@@ -1,13 +1,14 @@
 import "./App.scss";
 import Typography from "@mui/material/Typography";
+import { theme } from "./theme/MUI_Theme";
+import { ThemeProvider } from "@mui/material";
+import MainLayout from "./layout/main-layout/MainLayout";
 
 function App() {
   return (
-    <div className="App">
-      <Typography variant="body1" color="initial">
-        يا مرحب بالشباب
-      </Typography>
-    </div>
+    <ThemeProvider theme={theme}>
+      <MainLayout></MainLayout>
+    </ThemeProvider>
   );
 }
 
