@@ -1,21 +1,22 @@
 import Drawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
+import Button from "@mui/material/Button";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import Link from "@mui/material/Link";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import IconBox from "./IconBox";
+import { Stack } from "@mui/material";
+import { useState } from "react";
+
+const routesCollections = ["الادوار والمستخدمين", "الهيكل التنظيمي", "العملاء"];
 
 function DrawerComponent(props: PropsType) {
+  const [currentCollection, setCurrentCollection] = useState<null | number>();
+
   return (
     <Drawer
       sx={{
@@ -34,55 +35,49 @@ function DrawerComponent(props: PropsType) {
       variant="permanent"
       anchor="left"
     >
-      <Toolbar />
-      <Divider />
+      {/* <Toolbar /> */}
+      <IconBox />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <>
-            {/* <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem> */}
-            <Accordion
-              sx={{
-                backgroundColor: "transparent",
-              }}
-              elevation={0}
-              disableGutters
+        {routesCollections.map((text, index) => (
+          <Accordion
+            sx={{
+              backgroundColor: "transparent",
+            }}
+            expanded={currentCollection === index}
+            onChange={(e, x) => {
+              if (x) {
+                setCurrentCollection(index);
+              } else {
+                setCurrentCollection(null);
+              }
+            }}
+            elevation={0}
+            disableGutters
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              component={Button}
+              sx={{ width: 1 }}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+              <Typography>{text}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Stack
+                sx={{
+                  button: {
+                    width: 1,
+                    justifyContent: "start",
+                  },
+                }}
               >
-                <Typography>{text}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </>
+                <Button>الصفحة الاولي</Button>
+                <Button>الصفحة الثانية</Button>
+                <Button>الصفحة الثالثة</Button>
+              </Stack>
+            </AccordionDetails>
+          </Accordion>
         ))}
       </List>
     </Drawer>
