@@ -38,8 +38,8 @@ function SearchBar() {
         >
           فلتر
         </Button>
-        <Filters opened={filtersOpened} />
       </Stack>
+      <Filters opened={filtersOpened} />
     </>
   );
 }

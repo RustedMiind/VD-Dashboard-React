@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import SelectCustom from "../../../components/MuiCustom";
 
 function Filters(props: PropsType) {
   return (
@@ -21,12 +22,12 @@ function Filters(props: PropsType) {
       sx={{
         p: 2,
         transition: "300ms",
-        position: "absolute",
+        // position: "absolute",
+        mt: 2,
         overflow: "hidden",
         opacity: props.opened ? 1 : 0,
+        maxHeight: props.opened ? "100px" : 0,
         pointerEvents: props.opened ? "all" : "none",
-        top: props.opened ? "110%" : 0,
-        zIndex: 2,
         "> *": { px: 1 },
       }}
     >
@@ -34,69 +35,49 @@ function Filters(props: PropsType) {
         {/* <Typography variant="body1" gutterBottom>
           تاريخ الورود
         </Typography> */}
-        <DatePicker label="تاريخ الورود" sx={{ w: 1 }} />
+        <DatePicker
+          slotProps={{ textField: { size: "small" } }}
+          label="تاريخ الورود"
+          sx={{ w: 1 }}
+        />
       </Grid>
       <Grid item xs={2}>
         {/* <Typography variant="body1" gutterBottom>
           تاريخ الانتهاء
         </Typography> */}
-        <DatePicker label="تاريخ الانتهاء" sx={{ w: 1 }} />
+        <DatePicker
+          label="تاريخ الانتهاء"
+          sx={{ w: 1 }}
+          slotProps={{ textField: { size: "small" } }}
+        />
       </Grid>
       <Grid item xs={2}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">نوع الطلب</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="نوع الطلب"
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <SelectCustom
+          label="نوع الطلب"
+          size="small"
+          options={[{ name: "1", value: "1" }]}
+        />
       </Grid>
       <Grid item xs={2}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">القسم</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="القسم"
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <SelectCustom
+          label="القسم"
+          size="small"
+          options={[{ name: "1", value: "1" }]}
+        />
       </Grid>
       <Grid item xs={2}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">حالة الطلب</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="حالة الطلب"
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <SelectCustom
+          label="حالة الطلب"
+          size="small"
+          options={[{ name: "1", value: "1" }]}
+        />
       </Grid>
       <Grid item xs={2}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">الترتيب</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="الترتيب"
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <SelectCustom
+          label="الترتيب"
+          size="small"
+          options={[{ name: "1", value: "1" }]}
+        />
       </Grid>
     </Grid>
   );
