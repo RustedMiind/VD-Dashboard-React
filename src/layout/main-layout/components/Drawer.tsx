@@ -19,6 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import BadgeIcon from "@mui/icons-material/Badge";
 
 const routesCollections: RoutesCollectionType[] = [
   {
@@ -55,6 +56,16 @@ const routesCollections: RoutesCollectionType[] = [
       { name: "حضور الموظفين", path: "#" },
       { name: "طلبات الموظفين", path: "#" },
       { name: "الشكاوي والدعم", path: "#" },
+      { name: "محددات المشاريع", path: "#" },
+    ],
+  },
+  {
+    name: "الموظفين",
+    icon: BadgeIcon,
+    routes: [
+      { name: "حضور الموظفين", path: "/" },
+      { name: "طلبات الموظفين", path: "/employees/requests", react: true },
+      { name: "اجراءات الطلبات", path: "/employees/procedures", react: true },
       { name: "محددات المشاريع", path: "#" },
     ],
   },
