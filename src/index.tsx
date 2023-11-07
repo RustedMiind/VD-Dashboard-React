@@ -7,6 +7,8 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
 import { BrowserRouter } from "react-router-dom";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -17,11 +19,13 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <BrowserRouter>
-    <CacheProvider value={cacheRtl}>
-      <App />
-    </CacheProvider>
-  </BrowserRouter>
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <BrowserRouter>
+      <CacheProvider value={cacheRtl}>
+        <App />
+      </CacheProvider>
+    </BrowserRouter>
+  </LocalizationProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
