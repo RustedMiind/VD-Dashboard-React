@@ -37,7 +37,11 @@ function EmplyeesRequests() {
       </Box>
       <Paper
         // variant="outlined"
-        sx={{ bgcolor: "Background", overflow: "hidden" }}
+        sx={{
+          //
+          bgcolor: "Background",
+          overflow: "hidden",
+        }}
         elevation={4}
       >
         <EmployeesRequestsTable />

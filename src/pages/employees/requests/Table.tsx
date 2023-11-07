@@ -36,7 +36,12 @@ function EmployeesRequestsTable() {
               <TableCell>اداري</TableCell>
               <TableCell>في ميديا</TableCell>
               <TableCell>
-                <Chip color="success" variant="outlined" label="نشط" />
+                <Chip
+                  color="success"
+                  //
+                  variant="outlined"
+                  label="نشط"
+                />
               </TableCell>
               <TableCell>هذا النص هو مثال لنص يمكن..</TableCell>
             </TableRow>

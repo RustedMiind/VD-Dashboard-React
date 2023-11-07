@@ -11,6 +11,13 @@ export const theme = createTheme({
       main: "#004693",
       contrastText: "#FFFFFF",
     },
+    success: {
+      main: "#18CB5F",
+      contrastText: "#FFFFFF",
+    },
+    error: {
+      main: "#CB1818",
+    },
     // secondary: {
     //   main: "#004693",
     // },

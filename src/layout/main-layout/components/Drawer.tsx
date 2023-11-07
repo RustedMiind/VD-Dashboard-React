@@ -7,15 +7,23 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconBox from "./IconBox";
-import { Stack } from "@mui/material";
+import { Box, Stack, SvgIconTypeMap } from "@mui/material";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+
+// Icons
+import SecurityIcon from "@mui/icons-material/Security";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
+import GroupIcon from "@mui/icons-material/Group";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 const routesCollections: RoutesCollectionType[] = [
   {
     name: "الادوار والمستخدمين",
+    icon: SecurityIcon,
     routes: [
       { name: "الادوار", path: "#" },
       { name: "المستخدمين", path: "#" },
@@ -23,6 +31,7 @@ const routesCollections: RoutesCollectionType[] = [
   },
   {
     name: "الهيكل التنظيمي",
+    icon: AutoAwesomeMosaicIcon,
     routes: [
       { name: "الفروع", path: "#" },
       { name: "الادارة والاقسام", path: "#" },
@@ -32,6 +41,7 @@ const routesCollections: RoutesCollectionType[] = [
   },
   {
     name: "العملاء",
+    icon: GroupIcon,
     routes: [
       { name: "بيانات العملاء", path: "#" },
       { name: "بيانات الوسطاء", path: "#" },
@@ -40,6 +50,7 @@ const routesCollections: RoutesCollectionType[] = [
   },
   {
     name: "الحضور والطلبات",
+    icon: AssignmentIcon,
     routes: [
       { name: "حضور الموظفين", path: "#" },
       { name: "طلبات الموظفين", path: "#" },
@@ -97,7 +108,10 @@ function DrawerComponent(props: PropsType) {
               sx={{ width: 1 }}
               key={collection.name}
             >
-              <Typography>{collection.name}</Typography>
+              {collection.icon && <collection.icon />}
+              <Typography ml={collection.icon ? 0.5 : 0}>
+                {collection.name}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Stack
@@ -134,6 +148,9 @@ type PropsType = {
 type RoutesCollectionType = {
   name: string;
   routes: RouteType[];
+  icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+    muiName: string;
+  };
 };
 
 type RouteType = { name: string; path: string; react?: boolean };
