@@ -11,8 +11,43 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconBox from "./IconBox";
 import { Stack } from "@mui/material";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-const routesCollections = ["الادوار والمستخدمين", "الهيكل التنظيمي", "العملاء"];
+const routesCollections: RoutesCollectionType[] = [
+  {
+    name: "الادوار والمستخدمين",
+    routes: [
+      { name: "الادوار", path: "#" },
+      { name: "المستخدمين", path: "#" },
+    ],
+  },
+  {
+    name: "الهيكل التنظيمي",
+    routes: [
+      { name: "الفروع", path: "#" },
+      { name: "الادارة والاقسام", path: "#" },
+      { name: "التسلسل الوظيفي", path: "#" },
+      { name: "بيانات الموظفين", path: "#" },
+    ],
+  },
+  {
+    name: "العملاء",
+    routes: [
+      { name: "بيانات العملاء", path: "#" },
+      { name: "بيانات الوسطاء", path: "#" },
+      { name: "طلبات العملاء", path: "#", react: true },
+    ],
+  },
+  {
+    name: "الحضور والطلبات",
+    routes: [
+      { name: "حضور الموظفين", path: "#" },
+      { name: "طلبات الموظفين", path: "#" },
+      { name: "الشكاوي والدعم", path: "#" },
+      { name: "محددات المشاريع", path: "#" },
+    ],
+  },
+];
 
 function DrawerComponent(props: PropsType) {
   const [currentCollection, setCurrentCollection] = useState<null | number>();
@@ -38,7 +73,7 @@ function DrawerComponent(props: PropsType) {
       {/* <Toolbar /> */}
       <IconBox />
       <List>
-        {routesCollections.map((text, index) => (
+        {routesCollections.map((collection, index) => (
           <Accordion
             sx={{
               backgroundColor: "transparent",
@@ -60,8 +95,9 @@ function DrawerComponent(props: PropsType) {
               id="panel1a-header"
               component={Button}
               sx={{ width: 1 }}
+              key={collection.name}
             >
-              <Typography>{text}</Typography>
+              <Typography>{collection.name}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Stack
@@ -72,9 +108,16 @@ function DrawerComponent(props: PropsType) {
                   },
                 }}
               >
-                <Button>الصفحة الاولي</Button>
-                <Button>الصفحة الثانية</Button>
-                <Button>الصفحة الثالثة</Button>
+                {collection.routes.map((route) => (
+                  <Button
+                    sx={{ justifyContent: "start" }}
+                    {...(route.react
+                      ? { component: NavLink, to: route.path }
+                      : { component: "a", href: route.path })}
+                  >
+                    {route.name}
+                  </Button>
+                ))}
               </Stack>
             </AccordionDetails>
           </Accordion>
@@ -87,5 +130,12 @@ function DrawerComponent(props: PropsType) {
 type PropsType = {
   width: number;
 };
+
+type RoutesCollectionType = {
+  name: string;
+  routes: RouteType[];
+};
+
+type RouteType = { name: string; path: string; react?: boolean };
 
 export default DrawerComponent;
