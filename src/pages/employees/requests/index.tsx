@@ -1,72 +1,46 @@
-import {
-  Stack,
-  Typography,
-  TextField,
-  Button,
-  IconButton,
-  Box,
-  Tabs,
-  Tab,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableCell,
-  Chip,
-} from "@mui/material";
+import { Stack, Typography, Box, Tabs, Tab, Paper } from "@mui/material";
 import SearchBar from "./SearchBar";
-
-const temp = [
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-];
+import EmployeesRequestsTable from "./Table";
+import RequestTypesToggles from "./Toggles";
+import { useState } from "react";
 
 function EmplyeesRequests() {
+  const [currentTab, setCurrentTab] = useState("1");
+
   return (
     <Stack>
       <Typography variant="h5" fontWeight={600} mb={3}>
         طلبات الموظفين
       </Typography>
       <SearchBar />
-      <Box mt={2}>
-        <Tabs aria-label="basic tabs example">
-          <Tab label="الكل" />
-          <Tab label="الوارد" />
-          <Tab label="الصادر" />
+      <Box
+        mt={2}
+        display="flex"
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+        flexWrap="wrap"
+        alignItems="end"
+      >
+        <RequestTypesToggles />
+
+        <Tabs
+          aria-label="basic tabs example"
+          value={currentTab}
+          onChange={(e, v) => {
+            setCurrentTab(v);
+          }}
+        >
+          <Tab label="الكل" value={"1"} />
+          <Tab label="الوارد" value={"2"} />
+          <Tab label="الصادر" value={"3"} />
         </Tabs>
       </Box>
-      <Paper variant="elevation" sx={{ bgcolor: "Background" }} elevation={4}>
-        <TableContainer sx={{ height: 500 }}>
-          <Table aria-label="simple table" stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>رقم الطلب</TableCell>
-                <TableCell>اسم الموظف</TableCell>
-                <TableCell>تاريخ الورود</TableCell>
-                <TableCell>نوع الطلب</TableCell>
-                <TableCell>القسم</TableCell>
-                <TableCell>حالة الطلب</TableCell>
-                <TableCell>الملاحظات</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {temp.map((row, index) => (
-                <TableRow>
-                  <TableCell>{index}</TableCell>
-                  <TableCell>علي سليمان</TableCell>
-                  <TableCell>12/12/2012</TableCell>
-                  <TableCell>اداري</TableCell>
-                  <TableCell>في ميديا</TableCell>
-                  <TableCell>
-                    <Chip color="success" variant="outlined" label="نشط" />
-                  </TableCell>
-                  <TableCell>هذا النص هو مثال لنص يمكن..</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Paper
+        // variant="outlined"
+        sx={{ bgcolor: "Background", overflow: "hidden" }}
+        elevation={4}
+      >
+        <EmployeesRequestsTable />
       </Paper>
     </Stack>
   );

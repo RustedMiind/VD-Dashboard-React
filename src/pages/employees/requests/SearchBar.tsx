@@ -1,10 +1,4 @@
-import {
-  Stack,
-  Typography,
-  TextField,
-  Button,
-  IconButton,
-} from "@mui/material";
+import { Stack, TextField, Button } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Filters from "./Filters";
@@ -25,7 +19,11 @@ function SearchBar() {
       >
         <TextField label="بحث" size="small" sx={{ flexGrow: 1 }} />
         <Button variant="contained">بحث</Button>
-        <Button startIcon={<PrintIcon />} variant="contained">
+        <Button
+          startIcon={<PrintIcon />}
+          // disabled
+          variant="contained"
+        >
           طباعة
         </Button>
         <Button
@@ -35,6 +33,7 @@ function SearchBar() {
           }}
           color={filtersOpened ? "success" : "primary"}
           variant="outlined"
+          // disabled
         >
           فلتر
         </Button>
