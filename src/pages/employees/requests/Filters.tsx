@@ -21,7 +21,7 @@ function Filters(props: PropsType) {
       alignItems="end"
       sx={{
         p: 2,
-        transition: "300ms",
+        transition: "600ms",
         // position: "absolute",
         mt: 2,
         overflow: "hidden",
