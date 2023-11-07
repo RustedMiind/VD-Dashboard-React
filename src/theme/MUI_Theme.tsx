@@ -1,4 +1,5 @@
 import { colors, createTheme } from "@mui/material";
+import "../assets/fonts/include.scss";
 
 export const theme = createTheme({
   direction: "rtl",
