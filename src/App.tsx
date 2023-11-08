@@ -1,53 +1,34 @@
 import "./App.scss";
-import Typography from "@mui/material/Typography";
 import { theme } from "./theme/MUI_Theme";
-import { ThemeProvider, Paper } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import MainLayout from "./layout/main-layout/MainLayout";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import RoutesComponent from "./Routes";
 import axios from "axios";
 import { token } from "./token";
+import { Api } from "./constants";
 
-function repeatObject(obj: any, length: number): any[] {
-  const arr = [];
-  for (let i = 0; i < length; i++) {
-    arr.push(obj);
-  }
-  return arr;
-}
-
-function createData(
-  name: string,
-  date: string,
-  branch: string,
-  management: string,
-  attendTime: string,
-  clockInTime: string,
-  clockOutTime: string,
-  latency: string,
-  totalWorkHours: string,
-  todaysPay: string
-) {
-  return {
-    name,
-    date,
-    branch,
-    management,
-    attendTime,
-    clockInTime,
-    clockOutTime,
-    latency,
-    totalWorkHours,
-    todaysPay,
-  };
-}
-
-axios.defaults.headers.common.Authorization = token;
+// Delete After presentation
+const cookieToken = document.cookie
+  .split(";")
+  .map((cookie) => cookie.trim())
+  .find((cookie) => cookie.startsWith("token="));
+const tokenCookie = cookieToken ? cookieToken.split("=")[1] : null;
+axios.defaults.headers.common.Authorization = tokenCookie;
+axios
+  .post<{ data: { token: string } }>(Api("employee/login"), {
+    email: "heleenali847@gmail.com",
+    password: "123456789",
+    imei: "5153153",
+    device_token: "scqwsvcqewcqw",
+    device_type: "android",
+  })
+  .then(({ data }) => {
+    console.log("Token", data.data.token);
+    axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
+    document.cookie = `token=Bearer ${data.data.token}; expires=2024-11-08T15:10:31.339Z; path=pathName;`;
+  })
+  .catch(console.log);
+// End Delete
 
 function App() {
   return (
