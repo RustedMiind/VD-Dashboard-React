@@ -3,6 +3,7 @@ import { EmployeeType } from "./Employee";
 export interface EmployeeRequest {
   id: number;
   requestable_id: RequestableIdType;
+  requestable_type: string;
   employee_id: number;
   created_at: string;
   updated_at: string;

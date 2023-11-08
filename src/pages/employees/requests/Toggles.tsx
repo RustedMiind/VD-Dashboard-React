@@ -1,36 +1,7 @@
 import { Stack, Chip, Badge } from "@mui/material";
-import { useState } from "react";
+import { requestTypes } from "./RequestTypes";
 
-function RequestTypesToggles() {
-  const chips: ChipType[] = [
-    {
-      name: "اجازات",
-      count: 4,
-    },
-    {
-      name: "مهام عمل",
-      count: 1,
-    },
-    {
-      name: "سلف",
-      count: 5,
-    },
-    {
-      name: "عهد",
-      count: 5,
-    },
-    {
-      name: "احتياجات عمل",
-      count: 0,
-    },
-    {
-      name: "صيانة سيارة",
-      count: 0,
-    },
-  ];
-
-  const [selected, setSelected] = useState<string[]>([]);
-
+function RequestTypesToggles({ selected, setSelected }: PropsType) {
   console.log(selected);
 
   function toggleSelected(toggle: string) {
@@ -38,8 +9,8 @@ function RequestTypesToggles() {
     const index = instance.findIndex((chip) => chip === toggle);
 
     if (index === -1) {
-      const chipIndex = chips.findIndex((chip) => chip.name === toggle);
-      instance.push(chips[chipIndex].name);
+      const chipIndex = requestTypes.findIndex((chip) => chip.name === toggle);
+      instance.push(requestTypes[chipIndex].name);
       setSelected(instance);
     } else {
       instance.splice(index, 1);
@@ -56,11 +27,11 @@ function RequestTypesToggles() {
         mb: 1,
       }}
     >
-      {chips.map((chip) => {
+      {requestTypes.map((chip) => {
         const found = selected.includes(chip.name);
 
         return (
-          <Badge key={chip.name} badgeContent={chip.count} color="error">
+          <Badge key={chip.name} badgeContent={0} color="error">
             <Chip
               color="primary"
               onClick={() => {
@@ -76,9 +47,9 @@ function RequestTypesToggles() {
   );
 }
 
-type ChipType = {
-  name: string;
-  count: number;
+type PropsType = {
+  selected: string[];
+  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default RequestTypesToggles;

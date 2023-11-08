@@ -6,13 +6,17 @@ import { useEffect, useState } from "react";
 import { EmployeeRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
+import { requestTypes } from "./RequestTypes";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
-  const [requests, setRequests] = useState<EmployeeRequest[] | null>(null);
+  const [requests, setRequests] = useState<EmployeeRequest[] | undefined>(
+    undefined
+  );
   const [search, setSearch] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
-  let filtered: EmployeeRequest[] | null = requests;
+  let filtered: EmployeeRequest[] | undefined = requests;
 
   if (search) {
     const searchLowerCase = search.toLowerCase();
@@ -21,7 +25,28 @@ function EmplyeesRequests() {
         .toLocaleLowerCase()
         .includes(searchLowerCase);
     });
-    filtered = filter || null;
+    filtered = filter || undefined;
+  }
+  if (selectedTypes.length) {
+    const filter = filtered?.filter((request) => {
+      let found = false;
+      selectedTypes.forEach((selection) => {
+        const temp = requestTypes.find((x) => x.name === selection);
+        // if (found) {
+        //   return;
+        // }
+        if (
+          temp &&
+          request.requestable_type
+            .toLowerCase()
+            .includes(temp?.prefix.toLowerCase())
+        ) {
+          found = true;
+        }
+      });
+      return found;
+    });
+    filtered = filter || undefined;
   }
 
   useEffect(() => {
@@ -34,7 +59,7 @@ function EmplyeesRequests() {
         console.log(data);
       })
       .catch((err) => {
-        setRequests(null);
+        setRequests(undefined);
         console.log(err);
       });
   }, []);
@@ -53,7 +78,10 @@ function EmplyeesRequests() {
         flexWrap="wrap"
         alignItems="end"
       >
-        <RequestTypesToggles />
+        <RequestTypesToggles
+          selected={selectedTypes}
+          setSelected={setSelectedTypes}
+        />
 
         <Tabs
           aria-label="basic tabs example"
