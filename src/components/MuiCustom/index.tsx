@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 function SelectCustom(props: SelectPropsType) {
   return (
-    <FormControl fullWidth size={props.size}>
+    <FormControl fullWidth size={props.size} disabled={props.disabled}>
       <InputLabel size={props.size}>{props.label}</InputLabel>
       <Select label={props.label} size={props.size}>
         {props.options.map((option) => (
@@ -19,6 +19,7 @@ type SelectPropsType = {
   size: "small" | undefined;
   currentOption?: number | string;
   options: { value: number | string; name: string }[];
+  disabled?: boolean;
 };
 
 export default SelectCustom;

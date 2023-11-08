@@ -1,7 +1,8 @@
 import { ThemeOptions, TypeBackground } from "@mui/material";
+import { TypeBackground } from "@mui/material";
 
-declare module "@mui/material" {
+export declare module "@mui/material" {
   interface TypeBackground {
-    med: React.CSSProperties["color"];
+    med: string;
   }
 }

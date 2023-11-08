@@ -11,9 +11,23 @@ import { useState } from "react";
 
 // Icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import LevelItem from "./LevelItem";
 
 function EmploeesRequestsProcedures() {
   const [currentTab, setCurrentTab] = useState("1");
+  const [levels, setLevels] = useState([0]);
+
+  function addLevel() {
+    const instance = [...levels];
+    instance.push(instance.length);
+    setLevels(instance);
+  }
+
+  function removeLevel(val: number) {
+    const instance = [...levels];
+    const filtered = instance.filter((v) => v !== val);
+    setLevels(filtered);
+  }
 
   return (
     <Stack>
@@ -29,7 +43,12 @@ function EmploeesRequestsProcedures() {
         flexWrap="wrap"
         alignItems="end"
       >
-        <Button variant="contained" startIcon={<AddCircleOutlineIcon />}>
+        <Button
+          variant="contained"
+          startIcon={<AddCircleOutlineIcon />}
+          sx={{ mb: 1 }}
+          onClick={addLevel}
+        >
           اضافة مرحلة جديدة
         </Button>
 
@@ -49,7 +68,25 @@ function EmploeesRequestsProcedures() {
         </Tabs>
       </Box>
 
-      <Paper sx={{ p: 2 }}></Paper>
+      <Paper sx={{ p: 2 }}>
+        <Stack>
+          {levels.map((level, index, arr) => {
+            const IS_LAST_ITEM = index === arr.length - 1;
+            return (
+              <LevelItem
+                levelName={`مرحلة ${level + 1}`}
+                onDelete={
+                  IS_LAST_ITEM
+                    ? () => {
+                        removeLevel(level);
+                      }
+                    : undefined
+                }
+              />
+            );
+          })}
+        </Stack>
+      </Paper>
     </Stack>
   );
 }
