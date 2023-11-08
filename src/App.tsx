@@ -10,6 +10,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import RoutesComponent from "./Routes";
+import axios from "axios";
+import { token } from "./token";
 
 function repeatObject(obj: any, length: number): any[] {
   const arr = [];
@@ -45,21 +47,7 @@ function createData(
   };
 }
 
-const rows = repeatObject(
-  createData(
-    "علي سليمان",
-    "06/07/2023",
-    "القاهرة",
-    "في ميديا",
-    "07:30 ص",
-    "07:33 ص",
-    "04:15 م",
-    "3د",
-    "7 س",
-    "600"
-  ),
-  50
-);
+axios.defaults.headers.common.Authorization = token;
 
 function App() {
   return (

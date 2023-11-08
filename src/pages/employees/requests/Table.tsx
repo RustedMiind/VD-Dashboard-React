@@ -7,12 +7,40 @@ import {
   TableCell,
   Chip,
 } from "@mui/material";
+import { EmployeeRequest } from "../../../types";
+import { formatDate } from "../../../methods";
 
-const temp = [
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-];
+/*
+-1 pending
+1 active
+0 rejected
+2 rejected
+*/
 
-function EmployeesRequestsTable() {
+function generateChip(value: number): JSX.Element {
+  let chip: JSX.Element = (
+    <Chip color="primary" variant="outlined" label="تحت المراجعة" />
+  );
+
+  switch (value) {
+    // case -1:
+    //   chip = <Chip color="primary" label="تحت المراجعة" />
+    //   break;
+    case 0:
+      chip = <Chip color="error" variant="outlined" label="مرفوض" />;
+      break;
+    case 1:
+      chip = <Chip color="success" variant="outlined" label="معتمد" />;
+      break;
+
+    default:
+      break;
+  }
+
+  return chip;
+}
+
+function EmployeesRequestsTable(props: PropsType) {
   return (
     <TableContainer sx={{ height: 500 }}>
       <Table aria-label="simple table" stickyHeader>
@@ -28,22 +56,15 @@ function EmployeesRequestsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {temp.map((row, index) => (
+          {props.requests.map((request, index) => (
             <TableRow>
-              <TableCell>{index}</TableCell>
-              <TableCell>علي سليمان</TableCell>
-              <TableCell>12/12/2012</TableCell>
-              <TableCell>اداري</TableCell>
-              <TableCell>في ميديا</TableCell>
-              <TableCell>
-                <Chip
-                  color="success"
-                  //
-                  variant="outlined"
-                  label="نشط"
-                />
-              </TableCell>
-              <TableCell>هذا النص هو مثال لنص يمكن..</TableCell>
+              <TableCell>{request.id}</TableCell>
+              <TableCell>{request.employee.name}</TableCell>
+              <TableCell>{formatDate(request.created_at)}</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>{generateChip(request.requestable_id)}</TableCell>
+              <TableCell>-</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -51,5 +72,9 @@ function EmployeesRequestsTable() {
     </TableContainer>
   );
 }
+
+type PropsType = {
+  requests: EmployeeRequest[];
+};
 
 export default EmployeesRequestsTable;

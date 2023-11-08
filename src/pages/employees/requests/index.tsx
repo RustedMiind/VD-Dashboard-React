@@ -2,10 +2,29 @@ import { Stack, Typography, Box, Tabs, Tab, Paper } from "@mui/material";
 import SearchBar from "./SearchBar";
 import EmployeesRequestsTable from "./Table";
 import RequestTypesToggles from "./Toggles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { EmployeeRequest } from "../../../types";
+import axios from "axios";
+import { Api } from "../../../constants";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
+  const [requests, setRequests] = useState<EmployeeRequest[] | null>(null);
+
+  useEffect(() => {
+    axios
+      .get<{ requests: EmployeeRequest[] }>(
+        Api("employee/general-requests/requests")
+      )
+      .then(({ data }) => {
+        setRequests(data.requests);
+        console.log(data);
+      })
+      .catch((err) => {
+        setRequests(null);
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Stack>
@@ -44,7 +63,7 @@ function EmplyeesRequests() {
         }}
         elevation={4}
       >
-        <EmployeesRequestsTable />
+        {requests && <EmployeesRequestsTable requests={requests} />}
       </Paper>
     </Stack>
   );
