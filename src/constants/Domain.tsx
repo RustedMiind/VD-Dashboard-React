@@ -1,5 +1,5 @@
 export const Domain = (path: string = "") => {
-  const domain = "http://visiondimensions.com/";
+  const domain = "https://visiondimensions.com/";
 
   return `${domain}${path}`;
 };
