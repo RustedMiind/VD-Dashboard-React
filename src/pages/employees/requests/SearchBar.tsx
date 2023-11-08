@@ -4,7 +4,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Filters from "./Filters";
 import { useState } from "react";
 
-function SearchBar() {
+function SearchBar(props: PropsType) {
   const [filtersOpened, setFiltersOpenen] = useState(false);
 
   return (
@@ -17,11 +17,26 @@ function SearchBar() {
           position: "relative",
         }}
       >
-        <TextField label="بحث" size="small" sx={{ flexGrow: 1 }} />
-        <Button variant="contained">بحث</Button>
+        <TextField
+          label="بحث"
+          value={props.search}
+          onChange={(e) => {
+            props.setSearch(e.target.value);
+          }}
+          size="small"
+          sx={{ flexGrow: 1 }}
+          // disabled
+        />
+        <Button
+          variant="contained"
+          //  disabled
+        >
+          بحث
+        </Button>
         <Button
           startIcon={<PrintIcon />}
-          // disabled
+          disabled
+          //
           variant="contained"
         >
           طباعة
@@ -33,7 +48,7 @@ function SearchBar() {
           }}
           color={filtersOpened ? "success" : "primary"}
           variant="outlined"
-          // disabled
+          disabled
         >
           فلتر
         </Button>
@@ -42,5 +57,10 @@ function SearchBar() {
     </>
   );
 }
+
+type PropsType = {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+};
 
 export default SearchBar;

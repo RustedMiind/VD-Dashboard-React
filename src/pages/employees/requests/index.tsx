@@ -10,6 +10,19 @@ import { Api } from "../../../constants";
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
   const [requests, setRequests] = useState<EmployeeRequest[] | null>(null);
+  const [search, setSearch] = useState("");
+
+  let filtered: EmployeeRequest[] | null = requests;
+
+  if (search) {
+    const searchLowerCase = search.toLowerCase();
+    const filter = requests?.filter((request) => {
+      return request.employee.name
+        .toLocaleLowerCase()
+        .includes(searchLowerCase);
+    });
+    filtered = filter || null;
+  }
 
   useEffect(() => {
     axios
@@ -31,7 +44,7 @@ function EmplyeesRequests() {
       <Typography variant="h5" fontWeight={600} mb={3}>
         طلبات الموظفين
       </Typography>
-      <SearchBar />
+      <SearchBar search={search} setSearch={setSearch} />
       <Box
         mt={2}
         display="flex"
@@ -63,7 +76,7 @@ function EmplyeesRequests() {
         }}
         elevation={4}
       >
-        {requests && <EmployeesRequestsTable requests={requests} />}
+        {filtered && <EmployeesRequestsTable requests={filtered} />}
       </Paper>
     </Stack>
   );

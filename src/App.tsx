@@ -4,7 +4,6 @@ import { ThemeProvider } from "@mui/material";
 import MainLayout from "./layout/main-layout/MainLayout";
 import RoutesComponent from "./Routes";
 import axios from "axios";
-import { token } from "./token";
 import { Api } from "./constants";
 
 // Delete After presentation
