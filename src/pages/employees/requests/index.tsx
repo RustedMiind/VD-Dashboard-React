@@ -91,8 +91,8 @@ function EmplyeesRequests() {
           }}
         >
           <Tab label="الكل" value={"1"} />
-          <Tab label="الوارد" value={"2"} />
-          <Tab label="الصادر" value={"3"} />
+          <Tab label="الوارد" value={"2"} disabled />
+          <Tab label="الصادر" value={"3"} disabled />
         </Tabs>
       </Box>
       <Paper
