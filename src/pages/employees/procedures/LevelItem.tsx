@@ -12,7 +12,7 @@ import {
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import {
   TableContainer,
   Table,
@@ -27,9 +27,9 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SelectCustom from "../../../components/MuiCustom";
-import { DepartmentType, LevelType } from ".";
-import { ProceduresModelsType } from "./types";
+import { Step } from "./types";
 import { isStringAllNumbers } from "../../../methods/isStringAllNumbers";
+import { DepartmentWithEmployeesType } from "../../../methods/HandleData/HandleDepartmentWithEmployees";
 
 interface ReducerAction<P> {
   type: string;
@@ -42,17 +42,20 @@ interface ManagerActionType extends ReducerAction<number> {
 interface EmployeeActionType extends ReducerAction<number> {
   type: "SET_EMPLOYEE";
 }
-interface AcceptedActionType extends ReducerAction<boolean> {
+interface AcceptedActionType extends ReducerAction<0 | 1 | 2 | 3> {
   type: "SET_ACCEPTED";
 }
-interface ApprovedActionType extends ReducerAction<boolean> {
+interface ApprovedActionType extends ReducerAction<0 | 1 | 2 | 3> {
   type: "SET_APPROVED";
 }
 interface DurationActionType extends ReducerAction<string> {
   type: "SET_DURATION";
 }
-interface ModelActionType extends ReducerAction<ProceduresModelsType> {
+interface ModelActionType extends ReducerAction<1 | 2 | 3 | 4> {
   type: "SET_MODEL";
+}
+interface ModelActionResetType extends ReducerAction<Step> {
+  type: "SET_RESET";
 }
 
 type ActionTypes =
@@ -61,40 +64,78 @@ type ActionTypes =
   | AcceptedActionType
   | ApprovedActionType
   | DurationActionType
-  | ModelActionType;
-function reducer(state: LevelType, action: ActionTypes): LevelType {
+  | ModelActionType
+  | ModelActionResetType;
+function reducer(state: Step, action: ActionTypes): Step {
   switch (action.type) {
     case "SET_MANAGER":
-      return { ...state, departmentManagerId: action.payload };
+      return { ...state, department_id: action.payload };
     case "SET_EMPLOYEE":
-      return { ...state, employeeId: action.payload };
-    case "SET_ACCEPTED":
-      return { ...state, accepted: action.payload };
+      return { ...state, employee_id: action.payload };
     case "SET_APPROVED":
-      return { ...state, approval: action.payload };
+      if (state.action === 1) {
+        return { ...state, action: 3 };
+      } else if (state.action === 2) {
+        return { ...state, action: 0 };
+      } else if (state.action === 3) {
+        return { ...state, action: 1 };
+      } else {
+        return { ...state, action: 2 };
+      }
+    case "SET_ACCEPTED":
+      if (state.action === 2) {
+        return { ...state, action: 3 };
+      } else if (state.action === 1) {
+        return { ...state, action: 0 };
+      } else if (state.action === 3) {
+        return { ...state, action: 2 };
+      } else {
+        return { ...state, action: 1 };
+      }
     case "SET_DURATION":
       if (isStringAllNumbers(action.payload)) {
-        return { ...state, duration: action.payload };
+        return { ...state, duration: parseInt(action.payload) || 0 };
       } else {
         return state;
       }
     case "SET_MODEL":
       return { ...state, model: action.payload };
+    case "SET_RESET":
+      return action.payload;
     default:
       return state;
   }
 }
 
 function LevelItem(props: PropsType) {
-  const [expanded, setEcpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [update, setUpdate] = useState(false);
   const [level, dispatch] = useReducer(reducer, props.level);
+
+  const formDisabled = !update;
+
+  function updateLevel() {
+    props.updateLevel(level);
+    setUpdate(false);
+    setExpanded(true);
+  }
+
+  useEffect(() => {
+    dispatch({ type: "SET_RESET", payload: props.level });
+  }, [
+    props.level.action,
+    props.level.department_id,
+    props.level.duration,
+    props.level.id,
+    props.level.employee_id,
+    props.level.model,
+  ]);
 
   return (
     <Stack my={0.5}>
       <Accordion
         sx={{ bgcolor: "background.med", overflow: "hidden" }}
-        expanded={expanded}
+        expanded={update || expanded}
         elevation={0}
         disableGutters
       >
@@ -115,13 +156,44 @@ function LevelItem(props: PropsType) {
               variant="text"
               startIcon={<AddCircleOutlineIcon />}
               onClick={() => {
-                setEcpanded(!expanded);
+                // setUpdate(true);
+                setExpanded(!expanded);
               }}
             >
-              {"مرحلة للتجربة"}
+              {props.name}
             </Button>
             <Stack direction="row" alignItems="center" gap={1}>
-              <Button variant="outlined" startIcon={<EditIcon />}>
+              {update && (
+                <>
+                  <Button
+                    startIcon={<EditIcon />}
+                    onClick={updateLevel}
+                    color={"success"}
+                    variant={"contained"}
+                    disableElevation
+                  >
+                    حفظ التعديل
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      dispatch({ type: "SET_RESET", payload: props.level });
+                      setUpdate(false);
+                    }}
+                    color={"error"}
+                    variant={"contained"}
+                    disableElevation
+                  >
+                    الغاء التعديل
+                  </Button>
+                </>
+              )}
+              <Button
+                onClick={() => {
+                  setUpdate(true);
+                }}
+                variant={update ? "contained" : "outlined"}
+                disableElevation
+              >
                 تعديل
               </Button>
               <Button
@@ -162,8 +234,13 @@ function LevelItem(props: PropsType) {
                         <Select
                           label={"القسم"}
                           size={"small"}
-                          value={level.departmentManagerId}
+                          value={level.department_id}
+                          disabled={formDisabled}
                           onChange={(e) => {
+                            dispatch({
+                              type: "SET_EMPLOYEE",
+                              payload: 0,
+                            });
                             dispatch({
                               type: "SET_MANAGER",
                               payload: e.target.value as number,
@@ -171,8 +248,11 @@ function LevelItem(props: PropsType) {
                           }}
                         >
                           {props.departments.map((department) => (
-                            <MenuItem key={department.id} value={department.id}>
-                              {department.name}
+                            <MenuItem
+                              key={department.departmentId}
+                              value={department.departmentId}
+                            >
+                              {department.departmentName}
                             </MenuItem>
                           ))}
                         </Select>
@@ -190,7 +270,8 @@ function LevelItem(props: PropsType) {
                         <Select
                           label={"الموظف"}
                           size={"small"}
-                          value={level.employeeId}
+                          value={level.employee_id}
+                          disabled={formDisabled}
                           onChange={(e) => {
                             dispatch({
                               type: "SET_EMPLOYEE",
@@ -201,11 +282,11 @@ function LevelItem(props: PropsType) {
                           {props.departments
                             .find(
                               (department) =>
-                                department.id === level.departmentManagerId
+                                department.departmentId === level.department_id
                             )
                             ?.employees.map((employee) => (
                               <MenuItem key={employee.id} value={employee.id}>
-                                {employee.name}
+                                {employee.employeeName}
                               </MenuItem>
                             ))}
                         </Select>
@@ -215,23 +296,25 @@ function LevelItem(props: PropsType) {
                   <TableCell>
                     <Checkbox
                       name="accepted"
-                      value={level.accepted}
+                      disabled={formDisabled}
+                      checked={level.action === 1 || level.action === 3}
                       onChange={(e) => {
                         dispatch({
                           type: "SET_ACCEPTED",
-                          payload: e.target.checked,
+                          payload: 1,
                         });
                       }}
                     />
                   </TableCell>
                   <TableCell>
                     <Checkbox
+                      disabled={formDisabled}
                       name="approved"
-                      value={level.approval}
+                      checked={level.action === 2 || level.action === 3}
                       onChange={(e) => {
                         dispatch({
-                          type: "SET_ACCEPTED",
-                          payload: e.target.checked,
+                          type: "SET_APPROVED",
+                          payload: 2,
                         });
                       }}
                     />
@@ -239,6 +322,7 @@ function LevelItem(props: PropsType) {
                   <TableCell>
                     <TextField
                       size="small"
+                      disabled={formDisabled}
                       label="مدة التجاوز"
                       value={level.duration}
                       onChange={(e) => {
@@ -258,6 +342,7 @@ function LevelItem(props: PropsType) {
                   <TableCell>
                     <Box width={{ lg: 150, xl: 200 }}>
                       <SelectCustom
+                        disabled={formDisabled}
                         options={[
                           { name: "نموذج المرحلة الاولي", value: "1" },
                           { name: "نموذج المرحلة الثانية", value: "2" },
@@ -280,8 +365,10 @@ function LevelItem(props: PropsType) {
 
 type PropsType = {
   onDelete?: () => void;
-  level: LevelType;
-  departments: DepartmentType;
+  level: Step;
+  departments: DepartmentWithEmployeesType[];
+  updateLevel: (payload: Step) => void;
+  name: string;
 };
 
 export default LevelItem;

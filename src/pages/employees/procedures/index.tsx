@@ -6,55 +6,44 @@ import {
   Typography,
   Button,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import LevelItem from "./LevelItem";
-import { ProceduresModelsType } from "./types";
+import { ProceduresModelsType, Step } from "./types";
+import axios from "axios";
+import HandleDepartmentWithEmployees, {
+  DepartmentWithEmployeesType,
+} from "../../../methods/HandleData/HandleDepartmentWithEmployees";
+import { Api } from "../../../constants";
+import { requestsIds } from "./RequestsIds";
 
-const EmployeesFill: EmployeeType = [
-  { name: "علي سليمان", id: 1 },
-  { name: "محمد محمود", id: 2 },
-  { name: "سيد رمضان", id: 3 },
-  { name: "احمد فتحي", id: 4 },
-  { name: "ماجد محمد", id: 5 },
-  { name: "عبدالله محمود", id: 6 },
-  { name: "سيد رجب", id: 7 },
-];
-type EmployeeType = { name: string; id: number }[];
-export type DepartmentType = {
-  name: string;
-  id: number;
-  employees: { name: string; id: number }[];
-}[];
-
-const DepartmentsFill: DepartmentType = [
-  {
-    name: "فرع جدة",
-    id: 1,
-    employees: EmployeesFill,
-  },
-];
-
-const InitLevel: LevelType = {
-  accepted: false,
-  approval: false,
-  departmentManagerId: 1,
-  duration: "0",
-  employeeId: 1,
-  model: { id: 1, status: 1 },
+const InitLevel: Step = {
+  action: 0,
+  department_id: 0,
+  id: 0,
+  type: 0,
+  duration: 0,
+  employee_id: 1,
+  model: 1,
 };
 
 function EmploeesRequestsProcedures() {
-  const [currentTab, setCurrentTab] = useState("1");
+  const [currentTab, setCurrentTab] = useState(1);
+  const [toaster, setToaster] = useState<{
+    type: "error" | "success" | "null";
+  }>({ type: "error" });
   const [proceduce, setProcedure] = useState<ProcedureType>({
-    name: "اجازات",
-    id: 1,
     levels: [InitLevel],
   });
+  const [departments, setDepartments] = useState<
+    DepartmentWithEmployeesType[] | null
+  >();
 
-  function setLevels(payload: LevelType[]) {
+  function setLevels(payload: Step[]) {
     setProcedure({ ...proceduce, levels: payload });
   }
 
@@ -72,6 +61,42 @@ function EmploeesRequestsProcedures() {
     // setLevels(filtered);
     setLevels(instance);
   }
+
+  function updateLevel(index: number) {
+    return (payload: Step) => {
+      const instance = [...proceduce.levels];
+      instance.splice(index, 1, payload);
+      // const filtered = instance.filter((v) => v !== val);
+      // setLevels(filtered);
+      setLevels(instance);
+    };
+  }
+
+  useEffect(() => {
+    setLevels([]);
+    axios
+      .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
+      .then((res) => {
+        axios
+          .request<{ steps: Step[] }>({
+            url: Api("employee/general-requests/steps"),
+            method: "POST",
+            params: { type: currentTab },
+          })
+          .then(({ data }) => {
+            setLevels(data.steps);
+            console.log("steps", data);
+          })
+          .catch(console.log);
+        console.log(res);
+        console.log(
+          "Handled",
+          HandleDepartmentWithEmployees(res.data.employee)
+        );
+        setDepartments(HandleDepartmentWithEmployees(res.data.employee));
+      })
+      .catch(console.log);
+  }, [currentTab]);
 
   return (
     <Stack>
@@ -103,43 +128,91 @@ function EmploeesRequestsProcedures() {
             setCurrentTab(v);
           }}
         >
-          <Tab label="الاجازات" value={"1"} />
-          <Tab label="مهمة عمل" value={"2"} />
-          <Tab label="السلف" value={"3"} />
-          <Tab label="العهدة" value={"4"} />
-          <Tab label="احتياجات عمل" value={"5"} />
-          <Tab label="صيانة سيارة" value={"6"} />
+          {requestsIds.map((req) => (
+            <Tab label={req.name} value={req.id} />
+          ))}
         </Tabs>
       </Box>
-
       <Paper sx={{ p: 2 }}>
-        <Stack>
-          {proceduce.levels.map((level, index, arr) => {
-            const IS_LAST_ITEM = index === arr.length - 1;
-            return (
-              <LevelItem
-                level={level}
-                onDelete={
-                  IS_LAST_ITEM
-                    ? () => {
-                        removeLevel(index);
-                      }
-                    : undefined
-                }
-                departments={DepartmentsFill}
-              />
-            );
-          })}
+        {departments && (
+          <Stack>
+            {proceduce.levels.map((level, index, arr) => {
+              const IS_LAST_ITEM = index === arr.length - 1;
+              const MORE_THAN_ONE = arr.length > 1;
+              return (
+                <LevelItem
+                  level={level}
+                  updateLevel={updateLevel(index)}
+                  name={`المرحلة ${index + 1}`}
+                  onDelete={
+                    IS_LAST_ITEM && MORE_THAN_ONE
+                      ? () => {
+                          removeLevel(index);
+                        }
+                      : undefined
+                  }
+                  departments={departments}
+                />
+              );
+            })}
+          </Stack>
+        )}
+        <Stack mt={2} direction={"row-reverse"}>
+          <Button
+            sx={{ px: 4 }}
+            variant="contained"
+            onClick={() => {
+              const data = proceduce.levels.map((r) => {
+                const { created_at, deleted_at, updated_at, id, ...t } = r;
+                return { ...t, type: currentTab };
+              });
+              console.log("levels", data);
+              axios
+                .post(Api("employee/general-requests/steps/create"), {
+                  data,
+                })
+                .then((res) => {
+                  console.log(res);
+                  setToaster({ type: "success" });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setToaster({ type: "error" });
+                });
+            }}
+          >
+            ارسال التعديلات
+          </Button>
         </Stack>
       </Paper>
+
+      <Snackbar
+        open={toaster.type === "success"}
+        autoHideDuration={6000}
+        onClose={() => {
+          setToaster({ type: "null" });
+        }}
+        message="Note archived"
+      >
+        <Alert
+          {...(toaster.type === "success"
+            ? { severity: "success" }
+            : { severity: "error" })}
+          sx={{ width: "100%" }}
+        >
+          {toaster.type === "success"
+            ? "تم الحفظ بنجاح"
+            : "تعذر في الحفظ, تأكد من ادخال البيانات بالشكل الصحيح"}
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 }
 
 export interface ProcedureType {
-  name: string;
-  id: number;
-  levels: LevelType[];
+  // name: string;
+  // id: number;
+  levels: Step[];
 }
 
 export interface LevelType {
