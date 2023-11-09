@@ -8,25 +8,75 @@ import {
   Paper,
 } from "@mui/material";
 import { useState } from "react";
-
 // Icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import LevelItem from "./LevelItem";
+import { ProceduresModelsType } from "./types";
+
+const EmployeesFill: EmployeeType = [
+  { name: "علي سليمان", id: 1 },
+  { name: "محمد محمود", id: 2 },
+  { name: "سيد رمضان", id: 3 },
+  { name: "احمد فتحي", id: 4 },
+  { name: "ماجد محمد", id: 5 },
+  { name: "عبدالله محمود", id: 6 },
+  { name: "سيد رجب", id: 7 },
+];
+type EmployeeType = { name: string; id: number }[];
+export type DepartmentType = {
+  name: string;
+  id: number;
+  employees: { name: string; id: number }[];
+}[];
+
+const DepartmentsFill: DepartmentType = [
+  {
+    name: "فرع جدة",
+    id: 1,
+    employees: EmployeesFill,
+  },
+];
+
+const InitLevel: LevelType = {
+  accepted: false,
+  approval: false,
+  departmentManagerId: 1,
+  duration: "0",
+  employeeId: 1,
+  model: { id: 1, status: 1 },
+};
 
 function EmploeesRequestsProcedures() {
   const [currentTab, setCurrentTab] = useState("1");
-  const [levels, setLevels] = useState([0]);
+  const [levels, setLevels] = useState<LevelType[]>([InitLevel]);
+  const [procedure, setProcedure] = useState<ProcedureType>({
+    name: "اجازات",
+    id: 1,
+    levels: [
+      {
+        employeeId: 1,
+        departmentManagerId: 4,
+        accepted: false,
+        approval: false,
+        duration: "",
+        model: { id: 1, status: 1 },
+      },
+    ],
+  });
 
   function addLevel() {
     const instance = [...levels];
-    instance.push(instance.length);
+    instance.push(InitLevel);
     setLevels(instance);
   }
 
   function removeLevel(val: number) {
     const instance = [...levels];
-    const filtered = instance.filter((v) => v !== val);
-    setLevels(filtered);
+
+    instance.splice(val, 1);
+    // const filtered = instance.filter((v) => v !== val);
+    // setLevels(filtered);
+    setLevels(instance);
   }
 
   return (
@@ -74,14 +124,15 @@ function EmploeesRequestsProcedures() {
             const IS_LAST_ITEM = index === arr.length - 1;
             return (
               <LevelItem
-                levelName={`مرحلة ${level + 1}`}
+                level={level}
                 onDelete={
                   IS_LAST_ITEM
                     ? () => {
-                        removeLevel(level);
+                        removeLevel(index);
                       }
                     : undefined
                 }
+                departments={DepartmentsFill}
               />
             );
           })}
@@ -89,6 +140,21 @@ function EmploeesRequestsProcedures() {
       </Paper>
     </Stack>
   );
+}
+
+export interface ProcedureType {
+  name: string;
+  id: number;
+  levels: LevelType[];
+}
+
+export interface LevelType {
+  departmentManagerId: number;
+  employeeId: number;
+  accepted: boolean;
+  approval: boolean;
+  duration: string;
+  model: ProceduresModelsType;
 }
 
 export default EmploeesRequestsProcedures;
