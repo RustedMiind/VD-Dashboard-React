@@ -9,17 +9,22 @@ import {
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
+import { requestTypes } from "./RequestTypes";
 
 /*
 -1 pending
 1 active
 0 rejected
-2 rejected
 */
 
 function generateChip(value: number): JSX.Element {
   let chip: JSX.Element = (
-    <Chip color="primary" variant="outlined" label="تحت المراجعة" />
+    <Chip
+      onClick={() => {}}
+      color="primary"
+      variant="outlined"
+      label="اتخاذ الاجراء"
+    />
   );
 
   switch (value) {
@@ -30,7 +35,7 @@ function generateChip(value: number): JSX.Element {
       chip = <Chip color="error" variant="outlined" label="مرفوض" />;
       break;
     case 1:
-      chip = <Chip color="success" variant="outlined" label="معتمد" />;
+      chip = <Chip color="success" variant="outlined" label="مقبول" />;
       break;
 
     default:
@@ -56,17 +61,25 @@ function EmployeesRequestsTable(props: PropsType) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.requests.map((request, index) => (
-            <TableRow>
-              <TableCell>{request.id}</TableCell>
-              <TableCell>{request.employee.name}</TableCell>
-              <TableCell>{formatDate(request.created_at)}</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>{generateChip(request.requestable_id)}</TableCell>
-              <TableCell>-</TableCell>
-            </TableRow>
-          ))}
+          {props.requests.map((request, index) => {
+            const requsetType = requestTypes.find((x) =>
+              request.requestable_type
+                .toLowerCase()
+                .includes(x.prefix.toLowerCase())
+            )?.name;
+
+            return (
+              <TableRow>
+                <TableCell>{request.id}</TableCell>
+                <TableCell>{request.employee.name}</TableCell>
+                <TableCell>{formatDate(request.created_at)}</TableCell>
+                <TableCell>{requsetType}</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>{generateChip(request.requestable_id)}</TableCell>
+                <TableCell>-</TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
