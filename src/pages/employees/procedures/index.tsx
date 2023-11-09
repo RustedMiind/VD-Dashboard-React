@@ -48,30 +48,24 @@ const InitLevel: LevelType = {
 
 function EmploeesRequestsProcedures() {
   const [currentTab, setCurrentTab] = useState("1");
-  const [levels, setLevels] = useState<LevelType[]>([InitLevel]);
-  const [procedure, setProcedure] = useState<ProcedureType>({
+  const [proceduce, setProcedure] = useState<ProcedureType>({
     name: "اجازات",
     id: 1,
-    levels: [
-      {
-        employeeId: 1,
-        departmentManagerId: 4,
-        accepted: false,
-        approval: false,
-        duration: "",
-        model: { id: 1, status: 1 },
-      },
-    ],
+    levels: [InitLevel],
   });
 
+  function setLevels(payload: LevelType[]) {
+    setProcedure({ ...proceduce, levels: payload });
+  }
+
   function addLevel() {
-    const instance = [...levels];
+    const instance = [...proceduce.levels];
     instance.push(InitLevel);
     setLevels(instance);
   }
 
   function removeLevel(val: number) {
-    const instance = [...levels];
+    const instance = [...proceduce.levels];
 
     instance.splice(val, 1);
     // const filtered = instance.filter((v) => v !== val);
@@ -120,7 +114,7 @@ function EmploeesRequestsProcedures() {
 
       <Paper sx={{ p: 2 }}>
         <Stack>
-          {levels.map((level, index, arr) => {
+          {proceduce.levels.map((level, index, arr) => {
             const IS_LAST_ITEM = index === arr.length - 1;
             return (
               <LevelItem
