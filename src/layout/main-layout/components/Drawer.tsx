@@ -46,7 +46,7 @@ const routesCollections: RoutesCollectionType[] = [
     routes: [
       { name: "بيانات العملاء", path: "#" },
       { name: "بيانات الوسطاء", path: "#" },
-      { name: "طلبات العملاء", path: "#", react: true },
+      { name: "طلبات العملاء", path: "#" },
     ],
   },
   {
@@ -135,6 +135,7 @@ function DrawerComponent(props: PropsType) {
               >
                 {collection.routes.map((route) => (
                   <Button
+                    disabled={!route.react}
                     sx={{ justifyContent: "start" }}
                     {...(route.react
                       ? { component: NavLink, to: route.path }
