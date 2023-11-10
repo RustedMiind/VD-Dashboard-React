@@ -35,7 +35,6 @@ function SearchBar(props: PropsType) {
         </Button>
 
       </Stack>
-      <Filters opened={filtersOpened} />
     </>
   );
 }

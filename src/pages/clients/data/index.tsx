@@ -1,4 +1,4 @@
-import { Stack, Typography, Box, Tabs, Tab, Paper } from "@mui/material";
+import { Stack, Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import SearchBar from "./SearchBar";
 import EmployeesRequestsTable from "./Table";
 import RequestTypesToggles from "./Toggles";
@@ -7,7 +7,9 @@ import { EmployeeRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { requestTypes } from "./RequestTypes";
-
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import DeleteIcon from '@mui/icons-material/Delete';
 function ClientData() {
   const [currentTab, setCurrentTab] = useState("1");
   const [requests, setRequests] = useState<EmployeeRequest[] | undefined>(
@@ -71,9 +73,49 @@ function ClientData() {
         بيانات العملاء
       </Typography>
       <SearchBar search={search} setSearch={setSearch} />
-      <Typography variant="h6" fontWeight={600} mb={3} >
+      <Typography variant="h6" fontWeight={600} mb={3} mt={2} >
         العملاء
       </Typography>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        flexDirection="row"
+        flexWrap="wrap"
+        alignItems="end"
+      >
+        <Stack sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          alignItems: "end",
+        }}>
+          <Button
+            variant="contained"
+            startIcon={<AddCircleOutlineIcon />}
+            sx={{ mb: 1 }}
+          >
+            اضافة عميل جديد
+          </Button>
+          <Button
+
+            variant="contained"
+            startIcon={<EditNoteIcon />}
+            sx={{ mb: 1, ml: 2 }}
+          >
+            تعديل بيانات عميل
+          </Button>
+        </Stack>
+        <Button
+          color="error"
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          sx={{ mb: 1, ml: 2 }}
+        >
+          حذف
+        </Button>
+
+      </Box>
       <Paper
         // variant="outlined"
         sx={{

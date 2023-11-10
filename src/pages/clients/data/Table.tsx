@@ -9,6 +9,7 @@ import {
   Checkbox,
   Stack,
   Box,
+  Paper,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { requestTypes } from "./RequestTypes";
@@ -16,7 +17,6 @@ import { Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
@@ -57,51 +57,8 @@ function generateChip(value: number): JSX.Element {
 function EmployeesRequestsTable(props: PropsType) {
   return (
     <Stack sx={{ backgroundColor: "#F3F5F7" }}>
-
-      <Box
-        mt={2}
-        ml={2}
-        display="flex"
-        justifyContent="space-between"
-        flexDirection="row"
-        flexWrap="wrap"
-        alignItems="end"
-      >
-        <Stack sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          alignItems: "end",
-        }}>
-          <Button
-            variant="contained"
-            startIcon={<AddCircleOutlineIcon />}
-            sx={{ mb: 1 }}
-          >
-            اضافة عميل جديد
-          </Button>
-          <Button
-
-            variant="contained"
-            startIcon={<EditNoteIcon />}
-            sx={{ mb: 1, ml: 2 }}
-          >
-            تعديل بيانات عميل
-          </Button>
-        </Stack>
-        <Chip
-          sx={{ mr: 2, mb: 1, color: "red", border: "solid 1px" }}
-          label="حذف"
-          deleteIcon={<DeleteIcon />}
-          onClick={handleClick}
-          onDelete={handleDelete}
-          variant="outlined"
-        />
-
-      </Box>
       <TableContainer sx={{ height: 500 }}>
-        <Table aria-label="simple table">
+        <Table aria-label="simple table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell ><Checkbox /></TableCell>
