@@ -20,7 +20,7 @@ import { requestTypes } from "./RequestTypes";
 function generateChip(value: number): JSX.Element {
   let chip: JSX.Element = (
     <Chip
-      onClick={() => {}}
+      onClick={() => { }}
       color="primary"
       variant="outlined"
       label="اتخاذ الاجراء"

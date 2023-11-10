@@ -44,7 +44,7 @@ const routesCollections: RoutesCollectionType[] = [
     name: "العملاء",
     icon: GroupIcon,
     routes: [
-      { name: "بيانات العملاء", path: "#" },
+      { name: "بيانات العملاء", path: "/clients/data", react: true },
       { name: "بيانات الوسطاء", path: "#" },
       { name: "طلبات العملاء", path: "#" },
     ],
