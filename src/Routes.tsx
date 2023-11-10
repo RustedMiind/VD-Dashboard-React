@@ -14,7 +14,6 @@ function RoutesComponent() {
       </Route>
       <Route path="clients">
         <Route path="data" element={<ClientData />} />
-        {/* <Route path="procedures" element={<EmploeesRequestsProcedures />} /> */}
       </Route>
     </Routes>
   );

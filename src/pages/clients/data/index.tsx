@@ -107,10 +107,10 @@ function ClientData() {
           </Button>
         </Stack>
         <Button
-          color="error"
+
           variant="outlined"
           startIcon={<DeleteIcon />}
-          sx={{ mb: 1, ml: 2 }}
+          sx={{ mb: 1, ml: 2, color: "#CB1818", border: "solid 1px #CB1818" }}
         >
           حذف
         </Button>

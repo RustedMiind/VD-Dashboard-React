@@ -13,10 +13,7 @@ import {
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { requestTypes } from "./RequestTypes";
-import { Button } from "@mui/material";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DeleteIcon from '@mui/icons-material/Delete';
+import SettingsIcon from '@mui/icons-material/Settings';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
@@ -31,8 +28,8 @@ function generateChip(value: number): JSX.Element {
   let chip: JSX.Element = (
     <Chip
       onClick={() => { }}
-      sx={{ color: '#CB1818', backgroundColor: "#EED4D4", border: 'solid 1px' }} variant="outlined"
-      label="اتخاذ الاجراء"
+      sx={{ color: '#CB1818', backgroundColor: "#EED4D4", border: 'solid 1px', borderRadius: '7px' }} variant="outlined"
+      label="منتهي"
     />
   );
 
@@ -44,7 +41,7 @@ function generateChip(value: number): JSX.Element {
       chip = <Chip color="error" label="مرفوض" />;
       break;
     case 1:
-      chip = <Chip sx={{ color: '#18CB5F', backgroundColor: "#D4EEDE", border: 'solid 1px' }} label="جاري العمل" />;
+      chip = <Chip sx={{ color: '#18CB5F', backgroundColor: "#D4EEDE", border: 'solid 1px', borderRadius: '7px' }} label="جاري العمل" />;
       break;
 
     default:
@@ -59,16 +56,16 @@ function EmployeesRequestsTable(props: PropsType) {
     <Stack sx={{ backgroundColor: "#F3F5F7" }}>
       <TableContainer sx={{ height: 500 }}>
         <Table aria-label="simple table" stickyHeader>
-          <TableHead>
-            <TableRow>
+          <TableHead >
+            <TableRow >
               <TableCell ><Checkbox /></TableCell>
               <TableCell>اسم المالك</TableCell>
               <TableCell>رقم التليفون</TableCell>
-              <TableCell>البريد الالكتروني</TableCell>
-              <TableCell>رقم الهوية</TableCell>
+              <TableCell >البريد الالكتروني</TableCell>
+              <TableCell sx={{ textAlign: "center" }} >رقم الهوية</TableCell>
               <TableCell>الفرع</TableCell>
               <TableCell>حالة مشاريع العمل</TableCell>
-              <TableCell>اسم الوكيل</TableCell>
+              <TableCell >اسم الوكيل</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -98,14 +95,14 @@ function EmployeesRequestsTable(props: PropsType) {
 
                   </TableCell>
 
-                  <TableCell sx={{ color: '#F19B02' }}>{request.employee.name}</TableCell>
+                  <TableCell sx={{ color: '#F19B02', textDecoration: "underline", maxWidth: "100px", whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{request.employee.name}</TableCell>
                   <TableCell>+966 543 23456 53</TableCell>
                   <TableCell>youremail@domain.com</TableCell>
-                  <TableCell>{requsetType}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }} >{requsetType}</TableCell>
                   <TableCell>الرياض</TableCell>
-                  <TableCell>{generateChip(request.requestable_id)}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{generateChip(request.requestable_id)}</TableCell>
                   <TableCell>احمد محمود</TableCell>
-                  <TableCell>+</TableCell>
+                  <TableCell><SettingsIcon /></TableCell>
                 </TableRow>
               );
             })}
