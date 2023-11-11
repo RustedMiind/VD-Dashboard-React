@@ -3,6 +3,7 @@ import MainPage from "./pages/main";
 import EmplyeesRequests from "./pages/employees/requests";
 import EmploeesRequestsProcedures from "./pages/employees/procedures";
 import ClientData from "./pages/clients/data";
+import AddClient from "./pages/clients/data/addClient/AddClient";
 
 function RoutesComponent() {
   return (
@@ -15,6 +16,8 @@ function RoutesComponent() {
       <Route path="clients">
         <Route path="data" element={<ClientData />} />
       </Route>
+      <Route path="addClient" element={<AddClient />} />
+
     </Routes>
   );
 }

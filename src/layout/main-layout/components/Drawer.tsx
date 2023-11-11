@@ -147,6 +147,7 @@ function DrawerComponent(props: PropsType) {
               </Stack>
             </AccordionDetails>
           </Accordion>
+
         ))}
       </List>
     </Drawer>

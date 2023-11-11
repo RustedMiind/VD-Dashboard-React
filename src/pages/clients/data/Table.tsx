@@ -76,8 +76,6 @@ function EmployeesRequestsTable(props: PropsType) {
                   .toLowerCase()
                   .includes(x.prefix.toLowerCase())
               )?.name;
-              console.log(props.selectedData.includes(request.id),
-                'dfgdg', props.selectedData)
               return (
                 <TableRow key={request.id}>
                   <TableCell>

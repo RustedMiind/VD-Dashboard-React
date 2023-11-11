@@ -94,6 +94,8 @@ function ClientData() {
             variant="contained"
             startIcon={<AddCircleOutlineIcon />}
             sx={{ mb: 1 }}
+            href="/addClient"
+
           >
             اضافة عميل جديد
           </Button>
