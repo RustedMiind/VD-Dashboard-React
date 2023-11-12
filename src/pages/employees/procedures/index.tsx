@@ -1,8 +1,5 @@
 import {
-  Box,
   Stack,
-  Tab,
-  Tabs,
   Typography,
   Button,
   Paper,
@@ -18,7 +15,6 @@ import HandleDepartmentWithEmployees, {
   DepartmentWithEmployeesType,
 } from "../../../methods/HandleData/HandleDepartmentWithEmployees";
 import { Api } from "../../../constants";
-import { requestsIds } from "./RequestsIds";
 import TabsAndAdd from "./TabsAndAdd";
 
 const InitLevel: Step = {
@@ -63,6 +59,7 @@ function EmploeesRequestsProcedures() {
         setDepartments(HandleDepartmentWithEmployees(res.data.employee));
       })
       .catch(console.log);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
   return (
@@ -160,25 +157,23 @@ function EmploeesRequestsProcedures() {
   }
 
   function submitData() {
-    {
-      const data = proceduce.levels.map((r) => {
-        const { created_at, deleted_at, updated_at, id, ...t } = r;
-        return { ...t, type: currentTab };
+    const data = proceduce.levels.map((r) => {
+      const { created_at, deleted_at, updated_at, id, ...t } = r;
+      return { ...t, type: currentTab };
+    });
+    console.log("levels", data);
+    axios
+      .post(Api("employee/general-requests/steps/create"), {
+        data,
+      })
+      .then((res) => {
+        console.log(res);
+        setToaster({ type: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+        setToaster({ type: "error" });
       });
-      console.log("levels", data);
-      axios
-        .post(Api("employee/general-requests/steps/create"), {
-          data,
-        })
-        .then((res) => {
-          console.log(res);
-          setToaster({ type: "success" });
-        })
-        .catch((err) => {
-          console.log(err);
-          setToaster({ type: "error" });
-        });
-    }
   }
 }
 

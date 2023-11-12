@@ -1,6 +1,4 @@
 import {
-  Stack,
-  Button,
   Box,
   InputAdornment,
   Checkbox,
@@ -9,10 +7,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import { useEffect, useReducer, useState } from "react";
 import {
   TableContainer,
   Table,
@@ -24,7 +18,6 @@ import {
 } from "@mui/material";
 import SelectCustom from "../../../../components/MuiCustom";
 import { ActionTypes } from "./reducer";
-import { LevelType } from "..";
 import { Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 
