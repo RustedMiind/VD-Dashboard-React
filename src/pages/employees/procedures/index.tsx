@@ -10,9 +10,8 @@ import {
   Alert,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-// Icons
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import LevelItem from "./LevelItem";
+
+import LevelItem from "./LevelItem/LevelItem";
 import { ProceduresModelsType, Step } from "./types";
 import axios from "axios";
 import HandleDepartmentWithEmployees, {
@@ -20,6 +19,7 @@ import HandleDepartmentWithEmployees, {
 } from "../../../methods/HandleData/HandleDepartmentWithEmployees";
 import { Api } from "../../../constants";
 import { requestsIds } from "./RequestsIds";
+import TabsAndAdd from "./TabsAndAdd";
 
 const InitLevel: Step = {
   action: 0,
@@ -42,6 +42,93 @@ function EmploeesRequestsProcedures() {
   const [departments, setDepartments] = useState<
     DepartmentWithEmployeesType[] | null
   >();
+
+  useEffect(() => {
+    setLevels([]);
+    axios
+      .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
+      .then((res) => {
+        axios
+          .post(Api("employee/general-requests/steps"), { type: currentTab })
+          .then(({ data }) => {
+            setLevels(data.steps);
+            console.log("steps", data);
+          })
+          .catch(console.log);
+        console.log(res);
+        console.log(
+          "Handled",
+          HandleDepartmentWithEmployees(res.data.employee)
+        );
+        setDepartments(HandleDepartmentWithEmployees(res.data.employee));
+      })
+      .catch(console.log);
+  }, [currentTab]);
+
+  return (
+    <Stack>
+      <Typography variant="h5" fontWeight={600} mb={3}>
+        اعدادات اجراءات الطلبات
+      </Typography>
+
+      <TabsAndAdd
+        addLevel={addLevel}
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+      />
+
+      <Paper sx={{ p: 2 }}>
+        {departments && (
+          <Stack>
+            {proceduce.levels.map((level, index, arr) => {
+              const IS_LAST_ITEM = index === arr.length - 1;
+              const MORE_THAN_ONE = arr.length > 1;
+              return (
+                <LevelItem
+                  level={level}
+                  updateLevel={updateLevel(index)}
+                  name={`المرحلة ${index + 1}`}
+                  onDelete={
+                    IS_LAST_ITEM && MORE_THAN_ONE
+                      ? () => {
+                          removeLevel(index);
+                        }
+                      : undefined
+                  }
+                  departments={departments}
+                />
+              );
+            })}
+          </Stack>
+        )}
+        <Stack mt={2} direction={"row-reverse"}>
+          <Button sx={{ px: 4 }} variant="contained" onClick={submitData}>
+            ارسال التعديلات
+          </Button>
+        </Stack>
+      </Paper>
+
+      <Snackbar
+        open={toaster.type === "success"}
+        autoHideDuration={6000}
+        onClose={() => {
+          setToaster({ type: "null" });
+        }}
+        message="Note archived"
+      >
+        <Alert
+          {...(toaster.type === "success"
+            ? { severity: "success" }
+            : { severity: "error" })}
+          sx={{ width: "100%" }}
+        >
+          {toaster.type === "success"
+            ? "تم الحفظ بنجاح"
+            : "تعذر في الحفظ, تأكد من ادخال البيانات بالشكل الصحيح"}
+        </Alert>
+      </Snackbar>
+    </Stack>
+  );
 
   function setLevels(payload: Step[]) {
     setProcedure({ ...proceduce, levels: payload });
@@ -72,146 +159,30 @@ function EmploeesRequestsProcedures() {
     };
   }
 
-  useEffect(() => {
-    setLevels([]);
-    axios
-      .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
-      .then((res) => {
-        axios
-          .request<{ steps: Step[] }>({
-            url: Api("employee/general-requests/steps"),
-            method: "POST",
-            params: { type: currentTab },
-          })
-          .then(({ data }) => {
-            setLevels(data.steps);
-            console.log("steps", data);
-          })
-          .catch(console.log);
-        console.log(res);
-        console.log(
-          "Handled",
-          HandleDepartmentWithEmployees(res.data.employee)
-        );
-        setDepartments(HandleDepartmentWithEmployees(res.data.employee));
-      })
-      .catch(console.log);
-  }, [currentTab]);
-
-  return (
-    <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        اعدادات اجراءات الطلبات
-      </Typography>
-
-      <Box
-        mt={2}
-        display="flex"
-        justifyContent="space-between"
-        flexDirection="row-reverse"
-        flexWrap="wrap"
-        alignItems="end"
-      >
-        <Button
-          variant="contained"
-          startIcon={<AddCircleOutlineIcon />}
-          sx={{ mb: 1 }}
-          onClick={addLevel}
-        >
-          اضافة مرحلة جديدة
-        </Button>
-
-        <Tabs
-          aria-label="basic tabs example"
-          value={currentTab}
-          onChange={(e, v) => {
-            setCurrentTab(v);
-          }}
-        >
-          {requestsIds.map((req) => (
-            <Tab label={req.name} value={req.id} />
-          ))}
-        </Tabs>
-      </Box>
-      <Paper sx={{ p: 2 }}>
-        {departments && (
-          <Stack>
-            {proceduce.levels.map((level, index, arr) => {
-              const IS_LAST_ITEM = index === arr.length - 1;
-              const MORE_THAN_ONE = arr.length > 1;
-              return (
-                <LevelItem
-                  level={level}
-                  updateLevel={updateLevel(index)}
-                  name={`المرحلة ${index + 1}`}
-                  onDelete={
-                    IS_LAST_ITEM && MORE_THAN_ONE
-                      ? () => {
-                          removeLevel(index);
-                        }
-                      : undefined
-                  }
-                  departments={departments}
-                />
-              );
-            })}
-          </Stack>
-        )}
-        <Stack mt={2} direction={"row-reverse"}>
-          <Button
-            sx={{ px: 4 }}
-            variant="contained"
-            onClick={() => {
-              const data = proceduce.levels.map((r) => {
-                const { created_at, deleted_at, updated_at, id, ...t } = r;
-                return { ...t, type: currentTab };
-              });
-              console.log("levels", data);
-              axios
-                .post(Api("employee/general-requests/steps/create"), {
-                  data,
-                })
-                .then((res) => {
-                  console.log(res);
-                  setToaster({ type: "success" });
-                })
-                .catch((err) => {
-                  console.log(err);
-                  setToaster({ type: "error" });
-                });
-            }}
-          >
-            ارسال التعديلات
-          </Button>
-        </Stack>
-      </Paper>
-
-      <Snackbar
-        open={toaster.type === "success"}
-        autoHideDuration={6000}
-        onClose={() => {
-          setToaster({ type: "null" });
-        }}
-        message="Note archived"
-      >
-        <Alert
-          {...(toaster.type === "success"
-            ? { severity: "success" }
-            : { severity: "error" })}
-          sx={{ width: "100%" }}
-        >
-          {toaster.type === "success"
-            ? "تم الحفظ بنجاح"
-            : "تعذر في الحفظ, تأكد من ادخال البيانات بالشكل الصحيح"}
-        </Alert>
-      </Snackbar>
-    </Stack>
-  );
+  function submitData() {
+    {
+      const data = proceduce.levels.map((r) => {
+        const { created_at, deleted_at, updated_at, id, ...t } = r;
+        return { ...t, type: currentTab };
+      });
+      console.log("levels", data);
+      axios
+        .post(Api("employee/general-requests/steps/create"), {
+          data,
+        })
+        .then((res) => {
+          console.log(res);
+          setToaster({ type: "success" });
+        })
+        .catch((err) => {
+          console.log(err);
+          setToaster({ type: "error" });
+        });
+    }
+  }
 }
 
 export interface ProcedureType {
-  // name: string;
-  // id: number;
   levels: Step[];
 }
 

@@ -32,9 +32,6 @@ function EmplyeesRequests() {
       let found = false;
       selectedTypes.forEach((selection) => {
         const temp = requestTypes.find((x) => x.name === selection);
-        // if (found) {
-        //   return;
-        // }
         if (
           temp &&
           request.requestable_type

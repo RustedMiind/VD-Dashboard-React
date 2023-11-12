@@ -69,7 +69,7 @@ interface ModelActionResetType extends ReducerAction<Step> {
   type: "SET_RESET";
 }
 
-type ActionTypes =
+export type ActionTypes =
   | ManagerActionType
   | EmployeeActionType
   | AcceptedActionType
