@@ -49,8 +49,8 @@ function EmployeesRequestsTable(props: PropsType) {
   return (
     <TableContainer sx={{ height: 500 }}>
       <Table aria-label="simple table" stickyHeader>
-        <TableHead>
-          <TableRow>
+        <TableHead >
+          <TableRow >
             <TableCell>رقم الطلب</TableCell>
             <TableCell>اسم الموظف</TableCell>
             <TableCell>تاريخ الورود</TableCell>

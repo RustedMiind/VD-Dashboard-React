@@ -12,6 +12,7 @@ import {
 import { EmployeeRequest } from "../../../types";
 import { requestTypes } from "./RequestTypes";
 import SettingsIcon from '@mui/icons-material/Settings';
+import { formatDate } from "../../../methods";
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const bgTable = "#F3F5F7";
 
@@ -57,13 +58,13 @@ function EmployeesRequestsTable(props: PropsType) {
           <TableHead >
             <TableRow>
               <TableCell sx={{ backgroundColor: bgTable }} ><Checkbox /></TableCell>
-              <TableCell sx={{ backgroundColor: bgTable }}>اسم المالك</TableCell>
-              <TableCell sx={{ backgroundColor: bgTable }}>رقم التليفون</TableCell>
-              <TableCell sx={{ backgroundColor: bgTable }}>البريد الالكتروني</TableCell>
-              <TableCell sx={{ backgroundColor: bgTable, textAlign: "center" }} >رقم الهوية</TableCell>
-              <TableCell sx={{ backgroundColor: bgTable }}>الفرع</TableCell>
-              <TableCell sx={{ backgroundColor: bgTable }}>حالة مشاريع العمل</TableCell>
-              <TableCell sx={{ backgroundColor: bgTable }} >اسم الوكيل</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable }}>رقم العقد</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable }}>نوع العقد</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable }}>اسم العميل</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable, textAlign: "center" }} >تليفون العميل</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable }}>مدة العقد</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable }}>تاريخ انتهاء العقد</TableCell>
+              <TableCell sx={{ backgroundColor: bgTable }} >المهندس المسؤول</TableCell>
               <TableCell sx={{ backgroundColor: bgTable }}></TableCell>
             </TableRow>
           </TableHead>
@@ -91,12 +92,12 @@ function EmployeesRequestsTable(props: PropsType) {
 
                   </TableCell>
 
-                  <TableCell sx={{ color: '#F19B02', textDecoration: "underline", maxWidth: "100px", whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{request.employee.name}</TableCell>
+                  <TableCell>1234568</TableCell>
                   <TableCell>+966 543 23456 53</TableCell>
                   <TableCell>youremail@domain.com</TableCell>
                   <TableCell sx={{ textAlign: "center" }} >{requsetType}</TableCell>
-                  <TableCell>الرياض</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>{generateChip(request.requestable_id)}</TableCell>
+                  <TableCell>10</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{formatDate(request.created_at)}</TableCell>
                   <TableCell>احمد محمود</TableCell>
                   <TableCell><SettingsIcon /></TableCell>
                 </TableRow>
