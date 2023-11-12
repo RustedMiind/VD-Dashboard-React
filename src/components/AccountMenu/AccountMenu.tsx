@@ -24,7 +24,7 @@ export default function AccountMenu() {
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
+        <Tooltip title="اعدادات الحساب">
           <IconButton
             onClick={handleClick}
             size="small"
