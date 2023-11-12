@@ -3,7 +3,8 @@ import MainPage from "./pages/main";
 import EmplyeesRequests from "./pages/employees/requests";
 import EmploeesRequestsProcedures from "./pages/employees/procedures";
 import ClientData from "./pages/clients/data";
-import AddClient from "./pages/clients/data/addClient/AddClient";
+import AddClient from "./pages/clients/addClient/AddClient";
+import Contracts from "./pages/contracts/data";
 
 function RoutesComponent() {
   return (
@@ -14,9 +15,10 @@ function RoutesComponent() {
         <Route path="procedures" element={<EmploeesRequestsProcedures />} />
       </Route>
       <Route path="clients">
-        <Route path="data" element={<ClientData />} />
+        <Route path="" element={<ClientData />} />
+        <Route path="add" element={<AddClient />} />
       </Route>
-      <Route path="addClient" element={<AddClient />} />
+      <Route path="contracts" element={<Contracts />} />
 
     </Routes>
   );

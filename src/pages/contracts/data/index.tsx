@@ -1,5 +1,5 @@
 import { Stack, Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
-import SearchBar from "./SearchBar";
+import * as React from 'react';
 import EmployeesRequestsTable from "./Table";
 import { useEffect, useState } from "react";
 import { EmployeeRequest } from "../../../types";
@@ -10,7 +10,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NavLink } from "react-router-dom";
-function ClientData() {
+function Contracts() {
   const [currentTab, setCurrentTab] = useState("1");
   const [requests, setRequests] = useState<EmployeeRequest[] | undefined>(
     undefined
@@ -51,7 +51,45 @@ function ClientData() {
     });
     filtered = filter || undefined;
   }
+  // Start tab function 
+  interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+  }
 
+  function CustomTabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+  // End tab function
   useEffect(() => {
     axios
       .get<{ requests: EmployeeRequest[] }>(
@@ -69,39 +107,24 @@ function ClientData() {
 
   return (
     <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        بيانات العملاء
-      </Typography>
-      <SearchBar search={search} setSearch={setSearch} />
-      <Typography variant="h6" fontWeight={600} mb={3} mt={2} >
-        العملاء
-      </Typography>
-
-      <Paper
-        // variant="outlined"
-        sx={{
-          //
-          bgcolor: "Background",
-          overflow: "hidden",
-          backgroundColor: "#F3F5F7"
-        }}
-        elevation={4}
-      >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          flexDirection="row"
-          flexWrap="wrap"
-          alignItems="end"
-          padding={3}
-        >
-          <Stack sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            alignItems: "end",
-          }}>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Tab label="بيانات العقود"  {...a11yProps(0)} />
+            <Tab label="ادارة العقود" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <Paper
+            // variant="outlined"
+            sx={{
+              p: 2,
+              bgcolor: "Background",
+              overflow: "hidden",
+              backgroundColor: "#F3F5F7"
+            }}
+            elevation={4}
+          >
             <Button
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
@@ -111,29 +134,16 @@ function ClientData() {
             >
               اضافة عميل جديد
             </Button>
-            <Button
+            {filtered && <EmployeesRequestsTable selectedData={selectedData} setSelectedData={setSelectedData} requests={filtered} />}
+          </Paper>        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          Item Two
+        </CustomTabPanel>
+      </Box>
 
-              variant="contained"
-              startIcon={<EditNoteIcon />}
-              sx={{ mb: 1, ml: 2 }}
-            >
-              تعديل بيانات عميل
-            </Button>
-          </Stack>
-          <Button
 
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-            sx={{ mb: 1, ml: 2, color: "#CB1818", border: "solid 1px #CB1818" }}
-          >
-            حذف
-          </Button>
-
-        </Box>
-        {filtered && <EmployeesRequestsTable selectedData={selectedData} setSelectedData={setSelectedData} requests={filtered} />}
-      </Paper>
     </Stack>
   );
 }
 
-export default ClientData;
+export default Contracts;

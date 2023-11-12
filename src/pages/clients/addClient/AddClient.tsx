@@ -7,6 +7,7 @@ import FormControlLabel, {
 import Radio from '@mui/material/Radio';
 import { useState } from "react";
 import FormAdd from "./FormAdd";
+import { Api, Domain } from "../../../constants";
 
 interface StyledFormControlLabelProps extends FormControlLabelProps {
     checked: boolean;
@@ -33,7 +34,9 @@ function MyFormControlLabel(props: FormControlLabelProps) {
 }
 
 function AddClient() {
-    const [typeAdd, settypeAdd] = useState<string>('فرد')
+    console.log(Api("wdcw"));
+
+    const [typeAdd, settypeAdd] = useState<TypeAdd>('فرد')
     console.log(typeAdd);
 
     return (
@@ -47,15 +50,11 @@ function AddClient() {
                     <MyFormControlLabel onClick={() => settypeAdd('شركه')} value="شركه" label="شركه" control={<Radio />} />
                 </Box>
             </RadioGroup>
-            {typeAdd === 'فرد' ?
-                <FormAdd typeAdd={typeAdd} />
-                :
-                <FormAdd typeAdd={typeAdd} />
-            }
-
+            <FormAdd typeAdd={typeAdd} />
         </Stack >
     )
 }
 
 export default AddClient
 
+export type TypeAdd = "فرد" | "شركه"
