@@ -7,8 +7,6 @@ import axios from "axios";
 import { Api } from "../../../constants";
 import { requestTypes } from "./RequestTypes";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { NavLink } from "react-router-dom";
 function Contracts() {
   const [currentTab, setCurrentTab] = useState("1");
@@ -132,10 +130,11 @@ function Contracts() {
               component={NavLink}
               to={'add'}
             >
-              اضافة عميل جديد
+              اضافة عقد
             </Button>
             {filtered && <EmployeesRequestsTable selectedData={selectedData} setSelectedData={setSelectedData} requests={filtered} />}
-          </Paper>        </CustomTabPanel>
+          </Paper>
+        </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           Item Two
         </CustomTabPanel>

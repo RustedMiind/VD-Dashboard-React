@@ -1,8 +1,6 @@
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
-import Link from "@mui/material/Link";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -134,8 +132,9 @@ function DrawerComponent(props: PropsType) {
                   },
                 }}
               >
-                {collection.routes.map((route) => (
+                {collection.routes.map((route, i) => (
                   <Button
+                    key={i}
                     disabled={!route.react}
                     sx={{ justifyContent: "start" }}
                     {...(route.react

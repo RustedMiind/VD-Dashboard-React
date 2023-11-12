@@ -1,4 +1,5 @@
 import { Stack, Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
+
 import SearchBar from "./SearchBar";
 import EmployeesRequestsTable from "./Table";
 import { useEffect, useState } from "react";

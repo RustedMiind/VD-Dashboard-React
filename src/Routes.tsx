@@ -5,6 +5,9 @@ import EmploeesRequestsProcedures from "./pages/employees/procedures";
 import ClientData from "./pages/clients/data";
 import AddClient from "./pages/clients/addClient/AddClient";
 import Contracts from "./pages/contracts/data";
+import AddContracts from "./pages/contracts/addContracts/ContractsNotFound";
+import CreateContracts from "./pages/contracts/addContracts/CreateContracts";
+import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound";
 
 function RoutesComponent() {
   return (
@@ -18,7 +21,11 @@ function RoutesComponent() {
         <Route path="" element={<ClientData />} />
         <Route path="add" element={<AddClient />} />
       </Route>
-      <Route path="contracts" element={<Contracts />} />
+      <Route path="contracts">
+        <Route path="" element={<Contracts />} />
+        <Route path="add" element={<ContractsNotFound />} />
+        <Route path="create" element={<CreateContracts />} />
+      </Route>
 
     </Routes>
   );
