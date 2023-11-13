@@ -9,7 +9,6 @@
     "@mui/lab": "^5.0.0-alpha.152",
     "@mui/material": "^5.14.16",
     "@mui/x-date-pickers": "^6.18.0",
-    "@react-spring/web": "^9.7.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",

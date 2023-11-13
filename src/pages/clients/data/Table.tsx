@@ -9,7 +9,7 @@ import {
   Checkbox,
   Stack,
 } from "@mui/material";
-import { EmployeeRequest } from "../../../types";
+import { ClientRequest, EmployeeRequest } from "../../../types";
 import { requestTypes } from "./RequestTypes";
 import SettingsIcon from '@mui/icons-material/Settings';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -49,7 +49,7 @@ function generateChip(value: number): JSX.Element {
   return chip;
 }
 
-function EmployeesRequestsTable(props: PropsType) {
+function ClientRequestsTable(props: PropsType) {
   return (
     <Stack sx={{ backgroundColor: bgTable }}>
       <TableContainer sx={{ height: 500 }}>
@@ -70,7 +70,7 @@ function EmployeesRequestsTable(props: PropsType) {
           <TableBody>
             {props.requests.map((request, index) => {
               const requsetType = requestTypes.find((x) =>
-                request.requestable_type
+                request.email
                   .toLowerCase()
                   .includes(x.prefix.toLowerCase())
               )?.name;
@@ -91,12 +91,12 @@ function EmployeesRequestsTable(props: PropsType) {
 
                   </TableCell>
 
-                  <TableCell sx={{ color: '#F19B02', textDecoration: "underline", maxWidth: "100px", whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{request.employee.name}</TableCell>
+                  <TableCell sx={{ color: '#F19B02', textDecoration: "underline", maxWidth: "100px", whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>ff</TableCell>
                   <TableCell>+966 543 23456 53</TableCell>
                   <TableCell>youremail@domain.com</TableCell>
                   <TableCell sx={{ textAlign: "center" }} >{requsetType}</TableCell>
                   <TableCell>الرياض</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>{generateChip(request.requestable_id)}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>d</TableCell>
                   <TableCell>احمد محمود</TableCell>
                   <TableCell><SettingsIcon /></TableCell>
                 </TableRow>
@@ -111,9 +111,9 @@ function EmployeesRequestsTable(props: PropsType) {
 }
 
 type PropsType = {
-  requests: EmployeeRequest[];
+  requests: ClientRequest[];
   selectedData: number[];
   setSelectedData: React.Dispatch<React.SetStateAction<number[]>>
 };
 
-export default EmployeesRequestsTable;
+export default ClientRequestsTable;

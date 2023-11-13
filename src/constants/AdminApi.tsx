@@ -1,5 +1,5 @@
-import { Api } from "./Api";
+import { apiDomain } from "./apiDomain";
 
 export const AdminApi = (path: string) => {
-  return `${Api("admin/")}${path}`;
+  return `${apiDomain("api/")}${path}`;
 };

@@ -1,9 +1,8 @@
 import { Stack, Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 
 import SearchBar from "./SearchBar";
-import EmployeesRequestsTable from "./Table";
 import { useEffect, useState } from "react";
-import { EmployeeRequest } from "../../../types";
+import { ClientRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { requestTypes } from "./RequestTypes";
@@ -11,21 +10,23 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NavLink } from "react-router-dom";
+import ClientRequestsTable from "./Table";
+import { AdminApi } from "../../../constants/AdminApi";
 function ClientData() {
   const [currentTab, setCurrentTab] = useState("1");
-  const [requests, setRequests] = useState<EmployeeRequest[] | undefined>(
+  const [requests, setRequests] = useState<ClientRequest[] | undefined>(
     undefined
   );
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedData, setSelectedData] = useState<number[]>([]);
 
-  let filtered: EmployeeRequest[] | undefined = requests;
+  let filtered: ClientRequest[] | undefined = requests;
 
   if (search) {
     const searchLowerCase = search.toLowerCase();
     const filter = requests?.filter((request) => {
-      return request.employee.name
+      return request.name
         .toLocaleLowerCase()
         .includes(searchLowerCase);
     });
@@ -41,7 +42,7 @@ function ClientData() {
         // }
         if (
           temp &&
-          request.requestable_type
+          request.email
             .toLowerCase()
             .includes(temp?.prefix.toLowerCase())
         ) {
@@ -54,21 +55,23 @@ function ClientData() {
   }
 
   useEffect(() => {
+    console.log(AdminApi("client"))
     axios
-      .get<{ requests: EmployeeRequest[] }>(
-        Api("employee/general-requests/requests")
+      .get<{ requests: ClientRequest[] }>(
+        AdminApi("client")
       )
       .then(({ data }) => {
-        setRequests(data.requests);
-        console.log(data);
+        console.log("data", data);
+
       })
       .catch((err) => {
         setRequests(undefined);
-        console.log(err);
+        console.log("err", err);
       });
   }, []);
 
   return (
+
     <Stack>
       <Typography variant="h5" fontWeight={600} mb={3}>
         بيانات العملاء
@@ -131,7 +134,7 @@ function ClientData() {
           </Button>
 
         </Box>
-        {filtered && <EmployeesRequestsTable selectedData={selectedData} setSelectedData={setSelectedData} requests={filtered} />}
+        {filtered && <ClientRequestsTable selectedData={selectedData} setSelectedData={setSelectedData} requests={filtered} />}
       </Paper>
     </Stack>
   );

@@ -96,6 +96,7 @@ function DrawerComponent(props: PropsType) {
       <List>
         {routesCollections.map((collection, index) => (
           <Accordion
+            key={index}
             sx={{
               backgroundColor: "transparent",
             }}
