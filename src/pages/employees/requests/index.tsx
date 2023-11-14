@@ -7,6 +7,7 @@ import { EmployeeRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { requestTypes } from "./RequestTypes";
+import ModelDialog from "./ModelDialog/ModelDialog";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
@@ -59,52 +60,54 @@ function EmplyeesRequests() {
         setRequests(undefined);
         console.log(err);
       });
-
   }, []);
 
   return (
-    <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        طلبات الموظفين
-      </Typography>
-      <SearchBar search={search} setSearch={setSearch} />
-      <Box
-        mt={2}
-        display="flex"
-        justifyContent="space-between"
-        flexDirection="row-reverse"
-        flexWrap="wrap"
-        alignItems="end"
-      >
-        <RequestTypesToggles
-          selected={selectedTypes}
-          setSelected={setSelectedTypes}
-        />
-
-        <Tabs
-          aria-label="basic tabs example"
-          value={currentTab}
-          onChange={(e, v) => {
-            setCurrentTab(v);
-          }}
+    <>
+      <ModelDialog open={true} />
+      <Stack>
+        <Typography variant="h5" fontWeight={600} mb={3}>
+          طلبات الموظفين
+        </Typography>
+        <SearchBar search={search} setSearch={setSearch} />
+        <Box
+          mt={2}
+          display="flex"
+          justifyContent="space-between"
+          flexDirection="row-reverse"
+          flexWrap="wrap"
+          alignItems="end"
         >
-          <Tab label="الكل" value={"1"} />
-          <Tab label="الوارد" value={"2"} disabled />
-          <Tab label="الصادر" value={"3"} disabled />
-        </Tabs>
-      </Box>
-      <Paper
-        // variant="outlined"
-        sx={{
-          //
-          bgcolor: "Background",
-          overflow: "hidden",
-        }}
-        elevation={4}
-      >
-        {filtered && <EmployeesRequestsTable requests={filtered} />}
-      </Paper>
-    </Stack>
+          <RequestTypesToggles
+            selected={selectedTypes}
+            setSelected={setSelectedTypes}
+          />
+
+          <Tabs
+            aria-label="basic tabs example"
+            value={currentTab}
+            onChange={(e, v) => {
+              setCurrentTab(v);
+            }}
+          >
+            <Tab label="الكل" value={"1"} />
+            <Tab label="الوارد" value={"2"} disabled />
+            <Tab label="الصادر" value={"3"} disabled />
+          </Tabs>
+        </Box>
+        <Paper
+          // variant="outlined"
+          sx={{
+            //
+            bgcolor: "Background",
+            overflow: "hidden",
+          }}
+          elevation={4}
+        >
+          {filtered && <EmployeesRequestsTable requests={filtered} />}
+        </Paper>
+      </Stack>
+    </>
   );
 }
 

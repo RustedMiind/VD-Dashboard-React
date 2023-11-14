@@ -42,11 +42,11 @@ if (db_token) {
     })
     .catch((err) => {
       console.log(err);
-      window.location.replace(Domain());
+      // window.location.replace(Domain());
     });
 } else {
   setCookie(db_token, "", 0.00001);
-  window.location.replace(Domain());
+  // window.location.replace(Domain());
 }
 
 // If you want to start measuring performance in your app, pass a function

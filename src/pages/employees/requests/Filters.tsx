@@ -1,6 +1,7 @@
 import { Grid, Paper } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import SelectCustom from "../../../components/MuiCustom";
+import { EmployeeRequest } from "../../../types";
 
 function Filters(props: PropsType) {
   return (
@@ -76,5 +77,8 @@ function Filters(props: PropsType) {
 export default Filters;
 
 type PropsType = {
-  opened?: boolean;
+  opened: boolean;
+  request: EmployeeRequest | null;
+  onClose: () => void;
+  onSubmit: () => void;
 };
