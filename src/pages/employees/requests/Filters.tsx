@@ -78,7 +78,4 @@ export default Filters;
 
 type PropsType = {
   opened: boolean;
-  request: EmployeeRequest | null;
-  onClose: () => void;
-  onSubmit: () => void;
 };

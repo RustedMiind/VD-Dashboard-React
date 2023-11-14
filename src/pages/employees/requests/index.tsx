@@ -64,7 +64,12 @@ function EmplyeesRequests() {
 
   return (
     <>
-      <ModelDialog open={true} />
+      <ModelDialog
+        open={false}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        request={null}
+      />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
           طلبات الموظفين

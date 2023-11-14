@@ -12,6 +12,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import { EmployeeRequest } from "../../../../types";
 
 function ModelDialog(props: PropsType) {
   return (
@@ -95,6 +96,9 @@ function ModelDialog(props: PropsType) {
 
 type PropsType = {
   open: boolean;
+  request: EmployeeRequest | null;
+  onClose: () => void;
+  onSubmit: () => void;
 };
 
 export default ModelDialog;
