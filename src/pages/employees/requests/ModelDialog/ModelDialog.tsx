@@ -16,7 +16,7 @@ import { EmployeeRequest } from "../../../../types";
 
 function ModelDialog(props: PropsType) {
   return (
-    <Dialog open={props.open} maxWidth="md" fullWidth>
+    <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth>
       <DialogTitle>نموذج مالية</DialogTitle>
       <DialogContent>
         <Stack direction={"row"} pt={2}>
@@ -85,7 +85,9 @@ function ModelDialog(props: PropsType) {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined">الغاء</Button>
+        <Button variant="outlined" onClick={props.onClose}>
+          الغاء
+        </Button>
         <Button variant="contained" autoFocus>
           ارسال
         </Button>

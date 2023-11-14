@@ -16,8 +16,22 @@ function EmplyeesRequests() {
   );
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
+    null
+  );
 
   let filtered: EmployeeRequest[] | undefined = requests;
+
+  function handleOpenModal(request: EmployeeRequest) {
+    return () => {
+      setdialogRequest(request);
+      setDialogOpen(true);
+    };
+  }
+  function handleCloseModal() {
+    setDialogOpen(false);
+  }
 
   if (search) {
     const searchLowerCase = search.toLowerCase();
@@ -65,10 +79,10 @@ function EmplyeesRequests() {
   return (
     <>
       <ModelDialog
-        open={false}
-        onClose={() => {}}
+        open={dialogOpen}
+        onClose={handleCloseModal}
         onSubmit={() => {}}
-        request={null}
+        request={dialogRequest}
       />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
@@ -109,7 +123,12 @@ function EmplyeesRequests() {
           }}
           elevation={4}
         >
-          {filtered && <EmployeesRequestsTable requests={filtered} />}
+          {filtered && (
+            <EmployeesRequestsTable
+              openModal={handleOpenModal}
+              requests={filtered}
+            />
+          )}
         </Paper>
       </Stack>
     </>

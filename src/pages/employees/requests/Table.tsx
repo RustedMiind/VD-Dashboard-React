@@ -17,40 +17,40 @@ import { requestTypes } from "./RequestTypes";
 0 rejected
 */
 
-function generateChip(value: number): JSX.Element {
-  let chip: JSX.Element = (
-    <Chip
-      onClick={() => { }}
-      color="primary"
-      variant="outlined"
-      label="اتخاذ الاجراء"
-    />
-  );
+function EmployeesRequestsTable(props: PropsType) {
+  function generateChip(value: number, request: EmployeeRequest): JSX.Element {
+    let chip: JSX.Element = (
+      <Chip
+        onClick={props.openModal(request)}
+        color="primary"
+        variant="outlined"
+        label="اتخاذ الاجراء"
+      />
+    );
 
-  switch (value) {
-    // case -1:
-    //   chip = <Chip color="primary" label="تحت المراجعة" />
-    //   break;
-    case 0:
-      chip = <Chip color="error" variant="outlined" label="مرفوض" />;
-      break;
-    case 1:
-      chip = <Chip color="success" variant="outlined" label="مقبول" />;
-      break;
+    switch (value) {
+      // case -1:
+      //   chip = <Chip color="primary" label="تحت المراجعة" />
+      //   break;
+      case 0:
+        chip = <Chip color="error" variant="outlined" label="مرفوض" />;
+        break;
+      case 1:
+        chip = <Chip color="success" variant="outlined" label="مقبول" />;
+        break;
 
-    default:
-      break;
+      default:
+        break;
+    }
+
+    return chip;
   }
 
-  return chip;
-}
-
-function EmployeesRequestsTable(props: PropsType) {
   return (
     <TableContainer sx={{ height: 500 }}>
       <Table aria-label="simple table" stickyHeader>
-        <TableHead >
-          <TableRow >
+        <TableHead>
+          <TableRow>
             <TableCell>رقم الطلب</TableCell>
             <TableCell>اسم الموظف</TableCell>
             <TableCell>تاريخ الورود</TableCell>
@@ -68,9 +68,6 @@ function EmployeesRequestsTable(props: PropsType) {
                 .includes(x.prefix.toLowerCase())
             )?.name;
 
-
-
-
             return (
               <TableRow>
                 <TableCell>{request.id}</TableCell>
@@ -78,7 +75,9 @@ function EmployeesRequestsTable(props: PropsType) {
                 <TableCell>{formatDate(request.created_at)}</TableCell>
                 <TableCell>{requsetType}</TableCell>
                 <TableCell>-</TableCell>
-                <TableCell>{generateChip(request.requestable_id)}</TableCell>
+                <TableCell>
+                  {generateChip(request.requestable_id, request)}
+                </TableCell>
                 <TableCell>-</TableCell>
               </TableRow>
             );
@@ -91,6 +90,7 @@ function EmployeesRequestsTable(props: PropsType) {
 
 type PropsType = {
   requests: EmployeeRequest[];
+  openModal: (r: EmployeeRequest) => () => void;
 };
 
 export default EmployeesRequestsTable;
