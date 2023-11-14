@@ -8,11 +8,12 @@ import Contracts from "./pages/contracts/data";
 import AddContracts from "./pages/contracts/addContracts/ContractsNotFound.1";
 import CreateContracts from "./pages/contracts/addContracts/CreateContracts";
 import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound.1";
+import NotReactRoute from "./NotReactRoute";
 
 function RoutesComponent() {
   return (
     <Routes>
-      <Route path="react">
+      <Route path="react/*">
         <Route path="" element={<MainPage />} />
         <Route path="employees">
           <Route path="requests" element={<EmplyeesRequests />} />
@@ -27,7 +28,9 @@ function RoutesComponent() {
           <Route path="add" element={<ContractsNotFound />} />
           <Route path="create" element={<CreateContracts />} />
         </Route>
+        <Route path="*" element={<div>صفحة خاطئة</div>} />
       </Route>
+      <Route path="*" element={<NotReactRoute />} />
     </Routes>
   );
 }
