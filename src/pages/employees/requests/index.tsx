@@ -8,20 +8,24 @@ import axios from "axios";
 import { Api } from "../../../constants";
 import { requestTypes } from "./RequestTypes";
 import ModelDialog from "./ModelDialog/ModelDialog";
+import LoadingTable from "../../../components/LoadingTable";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
-  const [requests, setRequests] = useState<EmployeeRequest[] | undefined>(
-    undefined
-  );
+  const [requests, setRequests] = useState<
+    EmployeeRequest[] | "loading" | "none" | "error"
+  >("loading");
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
     null
   );
+  const IS_REQUESTS_EXISTS = Array.isArray(requests);
 
-  let filtered: EmployeeRequest[] | undefined = requests;
+  let filtered: EmployeeRequest[] | undefined = IS_REQUESTS_EXISTS
+    ? requests
+    : undefined;
 
   function handleOpenModal(request: EmployeeRequest) {
     return () => {
@@ -33,7 +37,7 @@ function EmplyeesRequests() {
     setDialogOpen(false);
   }
 
-  if (search) {
+  if (search && IS_REQUESTS_EXISTS) {
     const searchLowerCase = search.toLowerCase();
     const filter = requests?.filter((request) => {
       return request.employee.name
@@ -71,7 +75,7 @@ function EmplyeesRequests() {
         console.log(data);
       })
       .catch((err) => {
-        setRequests(undefined);
+        setRequests("error");
         console.log(err);
       });
   }, []);
@@ -128,6 +132,14 @@ function EmplyeesRequests() {
               openModal={handleOpenModal}
               requests={filtered}
             />
+          )}
+          {requests === "loading" && (
+            <LoadingTable rows={60} cols={7} height={500} />
+          )}
+          {requests === "error" && (
+            <Typography variant="h4" color="error">
+              حدث خظأ في عرض الطلبات
+            </Typography>
           )}
         </Paper>
       </Stack>

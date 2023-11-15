@@ -6,6 +6,7 @@ import {
   TableBody,
   TableCell,
   Chip,
+  Typography,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
@@ -84,6 +85,11 @@ function EmployeesRequestsTable(props: PropsType) {
           })}
         </TableBody>
       </Table>
+      {props.requests.length === 0 && (
+        <Typography variant="h5" textAlign="center" p={2} py={4}>
+          لم يتم ايجاد اي من الطلبات المطلوبة
+        </Typography>
+      )}
     </TableContainer>
   );
 }
