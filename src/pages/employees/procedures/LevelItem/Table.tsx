@@ -93,6 +93,7 @@ function TableComponent({
                     value={level.employee_id}
                     disabled={formDisabled}
                     onChange={(e) => {
+                      console.log(departments);
                       dispatch({
                         type: "SET_EMPLOYEE",
                         payload: e.target.value as number,
@@ -105,7 +106,10 @@ function TableComponent({
                           department.departmentId === level.department_id
                       )
                       ?.employees.map((employee) => (
-                        <MenuItem key={employee.id} value={employee.id}>
+                        <MenuItem
+                          key={employee.employee_id}
+                          value={employee.employee_id}
+                        >
                           {employee.employeeName}
                         </MenuItem>
                       ))}
