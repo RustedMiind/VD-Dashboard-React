@@ -13,11 +13,16 @@ import {
   TextField,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
+import { ProceduresModelTypeCode } from "../../procedures/types";
+import { modelNamesIds } from "../../procedures/ModelTypes";
 
 function ModelDialog(props: PropsType) {
+  const model =
+    modelNamesIds.find((x) => props.modelType === x.id) || modelNamesIds[0];
+
   return (
     <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth>
-      <DialogTitle>نموذج مالية</DialogTitle>
+      <DialogTitle>{model.name}</DialogTitle>
       <DialogContent>
         <Stack direction={"row"} pt={2}>
           <Stack width={0.5} direction="row" alignItems="center" gap={1}>
@@ -36,35 +41,36 @@ function ModelDialog(props: PropsType) {
                 label="حالة  الطلب"
                 // onChange={handleChange}
               >
-                <MenuItem value={30}>ﻻ اجراء</MenuItem>
-                <MenuItem value={10}>مقبول</MenuItem>
-                <MenuItem value={20}>معتمد</MenuItem>
-                <MenuItem value={30}>مرفوض</MenuItem>
+                <MenuItem value={0}>مرفوض</MenuItem>
+                <MenuItem value={1}>مقبول</MenuItem>
+                <MenuItem value={2}>معتمد</MenuItem>
               </Select>
             </FormControl>
           </Stack>
-          <Stack width={0.5} direction="row" alignItems="center" gap={1}>
-            <Typography variant="body1" component="label" htmlFor="status">
-              اختر الموظف البديل
-            </Typography>
-            <FormControl sx={{ width: 200 }} size="small">
-              <InputLabel id="demo-simple-select-label" size="small">
-                الموظف البديل
-              </InputLabel>
-              <Select
-                size="small"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                // value={age}
-                label="الموظف البديل"
-                // onChange={handleChange}
-              >
-                <MenuItem value={10}>احمد محمد</MenuItem>
-                <MenuItem value={20}>علي</MenuItem>
-                <MenuItem value={30}>عمرو</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
+          {model.id === 2 && (
+            <Stack width={0.5} direction="row" alignItems="center" gap={1}>
+              <Typography variant="body1" component="label" htmlFor="status">
+                اختر الموظف البديل
+              </Typography>
+              <FormControl sx={{ width: 200 }} size="small">
+                <InputLabel id="demo-simple-select-label" size="small">
+                  الموظف البديل
+                </InputLabel>
+                <Select
+                  size="small"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  // value={age}
+                  label="الموظف البديل"
+                  // onChange={handleChange}
+                >
+                  <MenuItem value={10}>احمد محمد</MenuItem>
+                  <MenuItem value={20}>علي</MenuItem>
+                  <MenuItem value={30}>عمرو</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          )}
         </Stack>
         <Stack mt={2}>
           <Typography
@@ -101,6 +107,7 @@ type PropsType = {
   request: EmployeeRequest | null;
   onClose: () => void;
   onSubmit: () => void;
+  modelType: ProceduresModelTypeCode;
 };
 
 export default ModelDialog;

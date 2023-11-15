@@ -87,6 +87,7 @@ function EmplyeesRequests() {
         onClose={handleCloseModal}
         onSubmit={() => {}}
         request={dialogRequest}
+        modelType={dialogRequest?.nextStep?.model}
       />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
