@@ -18,7 +18,6 @@ import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import BadgeIcon from "@mui/icons-material/Badge";
-import { AdminApi } from "../../../constants/AdminApi";
 import { AdminUrl } from "../../../constants/AdminUrl";
 
 const routesCollections: RoutesCollectionType[] = [
