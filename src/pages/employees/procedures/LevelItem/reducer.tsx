@@ -1,4 +1,5 @@
 import { isStringAllNumbers } from "../../../../methods/isStringAllNumbers";
+import { ReducerAction } from "../../../../types";
 import { Step } from "../types";
 
 function reducer(state: Step, action: ActionTypes): Step {
@@ -40,11 +41,6 @@ function reducer(state: Step, action: ActionTypes): Step {
     default:
       return state;
   }
-}
-
-interface ReducerAction<P> {
-  type: string;
-  payload: P;
 }
 
 interface ManagerActionType extends ReducerAction<number> {

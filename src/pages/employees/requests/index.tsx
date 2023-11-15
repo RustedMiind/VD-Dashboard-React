@@ -64,8 +64,8 @@ function EmplyeesRequests() {
     });
     filtered = filter || undefined;
   }
-
-  useEffect(() => {
+  function resetTable() {
+    setRequests("loading");
     axios
       .get<{ requests: EmployeeRequest[] }>(
         Api("employee/general-requests/requests")
@@ -78,11 +78,13 @@ function EmplyeesRequests() {
         setRequests("error");
         console.log(err);
       });
-  }, []);
+  }
+  useEffect(resetTable, []);
 
   return (
     <>
       <ModelDialog
+        resetTable={resetTable}
         open={dialogOpen}
         onClose={handleCloseModal}
         onSubmit={() => {}}

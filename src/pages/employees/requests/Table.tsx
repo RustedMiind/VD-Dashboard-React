@@ -37,7 +37,7 @@ function EmployeesRequestsTable(props: PropsType) {
         chip = <Chip color="error" variant="outlined" label="مرفوض" />;
         break;
       case 1:
-        chip = <Chip color="success" variant="outlined" label="مقبول" />;
+        chip = <Chip color="success" variant="outlined" label="معتمد" />;
         break;
 
       default:
