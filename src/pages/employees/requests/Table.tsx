@@ -101,7 +101,9 @@ function EmployeesRequestsTable(props: PropsType) {
                   </Box>
                 </TableCell>
                 <TableCell>{formatDate(request.created_at)}</TableCell>
-                <TableCell>{requsetType}</TableCell>
+                <TableCell onClick={props.openModel(request)}>
+                  {requsetType}
+                </TableCell>
                 <TableCell>{request.departmentName || "-"}</TableCell>
                 <TableCell>{generateChip(request.status, request)}</TableCell>
                 <TableCell>...</TableCell>
@@ -123,6 +125,7 @@ type PropsType = {
   requests: EmployeeRequest[];
   openModel: (r: EmployeeRequest) => () => void;
   openStatus: (r: EmployeeRequest) => () => void;
+  openDetails: (r: EmployeeRequest) => () => void;
 };
 
 export default EmployeesRequestsTable;

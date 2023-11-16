@@ -10,6 +10,7 @@ import ModelDialog from "./ModelDialog/ModelDialog";
 import LoadingTable from "../../../components/LoadingTable";
 import StatusDialog from "./StatusDialog";
 import reducer, { FiltersInit } from "./Filters/reducer";
+import DetailsDialog from "./DetailsDialog";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
@@ -22,9 +23,9 @@ function EmplyeesRequests() {
   const [selectedType, setSelectedType] = useState<number | undefined>(
     undefined
   );
-  const [dialogOpen, setDialogOpen] = useState<undefined | "model" | "status">(
-    undefined
-  );
+  const [dialogOpen, setDialogOpen] = useState<
+    undefined | "model" | "status" | "details"
+  >(undefined);
   const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
     null
   );
@@ -44,6 +45,12 @@ function EmplyeesRequests() {
     return () => {
       setdialogRequest(request);
       setDialogOpen("status");
+    };
+  }
+  function handleOpenDetails(request: EmployeeRequest) {
+    return () => {
+      setdialogRequest(request);
+      setDialogOpen("details");
     };
   }
   function handleCloseDialog() {
@@ -94,6 +101,11 @@ function EmplyeesRequests() {
         onClose={handleCloseDialog}
         request={dialogRequest}
       />
+      <DetailsDialog
+        open={dialogOpen === "details"}
+        onClose={handleCloseDialog}
+        request={dialogRequest}
+      />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
           طلبات الموظفين
@@ -141,6 +153,7 @@ function EmplyeesRequests() {
             <EmployeesRequestsTable
               openModel={handleOpenModel}
               openStatus={handleOpenStatus}
+              openDetails={handleOpenDetails}
               requests={filtered}
             />
           )}
