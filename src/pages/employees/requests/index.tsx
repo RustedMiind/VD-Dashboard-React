@@ -31,7 +31,7 @@ function EmplyeesRequests() {
   const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
     null
   );
-  const IS_REQUESTS_EXISTS = Array.isArray(requests);
+  const IS_REQUESTS_EXISTS = typeof requests === "object";
 
   let filtered: EmployeeRequest[] | undefined = IS_REQUESTS_EXISTS
     ? requests

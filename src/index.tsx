@@ -11,7 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
 import { Api, Domain } from "./constants";
-import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
+import { deleteCookie, getCookie } from "./methods/cookies";
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -22,10 +22,10 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 function resetAuth() {
-  deleteCookie("db_token");
-  deleteCookie("vision_session");
-  deleteCookie("XSRF-TOKEN");
-  window.location.replace(Domain("admin/login"));
+  // deleteCookie("db_token");
+  // deleteCookie("vision_session");
+  // deleteCookie("XSRF-TOKEN");
+  // window.location.replace(Domain("admin/login"));
 }
 
 const db_token = getCookie("db_token");

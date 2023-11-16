@@ -27,7 +27,7 @@ function Navbar(props: PropsType) {
           noWrap
           component="div"
         ></Typography>
-        <IconButton size="medium" sx={{ ml: 2 }}>
+        <IconButton disabled size="medium" sx={{ ml: 2 }}>
           <Badge badgeContent={2} color="error">
             <NotificationsIcon color="action" />
           </Badge>

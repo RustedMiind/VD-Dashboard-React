@@ -72,10 +72,8 @@ const routesCollections: RoutesCollectionType[] = [
         name: "حضور الموظفين",
         path: "employee/reports",
       },
-      {
-        name: "طلبات الموظفين",
-        path: "attendance/requests",
-      },
+      { name: "طلبات الموظفين", path: "/employees/requests", react: true },
+      { name: "اجراءات الطلبات", path: "/employees/procedures", react: true },
       {
         name: "الشكاوي والدعم",
         path: "attendance/support",
@@ -86,16 +84,14 @@ const routesCollections: RoutesCollectionType[] = [
       },
     ],
   },
-  {
-    name: "الموظفين",
-    icon: BadgeIcon,
-    routes: [
-      { name: "حضور الموظفين", path: "" },
-      { name: "طلبات الموظفين", path: "/employees/requests", react: true },
-      { name: "اجراءات الطلبات", path: "/employees/procedures", react: true },
-      { name: "محددات المشاريع", path: "" },
-    ],
-  },
+  // {
+  //   name: "الموظفين",
+  //   icon: BadgeIcon,
+  //   routes: [
+  //     { name: "حضور الموظفين", path: "" },
+  //     { name: "محددات المشاريع", path: "" },
+  //   ],
+  // },
 ];
 
 function DrawerComponent(props: PropsType) {

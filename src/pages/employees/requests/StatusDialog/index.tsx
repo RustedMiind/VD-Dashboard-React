@@ -46,14 +46,14 @@ function StatusDialog(props: PropsType) {
           </TableContainer>
         </Paper>
       </DialogContent>
-      <DialogActions>
+      {/* <DialogActions>
         <Button variant="outlined" type="button" onClick={props.onClose}>
           الغاء
         </Button>
         <Button variant="contained" type="submit" autoFocus>
           ارسال
         </Button>
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
   );
 }
