@@ -1,7 +1,6 @@
 import { Grid, Paper } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import SelectCustom from "../../../components/MuiCustom";
-import { EmployeeRequest } from "../../../types";
+import SelectCustom from "../../../../components/MuiCustom";
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 
@@ -35,7 +34,9 @@ function Filters(props: PropsType) {
           label="تاريخ الورود"
           sx={{ w: 1 }}
           value={value}
-          onChange={(newValue) => setValue(newValue)}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
         />
       </Grid>
       <Grid item xs={2}>

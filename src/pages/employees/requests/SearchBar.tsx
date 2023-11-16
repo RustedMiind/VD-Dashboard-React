@@ -1,7 +1,7 @@
 import { Stack, TextField, Button } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import Filters from "./Filters";
+import Filters from "./Filters/Filters";
 import { useState } from "react";
 
 function SearchBar(props: PropsType) {
