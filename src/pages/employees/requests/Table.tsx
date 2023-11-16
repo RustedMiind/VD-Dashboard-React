@@ -84,7 +84,7 @@ function EmployeesRequestsTable(props: PropsType) {
             )?.name;
 
             return (
-              <TableRow>
+              <TableRow key={request.id}>
                 <TableCell>{request.id}</TableCell>
                 <TableCell>
                   <Box

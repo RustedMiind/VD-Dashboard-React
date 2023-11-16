@@ -21,7 +21,7 @@ function LoadingTable(props: PropsType) {
         <TableHead>
           <TableRow>
             {cols.map((col) => (
-              <TableCell>
+              <TableCell key={Math.random()}>
                 <Skeleton width={randomWidth()} />
               </TableCell>
             ))}
@@ -29,9 +29,9 @@ function LoadingTable(props: PropsType) {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow>
+            <TableRow key={Math.random()}>
               {cols.map((col) => (
-                <TableCell>
+                <TableCell key={Math.random()}>
                   <Skeleton width={randomWidth()} />
                 </TableCell>
               ))}

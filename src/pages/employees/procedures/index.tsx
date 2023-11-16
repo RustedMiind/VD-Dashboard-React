@@ -89,6 +89,7 @@ function EmploeesRequestsProcedures() {
                 const MORE_THAN_ONE = arr.length > 1;
                 return (
                   <LevelItem
+                    key={level.id}
                     level={level}
                     updateLevel={updateLevel(index)}
                     name={`المرحلة ${index + 1}`}

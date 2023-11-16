@@ -31,7 +31,12 @@ function TabsAndAdd(props: PropsType) {
         }}
       >
         {requestsIds.map((req) => (
-          <Tab label={req.name} value={req.id} disabled={props.disabled} />
+          <Tab
+            key={req.id}
+            label={req.name}
+            value={req.id}
+            disabled={props.disabled}
+          />
         ))}
       </Tabs>
     </Box>

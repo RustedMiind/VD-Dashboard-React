@@ -33,7 +33,7 @@ function DetailsDialog(props: PropsType) {
               </TableHead>
               <TableBody>
                 {props.request?.steps_of_approval?.map((step) => (
-                  <TableRow>
+                  <TableRow key={step.id}>
                     <TableCell>{step.employee_id}</TableCell>
                     <TableCell>{step.created_at}</TableCell>
                     <TableCell>{step.department_id}</TableCell>
