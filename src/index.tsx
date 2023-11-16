@@ -11,7 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
 import { Api, Domain } from "./constants";
-import { getCookie, setCookie } from "./methods/cookies";
+import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -21,6 +21,12 @@ const cacheRtl = createCache({
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+function resetAuth() {
+  deleteCookie("db_token");
+  deleteCookie("vision_session");
+  deleteCookie("XSRF-TOKEN");
+  window.location.replace(Domain("admin/login"));
+}
 
 const db_token = getCookie("db_token");
 if (db_token) {
@@ -42,11 +48,10 @@ if (db_token) {
     })
     .catch((err) => {
       console.log(err);
-      // window.location.replace(Domain());
+      resetAuth();
     });
 } else {
-  setCookie(db_token, "", 0.00001);
-  // window.location.replace(Domain());
+  resetAuth();
 }
 
 // If you want to start measuring performance in your app, pass a function
