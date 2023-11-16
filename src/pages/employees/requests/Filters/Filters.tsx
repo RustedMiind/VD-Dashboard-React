@@ -1,12 +1,13 @@
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, TextField, Menu, MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import SelectCustom from "../../../../components/MuiCustom";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import reducer, { ActionTypes, FiltersInit } from "./reducer";
+import { FilterType, OrderByType } from "./FilterType";
+import { DateFormatString } from "../../../../constants/DateFormat";
 
 function Filters(props: PropsType) {
-  const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-17"));
-
   return (
     <Grid
       component={Paper}
@@ -33,24 +34,49 @@ function Filters(props: PropsType) {
           slotProps={{ textField: { size: "small" } }}
           label="تاريخ الورود"
           sx={{ w: 1 }}
-          value={value}
+          value={dayjs(props.filters.sdate)}
           onChange={(newValue) => {
-            setValue(newValue);
+            props.dispatch({
+              type: "SET_START_DATE",
+              payload: newValue?.format(DateFormatString) || "",
+            });
           }}
         />
       </Grid>
       <Grid item xs={2}>
-        {/* <Typography variant="body1" gutterBottom>
-          تاريخ الانتهاء
-        </Typography> */}
         <DatePicker
           label="تاريخ الانتهاء"
           sx={{ w: 1 }}
           slotProps={{ textField: { size: "small" } }}
+          value={dayjs(props.filters.edate)}
+          onChange={(newValue) => {
+            props.dispatch({
+              type: "SET_END_DATE",
+              payload: newValue?.format(DateFormatString) || "",
+            });
+          }}
         />
       </Grid>
       <Grid item xs={2}>
+        <TextField
+          fullWidth
+          label="الترتيب"
+          size="small"
+          select
+          onChange={(e) => {
+            props.dispatch({
+              type: "SET_ORDER_BY",
+              payload: e.target.value as OrderByType,
+            });
+          }}
+        >
+          <MenuItem value={"asc"}>تصاعدي</MenuItem>
+          <MenuItem value={"desc"}>تنازلي</MenuItem>
+        </TextField>
+      </Grid>
+      {/* <Grid item xs={2}>
         <SelectCustom
+          disabled
           label="نوع الطلب"
           size="small"
           options={[{ name: "1", value: "1" }]}
@@ -58,6 +84,7 @@ function Filters(props: PropsType) {
       </Grid>
       <Grid item xs={2}>
         <SelectCustom
+          disabled
           label="القسم"
           size="small"
           options={[{ name: "1", value: "1" }]}
@@ -65,18 +92,12 @@ function Filters(props: PropsType) {
       </Grid>
       <Grid item xs={2}>
         <SelectCustom
+          disabled
           label="حالة الطلب"
           size="small"
           options={[{ name: "1", value: "1" }]}
         />
-      </Grid>
-      <Grid item xs={2}>
-        <SelectCustom
-          label="الترتيب"
-          size="small"
-          options={[{ name: "1", value: "1" }]}
-        />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }
@@ -85,4 +106,6 @@ export default Filters;
 
 type PropsType = {
   opened: boolean;
+  dispatch: React.Dispatch<ActionTypes>;
+  filters: FilterType;
 };

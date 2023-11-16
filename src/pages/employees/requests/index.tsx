@@ -2,16 +2,19 @@ import { Stack, Typography, Box, Tabs, Tab, Paper } from "@mui/material";
 import SearchBar from "./SearchBar";
 import EmployeesRequestsTable from "./Table";
 import RequestTypesToggles from "./Toggles";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { EmployeeRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
 import ModelDialog from "./ModelDialog/ModelDialog";
 import LoadingTable from "../../../components/LoadingTable";
 import StatusDialog from "./StatusDialog";
+import reducer, { FiltersInit } from "./Filters/reducer";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
+
+  const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [requests, setRequests] = useState<
     EmployeeRequest[] | "loading" | "none" | "error"
   >("loading");
@@ -41,6 +44,7 @@ function EmplyeesRequests() {
 
   function resetTable() {
     setRequests("loading");
+    console.log(filters);
     axios
       .get<{ requests: EmployeeRequest[] }>(
         Api("employee/general-requests/requests"),
@@ -48,6 +52,10 @@ function EmplyeesRequests() {
           params: {
             type: selectedType,
             search: search || null,
+            ...{
+              edate: filters.edate || undefined,
+              sdate: filters.sdate || undefined,
+            },
           },
         }
       )
@@ -85,6 +93,8 @@ function EmplyeesRequests() {
           applySearch={resetTable}
           search={search}
           setSearch={setSearch}
+          filters={filters}
+          dispatch={dispatch}
         />
         <Box
           mt={2}

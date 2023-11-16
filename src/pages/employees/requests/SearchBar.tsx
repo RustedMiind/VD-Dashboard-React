@@ -3,6 +3,8 @@ import PrintIcon from "@mui/icons-material/Print";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Filters from "./Filters/Filters";
 import { useState } from "react";
+import { ActionTypes } from "./Filters/reducer";
+import { FilterType } from "./Filters/FilterType";
 
 function SearchBar(props: PropsType) {
   const [filtersOpened, setFiltersOpenen] = useState(false);
@@ -59,7 +61,11 @@ function SearchBar(props: PropsType) {
           فلتر
         </Button>
       </Stack>
-      <Filters opened={filtersOpened} />
+      <Filters
+        dispatch={props.dispatch}
+        filters={props.filters}
+        opened={filtersOpened}
+      />
     </>
   );
 }
@@ -68,6 +74,8 @@ type PropsType = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   applySearch: () => void;
+  dispatch: React.Dispatch<ActionTypes>;
+  filters: FilterType;
 };
 
 export default SearchBar;
