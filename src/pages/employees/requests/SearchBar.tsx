@@ -37,6 +37,7 @@ function SearchBar(props: PropsType) {
         <Button
           variant="contained"
           //  disabled
+          type="submit"
           onClick={props.applySearch}
         >
           بحث
@@ -44,8 +45,9 @@ function SearchBar(props: PropsType) {
         <Button
           startIcon={<PrintIcon />}
           // disabled
-          type="submit"
+          type="button"
           variant="contained"
+          onClick={window.print}
         >
           طباعة
         </Button>

@@ -7,6 +7,7 @@ import {
   TableCell,
   Chip,
   Typography,
+  Box,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
@@ -29,7 +30,7 @@ function EmployeesRequestsTable(props: PropsType) {
         if (HAS_ACCESS) {
           chip = (
             <Chip
-              onClick={props.openModal(request)}
+              onClick={props.openModel(request)}
               color="primary"
               variant="filled"
               label="اتخاذ الاجراء"
@@ -37,7 +38,12 @@ function EmployeesRequestsTable(props: PropsType) {
           );
         } else {
           chip = (
-            <Chip color="primary" variant={variant} label="تحت المراجعة" />
+            <Chip
+              color="primary"
+              variant={variant}
+              onClick={props.openStatus(request)}
+              label="تحت الاجراء"
+            />
           );
         }
         break;
@@ -80,12 +86,25 @@ function EmployeesRequestsTable(props: PropsType) {
             return (
               <TableRow>
                 <TableCell>{request.id}</TableCell>
-                <TableCell>{request.employee.name}</TableCell>
+                <TableCell>
+                  <Box
+                    component="span"
+                    sx={{
+                      display: "inline-block",
+                      maxWidth: 150,
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {request.employee.name}
+                  </Box>
+                </TableCell>
                 <TableCell>{formatDate(request.created_at)}</TableCell>
                 <TableCell>{requsetType}</TableCell>
-                <TableCell>-</TableCell>
+                <TableCell>{request.departmentName || "-"}</TableCell>
                 <TableCell>{generateChip(request.status, request)}</TableCell>
-                <TableCell>-</TableCell>
+                <TableCell>...</TableCell>
               </TableRow>
             );
           })}
@@ -102,7 +121,8 @@ function EmployeesRequestsTable(props: PropsType) {
 
 type PropsType = {
   requests: EmployeeRequest[];
-  openModal: (r: EmployeeRequest) => () => void;
+  openModel: (r: EmployeeRequest) => () => void;
+  openStatus: (r: EmployeeRequest) => () => void;
 };
 
 export default EmployeesRequestsTable;

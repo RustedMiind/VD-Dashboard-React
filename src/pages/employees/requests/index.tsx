@@ -22,7 +22,9 @@ function EmplyeesRequests() {
   const [selectedType, setSelectedType] = useState<number | undefined>(
     undefined
   );
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState<undefined | "model" | "status">(
+    undefined
+  );
   const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
     null
   );
@@ -32,14 +34,20 @@ function EmplyeesRequests() {
     ? requests
     : undefined;
 
-  function handleOpenModal(request: EmployeeRequest) {
+  function handleOpenModel(request: EmployeeRequest) {
     return () => {
       setdialogRequest(request);
-      setDialogOpen(true);
+      setDialogOpen("model");
     };
   }
-  function handleCloseModal() {
-    setDialogOpen(false);
+  function handleOpenStatus(request: EmployeeRequest) {
+    return () => {
+      setdialogRequest(request);
+      setDialogOpen("status");
+    };
+  }
+  function handleCloseDialog() {
+    setDialogOpen(undefined);
   }
 
   function resetTable() {
@@ -53,8 +61,9 @@ function EmplyeesRequests() {
             type: selectedType,
             search: search || null,
             ...{
-              edate: filters.edate || undefined,
+              // edate: filters.edate || undefined,
               sdate: filters.sdate || undefined,
+              order: filters.order,
             },
           },
         }
@@ -74,16 +83,16 @@ function EmplyeesRequests() {
     <>
       <ModelDialog
         resetTable={resetTable}
-        open={dialogOpen}
-        onClose={handleCloseModal}
+        open={dialogOpen === "model"}
+        onClose={handleCloseDialog}
         onSubmit={() => {}}
         request={dialogRequest}
         modelType={dialogRequest?.nextStep?.model}
       />
       <StatusDialog
-        open={false}
-        onClose={() => {}}
-        request={filtered ? filtered[0] : null}
+        open={dialogOpen === "status"}
+        onClose={handleCloseDialog}
+        request={dialogRequest}
       />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
@@ -130,7 +139,8 @@ function EmplyeesRequests() {
         >
           {filtered && (
             <EmployeesRequestsTable
-              openModal={handleOpenModal}
+              openModel={handleOpenModel}
+              openStatus={handleOpenStatus}
               requests={filtered}
             />
           )}
@@ -138,8 +148,18 @@ function EmplyeesRequests() {
             <LoadingTable rows={8} cols={7} height={500} />
           )}
           {requests === "error" && (
-            <Typography variant="h4" color="error">
-              حدث خظأ في عرض الطلبات
+            <Typography
+              variant="h4"
+              color="error"
+              textAlign="center"
+              fontWeight={700}
+              p={1}
+              py={4}
+            >
+              حدث خطأ في عرض الطلبات.
+              <br />
+              <br />
+              برجاء اعادة المحاولة مرة اخري
             </Typography>
           )}
         </Paper>

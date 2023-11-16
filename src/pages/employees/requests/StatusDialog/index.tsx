@@ -26,7 +26,6 @@ function StatusDialog(props: PropsType) {
                 <TableRow>
                   <TableCell>اسم الموظف</TableCell>
                   <TableCell>تاريخ الورود</TableCell>
-                  <TableCell>تاريخ الانتهاء</TableCell>
                   <TableCell>القسم الوظيفي</TableCell>
                   <TableCell>حالة الطلب</TableCell>
                   <TableCell>الملاحظات</TableCell>
@@ -36,11 +35,10 @@ function StatusDialog(props: PropsType) {
                 {props.request?.steps_of_approval?.map((step) => (
                   <TableRow>
                     <TableCell>{step.employee_id}</TableCell>
-                    <TableCell>تاريخ الورود</TableCell>
-                    <TableCell>تاريخ الانتهاء</TableCell>
-                    <TableCell>القسم الوظيفي</TableCell>
-                    <TableCell>حالة الطلب</TableCell>
-                    <TableCell>الملاحظات</TableCell>
+                    <TableCell>{step.created_at}</TableCell>
+                    <TableCell>{step.department_id}</TableCell>
+                    <TableCell>{step.action}</TableCell>
+                    <TableCell>...</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
