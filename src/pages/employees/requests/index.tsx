@@ -11,6 +11,7 @@ import LoadingTable from "../../../components/LoadingTable";
 import StatusDialog from "./StatusDialog";
 import reducer, { FiltersInit } from "./Filters/reducer";
 import DetailsDialog from "./DetailsDialog";
+import { CountType } from "../../../types/Count";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
@@ -19,6 +20,7 @@ function EmplyeesRequests() {
   const [requests, setRequests] = useState<
     EmployeeRequest[] | "loading" | "none" | "error"
   >("loading");
+  const [counts, setCounts] = useState<CountType[] | null>(null);
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState<number | undefined>(
     undefined
@@ -61,7 +63,7 @@ function EmplyeesRequests() {
     setRequests("loading");
     console.log(filters);
     axios
-      .get<{ requests: EmployeeRequest[] }>(
+      .get<{ requests: EmployeeRequest[]; count: CountType[] }>(
         Api("employee/general-requests/requests"),
         {
           params: {
@@ -77,6 +79,7 @@ function EmplyeesRequests() {
       )
       .then(({ data }) => {
         setRequests(data.requests);
+        setCounts(data.count);
         console.log(data);
       })
       .catch((err) => {
@@ -128,6 +131,7 @@ function EmplyeesRequests() {
           <RequestTypesToggles
             selected={selectedType}
             setSelected={setSelectedType}
+            counts={counts}
           />
 
           <Tabs
