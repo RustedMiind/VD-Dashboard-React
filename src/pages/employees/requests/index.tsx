@@ -14,7 +14,7 @@ import DetailsDialog from "./DetailsDialog";
 import { CountType } from "../../../types/Count";
 
 function EmplyeesRequests() {
-  const [currentTab, setCurrentTab] = useState("1");
+  const [currentTab, setCurrentTab] = useState<number>(0);
 
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [requests, setRequests] = useState<
@@ -36,6 +36,10 @@ function EmplyeesRequests() {
   let filtered: EmployeeRequest[] | undefined = IS_REQUESTS_EXISTS
     ? requests
     : undefined;
+
+  if (currentTab !== 0) {
+    filtered = filtered?.filter((item) => item.status === currentTab);
+  }
 
   function handleOpenModel(request: EmployeeRequest) {
     return () => {
@@ -141,7 +145,9 @@ function EmplyeesRequests() {
               setCurrentTab(v);
             }}
           >
-            <Tab label="الكل" value={"1"} />
+            <Tab label="الكل" value={0} />
+            <Tab label="الوارد" value={-1} />
+            <Tab label="الصادر" value={-2} />
           </Tabs>
         </Box>
         <Paper

@@ -27,7 +27,7 @@ interface OrderByActionType extends ReducerAction<OrderByType> {
 export const FiltersInit: FilterType = {
   edate: "",
   sdate: "",
-  order: "asc",
+  order: "desc",
 };
 
 export type ActionTypes =

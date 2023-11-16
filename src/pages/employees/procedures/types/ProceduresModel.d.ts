@@ -1,5 +1,5 @@
 export interface ProceduresModel {
-  status: -1 | 0 | 1 | 2;
+  status: -2 | -1 | 0 | 1 | 2;
   note?: string;
   id: ProceduresModelTypeCode;
 }
