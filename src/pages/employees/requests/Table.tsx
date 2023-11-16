@@ -73,9 +73,7 @@ function EmployeesRequestsTable(props: PropsType) {
                     </Box>
                   </TableCell>
                   <TableCell>{formatDate(request.created_at)}</TableCell>
-                  <TableCell
-                  // onClick={props.openStatus(request)}
-                  >
+                  <TableCell onClick={props.openDetails(request)}>
                     {requsetType}
                   </TableCell>
                   <TableCell>{request.departmentName || "-"}</TableCell>

@@ -111,7 +111,7 @@ function EmplyeesRequests() {
       <DetailsDialog
         open={dialogOpen === "details"}
         onClose={handleCloseDialog}
-        request={dialogRequest}
+        requestId={dialogRequest?.id || 0}
       />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>

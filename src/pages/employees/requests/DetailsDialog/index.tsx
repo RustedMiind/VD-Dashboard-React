@@ -11,56 +11,65 @@ import {
   TableRow,
   TableBody,
   TableCell,
+  Stack,
+  Typography,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
+import { useEffect, useState } from "react";
+import { RequestDetails } from "../../../../types/RequestDetails";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { objectToArrayWithArName } from "../../../../methods/objToArrWithAr";
 
 function DetailsDialog(props: PropsType) {
+  const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
+
+  useEffect(() => {
+    if (props.open)
+      axios
+        .get<{ request: RequestDetails }>(
+          Api("employee/general-requests/requests/" + props.requestId)
+        )
+        .then(({ data }) => {
+          setDetails(data.request);
+        });
+    else {
+      setDetails(undefined);
+    }
+  }, [props.open]);
+
+  const detailsWithAr = details ? objectToArrayWithArName(details) : [];
+
   return (
     <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth>
-      <DialogTitle>حالة الطلب</DialogTitle>
+      <DialogTitle>نوع الطلب</DialogTitle>
       <DialogContent>
-        <Paper elevation={3} sx={{ bgcolor: "Background" }}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>اسم الموظف</TableCell>
-                  <TableCell>تاريخ الورود</TableCell>
-                  <TableCell>القسم الوظيفي</TableCell>
-                  <TableCell>حالة الطلب</TableCell>
-                  <TableCell>الملاحظات</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {props.request?.steps_of_approval?.map((step) => (
-                  <TableRow key={step.id}>
-                    <TableCell>{step.employee_id}</TableCell>
-                    <TableCell>{step.created_at}</TableCell>
-                    <TableCell>{step.department_id}</TableCell>
-                    <TableCell>{step.action}</TableCell>
-                    <TableCell>...</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
+        <Stack py={1}>
+          <Typography variant="body1" fontWeight={700}>
+            اسم الموظف
+          </Typography>
+          <Typography variant="body2">{details?.employee?.name}</Typography>
+        </Stack>
+        {detailsWithAr.map(
+          (item) =>
+            (typeof item.value === "string" ||
+              typeof item.value === "number") && (
+              <Stack py={1}>
+                <Typography variant="body1" fontWeight={700}>
+                  {item.name}
+                </Typography>
+                <Typography variant="body2">{item.value}</Typography>
+              </Stack>
+            )
+        )}
       </DialogContent>
-      <DialogActions>
-        <Button variant="outlined" type="button" onClick={props.onClose}>
-          الغاء
-        </Button>
-        <Button variant="contained" type="submit" autoFocus>
-          ارسال
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }
 
 type PropsType = {
   open: boolean;
-  request: EmployeeRequest | null;
+  requestId: number;
   onClose: () => void;
 };
 
