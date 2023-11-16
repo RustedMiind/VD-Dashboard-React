@@ -2,20 +2,11 @@ import { Stack, Chip, Badge } from "@mui/material";
 import { requestTypes } from "./RequestTypes";
 
 function RequestTypesToggles({ selected, setSelected }: PropsType) {
-  console.log(selected);
-
-  function toggleSelected(toggle: string) {
-    const instance = [...selected];
-    const index = instance.findIndex((chip) => chip === toggle);
-
-    if (index === -1) {
-      const chipIndex = requestTypes.findIndex((chip) => chip.name === toggle);
-      instance.push(requestTypes[chipIndex].name);
-      setSelected(instance);
-    } else {
-      instance.splice(index, 1);
-      setSelected(instance);
-    }
+  function setCurrent(value: number) {
+    return () => {
+      if (selected === value) setSelected(undefined);
+      else setSelected(value);
+    };
   }
 
   return (
@@ -28,16 +19,14 @@ function RequestTypesToggles({ selected, setSelected }: PropsType) {
       }}
     >
       {requestTypes.map((chip) => {
-        const found = selected.includes(chip.name);
+        const current = selected === chip.value;
 
         return (
           <Badge key={chip.name} badgeContent={0} color="error">
             <Chip
               color="primary"
-              onClick={() => {
-                toggleSelected(chip.name);
-              }}
-              variant={found ? "filled" : "outlined"}
+              onClick={setCurrent(chip.value)}
+              variant={current ? "filled" : "outlined"}
               label={chip.name}
             />
           </Badge>
@@ -48,8 +37,8 @@ function RequestTypesToggles({ selected, setSelected }: PropsType) {
 }
 
 type PropsType = {
-  selected: string[];
-  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  selected: number | undefined;
+  setSelected: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 export default RequestTypesToggles;

@@ -2,8 +2,12 @@ import { Grid, Paper } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import SelectCustom from "../../../components/MuiCustom";
 import { EmployeeRequest } from "../../../types";
+import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 
 function Filters(props: PropsType) {
+  const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-17"));
+
   return (
     <Grid
       component={Paper}
@@ -30,6 +34,8 @@ function Filters(props: PropsType) {
           slotProps={{ textField: { size: "small" } }}
           label="تاريخ الورود"
           sx={{ w: 1 }}
+          value={value}
+          onChange={(newValue) => setValue(newValue)}
         />
       </Grid>
       <Grid item xs={2}>

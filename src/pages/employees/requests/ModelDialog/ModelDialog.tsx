@@ -30,7 +30,15 @@ function ModelDialog(props: PropsType) {
     undefined
   );
   const [formData, dispatch] = useReducer(reducer, ModelFormInitial);
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+    show: boolean;
+  }>({
+    type: "success",
+    message: "تم الحفظ بنجاح",
+    show: false,
+  });
 
   useEffect(() => {
     dispatch({ type: "SET_RESET", payload: null });
@@ -149,15 +157,15 @@ function ModelDialog(props: PropsType) {
       </Dialog>
 
       <Snackbar
-        open={!!error}
+        open={status.show}
         autoHideDuration={6000}
         onClose={() => {
-          setError("");
+          setStatus({ ...status, show: false });
         }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Alert severity="error" sx={{ width: 1 }}>
-          {error}
+        <Alert severity={status.type} sx={{ width: 1 }}>
+          {status.message}
         </Alert>
       </Snackbar>
     </>
@@ -172,12 +180,21 @@ function ModelDialog(props: PropsType) {
         formData
       )
       .then((res) => {
-        console.log("Log A7a", res);
+        console.log("Dialog Response: ", res);
+        setStatus({
+          ...status,
+          show: true,
+          message: "تم اتخاذ الاجراء بنجاح",
+        });
         props.resetTable();
         props.onClose();
       })
       .catch((err) => {
-        setError(err.response.data.message || "");
+        setStatus({
+          ...status,
+          show: true,
+          message: err.response.data.message || "",
+        });
       });
   }
 }

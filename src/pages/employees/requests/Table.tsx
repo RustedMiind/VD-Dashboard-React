@@ -20,24 +20,32 @@ import { requestTypes } from "./RequestTypes";
 
 function EmployeesRequestsTable(props: PropsType) {
   function generateChip(value: number, request: EmployeeRequest): JSX.Element {
-    let chip: JSX.Element = (
-      <Chip
-        onClick={props.openModal(request)}
-        color="primary"
-        variant="outlined"
-        label="اتخاذ الاجراء"
-      />
-    );
+    const variant = "outlined";
+    const HAS_ACCESS = request.nextStep && request.nextStep.hasAccess;
+    let chip: JSX.Element = <></>;
 
     switch (value) {
-      // case -1:
-      //   chip = <Chip color="primary" label="تحت المراجعة" />
-      //   break;
+      case -1:
+        if (HAS_ACCESS) {
+          chip = (
+            <Chip
+              onClick={props.openModal(request)}
+              color="primary"
+              variant="filled"
+              label="اتخاذ الاجراء"
+            />
+          );
+        } else {
+          chip = (
+            <Chip color="primary" variant={variant} label="تحت المراجعة" />
+          );
+        }
+        break;
       case 0:
-        chip = <Chip color="error" variant="outlined" label="مرفوض" />;
+        chip = <Chip color="error" variant={variant} label="مرفوض" />;
         break;
       case 1:
-        chip = <Chip color="success" variant="outlined" label="معتمد" />;
+        chip = <Chip color="success" variant={variant} label="معتمد" />;
         break;
 
       default:
@@ -76,9 +84,7 @@ function EmployeesRequestsTable(props: PropsType) {
                 <TableCell>{formatDate(request.created_at)}</TableCell>
                 <TableCell>{requsetType}</TableCell>
                 <TableCell>-</TableCell>
-                <TableCell>
-                  {generateChip(request.requestable_id, request)}
-                </TableCell>
+                <TableCell>{generateChip(request.status, request)}</TableCell>
                 <TableCell>-</TableCell>
               </TableRow>
             );

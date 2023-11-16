@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { EmployeeRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
-import { requestTypes } from "./RequestTypes";
 import ModelDialog from "./ModelDialog/ModelDialog";
 import LoadingTable from "../../../components/LoadingTable";
 
@@ -16,7 +15,9 @@ function EmplyeesRequests() {
     EmployeeRequest[] | "loading" | "none" | "error"
   >("loading");
   const [search, setSearch] = useState("");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<number | undefined>(
+    undefined
+  );
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
     null
@@ -37,38 +38,16 @@ function EmplyeesRequests() {
     setDialogOpen(false);
   }
 
-  if (search && IS_REQUESTS_EXISTS) {
-    const searchLowerCase = search.toLowerCase();
-    const filter = requests?.filter((request) => {
-      return request.employee.name
-        .toLocaleLowerCase()
-        .includes(searchLowerCase);
-    });
-    filtered = filter || undefined;
-  }
-  if (selectedTypes.length) {
-    const filter = filtered?.filter((request) => {
-      let found = false;
-      selectedTypes.forEach((selection) => {
-        const temp = requestTypes.find((x) => x.name === selection);
-        if (
-          temp &&
-          request.requestable_type
-            .toLowerCase()
-            .includes(temp?.prefix.toLowerCase())
-        ) {
-          found = true;
-        }
-      });
-      return found;
-    });
-    filtered = filter || undefined;
-  }
   function resetTable() {
     setRequests("loading");
     axios
       .get<{ requests: EmployeeRequest[] }>(
-        Api("employee/general-requests/requests")
+        Api("employee/general-requests/requests"),
+        {
+          params: {
+            type: selectedType,
+          },
+        }
       )
       .then(({ data }) => {
         setRequests(data.requests);
@@ -79,7 +58,7 @@ function EmplyeesRequests() {
         console.log(err);
       });
   }
-  useEffect(resetTable, []);
+  useEffect(resetTable, [selectedType]);
 
   return (
     <>
@@ -105,8 +84,8 @@ function EmplyeesRequests() {
           alignItems="end"
         >
           <RequestTypesToggles
-            selected={selectedTypes}
-            setSelected={setSelectedTypes}
+            selected={selectedType}
+            setSelected={setSelectedType}
           />
 
           <Tabs
@@ -117,8 +96,6 @@ function EmplyeesRequests() {
             }}
           >
             <Tab label="الكل" value={"1"} />
-            <Tab label="الوارد" value={"2"} disabled />
-            <Tab label="الصادر" value={"3"} disabled />
           </Tabs>
         </Box>
         <Paper
@@ -137,7 +114,7 @@ function EmplyeesRequests() {
             />
           )}
           {requests === "loading" && (
-            <LoadingTable rows={60} cols={7} height={500} />
+            <LoadingTable rows={8} cols={7} height={500} />
           )}
           {requests === "error" && (
             <Typography variant="h4" color="error">

@@ -11,6 +11,7 @@ export interface EmployeeRequest {
   requestable: Requestable;
   nextStep: NextStep | null;
   steps_of_approval: StepOfApproval[] | null;
+  status: RequestStatusType;
 }
 
 interface Requestable {
@@ -27,7 +28,31 @@ interface NextStep {
   duration: number;
   model: ProceduresModelTypeCode;
   type: number;
+  hasAccess: boolean;
 }
+/*
+{
+    "id": 112,
+    "employee_id": 30,
+    "department_id": 146,
+    "action": 3,
+    "duration": 12323,
+    "model": 2,
+    "type": 6,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null,
+    "hasAccess": false,
+    "model_details": {
+        "general_request_id": 251,
+        "steps_of_approval_id": 112,
+        "note": null,
+        "alternative_employee_id": null,
+        "status": -1,
+        "updated_at": "2023-11-15 21:34:24"
+    }
+}
+*/
 
 interface StepOfApproval {
   id: number;
@@ -85,4 +110,7 @@ steps_of_approval: [
 }
 */
 
-export type RequestableIdType = -1 | 0 | 1;
+export type RequestStatusType = -1 | 0 | 1;
+// -1 Pending
+// 0 Ignored
+// 1 Approved

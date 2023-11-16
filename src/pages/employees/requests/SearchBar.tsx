@@ -48,7 +48,7 @@ function SearchBar(props: PropsType) {
           }}
           color={filtersOpened ? "success" : "primary"}
           variant="outlined"
-          disabled
+          // disabled
         >
           فلتر
         </Button>
