@@ -8,6 +8,7 @@ import axios from "axios";
 import { Api } from "../../../constants";
 import ModelDialog from "./ModelDialog/ModelDialog";
 import LoadingTable from "../../../components/LoadingTable";
+import StatusDialog from "./StatusDialog";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState("1");
@@ -46,6 +47,7 @@ function EmplyeesRequests() {
         {
           params: {
             type: selectedType,
+            search: search || null,
           },
         }
       )
@@ -70,11 +72,20 @@ function EmplyeesRequests() {
         request={dialogRequest}
         modelType={dialogRequest?.nextStep?.model}
       />
+      <StatusDialog
+        open={false}
+        onClose={() => {}}
+        request={filtered ? filtered[0] : null}
+      />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
           طلبات الموظفين
         </Typography>
-        <SearchBar search={search} setSearch={setSearch} />
+        <SearchBar
+          applySearch={resetTable}
+          search={search}
+          setSearch={setSearch}
+        />
         <Box
           mt={2}
           display="flex"

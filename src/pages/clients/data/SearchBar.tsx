@@ -25,15 +25,14 @@ function SearchBar(props: PropsType) {
           }}
           size="small"
           sx={{ flexGrow: 1 }}
-        // disabled
+          // disabled
         />
         <Button
           variant="contained"
-        //  disabled
+          //  disabled
         >
           بحث
         </Button>
-
       </Stack>
     </>
   );

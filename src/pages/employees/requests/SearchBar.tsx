@@ -10,6 +10,11 @@ function SearchBar(props: PropsType) {
   return (
     <>
       <Stack
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.applySearch();
+        }}
         direction="row"
         gap={1}
         sx={{
@@ -30,13 +35,14 @@ function SearchBar(props: PropsType) {
         <Button
           variant="contained"
           //  disabled
+          onClick={props.applySearch}
         >
           بحث
         </Button>
         <Button
           startIcon={<PrintIcon />}
-          disabled
-          //
+          // disabled
+          type="submit"
           variant="contained"
         >
           طباعة
@@ -61,6 +67,7 @@ function SearchBar(props: PropsType) {
 type PropsType = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  applySearch: () => void;
 };
 
 export default SearchBar;
