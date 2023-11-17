@@ -1,8 +1,10 @@
 import { Stack, TextField, Button } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import Filters from "./Filters";
+import Filters from "./Filters/Filters";
 import { useState } from "react";
+import { ActionTypes } from "./Filters/reducer";
+import { FilterType } from "./Filters/FilterType";
 
 function SearchBar(props: PropsType) {
   const [filtersOpened, setFiltersOpenen] = useState(false);
@@ -10,6 +12,11 @@ function SearchBar(props: PropsType) {
   return (
     <>
       <Stack
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.applySearch();
+        }}
         direction="row"
         gap={1}
         sx={{
@@ -30,14 +37,17 @@ function SearchBar(props: PropsType) {
         <Button
           variant="contained"
           //  disabled
+          type="submit"
+          onClick={props.applySearch}
         >
           بحث
         </Button>
         <Button
           startIcon={<PrintIcon />}
-          disabled
-          //
+          // disabled
+          type="button"
           variant="contained"
+          onClick={window.print}
         >
           طباعة
         </Button>
@@ -48,12 +58,16 @@ function SearchBar(props: PropsType) {
           }}
           color={filtersOpened ? "success" : "primary"}
           variant="outlined"
-          disabled
+          // disabled
         >
           فلتر
         </Button>
       </Stack>
-      <Filters opened={filtersOpened} />
+      <Filters
+        dispatch={props.dispatch}
+        filters={props.filters}
+        opened={filtersOpened}
+      />
     </>
   );
 }
@@ -61,6 +75,9 @@ function SearchBar(props: PropsType) {
 type PropsType = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  applySearch: () => void;
+  dispatch: React.Dispatch<ActionTypes>;
+  filters: FilterType;
 };
 
 export default SearchBar;

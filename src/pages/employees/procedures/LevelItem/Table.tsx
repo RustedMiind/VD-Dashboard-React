@@ -1,6 +1,4 @@
 import {
-  Stack,
-  Button,
   Box,
   InputAdornment,
   Checkbox,
@@ -9,10 +7,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import { useEffect, useReducer, useState } from "react";
 import {
   TableContainer,
   Table,
@@ -24,9 +18,9 @@ import {
 } from "@mui/material";
 import SelectCustom from "../../../../components/MuiCustom";
 import { ActionTypes } from "./reducer";
-import { LevelType } from "..";
-import { Step } from "../types";
+import { ProceduresModelTypeCode, Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
+import { modelNamesIds } from "../ModelTypes";
 
 function TableComponent({
   level,
@@ -99,6 +93,7 @@ function TableComponent({
                     value={level.employee_id}
                     disabled={formDisabled}
                     onChange={(e) => {
+                      console.log(departments);
                       dispatch({
                         type: "SET_EMPLOYEE",
                         payload: e.target.value as number,
@@ -111,7 +106,10 @@ function TableComponent({
                           department.departmentId === level.department_id
                       )
                       ?.employees.map((employee) => (
-                        <MenuItem key={employee.id} value={employee.id}>
+                        <MenuItem
+                          key={employee.employee_id}
+                          value={employee.employee_id}
+                        >
                           {employee.employeeName}
                         </MenuItem>
                       ))}
@@ -167,16 +165,31 @@ function TableComponent({
             </TableCell>
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <SelectCustom
-                  disabled={formDisabled}
-                  options={[
-                    { name: "نموذج المرحلة الاولي", value: "1" },
-                    { name: "نموذج المرحلة الثانية", value: "2" },
-                  ]}
-                  size="small"
-                  label="اختر النموذج"
-                  // disabled
-                />
+                <FormControl
+                  fullWidth
+                  size={"small"}
+                  // disabled={props.disabled}
+                >
+                  <InputLabel size="small">النموذج</InputLabel>
+                  <Select
+                    label={"النموذج"}
+                    size={"small"}
+                    value={level.model}
+                    disabled={formDisabled}
+                    onChange={(e) => {
+                      dispatch({
+                        type: "SET_MODEL",
+                        payload: e.target.value as ProceduresModelTypeCode,
+                      });
+                    }}
+                  >
+                    {modelNamesIds.map((model) => (
+                      <MenuItem key={model.id} value={model.id}>
+                        {model.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
             </TableCell>
           </TableRow>

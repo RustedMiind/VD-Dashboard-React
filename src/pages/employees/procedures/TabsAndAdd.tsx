@@ -1,14 +1,4 @@
-import {
-  Box,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-  Button,
-  Paper,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Box, Tab, Tabs, Button } from "@mui/material";
 // Icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { requestsIds } from "./RequestsIds";
@@ -28,6 +18,7 @@ function TabsAndAdd(props: PropsType) {
         startIcon={<AddCircleOutlineIcon />}
         sx={{ mb: 1 }}
         onClick={props.addLevel}
+        disabled={props.disabled}
       >
         اضافة مرحلة جديدة
       </Button>
@@ -40,7 +31,12 @@ function TabsAndAdd(props: PropsType) {
         }}
       >
         {requestsIds.map((req) => (
-          <Tab label={req.name} value={req.id} />
+          <Tab
+            key={req.id}
+            label={req.name}
+            value={req.id}
+            disabled={props.disabled}
+          />
         ))}
       </Tabs>
     </Box>
@@ -51,6 +47,7 @@ type PropsType = {
   addLevel: () => void;
   currentTab: number;
   setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
+  disabled?: boolean;
 };
 
 export default TabsAndAdd;

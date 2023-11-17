@@ -11,6 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { Domain } from "../../constants";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,7 +27,9 @@ export default function AccountMenu() {
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="اعدادات الحساب">
           <IconButton
-            onClick={handleClick}
+            LinkComponent="a"
+            href={Domain("")}
+            // onClick={handleClick}
             size="small"
             sx={{ ml: 2 }}
             aria-controls={open ? "account-menu" : undefined}

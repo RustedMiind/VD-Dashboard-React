@@ -1,7 +1,7 @@
 export interface ProceduresModel {
-  status: -1 | 0 | 1 | 2;
+  status: -2 | -1 | 0 | 1 | 2;
   note?: string;
-  id: number;
+  id: ProceduresModelTypeCode;
 }
 
 export interface FinancialModel extends ProceduresModel {
@@ -20,6 +20,8 @@ export interface ApprovalModel extends ProceduresModel {
 export interface AcceptionModel extends ProceduresModel {
   id: 4;
 }
+
+export type ProceduresModelTypeCode = 1 | 2 | 3 | 4;
 
 export type ProceduresModelsType =
   | FinancialModel

@@ -1,9 +1,6 @@
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Navbar from "./components/Navbar";
 import DrawerComponent from "./components/Drawer";
 import { Children } from "../../types/Children";

@@ -1,14 +1,12 @@
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
-import Link from "@mui/material/Link";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import IconBox from "./IconBox";
-import { Box, Stack, SvgIconTypeMap } from "@mui/material";
+import { Stack, SvgIconTypeMap } from "@mui/material";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -20,55 +18,80 @@ import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import BadgeIcon from "@mui/icons-material/Badge";
+import { AdminUrl } from "../../../constants/AdminUrl";
 
 const routesCollections: RoutesCollectionType[] = [
   {
     name: "الادوار والمستخدمين",
     icon: SecurityIcon,
     routes: [
-      { name: "الادوار", path: "#" },
-      { name: "المستخدمين", path: "#" },
+      { name: "الادوار", path: "roles/index" },
+      { name: "المستخدمين", path: "users" },
     ],
   },
   {
     name: "الهيكل التنظيمي",
     icon: AutoAwesomeMosaicIcon,
     routes: [
-      { name: "الفروع", path: "#" },
-      { name: "الادارة والاقسام", path: "#" },
-      { name: "التسلسل الوظيفي", path: "#" },
-      { name: "بيانات الموظفين", path: "#" },
+      { name: "الفروع", path: "branches" },
+      {
+        name: "الادارة والاقسام",
+        path: "managements",
+      },
+      {
+        name: "التسلسل الوظيفي",
+        path: "job_types",
+      },
+      {
+        name: "بيانات الموظفين",
+        path: "employees",
+      },
     ],
   },
   {
     name: "العملاء",
     icon: GroupIcon,
     routes: [
-      { name: "بيانات العملاء", path: "#" },
-      { name: "بيانات الوسطاء", path: "#" },
-      { name: "طلبات العملاء", path: "#" },
+      { name: "بيانات العملاء", path: "/clients", react: true },
+      { name: "ادارة العقود", path: "/contracts", react: true },
+      {
+        name: "بيانات الوسطاء",
+        path: "brokers",
+      },
+      {
+        name: "طلبات العملاء",
+        path: "clients/requests",
+      },
     ],
   },
   {
     name: "الحضور والطلبات",
     icon: AssignmentIcon,
     routes: [
-      { name: "حضور الموظفين", path: "#" },
-      { name: "طلبات الموظفين", path: "#" },
-      { name: "الشكاوي والدعم", path: "#" },
-      { name: "محددات المشاريع", path: "#" },
-    ],
-  },
-  {
-    name: "الموظفين",
-    icon: BadgeIcon,
-    routes: [
-      { name: "حضور الموظفين", path: "/" },
+      {
+        name: "حضور الموظفين",
+        path: "employee/reports",
+      },
       { name: "طلبات الموظفين", path: "/employees/requests", react: true },
       { name: "اجراءات الطلبات", path: "/employees/procedures", react: true },
-      { name: "محددات المشاريع", path: "#" },
+      {
+        name: "الشكاوي والدعم",
+        path: "attendance/support",
+      },
+      {
+        name: "محددات المشاريع",
+        path: "attendance/projects-shifts",
+      },
     ],
   },
+  // {
+  //   name: "الموظفين",
+  //   icon: BadgeIcon,
+  //   routes: [
+  //     { name: "حضور الموظفين", path: "" },
+  //     { name: "محددات المشاريع", path: "" },
+  //   ],
+  // },
 ];
 
 function DrawerComponent(props: PropsType) {
@@ -97,6 +120,7 @@ function DrawerComponent(props: PropsType) {
       <List>
         {routesCollections.map((collection, index) => (
           <Accordion
+            key={index}
             sx={{
               backgroundColor: "transparent",
             }}
@@ -133,13 +157,14 @@ function DrawerComponent(props: PropsType) {
                   },
                 }}
               >
-                {collection.routes.map((route) => (
+                {collection.routes.map((route, i) => (
                   <Button
-                    disabled={!route.react}
+                    key={i}
+                    disabled={!route.path}
                     sx={{ justifyContent: "start" }}
                     {...(route.react
-                      ? { component: NavLink, to: route.path }
-                      : { component: "a", href: route.path })}
+                      ? { component: NavLink, to: `/react${route.path}` }
+                      : { component: "a", href: AdminUrl(route.path) })}
                   >
                     {route.name}
                   </Button>

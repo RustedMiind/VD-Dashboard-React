@@ -1,7 +1,8 @@
 import { Stack } from "@mui/material";
 
 function MainPage() {
-  return <Stack></Stack>;
+  return <Stack>
+  </Stack>;
 }
 
 export default MainPage;
