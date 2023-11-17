@@ -10,6 +10,6 @@ export interface EmployeeType {
   address: string;
   has_overtime: 1;
   deleted_at?: string;
-  created_at: "2023-09-30T18:57:01.000000Z";
-  updated_at: "2023-10-21T15:13:53.000000Z";
+  created_at: string;
+  updated_at: string;
 }

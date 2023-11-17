@@ -1,5 +1,13 @@
-import { Stack, Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
-import * as React from 'react';
+import {
+  Stack,
+  Typography,
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+  Button,
+} from "@mui/material";
+import * as React from "react";
 import EmployeesRequestsTable from "./Table";
 import { useEffect, useState } from "react";
 import { EmployeeRequest } from "../../../types";
@@ -22,7 +30,7 @@ function Contracts() {
   if (search) {
     const searchLowerCase = search.toLowerCase();
     const filter = requests?.filter((request) => {
-      return request.employee.name
+      return request.employee?.name
         .toLocaleLowerCase()
         .includes(searchLowerCase);
     });
@@ -49,7 +57,7 @@ function Contracts() {
     });
     filtered = filter || undefined;
   }
-  // Start tab function 
+  // Start tab function
   interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -79,7 +87,7 @@ function Contracts() {
   function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
     };
   }
   const [value, setValue] = React.useState(0);
@@ -105,10 +113,14 @@ function Contracts() {
 
   return (
     <Stack>
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="بيانات العقود"  {...a11yProps(0)} />
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="بيانات العقود" {...a11yProps(0)} />
             <Tab label="ادارة العقود" {...a11yProps(1)} />
           </Tabs>
         </Box>
@@ -119,7 +131,7 @@ function Contracts() {
               p: 2,
               bgcolor: "Background",
               overflow: "hidden",
-              backgroundColor: "#F3F5F7"
+              backgroundColor: "#F3F5F7",
             }}
             elevation={4}
           >
@@ -128,19 +140,23 @@ function Contracts() {
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
               component={NavLink}
-              to={'add'}
+              to={"add"}
             >
               اضافة عقد
             </Button>
-            {filtered && <EmployeesRequestsTable selectedData={selectedData} setSelectedData={setSelectedData} requests={filtered} />}
+            {filtered && (
+              <EmployeesRequestsTable
+                selectedData={selectedData}
+                setSelectedData={setSelectedData}
+                requests={filtered}
+              />
+            )}
           </Paper>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           Item Two
         </CustomTabPanel>
       </Box>
-
-
     </Stack>
   );
 }

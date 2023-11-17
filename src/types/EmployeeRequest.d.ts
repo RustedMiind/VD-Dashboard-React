@@ -1,3 +1,4 @@
+import { DepartmentEmployee } from "./DepartmentEmployee";
 import { EmployeeType } from "./Employee";
 
 export interface EmployeeRequest {
@@ -5,9 +6,9 @@ export interface EmployeeRequest {
   requestable_id: RequestableIdType;
   requestable_type: string;
   employee_id: number;
+  employee?: EmployeeType;
   created_at: string;
   updated_at: string;
-  employee: EmployeeType;
   requestable: Requestable;
   nextStep: NextStep | null;
   steps_of_approval: StepOfApproval[] | null;
@@ -58,13 +59,24 @@ interface NextStep {
 interface StepOfApproval {
   id: number;
   employee_id: number;
+  employee: EmployeeType;
   department_id: number;
+  department: DepartmentEmployee;
   action: number;
   duration: number;
   model: number;
+  model_details: ModelDetails;
   type: number;
   deleted_at?: string;
   created_at?: string;
+}
+
+interface ModelDetails {
+  general_request_id: 159;
+  steps_of_approval_id: 40;
+  note?: string;
+  alternative_employee_id?: null;
+  status: number;
 }
 
 /*

@@ -13,6 +13,8 @@ import {
   TableCell,
   Stack,
   Typography,
+  Grid,
+  TextField,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
 import { useEffect, useState } from "react";
@@ -25,16 +27,15 @@ function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
 
   useEffect(() => {
-    if (props.open)
+    if (props.open && props.requestId > 0) {
+      setDetails(undefined);
       axios
         .get<{ request: RequestDetails }>(
-          Api("employee/general-requests/requests/" + props.requestId)
+          Api(`employee/general-requests/requests/${props.requestId}`)
         )
         .then(({ data }) => {
           setDetails(data.request);
         });
-    else {
-      setDetails(undefined);
     }
   }, [props.open]);
 
@@ -44,24 +45,38 @@ function DetailsDialog(props: PropsType) {
     <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth>
       <DialogTitle>نوع الطلب</DialogTitle>
       <DialogContent>
-        <Stack py={1}>
-          <Typography variant="body1" fontWeight={700}>
-            اسم الموظف
-          </Typography>
-          <Typography variant="body2">{details?.employee?.name}</Typography>
-        </Stack>
-        {detailsWithAr.map(
-          (item) =>
-            (typeof item.value === "string" ||
-              typeof item.value === "number") && (
-              <Stack py={1}>
-                <Typography variant="body1" fontWeight={700}>
-                  {item.name}
-                </Typography>
-                <Typography variant="body2">{item.value}</Typography>
-              </Stack>
-            )
-        )}
+        <Grid container>
+          {
+            <Grid item md={6} p={1} px={2}>
+              <Typography variant="body1" fontWeight={700} gutterBottom>
+                اسم الموظف
+              </Typography>
+              <TextField
+                value={details?.employee?.name || ""}
+                disabled
+                fullWidth
+                size="small"
+              />
+            </Grid>
+          }
+          {detailsWithAr.map(
+            (item) =>
+              (typeof item.value === "string" ||
+                typeof item.value === "number") && (
+                <Grid item md={6} p={1} px={2}>
+                  <Typography variant="body1" fontWeight={700} gutterBottom>
+                    {item.name}
+                  </Typography>
+                  <TextField
+                    value={item.value}
+                    disabled
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+              )
+          )}
+        </Grid>
       </DialogContent>
     </Dialog>
   );

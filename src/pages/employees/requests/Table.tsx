@@ -10,6 +10,7 @@ import {
   Box,
   Pagination,
   Stack,
+  Button,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
@@ -54,7 +55,10 @@ function EmployeesRequestsTable(props: PropsType) {
                   .toLowerCase()
                   .includes(x.prefix.toLowerCase())
               )?.name;
-
+              const note =
+                request.steps_of_approval &&
+                request.steps_of_approval[request.steps_of_approval.length - 1]
+                  ?.model_details?.note;
               return (
                 <TableRow key={request.id}>
                   <TableCell>{request.id}</TableCell>
@@ -69,16 +73,33 @@ function EmployeesRequestsTable(props: PropsType) {
                         overflow: "hidden",
                       }}
                     >
-                      {request.employee.name}
+                      {request.employee?.name}
                     </Box>
                   </TableCell>
                   <TableCell>{formatDate(request.created_at)}</TableCell>
-                  <TableCell onClick={props.openDetails(request)}>
-                    {requsetType}
+                  <TableCell>
+                    <Chip
+                      size="small"
+                      onClick={props.openDetails(request)}
+                      label={requsetType}
+                    />
                   </TableCell>
                   <TableCell>{request.departmentName || "-"}</TableCell>
                   <TableCell>{generateChip(request.status, request)}</TableCell>
-                  <TableCell>...</TableCell>
+                  <TableCell>
+                    <Box
+                      component="span"
+                      sx={{
+                        display: "inline-block",
+                        maxWidth: 150,
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {note || "..."}
+                    </Box>
+                  </TableCell>
                 </TableRow>
               );
             })}

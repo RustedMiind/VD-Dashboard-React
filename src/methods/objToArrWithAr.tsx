@@ -3,6 +3,7 @@ import {
   KeyWithArabic,
   RequestDetails,
 } from "../types/RequestDetails";
+import { formatDate } from "./formateDate";
 
 export const keyToArabic: KeyToArabic[] = [
   { key: "car_type", name: "نوع السيارة" },
@@ -35,7 +36,13 @@ export function objectToArrayWithArName(obj: RequestDetails): KeyWithArabic[] {
     console.log(key);
     const found = keyToArabic.find((f) => f.key === key);
     if (found) {
-      keysWithArabic.push({ ...found, value: value });
+      if (
+        found.key.includes("date") ||
+        found.key.includes("created_at") ||
+        found.key.includes("updated_at")
+      ) {
+        keysWithArabic.push({ ...found, value: formatDate(value as string) });
+      } else keysWithArabic.push({ ...found, value: value });
     }
   }
   console.log(keysWithArabic);

@@ -13,6 +13,7 @@ import {
   TableCell,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
+import { formatDate } from "../../../../methods";
 
 function StatusDialog(props: PropsType) {
   return (
@@ -35,7 +36,7 @@ function StatusDialog(props: PropsType) {
                 {props.request?.steps_of_approval?.map((step) => (
                   <TableRow key={step.id}>
                     <TableCell>{step.employee_id}</TableCell>
-                    <TableCell>{step.created_at}</TableCell>
+                    <TableCell>{formatDate(step.created_at || "")}</TableCell>
                     <TableCell>{step.department_id}</TableCell>
                     <TableCell>{step.action}</TableCell>
                     <TableCell>...</TableCell>
