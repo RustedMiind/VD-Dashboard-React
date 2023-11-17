@@ -37,10 +37,6 @@ function EmplyeesRequests() {
     ? requests
     : undefined;
 
-  if (currentTab !== -1) {
-    filtered = filtered?.filter((item) => item.status === currentTab);
-  }
-
   function handleOpenModel(request: EmployeeRequest) {
     return () => {
       setdialogRequest(request);
