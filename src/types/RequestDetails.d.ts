@@ -25,6 +25,10 @@ export interface RequestDetails {
   duration?: string;
   date?: string;
   salary_first?: number;
+  requestable?: {
+    date: string;
+    typeInArabic: string;
+  };
 }
 
 export type KeyToArabic = { name: string; key: string };

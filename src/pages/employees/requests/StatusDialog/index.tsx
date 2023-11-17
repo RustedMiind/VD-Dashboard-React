@@ -11,6 +11,7 @@ import {
   TableRow,
   TableBody,
   TableCell,
+  Chip,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
 import { formatDate } from "../../../../methods";
@@ -27,18 +28,22 @@ function StatusDialog(props: PropsType) {
                 <TableRow>
                   <TableCell>اسم الموظف</TableCell>
                   <TableCell>تاريخ الورود</TableCell>
+                  <TableCell>تاريخ الصدور</TableCell>
                   <TableCell>القسم الوظيفي</TableCell>
                   <TableCell>حالة الطلب</TableCell>
                   <TableCell>الملاحظات</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.request?.steps_of_approval?.map((step) => (
+                {props.request?.checked_steps?.map((step) => (
                   <TableRow key={step.id}>
-                    <TableCell>{step.employee_id}</TableCell>
-                    <TableCell>{formatDate(step.created_at || "")}</TableCell>
-                    <TableCell>{step.department_id}</TableCell>
-                    <TableCell>{step.action}</TableCell>
+                    <TableCell>{step.employeeName}</TableCell>
+                    <TableCell>{formatDate(step.created_at)}</TableCell>
+                    <TableCell>
+                      {formatDate(step.model_details?.created_at)}
+                    </TableCell>
+                    <TableCell>{step.departmentName}</TableCell>
+                    <TableCell>{generateChip(step.action)}</TableCell>
                     <TableCell>...</TableCell>
                   </TableRow>
                 ))}
@@ -57,6 +62,29 @@ function StatusDialog(props: PropsType) {
       </DialogActions> */}
     </Dialog>
   );
+
+  function generateChip(value: number): JSX.Element {
+    const variant = "outlined";
+    let chip: JSX.Element = <></>;
+
+    switch (value) {
+      case -1:
+        chip = <Chip color="primary" variant={variant} label="تحت الاجراء" />;
+
+        break;
+      case 0:
+        chip = <Chip color="error" variant={variant} label="مرفوض" />;
+        break;
+      case 1:
+        chip = <Chip color="success" variant={variant} label="مقبول" />;
+        break;
+
+      default:
+        break;
+    }
+
+    return chip;
+  }
 }
 
 type PropsType = {

@@ -56,8 +56,8 @@ function EmployeesRequestsTable(props: PropsType) {
                   .includes(x.prefix.toLowerCase())
               )?.name;
               const note =
-                request.steps_of_approval &&
-                request.steps_of_approval[request.steps_of_approval.length - 1]
+                request.checked_steps &&
+                request.checked_steps[request.checked_steps.length - 1]
                   ?.model_details?.note;
               return (
                 <TableRow key={request.id}>

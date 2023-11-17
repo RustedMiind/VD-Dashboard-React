@@ -28,6 +28,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
+// Start Delete
 axios
   .post<{ data: { token: string } }>(Api("employee/login"), {
     email: "ali@gmail.com",

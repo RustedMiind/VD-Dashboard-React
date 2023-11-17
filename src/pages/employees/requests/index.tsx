@@ -14,7 +14,7 @@ import DetailsDialog from "./DetailsDialog";
 import { CountType } from "../../../types/Count";
 
 function EmplyeesRequests() {
-  const [currentTab, setCurrentTab] = useState<number>(0);
+  const [currentTab, setCurrentTab] = useState<number>(-1);
 
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [requests, setRequests] = useState<
@@ -37,7 +37,7 @@ function EmplyeesRequests() {
     ? requests
     : undefined;
 
-  if (currentTab !== 0) {
+  if (currentTab !== -1) {
     filtered = filtered?.filter((item) => item.status === currentTab);
   }
 
@@ -77,6 +77,7 @@ function EmplyeesRequests() {
               // edate: filters.edate || undefined,
               sdate: filters.sdate || undefined,
               order: filters.order,
+              action: currentTab !== -1 ? currentTab : null,
             },
           },
         }
@@ -91,7 +92,7 @@ function EmplyeesRequests() {
         console.log(err);
       });
   }
-  useEffect(resetTable, [selectedType]);
+  useEffect(resetTable, [selectedType, currentTab]);
 
   return (
     <>
@@ -145,9 +146,9 @@ function EmplyeesRequests() {
               setCurrentTab(v);
             }}
           >
-            <Tab label="الكل" value={0} />
-            <Tab label="الوارد" value={-1} />
-            <Tab label="الصادر" value={-2} />
+            <Tab label="الكل" value={-1} />
+            <Tab label="الوارد" value={0} />
+            <Tab label="الصادر" value={1} />
           </Tabs>
         </Box>
         <Paper

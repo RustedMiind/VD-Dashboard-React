@@ -29,7 +29,7 @@ function Navbar(props: PropsType) {
           component="div"
         ></Typography>
         <IconButton disabled size="medium" sx={{ ml: 2 }}>
-          <Badge badgeContent={2} color="error">
+          <Badge badgeContent={0} color="error">
             <NotificationsIcon color="action" />
           </Badge>
         </IconButton>

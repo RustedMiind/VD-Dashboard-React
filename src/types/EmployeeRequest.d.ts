@@ -11,7 +11,8 @@ export interface EmployeeRequest {
   updated_at: string;
   requestable: Requestable;
   nextStep: NextStep | null;
-  steps_of_approval: StepOfApproval[] | null;
+  // steps_of_approval: StepOfApproval[] | null;
+  checked_steps: StepOfApproval[] | null;
   status: RequestStatusType;
   departmentName: string | null;
 }
@@ -60,7 +61,9 @@ interface StepOfApproval {
   id: number;
   employee_id: number;
   employee: EmployeeType;
+  employeeName?: string;
   department_id: number;
+  departmentName?: string;
   department: DepartmentEmployee;
   action: number;
   duration: number;
@@ -72,6 +75,7 @@ interface StepOfApproval {
 }
 
 interface ModelDetails {
+  created_at: string;
   general_request_id: 159;
   steps_of_approval_id: 40;
   note?: string;

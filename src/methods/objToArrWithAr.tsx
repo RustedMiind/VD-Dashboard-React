@@ -8,9 +8,9 @@ import { formatDate } from "./formateDate";
 export const keyToArabic: KeyToArabic[] = [
   { key: "car_type", name: "نوع السيارة" },
   { key: "number_car", name: "رقم السيارة" },
-  { key: "created_at", name: "تاريخ الانشاء" },
-  { key: "updated_at", name: "تاريخ التعديل" },
-  { key: "typeInArabic", name: "النوع" },
+  { key: "created_at", name: "تاريخ الورود" },
+  // { key: "updated_at", name: "تاريخ التعديل" },
+  { key: "typeInArabic", name: "نوع الطلب" },
   { key: "name", name: "الاسم" },
   { key: "responsible", name: "المسؤول" },
   { key: "time_from", name: "الوقت من" },
@@ -26,7 +26,7 @@ export const keyToArabic: KeyToArabic[] = [
   // { key: "type", name: "النوع" },
   { key: "duration", name: "المدة" },
   { key: "date", name: "التاريخ" },
-  { key: "salary_first", name: "الراتب الاول" },
+  // { key: "salary_first", name: "الراتب الاول" },
 ];
 
 export function objectToArrayWithArName(obj: RequestDetails): KeyWithArabic[] {
