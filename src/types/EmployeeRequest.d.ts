@@ -12,7 +12,7 @@ export interface EmployeeRequest {
   requestable: Requestable;
   nextStep: NextStep | null;
   // steps_of_approval: StepOfApproval[] | null;
-  checked_steps: StepOfApproval[] | null;
+  checkedSteps: StepOfApproval[] | null;
   status: RequestStatusType;
   departmentName: string | null;
 }
@@ -76,6 +76,7 @@ interface StepOfApproval {
 
 interface ModelDetails {
   created_at: string;
+  updated_at: string;
   general_request_id: 159;
   steps_of_approval_id: 40;
   note?: string;

@@ -17,7 +17,7 @@ export const keyToArabic: KeyToArabic[] = [
   { key: "time_valid_in_seconds", name: "الوقت المتاح بالثواني" },
   { key: "time_valid_to", name: "الوقت المتاح الي" },
   { key: "latitude", name: "خط الطول" },
-  { key: "longitude", name: "خط العرض" },
+  { key: "longitude", name: "دوائر العرض" },
   { key: "address", name: "العنوان" },
   { key: "project_name", name: "اسم المشروع" },
   { key: "description", name: "الوصف" },

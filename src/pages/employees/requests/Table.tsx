@@ -56,8 +56,8 @@ function EmployeesRequestsTable(props: PropsType) {
                   .includes(x.prefix.toLowerCase())
               )?.name;
               const note =
-                request.checked_steps &&
-                request.checked_steps[request.checked_steps.length - 1]
+                request.checkedSteps &&
+                request.checkedSteps[request.checkedSteps.length - 1]
                   ?.model_details?.note;
               return (
                 <TableRow key={request.id}>
@@ -155,12 +155,35 @@ function EmployeesRequestsTable(props: PropsType) {
         }
         break;
       case 0:
-        chip = <Chip color="error" variant={variant} label="مرفوض" />;
+        chip = (
+          <Chip
+            color="error"
+            onClick={props.openStatus(request)}
+            variant={variant}
+            label="مرفوض"
+          />
+        );
         break;
       case 1:
-        chip = <Chip color="success" variant={variant} label="معتمد" />;
+        chip = (
+          <Chip
+            color="success"
+            onClick={props.openStatus(request)}
+            variant={variant}
+            label="مقبول"
+          />
+        );
         break;
-
+      case 2:
+        chip = (
+          <Chip
+            color="success"
+            onClick={props.openStatus(request)}
+            variant={variant}
+            label="معتمد"
+          />
+        );
+        break;
       default:
         break;
     }

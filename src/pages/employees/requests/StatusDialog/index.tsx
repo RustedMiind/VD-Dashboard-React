@@ -12,6 +12,7 @@ import {
   TableBody,
   TableCell,
   Chip,
+  Box,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
 import { formatDate } from "../../../../methods";
@@ -35,18 +36,40 @@ function StatusDialog(props: PropsType) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.request?.checked_steps?.map((step) => (
-                  <TableRow key={step.id}>
-                    <TableCell>{step.employeeName}</TableCell>
-                    <TableCell>{formatDate(step.created_at)}</TableCell>
-                    <TableCell>
-                      {formatDate(step.model_details?.created_at)}
-                    </TableCell>
-                    <TableCell>{step.departmentName}</TableCell>
-                    <TableCell>{generateChip(step.action)}</TableCell>
-                    <TableCell>...</TableCell>
-                  </TableRow>
-                ))}
+                {props.request?.checkedSteps?.map((step) => {
+                  const note =
+                    props.request?.checkedSteps &&
+                    props.request.checkedSteps[
+                      props.request.checkedSteps.length - 1
+                    ]?.model_details?.note;
+                  return (
+                    <TableRow key={step.id}>
+                      <TableCell>{step.employeeName}</TableCell>
+                      <TableCell>
+                        {formatDate(props.request?.created_at)}
+                      </TableCell>
+                      <TableCell>
+                        {formatDate(step.model_details?.updated_at)}
+                      </TableCell>
+                      <TableCell>{step.departmentName}</TableCell>
+                      <TableCell>
+                        {generateChip(step.model_details?.status)}
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          component="span"
+                          sx={{
+                            display: "inline-block",
+                            maxWidth: 150,
+                            overflow: "hidden",
+                          }}
+                        >
+                          {note || "..."}
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
@@ -78,7 +101,9 @@ function StatusDialog(props: PropsType) {
       case 1:
         chip = <Chip color="success" variant={variant} label="مقبول" />;
         break;
-
+      case 2:
+        chip = <Chip color="success" variant={variant} label="معتمد" />;
+        break;
       default:
         break;
     }
