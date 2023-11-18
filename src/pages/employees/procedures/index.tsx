@@ -173,10 +173,18 @@ function EmploeesRequestsProcedures() {
   }
 
   function submitData() {
-    const data = proceduce.levels.map((r) => {
-      const { created_at, deleted_at, updated_at, id, ...t } = r;
-      return { ...t, type: currentTab };
+    const data = proceduce.levels.map((r): Partial<Step> => {
+      // return { ...t, type: currentTab };
+      return {
+        type: currentTab,
+        action: r.action,
+        duration: r.duration,
+        employee_id: r.employee_id,
+        department_id: r.department_id,
+        model: r.model,
+      };
     });
+    console.log(data);
     setSendState("sending");
     axios
       .post(Api("employee/general-requests/steps/create"), {

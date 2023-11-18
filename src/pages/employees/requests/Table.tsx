@@ -26,7 +26,7 @@ import { useState } from "react";
 function EmployeesRequestsTable(props: PropsType) {
   const ROWS_PER_PAGE = 8;
   const [page, setPage] = useState(1);
-  const PAGES = Math.ceil(props.requests.length / ROWS_PER_PAGE);
+  const PAGES = Math.ceil(props.requests.length / ROWS_PER_PAGE) || 1;
 
   const toView = props.requests.slice(
     (page - 1) * ROWS_PER_PAGE,

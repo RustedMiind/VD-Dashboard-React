@@ -10,6 +10,11 @@ function RequestTypesToggles({ selected, setSelected, counts }: PropsType) {
     };
   }
 
+  function findCount(type: number): CountType | undefined {
+    const found = counts?.find((c) => c.type === type);
+    return found;
+  }
+
   return (
     <Stack
       sx={{
@@ -21,7 +26,7 @@ function RequestTypesToggles({ selected, setSelected, counts }: PropsType) {
     >
       {requestTypes.map((chip, index) => {
         const current = selected === chip.value;
-        const count = counts && counts[index + 1] ? counts[index + 1].count : 0;
+        const count = findCount(index + 1)?.count || 0;
         return (
           <Badge key={chip.name} badgeContent={count} max={19} color="error">
             <Chip
