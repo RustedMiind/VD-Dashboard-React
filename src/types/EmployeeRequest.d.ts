@@ -27,6 +27,8 @@ interface NextStep {
   id: number;
   employee_id: number;
   department_id: number;
+  employeeName: string;
+  departmentName: string;
   action: number;
   duration: number;
   model: ProceduresModelTypeCode;

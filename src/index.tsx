@@ -14,8 +14,8 @@ import { Api, Domain } from "./constants";
 import { deleteCookie, getCookie } from "./methods/cookies";
 
 console.table({
-  Version: "1.1.1",
-  Comment: "Updated Duplicates of Status Dialog",
+  Version: "1.1.2",
+  Comment: "Added Next Step to Employee Request Status Dialog",
 });
 
 const cacheRtl = createCache({
