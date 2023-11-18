@@ -13,7 +13,10 @@ import axios from "axios";
 import { Api, Domain } from "./constants";
 import { deleteCookie, getCookie } from "./methods/cookies";
 
-console.log("Version : ", "1.1.0");
+console.table({
+  Version: "1.1.1",
+  Comment: "Updated Duplicates of Status Dialog",
+});
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -30,10 +33,21 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
-// For Production
-RunProd();
-// For Development
-// RunDev();
+MountApp("production");
+
+function MountApp(type: "production" | "development") {
+  switch (type) {
+    case "development":
+      RunDev();
+      break;
+    case "production":
+      RunProd();
+      break;
+    default:
+      RunProd();
+      break;
+  }
+}
 
 function RunProd() {
   const db_token = getCookie("db_token");
