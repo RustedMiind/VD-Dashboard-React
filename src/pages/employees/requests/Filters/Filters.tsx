@@ -34,6 +34,7 @@ function Filters(props: PropsType) {
           slotProps={{ textField: { size: "small" } }}
           label="تاريخ الورود"
           sx={{ w: 1 }}
+          disableFuture
           value={dayjs(props.filters.sdate)}
           onChange={(newValue) => {
             props.dispatch({

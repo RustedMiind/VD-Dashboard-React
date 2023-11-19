@@ -70,8 +70,8 @@ function EmplyeesRequests() {
             type: selectedType,
             search: search || null,
             ...{
-              // edate: filters.edate || undefined,
-              sdate: filters.sdate || undefined,
+              edate: filters.edate || null,
+              sdate: filters.sdate || null,
               order: filters.order,
               action: currentTab !== -1 ? currentTab : null,
             },
