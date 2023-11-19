@@ -12,7 +12,6 @@ import {
   Alert,
   Snackbar,
 } from "@mui/material";
-
 import { FormData } from "./reducer";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -105,6 +104,7 @@ export default function FormAdd() {
       .post(Api("employee/client/store"), objectToFormData(formData))
       .then((res) => {
         setToaster({ type: "success" });
+        window.location.href = "/react/clients";
       })
       .catch((err) => {
         setToaster({ type: "error" });
@@ -159,6 +159,7 @@ export default function FormAdd() {
       .patch(Api("employee/client/update"), objectToFormData(formData))
       .then((res) => {
         setToaster({ type: "success" });
+        window.location.href = "/react/clients";
       })
       .catch((err) => {
         setToaster({ type: "error" });
