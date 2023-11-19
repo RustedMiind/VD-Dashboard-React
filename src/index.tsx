@@ -33,7 +33,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
-MountApp("development");
+MountApp("production");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
