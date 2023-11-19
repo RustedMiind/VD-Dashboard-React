@@ -184,31 +184,48 @@ function EmploeesRequestsProcedures() {
   function loadLevels() {
     setLevels([]);
     setendpointStatus("loading");
-    axios
-      .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
-      .then((res) => {
-        console.log(res);
-        console.log(
-          "Handled",
-          HandleDepartmentWithEmployees(res.data.employee)
-        );
-        setDepartments(HandleDepartmentWithEmployees(res.data.employee));
-      })
-      .catch((err) => {
-        console.log(err);
-        setendpointStatus("error");
-      });
-    axios
-      .post(Api("employee/general-requests/steps"), { type: currentTab })
-      .then(({ data }) => {
-        setLevels(data.steps);
-        console.log("steps", data);
-        setendpointStatus("none");
-      })
-      .catch((err) => {
-        console.log(err);
-        setendpointStatus("error");
-      });
+
+    getDepartments().then(getLevels).catch(console.log);
+  }
+  function getDepartments() {
+    return new Promise<void>((ressolve, reject) => {
+      if (!departments) {
+        axios
+          .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
+          .then((res) => {
+            console.log(res);
+            console.log(
+              "Departments : ",
+              HandleDepartmentWithEmployees(res.data.employee)
+            );
+            setDepartments(HandleDepartmentWithEmployees(res.data.employee));
+            ressolve();
+          })
+          .catch((err) => {
+            console.log(err);
+            setendpointStatus("error");
+            reject(err);
+          });
+      } else ressolve();
+    });
+  }
+
+  function getLevels() {
+    return new Promise<void>((ressolve, reject) => {
+      axios
+        .post(Api("employee/general-requests/steps"), { type: currentTab })
+        .then(({ data }) => {
+          setLevels(data.steps);
+          console.log("Steps : ", data);
+          setendpointStatus("none");
+          ressolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          setendpointStatus("error");
+          ressolve(err);
+        });
+    });
   }
 }
 

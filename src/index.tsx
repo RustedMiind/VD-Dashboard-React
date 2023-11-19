@@ -14,8 +14,8 @@ import { Api, Domain } from "./constants";
 import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
 
 console.table({
-  Version: "1.1.3",
-  Comment: "Added Next Step to Employee Request Status Dialog",
+  Version: "1.1.4",
+  Comment: "Activated End Date filter in employees requests",
 });
 
 const cacheRtl = createCache({
@@ -33,7 +33,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
-MountApp("development");
+MountApp("production");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
