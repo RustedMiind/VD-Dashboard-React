@@ -11,7 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
 import { Api, Domain } from "./constants";
-import { deleteCookie, getCookie } from "./methods/cookies";
+import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
 
 console.table({
   Version: "1.1.2",
@@ -33,7 +33,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
-MountApp("production");
+MountApp("development");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
@@ -78,7 +78,7 @@ function RunProd() {
 }
 function RunDev() {
   axios
-    .post<{ data: { token: string } }>(Api("employee/login"), {
+    .post<{ data: { token: string; user: any } }>(Api("employee/login"), {
       email: "ali@gmail.com",
       password: "123",
       imei: "5153153",
@@ -86,9 +86,10 @@ function RunDev() {
       device_type: "android",
     })
     .then(({ data }) => {
-      console.log("Token", data.data.token);
+      console.log("User Data: ", data.data.user);
+      console.log("User Token", data.data.token);
       axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
-      document.cookie = `token=Bearer ${data.data.token}; expires=2024-11-08T15:10:31.339Z; path=pathName;`;
+      setCookie("db_token", data.data.token, 7);
       root.render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <BrowserRouter>
