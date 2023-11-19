@@ -37,11 +37,7 @@ function StatusDialog(props: PropsType) {
               </TableHead>
               <TableBody>
                 {props.request?.checkedSteps?.map((step) => {
-                  const note =
-                    props.request?.checkedSteps &&
-                    props.request.checkedSteps[
-                      props.request.checkedSteps.length - 1
-                    ]?.model_details?.note;
+                  const note = step.model_details?.note;
                   return (
                     <TableRow key={step.id}>
                       <TableCell>{step.employeeName}</TableCell>

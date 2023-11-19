@@ -1,12 +1,6 @@
 import { Stack, TextField, Button } from "@mui/material";
-import PrintIcon from "@mui/icons-material/Print";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import Filters from "./Filters";
-import { useState } from "react";
 
 function SearchBar(props: PropsType) {
-  const [filtersOpened, setFiltersOpenen] = useState(false);
-
   return (
     <>
       <Stack
@@ -20,16 +14,18 @@ function SearchBar(props: PropsType) {
         <TextField
           label="بحث"
           value={props.search}
-          onChange={(e) => {
-            props.setSearch(e.target.value);
-          }}
           size="small"
           sx={{ flexGrow: 1 }}
+          onChange={(e: any) => {
+            
+            props.setSearch(e.target.value);
+          }}
           // disabled
         />
         <Button
           variant="contained"
           //  disabled
+          onClick={props.getRequests}
         >
           بحث
         </Button>
@@ -41,6 +37,7 @@ function SearchBar(props: PropsType) {
 type PropsType = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  getRequests: () => void;
 };
 
 export default SearchBar;
