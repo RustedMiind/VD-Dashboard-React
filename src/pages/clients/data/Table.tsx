@@ -81,7 +81,7 @@ function ClientRequestsTable(props: PropsType) {
                     />
                     <Row text={request.phone} />
                     <Row text={request.email} />
-                    <Row text={request.card_id} sx={{ textAlign: "center" }} />
+                    <Row text={request.register_number||request.card_id} sx={{ textAlign: "center" }} />
                     <Row text={request.branch?.name} />
 
                     <Row

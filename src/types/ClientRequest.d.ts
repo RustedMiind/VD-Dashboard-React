@@ -9,6 +9,7 @@ export interface ClientRequest {
   phone: "01098281638";
   email: "client@vision.com";
   card_id: "1234567890";
+  register_number: "1234567890";
   branch_id: 1;
   broker_id: null;
   status_id: null;
