@@ -3,19 +3,18 @@ export const companyInitial: CompanyFormType = {
   agent_name: "",
   branch_id: 0,
   broker_id: 0,
-  register_number:0,
+  register_number: 0,
   card_image: null,
   letter_head: "",
   company_name: "",
   phone: "",
   email: "",
-
 };
 export const individualInitial: IndividualFormType = {
   type: "individual",
   branch_id: 0,
   broker_id: 0,
-  card_id: 0,
+  card_id: null,
   card_image: null,
   letter_head: "",
   name: "",
@@ -74,7 +73,7 @@ interface CompanyNameActionType extends ReducerAction<string> {
   type: "COMPANY_NAME";
 }
 
-interface CardIdActionType extends ReducerAction<number> {
+interface CardIdActionType extends ReducerAction<number | null> {
   type: "CARD_ID";
 }
 interface RegisterNumberActionType extends ReducerAction<number> {
@@ -119,7 +118,7 @@ export type ActionTypes =
 export interface BaseFormData {
   name?: string;
   company_name?: string;
-  card_id?: number ;
+  card_id?: number | null;
   register_number?: number;
   phone: string;
   branch_id: number;

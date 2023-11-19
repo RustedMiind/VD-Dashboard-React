@@ -107,7 +107,7 @@ function ClientRequestsTable(props: PropsType) {
                         )
                       }
                     />
-                    <Row text={"-"} />
+                    <Row text={request.agent_name} />
                     <Row text={<SettingsIcon />} />
                   </TableRow>
                 );

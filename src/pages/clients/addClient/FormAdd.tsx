@@ -13,6 +13,7 @@ import {
   Snackbar,
 } from "@mui/material";
 
+import { FormData } from "./reducer";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useEffect, useReducer, useState } from "react";
@@ -22,10 +23,10 @@ import { Api } from "../../../constants";
 import { Branch, Broker } from "../../../types";
 import { useParams } from "react-router-dom";
 import { objectToFormData } from "../../../methods";
+import PopUpError from "../data/PopUpError/PopUpError";
 const paddingSize = 0.1;
 const VisuallyHiddenInput = styled("input")({
   clipPath: "inset(0%)",
-  
 });
 
 export default function FormAdd() {
@@ -33,7 +34,12 @@ export default function FormAdd() {
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
   const [formData, dispatch] = useReducer(reducer, individualInitial);
-
+  const [errors, setErrors] = useState<
+    Partial<FormData & { card_image: string }> | undefined
+  >(undefined);
+  const [card_idError, setCard_idError] = useState<string>("");
+  const [phoneError, setPhoneError] = useState<string>("");
+  const [open, setOpen] = useState(false);
   // object respose
   const objectResponse = useParams();
   //toster
@@ -49,30 +55,29 @@ export default function FormAdd() {
   }
 
   async function GetDataClient() {
-    if (objectResponse.name != undefined) {
-      try {
-        const { data } = await axios.get<{ data: any }>(
-          Api(`employee/client/edit`),
-          {
-            params: {
-              name: objectResponse.name,
-            },
-          }
-        );
-        setclientEdit(data.data);
-        dispatch({ type: "TYPE", payload: data.data.type });
-        dispatch({ type: "NAME", payload: data.data.name });
-        dispatch({ type: "CARD_ID", payload: data.data.card_id });
-        dispatch({ type: "PHONE_NUMBER", payload: data.data.phone });
-        dispatch({ type: "EMAIL", payload: data.data.email });
-        dispatch({ type: "BRANCH_ID", payload: data.data.branch_id });
-        dispatch({ type: "BROKER_ID", payload: data.data.broker_id });
-        dispatch({ type: "AGENT_NAME", payload: data.data.agent_name });
-        dispatch({ type: "LETTER_HEAD", payload: data.data.letter_head  });
-        dispatch({ type: "CARD_IMAGE", payload: data.data.card_image });
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      const { data } = await axios.get<{ data: any }>(
+        Api(`employee/client/edit`),
+        {
+          params: {
+            name: objectResponse.name,
+            phone: objectResponse.phone,
+          },
+        }
+      );
+      setclientEdit(data.data);
+      dispatch({ type: "TYPE", payload: data.data.type });
+      dispatch({ type: "NAME", payload: data.data.name });
+      dispatch({ type: "CARD_ID", payload: data.data.card_id });
+      dispatch({ type: "PHONE_NUMBER", payload: data.data.phone });
+      dispatch({ type: "EMAIL", payload: data.data.email });
+      dispatch({ type: "BRANCH_ID", payload: data.data.branch_id });
+      dispatch({ type: "BROKER_ID", payload: data.data.broker_id });
+      dispatch({ type: "AGENT_NAME", payload: data.data.agent_name });
+      dispatch({ type: "LETTER_HEAD", payload: data.data.letter_head });
+      dispatch({ type: "CARD_IMAGE", payload: data.data.card_image });
+    } catch (error) {
+      console.log(error);
     }
   }
   // useEffect get branches , broker and clientRespose
@@ -100,17 +105,55 @@ export default function FormAdd() {
       .post(Api("employee/client/store"), objectToFormData(formData))
       .then((res) => {
         setToaster({ type: "success" });
-        console.log(formData);
-        
       })
       .catch((err) => {
         setToaster({ type: "error" });
+        console.log(err, "ddddd");
+
+        // setCard_idError(err.response.data.data.card_id[0]);
+        // setPhoneError(err.response.data.data.phone[0]);
+
+        let errorObj: { key: string; value: string }[] = [];
+        let tempObj: any = {};
+
+        for (let i in err.response.data.data) {
+          const current = err.response.data.data[i] as string[];
+          current.join(", ");
+          errorObj.push({ key: i, value: current.join(", ") });
+        }
+        errorObj.forEach((item) => {
+          tempObj[item.key] = item.value;
+        });
+        setErrors(tempObj);
       });
+    if (card_idError) {
+      console.log("dalog2");
+      return (
+        <PopUpError
+          card_idError={card_idError}
+          open={open}
+          handleClose={() => {
+            setOpen(false);
+          }}
+        />
+      );
+    }
+    if (phoneError) {
+      console.log("dalog");
+      return (
+        <PopUpError
+          phoneError={phoneError}
+          open={open}
+          handleClose={() => {
+            setOpen(false);
+          }}
+        />
+      );
+    }
+    console.log(phoneError);
   }
   //Edit handle
   function EditHandle(e: any) {
-    console.log(clientEdit, "edfcef");
-
     e.preventDefault();
     axios
       .patch(Api("employee/client/update"), objectToFormData(formData))
@@ -119,7 +162,28 @@ export default function FormAdd() {
       })
       .catch((err) => {
         setToaster({ type: "error" });
+        // setCard_idError(err.response.data.data.card_id[0]);
+        // setPhoneError(err.response.data.data.phone[0]);
       });
+
+    // if (card_idError) {
+    //   return (
+    //     <PopUpError
+    //       card_idError={card_idError}
+    //       open={open}
+    //       handleClose={handleCloseDialog}
+    //     />
+    //   );
+    // }
+    // if (phoneError) {
+    //   return (
+    //     <PopUpError
+    //       phoneError={phoneError}
+    //       open={open}
+    //       handleClose={handleCloseDialog}
+    //     />
+    //   );
+    // }
   }
   return (
     <Box
@@ -175,6 +239,10 @@ export default function FormAdd() {
                 });
               }}
             />
+
+            <Typography variant="body2" color="error">
+              {errors?.name}
+            </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -202,6 +270,9 @@ export default function FormAdd() {
                 });
               }}
             />
+            <Typography variant="body2" color="error">
+              {errors?.card_id}
+            </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -220,6 +291,10 @@ export default function FormAdd() {
                 dispatch({ type: "PHONE_NUMBER", payload: e.target.value });
               }}
             />
+
+            <Typography variant="body2" color="error">
+              {errors?.phone}
+            </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -238,6 +313,9 @@ export default function FormAdd() {
                 dispatch({ type: "EMAIL", payload: e.target.value });
               }}
             />
+            <Typography variant="body2" color="error">
+              {errors?.email}
+            </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -268,6 +346,10 @@ export default function FormAdd() {
                 </MenuItem>
               ))}
             </TextField>
+
+            <Typography variant="body2" color="error">
+              {errors?.broker_id}
+            </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -296,6 +378,10 @@ export default function FormAdd() {
                 </MenuItem>
               ))}
             </TextField>
+
+            <Typography variant="body2" color="error">
+              {errors?.branch_id}
+            </Typography>
           </Stack>
         </Grid>
 
@@ -319,6 +405,9 @@ export default function FormAdd() {
                   });
                 }}
               ></TextField>
+              <Typography variant="body2" color="error">
+                {errors?.agent_name}
+              </Typography>
             </Stack>
           </Grid>
         )}
@@ -339,6 +428,9 @@ export default function FormAdd() {
                 dispatch({ type: "LETTER_HEAD", payload: e.target.value });
               }}
             />
+            <Typography variant="body2" color="error">
+              {errors?.letter_head}
+            </Typography>
           </Stack>
         </Grid>
 
@@ -355,7 +447,7 @@ export default function FormAdd() {
               >
                 ارفاق صورة
                 <VisuallyHiddenInput
-                // value={formData.card_image}
+                  // value={formData.card_image}
                   onChange={(e) => {
                     const files = e.target.files;
                     if (files) {
@@ -367,6 +459,10 @@ export default function FormAdd() {
                   type="file"
                 />
               </Button>
+
+              <Typography variant="body2" color="error">
+                {errors?.card_image}
+              </Typography>
             </Box>
           </Stack>
         </Grid>
@@ -376,7 +472,6 @@ export default function FormAdd() {
           </Button>
         </Grid>
       </Grid>
-
 
       {/* alert */}
       <Snackbar
@@ -400,4 +495,8 @@ export default function FormAdd() {
       </Snackbar>
     </Box>
   );
+
+  function handleCloseDialog() {
+    setOpen(false);
+  }
 }

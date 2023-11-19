@@ -17,4 +17,5 @@ export interface ClientRequest {
   status: null;
   contracts: Contract[];
   branch: Branch;
+  agent_name: string | null;
 }
