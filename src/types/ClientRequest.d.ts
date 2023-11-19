@@ -1,3 +1,5 @@
+import { Branch, Contract } from "./";
+
 export interface ClientRequest {
   id: number;
   name: string;
@@ -5,9 +7,6 @@ export interface ClientRequest {
   email: string;
   card_id: string;
   branch: Branch;
+  contracts: Contract[];
   Contract_status: string;
-}
-
-interface Branch {
-  name: string;
 }

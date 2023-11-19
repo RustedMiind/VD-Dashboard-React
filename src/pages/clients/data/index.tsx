@@ -1,93 +1,74 @@
-import {
-  Stack,
-  Typography,
-  Box,
-  Tabs,
-  Tab,
-  Paper,
-  Button,
-} from "@mui/material";
-
+import { Stack, Typography, Box, Paper, Button } from "@mui/material";
 import SearchBar from "./SearchBar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { ClientRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
-import { requestTypes } from "./RequestTypes";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { NavLink } from "react-router-dom";
 import ClientRequestsTable from "./Table";
-import { AdminApi } from "../../../constants/AdminApi";
+import DeleteBtn from "./DeleteButton/DeleteBtn";
+import PopUp from "./PopUp/PopUp";
+import { IndexContextProvider } from "../Context/Store";
+
 function ClientData() {
-  const [currentTab, setCurrentTab] = useState("1");
+  const [open, setOpen] = useState<
+    Boolean | React.Dispatch<React.SetStateAction<Boolean>>
+  >(false);
+
+  // search bar
+
+
+
   const [requests, setRequests] = useState<ClientRequest[] | undefined>(
     undefined
   );
   const [search, setSearch] = useState("");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedData, setSelectedData] = useState<number[]>([]);
 
-  let filtered: ClientRequest[] | undefined = requests;
-
-  if (search) {
-    const searchLowerCase = search.toLowerCase();
-    const filter = requests?.filter((request) => {
-      return request.name.toLocaleLowerCase().includes(searchLowerCase);
-    });
-    filtered = filter || undefined;
-  }
-  if (selectedTypes.length) {
-    const filter = filtered?.filter((request) => {
-      let found = false;
-      selectedTypes.forEach((selection) => {
-        const temp = requestTypes.find((x) => x.name === selection);
-        // if (found) {
-        //   return;
-        // }
-        if (
-          temp &&
-          request.email.toLowerCase().includes(temp?.prefix.toLowerCase())
-        ) {
-          found = true;
-        }
-      });
-      return found;
-    });
-    filtered = filter || undefined;
-  }
-
-  useEffect(() => {
-    console.log(AdminApi("client"));
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  function getRequests() {
     axios
-      .get<{ requests: ClientRequest[] }>(AdminApi("client"))
+      .get<{ data: ClientRequest[] }>(Api("employee/client"), {
+        params: {
+          search,
+        },
+      })
       .then(({ data }) => {
-        console.log("data", data);
+        console.log(data);
+        
+        setRequests(data.data);
       })
       .catch((err) => {
         setRequests(undefined);
         console.log("err", err);
       });
-  }, []);
+  }
+  // Get Clients
+  useEffect(getRequests, []);
+  // const filtered = searchResult?.length?searchResult:requests
 
   return (
     <Stack>
+                  <IndexContextProvider>
+
       <Typography variant="h5" fontWeight={600} mb={3}>
         بيانات العملاء
       </Typography>
-      <SearchBar search={search} setSearch={setSearch} />
+      <SearchBar
+        search={search}
+        setSearch={setSearch}
+        getRequests={getRequests}
+      />
       <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
         العملاء
       </Typography>
 
       <Paper
-        // variant="outlined"
         sx={{
-          //
           bgcolor: "Background",
           overflow: "hidden",
-          backgroundColor: "#F3F5F7",
         }}
         elevation={4}
       >
@@ -99,48 +80,34 @@ function ClientData() {
           alignItems="end"
           padding={3}
         >
-          <Stack
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              alignItems: "end",
-            }}
-          >
+          <Box>
             <Button
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
-              sx={{ mb: 1 }}
               component={NavLink}
               to={"add"}
             >
               اضافة عميل جديد
             </Button>
             <Button
+              sx={{ ml: 2 }}
               variant="contained"
-              startIcon={<EditNoteIcon />}
-              sx={{ mb: 1, ml: 2 }}
+              onClick={handleClickOpen}
             >
               تعديل بيانات عميل
             </Button>
-          </Stack>
-          <Button
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-            sx={{ mb: 1, ml: 2, color: "#CB1818", border: "solid 1px #CB1818" }}
-          >
-            حذف
-          </Button>
+            <PopUp open={open} setOpen={setOpen} />
+          </Box>
+          <Box>
+            <DeleteBtn setRequests={setRequests} requests={requests} />
+          </Box>
         </Box>
-        {filtered && (
-          <ClientRequestsTable
-            selectedData={selectedData}
-            setSelectedData={setSelectedData}
-            requests={filtered}
-          />
-        )}
+
+          <ClientRequestsTable requests={requests} />
+       
       </Paper>
+      </IndexContextProvider>
+
     </Stack>
   );
 }

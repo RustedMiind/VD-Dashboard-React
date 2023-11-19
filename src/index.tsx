@@ -13,7 +13,10 @@ import axios from "axios";
 import { Api, Domain } from "./constants";
 import { deleteCookie, getCookie } from "./methods/cookies";
 
-console.log("Version : ", "1.1.0");
+console.table({
+  Version: "1.1.1",
+  Comment: "Updated Duplicates of Status Dialog",
+});
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -21,7 +24,7 @@ const cacheRtl = createCache({
 });
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 function resetAuth() {
   deleteCookie("db_token");
@@ -30,10 +33,21 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
-// For Production
-RunProd();
-// For Development
-// RunDev();
+MountApp("production");
+
+function MountApp(type: "production" | "development") {
+  switch (type) {
+    case "development":
+      RunDev();
+      break;
+    case "production":
+      RunProd();
+      break;
+    default:
+      RunProd();
+      break;
+  }
+}
 
 function RunProd() {
   const db_token = getCookie("db_token");
@@ -51,7 +65,7 @@ function RunProd() {
                 <App />
               </CacheProvider>
             </BrowserRouter>
-          </LocalizationProvider>
+          </LocalizationProvider>,
         );
       })
       .catch((err) => {
@@ -74,7 +88,7 @@ function RunDev() {
     .then(({ data }) => {
       console.log("Token", data.data.token);
       axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
-      document.cookie = `token=Bearer ${data.data.token}; expires=2024-11-08T15:10:31.339Z; path=pathName;`;
+      document.cookie = `db_token=${data.data.token}; expires=2024-11-08T15:10:31.339Z; path=pathName;`;
       root.render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <BrowserRouter>
@@ -82,7 +96,7 @@ function RunDev() {
               <App />
             </CacheProvider>
           </BrowserRouter>
-        </LocalizationProvider>
+        </LocalizationProvider>,
       );
     })
     .catch(console.log);
