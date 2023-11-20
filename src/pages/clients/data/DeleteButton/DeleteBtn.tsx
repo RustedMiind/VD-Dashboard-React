@@ -27,6 +27,7 @@ function DeleteBtn(props: PropsType) {
     <Button
       variant="outlined"
       startIcon={<DeleteIcon />}
+      disabled={!!!deleteClients?.index?.id}
       sx={{
         ml: 3,
         width: "100px",

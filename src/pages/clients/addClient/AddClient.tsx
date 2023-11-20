@@ -30,7 +30,11 @@ function MyFormControlLabel(props: FormControlLabelProps) {
 }
 
 function AddClient() {
-  return <Stack> <FormAdd /> </Stack>;
+  return (
+    <Stack>
+      <FormAdd />
+    </Stack>
+  );
 }
 
 export default AddClient;

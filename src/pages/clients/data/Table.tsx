@@ -47,7 +47,7 @@ function ClientRequestsTable(props: PropsType) {
   }
   return (
     <Stack>
-      <TableContainer sx={{ height: 500 }}>
+      <TableContainer>
         <Table aria-label="simple table" stickyHeader>
           <TableHeader
             requests={props.requests}
@@ -81,29 +81,40 @@ function ClientRequestsTable(props: PropsType) {
                     />
                     <Row text={request.phone} />
                     <Row text={request.email} />
-                    <Row
-                      text={request.register_number || request.card_id}
-                      sx={{ textAlign: "center" }}
-                    />
+                    <Row text={request.register_number || request.card_id} />
                     <Row text={request.branch?.name} />
 
                     <Row
                       text={
                         request.Contract_status === "منتهي" ? (
                           <Chip
-                            color="error"
+                            sx={{
+                              color: "#CB1818",
+                              background: "#EED4D4",
+                              borderRadius: "9px",
+                            }}
                             variant="outlined"
                             label="منتهي"
                           />
                         ) : request.Contract_status === "لا يوجد عقود" ? (
                           <Chip
-                            color="primary"
+                            sx={{
+                              color: "#A7A7A7",
+                              background: "#EBEBEB",
+                              borderRadius: "9px",
+                              textAlign: "center",
+                            }}
                             variant="outlined"
                             label="لا يوجد عقود"
                           />
                         ) : (
                           <Chip
-                            color="primary"
+                            sx={{
+                              color: "#18CB5F",
+                              background: "#D4EEDE",
+                              borderRadius: "9px",
+                              textAlign: "center",
+                            }}
                             variant="outlined"
                             label="جاري العمل"
                           />
