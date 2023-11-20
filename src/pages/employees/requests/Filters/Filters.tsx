@@ -10,6 +10,7 @@ import { RequestStatusType } from "../../procedures/types";
 import { Department } from "../../../../types";
 import axios from "axios";
 import { Api } from "../../../../constants";
+import { requestTypes } from "../RequestTypes";
 
 function Filters(props: PropsType) {
   const [departments, setDepartments] = useState<undefined | Department[]>(
@@ -97,6 +98,7 @@ function Filters(props: PropsType) {
           label="حالة الطلب"
           size="small"
           select
+          value={props.filters.status}
           onChange={(e) => {
             props.dispatch({
               type: "SET_STATUS",
@@ -119,6 +121,7 @@ function Filters(props: PropsType) {
           label="القسم"
           size="small"
           select
+          value={props.filters.department_id}
           onChange={(e) => {
             props.dispatch({
               type: "SET_DEPARTMENT",
@@ -133,12 +136,25 @@ function Filters(props: PropsType) {
         </TextField>
       </Grid>
       <Grid item xs={2}>
-        <SelectCustom
-          disabled
+        <TextField
+          fullWidth
           label="نوع الطلب"
           size="small"
-          options={[{ name: "1", value: "1" }]}
-        />
+          select
+          value={props.filters.status}
+          onChange={(e) => {
+            if (typeof e.target.value === "number" && e.target.value > 0) {
+              props.setSelectedType(e.target.value as unknown as number);
+            } else {
+              props.setSelectedType(undefined);
+            }
+          }}
+        >
+          <MenuItem value={0}>كل الانواع</MenuItem>
+          {requestTypes.map((reqType) => (
+            <MenuItem value={reqType.value}>{reqType.name}</MenuItem>
+          ))}
+        </TextField>
       </Grid>
     </Grid>
   );
@@ -150,4 +166,6 @@ type PropsType = {
   opened: boolean;
   dispatch: React.Dispatch<ActionTypes>;
   filters: FilterType;
+  selectedType: number | undefined;
+  setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
 };

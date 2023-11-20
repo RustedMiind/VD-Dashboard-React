@@ -37,60 +37,6 @@ function EmplyeesRequests() {
     ? requests
     : undefined;
 
-  function handleOpenModel(request: EmployeeRequest) {
-    return () => {
-      setdialogRequest(request);
-      setDialogOpen("model");
-    };
-  }
-  function handleOpenStatus(request: EmployeeRequest) {
-    return () => {
-      setdialogRequest(request);
-      setDialogOpen("status");
-    };
-  }
-  function handleOpenDetails(request: EmployeeRequest) {
-    return () => {
-      setdialogRequest(request);
-      setDialogOpen("details");
-    };
-  }
-  function handleCloseDialog() {
-    setDialogOpen(undefined);
-  }
-
-  function resetTable() {
-    setRequests("loading");
-    console.log(filters);
-    axios
-      .get<{ requests: EmployeeRequest[]; count: CountType[] }>(
-        Api("employee/general-requests/requests"),
-        {
-          params: {
-            type: selectedType,
-            search: search || null,
-            ...{
-              edate: filters.edate || null,
-              sdate: filters.sdate || null,
-              order: filters.order,
-              action: currentTab !== -1 ? currentTab : null,
-              status:
-                typeof filters.status === "number" ? filters.status : null,
-              department_id: filters.department_id || null,
-            },
-          },
-        }
-      )
-      .then(({ data }) => {
-        setRequests(data.requests);
-        setCounts(data.count);
-        console.log(data);
-      })
-      .catch((err) => {
-        setRequests("error");
-        console.log(err);
-      });
-  }
   useEffect(resetTable, [selectedType, currentTab]);
 
   return (
@@ -122,6 +68,8 @@ function EmplyeesRequests() {
           search={search}
           setSearch={setSearch}
           filters={filters}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
           dispatch={dispatch}
         />
         <Box
@@ -189,6 +137,62 @@ function EmplyeesRequests() {
       </Stack>
     </>
   );
+
+  // Component Functions
+  function handleOpenModel(request: EmployeeRequest) {
+    return () => {
+      setdialogRequest(request);
+      setDialogOpen("model");
+    };
+  }
+  function handleOpenStatus(request: EmployeeRequest) {
+    return () => {
+      setdialogRequest(request);
+      setDialogOpen("status");
+    };
+  }
+  function handleOpenDetails(request: EmployeeRequest) {
+    return () => {
+      setdialogRequest(request);
+      setDialogOpen("details");
+    };
+  }
+  function handleCloseDialog() {
+    setDialogOpen(undefined);
+  }
+
+  function resetTable() {
+    setRequests("loading");
+    console.log(filters);
+    axios
+      .get<{ requests: EmployeeRequest[]; count: CountType[] }>(
+        Api("employee/general-requests/requests"),
+        {
+          params: {
+            type: selectedType,
+            search: search || null,
+            ...{
+              edate: filters.edate || null,
+              sdate: filters.sdate || null,
+              order: filters.order,
+              action: currentTab !== -1 ? currentTab : null,
+              status:
+                typeof filters.status === "number" ? filters.status : null,
+              department_id: filters.department_id || null,
+            },
+          },
+        }
+      )
+      .then(({ data }) => {
+        setRequests(data.requests);
+        setCounts(data.count);
+        console.log(data);
+      })
+      .catch((err) => {
+        setRequests("error");
+        console.log(err);
+      });
+  }
 }
 
 export default EmplyeesRequests;

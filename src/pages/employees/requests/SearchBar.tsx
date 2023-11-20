@@ -63,7 +63,10 @@ function SearchBar(props: PropsType) {
           فلتر
         </Button>
       </Stack>
+
       <Filters
+        selectedType={props.selectedType}
+        setSelectedType={props.setSelectedType}
         dispatch={props.dispatch}
         filters={props.filters}
         opened={filtersOpened}
@@ -78,6 +81,8 @@ type PropsType = {
   applySearch: () => void;
   dispatch: React.Dispatch<ActionTypes>;
   filters: FilterType;
+  selectedType: number | undefined;
+  setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 export default SearchBar;
