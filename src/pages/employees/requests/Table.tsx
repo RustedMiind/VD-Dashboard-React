@@ -11,6 +11,9 @@ import {
   Pagination,
   Stack,
   Button,
+  TextField,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
@@ -26,12 +29,14 @@ import { useState } from "react";
 function EmployeesRequestsTable(props: PropsType) {
   const ROWS_PER_PAGE = 8;
   const [page, setPage] = useState(1);
+  const [rowsCount, setRowsCount] = useState(10);
   const PAGES = Math.ceil(props.requests.length / ROWS_PER_PAGE) || 1;
 
-  const toView = props.requests.slice(
-    (page - 1) * ROWS_PER_PAGE,
-    page * ROWS_PER_PAGE
-  );
+  // const toView = props.requests.slice(
+  //   (page - 1) * ROWS_PER_PAGE,
+  //   page * ROWS_PER_PAGE
+  // );
+  const toView = props.requests.slice(0, rowsCount);
 
   return (
     <>
@@ -112,7 +117,7 @@ function EmployeesRequestsTable(props: PropsType) {
         )}
       </TableContainer>
 
-      <Stack alignItems="center" py={2}>
+      {/* <Stack alignItems="center" py={2}>
         <Pagination
           count={PAGES}
           page={page}
@@ -123,6 +128,23 @@ function EmployeesRequestsTable(props: PropsType) {
             setPage(p);
           }}
         />
+      </Stack> */}
+      <Stack width={300} p={2}>
+        <TextField
+          label="عدد العرض في الصفحة"
+          value={rowsCount}
+          select
+          onChange={(e) => {
+            setRowsCount(parseInt(e.target.value) || 10);
+          }}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={25}>25</MenuItem>
+          <MenuItem value={500}>500</MenuItem>
+          <MenuItem value={2500}>2500</MenuItem>
+          <MenuItem value={10000}>10000</MenuItem>
+        </TextField>
       </Stack>
     </>
   );
@@ -136,21 +158,25 @@ function EmployeesRequestsTable(props: PropsType) {
       case -1:
         if (HAS_ACCESS) {
           chip = (
-            <Chip
-              onClick={props.openModel(request)}
+            <Button
+              size="small"
               color="primary"
-              variant="filled"
-              label="اتخاذ الاجراء"
-            />
+              sx={{ textDecoration: "underline !important" }}
+              onClick={props.openModel(request)}
+            >
+              اتخاذ الاجراء
+            </Button>
           );
         } else {
           chip = (
-            <Chip
+            <Button
+              size="small"
               color="primary"
-              variant={variant}
+              sx={{ textDecoration: "underline !important" }}
               onClick={props.openStatus(request)}
-              label="تحت الاجراء"
-            />
+            >
+              تحت الاجراء
+            </Button>
           );
         }
         break;
