@@ -61,19 +61,20 @@ export default function FormAdd() {
   }
 
   async function GetDataClient() {
+    console.log(objectResponse);
+
     try {
       const { data } = await axios.get<{ data: any }>(
         Api(`employee/client/edit`),
         {
           params: {
             name: objectResponse.name,
-            phone: objectResponse.phone,
           },
         }
       );
       setclientEdit(data.data);
       let { card_image, ...FormWithoutImage } = data.data;
-      dispatch({ type: "SET_FORM", payload: FormWithoutImage });
+      dispatch({ type: "SET_TYPE_WITH_CHECK", payload: data.data });
     } catch (error) {
       console.log(error);
     }
@@ -152,17 +153,24 @@ export default function FormAdd() {
   //Edit handle
   function EditHandle(e: any) {
     e.preventDefault();
-    let tempObj = formData;
-    const toSend = tempObj.card_image ? objectToFormData(tempObj) : tempObj;
+    console.log("card image", formData.card_image);
+    let { card_image, ...withoutImage } = formData;
+
+    console.log("without image", withoutImage);
+    const toSend = formData.card_image
+      ? objectToFormData(formData)
+      : objectToFormData(withoutImage);
+    // const toSend = objectToFormData(temp);
+
     axios
       .post(Api(`employee/client/update/${clientEdit.id}`), toSend)
       .then((res) => {
         setToaster({ type: "success" });
         console.log(formData);
         navigate("/react/clients");
-        // window.location.href = "/react/clients";
       })
       .catch((err) => {
+        console.log(err);
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: any = {};
@@ -248,6 +256,9 @@ export default function FormAdd() {
               required
               size="small"
               value={formData.name}
+              placeholder={
+                formData.type == "individual" ? "اسم العميل" : "اسم الشركه"
+              }
               onChange={(e) => {
                 dispatch({
                   type: "NAME",
@@ -272,6 +283,9 @@ export default function FormAdd() {
               id="outlined-idNumber-input"
               type="number"
               required
+              placeholder={
+                formData.type == "individual" ? "رقم الهويه" : "السجل التجاري"
+              }
               size="small"
               value={
                 formData.type == "individual"
@@ -304,6 +318,7 @@ export default function FormAdd() {
               type="text"
               required
               size="small"
+              placeholder=" رقم الجوال"
               defaultValue={clientEdit ? clientEdit.phone : ""}
               value={formData.phone}
               onChange={(e) => {
@@ -325,6 +340,7 @@ export default function FormAdd() {
               id="outlined-email-input"
               type="email"
               required
+              placeholder="البريد الالكتروني"
               size="small"
               defaultValue={clientEdit ? clientEdit.email : ""}
               value={formData.email}
@@ -349,6 +365,7 @@ export default function FormAdd() {
                 size="small"
                 select
                 defaultValue={clientEdit?.broker_id}
+                placeholder="الوسيط"
                 onChange={(e) => {
                   console.log(e.target);
                   dispatch({
@@ -380,6 +397,7 @@ export default function FormAdd() {
                 id="outlined-select-currency"
                 size="small"
                 select
+                placeholder="الفرع"
                 defaultValue={clientEdit?.branch_id}
                 onChange={(e) => {
                   dispatch({
@@ -417,6 +435,7 @@ export default function FormAdd() {
                   type="text"
                   required
                   size="small"
+                  placeholder="اسم الوكيل"
                   defaultValue={clientEdit ? clientEdit.agent_name : ""}
                   value={formData.agent_name}
                   onChange={(e) => {
@@ -441,6 +460,7 @@ export default function FormAdd() {
               type="text"
               required
               size="small"
+              placeholder=""
               fullWidth
               defaultValue={clientEdit ? clientEdit.letter_head : ""}
               value={formData.letter_head}

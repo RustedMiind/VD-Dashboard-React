@@ -47,28 +47,34 @@ function PopUp({ open, setOpen }: any) {
     setOpen(false);
   };
   const getClient = () => {
-    if (searchClient.name != "" || searchClient.phone != "" ||searchClient.branch_id != 0 ||searchClient.broker_id != 0 ) {
-      axios.get<{ data: FormData }>(Api(`employee/client/edit`), {
+    console.log(searchClient);
+
+    if (
+      searchClient.name != "" ||
+      searchClient.phone != "" ||
+      searchClient.branch_id !== 0 ||
+      searchClient.broker_id !== 0
+    ) {
+      axios
+        .get<{ data: FormData }>(Api(`employee/client/edit`), {
           params: {
             name: searchClient.name,
             phone: searchClient.phone,
+            branch_id: searchClient.branch_id,
+            broker_id: searchClient.broker_id,
           },
         })
         .then(({ data }: any) => {
           if (data.data) {
             navigate(`${data.data.name}/edit`);
-            
           }
         })
         .catch((err) => {
           console.log("err", err);
         });
-  }
-  else{
-    
-  }
-  
-}
+    } else {
+    }
+  };
   function changeTypeHandler(type: "individual" | "company") {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.checked) dispatch({ type: "TYPE", payload: type });

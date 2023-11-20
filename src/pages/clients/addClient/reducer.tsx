@@ -3,7 +3,7 @@ export const companyInitial: CompanyFormType = {
   agent_name: "",
   branch_id: 0,
   broker_id: 0,
-  register_number: 0,
+  register_number: null,
   card_image: null,
   letter_head: "",
   phone: "",
@@ -14,7 +14,7 @@ export const individualInitial: IndividualFormType = {
   type: "individual",
   branch_id: 0,
   broker_id: 0,
-  card_id: 0,
+  card_id: null,
   card_image: null,
   letter_head: "",
   name: "",
@@ -54,8 +54,35 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       return { ...state, card_image: action.payload };
     case "AGENT_NAME":
       return { ...state, agent_name: action.payload };
-    case "SET_FORM":
-      return { ...state, ...action.payload };
+    case "SET_TYPE_WITH_CHECK":
+      if (action.payload.type === "company") {
+        return {
+          branch_id: action.payload.branch_id,
+          broker_id: action.payload.broker_id,
+          name: action.payload.name,
+          card_id: action.payload.card_id,
+          card_image: null,
+          register_number: action.payload.register_number,
+          email: action.payload.email,
+          agent_name: action.payload.agent_name,
+          letter_head: action.payload.letter_head,
+          phone: action.payload.phone,
+          type: "company",
+        };
+      } else if (action.payload.type === "individual") {
+        return {
+          branch_id: action.payload.branch_id,
+          broker_id: action.payload.broker_id,
+          card_image: null,
+          email: action.payload.email,
+          name: action.payload.name,
+          phone: action.payload.phone,
+          type: "individual",
+          card_id: action.payload.card_id,
+          letter_head: action.payload.letter_head,
+        };
+      } else return state;
+
     default:
       return state;
   }
@@ -71,14 +98,11 @@ interface TypeActionType extends ReducerAction<"individual" | "company"> {
 interface NameActionType extends ReducerAction<string> {
   type: "NAME";
 }
-// interface CompanyNameActionType extends ReducerAction<string> {
-//   type: "COMPANY_NAME";
-// }
 
-interface CardIdActionType extends ReducerAction<number> {
+interface CardIdActionType extends ReducerAction<number | null> {
   type: "CARD_ID";
 }
-interface RegisterNumberActionType extends ReducerAction<number> {
+interface RegisterNumberActionType extends ReducerAction<number | null> {
   type: "REGISTER_NUMBER";
 }
 interface PhoneNumberActionType extends ReducerAction<string> {
@@ -102,8 +126,8 @@ interface CardImageActionType extends ReducerAction<File> {
 interface AgentNameActionType extends ReducerAction<string> {
   type: "AGENT_NAME";
 }
-interface SetFormAcionType extends ReducerAction<FormData> {
-  type: "SET_FORM";
+interface SetFormWithCheckAcionType extends ReducerAction<FormData> {
+  type: "SET_TYPE_WITH_CHECK";
 }
 
 export type ActionTypes =
@@ -119,12 +143,14 @@ export type ActionTypes =
   | LetterHeadActionType
   | CardImageActionType
   | AgentNameActionType
-  | SetFormAcionType;
+  | SetFormWithCheckAcionType;
+// | SetFormCompanyAcionType
+// | SetFormIndividualAcionType;
 
 export interface BaseFormData {
   name: string;
-  card_id?: number;
-  register_number?: number;
+  card_id?: number | null;
+  register_number?: number | null;
   phone: string;
   branch_id: number;
   broker_id: number;
