@@ -164,6 +164,16 @@ export default function FormAdd() {
       })
       .catch((err) => {
         setToaster({ type: "error" });
+        let errorObj: { key: string; value: string }[] = [];
+        let tempObj: any = {};
+        for (let i in err.response.data.data) {
+          const current = err.response.data.data[i] as string[];
+          current.join(", ");
+          errorObj.push({ key: i, value: current.join(", ") });
+        }
+        errorObj.forEach((item) => {
+          tempObj[item.key] = item.value;
+        });
         // setCard_idError(err.response.data.data.card_id[0]);
         // setPhoneError(err.response.data.data.phone[0]);
       });
@@ -240,7 +250,7 @@ export default function FormAdd() {
               value={formData.name}
               onChange={(e) => {
                 dispatch({
-                  type: formData.type == "individual" ? "NAME" : "COMPANY_NAME",
+                  type: "NAME",
                   payload: e.target.value,
                 });
               }}
@@ -415,7 +425,7 @@ export default function FormAdd() {
                 />
 
                 <Typography variant="body2" color="error">
-                  {errors?.phone}
+                  {errors?.agent_name}
                 </Typography>
               </Stack>
             </Grid>

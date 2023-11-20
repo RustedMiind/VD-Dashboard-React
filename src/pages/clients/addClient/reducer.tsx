@@ -3,18 +3,18 @@ export const companyInitial: CompanyFormType = {
   agent_name: "",
   branch_id: 0,
   broker_id: 0,
-  register_number: null,
+  register_number: 0,
   card_image: null,
   letter_head: "",
-  company_name: "",
   phone: "",
   email: "",
+  name: "",
 };
 export const individualInitial: IndividualFormType = {
   type: "individual",
   branch_id: 0,
   broker_id: 0,
-  card_id: null,
+  card_id: 0,
   card_image: null,
   letter_head: "",
   name: "",
@@ -34,8 +34,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       }
     case "NAME":
       return { ...state, name: action.payload };
-    case "COMPANY_NAME":
-      return { ...state, company_name: action.payload };
+    // case "COMPANY_NAME":
+    //   return { ...state, company_name: action.payload };
     case "CARD_ID":
       return { ...state, card_id: action.payload };
     case "REGISTER_NUMBER":
@@ -71,14 +71,14 @@ interface TypeActionType extends ReducerAction<"individual" | "company"> {
 interface NameActionType extends ReducerAction<string> {
   type: "NAME";
 }
-interface CompanyNameActionType extends ReducerAction<string> {
-  type: "COMPANY_NAME";
-}
+// interface CompanyNameActionType extends ReducerAction<string> {
+//   type: "COMPANY_NAME";
+// }
 
-interface CardIdActionType extends ReducerAction<number | null> {
+interface CardIdActionType extends ReducerAction<number> {
   type: "CARD_ID";
 }
-interface RegisterNumberActionType extends ReducerAction<number | null> {
+interface RegisterNumberActionType extends ReducerAction<number> {
   type: "REGISTER_NUMBER";
 }
 interface PhoneNumberActionType extends ReducerAction<string> {
@@ -110,7 +110,7 @@ export type ActionTypes =
   | TypeActionType
   | RegisterNumberActionType
   | NameActionType
-  | CompanyNameActionType
+  // | CompanyNameActionType
   | CardIdActionType
   | PhoneNumberActionType
   | EmailActionType
@@ -122,10 +122,9 @@ export type ActionTypes =
   | SetFormAcionType;
 
 export interface BaseFormData {
-  name?: string;
-  company_name?: string;
-  card_id?: number | null;
-  register_number?: number | null;
+  name: string;
+  card_id?: number;
+  register_number?: number;
   phone: string;
   branch_id: number;
   broker_id: number;
