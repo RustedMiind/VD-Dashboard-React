@@ -5,3 +5,4 @@ export * from "./ClientRequest";
 export * from "./ReducerActionType";
 export * from "./Branch";
 export * from "./Broker";
+export * from "./Department";
