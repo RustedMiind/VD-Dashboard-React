@@ -74,6 +74,9 @@ function EmplyeesRequests() {
               sdate: filters.sdate || null,
               order: filters.order,
               action: currentTab !== -1 ? currentTab : null,
+              status:
+                typeof filters.status === "number" ? filters.status : null,
+              department_id: filters.department_id || null,
             },
           },
         }

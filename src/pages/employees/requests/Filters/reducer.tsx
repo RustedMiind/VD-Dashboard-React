@@ -1,4 +1,5 @@
-import { ReducerAction, RequestStatusType } from "../../../../types";
+import { ReducerAction } from "../../../../types";
+import { RequestStatusType } from "../../procedures/types";
 import { FilterType, OrderByType } from "./FilterType";
 
 function reducer(state: FilterType, action: ActionTypes): FilterType {
@@ -9,6 +10,10 @@ function reducer(state: FilterType, action: ActionTypes): FilterType {
       return { ...state, sdate: action.payload };
     case "SET_ORDER_BY":
       return { ...state, order: action.payload };
+    case "SET_STATUS":
+      return { ...state, status: action.payload };
+    case "SET_DEPARTMENT":
+      return { ...state, department_id: action.payload };
     default:
       return state;
   }
@@ -23,10 +28,11 @@ interface StartDateActionType extends ReducerAction<string> {
 interface OrderByActionType extends ReducerAction<OrderByType> {
   type: "SET_ORDER_BY";
 }
-interface StatusActionType extends ReducerAction<RequestStatusType> {
+interface StatusActionType
+  extends ReducerAction<RequestStatusType | undefined> {
   type: "SET_STATUS";
 }
-interface DepartmentActionType extends ReducerAction<number> {
+interface DepartmentActionType extends ReducerAction<number | null> {
   type: "SET_DEPARTMENT";
 }
 
