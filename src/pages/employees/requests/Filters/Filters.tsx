@@ -75,7 +75,7 @@ function Filters(props: PropsType) {
           <MenuItem value={"desc"}>تنازلي</MenuItem>
         </TextField>
       </Grid>
-      {/* <Grid item xs={2}>
+      <Grid item xs={2}>
         <SelectCustom
           disabled
           label="نوع الطلب"
@@ -98,7 +98,7 @@ function Filters(props: PropsType) {
           size="small"
           options={[{ name: "1", value: "1" }]}
         />
-      </Grid> */}
+      </Grid>
     </Grid>
   );
 }

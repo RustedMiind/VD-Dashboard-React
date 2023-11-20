@@ -1,4 +1,4 @@
-import { ReducerAction } from "../../../../types";
+import { ReducerAction, RequestStatusType } from "../../../../types";
 import { FilterType, OrderByType } from "./FilterType";
 
 function reducer(state: FilterType, action: ActionTypes): FilterType {
@@ -23,6 +23,12 @@ interface StartDateActionType extends ReducerAction<string> {
 interface OrderByActionType extends ReducerAction<OrderByType> {
   type: "SET_ORDER_BY";
 }
+interface StatusActionType extends ReducerAction<RequestStatusType> {
+  type: "SET_STATUS";
+}
+interface DepartmentActionType extends ReducerAction<number> {
+  type: "SET_DEPARTMENT";
+}
 
 export const FiltersInit: FilterType = {
   edate: "",
@@ -33,6 +39,8 @@ export const FiltersInit: FilterType = {
 export type ActionTypes =
   | EndDateActionType
   | StartDateActionType
-  | OrderByActionType;
+  | OrderByActionType
+  | DepartmentActionType
+  | StatusActionType;
 
 export default reducer;

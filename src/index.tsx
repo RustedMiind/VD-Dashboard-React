@@ -12,11 +12,33 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
 import { Api, Domain } from "./constants";
 import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
+import { DevUser } from "./DevUser";
+import { DevUserType } from "./DevUserType";
 
 console.table({
   Version: "1.1.4",
   Comment: "Activated End Date filter in employees requests",
 });
+
+const devUser: DevUserType = DevUser;
+/* 
+Add File DevUser.tsx in /src
+
+Copy & Paste the following code and replace username and password with yours;
+
+<-------File Content-------->
+
+import { DevUserType } from "./DevUserType";
+
+export const DevUser: DevUserType = {
+  email: "",
+  password: "",
+};
+
+
+<-------End File Content-------->
+
+*/
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -33,6 +55,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
+// Mount the application in mode Development or Production
 MountApp("development");
 
 function MountApp(type: "production" | "development") {
@@ -79,8 +102,8 @@ function RunProd() {
 function RunDev() {
   axios
     .post<{ data: { token: string; user: any } }>(Api("employee/login"), {
-      email: "ali@gmail.com",
-      password: "123",
+      email: devUser.email,
+      password: devUser.password,
       imei: "5153153",
       device_token: "scqwsvcqewcqw",
       device_type: "android",
