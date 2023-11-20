@@ -43,6 +43,6 @@ function DeleteBtn(props: PropsType) {
 export default DeleteBtn;
 
 export type PropsType = {
-  requests: ClientRequest[] | undefined;
+  requests: ClientRequest[] | null;
   setRequests: any;
 };

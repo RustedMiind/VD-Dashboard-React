@@ -17,9 +17,7 @@ function ClientData() {
   >(false);
 
   // search bar
-  const [requests, setRequests] = useState<ClientRequest[] | undefined>(
-    undefined
-  );
+  const [requests, setRequests] = useState<ClientRequest[] | null>(null);
   const [search, setSearch] = useState("");
 
   const handleClickOpen = () => {
@@ -36,7 +34,7 @@ function ClientData() {
         setRequests(data.data);
       })
       .catch((err) => {
-        setRequests(undefined);
+        setRequests(null);
       });
   }
   // Get Clients
