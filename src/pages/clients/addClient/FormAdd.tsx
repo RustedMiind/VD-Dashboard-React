@@ -19,13 +19,19 @@ import { TypeAdd } from "./AddClient";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
 const paddingSize = 0.1;
 const VisuallyHiddenInput = styled("input")({
-  clipPath: "inset(0%)",
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: "1px",
+  overflow: "hidden",
+  position: "absolute",
+  whiteSpace: "nowrap",
+  width: "1px",
 });
 
 export default function FormAdd() {
@@ -45,6 +51,7 @@ export default function FormAdd() {
   const [toaster, setToaster] = useState<{
     type: "error" | "success" | "null";
   }>({ type: "error" });
+  const navigate = useNavigate();
 
   // function handle Type
   function changeTypeHandler(type: "individual" | "company") {
@@ -65,17 +72,8 @@ export default function FormAdd() {
         }
       );
       setclientEdit(data.data);
-      dispatch({ type: "TYPE", payload: data.data.type });
-      dispatch({ type: "NAME", payload: data.data.name });
-      dispatch({ type: "CARD_ID", payload: data.data.card_id });
-      dispatch({ type: "REGISTER_NUMBER", payload: data.data.register_number });
-      dispatch({ type: "PHONE_NUMBER", payload: data.data.phone });
-      dispatch({ type: "EMAIL", payload: data.data.email });
-      dispatch({ type: "BRANCH_ID", payload: data.data.branch_id });
-      dispatch({ type: "BROKER_ID", payload: data.data.broker_id });
-      dispatch({ type: "AGENT_NAME", payload: data.data.agent_name });
-      dispatch({ type: "LETTER_HEAD", payload: data.data.letter_head });
-      dispatch({ type: "CARD_IMAGE", payload: data.data.card_image });
+      let { card_image, ...FormWithoutImage } = data.data;
+      dispatch({ type: "SET_FORM", payload: FormWithoutImage });
     } catch (error) {
       console.log(error);
     }
@@ -106,7 +104,7 @@ export default function FormAdd() {
       .post(Api("employee/client/store"), objectToFormData(formData))
       .then((res) => {
         setToaster({ type: "success" });
-        window.location.href = "/react/clients";
+        navigate("/react/clients");
       })
       .catch((err) => {
         setToaster({ type: "error" });
@@ -154,14 +152,15 @@ export default function FormAdd() {
   //Edit handle
   function EditHandle(e: any) {
     e.preventDefault();
+    let tempObj = formData;
+    const toSend = tempObj.card_image ? objectToFormData(tempObj) : tempObj;
     axios
-      .patch(
-        Api(`employee/client/update/id=${clientEdit.id}`),
-        objectToFormData(formData)
-      )
+      .post(Api(`employee/client/update/${clientEdit.id}`), toSend)
       .then((res) => {
         setToaster({ type: "success" });
-        window.location.href = "/react/clients";
+        console.log(formData);
+        navigate("/react/clients");
+        // window.location.href = "/react/clients";
       })
       .catch((err) => {
         setToaster({ type: "error" });
@@ -200,13 +199,15 @@ export default function FormAdd() {
       onSubmit={clientEdit ? EditHandle : submitHandle}
     >
       <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
-        {objectResponse.id ? "تعديل بيانات العميل" : "اضافه عميل"}
+        {clientEdit ? "تعديل بيانات العميل" : "اضافه عميل"}
       </Typography>
-      <RadioGroup name="use-radio-group" defaultValue="فرد">
+
+      <RadioGroup name="use-radio-group" value={formData.type}>
         <Box sx={{ mb: 2 }}>
           <FormControlLabel
             control={
               <Radio
+                disabled={!!clientEdit}
                 checked={formData.type === "individual"}
                 onChange={changeTypeHandler("individual")}
               />
@@ -216,6 +217,7 @@ export default function FormAdd() {
           <FormControlLabel
             control={
               <Radio
+                disabled={!!clientEdit}
                 checked={formData.type === "company"}
                 onChange={changeTypeHandler("company")}
               />
@@ -258,15 +260,14 @@ export default function FormAdd() {
             </Typography>
             <TextField
               id="outlined-idNumber-input"
-              type="text"
+              type="number"
               required
               size="small"
-              defaultValue={
-                clientEdit
-                  ? clientEdit.register_number | clientEdit.card_id
-                  : ""
+              value={
+                formData.type == "individual"
+                  ? formData.card_id
+                  : formData.register_number
               }
-              value={formData.register_number || formData.card_id}
               onChange={(e) => {
                 dispatch({
                   type:
@@ -274,7 +275,7 @@ export default function FormAdd() {
                       ? "CARD_ID"
                       : "REGISTER_NUMBER",
 
-                  payload: e.target.value,
+                  payload: parseInt(e.target.value),
                 });
               }}
             />
@@ -327,7 +328,6 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -360,7 +360,6 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -444,7 +443,6 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -476,7 +474,6 @@ export default function FormAdd() {
             </Box>
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>
           <Button fullWidth type="submit" variant="contained">
             حفظ

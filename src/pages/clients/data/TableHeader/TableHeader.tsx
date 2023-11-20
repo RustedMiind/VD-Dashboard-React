@@ -3,15 +3,16 @@ function TableHeader(props: any) {
   const bgTable = "#F3F5F7";
 
   function checkAllHandler(e: any) {
-    const allChecked: number[] = props.requests?.reduce((accumlator:any,newValue:any) => {
-      if(!newValue.contracts?.length)
-      {
-        accumlator.push(newValue.id)
-      }
-      return accumlator;
-    },[]);
+    const allChecked: number[] = props.requests?.reduce(
+      (accumlator: any, newValue: any) => {
+        if (!newValue.contracts?.length) {
+          accumlator.push(newValue.id);
+        }
+        return accumlator;
+      },
+      []
+    );
 
-    
     if (e.target.checked) {
       props.setSelectedItems(allChecked);
     } else {

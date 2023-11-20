@@ -3,7 +3,7 @@ export const companyInitial: CompanyFormType = {
   agent_name: "",
   branch_id: 0,
   broker_id: 0,
-  register_number: "",
+  register_number: null,
   card_image: null,
   letter_head: "",
   company_name: "",
@@ -14,7 +14,7 @@ export const individualInitial: IndividualFormType = {
   type: "individual",
   branch_id: 0,
   broker_id: 0,
-  card_id: '',
+  card_id: null,
   card_image: null,
   letter_head: "",
   name: "",
@@ -54,6 +54,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       return { ...state, card_image: action.payload };
     case "AGENT_NAME":
       return { ...state, agent_name: action.payload };
+    case "SET_FORM":
+      return { ...state, ...action.payload };
     default:
       return state;
   }
@@ -73,10 +75,10 @@ interface CompanyNameActionType extends ReducerAction<string> {
   type: "COMPANY_NAME";
 }
 
-interface CardIdActionType extends ReducerAction<string > {
+interface CardIdActionType extends ReducerAction<number | null> {
   type: "CARD_ID";
 }
-interface RegisterNumberActionType extends ReducerAction<string> {
+interface RegisterNumberActionType extends ReducerAction<number | null> {
   type: "REGISTER_NUMBER";
 }
 interface PhoneNumberActionType extends ReducerAction<string> {
@@ -100,6 +102,9 @@ interface CardImageActionType extends ReducerAction<File> {
 interface AgentNameActionType extends ReducerAction<string> {
   type: "AGENT_NAME";
 }
+interface SetFormAcionType extends ReducerAction<FormData> {
+  type: "SET_FORM";
+}
 
 export type ActionTypes =
   | TypeActionType
@@ -113,13 +118,14 @@ export type ActionTypes =
   | BrokerIdActionType
   | LetterHeadActionType
   | CardImageActionType
-  | AgentNameActionType;
+  | AgentNameActionType
+  | SetFormAcionType;
 
 export interface BaseFormData {
   name?: string;
   company_name?: string;
-  card_id?: string ;
-  register_number?: string;
+  card_id?: number | null;
+  register_number?: number | null;
   phone: string;
   branch_id: number;
   broker_id: number;
