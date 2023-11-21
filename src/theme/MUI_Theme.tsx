@@ -1,5 +1,6 @@
 import { colors, createTheme } from "@mui/material";
 import "../assets/fonts/include.scss";
+import "./Mui_Custom.scss";
 
 export const theme = createTheme({
   direction: "rtl",
@@ -37,6 +38,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           fontFamily: "TheSans",
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
         },
       },
     },
