@@ -48,6 +48,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
+    MuiPaper: {
+      defaultProps: { elevation: 0 },
+    },
   },
   typography: {
     fontFamily: [
