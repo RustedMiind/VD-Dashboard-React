@@ -2,28 +2,24 @@ import { Stack, Button } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 // icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
-import reducer from "./reducer";
+import useReducer, { ActionTypes } from "./reducer";
 import TableComponent from "./Table";
 
 function LevelItem(props: PropsType) {
   const [expanded, setExpanded] = useState(false);
-  const [update, setUpdate] = useState(false);
-  const [level, dispatch] = useReducer(reducer, props.level);
-
-  const formDisabled = !update;
-
-  function updateLevel() {
-    props.updateLevel(level);
-    setUpdate(false);
-    setExpanded(true);
-  }
+  const reducer = useReducer(props.level);
+  const dispatch = (action: ActionTypes) => {
+    props.updateLevel(reducer(action));
+  };
+  const level = props.level;
+  const formDisabled = false;
 
   useEffect(() => {
     dispatch({ type: "SET_RESET", payload: props.level });
@@ -40,7 +36,7 @@ function LevelItem(props: PropsType) {
     <Stack my={0.5}>
       <Accordion
         sx={{ bgcolor: "background.med", overflow: "hidden" }}
-        expanded={update || expanded}
+        expanded={expanded}
         elevation={0}
         disableGutters
       >
@@ -68,7 +64,7 @@ function LevelItem(props: PropsType) {
               {props.name}
             </Button>
             <Stack direction="row" alignItems="center" gap={1}>
-              {update && (
+              {/* {update && (
                 <>
                   <Button
                     startIcon={<EditIcon />}
@@ -91,19 +87,18 @@ function LevelItem(props: PropsType) {
                     الغاء التعديل
                   </Button>
                 </>
-              )}
+              )} */}
 
-              {formDisabled && (
-                <Button
-                  onClick={() => {
-                    setUpdate(true);
-                  }}
-                  variant={update ? "contained" : "outlined"}
-                  disableElevation
-                >
-                  تعديل
-                </Button>
-              )}
+              <Button
+                onClick={() => {
+                  setExpanded(true);
+                }}
+                variant={"outlined"}
+                disableElevation
+                startIcon={<EditIcon />}
+              >
+                تعديل
+              </Button>
               <Button
                 variant="outlined"
                 color="error"

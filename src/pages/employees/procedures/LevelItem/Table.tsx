@@ -21,6 +21,7 @@ import { ActionTypes } from "./reducer";
 import { ProceduresModelTypeCode, Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 import { modelNamesIds } from "../ModelTypes";
+import SelectManagerDialog from "./SelectManagerDialog";
 
 function TableComponent({
   level,
@@ -45,38 +46,20 @@ function TableComponent({
           <TableRow>
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl
-                  fullWidth
-                  size={"small"}
-                  // disabled={props.disabled}
-                >
-                  <InputLabel size="small">القسم</InputLabel>
-                  <Select
-                    label={"القسم"}
-                    size={"small"}
-                    value={level.department_id}
-                    disabled={formDisabled}
-                    onChange={(e) => {
-                      dispatch({
-                        type: "SET_EMPLOYEE",
-                        payload: 0,
-                      });
-                      dispatch({
-                        type: "SET_MANAGER",
-                        payload: e.target.value as number,
-                      });
-                    }}
-                  >
-                    {departments.map((department) => (
-                      <MenuItem
-                        key={department.departmentId}
-                        value={department.departmentId}
-                      >
-                        {department.departmentName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <SelectManagerDialog
+                  deparment_id={level.department_id}
+                  departments={departments}
+                  setDepartmentId={(value: number) => {
+                    dispatch({
+                      type: "SET_EMPLOYEE",
+                      payload: 0,
+                    });
+                    dispatch({
+                      type: "SET_MANAGER",
+                      payload: value,
+                    });
+                  }}
+                />
               </Box>
             </TableCell>
             <TableCell>
