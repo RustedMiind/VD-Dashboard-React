@@ -22,7 +22,7 @@ export interface RequestDetails {
   project_name?: string;
   description?: string;
   amount?: number;
-  type?: string;
+  type?: number;
   duration?: string;
   date?: string;
   salary_first?: number;

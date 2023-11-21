@@ -17,6 +17,7 @@ import { formatDate } from "../../../../methods";
 import VacationDetails from "./VacationDetails";
 import WorkNeeds from "./WorkNeeds";
 import MissionDetails from "./MissionDetails";
+import CarFixDetails from "./CarFixDetails";
 
 function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
@@ -55,13 +56,18 @@ function DetailsDialog(props: PropsType) {
                 value={details?.requestable?.typeInArabic}
               />
               {((): React.ReactElement | "" | undefined => {
-                return (
-                  <>
-                    <VacationDetails details={details} />
-                    <WorkNeeds details={details} />
-                    <MissionDetails details={details} />
-                  </>
-                );
+                switch (details.type) {
+                  case 1:
+                    return <VacationDetails details={details} />;
+                  case 2:
+                    return <MissionDetails details={details} />;
+                  case 5:
+                    return <WorkNeeds details={details} />;
+                  case 6:
+                    return <CarFixDetails details={details} />;
+                  default:
+                    return <></>;
+                }
               })()}
             </>
           )}

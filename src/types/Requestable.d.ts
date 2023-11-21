@@ -24,6 +24,7 @@ export interface Requestable {
   date: string;
   details?: detail[];
   builder?: Builder[];
+  car_type?: string;
 }
 
 interface detail {
