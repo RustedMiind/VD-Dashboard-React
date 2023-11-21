@@ -159,6 +159,7 @@ function ClientRequestsTable(props: PropsType) {
         <Button
           variant="contained"
           startIcon={<PrintIcon />}
+          onClick={window.print}
           sx={{
             width: "200px",
             position: "absolute",
@@ -167,7 +168,7 @@ function ClientRequestsTable(props: PropsType) {
             mt: "20px",
           }}
         >
-          طباعه العملاء المحددين
+          طباعه العملاء
         </Button>
       )}
     </>

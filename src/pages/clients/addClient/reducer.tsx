@@ -60,7 +60,6 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           branch_id: action.payload.branch_id,
           broker_id: action.payload.broker_id,
           name: action.payload.name,
-          card_id: action.payload.card_id,
           card_image: null,
           register_number: action.payload.register_number,
           email: action.payload.email,
