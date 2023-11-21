@@ -80,18 +80,24 @@ function ClientData() {
               >
                 اضافة عميل جديد
               </Button>
-              <Button
-                sx={{ ml: 2 }}
-                variant="contained"
-                onClick={handleClickOpen}
-              >
-                تعديل بيانات عميل
-              </Button>
+              {requests?.length !== 0 && (
+                <>
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    onClick={handleClickOpen}
+                  >
+                    تعديل بيانات عميل
+                  </Button>
+                </>
+              )}
               <PopUp open={open} setOpen={setOpen} />
             </Box>
-            <Box>
-              <DeleteBtn setRequests={setRequests} requests={requests} />
-            </Box>
+            {requests?.length !== 0 && (
+              <>
+                <DeleteBtn setRequests={setRequests} requests={requests} />
+              </>
+            )}
           </Box>
 
           <ClientRequestsTable requests={requests} />

@@ -16,6 +16,7 @@ import TableHeader from "./TableHeader/TableHeader";
 import Row from "./Row/Row";
 import { TableContext } from "../Context/Store";
 import PrintIcon from "@mui/icons-material/Print";
+import NotFoundClients from "./TableHeader/NotFoundClients";
 
 export type IdListType = {
   id: number[];
@@ -59,17 +60,7 @@ function ClientRequestsTable(props: PropsType) {
                 setSelectedItems={setSelectedItems}
               />
             ) : (
-              <Typography
-                variant="body1"
-                sx={{
-                  textAlign: "center",
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  p: 3,
-                }}
-              >
-                لا يوجد عملاء
-              </Typography>
+              <NotFoundClients />
             )}
             {props.requests && (
               <TableBody>
