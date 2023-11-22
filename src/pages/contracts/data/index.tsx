@@ -16,54 +16,19 @@ import { Api } from "../../../constants";
 import { requestTypes } from "./RequestTypes";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
+import ContractsTable from "./Table";
+import { ContractRequest } from "../../../types/ContractRequest";
+import TopTable from "./topTable/TopTable";
 function Contracts() {
   const [currentTab, setCurrentTab] = useState("1");
-  const [requests, setRequests] = useState<EmployeeRequest[] | undefined>(
-    undefined
-  );
-  const [search, setSearch] = useState("");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedData, setSelectedData] = useState<number[]>([]);
+  const [requests, setRequests] = useState<ContractRequest[] | null>(null);
 
-  let filtered: EmployeeRequest[] | undefined = requests;
-
-  if (search) {
-    const searchLowerCase = search.toLowerCase();
-    const filter = requests?.filter((request) => {
-      return request?.employee?.name
-        .toLocaleLowerCase()
-        .includes(searchLowerCase);
-    });
-    filtered = filter || undefined;
-  }
-  if (selectedTypes.length) {
-    const filter = filtered?.filter((request) => {
-      let found = false;
-      selectedTypes.forEach((selection) => {
-        const temp = requestTypes.find((x) => x.name === selection);
-        // if (found) {
-        //   return;
-        // }
-        if (
-          temp &&
-          request.requestable_type
-            .toLowerCase()
-            .includes(temp?.prefix.toLowerCase())
-        ) {
-          found = true;
-        }
-      });
-      return found;
-    });
-    filtered = filter || undefined;
-  }
   // Start tab function
   interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
   }
-
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -83,7 +48,6 @@ function Contracts() {
       </div>
     );
   }
-
   function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
@@ -96,21 +60,19 @@ function Contracts() {
     setValue(newValue);
   };
   // End tab function
+
   useEffect(() => {
     axios
-      .get<{ requests: EmployeeRequest[] }>(
-        Api("employee/general-requests/requests")
-      )
+      .get<{ data: ContractRequest[] }>(Api("employee/contract"))
       .then(({ data }) => {
-        setRequests(data.requests);
-        console.log(data);
+        setRequests(data.data);
+        console.log(data.data);
       })
       .catch((err) => {
-        setRequests(undefined);
         console.log(err);
+        setRequests(null);
       });
   }, []);
-
   return (
     <Stack>
       <Box sx={{ width: "100%" }}>
@@ -144,13 +106,8 @@ function Contracts() {
             >
               اضافة عقد
             </Button>
-            {filtered && (
-              <EmployeesRequestsTable
-                selectedData={selectedData}
-                setSelectedData={setSelectedData}
-                requests={filtered}
-              />
-            )}
+            <TopTable />
+            <ContractsTable requests={requests} />
           </Paper>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
