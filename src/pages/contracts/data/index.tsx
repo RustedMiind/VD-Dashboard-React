@@ -74,7 +74,7 @@ function Contracts() {
             aria-label="basic tabs example"
           >
             <Tab label="بيانات العقود" />
-            <Tab label="ادارة العقود" />
+            <Tab label="ادارة العقود" disabled />
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
