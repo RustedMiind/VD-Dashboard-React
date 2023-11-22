@@ -1,20 +1,17 @@
 import { Box, Stack } from "@mui/system";
-import ChipBox from "./ChipBox";
+import StatusChip from "../../../../components/StatusChip";
+import DoubleChips from "../../../../components/DoubleStatusChips";
 
 export default function TopTable() {
   return (
     <Stack>
-      <Box>
-        <ChipBox
-          color="#18CB5F"
-          backGround="#D4EEDE"
-          lable={"ساري"}
-          number={10}
-        />
-        <ChipBox color="#F19B02" backGround="red" lable={"متأخر"} number={10} />
-        <ChipBox color="error" backGround="red" lable={"متوقف"} number={10} />
-        <ChipBox color="red" backGround="red" lable={"منتهي"} number={10} />
-      </Box>
+      <Stack direction={"row"} spacing={2} mb={1}>
+        <DoubleChips color="error" label="عنوان البوكس" value="123" />
+        <DoubleChips color="primary" label="عنوان البوكس" value="123" />
+        <DoubleChips color="secondary" label="عنوان البوكس" value="123" />
+        <DoubleChips color="warning" label="عنوان البوكس" value="123" />
+        <DoubleChips color="success" label="عنوان البوكس" value="123" />
+      </Stack>
       <Box></Box>
     </Stack>
   );
