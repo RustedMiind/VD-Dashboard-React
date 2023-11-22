@@ -17,12 +17,6 @@ export interface EmployeeRequest {
   departmentName: string | null;
 }
 
-interface Requestable {
-  id: RequestableIdType;
-  date: string;
-  employee_id: string;
-}
-
 interface NextStep {
   id: number;
   employee_id: number;

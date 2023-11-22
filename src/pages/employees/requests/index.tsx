@@ -102,10 +102,9 @@ function EmplyeesRequests() {
           // variant="outlined"
           sx={{
             //
-            bgcolor: "Background",
             overflow: "hidden",
           }}
-          elevation={4}
+          elevation={0}
         >
           {filtered && (
             <EmployeesRequestsTable

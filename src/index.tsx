@@ -55,8 +55,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
-// Mount the application in mode Development or Production
-MountApp("development");
+MountApp("production");
 
 function MountApp(type: "production" | "development") {
   switch (type) {

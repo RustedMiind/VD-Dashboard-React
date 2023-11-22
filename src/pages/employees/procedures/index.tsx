@@ -95,7 +95,7 @@ function EmploeesRequestsProcedures() {
             loading={sendState === "sending"}
             disabled={endpointStatus !== "none"}
           >
-            ارسال التعديلات
+            حفظ
           </LoadingButton>
         </Stack>
       </Paper>
