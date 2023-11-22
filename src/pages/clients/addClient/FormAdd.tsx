@@ -20,6 +20,7 @@ import axios from "axios";
 import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
 import BtnFile from "./BtnFile";
+import RequiredSymbol from "../../../components/RequiredSymbol";
 const paddingSize = 0.1;
 export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<any | undefined>(undefined);
@@ -234,11 +235,13 @@ export default function FormAdd() {
           <Stack>
             {formData.type == "individual" ? (
               <Typography component="label" sx={{ ml: 2 }}>
-                اسم العميل<span className="star">*</span>
+                اسم العميل
+                <RequiredSymbol />
               </Typography>
             ) : (
               <Typography component="label" sx={{ ml: 2 }}>
-                اسم الشركه <span className="star"> *</span>
+                اسم الشركه
+                <RequiredSymbol />
               </Typography>
             )}
             <TextField
@@ -267,11 +270,11 @@ export default function FormAdd() {
           <Stack>
             {formData.type == "individual" ? (
               <Typography component="label" sx={{ ml: 2 }}>
-                رقم الهويه <span className="star">*</span>
+                رقم الهويه <RequiredSymbol />
               </Typography>
             ) : (
               <Typography component="label" sx={{ ml: 2 }}>
-                السجل التجاري <span className="star">*</span>
+                السجل التجاري <RequiredSymbol />
               </Typography>
             )}
             <TextField
@@ -306,7 +309,7 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              رقم الجوال <span className="star">*</span>
+              رقم الجوال <RequiredSymbol />
             </Typography>
             <TextField
               id="outlined-phone-input"
@@ -361,7 +364,7 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              الوسيط<span className="star">*</span>
+              الوسيط <RequiredSymbol />
             </Typography>
             {(clientEdit === null || clientEdit?.broker_id) && (
               <TextField
@@ -395,7 +398,7 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              الفرع <span className="star">*</span>
+              الفرع <RequiredSymbol />
             </Typography>
             {(clientEdit === null || clientEdit?.branch_id) && (
               <TextField

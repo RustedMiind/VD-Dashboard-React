@@ -7,24 +7,14 @@ import {
   TableCell,
   Checkbox,
   Stack,
-  Button,
 } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import IconButton from "@mui/material/IconButton";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { EmployeeRequest } from "../../../types";
-import { requestTypes } from "./RequestTypes";
 import SettingsIcon from "@mui/icons-material/Settings";
-import axios from "axios";
-import { Api } from "../../../constants";
-import { useEffect } from "react";
+import { ContractRequest } from "../../../types/ContractRequest";
 
-function ContractsTable(props: PropsType) {
-  //   useEffect(() => {
-  //     axios.get(Api('employee/client'))
-  //     .then(({data}))=>{
-  //       console.log(data);
-
-  //  } }, [])
-
+function ContractsTable({ requests }: PropsType) {
   return (
     <Stack>
       <TableContainer sx={{ height: 500 }}>
@@ -36,9 +26,13 @@ function ContractsTable(props: PropsType) {
               </TableCell>
               <TableCell>رقم العقد</TableCell>
               <TableCell>
-                نوع العقد <Button startIcon={<FilterListIcon />} />
+                نوع العقد{" "}
+                <IconButton aria-label="SwapVertIcon" color="primary">
+                  <SwapVertIcon />
+                </IconButton>
               </TableCell>
               <TableCell>اسم العميل</TableCell>
+              <TableCell>اسم الفرع</TableCell>
               <TableCell>تليفون العميل</TableCell>
               <TableCell>مدة العقد</TableCell>
               <TableCell>تاريخ انتهاء العقد</TableCell>
@@ -47,24 +41,20 @@ function ContractsTable(props: PropsType) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.requests.map((request, index) => {
-              const requsetType = requestTypes.find((x) =>
-                request.requestable_type
-                  .toLowerCase()
-                  .includes(x.prefix.toLowerCase())
-              )?.name;
+            {requests?.map((request) => {
               return (
                 <TableRow>
                   <TableCell>
                     <Checkbox />
                   </TableCell>
-                  <TableCell>1234568</TableCell>
-                  <TableCell>+966 543 23456 53</TableCell>
-                  <TableCell>youremail@domain.com</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>{request.code}</TableCell>
+                  <TableCell>{request.type.name}</TableCell>
+                  <TableCell>{request.client}</TableCell>
+                  <TableCell>{request.branch.name}</TableCell>
+                  <TableCell>{request.employee.phone}</TableCell>
+                  <TableCell>{request.period}</TableCell>
+                  <TableCell>{request.end_date_period}</TableCell>
+                  <TableCell>{request.employee.name}</TableCell>
                   <TableCell>
                     <SettingsIcon />
                   </TableCell>
@@ -79,9 +69,7 @@ function ContractsTable(props: PropsType) {
 }
 
 type PropsType = {
-  requests: EmployeeRequest[];
-  selectedData: number[];
-  setSelectedData: React.Dispatch<React.SetStateAction<number[]>>;
+  requests: ContractRequest[] | null;
 };
 
 export default ContractsTable;

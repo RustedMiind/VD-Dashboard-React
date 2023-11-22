@@ -31,29 +31,6 @@ function BtnFile(props: any) {
             }
           }}
         />
-        {/* <Box sx={{ mt: 1, ml: 1, bgcolor: "red" }}>
-          <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-          >
-            ارفاق صورة
-            <VisuallyHiddenInput
-              onChange={(e) => {
-                const files = e.target.files;
-                if (files) {
-                  const file = files[0];
-                  props.dispatch({ type: "CARD_IMAGE", payload: file });
-                }
-              }}
-              type="file"
-            />
-          </Button>
-
-          <Typography variant="body2" color="error">
-            {props.errors?.card_image}
-          </Typography>
-        </Box> */}
       </Stack>
     </Grid>
   );
