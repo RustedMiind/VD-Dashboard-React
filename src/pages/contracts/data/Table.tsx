@@ -49,7 +49,7 @@ function ContractsTable({ requests }: PropsType) {
                   </TableCell>
                   <TableCell>{request.code}</TableCell>
                   <TableCell>{request.type.name}</TableCell>
-                  <TableCell>{request.client}</TableCell>
+                  <TableCell>{request.client.name}</TableCell>
                   <TableCell>{request.branch.name}</TableCell>
                   <TableCell>{request.employee.phone}</TableCell>
                   <TableCell>{request.period}</TableCell>

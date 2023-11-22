@@ -8,19 +8,15 @@ import {
   Button,
 } from "@mui/material";
 import * as React from "react";
-import EmployeesRequestsTable from "./Table";
 import { useEffect, useState } from "react";
-import { EmployeeRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
-import { requestTypes } from "./RequestTypes";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
 import ContractsTable from "./Table";
 import { ContractRequest } from "../../../types/ContractRequest";
 import TopTable from "./topTable/TopTable";
 function Contracts() {
-  const [currentTab, setCurrentTab] = useState("1");
   const [requests, setRequests] = useState<ContractRequest[] | null>(null);
 
   // Start tab function
@@ -48,12 +44,7 @@ function Contracts() {
       </div>
     );
   }
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`,
-    };
-  }
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -64,9 +55,9 @@ function Contracts() {
   useEffect(() => {
     axios
       .get<{ data: ContractRequest[] }>(Api("employee/contract"))
-      .then(({ data }) => {
-        setRequests(data.data);
-        console.log(data.data);
+      .then((res) => {
+        setRequests(res.data.data);
+        console.log("contracts ", res);
       })
       .catch((err) => {
         console.log(err);
@@ -82,8 +73,8 @@ function Contracts() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="بيانات العقود" {...a11yProps(0)} />
-            <Tab label="ادارة العقود" {...a11yProps(1)} />
+            <Tab label="بيانات العقود" />
+            <Tab label="ادارة العقود" />
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>

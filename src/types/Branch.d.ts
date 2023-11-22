@@ -1,9 +1,9 @@
 export interface Branch {
   active: number;
-  address: null;
+  // address: null;
   city_id: number;
   created_at: string;
-  deleted_at: null;
+  // deleted_at: null;
   email: string;
   id: number;
   is_clients: number;
@@ -16,9 +16,9 @@ export interface Branch {
   longitude: string;
   manager_id: number;
   name: string;
-  parent_id: null;
+  // parent_id: null;
   phone: string;
-  polygon: null;
+  // polygon: null;
   share_client: number;
   share_manager: number;
   share_paper: number;
@@ -26,5 +26,5 @@ export interface Branch {
   share_shift: number;
   shift_id: number;
   type: string;
-  updated_at:string;
+  updated_at: string;
 }
