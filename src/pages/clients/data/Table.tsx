@@ -7,29 +7,32 @@ import {
   Checkbox,
   Stack,
   Button,
-  Typography,
 } from "@mui/material";
+
 import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import TableHeader from "./TableHeader/TableHeader";
 import Row from "./Row/Row";
 import { TableContext } from "../Context/Store";
 import PrintIcon from "@mui/icons-material/Print";
+import NotFoundClients from "./TableHeader/NotFoundClients";
+import ReactToPrint from "react-to-print";
 
 export type IdListType = {
   id: number[];
 };
 
 function ClientRequestsTable(props: PropsType) {
-  console.log(props.requests, "rrrfef");
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const tableContext = useContext(TableContext);
-  // handler delete
+  const tableRef: any = useRef();
   const chekedArray: IdListType = {
     id: [],
   };
-
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const handlePrint = () => {
+    tableRef.current.print();
+  };
   chekedArray.id = selectedItems;
   useEffect(() => {
     tableContext?.setIndex(chekedArray);
@@ -52,24 +55,14 @@ function ClientRequestsTable(props: PropsType) {
     <>
       <Stack>
         <TableContainer>
-          <Table sx={{ overflow: "hidden" }} stickyHeader>
+          <Table sx={{ overflow: "hidden" }} stickyHeader ref={tableRef}>
             {props.requests?.length !== 0 ? (
               <TableHeader
                 requests={props.requests}
                 setSelectedItems={setSelectedItems}
               />
             ) : (
-              <Typography
-                variant="body1"
-                sx={{
-                  textAlign: "center",
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  p: 3,
-                }}
-              >
-                لا يوجد عملاء
-              </Typography>
+              <NotFoundClients />
             )}
             {props.requests && (
               <TableBody>
@@ -140,11 +133,7 @@ function ClientRequestsTable(props: PropsType) {
                         }
                       />
                       <Row
-                        text={
-                          request.agent_name
-                            ? request.agent_name
-                            : "لا يوجد وكيل"
-                        }
+                        text={request.agent_name ? request.agent_name : "-"}
                       />
                       <Row text={<SettingsIcon />} />
                     </TableRow>
@@ -156,20 +145,25 @@ function ClientRequestsTable(props: PropsType) {
         </TableContainer>
       </Stack>
       {props.requests?.length !== 0 && (
-        <Button
-          variant="contained"
-          startIcon={<PrintIcon />}
-          onClick={window.print}
-          sx={{
-            width: "200px",
-            position: "absolute",
-            right: "40px",
-            zIndex: "100000000",
-            mt: "20px",
-          }}
-        >
-          طباعه العملاء
-        </Button>
+        <ReactToPrint
+          trigger={() => (
+            <Button
+              variant="contained"
+              startIcon={<PrintIcon />}
+              sx={{
+                width: "200px",
+                position: "absolute",
+                right: "40px",
+                zIndex: "100000000",
+                mt: "20px",
+              }}
+              onClick={handlePrint}
+            >
+              طباعه العملاء
+            </Button>
+          )}
+          content={() => tableRef.current}
+        />
       )}
     </>
   );
@@ -177,7 +171,6 @@ function ClientRequestsTable(props: PropsType) {
 
 export type PropsType = {
   requests: ClientRequest[] | null;
-  // openModal: (r: ClientRequest) => () => void;
 };
 
 export default ClientRequestsTable;
