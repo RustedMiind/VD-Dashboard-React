@@ -2,11 +2,16 @@ import { Grid, SxProps, TextField, Typography } from "@mui/material";
 
 function DataInputLike(props: PropsType) {
   const defaultSx: SxProps = {
-    pointerEvents: "none",
-    borderColor: "primary.light",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderRadius: "10px",
+    ".MuiInputBase-root": {
+      pointerEvents: "none",
+      borderColor: "primary.light",
+      borderStyle: "solid",
+      borderWidth: 1,
+      ".MuiOutlinedInput-notchedOutline": {
+        border: "none !important",
+        outline: "none !important",
+      },
+    },
   };
 
   return (
@@ -20,11 +25,10 @@ function DataInputLike(props: PropsType) {
         fullWidth
         // focused={true}
         size="small"
+        sx={defaultSx}
         multiline={props.multiLine}
         inputProps={{
-          ...(props.multiLine
-            ? { sx: { minHeight: 100, ...defaultSx } }
-            : { sx: defaultSx }),
+          ...(props.multiLine ? { sx: { minHeight: 70 } } : { sx: {} }),
         }}
       />
     </Grid>
