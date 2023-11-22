@@ -28,3 +28,5 @@ export type ProceduresModelsType =
   | AlternativeEmployeeModel
   | ApprovalModel
   | AcceptionModel;
+
+export type RequestStatusType = -2 | -1 | 0 | 1 | 2;

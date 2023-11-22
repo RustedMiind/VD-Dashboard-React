@@ -17,12 +17,7 @@ function ClientData() {
   >(false);
 
   // search bar
-
-
-
-  const [requests, setRequests] = useState<ClientRequest[] | undefined>(
-    undefined
-  );
+  const [requests, setRequests] = useState<ClientRequest[] | null>(null);
   const [search, setSearch] = useState("");
 
   const handleClickOpen = () => {
@@ -36,13 +31,10 @@ function ClientData() {
         },
       })
       .then(({ data }) => {
-        console.log(data);
-        
         setRequests(data.data);
       })
       .catch((err) => {
-        setRequests(undefined);
-        console.log("err", err);
+        setRequests(null);
       });
   }
   // Get Clients
@@ -51,63 +43,66 @@ function ClientData() {
 
   return (
     <Stack>
-                  <IndexContextProvider>
+      <IndexContextProvider>
+        <Typography variant="h5" fontWeight={600} mb={3}>
+          بيانات العملاء
+        </Typography>
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+          getRequests={getRequests}
+        />
+        <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
+          العملاء
+        </Typography>
 
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        بيانات العملاء
-      </Typography>
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-        getRequests={getRequests}
-      />
-      <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
-        العملاء
-      </Typography>
-
-      <Paper
-        sx={{
-          bgcolor: "Background",
-          overflow: "hidden",
-        }}
-        elevation={4}
-      >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          flexDirection="row"
-          flexWrap="wrap"
-          alignItems="end"
-          padding={3}
+        <Paper
+          sx={{
+            bgcolor: "Background",
+            overflow: "hidden",
+          }}
+          elevation={4}
         >
-          <Box>
-            <Button
-              variant="contained"
-              startIcon={<AddCircleOutlineIcon />}
-              component={NavLink}
-              to={"add"}
-            >
-              اضافة عميل جديد
-            </Button>
-            <Button
-              sx={{ ml: 2 }}
-              variant="contained"
-              onClick={handleClickOpen}
-            >
-              تعديل بيانات عميل
-            </Button>
-            <PopUp open={open} setOpen={setOpen} />
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            flexDirection="row"
+            flexWrap="wrap"
+            alignItems="end"
+            padding={3}
+          >
+            <Box>
+              <Button
+                variant="contained"
+                startIcon={<AddCircleOutlineIcon />}
+                component={NavLink}
+                to={"add"}
+              >
+                اضافة عميل جديد
+              </Button>
+              {requests?.length !== 0 && (
+                <>
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    onClick={handleClickOpen}
+                  >
+                    تعديل بيانات عميل
+                  </Button>
+                </>
+              )}
+              <PopUp open={open} setOpen={setOpen} />
+            </Box>
+            {requests?.length !== 0 && (
+              <>
+                <DeleteBtn setRequests={setRequests} requests={requests} />
+              </>
+            )}
           </Box>
-          <Box>
-            <DeleteBtn setRequests={setRequests} requests={requests} />
-          </Box>
-        </Box>
 
           <ClientRequestsTable requests={requests} />
-       
-      </Paper>
+        </Paper>
       </IndexContextProvider>
-
     </Stack>
   );
 }

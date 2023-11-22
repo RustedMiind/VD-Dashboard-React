@@ -34,33 +34,7 @@ function EmploeesRequestsProcedures() {
     DepartmentWithEmployeesType[] | null
   >();
 
-  useEffect(() => {
-    setLevels([]);
-    setendpointStatus("loading");
-    axios
-      .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
-      .then((res) => {
-        axios
-          .post(Api("employee/general-requests/steps"), { type: currentTab })
-          .then(({ data }) => {
-            setLevels(data.steps);
-            console.log("steps", data);
-            setendpointStatus("none");
-          })
-          .catch((err) => {
-            console.log(err);
-            setendpointStatus("error");
-          });
-        console.log(res);
-        console.log(
-          "Handled",
-          HandleDepartmentWithEmployees(res.data.employee)
-        );
-        setDepartments(HandleDepartmentWithEmployees(res.data.employee));
-      })
-      .catch(console.log);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTab]);
+  useEffect(loadLevels, [currentTab]);
 
   return (
     <Stack>
@@ -79,6 +53,13 @@ function EmploeesRequestsProcedures() {
         {endpointStatus === "loading" && (
           <Stack>
             <LevelsPlaceholder />
+          </Stack>
+        )}
+        {endpointStatus === "error" && (
+          <Stack>
+            <Typography variant="h5" py={4} color="error" textAlign="center">
+              حدث خطأ في تحميل المراحل, برجاء المحاولة مرة اخري
+            </Typography>
           </Stack>
         )}
         {departments && (
@@ -114,7 +95,7 @@ function EmploeesRequestsProcedures() {
             loading={sendState === "sending"}
             disabled={endpointStatus !== "none"}
           >
-            ارسال التعديلات
+            حفظ
           </LoadingButton>
         </Stack>
       </Paper>
@@ -198,6 +179,53 @@ function EmploeesRequestsProcedures() {
         console.log(err);
         setSendState("error");
       });
+  }
+
+  function loadLevels() {
+    setLevels([]);
+    setendpointStatus("loading");
+
+    getDepartments().then(getLevels).catch(console.log);
+  }
+  function getDepartments() {
+    return new Promise<void>((ressolve, reject) => {
+      if (!departments) {
+        axios
+          .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
+          .then((res) => {
+            console.log(res);
+            console.log(
+              "Departments : ",
+              HandleDepartmentWithEmployees(res.data.employee)
+            );
+            setDepartments(HandleDepartmentWithEmployees(res.data.employee));
+            ressolve();
+          })
+          .catch((err) => {
+            console.log(err);
+            setendpointStatus("error");
+            reject(err);
+          });
+      } else ressolve();
+    });
+  }
+
+  function getLevels() {
+    return new Promise<void>((ressolve, reject) => {
+      axios
+        .post(Api("employee/general-requests/steps"), { type: currentTab })
+        .then(({ data }) => {
+          setLevels(data.steps);
+          console.log("Steps : ", data);
+          setendpointStatus("none");
+          ressolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          setendpointStatus("error");
+          ressolve(err);
+        });
+    });
   }
 }
 

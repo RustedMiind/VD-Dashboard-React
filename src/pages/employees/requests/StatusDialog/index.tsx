@@ -29,7 +29,7 @@ function StatusDialog(props: PropsType) {
                 <TableRow>
                   <TableCell>اسم الموظف</TableCell>
                   <TableCell>تاريخ الورود</TableCell>
-                  <TableCell>تاريخ الصدور</TableCell>
+                  <TableCell>تاريخ الانتهاء</TableCell>
                   <TableCell>القسم الوظيفي</TableCell>
                   <TableCell>حالة الطلب</TableCell>
                   <TableCell>الملاحظات</TableCell>
@@ -66,6 +66,21 @@ function StatusDialog(props: PropsType) {
                     </TableRow>
                   );
                 })}
+                {/* Next Step */}
+                {props.request?.nextStep && (
+                  <TableRow>
+                    <TableCell>{props.request.nextStep.employeeName}</TableCell>
+                    <TableCell>
+                      {formatDate(props.request?.created_at)}
+                    </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                      {props.request.nextStep.departmentName}
+                    </TableCell>
+                    <TableCell> {generateChip(-1)} </TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

@@ -1,4 +1,5 @@
 import { EmployeeType } from "./Employee";
+import { Requestable } from "./Requestable";
 
 export interface RequestDetails {
   employee?: EmployeeType;
@@ -21,14 +22,11 @@ export interface RequestDetails {
   project_name?: string;
   description?: string;
   amount?: number;
-  type?: string;
+  type?: number;
   duration?: string;
   date?: string;
   salary_first?: number;
-  requestable?: {
-    date: string;
-    typeInArabic: string;
-  };
+  requestable?: Requestable;
 }
 
 export type KeyToArabic = { name: string; key: string };

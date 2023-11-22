@@ -1,0 +1,14 @@
+.MuiTable-root {
+  td,
+  th {
+    border: none;
+  }
+}
+
+.MuiTableHead-root {
+  td,
+  th {
+    font-weight: 700;
+    border-bottom: 2px solid var(--main);
+  }
+}

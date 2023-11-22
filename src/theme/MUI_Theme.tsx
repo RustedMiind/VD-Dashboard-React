@@ -1,5 +1,6 @@
 import { colors, createTheme } from "@mui/material";
 import "../assets/fonts/include.scss";
+import "./Mui_Custom.scss";
 
 export const theme = createTheme({
   direction: "rtl",
@@ -39,6 +40,21 @@ export const theme = createTheme({
           fontFamily: "TheSans",
         },
       },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
+    MuiPaper: {
+      defaultProps: { elevation: 0 },
     },
   },
   typography: {

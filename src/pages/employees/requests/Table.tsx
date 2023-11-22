@@ -11,6 +11,9 @@ import {
   Pagination,
   Stack,
   Button,
+  TextField,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
@@ -26,12 +29,14 @@ import { useState } from "react";
 function EmployeesRequestsTable(props: PropsType) {
   const ROWS_PER_PAGE = 8;
   const [page, setPage] = useState(1);
+  const [rowsCount, setRowsCount] = useState(10);
   const PAGES = Math.ceil(props.requests.length / ROWS_PER_PAGE) || 1;
 
-  const toView = props.requests.slice(
-    (page - 1) * ROWS_PER_PAGE,
-    page * ROWS_PER_PAGE
-  );
+  // const toView = props.requests.slice(
+  //   (page - 1) * ROWS_PER_PAGE,
+  //   page * ROWS_PER_PAGE
+  // );
+  const toView = props.requests.slice(0, rowsCount);
 
   return (
     <>
@@ -78,11 +83,18 @@ function EmployeesRequestsTable(props: PropsType) {
                   </TableCell>
                   <TableCell>{formatDate(request.created_at)}</TableCell>
                   <TableCell>
-                    <Chip
+                    <Button
                       size="small"
+                      color="primary"
+                      sx={{
+                        minWidth: 0,
+                        textDecoration: "underline !important",
+                        fontWeight: 700,
+                      }}
                       onClick={props.openDetails(request)}
-                      label={requsetType}
-                    />
+                    >
+                      {requsetType}
+                    </Button>
                   </TableCell>
                   <TableCell>{request.departmentName || "-"}</TableCell>
                   <TableCell>{generateChip(request.status, request)}</TableCell>
@@ -111,18 +123,23 @@ function EmployeesRequestsTable(props: PropsType) {
           </Typography>
         )}
       </TableContainer>
-
-      <Stack alignItems="center" py={2}>
-        <Pagination
-          count={PAGES}
-          page={page}
-          size="large"
-          variant="text"
-          color="primary"
-          onChange={(e, p) => {
-            setPage(p);
+      <Stack p={2} direction="row" alignItems="center" spacing={1}>
+        <Typography> عدد العرض في الصفحة</Typography>
+        <TextField
+          size="small"
+          value={rowsCount}
+          select
+          onChange={(e) => {
+            setRowsCount(parseInt(e.target.value) || 10);
           }}
-        />
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={25}>25</MenuItem>
+          <MenuItem value={500}>500</MenuItem>
+          <MenuItem value={2500}>2500</MenuItem>
+          <MenuItem value={10000}>10000</MenuItem>
+        </TextField>
       </Stack>
     </>
   );
@@ -136,21 +153,25 @@ function EmployeesRequestsTable(props: PropsType) {
       case -1:
         if (HAS_ACCESS) {
           chip = (
-            <Chip
-              onClick={props.openModel(request)}
+            <Button
+              size="small"
               color="primary"
-              variant="filled"
-              label="اتخاذ الاجراء"
-            />
+              sx={{ textDecoration: "underline !important", fontWeight: 700 }}
+              onClick={props.openModel(request)}
+            >
+              اتخاذ الاجراء
+            </Button>
           );
         } else {
           chip = (
-            <Chip
+            <Button
+              size="small"
               color="primary"
-              variant={variant}
+              sx={{ textDecoration: "underline !important", fontWeight: 700 }}
               onClick={props.openStatus(request)}
-              label="تحت الاجراء"
-            />
+            >
+              تحت الاجراء
+            </Button>
           );
         }
         break;

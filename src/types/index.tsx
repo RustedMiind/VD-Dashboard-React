@@ -7,3 +7,7 @@ export * from "./Broker";
 export * from "./Branch";
 export * from "./Contract";
 export * from "./ObjectOfArray";
+export * from "./Branch";
+export * from "./Broker";
+export * from "./Department";
+export * from "./Requestable";

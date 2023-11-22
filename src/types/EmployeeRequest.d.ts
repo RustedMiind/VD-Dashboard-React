@@ -17,16 +17,12 @@ export interface EmployeeRequest {
   departmentName: string | null;
 }
 
-interface Requestable {
-  id: RequestableIdType;
-  date: string;
-  employee_id: string;
-}
-
 interface NextStep {
   id: number;
   employee_id: number;
   department_id: number;
+  employeeName: string;
+  departmentName: string;
   action: number;
   duration: number;
   model: ProceduresModelTypeCode;

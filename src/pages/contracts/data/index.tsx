@@ -30,7 +30,7 @@ function Contracts() {
   if (search) {
     const searchLowerCase = search.toLowerCase();
     const filter = requests?.filter((request) => {
-      return request.employee?.name
+      return request?.employee?.name
         .toLocaleLowerCase()
         .includes(searchLowerCase);
     });

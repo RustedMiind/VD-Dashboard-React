@@ -22,6 +22,7 @@ function RoutesComponent() {
         <Route path="clients">
           <Route path="" element={<ClientData />} />
           <Route path="add" element={<AddClient />} />
+          <Route path=":name/edit" element={<AddClient />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />

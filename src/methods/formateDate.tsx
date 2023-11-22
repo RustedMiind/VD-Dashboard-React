@@ -1,4 +1,4 @@
-export function formatDate(dateString: string | undefined): string {
+export function formatDate(dateString: string | undefined): string | undefined {
   if (dateString) {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -6,7 +6,5 @@ export function formatDate(dateString: string | undefined): string {
     const year = String(date.getFullYear());
 
     return `${day}/${month}/${year}`;
-  } else {
-    return "Invalid Date";
   }
 }
