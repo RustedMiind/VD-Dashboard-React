@@ -15,7 +15,7 @@ import { styled } from "@mui/material/styles";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
@@ -48,8 +48,6 @@ export default function FormAdd() {
   }
 
   async function GetDataClient() {
-    console.log(objectResponse);
-
     try {
       const { data } = await axios.get<{ data: any }>(
         Api(`employee/client/edit`),
@@ -323,9 +321,18 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
-              {errors?.phone}
-            </Typography>
+            {errors?.phone && (
+              <Typography sx={{ color: "#F19B02" }}>
+                الرقم مسجل مسبقا{"  "}
+                <Typography
+                  sx={{ color: "#F19B02" }}
+                  component={NavLink}
+                  to="www.google.com"
+                >
+                  اضغط هنا للمزيد
+                </Typography>
+              </Typography>
+            )}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
