@@ -6,3 +6,4 @@ export * from "./ReducerActionType";
 export * from "./Branch";
 export * from "./Broker";
 export * from "./Department";
+export * from "./Requestable";

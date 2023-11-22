@@ -83,11 +83,18 @@ function EmployeesRequestsTable(props: PropsType) {
                   </TableCell>
                   <TableCell>{formatDate(request.created_at)}</TableCell>
                   <TableCell>
-                    <Chip
+                    <Button
                       size="small"
+                      color="primary"
+                      sx={{
+                        minWidth: 0,
+                        textDecoration: "underline !important",
+                        fontWeight: 700,
+                      }}
                       onClick={props.openDetails(request)}
-                      label={requsetType}
-                    />
+                    >
+                      {requsetType}
+                    </Button>
                   </TableCell>
                   <TableCell>{request.departmentName || "-"}</TableCell>
                   <TableCell>{generateChip(request.status, request)}</TableCell>
@@ -116,22 +123,10 @@ function EmployeesRequestsTable(props: PropsType) {
           </Typography>
         )}
       </TableContainer>
-
-      {/* <Stack alignItems="center" py={2}>
-        <Pagination
-          count={PAGES}
-          page={page}
-          size="large"
-          variant="text"
-          color="primary"
-          onChange={(e, p) => {
-            setPage(p);
-          }}
-        />
-      </Stack> */}
-      <Stack width={300} p={2}>
+      <Stack p={2} direction="row" alignItems="center" spacing={1}>
+        <Typography> عدد العرض في الصفحة</Typography>
         <TextField
-          label="عدد العرض في الصفحة"
+          size="small"
           value={rowsCount}
           select
           onChange={(e) => {
@@ -161,7 +156,7 @@ function EmployeesRequestsTable(props: PropsType) {
             <Button
               size="small"
               color="primary"
-              sx={{ textDecoration: "underline !important" }}
+              sx={{ textDecoration: "underline !important", fontWeight: 700 }}
               onClick={props.openModel(request)}
             >
               اتخاذ الاجراء
@@ -172,7 +167,7 @@ function EmployeesRequestsTable(props: PropsType) {
             <Button
               size="small"
               color="primary"
-              sx={{ textDecoration: "underline !important" }}
+              sx={{ textDecoration: "underline !important", fontWeight: 700 }}
               onClick={props.openStatus(request)}
             >
               تحت الاجراء
