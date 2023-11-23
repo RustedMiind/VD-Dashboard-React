@@ -1,5 +1,6 @@
 import { Button, MenuItem, Stack, TextField } from "@mui/material";
 import { ContractRequest } from "../../../types/ContractRequest";
+import { TypeDataToSearch } from ".";
 
 function SearchBar(props: PropsType) {
   return (
@@ -7,9 +8,12 @@ function SearchBar(props: PropsType) {
       <Stack direction="row" gap={4} my={2}>
         <TextField
           placeholder="رقم تليفون العميل"
-          type="text"
+          type="number"
           size="small"
           sx={{ flexGrow: 1 }}
+          onChange={(e) => {
+            props.DataToSearch.phone = e.target.value;
+          }}
         />
         <TextField
           label="اسم العميل"
@@ -30,13 +34,20 @@ function SearchBar(props: PropsType) {
           placeholder="المهندس المسؤول"
           size="small"
           sx={{ flexGrow: 1 }}
+          onChange={(e) => {
+            props.DataToSearch.employee = e.target.value;
+          }}
         />
-        <Button variant="contained">بحث</Button>
+        <Button variant="contained" onClick={props.search}>
+          بحث
+        </Button>
       </Stack>
     </>
   );
 }
 type PropsType = {
   requests: ContractRequest[] | null;
+  DataToSearch: TypeDataToSearch;
+  search: () => void;
 };
 export default SearchBar;
