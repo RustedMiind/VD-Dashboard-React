@@ -16,6 +16,7 @@ import { NavLink } from "react-router-dom";
 import ContractsTable from "./Table";
 import { ContractRequest } from "../../../types/ContractRequest";
 import TopTable from "./topTable/TopTable";
+import SearchBar from "./SearchBar";
 function Contracts() {
   const [requests, setRequests] = useState<ContractRequest[] | null>(null);
 
@@ -66,6 +67,7 @@ function Contracts() {
   }, []);
   return (
     <Stack>
+      <SearchBar requests={requests} />
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderColor: "divider" }}>
           <Tabs

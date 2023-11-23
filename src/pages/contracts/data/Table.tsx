@@ -1,45 +1,22 @@
 import {
   TableContainer,
   Table,
-  TableHead,
   TableRow,
   TableBody,
   TableCell,
   Checkbox,
   Stack,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { EmployeeRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ContractRequest } from "../../../types/ContractRequest";
+import TableHeader from "./topTable/TableHeader";
 
 function ContractsTable({ requests }: PropsType) {
   return (
     <Stack>
       <TableContainer sx={{ height: 500 }}>
         <Table aria-label="simple table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Checkbox />
-              </TableCell>
-              <TableCell>رقم العقد</TableCell>
-              <TableCell>
-                نوع العقد{" "}
-                <IconButton aria-label="SwapVertIcon" color="primary">
-                  <SwapVertIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell>اسم العميل</TableCell>
-              <TableCell>اسم الفرع</TableCell>
-              <TableCell>تليفون العميل</TableCell>
-              <TableCell>مدة العقد</TableCell>
-              <TableCell>تاريخ انتهاء العقد</TableCell>
-              <TableCell>المهندس المسؤول</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
+          <TableHeader />
           <TableBody>
             {requests?.map((request) => {
               return (
