@@ -8,8 +8,8 @@ import Contracts from "./pages/contracts/data";
 import CreateContracts from "./pages/contracts/addContracts/CreateContracts";
 import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
-import ClientProcedures from "./pages/clientOrder/procedures";
-import ClientRequests from "./pages/clientOrder/requests";
+import ClientProcedures from "./pages/clients/procedures";
+import ClientRequests from "./pages/clients/requests";
 
 function RoutesComponent() {
   return (

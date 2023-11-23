@@ -1,6 +1,7 @@
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs, Button} from "@mui/material";
+// Icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { requestsIds } from "../../employees/procedures/RequestsIds";
+import { requestsIds } from "./RequestsIds";
 
 function TabsAndAdd(props: PropsType) {
   return (
@@ -21,6 +22,7 @@ function TabsAndAdd(props: PropsType) {
       >
         اضافة مرحلة جديدة
       </Button>
+
       <Tabs
         aria-label="basic tabs example"
         value={props.currentTab}
