@@ -30,9 +30,7 @@ function EmploeesRequestsProcedures() {
   const [proceduce, setProcedure] = useState<ProcedureType>({
     levels: [InitLevel],
   });
-  const [departments, setDepartments] = useState<
-    DepartmentWithEmployeesType[] | null
-  >();
+  const [departments, setDepartments] = useState();
 
   useEffect(loadLevels, [currentTab]);
 
@@ -188,15 +186,18 @@ function EmploeesRequestsProcedures() {
     return new Promise<void>((ressolve, reject) => {
       if (!departments) {
         axios
-          .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
+          .get(Api("employee/client/order/steps/use"))
           .then((res) => {
             console.log(res);
-            console.log(
-              "Departments : ",
-              HandleDepartmentWithEmployees(res.data.employee)
-            );
-            setDepartments(HandleDepartmentWithEmployees(res.data.employee));
-            ressolve();
+            console.log(res.data.Management);
+            setDepartments(res.data.Management);
+            // setDepartments()
+            // console.log(
+            //   "Departments : ",
+            //   HandleDepartmentWithEmployees(res.data.employee)
+            // );
+            // setDepartments(HandleDepartmentWithEmployees(res.data.employee));
+            // ressolve();
           })
           .catch((err) => {
             console.log(err);
