@@ -16,8 +16,8 @@ import { DevUser } from "./DevUser";
 import { DevUserType } from "./DevUserType";
 
 console.table({
-  Version: "1.1.4",
-  Comment: "Activated End Date filter in employees requests",
+  Version: "1.2",
+  Comment: "Figma Clone Employees",
 });
 
 const devUser: DevUserType = DevUser;
@@ -56,7 +56,7 @@ function resetAuth() {
 }
 
 // Mount the application in mode Development or Production
-MountApp("development");
+MountApp("production");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
