@@ -29,14 +29,18 @@ function Panal(props: PropType) {
       </div>
     );
   }
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState<number>(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   return (
     <>
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderColor: "divider" }}>
+        <Box
+          sx={{ borderColor: "divider" }}
+          display={"flex"}
+          justifyContent={"space-between"}
+        >
           <Tabs
             value={value}
             onChange={handleChange}
@@ -45,6 +49,15 @@ function Panal(props: PropType) {
             <Tab label="بيانات العقود" />
             <Tab label="ادارة العقود" />
           </Tabs>
+          <Button
+            variant="contained"
+            startIcon={<AddCircleOutlineIcon />}
+            sx={{ mr: 5 }}
+            component={NavLink}
+            to={"add"}
+          >
+            اضافة عقد
+          </Button>
         </Box>
         <CustomTabPanel value={value} index={0}>
           <Paper
@@ -57,21 +70,24 @@ function Panal(props: PropType) {
             }}
             elevation={4}
           >
-            <Button
-              variant="contained"
-              startIcon={<AddCircleOutlineIcon />}
-              sx={{ mb: 1 }}
-              component={NavLink}
-              to={"add"}
-            >
-              اضافة عقد
-            </Button>
-            <TopTable />
-            <ContractsTable requests={props.requests} />
+            <TopTable value={value} />
+            <ContractsTable requests={props.requests} value={value} />
           </Paper>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          Item Two
+          <Paper
+            // variant="outlined"
+            sx={{
+              p: 2,
+              bgcolor: "Background",
+              overflow: "hidden",
+              backgroundColor: "#F3F5F7",
+            }}
+            elevation={4}
+          >
+            <TopTable value={value} />
+            <ContractsTable requests={props.requests} value={value} />
+          </Paper>
         </CustomTabPanel>
       </Box>
     </>
