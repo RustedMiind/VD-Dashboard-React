@@ -1,0 +1,30 @@
+import { Branch, ClientRequest, EmployeeType } from "./";
+
+export type ContractRequest = {
+  id: number;
+  code: number;
+  period: number;
+  date: number;
+  // card_image: null;
+  details: string;
+  type: ContractType;
+  amount: number;
+  contract_type_id: number;
+  client_id: number;
+  branch_id: number;
+  management_id: number;
+  status_id: number;
+  employee_id: number;
+  created_at: number;
+  updated_at: number;
+  // deleted_at: null;
+  dateEnd: number;
+  end_date_period: number;
+  client: ClientRequest;
+  employee: EmployeeType;
+  // tasks: {};
+  // payments: {};
+  // management: null;
+  branch: Branch;
+  // levers: null;
+};

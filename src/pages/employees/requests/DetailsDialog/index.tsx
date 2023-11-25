@@ -18,6 +18,7 @@ import VacationDetails from "./VacationDetails";
 import WorkNeeds from "./WorkNeeds";
 import MissionDetails from "./MissionDetails";
 import CarFixDetails from "./CarFixDetails";
+import CustodyDetails from "./CustodyDetails";
 
 function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
@@ -61,6 +62,8 @@ function DetailsDialog(props: PropsType) {
                     return <VacationDetails details={details} />;
                   case 2:
                     return <MissionDetails details={details} />;
+                  case 4:
+                    return <CustodyDetails details={details} />;
                   case 5:
                     return <WorkNeeds details={details} />;
                   case 6:

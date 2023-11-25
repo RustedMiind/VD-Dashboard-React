@@ -25,6 +25,10 @@ export interface Requestable {
   details?: detail[];
   builder?: Builder[];
   car_type?: string;
+  last_custody?: string;
+  remaining_lastCustody?: string;
+  description?: string;
+  media?: Media[];
 }
 
 interface detail {

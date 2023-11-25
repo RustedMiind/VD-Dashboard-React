@@ -9,31 +9,19 @@ import {
   Radio,
   FormControlLabel,
   MenuItem,
-  Alert,
-  Snackbar,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
 import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { TypeAdd } from "./AddClient";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
+import BtnFile from "./BtnFile";
+import RequiredSymbol from "../../../components/RequiredSymbol";
 const paddingSize = 0.1;
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: "1px",
-  overflow: "hidden",
-  position: "absolute",
-  whiteSpace: "nowrap",
-  width: "1px",
-});
-
 export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<any | undefined>(undefined);
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
@@ -61,8 +49,6 @@ export default function FormAdd() {
   }
 
   async function GetDataClient() {
-    console.log(objectResponse);
-
     try {
       const { data } = await axios.get<{ data: any }>(
         Api(`employee/client/edit`),
@@ -213,7 +199,7 @@ export default function FormAdd() {
         "& .MuiTextField-root": { m: 1, width: "50ch" },
       }}
       noValidate
-      autoComplete="off"
+      autoComplete="on"
       onSubmit={clientEdit ? EditHandle : submitHandle}
     >
       <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
@@ -230,7 +216,7 @@ export default function FormAdd() {
                 onChange={changeTypeHandler("individual")}
               />
             }
-            label="فرد    "
+            label="فرد"
           />
           <FormControlLabel
             control={
@@ -247,9 +233,17 @@ export default function FormAdd() {
       <Grid container>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography component="label" sx={{ ml: 2 }}>
-              {formData.type == "individual" ? "اسم العميل *" : "اسم الشركه *"}
-            </Typography>
+            {formData.type == "individual" ? (
+              <Typography component="label" sx={{ ml: 2 }}>
+                اسم العميل
+                <RequiredSymbol />
+              </Typography>
+            ) : (
+              <Typography component="label" sx={{ ml: 2 }}>
+                اسم الشركه
+                <RequiredSymbol />
+              </Typography>
+            )}
             <TextField
               id="outlined-name-input"
               type="text"
@@ -274,11 +268,15 @@ export default function FormAdd() {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              {formData.type == "individual"
-                ? "رقم الهويه * "
-                : "السجل التجاري *"}
-            </Typography>
+            {formData.type == "individual" ? (
+              <Typography component="label" sx={{ ml: 2 }}>
+                رقم الهويه <RequiredSymbol />
+              </Typography>
+            ) : (
+              <Typography component="label" sx={{ ml: 2 }}>
+                السجل التجاري <RequiredSymbol />
+              </Typography>
+            )}
             <TextField
               id="outlined-idNumber-input"
               type="number"
@@ -311,7 +309,7 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              رقم الجوال *
+              رقم الجوال <RequiredSymbol />
             </Typography>
             <TextField
               id="outlined-phone-input"
@@ -326,9 +324,18 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
-              {errors?.phone}
-            </Typography>
+            {errors?.phone && (
+              <Typography sx={{ color: "#F19B02" }}>
+                الرقم مسجل مسبقا{"  "}
+                <Typography
+                  sx={{ color: "#F19B02" }}
+                  component={NavLink}
+                  to="www.google.com"
+                >
+                  اضغط هنا للمزيد
+                </Typography>
+              </Typography>
+            )}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -357,7 +364,7 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              الوسيط
+              الوسيط <RequiredSymbol />
             </Typography>
             {(clientEdit === null || clientEdit?.broker_id) && (
               <TextField
@@ -365,7 +372,8 @@ export default function FormAdd() {
                 size="small"
                 select
                 defaultValue={clientEdit?.broker_id}
-                placeholder="الوسيط"
+                label="الوسيط"
+                InputLabelProps={{ sx: { color: "#abc2db" } }}
                 onChange={(e) => {
                   console.log(e.target);
                   dispatch({
@@ -390,14 +398,15 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              الفرع *
+              الفرع <RequiredSymbol />
             </Typography>
             {(clientEdit === null || clientEdit?.branch_id) && (
               <TextField
+                label="الفرع"
                 id="outlined-select-currency"
                 size="small"
+                InputLabelProps={{ sx: { color: "#abc2db" } }}
                 select
-                placeholder="الفرع"
                 defaultValue={clientEdit?.branch_id}
                 onChange={(e) => {
                   dispatch({
@@ -407,11 +416,7 @@ export default function FormAdd() {
                 }}
               >
                 {branches?.map((branch) => (
-                  <MenuItem
-                    key={branch.id}
-                    value={branch.id}
-                    // selected={branch?.id === clientEdit?.branch_id}
-                  >
+                  <MenuItem key={branch.id} value={branch.id}>
                     {branch.name}
                   </MenuItem>
                 ))}
@@ -450,8 +455,22 @@ export default function FormAdd() {
             </Grid>
           </>
         )}
-        <Grid item p={paddingSize} md={6}>
-          <Stack width="100%" maxWidth="100%">
+        {formData.type === "company" && (
+          <Grid item p={paddingSize} md={6}>
+            <Stack>
+              <BtnFile errors={errors} dispatch={dispatch} />
+            </Stack>
+          </Grid>
+        )}
+        <Grid item p={paddingSize} md={formData.type === "individual" ? 6 : 12}>
+          <Stack
+            sx={{
+              "& .MuiTextField-root": {
+                m: 1,
+                width: formData.type === "company" ? "116.5ch" : "50ch",
+              },
+            }}
+          >
             <Typography sx={{ ml: 2 }} component="label">
               عنوان المراسلات
             </Typography>
@@ -460,7 +479,7 @@ export default function FormAdd() {
               type="text"
               required
               size="small"
-              placeholder=""
+              placeholder="عنوان المراسلات"
               fullWidth
               defaultValue={clientEdit ? clientEdit.letter_head : ""}
               value={formData.letter_head}
@@ -473,64 +492,19 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
-          <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              ارفاق صورة الهويه
-            </Typography>
-            <Box sx={{ mt: 1, ml: 1 }}>
-              <Button
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-              >
-                ارفاق صورة
-                <VisuallyHiddenInput
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files) {
-                      const file = files[0];
-                      dispatch({ type: "CARD_IMAGE", payload: file });
-                      console.log(typeof file);
-                    }
-                  }}
-                  type="file"
-                />
-              </Button>
-
-              <Typography variant="body2" color="error">
-                {errors?.card_image}
-              </Typography>
-            </Box>
-          </Stack>
-        </Grid>
+        {formData.type === "individual" && (
+          <Grid item p={paddingSize} md={6}>
+            <Stack>
+              <BtnFile errors={errors} dispatch={dispatch} />
+            </Stack>
+          </Grid>
+        )}
         <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>
           <Button fullWidth type="submit" variant="contained">
             حفظ
           </Button>
         </Grid>
       </Grid>
-
-      {/* alert */}
-      <Snackbar
-        open={toaster.type === "success"}
-        autoHideDuration={6000}
-        onClose={() => {
-          setToaster({ type: "null" });
-        }}
-        message="Note archived"
-      >
-        <Alert
-          {...(toaster.type === "success"
-            ? { severity: "success" }
-            : { severity: "error" })}
-          sx={{ width: "100%" }}
-        >
-          {toaster.type === "success"
-            ? "تم الحفظ بنجاح"
-            : "تعذر في الحفظ, تأكد من ادخال البيانات بالشكل الصحيح"}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }
