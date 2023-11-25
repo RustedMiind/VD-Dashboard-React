@@ -16,8 +16,8 @@ import { DevUser } from "./DevUser";
 import { DevUserType } from "./DevUserType";
 
 console.table({
-  Version: "1.2",
-  Comment: "Figma Clone Employees",
+  Version: "1.2.2",
+  Comment: "Added Mission Expectet time to details dialog",
 });
 
 const devUser: DevUserType = DevUser;

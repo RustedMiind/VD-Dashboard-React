@@ -13,6 +13,7 @@ export interface Requestable {
   address: string;
   reason: string;
   project_name: string;
+  vacation_credit: string;
   // "response": null,
   employee_id: number;
   status_id: number;

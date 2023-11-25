@@ -4,3 +4,5 @@ export * from "./isStringAllNumbers";
 export * from "./isStringAllNumbers";
 export * from "./objectToFormData";
 export * from "./generateUndefinedArray";
+export * from "./getDateDiff";
+export * from "./msToHoursMinutes";
