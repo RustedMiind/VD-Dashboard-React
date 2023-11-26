@@ -9,6 +9,8 @@ export type ContractRequest = {
   details: string;
   type: ContractType;
   amount: number;
+  client?: ClientRequest;
+  employee: EmployeeType;
   contract_type_id: number;
   client_id: number;
   branch_id: number;
@@ -20,11 +22,17 @@ export type ContractRequest = {
   // deleted_at: null;
   dateEnd: number;
   end_date_period: number;
-  client: ClientRequest;
-  employee: EmployeeType;
   // tasks: {};
   // payments: {};
   // management: null;
   branch: Branch;
   // levers: null;
+};
+
+type ContractType = {
+  id: number;
+  name: string;
+  // created_at: null;
+  // updated_at: null;
+  // deleted_at: null;
 };

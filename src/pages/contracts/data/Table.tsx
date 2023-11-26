@@ -1,45 +1,24 @@
 import {
   TableContainer,
   Table,
-  TableHead,
   TableRow,
   TableBody,
   TableCell,
   Checkbox,
   Stack,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { EmployeeRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ContractRequest } from "../../../types/ContractRequest";
+import TableHeader from "./topTable/TableHeader";
 
-function ContractsTable({ requests }: PropsType) {
+function ContractsTable({ requests, value }: PropsType) {
+  console.log(value);
+
   return (
     <Stack>
       <TableContainer sx={{ height: 500 }}>
         <Table aria-label="simple table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Checkbox />
-              </TableCell>
-              <TableCell>رقم العقد</TableCell>
-              <TableCell>
-                نوع العقد{" "}
-                <IconButton aria-label="SwapVertIcon" color="primary">
-                  <SwapVertIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell>اسم العميل</TableCell>
-              <TableCell>اسم الفرع</TableCell>
-              <TableCell>تليفون العميل</TableCell>
-              <TableCell>مدة العقد</TableCell>
-              <TableCell>تاريخ انتهاء العقد</TableCell>
-              <TableCell>المهندس المسؤول</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
+          <TableHeader value={value} />
           <TableBody>
             {requests?.map((request) => {
               return (
@@ -48,9 +27,13 @@ function ContractsTable({ requests }: PropsType) {
                     <Checkbox />
                   </TableCell>
                   <TableCell>{request.code}</TableCell>
-                  <TableCell>{request.type.name}</TableCell>
-                  <TableCell>{request.client.name}</TableCell>
-                  <TableCell>{request.branch.name}</TableCell>
+                  <TableCell>
+                    {value === 0 ? request.type.name : request.date}
+                  </TableCell>
+                  <TableCell>
+                    {value === 0 ? request.client?.name : request.date}
+                  </TableCell>
+                  <TableCell></TableCell>
                   <TableCell>{request.employee.phone}</TableCell>
                   <TableCell>{request.period}</TableCell>
                   <TableCell>{request.end_date_period}</TableCell>
@@ -70,6 +53,7 @@ function ContractsTable({ requests }: PropsType) {
 
 type PropsType = {
   requests: ContractRequest[] | null;
+  value: number;
 };
 
 export default ContractsTable;

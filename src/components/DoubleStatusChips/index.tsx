@@ -5,7 +5,7 @@ function DoubleChips(props: PropsType) {
   return (
     <Stack
       direction="row"
-      spacing={1}
+      spacing={0.5}
       alignItems="center"
       mx={props.space ? 1 : undefined}
     >
