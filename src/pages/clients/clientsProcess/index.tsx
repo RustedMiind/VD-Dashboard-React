@@ -11,12 +11,12 @@ import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
 
 const InitLevel: StepType = {
-  employee_id: 0,
   management_id: 0,
-  accept: 0,
-  approval: 0,
   period: 0,
   form_id: 0,
+  employee_id: 0,
+  accept: 0,
+  approval: 0,
 };
 
 const ClientProcess = () => {
@@ -29,6 +29,8 @@ const ClientProcess = () => {
     levels: [InitLevel],
   });
 
+  const [getLevelsData, setLevelsData] = useState();
+
   const snackbarClose = () => {
     setSendState("none");
   };
@@ -37,8 +39,9 @@ const ClientProcess = () => {
     return new Promise<void>((resSolve, reject) => {
       if (!dataForm) {
         axios
-          .get(Api("employee/client/order/steps/use"))
+          .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
+            console.log(res.data);
             setDataForm(res.data);
             resSolve();
           })
@@ -51,32 +54,49 @@ const ClientProcess = () => {
     });
   };
 
+  const getLevels = () => {
+    return new Promise<void>((resSolve, reject) => {
+      if (!getLevelsData) {
+        axios
+          .get(Api("employee/client/order/steps"))
+          .then((res) => {
+            console.log(res.data.data);
+            setLevelsData(res.data);
+            setLevels(res.data.data);
+            resSolve();
+          })
+          .catch((err) => {
+            console.log(err);
+            setEndPointStatus("error");
+            reject(err);
+          });
+      } else resSolve();
+    });
+  };
+
   const submitData = () => {
-    const data = process.levels.map(
+    const data = process.levels?.map(
       ({
+        management_id,
+        period,
+        form_id,
+        employee_id,
         accept,
         approval,
-        period,
-        employee_id,
-        management_id,
-        form_id,
       }): Partial<StepType> => {
         return {
-          accept: accept,
-          approval: approval,
-          period: period,
-          employee_id: employee_id,
-          management_id: management_id,
-          form_id: form_id,
+          management_id,
+          period,
+          form_id,
+          employee_id,
+          accept,
+          approval,
         };
       }
     );
-    console.log(data);
     setSendState("sending");
     axios
-      .post(Api("employee/client/order/steps/store"), {
-        data,
-      })
+      .post(Api("employee/client/order/steps/store"), ...data)
       .then((res) => {
         console.log("Done", res);
         setSendState("success");
@@ -88,7 +108,8 @@ const ClientProcess = () => {
   };
 
   const loadLevels = () => {
-    getFormData().then().catch(console.log);
+    getFormData().catch(console.log);
+    getLevels().catch(console.log);
   };
 
   const updateLevel = (index: number) => {
@@ -149,7 +170,7 @@ const ClientProcess = () => {
         {dataForm && (
           <Stack>
             {endPointStatus === "none" &&
-              process.levels.map((level, index, arr) => {
+              process.levels?.map((level, index, arr) => {
                 const IS_LAST_ITEM = index === arr.length - 1;
                 const MORE_THAN_ONE = arr.length > 1;
                 return (

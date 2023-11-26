@@ -1,8 +1,8 @@
 export interface StepType {
   employee_id: number;
   management_id: number;
-  accept: 0 | 1;
-  approval: 0 | 1;
+  accept?: 0 | 1;
+  approval?: 0 | 1;
   period: number;
   form_id: number;
   id?: number;

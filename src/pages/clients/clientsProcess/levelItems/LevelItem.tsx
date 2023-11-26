@@ -37,7 +37,6 @@ const LevelItem = ({
     level.form_id,
     level.id,
   ]);
-  console.log(level);
 
   const formDisabled = !update;
 
