@@ -11,20 +11,20 @@ export const theme = createTheme({
     primary: {
       main: "#004693",
       contrastText: "#FFFFFF",
-      // lightest: "#F3F5F7",
+      lightest: "#F3F5F7",
     },
     success: {
       main: "#18CB5F",
-      // lightest: "#D4EEDE",
+      lightest: "#D4EEDE",
       contrastText: "#FFFFFF",
     },
     error: {
       main: "#CB1818",
-      // lightest: "#EED4D4",
+      lightest: "#EED4D4",
     },
     warning: {
       main: "#F19B02",
-      // lightest: "#FDF0D9",
+      lightest: "#FDF0D9",
     },
     // secondary: {
     //   main: "#004693",
