@@ -12,7 +12,7 @@ function SearchBar(props: PropsType) {
           size="small"
           sx={{ flexGrow: 1 }}
           onChange={(e) => {
-            props.DataToSearch.phone = e.target.value;
+            props.DataToSearch.client_phone = e.target.value;
           }}
         />
         <TextField
@@ -22,10 +22,13 @@ function SearchBar(props: PropsType) {
           id="outlined-select-currency"
           size="small"
           sx={{ flexGrow: 2 }}
+          onChange={(e) => {
+            props.DataToSearch.client_id = parseInt(e.target.value);
+          }}
         >
           {props.requests?.map((request) => (
-            <MenuItem key={request.code} value={request.code}>
-              {request.client.name}
+            <MenuItem key={request.code} value={request.client_id}>
+              {request.client?.name}
             </MenuItem>
           ))}
         </TextField>
@@ -35,7 +38,7 @@ function SearchBar(props: PropsType) {
           size="small"
           sx={{ flexGrow: 1 }}
           onChange={(e) => {
-            props.DataToSearch.employee = e.target.value;
+            props.DataToSearch.employee_name = e.target.value;
           }}
         />
         <Button variant="contained" onClick={props.search}>
