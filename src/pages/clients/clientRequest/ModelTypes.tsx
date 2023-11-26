@@ -1,8 +1,6 @@
-import { ProceduresModelTypeCode } from "./types";
-
 type ModelNameIdType = {
   name: string;
-  id: ProceduresModelTypeCode;
+  id: number;
 };
 
 export const modelNamesIds: ModelNameIdType[] = [

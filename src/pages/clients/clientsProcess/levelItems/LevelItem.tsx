@@ -1,40 +1,45 @@
-import { Stack, Button } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import { useEffect, useReducer, useState } from "react";
-// icons
+import { Accordion, AccordionSummary, Button, Stack } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Step } from "../types";
-import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
-import reducer from "./reducer";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useEffect, useReducer, useState } from "react";
+import { AccordionDetails } from "@mui/material";
+import { StepType } from "../types/Step";
+import { FormData } from "../types/FormData";
 import TableComponent from "./Table";
+import reducer from "./reducer";
 
-function LevelItem(props: PropsType) {
+const LevelItem = ({
+  dataForm,
+  nameBtn,
+  level,
+  updateLevel,
+  onDelete,
+}: PropsType) => {
   const [expanded, setExpanded] = useState(false);
   const [update, setUpdate] = useState(false);
-  const [level, dispatch] = useReducer(reducer, props.level);
+  const [localLevel, dispatch] = useReducer(reducer, level);
 
-  const formDisabled = !update;
-
-  function updateLevel() {
-    props.updateLevel(level);
+  const localUpdateLevel = () => {
+    updateLevel(localLevel);
     setUpdate(false);
     setExpanded(true);
-  }
+  };
 
   useEffect(() => {
-    dispatch({ type: "SET_RESET", payload: props.level });
+    dispatch({ type: "SET_RESET", payload: level });
   }, [
-    props.level.action,
-    props.level.department_id,
-    props.level.duration,
-    props.level.id,
-    props.level.employee_id,
-    props.level.model,
+    level.management_id,
+    level.employee_id,
+    level.accept,
+    level.approval,
+    level.period,
+    level.form_id,
+    level.id,
   ]);
+  console.log(level);
+
+  const formDisabled = !update;
 
   return (
     <Stack my={0.5}>
@@ -45,7 +50,6 @@ function LevelItem(props: PropsType) {
         disableGutters
       >
         <AccordionSummary
-          // expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           sx={{ ".MuiAccordionSummary-content": { my: 0.75 } }}
           id="panel1a-header"
@@ -61,18 +65,18 @@ function LevelItem(props: PropsType) {
               variant="text"
               startIcon={<AddCircleOutlineIcon />}
               onClick={() => {
-                // setUpdate(true);
                 setExpanded(!expanded);
               }}
             >
-              {props.name}
+              {nameBtn}
             </Button>
+
             <Stack direction="row" alignItems="center" gap={1}>
               {update && (
                 <>
                   <Button
                     startIcon={<EditIcon />}
-                    onClick={updateLevel}
+                    onClick={localUpdateLevel}
                     color={"success"}
                     variant={"contained"}
                     disableElevation
@@ -81,7 +85,7 @@ function LevelItem(props: PropsType) {
                   </Button>
                   <Button
                     onClick={() => {
-                      dispatch({ type: "SET_RESET", payload: props.level });
+                      dispatch({ type: "SET_RESET", payload: level });
                       setUpdate(false);
                     }}
                     color={"error"}
@@ -104,12 +108,13 @@ function LevelItem(props: PropsType) {
                   تعديل
                 </Button>
               )}
+
               <Button
                 variant="outlined"
                 color="error"
                 startIcon={<DeleteIcon />}
-                disabled={!props.onDelete}
-                onClick={props.onDelete}
+                disabled={!onDelete}
+                onClick={onDelete}
               >
                 حذف
               </Button>
@@ -118,23 +123,23 @@ function LevelItem(props: PropsType) {
         </AccordionSummary>
         <AccordionDetails sx={{ bgcolor: "background.paper", my: 0 }}>
           <TableComponent
-            departments={props.departments}
-            dispatch={dispatch}
+            dataForm={dataForm}
             formDisabled={formDisabled}
-            level={level}
+            level={localLevel}
+            dispatch={dispatch}
           />
         </AccordionDetails>
       </Accordion>
     </Stack>
   );
-}
+};
 
 type PropsType = {
   onDelete?: () => void;
-  level: Step;
-  departments: DepartmentWithEmployeesType[];
-  updateLevel: (payload: Step) => void;
-  name: string;
+  level: StepType;
+  dataForm: FormData;
+  updateLevel: (payload: StepType) => void;
+  nameBtn: string;
 };
 
 export default LevelItem;

@@ -1,5 +1,5 @@
 import { ReducerAction } from "../../../../types";
-import { RequestStatusType } from "../../procedures/types";
+import { RequestStatusType } from "../types/ProceduresModel";
 import { FilterType, OrderByType } from "./FilterType";
 
 function reducer(state: FilterType, action: ActionTypes): FilterType {

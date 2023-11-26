@@ -15,8 +15,8 @@ import {
   Alert,
 } from "@mui/material";
 import { EmployeeRequest, EmployeeType } from "../../../../types";
-import { ProceduresModelTypeCode } from "../../procedures/types";
-import { modelNamesIds } from "../../procedures/ModelTypes";
+import { ProceduresModelTypeCode } from "../types/ProceduresModel";
+import { modelNamesIds } from "../ModelTypes";
 import { useEffect, useReducer, useState } from "react";
 import { ModelFormInitial, reducer } from "./reducer";
 import { ModelStatusType } from "./ModelFormType";

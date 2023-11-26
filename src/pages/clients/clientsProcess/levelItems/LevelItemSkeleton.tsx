@@ -2,7 +2,7 @@ import { Stack, Skeleton } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 
-function LevelItemPlaceholder() {
+function LevelItemSkeleton() {
   return (
     <Stack my={0.5}>
       <Accordion
@@ -34,4 +34,4 @@ function LevelItemPlaceholder() {
   );
 }
 
-export default LevelItemPlaceholder;
+export default LevelItemSkeleton;

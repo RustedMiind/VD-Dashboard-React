@@ -1,12 +1,11 @@
-import { Grid, Paper, TextField, Menu, MenuItem } from "@mui/material";
+import { Grid, Paper, TextField, MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import SelectCustom from "../../../../components/MuiCustom";
-import { useEffect, useReducer, useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import reducer, { ActionTypes, FiltersInit } from "./reducer";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { ActionTypes } from "./reducer";
 import { FilterType, OrderByType } from "./FilterType";
 import { DateFormatString } from "../../../../constants/DateFormat";
-import { RequestStatusType } from "../../procedures/types";
+
 import { Department } from "../../../../types";
 import axios from "axios";
 import { Api } from "../../../../constants";
@@ -102,9 +101,7 @@ function Filters(props: PropsType) {
           onChange={(e) => {
             props.dispatch({
               type: "SET_STATUS",
-              payload: e.target.value as unknown as
-                | RequestStatusType
-                | undefined,
+              payload: e.target.value as unknown as undefined,
             });
           }}
         >

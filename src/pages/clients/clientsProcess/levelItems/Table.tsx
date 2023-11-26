@@ -1,32 +1,28 @@
 import {
   Box,
-  InputAdornment,
   Checkbox,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
-} from "@mui/material";
-import {
-  TableContainer,
+  Select,
   Table,
-  TableHead,
-  TableRow,
   TableBody,
   TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
 } from "@mui/material";
-import { ActionTypes } from "./reducer";
-import { ProceduresModelTypeCode, Step } from "../types";
-import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
-import { modelNamesIds } from "../ModelTypes";
+import { FormData } from "../types/FormData";
+import { StepType } from "../types/Step";
+import React from "react";
 
-function TableComponent({
-  level,
+const TableComponent = ({
   formDisabled,
+  level,
+  dataForm,
   dispatch,
-  departments,
-}: PropsType) {
+}: PropsType) => {
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -44,147 +40,118 @@ function TableComponent({
           <TableRow>
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl
-                  fullWidth
-                  size={"small"}
-                  // disabled={props.disabled}
-                >
+                <FormControl fullWidth size={"small"}>
                   <InputLabel size="small">القسم</InputLabel>
                   <Select
                     label={"القسم"}
                     size={"small"}
-                    value={level.department_id}
+                    value={level.management_id}
                     disabled={formDisabled}
                     onChange={(e) => {
                       dispatch({
-                        type: "SET_EMPLOYEE",
-                        payload: 0,
-                      });
-                      dispatch({
-                        type: "SET_MANAGER",
+                        type: "SET_MANAGEMENT",
                         payload: e.target.value as number,
                       });
                     }}
                   >
-                    {departments.map((department) => (
-                      <MenuItem
-                        key={department.departmentId}
-                        value={department.departmentId}
-                      >
-                        {department.departmentName}
+                    {dataForm?.Management?.map(({ id, name }) => (
+                      <MenuItem key={id} value={id}>
+                        {name}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               </Box>
             </TableCell>
+
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl
-                  fullWidth
-                  size={"small"}
-                  // disabled={props.disabled}
-                >
+                <FormControl fullWidth size={"small"}>
                   <InputLabel size="small">الموظف</InputLabel>
                   <Select
                     label={"الموظف"}
                     size={"small"}
-                    value={level.employee_id}
                     disabled={formDisabled}
+                    value={level.employee_id}
                     onChange={(e) => {
-                      console.log(departments);
                       dispatch({
                         type: "SET_EMPLOYEE",
                         payload: e.target.value as number,
                       });
                     }}
                   >
-                    {departments
-                      .find(
-                        (department) =>
-                          department.departmentId === level.department_id
-                      )
-                      ?.employees.map((employee) => (
-                        <MenuItem
-                          key={employee.employee_id}
-                          value={employee.employee_id}
-                        >
-                          {employee.employeeName}
-                        </MenuItem>
-                      ))}
+                    {dataForm?.employees?.map(({ id, name }) => (
+                      <MenuItem key={id} value={id}>
+                        {name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Box>
             </TableCell>
+
             <TableCell>
               <Checkbox
                 name="accepted"
+                value={level.accept}
                 disabled={formDisabled}
-                checked={level.action === 1 || level.action === 3}
                 onChange={(e) => {
                   dispatch({
-                    type: "SET_ACCEPTED",
+                    type: "SET_ACCEPT",
                     payload: 1,
                   });
                 }}
               />
             </TableCell>
+
             <TableCell>
               <Checkbox
-                disabled={formDisabled}
                 name="approved"
-                checked={level.action === 2 || level.action === 3}
+                disabled={formDisabled}
+                value={level.approval}
                 onChange={(e) => {
                   dispatch({
-                    type: "SET_APPROVED",
-                    payload: 2,
+                    type: "SET_APPROVAL",
+                    payload: 1,
                   });
                 }}
               />
             </TableCell>
+
             <TableCell>
               <TextField
                 size="small"
-                disabled={formDisabled}
                 label="مدة التجاوز"
-                value={level.duration}
+                disabled={formDisabled}
+                value={level.period}
                 onChange={(e) => {
                   dispatch({
                     type: "SET_DURATION",
                     payload: e.target.value,
                   });
                 }}
-                sx={{ width: { lg: 150, xl: 200 }, minWidth: "none" }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">ساعة</InputAdornment>
-                  ),
-                }}
               />
             </TableCell>
+
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl
-                  fullWidth
-                  size={"small"}
-                  // disabled={props.disabled}
-                >
+                <FormControl fullWidth size={"small"}>
                   <InputLabel size="small">النموذج</InputLabel>
                   <Select
                     label={"النموذج"}
                     size={"small"}
-                    value={level.model}
                     disabled={formDisabled}
+                    value={level.form_id}
                     onChange={(e) => {
                       dispatch({
                         type: "SET_MODEL",
-                        payload: e.target.value as ProceduresModelTypeCode,
+                        payload: e.target.value as number,
                       });
                     }}
                   >
-                    {modelNamesIds.map((model) => (
-                      <MenuItem key={model.id} value={model.id}>
-                        {model.name}
+                    {dataForm?.contractForm?.map(({ id, name }) => (
+                      <MenuItem key={id} value={id}>
+                        {name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -196,13 +163,13 @@ function TableComponent({
       </Table>
     </TableContainer>
   );
-}
+};
 
 type PropsType = {
   formDisabled: boolean;
-  dispatch: React.Dispatch<ActionTypes>;
-  level: Step;
-  departments: DepartmentWithEmployeesType[];
+  level: StepType;
+  dataForm: FormData;
+  dispatch: React.Dispatch<any>;
 };
 
 export default TableComponent;

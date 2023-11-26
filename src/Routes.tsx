@@ -8,8 +8,8 @@ import Contracts from "./pages/contracts/data";
 import CreateContracts from "./pages/contracts/addContracts/CreateContracts";
 import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
-import ClientProcedures from "./pages/clients/procedures";
-import ClientRequests from "./pages/clients/requests";
+import ClientRequests from "./pages/clients/clientRequest";
+import ClientProcess from "./pages/clients/clientsProcess";
 
 function RoutesComponent() {
   return (
@@ -25,7 +25,7 @@ function RoutesComponent() {
           <Route path="add" element={<AddClient />} />
           <Route path=":name/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />
-          <Route path="procedures" element={<ClientProcedures />} />
+          <Route path="procedures" element={<ClientProcess />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />

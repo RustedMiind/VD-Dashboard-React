@@ -1,9 +1,13 @@
-import { Box, Tab, Tabs, Button} from "@mui/material";
-// Icons
+import { Box, Button, Tab, Tabs } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { requestsIds } from "./RequestsIds";
+import { requestsIds } from "./RequestIds";
 
-function TabsAndAdd(props: PropsType) {
+const TabsAndAdd = ({
+  currentTab,
+  setCurrentTab,
+  addLevel,
+  disabled,
+}: PropsType) => {
   return (
     <Box
       mt={2}
@@ -14,34 +18,28 @@ function TabsAndAdd(props: PropsType) {
       alignItems="end"
     >
       <Button
+        onClick={addLevel}
         variant="contained"
         startIcon={<AddCircleOutlineIcon />}
         sx={{ mb: 1 }}
-        onClick={props.addLevel}
-        disabled={props.disabled}
       >
         اضافة مرحلة جديدة
       </Button>
 
       <Tabs
         aria-label="basic tabs example"
-        value={props.currentTab}
+        value={currentTab}
         onChange={(e, v) => {
-          props.setCurrentTab(v);
+          setCurrentTab(v);
         }}
       >
-        {requestsIds.map((req) => (
-          <Tab
-            key={req.id}
-            label={req.name}
-            value={req.id}
-            disabled={props.disabled}
-          />
+        {requestsIds.map(({ id, name }) => (
+          <Tab key={id} label={name} value={id} disabled={disabled} />
         ))}
       </Tabs>
     </Box>
   );
-}
+};
 
 type PropsType = {
   addLevel: () => void;
