@@ -14,7 +14,10 @@ function VacationDetails({ details }: PropsType) {
         value={formatDate(details.requestable?.date)}
       />
       {/* Static */}
-      <DataInputLike title="رصيد الاجازات بعد العودة" value={"0"} />
+      <DataInputLike
+        title="رصيد الاجازات بعد العودة"
+        value={details.requestable?.vacation_credit}
+      />
       <DataInputLike
         title="العنوان اثناء الاجازة"
         cols={12}

@@ -38,7 +38,7 @@ function DetailsDialog(props: PropsType) {
   }, [props.open]);
 
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth>
+    <Dialog open={props.open} onClose={props.onClose} maxWidth="sm" fullWidth>
       <DialogTitle>نوع الطلب</DialogTitle>
       <DialogContent>
         <Grid container>
