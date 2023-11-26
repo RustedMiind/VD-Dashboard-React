@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/system";
-import DoubleChips from "../../../../components/DoubleStatusChips";
+import DoubleChips from "../../../components/DoubleStatusChips";
 import BtnCus from "./BtnCus";
 import { Button, Typography } from "@mui/material";
 import { PropType } from "./TableHeader";
@@ -25,10 +25,10 @@ export default function TopTable({ value }: PropType) {
       >
         {value === 0 && (
           <Stack direction={"row"} spacing={2} mb={1}>
+            <DoubleChips color="success" label="عنوان البوكس" value="123" />
+            <DoubleChips color="warning" label="عنوان البوكس" value="123" />
             <DoubleChips color="error" label="عنوان البوكس" value="123" />
             <DoubleChips color="primary" label="عنوان البوكس" value="123" />
-            <DoubleChips color="secondary" label="عنوان البوكس" value="123" />
-            <DoubleChips color="warning" label="عنوان البوكس" value="123" />
           </Stack>
         )}
         <Box>

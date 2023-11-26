@@ -1,11 +1,20 @@
 import React from "react";
 import TopTable from "./topTable/TopTable";
-import ContractsTable from "./Table";
+import ContractsTable from "./addContracts/Table";
 import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
-import { ContractRequest } from "../../../types/ContractRequest";
+import { ContractRequest } from "../../types/ContractRequest";
+import PopUpContracts from "./addContracts/FormComponents/PopUpContracts";
 function Panal(props: PropType) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -47,17 +56,17 @@ function Panal(props: PropType) {
             aria-label="basic tabs example"
           >
             <Tab label="بيانات العقود" />
-            <Tab label="ادارة العقود" />
+            <Tab label="ادارة العقود" disabled />
           </Tabs>
           <Button
             variant="contained"
             startIcon={<AddCircleOutlineIcon />}
             sx={{ mr: 5 }}
-            component={NavLink}
-            to={"add"}
+            onClick={handleClickOpen}
           >
             اضافة عقد
           </Button>
+          <PopUpContracts handleClose={handleClose} open={open} />
         </Box>
         <CustomTabPanel value={value} index={0}>
           <Paper

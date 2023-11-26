@@ -29,7 +29,7 @@ export type ContractRequest = {
   // levers: null;
 };
 
-type ContractType = {
+export type ContractType = {
   id: number;
   name: string;
   // created_at: null;

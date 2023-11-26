@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState, useReducer, useContext } from "react";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Accordion from "@mui/material/Accordion";
@@ -6,26 +7,22 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
-import { Theme, useTheme } from "@mui/material/styles";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import SelectItem, { OptionType } from "./FormComponents/Select";
+import TextInput from "./FormComponents/TextInput";
+import { ContractRequest } from "../../../types/ContractRequest";
+import { Api } from "../../../constants";
+import axios from "axios";
+import { reducer, contractIntial } from "./FormComponents/reducer";
+import {
+  ContextProvider,
+  ContractCreationOptionContext,
+} from "../Context/Store";
+import { contractTypes } from "./ContractTyeps";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 const paddingSize = 0.1;
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -38,40 +35,27 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
-function getStyles(name: string, personName: string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 const ContractData = () => {
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
+  const [requests, setRequests] = useState<ContractRequest[] | null>(null);
+  const [contractData, dispatch] = useReducer(reducer, contractIntial);
+  const [option, setOption] = useContext(ContractCreationOptionContext);
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
-  };
+  console.log(contractData);
+  useEffect(() => {
+    axios
+      .get<{ data: ContractRequest[] }>(Api("employee/contract"))
+      .then((res) => {
+        setRequests(res.data.data);
+        console.log(res.data.data, "dd");
+      })
+      .catch((err) => {
+        setRequests(null);
+      });
+  }, []);
+
   return (
-    <Accordion sx={{ mb: 3 }}>
+    <Accordion sx={{ mb: 3 }} defaultExpanded>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -90,163 +74,53 @@ const ContractData = () => {
         >
           <Grid container>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  نوع الفرع
-                </Typography>
-                <FormControl sx={{ m: 1, width: 470 }}>
-                  <Select
-                    size="small"
-                    multiple
-                    displayEmpty
-                    value={personName}
-                    onChange={handleChange}
-                    input={<OutlinedInput />}
-                    renderValue={(selected) => {
-                      if (selected.length === 0) {
-                        return <em>نوع الفرع</em>;
-                      }
-
-                      return selected.join(", ");
-                    }}
-                    MenuProps={MenuProps}
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem disabled value="">
-                      <em>نوع الفرع</em>
-                    </MenuItem>
-                    {names.map((name) => (
-                      <MenuItem
-                        key={name}
-                        value={name}
-                        style={getStyles(name, personName, theme)}
-                      >
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
+              {/* <SelectItem
+                  selected={null}
+                  options={requests}
+                  setSelected={() => {
+                    return (select: OptionType | null) => {};
+                  }}
+                  title="نوع الفرع"
+                /> */}
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  الاداره
-                </Typography>
-                <FormControl sx={{ m: 1, width: 470 }}>
-                  <Select
-                    size="small"
-                    multiple
-                    displayEmpty
-                    value={personName}
-                    onChange={handleChange}
-                    input={<OutlinedInput />}
-                    renderValue={(selected) => {
-                      if (selected.length === 0) {
-                        return <em>الاداره</em>;
-                      }
-
-                      return selected.join(", ");
-                    }}
-                    MenuProps={MenuProps}
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem disabled value="">
-                      <em>الاداره</em>
-                    </MenuItem>
-                    {names.map((name) => (
-                      <MenuItem
-                        key={name}
-                        value={name}
-                        style={getStyles(name, personName, theme)}
-                      >
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
+              <SelectItem
+                selected={option}
+                options={contractTypes.map((o) => ({
+                  title: o.name,
+                  value: o.type,
+                }))}
+                setSelected={() => {
+                  return (select: OptionType | null) => {};
+                }}
+                title="الاداره"
+              />
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  مده العقد
-                </Typography>
-                <TextField
-                  id="outlined-phone-input"
-                  type="text"
-                  required
-                  size="small"
-                  placeholder="مده العقد"
-                />
-              </Stack>
+              <TextInput title={"مدة العقد"} />
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  رقم العقد
-                </Typography>
-                <TextField
-                  id="outlined-email-input"
-                  type="text"
-                  required
-                  size="small"
-                />
-              </Stack>
+              <TextInput title={"رقم العقد"} />
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  نوع العقد
-                </Typography>
-                <FormControl sx={{ m: 1, width: 470 }}>
-                  <Select
-                    size="small"
-                    multiple
-                    displayEmpty
-                    value={personName}
-                    onChange={handleChange}
-                    input={<OutlinedInput />}
-                    renderValue={(selected) => {
-                      if (selected.length === 0) {
-                        return <em>اختر</em>;
-                      }
-
-                      return selected.join(", ");
-                    }}
-                    MenuProps={MenuProps}
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem disabled value="">
-                      <em>اختر</em>
-                    </MenuItem>
-                    {names.map((name) => (
-                      <MenuItem
-                        key={name}
-                        value={name}
-                        style={getStyles(name, personName, theme)}
-                      >
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
+              <SelectItem
+                selected={option}
+                options={contractTypes.map((o) => ({
+                  title: o.name,
+                  value: o.type,
+                }))}
+                setSelected={(e) => {
+                  setOption && setOption(parseInt(e.target.value));
+                }}
+                title="نوع العقد"
+              />
+              {/* <div>
+                {option} {typeof option}
+              </div> */}
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  موضوع العقد
-                </Typography>
-                <TextField
-                  id="outlined-address-input"
-                  type="text"
-                  required
-                  size="small"
-                />
-              </Stack>
+              <TextInput title="موضوع العقد" />
             </Grid>
-
             <Grid item p={paddingSize} md={6}>
               <Stack>
                 <Typography sx={{ ml: 2 }} component="label">
@@ -263,18 +137,7 @@ const ContractData = () => {
               </Stack>
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  العميل
-                </Typography>
-                <TextField
-                  id="outlined-address-input"
-                  type="text"
-                  required
-                  size="small"
-                  placeholder="اسم العميل"
-                />
-              </Stack>
+              <TextInput title="اسم العميل" />
             </Grid>
             <Grid item p={paddingSize} md={6}>
               <Stack>
@@ -290,7 +153,7 @@ const ContractData = () => {
                 />
               </Stack>
             </Grid>
-            <Grid item p={paddingSize} md={5}>
+            <Grid item p={paddingSize} md={6}>
               <Stack>
                 <Typography sx={{ ml: 2 }} component="label">
                   ارفاق صورة الهويه
@@ -308,43 +171,14 @@ const ContractData = () => {
               </Stack>
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  المهندس المسؤول
-                </Typography>
-                <FormControl sx={{ m: 1, width: 470 }}>
-                  <Select
-                    size="small"
-                    multiple
-                    displayEmpty
-                    value={personName}
-                    onChange={handleChange}
-                    input={<OutlinedInput />}
-                    renderValue={(selected) => {
-                      if (selected.length === 0) {
-                        return <em>المهندس المسؤول</em>;
-                      }
-
-                      return selected.join(", ");
-                    }}
-                    MenuProps={MenuProps}
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem disabled value="">
-                      <em>المهندس المسؤول</em>
-                    </MenuItem>
-                    {names.map((name) => (
-                      <MenuItem
-                        key={name}
-                        value={name}
-                        style={getStyles(name, personName, theme)}
-                      >
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
+              <SelectItem
+                selected={null}
+                options={[]}
+                setSelected={() => {
+                  return (select: OptionType | null) => {};
+                }}
+                title="المهندس المسؤول"
+              />
             </Grid>
           </Grid>
         </Box>

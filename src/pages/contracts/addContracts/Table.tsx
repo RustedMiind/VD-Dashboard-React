@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ContractRequest } from "../../../types/ContractRequest";
-import TableHeader from "./topTable/TableHeader";
+import TableHeader from "../topTable/TableHeader";
 
 function ContractsTable({ requests, value }: PropsType) {
   console.log(value);
@@ -27,14 +27,10 @@ function ContractsTable({ requests, value }: PropsType) {
                     <Checkbox />
                   </TableCell>
                   <TableCell>{request.code}</TableCell>
-                  <TableCell>
-                    {value === 0 ? request.type.name : request.date}
-                  </TableCell>
-                  <TableCell>
-                    {value === 0 ? request.client?.name : request.date}
-                  </TableCell>
-                  <TableCell></TableCell>
-                  <TableCell>{request.employee.phone}</TableCell>
+                  <TableCell>{request.type.name}</TableCell>
+                  <TableCell>{request.client?.name}</TableCell>
+                  <TableCell>{request.branch.name}</TableCell>
+                  <TableCell>{request.client?.phone}</TableCell>
                   <TableCell>{request.period}</TableCell>
                   <TableCell>{request.end_date_period}</TableCell>
                   <TableCell>{request.employee.name}</TableCell>
