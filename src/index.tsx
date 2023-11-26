@@ -16,8 +16,8 @@ import { DevUser } from "./DevUser";
 import { DevUserType } from "./DevUserType";
 
 console.table({
-  Version: "1.1.4",
-  Comment: "Activated End Date filter in employees requests",
+  Version: "1.2.2",
+  Comment: "Added Mission Expectet time to details dialog",
 });
 
 const devUser: DevUserType = DevUser;
@@ -55,6 +55,7 @@ function resetAuth() {
   window.location.replace(Domain("admin/login"));
 }
 
+// Mount the application in mode Development or Production
 MountApp("production");
 
 function MountApp(type: "production" | "development") {
