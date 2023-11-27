@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Box,
   Button,
@@ -19,46 +18,41 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
-const bgTable = "#F3F5F7";
+import FormDialog from "./Dialog";
+import { useState } from "react";
 
 function ContractTasks() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
   return (
     <>
+      <FormDialog open={dialogOpen} handleClose={handleCloseDialog} />
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Button
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
-          component={NavLink}
-          to={"add"}
+          onClick={handleOpenDialog}
         >
           اضافة مهمه
         </Button>
       </Box>
-      <Stack sx={{ backgroundColor: bgTable }}>
+      <Stack>
         <TableContainer sx={{ height: 500 }}>
-          <Table aria-label="simple table" stickyHeader>
+          <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ backgroundColor: bgTable }}>
-                  كود المهمه
-                </TableCell>
-                <TableCell sx={{ backgroundColor: bgTable }}>
-                  اسم المهمه
-                </TableCell>
-                <TableCell sx={{ backgroundColor: bgTable }}>
-                  مده المهمه
-                </TableCell>
-                <TableCell sx={{ backgroundColor: bgTable }}>
-                  قيمة المهمه
-                </TableCell>
-                <TableCell sx={{ backgroundColor: bgTable }}>
-                  المسؤول عن المهمه
-                </TableCell>
-                <TableCell sx={{ backgroundColor: bgTable }}>
-                  الاعدادات
-                </TableCell>
+                <TableCell>كود المهمه</TableCell>
+                <TableCell>اسم المهمه</TableCell>
+                <TableCell>مده المهمه</TableCell>
+                <TableCell>قيمة المهمه</TableCell>
+                <TableCell>المسؤول عن المهمه</TableCell>
+                <TableCell>الاعدادات</TableCell>
               </TableRow>
             </TableHead>
             {
@@ -70,8 +64,8 @@ function ContractTasks() {
                   <TableCell>2000رس</TableCell>
                   <TableCell>-</TableCell>
                   <TableCell>
-                    <EditNoteIcon sx={{}} />{" "}
-                    <DeleteIcon sx={{ color: "red" }} />
+                    <EditNoteIcon />
+                    <DeleteIcon color="error" />
                   </TableCell>
                 </TableRow>
               </TableBody>
