@@ -13,15 +13,17 @@ import {
   Box,
   RadioGroup,
 } from "@mui/material";
-import { useContext, useReducer } from "react";
+import { useState, useReducer, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material";
-import { ContractCreationOptionContext } from "../../Context/Store";
 import { contractTypes } from "../ContractTyeps";
 import { contractIntial, reducer } from "./reducer";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { ContractDataType } from "../../../../types/ContractRequest";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -31,9 +33,20 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 export default function PopUpContracts(props: PropType) {
-  const [option, setOption] = useContext(ContractCreationOptionContext);
+  // const [option, setOption] = useContext(ContractCreationOptionContext);
+  const [requests, setRequests] = useState<ContractDataType | null>(null);
+  const [contract_id, setContract_id] = useState<number | undefined>(undefined);
 
-  const [contractData, dispatch] = useReducer(reducer, contractIntial);
+  useEffect(() => {
+    axios
+      .get<ContractDataType>(Api("employee/contract/use"))
+      .then((res) => {
+        setRequests(res.data);
+      })
+      .catch((err) => {
+        setRequests(null);
+      });
+  }, []);
 
   return (
     <BootstrapDialog
@@ -75,24 +88,16 @@ export default function PopUpContracts(props: PropType) {
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
               sx={{ display: "flex", justifyContent: "center" }}
-              // value={option}
-              value={contractData.type}
               onChange={(e) => {
-                // console.log("Changed !!!! ", value);
-                // console.log("setOption Exist ", !!setOption);
-                // console.log(option, setOption);
-                // if (setOption) {
-                //   setOption(value as unknown as number);
-                // }
-                dispatch({ type: "TYPE", payload: 1 });
+                setContract_id(parseInt(e.target.value));
               }}
             >
-              {contractTypes.map((option) => (
+              {requests?.contractType.map((type) => (
                 <FormControlLabel
-                  key={option.type}
-                  value={option.type}
+                  key={type.id}
+                  value={type.id}
                   control={<Radio />}
-                  label={option.name}
+                  label={type.name}
                 />
               ))}
             </RadioGroup>
@@ -100,7 +105,7 @@ export default function PopUpContracts(props: PropType) {
           <Button
             variant="contained"
             component={NavLink}
-            to={"create"}
+            to={`${contract_id}`}
             sx={{ my: 5 }}
           >
             الذهاب لصفحة الادخال المباشر

@@ -1,5 +1,4 @@
 import { TextField, Stack, Typography, MenuItem } from "@mui/material";
-import { ContractRequest } from "../../../../types/ContractRequest";
 
 function SelectItem(props: PropsType) {
   return (
@@ -9,6 +8,7 @@ function SelectItem(props: PropsType) {
       </Typography>
       <TextField
         select
+        disabled={props.isDisabled}
         size="small"
         onChange={props.setSelected}
         value={props.selected}
@@ -24,9 +24,10 @@ function SelectItem(props: PropsType) {
 }
 
 type PropsType = {
-  title: string;
-  options: OptionType[] | null;
-  selected: number | string | null;
+  isDisabled?: boolean;
+  title?: string;
+  options?: OptionType[] | undefined;
+  selected?: number | null;
   setSelected?: (
     select: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -34,5 +35,4 @@ type PropsType = {
 
 export default SelectItem;
 
-// export type OptionType = { title: string; value: string | number };
 export type OptionType = { title: string; value: string | number };

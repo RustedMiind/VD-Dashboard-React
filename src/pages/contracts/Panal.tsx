@@ -1,5 +1,5 @@
 import React from "react";
-import TopTable from "./topTable/TopTable";
+import TopTable from "./addContracts/topTable/TopTable";
 import ContractsTable from "./addContracts/Table";
 import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";

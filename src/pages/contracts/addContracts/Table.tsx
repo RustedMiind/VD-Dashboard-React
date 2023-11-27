@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { ContractRequest } from "../../../types/ContractRequest";
-import TableHeader from "../topTable/TableHeader";
+import TableHeader from "./topTable/TableHeader";
 
 function ContractsTable({ requests, value }: PropsType) {
   console.log(value);

@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/system";
-import DoubleChips from "../../../components/DoubleStatusChips";
+import DoubleChips from "../../../../components/DoubleStatusChips";
 import BtnCus from "./BtnCus";
 import { Button, Typography } from "@mui/material";
 import { PropType } from "./TableHeader";

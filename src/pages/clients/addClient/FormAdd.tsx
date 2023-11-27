@@ -326,7 +326,8 @@ export default function FormAdd() {
 
             {errors?.phone && (
               <Typography sx={{ color: "#F19B02" }}>
-                الرقم مسجل مسبقا{"  "}
+                {errors?.phone}
+                {"  "}
                 <Typography
                   sx={{ color: "#F19B02" }}
                   component={NavLink}

@@ -16,7 +16,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
@@ -165,9 +165,6 @@ export default function CreateContracts() {
           </Stack>
         </AccordionDetails>
       </Accordion>
-      <Button fullWidth type="submit" variant="contained" sx={{ mt: 5 }}>
-        حفظ
-      </Button>
     </Stack>
   );
 }

@@ -4,7 +4,7 @@ import EmplyeesRequests from "./pages/employees/requests";
 import EmploeesRequestsProcedures from "./pages/employees/procedures";
 import ClientData from "./pages/clients/data";
 import AddClient from "./pages/clients/addClient/AddClient";
-import Contracts from "./pages/contracts/addContracts";
+import Contracts from "./pages/contracts";
 import AddContracts from "./pages/contracts/addContracts/ContractsNotFound.1";
 import CreateContracts from "./pages/contracts/addContracts/CreateContracts";
 import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound.1";
@@ -27,7 +27,7 @@ function RoutesComponent() {
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
           <Route path="add" element={<ContractsNotFound />} />
-          <Route path="create" element={<CreateContracts />} />
+          <Route path=":id" element={<CreateContracts />} />
         </Route>
         <Route path="*" element={<div>صفحة خاطئة</div>} />
       </Route>

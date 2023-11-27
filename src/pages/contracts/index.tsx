@@ -1,10 +1,10 @@
 import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Api } from "../../../constants";
-import { ContractRequest } from "../../../types/ContractRequest";
-import SearchBar from "../SearchBar";
-import Panal from "../Panal";
+import { Api } from "../../constants";
+import { ContractRequest } from "../../types/ContractRequest";
+import SearchBar from "./SearchBar";
+import Panal from "./Panal";
 function Contracts() {
   //  object have data to search
   const DataToSearch: TypeDataToSearch = {

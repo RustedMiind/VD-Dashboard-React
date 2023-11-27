@@ -12,7 +12,7 @@ function TextInput(props: PropsType) {
           required
           size="small"
           placeholder={props.title}
-          onChange={(e) => {}}
+          onChange={props.onDataChange}
         />
       </Stack>
     </>
@@ -21,6 +21,9 @@ function TextInput(props: PropsType) {
 
 type PropsType = {
   title: string;
+  onDataChange?: (
+    change: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 };
 
 export default TextInput;

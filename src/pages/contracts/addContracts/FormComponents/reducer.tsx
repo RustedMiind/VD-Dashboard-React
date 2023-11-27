@@ -11,7 +11,6 @@ export const contractIntial: BaseContractType = {
   client_id: 0,
   branch_id: 0,
   card_image: null,
-
   management_id: 0,
   employee_id: 0,
 };
@@ -40,6 +39,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       return { ...state, card_image: action.payload };
     case "EMPLOYEE_ID":
       return { ...state, employee_id: action.payload };
+    case "MANAGEMENT_ID":
+      return { ...state, management_id: action.payload };
 
     default:
       return state;

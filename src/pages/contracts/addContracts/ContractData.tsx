@@ -13,15 +13,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem, { OptionType } from "./FormComponents/Select";
 import TextInput from "./FormComponents/TextInput";
-import { ContractRequest } from "../../../types/ContractRequest";
+import { ContractDataType } from "../../../types/ContractRequest";
 import { Api } from "../../../constants";
 import axios from "axios";
 import { reducer, contractIntial } from "./FormComponents/reducer";
-import {
-  ContextProvider,
-  ContractCreationOptionContext,
-} from "../Context/Store";
-import { contractTypes } from "./ContractTyeps";
+import { useParams } from "react-router-dom";
+import { ClientRequest } from "../../../types";
 
 const paddingSize = 0.1;
 const VisuallyHiddenInput = styled("input")({
@@ -37,22 +34,43 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const ContractData = () => {
-  const [requests, setRequests] = useState<ContractRequest[] | null>(null);
+  const { id } = useParams();
+  const [requests, setRequests] = useState<ContractDataType | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
-  const [option, setOption] = useContext(ContractCreationOptionContext);
+  const [textFilter, setTextFilter] = useState("");
+  const [filteredClients, setFilterdClients] = useState<
+    ClientRequest[] | undefined
+  >(undefined);
 
   console.log(contractData);
+
+  useEffect(() => {
+    dispatch({ type: "CONTRACT_TYPE_ID", payload: +(id || 1) });
+  }, [id]);
+
   useEffect(() => {
     axios
-      .get<{ data: ContractRequest[] }>(Api("employee/contract"))
+      .get<ContractDataType>(Api("employee/contract/use"))
       .then((res) => {
-        setRequests(res.data.data);
-        console.log(res.data.data, "dd");
+        setRequests(res.data);
       })
       .catch((err) => {
         setRequests(null);
       });
   }, []);
+
+  const handleFilter = (e: any) => {
+    // setTextFilter(e.target.value);
+    // let filtered = requests?.client.filter((client) =>
+    //   client.name.includes(textFilter)
+    // );
+    // setFilterdClients(filtered);
+  };
+
+  const postData = (e: any) => {
+    e.preventDefault();
+    console.log(filteredClients);
+  };
 
   return (
     <Accordion sx={{ mb: 3 }} defaultExpanded>
@@ -71,55 +89,84 @@ const ContractData = () => {
           }}
           noValidate
           autoComplete="off"
+          onSubmit={postData}
         >
           <Grid container>
             <Grid item p={paddingSize} md={6}>
-              {/* <SelectItem
-                  selected={null}
-                  options={requests}
-                  setSelected={() => {
-                    return (select: OptionType | null) => {};
-                  }}
-                  title="نوع الفرع"
-                /> */}
-            </Grid>
-            <Grid item p={paddingSize} md={6}>
               <SelectItem
-                selected={option}
-                options={contractTypes.map((o) => ({
-                  title: o.name,
-                  value: o.type,
-                }))}
-                setSelected={() => {
-                  return (select: OptionType | null) => {};
-                }}
-                title="الاداره"
-              />
-            </Grid>
-            <Grid item p={paddingSize} md={6}>
-              <TextInput title={"مدة العقد"} />
-            </Grid>
-            <Grid item p={paddingSize} md={6}>
-              <TextInput title={"رقم العقد"} />
-            </Grid>
-            <Grid item p={paddingSize} md={6}>
-              <SelectItem
-                selected={option}
-                options={contractTypes.map((o) => ({
-                  title: o.name,
-                  value: o.type,
+                options={requests?.branches.map((branch) => ({
+                  title: branch.name,
+                  value: branch.id,
                 }))}
                 setSelected={(e) => {
-                  setOption && setOption(parseInt(e.target.value));
+                  console.log(e.target.value);
+                  dispatch({
+                    type: "BRANCH_ID",
+                    payload: parseInt(e.target.value),
+                  });
                 }}
-                title="نوع العقد"
+                title="نوع الفرع"
               />
-              {/* <div>
-                {option} {typeof option}
-              </div> */}
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <TextInput title="موضوع العقد" />
+              <SelectItem
+                options={requests?.management.map((manage) => ({
+                  title: manage.name,
+                  value: manage.id,
+                }))}
+                setSelected={(e) => {
+                  console.log(e.target.value);
+                  dispatch({
+                    type: "MANAGEMENT_ID",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
+                title="الادارة"
+              />
+            </Grid>
+            <Grid item p={paddingSize} md={6}>
+              <TextInput
+                title={"مدة العقد"}
+                onDataChange={(e) => {
+                  dispatch({
+                    type: "PERIOD",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item p={paddingSize} md={6}>
+              <TextInput
+                title={"رقم العقد"}
+                onDataChange={(e) => {
+                  dispatch({
+                    type: "CODE",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item p={paddingSize} md={6}>
+              <SelectItem
+                isDisabled={true}
+                selected={+(id || 1)}
+                options={requests?.contractType.map((type) => ({
+                  title: type.name,
+                  value: type.id,
+                }))}
+                title="نوع العقد"
+              />
+            </Grid>
+            <Grid item p={paddingSize} md={6}>
+              <TextInput
+                title="موضوع العقد"
+                onDataChange={(e) => {
+                  dispatch({
+                    type: "DETAILS",
+                    payload: e.target.value,
+                  });
+                }}
+              />
             </Grid>
             <Grid item p={paddingSize} md={6}>
               <Stack>
@@ -131,13 +178,34 @@ const ContractData = () => {
                     <DatePicker
                       slotProps={{ textField: { size: "small" } }}
                       label="تاريخ العقد"
+                      onChange={(e: any) => {
+                        let date = `${e.$D}/${e.$M}/${e.$y}`;
+                        dispatch({ type: "DATE", payload: date });
+                      }}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
               </Stack>
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <TextInput title="اسم العميل" />
+              <TextInput
+                title={"اسم العميل"}
+                onDataChange={(e: any) => {
+                  // setTextFilter(e.target.value);
+                  let filtered = requests?.client.filter((client) =>
+                    client.name.includes(e.target.value)
+                  );
+                  setFilterdClients(filtered);
+                  // console.log(filtered)
+                }}
+              />
+              <SelectItem
+                title=""
+                options={filteredClients?.map((client) => ({
+                  title: client.name,
+                  value: client.id,
+                }))}
+              />
             </Grid>
             <Grid item p={paddingSize} md={6}>
               <Stack>
@@ -150,6 +218,12 @@ const ContractData = () => {
                   required
                   size="small"
                   placeholder="قيمه العقد"
+                  onChange={(e) => {
+                    dispatch({
+                      type: "AMOUNT",
+                      payload: parseInt(e.target.value),
+                    });
+                  }}
                 />
               </Stack>
             </Grid>
@@ -181,6 +255,9 @@ const ContractData = () => {
               />
             </Grid>
           </Grid>
+          <Button fullWidth type="submit" variant="contained">
+            حفظ
+          </Button>
         </Box>
       </AccordionDetails>
     </Accordion>
