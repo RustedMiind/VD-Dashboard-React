@@ -93,12 +93,12 @@ const TableComponent = ({
             <TableCell>
               <Checkbox
                 name="accepted"
-                value={level.accept}
+                checked={level.accept === 1}
                 disabled={formDisabled}
-                onChange={(e) => {
+                onChange={(e, checked) => {
                   dispatch({
                     type: "SET_ACCEPT",
-                    payload: 1,
+                    payload: checked ? 1 : 0,
                   });
                 }}
               />
@@ -108,11 +108,11 @@ const TableComponent = ({
               <Checkbox
                 name="approved"
                 disabled={formDisabled}
-                value={level.approval}
-                onChange={(e) => {
+                checked={level.approval === 1}
+                onChange={(e, checked) => {
                   dispatch({
                     type: "SET_APPROVAL",
-                    payload: 1,
+                    payload: checked ? 1 : 0,
                   });
                 }}
               />

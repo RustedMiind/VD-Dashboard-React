@@ -9,8 +9,10 @@ import { Api } from "../../../constants";
 import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
+// import { reducer } from "../addClient/reducer";
 
 const InitLevel: StepType = {
+  branch_id: 0,
   management_id: 0,
   period: 0,
   form_id: 0,
@@ -28,8 +30,9 @@ const ClientProcess = () => {
   const [process, setProcess] = useState<ProcedureType>({
     levels: [InitLevel],
   });
-
   const [getLevelsData, setLevelsData] = useState();
+  // const [dataLevels, dispatch] = useReducer(reducer, process.levels);
+  // console.log(dataLevels);
 
   const snackbarClose = () => {
     setSendState("none");
@@ -41,7 +44,6 @@ const ClientProcess = () => {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
-            console.log(res.data);
             setDataForm(res.data);
             resSolve();
           })
@@ -60,7 +62,6 @@ const ClientProcess = () => {
         axios
           .get(Api("employee/client/order/steps"))
           .then((res) => {
-            console.log(res.data.data);
             setLevelsData(res.data);
             setLevels(res.data.data);
             resSolve();
@@ -94,9 +95,10 @@ const ClientProcess = () => {
         };
       }
     );
+    console.log(data);
     setSendState("sending");
     axios
-      .post(Api("employee/client/order/steps/store"), ...data)
+      .post(Api("employee/client/order/steps/store"), data)
       .then((res) => {
         console.log("Done", res);
         setSendState("success");
@@ -175,7 +177,7 @@ const ClientProcess = () => {
                 const MORE_THAN_ONE = arr.length > 1;
                 return (
                   <LevelItem
-                    key={level.id}
+                    key={level.branch_id}
                     level={level}
                     updateLevel={updateLevel(index)}
                     nameBtn={`المرحلة ${index + 1}`}
@@ -201,7 +203,7 @@ const ClientProcess = () => {
             disabled={endPointStatus !== "none"}
             onClick={submitData}
           >
-            ارسال التعديلات
+            حفظ
           </LoadingButton>
         </Stack>
       </Paper>

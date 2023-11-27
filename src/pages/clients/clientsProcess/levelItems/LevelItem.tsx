@@ -2,12 +2,12 @@ import { Accordion, AccordionSummary, Button, Stack } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { AccordionDetails } from "@mui/material";
 import { StepType } from "../types/Step";
 import { FormData } from "../types/FormData";
 import TableComponent from "./Table";
-import reducer from "./reducer";
+import useReducer from "./reducer";
 
 const LevelItem = ({
   dataForm,
@@ -18,13 +18,11 @@ const LevelItem = ({
 }: PropsType) => {
   const [expanded, setExpanded] = useState(false);
   const [update, setUpdate] = useState(false);
-  const [localLevel, dispatch] = useReducer(reducer, level);
-
-  const localUpdateLevel = () => {
-    updateLevel(localLevel);
-    setUpdate(false);
-    setExpanded(true);
+  const reducer = useReducer(level);
+  const dispatch = (action: any) => {
+    updateLevel(reducer(action));
   };
+  const localLevel = level;
 
   useEffect(() => {
     dispatch({ type: "SET_RESET", payload: level });
@@ -35,7 +33,7 @@ const LevelItem = ({
     level.approval,
     level.period,
     level.form_id,
-    level.id,
+    level.branch_id,
   ]);
 
   const formDisabled = !update;
@@ -71,42 +69,17 @@ const LevelItem = ({
             </Button>
 
             <Stack direction="row" alignItems="center" gap={1}>
-              {update && (
-                <>
-                  <Button
-                    startIcon={<EditIcon />}
-                    onClick={localUpdateLevel}
-                    color={"success"}
-                    variant={"contained"}
-                    disableElevation
-                  >
-                    حفظ التعديل
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      dispatch({ type: "SET_RESET", payload: level });
-                      setUpdate(false);
-                    }}
-                    color={"error"}
-                    variant={"contained"}
-                    disableElevation
-                  >
-                    الغاء التعديل
-                  </Button>
-                </>
-              )}
-
-              {formDisabled && (
-                <Button
-                  onClick={() => {
-                    setUpdate(true);
-                  }}
-                  variant={update ? "contained" : "outlined"}
-                  disableElevation
-                >
-                  تعديل
-                </Button>
-              )}
+              <Button
+                onClick={() => {
+                  setExpanded(!expanded);
+                  setUpdate(!update);
+                }}
+                variant={"outlined"}
+                disableElevation
+                startIcon={<EditIcon />}
+              >
+                تعديل
+              </Button>
 
               <Button
                 variant="outlined"
