@@ -1,5 +1,3 @@
-import { ContractType } from "../../../../types/ContractRequest";
-
 export const contractIntial: BaseContractType = {
   code: 0,
   date: "",

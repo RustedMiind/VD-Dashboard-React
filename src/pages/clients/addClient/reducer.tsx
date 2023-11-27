@@ -119,7 +119,7 @@ interface BrokerIdActionType extends ReducerAction<number> {
 interface LetterHeadActionType extends ReducerAction<string> {
   type: "LETTER_HEAD";
 }
-interface CardImageActionType extends ReducerAction<File> {
+interface CardImageActionType extends ReducerAction<File | null> {
   type: "CARD_IMAGE";
 }
 interface AgentNameActionType extends ReducerAction<string> {
@@ -154,7 +154,7 @@ export interface BaseFormData {
   branch_id: number;
   broker_id: number;
   letter_head: string;
-  card_image: File | null;
+  card_image?: File | null;
   email: string;
   agent_name?: string;
 }

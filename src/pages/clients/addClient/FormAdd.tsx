@@ -112,7 +112,6 @@ export default function FormAdd() {
         setErrors(tempObj);
       });
     if (card_idError) {
-      console.log("dalog2");
       return (
         <PopUpError
           card_idError={card_idError}
@@ -124,7 +123,6 @@ export default function FormAdd() {
       );
     }
     if (phoneError) {
-      console.log("dalog");
       return (
         <PopUpError
           phoneError={phoneError}

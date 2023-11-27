@@ -7,6 +7,7 @@ function SelectItem(props: PropsType) {
         {props.title}
       </Typography>
       <TextField
+        sx={{ position: "relative" }}
         select
         disabled={props.isDisabled}
         size="small"
