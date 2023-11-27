@@ -18,7 +18,7 @@ function BtnFile(props: any) {
     <Grid item p={0.1} md={6}>
       <Stack>
         <Typography sx={{ ml: 2 }} component="label">
-          صوره الهويه
+          صورة الهوية
         </Typography>
         <input
           type="file"

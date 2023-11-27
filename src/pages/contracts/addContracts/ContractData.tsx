@@ -19,6 +19,8 @@ import axios from "axios";
 import { reducer, contractIntial } from "./FormComponents/reducer";
 import { useParams } from "react-router-dom";
 import { ClientRequest } from "../../../types";
+import BtnFile from "../../clients/addClient/BtnFile";
+import { objectToFormData } from "../../../methods";
 
 const paddingSize = 0.1;
 const VisuallyHiddenInput = styled("input")({
@@ -37,10 +39,10 @@ const ContractData = () => {
   const { id } = useParams();
   const [requests, setRequests] = useState<ContractDataType | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
-  const [textFilter, setTextFilter] = useState("");
-  const [filteredClients, setFilterdClients] = useState<
-    ClientRequest[] | undefined
-  >(undefined);
+  // const [textFilter, setTextFilter] = useState("");
+  // const [filteredClients, setFilterdClients] = useState<
+  //   ClientRequest[] | undefined
+  // >(undefined);
 
   console.log(contractData);
 
@@ -59,17 +61,29 @@ const ContractData = () => {
       });
   }, []);
 
-  const handleFilter = (e: any) => {
-    // setTextFilter(e.target.value);
-    // let filtered = requests?.client.filter((client) =>
-    //   client.name.includes(textFilter)
-    // );
-    // setFilterdClients(filtered);
-  };
+  // const onFilter = (e: any) => {
+  //   setTextFilter(e.target.value);
+  //   let filtered = requests?.client.filter((client) =>
+  //     client.name.includes(textFilter)
+  //   );
+  //   setFilterdClients(filtered);
+  // let filtered = requests?.client.filter((client) =>
+  //   client.name.includes(e.target.value)
+  // );
+  // setFilterdClients(filtered);
 
-  const postData = (e: any) => {
+  // };
+
+  const addContractHandler = (e: any) => {
     e.preventDefault();
-    console.log(filteredClients);
+    axios
+      .post(Api("employee/contract/store"), objectToFormData(contractData))
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -89,11 +103,12 @@ const ContractData = () => {
           }}
           noValidate
           autoComplete="off"
-          onSubmit={postData}
+          onSubmit={addContractHandler}
         >
           <Grid container>
             <Grid item p={paddingSize} md={6}>
               <SelectItem
+                title="نوع الفرع"
                 options={requests?.branches.map((branch) => ({
                   title: branch.name,
                   value: branch.id,
@@ -105,7 +120,6 @@ const ContractData = () => {
                     payload: parseInt(e.target.value),
                   });
                 }}
-                title="نوع الفرع"
               />
             </Grid>
             <Grid item p={paddingSize} md={6}>
@@ -179,7 +193,7 @@ const ContractData = () => {
                       slotProps={{ textField: { size: "small" } }}
                       label="تاريخ العقد"
                       onChange={(e: any) => {
-                        let date = `${e.$D}/${e.$M}/${e.$y}`;
+                        let date = `${e.$D}-${e.$M}-${e.$y}`;
                         dispatch({ type: "DATE", payload: date });
                       }}
                     />
@@ -188,23 +202,18 @@ const ContractData = () => {
               </Stack>
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <TextInput
-                title={"اسم العميل"}
-                onDataChange={(e: any) => {
-                  // setTextFilter(e.target.value);
-                  let filtered = requests?.client.filter((client) =>
-                    client.name.includes(e.target.value)
-                  );
-                  setFilterdClients(filtered);
-                  // console.log(filtered)
-                }}
-              />
               <SelectItem
-                title=""
-                options={filteredClients?.map((client) => ({
+                title={"اسم العميل"}
+                options={requests?.client.map((client) => ({
                   title: client.name,
                   value: client.id,
                 }))}
+                setSelected={(e: any) => {
+                  dispatch({
+                    type: "CLIENT_ID",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
               />
             </Grid>
             <Grid item p={paddingSize} md={6}>
@@ -228,21 +237,11 @@ const ContractData = () => {
               </Stack>
             </Grid>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
-                <Typography sx={{ ml: 2 }} component="label">
-                  ارفاق صورة الهويه
-                </Typography>
-                <Box sx={{ mt: 1, ml: 1 }}>
-                  <Button
-                    component="label"
-                    variant="contained"
-                    startIcon={<CloudUploadIcon />}
-                  >
-                    ارفاق صورة
-                    <VisuallyHiddenInput type="file" />
-                  </Button>
-                </Box>
-              </Stack>
+              <Grid item p={paddingSize} md={6}>
+                <Stack>
+                  <BtnFile dispatch={dispatch} />
+                </Stack>
+              </Grid>
             </Grid>
             <Grid item p={paddingSize} md={6}>
               <SelectItem
