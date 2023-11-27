@@ -4,10 +4,10 @@ import EmplyeesRequests from "./pages/employees/requests";
 import EmploeesRequestsProcedures from "./pages/employees/procedures";
 import ClientData from "./pages/clients/data";
 import AddClient from "./pages/clients/addClient/AddClient";
-import Contracts from "./pages/contracts";
-import AddContracts from "./pages/contracts/addContracts/ContractsNotFound.1";
-import CreateContracts from "./pages/contracts/addContracts";
-import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound.1";
+import Contracts from "./pages/contracts/data";
+import AddContracts from "./pages/contracts/CreateContract/ContractsNotFound.1";
+import CreateContracts from "./pages/contracts/CreateContract";
+import ContractsNotFound from "./pages/contracts/CreateContract/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
 
 function RoutesComponent() {

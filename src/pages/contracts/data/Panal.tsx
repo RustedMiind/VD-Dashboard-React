@@ -1,11 +1,11 @@
 import React from "react";
-import TopTable from "./addContracts/topTable/TopTable";
-import ContractsTable from "./addContracts/Table";
+import TopTable from "../CreateContract/topTable/TopTable";
+import ContractsTable from "../CreateContract/Table";
 import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
-import { ContractRequest } from "../../types/ContractRequest";
-import PopUpContracts from "./addContracts/Components/PopUpContracts";
+import { ContractRequest } from "../../../types/ContractRequest";
+import PopUpContracts from "../CreateContract/Components/PopUpContracts";
 function Panal(props: PropType) {
   const [open, setOpen] = React.useState(false);
 
