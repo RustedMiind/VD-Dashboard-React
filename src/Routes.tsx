@@ -27,7 +27,11 @@ function RoutesComponent() {
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
           <Route path="add" element={<ContractsNotFound />} />
-          <Route path=":id" element={<CreateContracts />} />
+          <Route path="create/:type" element={<CreateContracts />} />
+          <Route path=":id">
+            <Route path="" element={<div>Contract Page</div>} />
+            <Route path="edit" element={<div>Contract Page Edit</div>} />
+          </Route>
         </Route>
         <Route path="*" element={<div>صفحة خاطئة</div>} />
       </Route>
