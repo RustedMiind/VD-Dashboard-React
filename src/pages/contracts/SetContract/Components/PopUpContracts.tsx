@@ -103,7 +103,7 @@ export default function PopUpContracts(props: PropType) {
           <Button
             variant="contained"
             component={NavLink}
-            to={`${contract_id}`}
+            to={`create/${contract_id}`}
             sx={{ my: 5 }}
           >
             الذهاب لصفحة الادخال المباشر
