@@ -6,7 +6,7 @@ import ClientData from "./pages/clients/data";
 import AddClient from "./pages/clients/addClient/AddClient";
 import Contracts from "./pages/contracts";
 import AddContracts from "./pages/contracts/addContracts/ContractsNotFound.1";
-import CreateContracts from "./pages/contracts/addContracts/CreateContracts";
+import CreateContracts from "./pages/contracts/addContracts";
 import ContractsNotFound from "./pages/contracts/addContracts/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
 

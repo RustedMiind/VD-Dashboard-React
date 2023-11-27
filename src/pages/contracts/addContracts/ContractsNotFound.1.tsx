@@ -19,7 +19,7 @@ import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material";
-import PopUpContracts from "./FormComponents/PopUpContracts";
+import PopUpContracts from "./Components/PopUpContracts";
 
 export default function ContractsNotFound() {
   const [open, setOpen] = React.useState(false);

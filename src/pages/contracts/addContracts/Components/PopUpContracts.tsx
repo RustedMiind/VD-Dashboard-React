@@ -19,8 +19,6 @@ import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material";
-import { contractTypes } from "../ContractTyeps";
-import { contractIntial, reducer } from "./reducer";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { ContractDataType } from "../../../../types/ContractRequest";
