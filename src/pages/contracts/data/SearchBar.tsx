@@ -1,5 +1,5 @@
 import { Button, MenuItem, Stack, TextField } from "@mui/material";
-import { ContractRequest } from "../../../types/ContractRequest";
+import { Contract } from "../../../types";
 import { TypeDataToSearch } from ".";
 
 function SearchBar(props: PropsType) {
@@ -49,7 +49,7 @@ function SearchBar(props: PropsType) {
   );
 }
 type PropsType = {
-  requests: ContractRequest[] | null;
+  requests: Contract[] | null;
   DataToSearch: TypeDataToSearch;
   search: () => void;
 };

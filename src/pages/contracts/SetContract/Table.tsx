@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ContractRequest } from "../../../types/ContractRequest";
+import { Contract } from "../../../types";
 import TableHeader from "./topTable/TableHeader";
 
 function ContractsTable({ requests, value }: PropsType) {
@@ -31,7 +31,7 @@ function ContractsTable({ requests, value }: PropsType) {
                   <TableCell>{request.client?.phone}</TableCell>
                   <TableCell>{request.period}</TableCell>
                   <TableCell>{request.end_date_period}</TableCell>
-                  <TableCell>{request.employee.name}</TableCell>
+                  <TableCell>{request.employee?.name}</TableCell>
                   <TableCell>
                     <SettingsIcon />
                   </TableCell>
@@ -46,7 +46,7 @@ function ContractsTable({ requests, value }: PropsType) {
 }
 
 type PropsType = {
-  requests: ContractRequest[] | null;
+  requests: Contract[] | null;
   value: number;
 };
 

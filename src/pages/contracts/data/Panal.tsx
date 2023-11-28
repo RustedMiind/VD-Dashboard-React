@@ -4,7 +4,7 @@ import ContractsTable from "../SetContract/Table";
 import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
-import { ContractRequest } from "../../../types/ContractRequest";
+import { Contract } from "../../../types";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
 function Panal(props: PropType) {
   const [open, setOpen] = React.useState(false);
@@ -104,6 +104,6 @@ function Panal(props: PropType) {
 }
 
 type PropType = {
-  requests: ContractRequest[] | null;
+  requests: Contract[] | null;
 };
 export default Panal;

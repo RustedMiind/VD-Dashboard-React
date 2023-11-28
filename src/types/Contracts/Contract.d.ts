@@ -22,11 +22,11 @@ export interface Contract {
   updated_at: string;
   dateEnd: string;
   end_date_period: number;
-  employee: EmployeeType;
-  tasks: ContractTask[];
-  payments: ContractPayment[];
-  branch: Branch;
-  // client: null;
+  employee?: EmployeeType;
+  tasks?: ContractTask[];
+  payments?: ContractPayment[];
+  branch?: Branch;
+  client?: ClientRequest;
   // card_image: null;
   // deleted_at: null;
   // end_date: null;
