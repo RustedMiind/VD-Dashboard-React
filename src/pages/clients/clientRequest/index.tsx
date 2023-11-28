@@ -1,26 +1,77 @@
 import axios from "axios";
 import { Api } from "../../../constants";
 import { Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import LoadingTable from "../../../components/LoadingTable";
+import { PanelData } from "./types";
+import reducer, { FiltersInit } from "./Filter/reducer";
 
 const ClientRequests = () => {
+  const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [currentTab, setCurrentTab] = useState<number>(-1);
-  const [requests, setRequests] = useState<[] | "loading" | "none" | "error">(
-    "loading"
+  const [requests, setRequests] = useState<
+    PanelData[] | "loading" | "none" | "error"
+  >("loading");
+  const [dialogRequest, setDialogRequest] = useState<PanelData | null>(null);
+  const [dialogOpen, setDialogOpen] = useState<
+    undefined | "model" | "status" | "details"
+  >(undefined);
+  const [selectedType, setSelectedType] = useState<number | undefined>(
+    undefined
   );
+  const [search, setSearch] = useState("");
+
   const getRequests = () => {
+    setRequests("loading");
+    console.log(filters);
     axios
-      .get(Api("employee/client/order"))
-      .then((res) => {
-        console.log(res);
+      .get<{ data: PanelData[] }>(Api("employee/client/order"), {
+        params: {
+          type: selectedType || null,
+          search: search || null,
+          ...{
+            dateFrom: filters.dateFrom || null,
+            dateTo: filters.dateTo || null,
+            statusOrder: filters.statusOrder || null,
+            branch_id: filters.branch_id || null,
+            typeOrder: filters.typeOrder || null,
+            orderBy: filters.orderBy || null,
+          },
+        },
+      })
+      .then(({ data }) => {
+        setRequests(data.data);
+        console.log(data.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  getRequests();
+  const handleOpenModel = (request: PanelData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("model");
+    };
+  };
+
+  const handleOpenStatus = (request: PanelData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("status");
+    };
+  };
+  const handleOpenDetails = (request: PanelData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("details");
+    };
+  };
+  const handleCloseDialog = () => {
+    setDialogOpen(undefined);
+  };
+
+  useEffect(getRequests, [selectedType, currentTab]);
 
   return (
     <>
@@ -72,6 +123,12 @@ const ClientRequests = () => {
       </Stack>
     </>
   );
+};
+
+type ResponseType = {
+  data: PanelData[];
+  msg?: string;
+  success: boolean;
 };
 
 export default ClientRequests;
