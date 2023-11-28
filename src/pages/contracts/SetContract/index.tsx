@@ -6,6 +6,7 @@ import Attachments from "./FormSections/AttachmentsSection";
 import SectionAccordion from "./Components/SectionAccordion";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ContractDetailsContextProvider from "./ContractDetailsContext";
 
 export default function CreateContracts(props: PropsType) {
   const isCreate = props.type === "create";
@@ -35,53 +36,55 @@ export default function CreateContracts(props: PropsType) {
   }, [isCreate]);
 
   return (
-    <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        {isCreate ? "انشاء عقد ادخال مباشر" : "تعديل بيانات العقد"}
-      </Typography>
-      <SectionAccordion
-        opened={currentOpened(1)}
-        setOpened={() => {
-          setCurrentOpened(1);
-        }}
-        title="بيانات العقد"
-      >
-        <ContractData />
-      </SectionAccordion>
+    <ContractDetailsContextProvider>
+      <Stack>
+        <Typography variant="h5" fontWeight={600} mb={3}>
+          {isCreate ? "انشاء عقد ادخال مباشر" : "تعديل بيانات العقد"}
+        </Typography>
+        <SectionAccordion
+          opened={currentOpened(1)}
+          setOpened={() => {
+            setCurrentOpened(1);
+          }}
+          title="بيانات العقد"
+        >
+          <ContractData />
+        </SectionAccordion>
 
-      <SectionAccordion
-        opened={currentOpened(2)}
-        setOpened={() => {
-          setCurrentOpened(2);
-        }}
-        title="بنود ومهام العقد"
-        disabled={isCreate}
-      >
-        <ContractTasks />
-      </SectionAccordion>
+        <SectionAccordion
+          opened={currentOpened(2)}
+          setOpened={() => {
+            setCurrentOpened(2);
+          }}
+          title="بنود ومهام العقد"
+          disabled={isCreate}
+        >
+          <ContractTasks />
+        </SectionAccordion>
 
-      <SectionAccordion
-        opened={currentOpened(3)}
-        setOpened={() => {
-          setCurrentOpened(3);
-        }}
-        title="دفعات العقد"
-        disabled={isCreate}
-      >
-        <Payments />
-      </SectionAccordion>
+        <SectionAccordion
+          opened={currentOpened(3)}
+          setOpened={() => {
+            setCurrentOpened(3);
+          }}
+          title="دفعات العقد"
+          disabled={isCreate}
+        >
+          <Payments />
+        </SectionAccordion>
 
-      <SectionAccordion
-        opened={currentOpened(4)}
-        setOpened={() => {
-          setCurrentOpened(4);
-        }}
-        title="مرفقات العقد"
-        disabled={isCreate}
-      >
-        <Attachments />
-      </SectionAccordion>
-    </Stack>
+        <SectionAccordion
+          opened={currentOpened(4)}
+          setOpened={() => {
+            setCurrentOpened(4);
+          }}
+          title="مرفقات العقد"
+          disabled={isCreate}
+        >
+          <Attachments />
+        </SectionAccordion>
+      </Stack>
+    </ContractDetailsContextProvider>
   );
 }
 
