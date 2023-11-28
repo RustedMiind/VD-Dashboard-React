@@ -21,7 +21,7 @@ import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { ContractDataType } from "../../../../types/ContractRequest";
+import { SelectOptions } from "../FormSections/ContractDataSection/SelectOptions";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -32,12 +32,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 export default function PopUpContracts(props: PropType) {
   // const [option, setOption] = useContext(ContractCreationOptionContext);
-  const [requests, setRequests] = useState<ContractDataType | null>(null);
+  const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contract_id, setContract_id] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     axios
-      .get<ContractDataType>(Api("employee/contract/use"))
+      .get<SelectOptions>(Api("employee/contract/use"))
       .then((res) => {
         setRequests(res.data);
       })
@@ -90,7 +90,7 @@ export default function PopUpContracts(props: PropType) {
                 setContract_id(parseInt(e.target.value));
               }}
             >
-              {requests?.contractType.map((type) => (
+              {requests?.contractType?.map((type) => (
                 <FormControlLabel
                   key={type.id}
                   value={type.id}

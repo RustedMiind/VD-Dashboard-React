@@ -12,8 +12,6 @@ import { ContractRequest } from "../../../types/ContractRequest";
 import TableHeader from "./topTable/TableHeader";
 
 function ContractsTable({ requests, value }: PropsType) {
-  console.log(value);
-
   return (
     <Stack>
       <TableContainer sx={{ height: 500 }}>

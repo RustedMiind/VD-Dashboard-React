@@ -12,7 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem, { OptionType } from "../../Components/Select";
 import TextInput from "../../Components/TextInput";
-import { ContractDataType } from "../../../../../types/ContractRequest";
+import { SelectOptions } from "./SelectOptions";
 import { Api } from "../../../../../constants";
 import axios from "axios";
 import { reducer, contractIntial } from "../../Components/reducer";
@@ -36,7 +36,7 @@ const VisuallyHiddenInput = styled("input")({
 
 const ContractData = () => {
   const { type } = useParams();
-  const [requests, setRequests] = useState<ContractDataType | null>(null);
+  const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   // const [textFilter, setTextFilter] = useState("");
   // const [filteredClients, setFilterdClients] = useState<
@@ -51,7 +51,7 @@ const ContractData = () => {
 
   useEffect(() => {
     axios
-      .get<ContractDataType>(Api("employee/contract/use"))
+      .get<SelectOptions>(Api("employee/contract/use"))
       .then((res) => {
         setRequests(res.data);
       })
@@ -59,19 +59,6 @@ const ContractData = () => {
         setRequests(null);
       });
   }, []);
-
-  // const onFilter = (e: any) => {
-  //   setTextFilter(e.target.value);
-  //   let filtered = requests?.client.filter((client) =>
-  //     client.name.includes(textFilter)
-  //   );
-  //   setFilterdClients(filtered);
-  // let filtered = requests?.client.filter((client) =>
-  //   client.name.includes(e.target.value)
-  // );
-  // setFilterdClients(filtered);
-
-  // };
 
   const addContractHandler = (e: any) => {
     e.preventDefault();
@@ -99,7 +86,7 @@ const ContractData = () => {
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             title="نوع الفرع"
-            options={requests?.branches.map((branch) => ({
+            options={requests?.branches?.map((branch) => ({
               title: branch.name,
               value: branch.id,
             }))}
@@ -114,7 +101,7 @@ const ContractData = () => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <SelectItem
-            options={requests?.management.map((manage) => ({
+            options={requests?.management?.map((manage) => ({
               title: manage.name,
               value: manage.id,
             }))}
@@ -154,7 +141,7 @@ const ContractData = () => {
           <SelectItem
             isDisabled={true}
             selected={+(type || 1)}
-            options={requests?.contractType.map((type) => ({
+            options={requests?.contractType?.map((type) => ({
               title: type.name,
               value: type.id,
             }))}
@@ -194,7 +181,7 @@ const ContractData = () => {
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             title={"اسم العميل"}
-            options={requests?.client.map((client) => ({
+            options={requests?.client?.map((client) => ({
               title: client.name,
               value: client.id,
             }))}
@@ -235,12 +222,18 @@ const ContractData = () => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <SelectItem
-            selected={null}
-            options={[]}
-            setSelected={() => {
-              return (select: OptionType | null) => {};
+            options={requests?.employees?.map((employee) => ({
+              title: employee.name,
+              value: employee.id,
+            }))}
+            setSelected={(e) => {
+              console.log(e.target.value);
+              dispatch({
+                type: "MANAGEMENT_ID",
+                payload: parseInt(e.target.value),
+              });
             }}
-            title="المهندس المسؤول"
+            title="الادارة"
           />
         </Grid>
       </Grid>
