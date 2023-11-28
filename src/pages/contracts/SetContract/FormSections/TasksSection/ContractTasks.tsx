@@ -19,7 +19,8 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import FormDialog from "./AddDialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ContractDetailsContext } from "../../ContractDetailsContext";
 
 function ContractTasks() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -29,6 +30,10 @@ function ContractTasks() {
   const handleOpenDialog = () => {
     setDialogOpen(true);
   };
+
+  const ContractDetails = useContext(ContractDetailsContext);
+  console.log("Hello From Context", ContractDetails);
+
   return (
     <>
       <FormDialog open={dialogOpen} handleClose={handleCloseDialog} />
@@ -55,21 +60,21 @@ function ContractTasks() {
                 <TableCell>الاعدادات</TableCell>
               </TableRow>
             </TableHead>
-            {
-              <TableBody>
+            <TableBody>
+              {ContractDetails?.contract?.tasks?.map((task) => (
                 <TableRow>
-                  <TableCell>002</TableCell>
-                  <TableCell>مهمة انشاء مباني معماريه</TableCell>
-                  <TableCell>شهرين</TableCell>
-                  <TableCell>2000رس</TableCell>
-                  <TableCell>-</TableCell>
+                  <TableCell>{task.id}</TableCell>
+                  <TableCell>{task.name}</TableCell>
+                  <TableCell>{task.period}</TableCell>
+                  <TableCell>{task.amount}</TableCell>
+                  <TableCell>{task.employees?.name}</TableCell>
                   <TableCell>
                     <EditNoteIcon />
                     <DeleteIcon color="error" />
                   </TableCell>
                 </TableRow>
-              </TableBody>
-            }
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
       </Stack>
