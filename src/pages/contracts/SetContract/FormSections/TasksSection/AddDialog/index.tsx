@@ -16,6 +16,15 @@ function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
 }
 
+/*
+
+Activate Delete Button
+Activate Update Button
+Add Toaster With State of Sending State 'error' || "success"
+Get Contract Data After updating any of its sub fields
+
+*/
+
 type TextfieldPropsType = TextFieldProps;
 
 function AddDialog(props: PropsType) {
