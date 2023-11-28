@@ -1,6 +1,6 @@
 import { Button, MenuItem, Stack, TextField } from "@mui/material";
 import { Contract } from "../../../types";
-import { TypeDataToSearch } from ".";
+import { TypeDataToSearch } from "./PageContent";
 
 function SearchBar(props: PropsType) {
   return (

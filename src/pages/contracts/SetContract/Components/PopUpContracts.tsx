@@ -3,20 +3,15 @@ import {
   Dialog,
   Button,
   DialogTitle,
-  Paper,
   DialogContent,
-  DialogActions,
-  Stack,
-  Typography,
   FormControlLabel,
   Radio,
   Box,
   RadioGroup,
 } from "@mui/material";
-import { useState, useReducer, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavLink } from "react-router-dom";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material";
 import axios from "axios";
@@ -34,6 +29,7 @@ export default function PopUpContracts(props: PropType) {
   // const [option, setOption] = useContext(ContractCreationOptionContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contract_id, setContract_id] = useState<number | undefined>(undefined);
+  const [isChecked, setIsChecked] = useState<string>();
 
   useEffect(() => {
     axios
@@ -96,6 +92,10 @@ export default function PopUpContracts(props: PropType) {
                   value={type.id}
                   control={<Radio />}
                   label={type.name}
+                  disabled={type.name !== "ادخال مباشر"}
+                  onChange={(e: any) => {
+                    setIsChecked(e.target.value);
+                  }}
                 />
               ))}
             </RadioGroup>
@@ -105,6 +105,7 @@ export default function PopUpContracts(props: PropType) {
             component={NavLink}
             to={`create/${contract_id}`}
             sx={{ my: 5 }}
+            disabled={!!!isChecked}
           >
             الذهاب لصفحة الادخال المباشر
           </Button>

@@ -17,9 +17,9 @@ export function ContractsContextProvider({ children }: childrenProps) {
   let [contracts, setContracts] = useState<Contract[] | null>(null);
   useEffect(getAllContracts, []);
   console.log(contracts, "context");
-  function getAllContracts() {
+  function getAllContracts(params?: any) {
     axios
-      .get<{ data: Contract[] }>(Api("employee/contract"))
+      .get<{ data: Contract[] }>(Api("employee/contract"), { params })
       .then((res) => {
         setContracts(res.data.data);
       })
@@ -38,5 +38,5 @@ export function ContractsContextProvider({ children }: childrenProps) {
 }
 type ContractContextType = {
   contracts: Contract[] | null;
-  setContracts: (() => void) | null;
+  setContracts: ((param?: any) => void) | null;
 };

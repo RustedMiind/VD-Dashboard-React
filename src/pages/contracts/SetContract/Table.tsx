@@ -18,10 +18,7 @@ function ContractsTable({ value }: PropsType) {
   const tableContext = useContext(ContractContext);
   const chekedArray: number[] = selectedItems;
   const { contracts } = useContext(ContractsContext);
-  console.log(chekedArray);
   useEffect(() => {
-    console.log(chekedArray);
-
     tableContext?.setIndex(chekedArray);
   }, [selectedItems]);
 
@@ -49,7 +46,6 @@ function ContractsTable({ value }: PropsType) {
                 <TableRow>
                   <TableCell>
                     <Checkbox
-                      // disabled={request.Contract_status === "منتهي"}
                       checked={selectedItems.includes(request.id)}
                       value={request.id}
                       onChange={CheckboxHandler}
