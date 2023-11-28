@@ -8,19 +8,20 @@ import { Api } from "../../../../constants";
 import { useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { Contract } from "../../../../types";
+import { ContractsContext } from "../../Context/ContractsContext";
+
 export default function BtnCus({ setRequests }: PropsType) {
   const deletedClientsIds = useContext(ContractContext);
-
+  const contractsContext = useContext(ContractsContext);
   function Delete() {
     console.log(deletedClientsIds);
-
     axios
       .post<{ data: Contract }>(Api("employee/contract/delete"), {
         id: deletedClientsIds?.index,
       })
       .then((res) => {
         console.log(res);
-        // setRequests(res.data);
+        contractsContext.setContracts && contractsContext.setContracts();
       })
       .catch((err) => {
         console.log(err);

@@ -3,10 +3,9 @@ import TopTable from "../SetContract/topTable/TopTable";
 import ContractsTable from "../SetContract/Table";
 import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { NavLink } from "react-router-dom";
 import { Contract } from "../../../types";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
-function Panal(props: PropType) {
+function Panal() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -79,8 +78,8 @@ function Panal(props: PropType) {
             }}
             elevation={4}
           >
-            <TopTable value={value} setRequests={props.setRequests} />
-            <ContractsTable requests={props.requests} value={value} />
+            <TopTable value={value} />
+            <ContractsTable value={value} />
           </Paper>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
@@ -94,8 +93,8 @@ function Panal(props: PropType) {
             }}
             elevation={4}
           >
-            <TopTable value={value} setRequests={props.setRequests} />
-            <ContractsTable requests={props.requests} value={value} />
+            <TopTable value={value} />
+            <ContractsTable value={value} />
           </Paper>
         </CustomTabPanel>
       </Box>
@@ -103,8 +102,4 @@ function Panal(props: PropType) {
   );
 }
 
-type PropType = {
-  requests: Contract[] | null;
-  setRequests: React.Dispatch<React.SetStateAction<Contract[] | null>>;
-};
 export default Panal;

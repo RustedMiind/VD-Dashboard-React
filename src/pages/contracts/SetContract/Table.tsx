@@ -12,12 +12,12 @@ import { Contract } from "../../../types";
 import TableHeader from "./topTable/TableHeader";
 import { useContext, useEffect, useState } from "react";
 import { ContractContext } from "../Context/Store";
-import { IdListType } from "../../clients/data/Table";
-
-function ContractsTable({ requests, value }: PropsType) {
+import { ContractsContext } from "../Context/ContractsContext";
+function ContractsTable({ value }: PropsType) {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const tableContext = useContext(ContractContext);
   const chekedArray: number[] = selectedItems;
+  const { contracts } = useContext(ContractsContext);
   console.log(chekedArray);
   useEffect(() => {
     console.log(chekedArray);
@@ -44,7 +44,7 @@ function ContractsTable({ requests, value }: PropsType) {
         <Table aria-label="simple table" stickyHeader>
           <TableHeader value={value} />
           <TableBody>
-            {requests?.map((request) => {
+            {contracts?.map((request) => {
               return (
                 <TableRow>
                   <TableCell>
@@ -77,7 +77,6 @@ function ContractsTable({ requests, value }: PropsType) {
 }
 
 type PropsType = {
-  requests: Contract[] | null;
   value: number;
 };
 

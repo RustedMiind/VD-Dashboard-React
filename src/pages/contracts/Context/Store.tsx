@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createContext } from "react";
-import { IdListType } from "../../clients/data/Table";
 
 type childrenProps = {
   children: React.ReactNode;

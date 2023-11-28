@@ -204,7 +204,7 @@ const ContractData = () => {
             setSelected={(e) => {
               console.log(e.target.value);
               dispatch({
-                type: "MANAGEMENT_ID",
+                type: "EMPLOYEE_ID",
                 payload: parseInt(e.target.value),
               });
             }}
