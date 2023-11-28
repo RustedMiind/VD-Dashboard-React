@@ -4,7 +4,7 @@ import BtnCus from "./BtnCus";
 import { Button, Typography } from "@mui/material";
 import { PropType } from "./TableHeader";
 
-export default function TopTable({ value }: PropType) {
+export default function TopTable({ value, setRequests }: PropType) {
   return (
     <Stack>
       {value === 0 ? (
@@ -32,7 +32,7 @@ export default function TopTable({ value }: PropType) {
           </Stack>
         )}
         <Box>
-          <BtnCus />
+          <BtnCus setRequests={setRequests} />
         </Box>
       </Stack>
     </Stack>

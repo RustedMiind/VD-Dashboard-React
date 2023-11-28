@@ -5,6 +5,7 @@ import { Api } from "../../../constants";
 import SearchBar from "./SearchBar";
 import Panal from "./Panal";
 import { Contract } from "../../../types";
+import { IndexContextProvider } from "../Context/Store";
 function Contracts() {
   //  object have data to search
   const DataToSearch: TypeDataToSearch = {
@@ -44,14 +45,16 @@ function Contracts() {
       });
   }, []);
   return (
-    <Stack>
-      <SearchBar
-        requests={requests}
-        DataToSearch={DataToSearch}
-        search={search}
-      />
-      <Panal requests={requests} />
-    </Stack>
+    <IndexContextProvider>
+      <Stack>
+        <SearchBar
+          requests={requests}
+          DataToSearch={DataToSearch}
+          search={search}
+        />
+        <Panal requests={requests} setRequests={setRequests} />
+      </Stack>
+    </IndexContextProvider>
   );
 }
 

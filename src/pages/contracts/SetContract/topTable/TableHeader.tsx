@@ -1,6 +1,7 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
+import { Contract } from "../../../../types";
 export default function TableHeader({ value }: PropType) {
   return (
     <TableHead>
@@ -29,5 +30,6 @@ export default function TableHeader({ value }: PropType) {
   );
 }
 export type PropType = {
-  value: number;
+  value?: number;
+  setRequests?: React.Dispatch<React.SetStateAction<Contract[] | null>>;
 };

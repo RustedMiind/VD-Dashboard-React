@@ -79,7 +79,7 @@ function Panal(props: PropType) {
             }}
             elevation={4}
           >
-            <TopTable value={value} />
+            <TopTable value={value} setRequests={props.setRequests} />
             <ContractsTable requests={props.requests} value={value} />
           </Paper>
         </CustomTabPanel>
@@ -94,7 +94,7 @@ function Panal(props: PropType) {
             }}
             elevation={4}
           >
-            <TopTable value={value} />
+            <TopTable value={value} setRequests={props.setRequests} />
             <ContractsTable requests={props.requests} value={value} />
           </Paper>
         </CustomTabPanel>
@@ -105,5 +105,6 @@ function Panal(props: PropType) {
 
 type PropType = {
   requests: Contract[] | null;
+  setRequests: React.Dispatch<React.SetStateAction<Contract[] | null>>;
 };
 export default Panal;

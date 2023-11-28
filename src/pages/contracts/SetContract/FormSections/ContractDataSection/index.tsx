@@ -1,50 +1,25 @@
-import * as React from "react";
-import { useEffect, useState, useReducer, useContext } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { styled } from "@mui/material/styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import SelectItem, { OptionType } from "../../Components/Select";
+import SelectItem from "../../Components/Select";
 import TextInput from "../../Components/TextInput";
 import { SelectOptions } from "./SelectOptions";
 import { Api } from "../../../../../constants";
 import axios from "axios";
 import { reducer, contractIntial } from "../../Components/reducer";
 import { useParams } from "react-router-dom";
-import { ClientRequest } from "../../../../../types";
 import BtnFile from "../../../../clients/addClient/BtnFile";
 import { objectToFormData } from "../../../../../methods";
 
 const paddingSize = 0.1;
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const ContractData = () => {
   const { type } = useParams();
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
-  // const [textFilter, setTextFilter] = useState("");
-  // const [filteredClients, setFilterdClients] = useState<
-  //   ClientRequest[] | undefined
-  // >(undefined);
-
-  console.log(contractData);
-
   useEffect(() => {
     dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
   }, [type]);
@@ -233,7 +208,7 @@ const ContractData = () => {
                 payload: parseInt(e.target.value),
               });
             }}
-            title="الادارة"
+            title="المهندس المسؤول"
           />
         </Grid>
       </Grid>

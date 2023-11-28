@@ -3,7 +3,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Stack } from "@mui/system";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
-export default function BtnCus() {
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { useContext } from "react";
+import { ContractContext } from "../../Context/Store";
+import { Contract } from "../../../../types";
+export default function BtnCus({ setRequests }: PropsType) {
+  const deletedClientsIds = useContext(ContractContext);
+
+  function Delete() {
+    console.log(deletedClientsIds);
+
+    axios
+      .post<{ data: Contract }>(Api("employee/contract/delete"), {
+        id: deletedClientsIds?.index,
+      })
+      .then((res) => {
+        console.log(res);
+        // setRequests(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
     <Stack direction={"row"}>
       <Button
@@ -17,6 +39,7 @@ export default function BtnCus() {
         sx={{ borderRadius: "10px", ml: 2, my: 2, px: 3 }}
         variant="outlined"
         startIcon={<DeleteIcon />}
+        onClick={Delete}
       >
         حذف
       </Button>
@@ -30,3 +53,8 @@ export default function BtnCus() {
     </Stack>
   );
 }
+type PropsType = {
+  setRequests:
+    | React.Dispatch<React.SetStateAction<Contract[] | null>>
+    | undefined;
+};
