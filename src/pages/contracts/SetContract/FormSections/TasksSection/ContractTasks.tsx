@@ -18,7 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import FormDialog from "./Dialog";
+import FormDialog from "./AddDialog";
 import { useState } from "react";
 
 function ContractTasks() {

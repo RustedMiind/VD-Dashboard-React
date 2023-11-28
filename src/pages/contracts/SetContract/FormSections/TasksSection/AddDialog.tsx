@@ -13,7 +13,7 @@ function FormTextField(props: TextfieldPropsType) {
 
 type TextfieldPropsType = TextFieldProps;
 
-function FormDialog(props: PropsType) {
+function AddDialog(props: PropsType) {
   return (
     <Dialog
       maxWidth="sm"
@@ -53,4 +53,4 @@ type PropsType = {
   handleClose: () => void;
 };
 
-export default FormDialog;
+export default AddDialog;
