@@ -34,6 +34,7 @@ function AddDialog(props: PropsType) {
       .then(() => {
         setSendState("success");
         props.handleClose();
+        dispatch({ type: "SET_RESET", payload: undefined });
       })
       .catch((err) => {
         console.log(err);
@@ -100,7 +101,14 @@ function AddDialog(props: PropsType) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose}>الغاء</Button>
+        <Button
+          onClick={() => {
+            props.handleClose();
+            dispatch({ type: "SET_RESET", payload: undefined });
+          }}
+        >
+          الغاء
+        </Button>
         <LoadingButton
           loading={sendState === "loading"}
           variant="contained"
