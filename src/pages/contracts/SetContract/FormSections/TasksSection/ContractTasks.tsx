@@ -61,13 +61,13 @@ function ContractTasks() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {ContractDetails?.tasks?.map((task) => (
+              {ContractDetails?.contract?.tasks?.map((task) => (
                 <TableRow>
                   <TableCell>{task.id}</TableCell>
                   <TableCell>{task.name}</TableCell>
                   <TableCell>{task.period}</TableCell>
                   <TableCell>{task.amount}</TableCell>
-                  <TableCell>{task.employee_id}</TableCell>
+                  <TableCell>{task.employees?.name}</TableCell>
                   <TableCell>
                     <EditNoteIcon />
                     <DeleteIcon color="error" />
