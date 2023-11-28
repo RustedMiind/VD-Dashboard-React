@@ -5,7 +5,8 @@ export interface Filter {
   branch_id?: number | null;
   typeOrder?: string | null;
   search?: string | null;
-  orderBy?: OrderByType | null;
+  sortBy?: OrderByType | null;
+  typeClient?: "individual" | "company" | "";
 }
 
 export type OrderByType = "desc" | "asc";

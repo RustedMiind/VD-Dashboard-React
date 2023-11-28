@@ -109,7 +109,7 @@ function RunDev() {
       device_type: "android",
     })
     .then(({ data }) => {
-      // console.log("User Data: ", data.data.user);
+      console.log("User Data: ", data.data.user);
       console.log("User Token", data.data.token);
       axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
       setCookie("db_token", data.data.token, 7);

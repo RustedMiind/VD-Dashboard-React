@@ -5,6 +5,11 @@ import { useEffect, useReducer, useState } from "react";
 import LoadingTable from "../../../components/LoadingTable";
 import { PanelData } from "./types";
 import reducer, { FiltersInit } from "./Filter/reducer";
+import ClientTableComponent from "./Table";
+import SearchBar from "./SearchBar";
+import { CountType } from "../../../types/Count";
+import RequestTypesToggles from "./Toggles";
+import StatusDialog from "./StatusDialog";
 
 const ClientRequests = () => {
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
@@ -20,28 +25,30 @@ const ClientRequests = () => {
     undefined
   );
   const [search, setSearch] = useState("");
+  const [counts, setCounts] = useState<CountType[] | null>(null);
 
   const getRequests = () => {
     setRequests("loading");
     console.log(filters);
     axios
-      .get<{ data: PanelData[] }>(Api("employee/client/order"), {
-        params: {
-          type: selectedType || null,
-          search: search || null,
-          ...{
+      .get<{ data: PanelData[]; count: CountType[] }>(
+        Api("employee/client/order"),
+        {
+          params: {
+            typeClient: filters.typeClient || null,
+            search: filters.search || null,
             dateFrom: filters.dateFrom || null,
             dateTo: filters.dateTo || null,
             statusOrder: filters.statusOrder || null,
             branch_id: filters.branch_id || null,
             typeOrder: filters.typeOrder || null,
-            orderBy: filters.orderBy || null,
+            sortBy: filters.sortBy || null,
           },
-        },
-      })
+        }
+      )
       .then(({ data }) => {
         setRequests(data.data);
-        console.log(data.data);
+        setCounts(data.count);
       })
       .catch((err) => {
         console.log(err);
@@ -72,13 +79,31 @@ const ClientRequests = () => {
   };
 
   useEffect(getRequests, [selectedType, currentTab]);
+  const IS_REQUESTS_EXISTS = typeof requests === "object";
+  let filtered: PanelData[] | undefined = IS_REQUESTS_EXISTS
+    ? requests
+    : undefined;
 
   return (
     <>
+      <StatusDialog
+        open={dialogOpen === "status"}
+        request={dialogRequest}
+        onClose={handleCloseDialog}
+      />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
           طلبات العملاء
         </Typography>
+
+        <SearchBar
+          applySearch={getRequests}
+          search={search}
+          setSearch={setSearch}
+          dispatch={dispatch}
+          filters={filters}
+          setSelectedType={setSelectedType}
+        />
 
         <Box
           mt={2}
@@ -88,6 +113,11 @@ const ClientRequests = () => {
           flexWrap="wrap"
           alignItems="end"
         >
+          <RequestTypesToggles
+            selected={selectedType}
+            setSelected={setSelectedType}
+            counts={counts}
+          />
           <Tabs
             aria-label="basic tabs example"
             value={currentTab}
@@ -101,9 +131,19 @@ const ClientRequests = () => {
           </Tabs>
         </Box>
         <Paper sx={{ overflow: "hidden" }} elevation={0}>
+          {filtered && (
+            <ClientTableComponent
+              openModel={handleOpenModel}
+              openStatus={handleOpenStatus}
+              openDetails={handleOpenDetails}
+              requests={filtered}
+            />
+          )}
+
           {requests === "loading" && (
             <LoadingTable rows={8} cols={7} height={500} />
           )}
+
           {requests === "error" && (
             <Typography
               variant="h4"
@@ -123,12 +163,6 @@ const ClientRequests = () => {
       </Stack>
     </>
   );
-};
-
-type ResponseType = {
-  data: PanelData[];
-  msg?: string;
-  success: boolean;
 };
 
 export default ClientRequests;

@@ -31,8 +31,6 @@ const ClientProcess = () => {
     levels: [InitLevel],
   });
   const [getLevelsData, setLevelsData] = useState();
-  // const [dataLevels, dispatch] = useReducer(reducer, process.levels);
-  // console.log(dataLevels);
 
   const snackbarClose = () => {
     setSendState("none");

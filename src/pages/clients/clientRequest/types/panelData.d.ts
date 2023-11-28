@@ -11,7 +11,7 @@ export interface PanelData {
   form_id: number;
   order_type_name: string;
   step_status: string;
-  step_status_id: number;
+  step_status_id: 1 | 2 | 33 | 100 | 99;
   order_step_form: [
     {
       id: number;
@@ -29,16 +29,16 @@ export interface PanelData {
       order_step: [
         {
           id: number;
-          collection: 4;
-          step_number: 1;
-          branch_id: 31;
-          management_id: 47;
-          employee_id: 80;
-          status: 0;
-          accept: 0;
-          approval: 0;
-          period: 1;
-          form_id: 1;
+          collection: number;
+          step_number: number;
+          branch_id: number;
+          management_id: number;
+          employee_id: number;
+          status: number;
+          accept: number;
+          approval: number;
+          period: number;
+          form_id: number;
           created_at?: string;
           updated_at?: string;
           deleted_at?: string;

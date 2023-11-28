@@ -13,10 +13,12 @@ const reducer = (state: Filter, action: ActionTypes): Filter => {
       return { ...state, statusOrder: action.payload };
     case "SET_BRANCH":
       return { ...state, branch_id: action.payload };
-    case "SET_ORDER_BY":
-      return { ...state, orderBy: action.payload };
+    case "SET_ORDER_BY_SORT":
+      return { ...state, sortBy: action.payload };
     case "SET_SEARCH":
       return { ...state, search: action.payload };
+    case "SET_ORDER_BY_CLIENT":
+      return { ...state, typeClient: action.payload };
     default:
       return state;
   }
@@ -39,18 +41,27 @@ interface StatusActionType extends ReducerAction<number | null | undefined> {
 interface BranchActionType extends ReducerAction<number | null> {
   type: "SET_BRANCH";
 }
-interface OrderByActionType extends ReducerAction<OrderByType> {
-  type: "SET_ORDER_BY";
+interface OrderBySortActionType extends ReducerAction<OrderByType> {
+  type: "SET_ORDER_BY_SORT";
 }
 
 interface SearchActionType extends ReducerAction<string> {
   type: "SET_SEARCH";
 }
 
+interface OrderByClient extends ReducerAction<"individual" | "company"> {
+  type: "SET_ORDER_BY_CLIENT";
+}
+
 export const FiltersInit: Filter = {
   dateFrom: "",
   dateTo: "",
-  orderBy: "desc",
+  statusOrder: 0,
+  branch_id: 0,
+  typeOrder: "",
+  search: "",
+  sortBy: "desc",
+  typeClient: "",
 };
 
 export type ActionTypes =
@@ -59,7 +70,8 @@ export type ActionTypes =
   | OrderTypeActionType
   | BranchActionType
   | StatusActionType
-  | OrderByActionType
-  | SearchActionType;
+  | OrderBySortActionType
+  | SearchActionType
+  | OrderByClient;
 
 export default reducer;
