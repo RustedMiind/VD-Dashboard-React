@@ -13,7 +13,7 @@ function StatusChip(props: PropsType) {
 
 type PropsType = {
   color: MuiMainColors;
-  label: string | number;
+  label: number | undefined | string;
 };
 
 export type MuiMainColors =

@@ -14,14 +14,18 @@ export const ContractsContext = createContext<ContractContextType>({
 });
 
 export function ContractsContextProvider({ children }: childrenProps) {
-  let [contracts, setContracts] = useState<Contract[] | null>(null);
+  let [contracts, setContracts] = useState<Partial<ContractResponse> | null>(
+    null
+  );
+
   useEffect(getAllContracts, []);
+
   console.log(contracts, "context");
   function getAllContracts(params?: any) {
     axios
-      .get<{ data: Contract[] }>(Api("employee/contract"), { params })
+      .get<Partial<ContractResponse>>(Api("employee/contract"), { params })
       .then((res) => {
-        setContracts(res.data.data);
+        setContracts(res.data);
       })
       .catch((err) => {
         setContracts(null);
@@ -37,6 +41,14 @@ export function ContractsContextProvider({ children }: childrenProps) {
   );
 }
 type ContractContextType = {
-  contracts: Contract[] | null;
+  contracts: Partial<ContractResponse> | null;
   setContracts: ((param?: any) => void) | null;
 };
+
+interface ContractResponse {
+  data: Contract[];
+  contract_work: number;
+  contract_stop: number;
+  contract_payment: number;
+  contract_end: number;
+}

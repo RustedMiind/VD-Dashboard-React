@@ -14,42 +14,51 @@ import { useContext, useEffect, useState } from "react";
 import { ContractContext } from "../Context/Store";
 import { ContractsContext } from "../Context/ContractsContext";
 import { NavLink } from "react-router-dom";
-function ContractsTable({ value }: PropsType) {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const tableContext = useContext(ContractContext);
-  const chekedArray: number[] = selectedItems;
-  const { contracts } = useContext(ContractsContext);
-  useEffect(() => {
-    tableContext?.setIndex(chekedArray);
-  }, [selectedItems]);
 
-  function CheckboxHandler(e: any) {
-    let isSelect = e.target.checked;
-    let value = parseInt(e.target.value);
-    if (isSelect) {
-      setSelectedItems([...selectedItems, value]);
-    } else {
-      setSelectedItems((prevData) => {
-        return prevData.filter((id) => {
-          return id !== value;
-        });
-      });
-    }
+function ContractsTable({ value }: PropsType) {
+  const selectedIdsContext = useContext(ContractContext);
+  const { contracts } = useContext(ContractsContext);
+  function CheckboxHandler(id: number) {
+    return function (e: any, checked: boolean) {
+      const idIndex = selectedIdsContext?.selectedIds?.findIndex(
+        (itemId) => itemId === id
+      );
+      const idFound = typeof idIndex === "number" && idIndex >= 0;
+
+      if (checked) {
+        selectedIdsContext?.selectedIds &&
+          selectedIdsContext?.setSelectedIds([
+            ...selectedIdsContext?.selectedIds,
+            id,
+          ]);
+      } else if (
+        selectedIdsContext?.selectedIds &&
+        idFound &&
+        typeof idIndex === "number"
+      ) {
+        const instance = [...selectedIdsContext?.selectedIds];
+        instance.splice(idIndex, 1);
+        selectedIdsContext?.setSelectedIds(instance);
+      }
+    };
   }
+
   return (
     <Stack>
       <TableContainer sx={{ height: 500 }}>
         <Table aria-label="simple table" stickyHeader>
           <TableHeader value={value} />
           <TableBody>
-            {contracts?.map((request) => {
+            {contracts?.data?.map((request) => {
               return (
                 <TableRow>
                   <TableCell>
                     <Checkbox
-                      checked={selectedItems.includes(request.id)}
+                      checked={selectedIdsContext?.selectedIds?.includes(
+                        request.id
+                      )}
                       value={request.id}
-                      onChange={CheckboxHandler}
+                      onChange={CheckboxHandler(request.id)}
                     />
                   </TableCell>
                   <TableCell>{request.code}</TableCell>

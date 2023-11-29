@@ -16,8 +16,8 @@ import TableHeader from "./TableHeader/TableHeader";
 import Row from "./Row/Row";
 import { TableContext } from "../Context/Store";
 import PrintIcon from "@mui/icons-material/Print";
-import NotFoundClients from "./TableHeader/NotFoundClients";
 import ReactToPrint from "react-to-print";
+import NotFound from "../../../components/NotFound";
 
 export type IdListType = {
   id: number[];
@@ -62,7 +62,7 @@ function ClientRequestsTable(props: PropsType) {
                 setSelectedItems={setSelectedItems}
               />
             ) : (
-              <NotFoundClients />
+              <NotFound title="لا يوجد عملاء" />
             )}
             {props.requests && (
               <TableBody>

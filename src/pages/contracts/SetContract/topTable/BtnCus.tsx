@@ -10,14 +10,14 @@ import { ContractContext } from "../../Context/Store";
 import { Contract } from "../../../../types";
 import { ContractsContext } from "../../Context/ContractsContext";
 
-export default function BtnCus({ setRequests }: PropsType) {
+export default function BtnCus() {
   const deletedClientsIds = useContext(ContractContext);
   const contractsContext = useContext(ContractsContext);
   function Delete() {
     console.log(deletedClientsIds);
     axios
       .post<{ data: Contract }>(Api("employee/contract/delete"), {
-        id: deletedClientsIds?.index,
+        id: deletedClientsIds?.selectedIds,
       })
       .then((res) => {
         console.log(res);
@@ -54,8 +54,3 @@ export default function BtnCus({ setRequests }: PropsType) {
     </Stack>
   );
 }
-type PropsType = {
-  setRequests:
-    | React.Dispatch<React.SetStateAction<Contract[] | null>>
-    | undefined;
-};

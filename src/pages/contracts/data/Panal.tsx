@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import TopTable from "../SetContract/topTable/TopTable";
 import ContractsTable from "../SetContract/Table";
 import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Contract } from "../../../types";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
+import { ContractsContext } from "../Context/ContractsContext";
+import NotFound from "../../../components/NotFound";
 function Panal() {
+  const { contracts } = useContext(ContractsContext);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -45,7 +48,7 @@ function Panal() {
     <>
       <Box sx={{ width: "100%" }}>
         <Box
-          sx={{ borderColor: "divider" }}
+          sx={{ borderColor: "divider", mb: 2 }}
           display={"flex"}
           justifyContent={"space-between"}
         >
@@ -67,21 +70,25 @@ function Panal() {
           </Button>
           <PopUpContracts handleClose={handleClose} open={open} />
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <Paper
-            // variant="outlined"
-            sx={{
-              p: 2,
-              bgcolor: "Background",
-              overflow: "hidden",
-              backgroundColor: "#F3F5F7",
-            }}
-            elevation={4}
-          >
-            <TopTable value={value} />
-            <ContractsTable value={value} />
-          </Paper>
-        </CustomTabPanel>
+        {contracts?.data?.length !== 0 ? (
+          <CustomTabPanel value={value} index={0}>
+            <Paper
+              sx={{
+                p: 2,
+                bgcolor: "Background",
+                overflow: "hidden",
+                backgroundColor: "#F3F5F7",
+              }}
+              elevation={4}
+            >
+              <TopTable value={value} />
+              <ContractsTable value={value} />
+            </Paper>
+          </CustomTabPanel>
+        ) : (
+          <NotFound title="لا يوجد عقود" />
+        )}
+
         <CustomTabPanel value={value} index={1}>
           <Paper
             // variant="outlined"

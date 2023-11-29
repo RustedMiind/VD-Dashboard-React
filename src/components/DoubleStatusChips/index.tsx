@@ -17,7 +17,7 @@ function DoubleChips(props: PropsType) {
 
 type PropsType = {
   label: string;
-  value: string | number;
+  value: number | undefined;
   color: MuiMainColors;
   space?: boolean;
 };
