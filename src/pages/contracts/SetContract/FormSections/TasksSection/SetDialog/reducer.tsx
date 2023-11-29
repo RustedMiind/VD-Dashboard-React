@@ -20,6 +20,8 @@ export function reducer(
       return { ...state, employee_id: action.payload };
     case "SET_RESET":
       return AddTaskFormInit;
+    case "SET_ALL":
+      return action.payload;
     default:
       return state;
   }
@@ -37,8 +39,11 @@ interface AmountActionType extends ReducerAction<string> {
 interface ManagerActionType extends ReducerAction<string> {
   type: "SET_EMPLOYEE_ID";
 }
-interface ResetActionType extends ReducerAction<undefined | null> {
+interface ResetActionType extends ReducerAction<any> {
   type: "SET_RESET";
+}
+interface SetAllActionType extends ReducerAction<AddTaskFormType> {
+  type: "SET_ALL";
 }
 
 export const AddTaskFormInit: AddTaskFormType = {
@@ -53,7 +58,8 @@ export type ActionTypes =
   | PeriodActionType
   | NameActionType
   | ManagerActionType
-  | ResetActionType;
+  | ResetActionType
+  | SetAllActionType;
 
 export type AddTaskFormType = {
   name: string;

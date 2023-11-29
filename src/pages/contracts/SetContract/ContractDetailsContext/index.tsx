@@ -12,16 +12,23 @@ import { Api } from "../../../../constants";
 import { useParams } from "react-router-dom";
 
 export const ContractDetailsContext = createContext<{
-  contract: null | Contract;
-  use: null | ContractUse;
-}>({ contract: null, use: null });
+  contract?: Contract;
+  use?: ContractUse;
+  refreshContract?: () => void;
+}>({});
 
 function ContractDetailsContextProvider({ children }: PropsType) {
   const { id } = useParams();
-  const [contractDetails, setContractDetails] = useState<null | Contract>(null);
-  const [contractUse, setContractUse] = useState<null | ContractUse>(null);
+  const [contractDetails, setContractDetails] = useState<undefined | Contract>(
+    undefined
+  );
+  const [contractUse, setContractUse] = useState<undefined | ContractUse>(
+    undefined
+  );
 
-  useEffect(() => {
+  useEffect(getContract, []);
+
+  function getContract() {
     if (id)
       axios
         .get<{ data: Contract }>(Api(`employee/contract/${id}`))
@@ -31,7 +38,7 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         })
         .catch((err) => {
           console.log("Contract Details Error", err);
-          setContractDetails(null);
+          setContractDetails(undefined);
         });
     axios
       .get<ContractUse>(Api(`employee/contract/use`))
@@ -41,13 +48,17 @@ function ContractDetailsContextProvider({ children }: PropsType) {
       })
       .catch((err) => {
         console.log("Contract Use Error", err);
-        setContractUse(null);
+        setContractUse(undefined);
       });
-  }, []);
+  }
 
   return (
     <ContractDetailsContext.Provider
-      value={{ contract: contractDetails, use: contractUse }}
+      value={{
+        contract: contractDetails,
+        use: contractUse,
+        refreshContract: getContract,
+      }}
     >
       {children}
     </ContractDetailsContext.Provider>
