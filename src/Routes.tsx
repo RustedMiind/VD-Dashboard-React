@@ -9,11 +9,13 @@ import AddContracts from "./pages/contracts/SetContract";
 // import ContractsNotFound from "./pages/contracts/SetContract/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
+import ForTest from "./pages/forTest";
 
 function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
+        <Route path="test" element={<ForTest />} />
         <Route path="" element={<MainPage />} />
         <Route path="employees">
           <Route path="requests" element={<EmplyeesRequests />} />
