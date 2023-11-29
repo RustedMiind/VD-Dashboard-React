@@ -1,3 +1,4 @@
+import { isStringAllNumbers } from "../../../../../../methods";
 import { ReducerAction } from "../../../../../../types";
 
 export function reducer(
@@ -8,13 +9,19 @@ export function reducer(
     case "SET_NAME":
       return { ...state, name: action.payload };
     case "SET_AMOUNT":
-      return { ...state, amount: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, amount: action.payload };
+      else return state;
     case "SET_PERIOD":
-      return { ...state, period: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, period: action.payload };
+      else return state;
     case "SET_EMPLOYEE_ID":
       return { ...state, employee_id: action.payload };
     case "SET_RESET":
       return AddTaskFormInit;
+    case "SET_ALL":
+      return action.payload;
     default:
       return state;
   }
@@ -32,8 +39,11 @@ interface AmountActionType extends ReducerAction<string> {
 interface ManagerActionType extends ReducerAction<string> {
   type: "SET_EMPLOYEE_ID";
 }
-interface ResetActionType extends ReducerAction<undefined> {
+interface ResetActionType extends ReducerAction<any> {
   type: "SET_RESET";
+}
+interface SetAllActionType extends ReducerAction<AddTaskFormType> {
+  type: "SET_ALL";
 }
 
 export const AddTaskFormInit: AddTaskFormType = {
@@ -48,7 +58,8 @@ export type ActionTypes =
   | PeriodActionType
   | NameActionType
   | ManagerActionType
-  | ResetActionType;
+  | ResetActionType
+  | SetAllActionType;
 
 export type AddTaskFormType = {
   name: string;
