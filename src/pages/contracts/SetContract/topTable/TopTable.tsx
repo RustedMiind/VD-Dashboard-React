@@ -3,8 +3,12 @@ import DoubleChips from "../../../../components/DoubleStatusChips";
 import BtnCus from "./BtnCus";
 import { Button, Typography } from "@mui/material";
 import { PropType } from "./TableHeader";
+import { ContractsContext } from "../../Context/ContractsContext";
+import { useContext } from "react";
 
-export default function TopTable({ value, setRequests }: PropType) {
+export default function TopTable({ value }: PropType) {
+  let contractsContext = useContext(ContractsContext);
+
   return (
     <Stack>
       {value === 0 ? (
@@ -25,14 +29,30 @@ export default function TopTable({ value, setRequests }: PropType) {
       >
         {value === 0 && (
           <Stack direction={"row"} spacing={2} mb={1}>
-            <DoubleChips color="success" label="عنوان البوكس" value="123" />
-            <DoubleChips color="warning" label="عنوان البوكس" value="123" />
-            <DoubleChips color="error" label="عنوان البوكس" value="123" />
-            <DoubleChips color="primary" label="عنوان البوكس" value="123" />
+            <DoubleChips
+              color="success"
+              label="ساري"
+              value={contractsContext.contracts?.contract_work}
+            />
+            <DoubleChips
+              color="warning"
+              label="متأخر"
+              value={contractsContext.contracts?.contract_payment}
+            />
+            <DoubleChips
+              color="error"
+              label="متوقف"
+              value={contractsContext.contracts?.contract_stop}
+            />
+            <DoubleChips
+              color="primary"
+              label="منتهي"
+              value={contractsContext.contracts?.contract_end}
+            />
           </Stack>
         )}
         <Box>
-          <BtnCus setRequests={setRequests} />
+          <BtnCus />
         </Box>
       </Stack>
     </Stack>

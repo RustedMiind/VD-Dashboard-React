@@ -49,7 +49,7 @@ function SearchBar(props: PropsType) {
   );
 }
 type PropsType = {
-  requests: Contract[] | null;
+  requests: Contract[] | undefined;
   DataToSearch: TypeDataToSearch;
   search: () => void;
 };

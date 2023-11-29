@@ -1,18 +1,47 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Contract } from "../../../../types";
+import { useContext, useEffect, useState } from "react";
+import { ContractContext } from "../../Context/Store";
+import { ContractsContext } from "../../Context/ContractsContext";
+
 export default function TableHeader({ value }: PropType) {
+  const { contracts } = useContext(ContractsContext);
+  let selectedIdsContext = useContext(ContractContext);
+  // const [selectedItems, setSelectedItems] = useState<number[] | undefined>([]);
+  // const chekedArray: number[] | undefined = selectedItems;
+  // useEffect(() => {
+  //   selectedIds?.setIndex(chekedArray);
+  // }, [selectedItems]);
+
+  const selectAllHandler = (e: any, checked: boolean) => {
+    let values: number[] | undefined = contracts?.data?.map((contract) => {
+      return contract.id;
+    });
+    // setSelectedItems(values)
+    if (checked) selectedIdsContext?.setSelectedIds(values || []);
+    else selectedIdsContext?.setSelectedIds([]);
+  };
   return (
     <TableHead>
       <TableRow>
         <TableCell>
-          <Checkbox />
+          <Checkbox
+            checked={
+              selectedIdsContext?.selectedIds?.length ===
+              contracts?.data?.length
+            }
+            onChange={selectAllHandler}
+          />
         </TableCell>
         <TableCell>رقم العقد</TableCell>
         <TableCell>
           {value === 0 ? "نوع العقد" : "تاريخ الورود"}
-          <IconButton aria-label="SwapVertIcon" color="primary">
+          <IconButton
+            aria-label="SwapVertIcon"
+            color="primary"
+            // onClick={() => }
+          >
             <SwapVertIcon />
           </IconButton>
         </TableCell>
@@ -31,5 +60,4 @@ export default function TableHeader({ value }: PropType) {
 }
 export type PropType = {
   value?: number;
-  setRequests?: React.Dispatch<React.SetStateAction<Contract[] | null>>;
 };

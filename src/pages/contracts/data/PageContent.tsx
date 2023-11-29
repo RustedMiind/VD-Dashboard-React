@@ -1,10 +1,7 @@
 import { Stack } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { Api } from "../../../constants";
+import { useContext } from "react";
 import SearchBar from "./SearchBar";
 import Panal from "./Panal";
-import { Contract } from "../../../types";
 import { IndexContextProvider } from "../Context/Store";
 import { ContractsContext } from "../Context/ContractsContext";
 
@@ -16,10 +13,7 @@ function PageContent() {
     client_id: 0,
     employee_name: "",
   };
-  const [requests, setRequests] = useState<Contract[] | null>(null);
   function search() {
-    console.log(DataToSearch);
-
     contractsContext.setContracts &&
       contractsContext.setContracts(DataToSearch);
   }
@@ -27,7 +21,7 @@ function PageContent() {
     <IndexContextProvider>
       <Stack>
         <SearchBar
-          requests={contractsContext?.contracts}
+          requests={contractsContext?.contracts?.data}
           DataToSearch={DataToSearch}
           search={search}
         />

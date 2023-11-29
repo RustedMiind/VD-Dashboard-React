@@ -8,14 +8,16 @@ type childrenProps = {
 export const ContractContext = createContext<IndexValue | null>(null);
 
 export function IndexContextProvider({ children }: childrenProps) {
-  let [index, setIndex] = useState<number[] | undefined>(undefined);
+  let [selectedIds, setSelectedIds] = useState<number[]>([]);
+  console.log(selectedIds, "index");
+  console.log(selectedIds);
   return (
-    <ContractContext.Provider value={{ index, setIndex }}>
+    <ContractContext.Provider value={{ selectedIds, setSelectedIds }}>
       {children}
     </ContractContext.Provider>
   );
 }
 type IndexValue = {
-  index: number[] | undefined;
-  setIndex: React.Dispatch<React.SetStateAction<number[] | undefined>>;
+  selectedIds: number[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
 };
