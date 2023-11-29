@@ -1,13 +1,13 @@
 import { EmployeeType } from "../Employee";
 
 export interface ContractTask {
-  id: number;
+  id: string;
   name: string;
-  period: number;
-  amount: number;
+  period: string;
+  amount: string;
   employees?: EmployeeType;
-  employee_id: number;
-  contract_id: number;
+  employee_id: string;
+  contract_id: string;
   created_at: string;
   updated_at: string;
   // deleted_at: null;
