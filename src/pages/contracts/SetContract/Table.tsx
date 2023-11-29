@@ -8,11 +8,12 @@ import {
   Stack,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Contract } from "../../../types";
+import IconButton from "@mui/material/IconButton";
 import TableHeader from "./topTable/TableHeader";
 import { useContext, useEffect, useState } from "react";
 import { ContractContext } from "../Context/Store";
 import { ContractsContext } from "../Context/ContractsContext";
+import { NavLink } from "react-router-dom";
 function ContractsTable({ value }: PropsType) {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const tableContext = useContext(ContractContext);
@@ -60,7 +61,15 @@ function ContractsTable({ value }: PropsType) {
                   <TableCell>{request.end_date_period}</TableCell>
                   <TableCell>{request.employee?.name}</TableCell>
                   <TableCell>
-                    <SettingsIcon />
+                    <IconButton
+                      color="primary"
+                      aria-label="add to shopping cart"
+                      component={NavLink}
+                      to={`${request.id}/edit`}
+                      size="small"
+                    >
+                      <SettingsIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               );
