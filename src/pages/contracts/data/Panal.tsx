@@ -6,6 +6,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
 import { ContractsContext } from "../Context/ContractsContext";
 import NotFound from "../../../components/NotFound";
+import ContractsNotFound from "../SetContract/ContractsNotFound.1";
 function Panal() {
   const { contracts } = useContext(ContractsContext);
 
@@ -60,14 +61,6 @@ function Panal() {
             <Tab label="بيانات العقود" />
             <Tab label="ادارة العقود" disabled />
           </Tabs>
-          <Button
-            variant="contained"
-            startIcon={<AddCircleOutlineIcon />}
-            sx={{ mr: 5 }}
-            onClick={handleClickOpen}
-          >
-            اضافة عقد
-          </Button>
           <PopUpContracts handleClose={handleClose} open={open} />
         </Box>
         {contracts?.data?.length !== 0 ? (
@@ -81,12 +74,20 @@ function Panal() {
               }}
               elevation={4}
             >
+              <Button
+                variant="contained"
+                startIcon={<AddCircleOutlineIcon />}
+                sx={{ mr: 5 }}
+                onClick={handleClickOpen}
+              >
+                اضافة عقد
+              </Button>
               <TopTable value={value} />
               <ContractsTable value={value} />
             </Paper>
           </CustomTabPanel>
         ) : (
-          <NotFound title="لا يوجد عقود" />
+          <ContractsNotFound />
         )}
 
         <CustomTabPanel value={value} index={1}>

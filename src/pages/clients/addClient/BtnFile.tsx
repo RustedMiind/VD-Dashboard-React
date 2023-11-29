@@ -1,7 +1,8 @@
-import { Stack, Typography, Box, Button, Grid } from "@mui/material";
+import { Stack, Typography, Box, Button, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
+import UploadFileInput from "../../../components/UploadFileInput";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -12,27 +13,20 @@ const VisuallyHiddenInput = styled("input")({
   width: "1px",
 });
 function BtnFile(props: any) {
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  // const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [file, setFile] = useState<File | undefined>(undefined);
 
   return (
-    <Grid item p={0.1} md={6}>
-      <Stack>
-        <Typography sx={{ ml: 2 }} component="label">
-          صورة الهوية
-        </Typography>
-        <input
-          type="file"
-          onChange={(e) => {
-            const files = e.target.files;
-            if (files) {
-              const file = files[0];
-              props.dispatch({ type: "CARD_IMAGE", payload: file });
-              setSelectedFile(file);
-            }
-          }}
-        />
-      </Stack>
-    </Grid>
+    <Stack width={1}>
+      <Typography sx={{ ml: 2 }} component="label">
+        صورة الهوية
+      </Typography>
+      <UploadFileInput
+        value={file}
+        setValue={setFile}
+        dispatch={props.dispatch}
+      />
+    </Stack>
   );
 }
 

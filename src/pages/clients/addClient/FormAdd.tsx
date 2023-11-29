@@ -259,7 +259,7 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.name}
             </Typography>
           </Stack>
@@ -276,6 +276,7 @@ export default function FormAdd() {
               </Typography>
             )}
             <TextField
+              fullWidth
               id="outlined-idNumber-input"
               type="number"
               required
@@ -299,9 +300,15 @@ export default function FormAdd() {
                 });
               }}
             />
-            <Typography variant="body2" color="error">
-              {errors?.card_id}
-            </Typography>
+            {formData.type === "individual" ? (
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.card_id}
+              </Typography>
+            ) : (
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.register_number}
+              </Typography>
+            )}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -323,16 +330,15 @@ export default function FormAdd() {
             />
 
             {errors?.phone && (
-              <Typography sx={{ color: "#F19B02" }}>
+              <Typography color="error" variant="body2" sx={{ ml: 2 }}>
                 {errors?.phone}
-                {"  "}
-                <Typography
+                {/* <Typography
                   sx={{ color: "#F19B02" }}
                   component={NavLink}
                   to="www.google.com"
                 >
                   اضغط هنا للمزيد
-                </Typography>
+                </Typography> */}
               </Typography>
             )}
           </Stack>
@@ -355,7 +361,7 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.email}
             </Typography>
           </Stack>
@@ -389,7 +395,7 @@ export default function FormAdd() {
               </TextField>
             )}
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.broker_id}
             </Typography>
           </Stack>
@@ -422,7 +428,7 @@ export default function FormAdd() {
               </TextField>
             )}
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.branch_id}
             </Typography>
           </Stack>
@@ -430,7 +436,7 @@ export default function FormAdd() {
         {formData.type === "company" && (
           <>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
+              <Stack width={1}>
                 <Typography sx={{ ml: 2 }} component="label">
                   اسم الوكيل
                 </Typography>
@@ -439,6 +445,7 @@ export default function FormAdd() {
                   type="text"
                   required
                   size="small"
+                  fullWidth
                   placeholder="اسم الوكيل"
                   defaultValue={clientEdit ? clientEdit.agent_name : ""}
                   value={formData.agent_name}
@@ -447,7 +454,7 @@ export default function FormAdd() {
                   }}
                 />
 
-                <Typography variant="body2" color="error">
+                <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                   {errors?.agent_name}
                 </Typography>
               </Stack>
@@ -456,7 +463,7 @@ export default function FormAdd() {
         )}
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
-            <Stack>
+            <Stack width={"480px"}>
               <BtnFile errors={errors} dispatch={dispatch} />
             </Stack>
           </Grid>
@@ -486,14 +493,14 @@ export default function FormAdd() {
                 dispatch({ type: "LETTER_HEAD", payload: e.target.value });
               }}
             />
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.letter_head}
             </Typography>
           </Stack>
         </Grid>
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
-            <Stack>
+            <Stack width={"480px"}>
               <BtnFile errors={errors} dispatch={dispatch} />
             </Stack>
           </Grid>

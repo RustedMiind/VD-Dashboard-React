@@ -5,7 +5,6 @@ export interface ClientRequest {
   id: 1;
   type: "individual";
   name: "client";
-  // company_name: "company";
   phone: "01098281638";
   email: "client@vision.com";
   card_id: "1234567890";

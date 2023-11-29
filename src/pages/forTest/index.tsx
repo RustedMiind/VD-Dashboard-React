@@ -7,7 +7,6 @@ function ForTest() {
 
   return (
     <Stack>
-      <Typography variant="h4">Only for test purposes</Typography>
       <Paper component={Stack} elevation={4} p={2}>
         <UploadFileInput value={file} setValue={setFile} />
       </Paper>

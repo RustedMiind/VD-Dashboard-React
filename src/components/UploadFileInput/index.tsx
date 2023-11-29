@@ -35,9 +35,10 @@ function UploadFileInput(props: PropsType) {
               value={props.value}
               onChange={(e) => {
                 const files = e.target.files || [];
-                const file = files[0];
-                if (file) {
+                if (files) {
+                  const file = files[0];
                   props.setValue(file);
+                  props.dispatch({ type: "CARD_IMAGE", payload: file });
                 }
               }}
               name=""
@@ -65,6 +66,7 @@ type PropsType = {
   value?: File;
   setValue: (file: File) => void;
   fileLink?: string;
+  dispatch?: any;
 };
 
 export default UploadFileInput;

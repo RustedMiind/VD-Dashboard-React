@@ -1,25 +1,8 @@
-import { FormControl, Modal } from "@mui/base";
-import {
-  Dialog,
-  Button,
-  DialogTitle,
-  Paper,
-  DialogContent,
-  DialogActions,
-  Stack,
-  Typography,
-  FormControlLabel,
-  Radio,
-  Box,
-  RadioGroup,
-} from "@mui/material";
+import { Button, Paper, Stack, Typography } from "@mui/material";
 import * as React from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material";
 import PopUpContracts from "./Components/PopUpContracts";
+import img1 from "../../../assets/images/branch-empty.png";
 
 export default function ContractsNotFound() {
   const [open, setOpen] = React.useState(false);
@@ -37,7 +20,7 @@ export default function ContractsNotFound() {
       </Typography>
       <Paper
         sx={{
-          height: "75vh",
+          height: "58vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -45,14 +28,16 @@ export default function ContractsNotFound() {
       >
         <React.Fragment>
           <Stack>
+            <img src={img1} />
+
             <Typography sx={{ fontSize: "28px", fontWeight: "700" }}>
-              لا يوجد لم يتم البدء في عمل التعاقدات
+              لا يوجد عقود متاحة
             </Typography>
             <Button
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               onClick={handleClickOpen}
-              sx={{ width: "50%", mx: "auto", mt: 4 }}
+              sx={{ mt: 4 }}
             >
               انشاء عقد جديد
             </Button>
