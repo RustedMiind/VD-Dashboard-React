@@ -21,6 +21,7 @@ function FilePreview(props: PropsType) {
       }}
     >
       <IconButton
+        disabled={!props.fileLink}
         color="primary"
         component="a"
         href={props.fileLink}
@@ -68,7 +69,7 @@ type PropsType = {
   fileName: string;
   fileSize?: string;
   fileExtension?: string;
-  fileLink: string;
+  fileLink?: string;
 };
 
 export default FilePreview;
