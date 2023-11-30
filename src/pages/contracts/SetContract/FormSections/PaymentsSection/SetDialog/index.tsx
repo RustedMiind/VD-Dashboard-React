@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, MenuItem, Snackbar } from "@mui/material";
+import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { AddTaskFormInit, reducer } from "./reducer";
 import axios from "axios";
@@ -14,18 +14,12 @@ import { LoadingButton } from "@mui/lab";
 import { ContractPayment, ContractTask } from "../../../../../../types";
 import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 
+// Icons
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
 }
-
-/*
-
-Activate Delete Button
-Activate Update Button
-Add Toaster With State of Sending State 'error' || "success"
-Get Contract Data After updating any of its sub fields
-
-*/
 
 type TextfieldPropsType = TextFieldProps;
 
@@ -135,9 +129,17 @@ function SetDialog(props: PropsType) {
                   });
                 }}
               >
-                <MenuItem value={"15"}>بعد 15 يوم</MenuItem>
-                <MenuItem value={"30"}>بعد 30 يوم</MenuItem>
-                <MenuItem value={"60"}>بعد 60 يوم</MenuItem>
+                <MenuItem value={"-30"}>بعد 30 يوم</MenuItem>
+                <MenuItem value={"-60"}>بعد 60 يوم</MenuItem>
+                <MenuItem value={undefined} disabled>
+                  <ListItemIcon>
+                    <ArrowDropDownIcon />
+                  </ListItemIcon>
+                  بعد انتهاء مهمة
+                </MenuItem>
+                {ContractDetails.contract?.tasks?.map((task) => (
+                  <MenuItem value={task.id}> {task.name} </MenuItem>
+                ))}
               </FormTextField>
             </Grid>
           </Grid>

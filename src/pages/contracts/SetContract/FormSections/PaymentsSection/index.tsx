@@ -2,27 +2,16 @@ import {
   Box,
   Button,
   Stack,
-  Typography,
   TableContainer,
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   IconButton,
   Snackbar,
   Alert,
 } from "@mui/material";
-
-// Icons
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { NavLink } from "react-router-dom";
 import { useContext, useState } from "react";
 import { ContractPayment } from "../../../../../types";
 import { ToasterType } from "../../../../../types/other/ToasterStateType";
@@ -30,6 +19,12 @@ import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { Api } from "../../../../../constants";
 import axios from "axios";
 import SetDialog from "./SetDialog";
+// Icons
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Payments() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -156,30 +151,32 @@ function Payments() {
             </TableHead>
             {
               <TableBody>
-                {ContractDetails?.contract?.payments?.map((payment) => (
-                  <TableRow>
-                    <TableCell>{payment.id}</TableCell>
-                    <TableCell>{payment.name}</TableCell>
-                    <TableCell>{payment.period}</TableCell>
-                    <TableCell>{payment.amount}</TableCell>
-                    <TableCell>{payment.period}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        size="small"
-                        onClick={handleOpenUpdateDialog(payment)}
-                      >
-                        <EditNoteIcon />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={handleDelete(payment.id)}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {ContractDetails?.contract?.payments?.map((payment) => {
+                  return (
+                    <TableRow>
+                      <TableCell>{payment.id}</TableCell>
+                      <TableCell>{payment.name}</TableCell>
+                      <TableCell>{payment.period}</TableCell>
+                      <TableCell>{payment.amount}</TableCell>
+                      <TableCell>{payment.status}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          size="small"
+                          onClick={handleOpenUpdateDialog(payment)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={handleDelete(payment.id)}
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             }
           </Table>
