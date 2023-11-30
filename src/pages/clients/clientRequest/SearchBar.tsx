@@ -66,7 +66,6 @@ const SearchBar = ({
         opened={filtersOpened}
         dispatch={dispatch}
         filters={filters}
-        // selectedType={selectedType}
         setSelectedType={setSelectedType}
       />
     </>
@@ -79,7 +78,6 @@ type PropsType = {
   applySearch: () => void;
   dispatch: React.Dispatch<ActionTypes>;
   filters: Filter;
-  // selectedType: number | undefined;
   setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
