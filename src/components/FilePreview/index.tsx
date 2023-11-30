@@ -12,7 +12,7 @@ function FilePreview(props: PropsType) {
         justifyContent: "space-between",
         px: 4,
         width: 1,
-        height: 60,
+        height: props.height || 60,
         borderWidth: 1,
         borderStyle: "dashed",
         borderColor: "primary.main",
@@ -70,6 +70,7 @@ type PropsType = {
   fileSize?: string;
   fileExtension?: string;
   fileLink?: string;
+  height?: number;
 };
 
 export default FilePreview;
