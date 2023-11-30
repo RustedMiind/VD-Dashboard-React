@@ -13,8 +13,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { PanelData } from "./types";
-import { useState } from "react";
+import { PanelData, StepStatusData } from "./types";
+import { Dispatch, SetStateAction, useState } from "react";
 import { formatDate } from "../../../methods";
 
 const ClientTableComponent = ({
@@ -22,10 +22,10 @@ const ClientTableComponent = ({
   openStatus,
   openModel,
   openDetails,
+  setRequests,
 }: PropsType) => {
   const [rowsCount, setRowsCount] = useState(10);
   const view = requests.slice(0, rowsCount);
-  console.log(view);
 
   function generateChip(request: PanelData): JSX.Element {
     const variant = "outlined";
@@ -38,7 +38,8 @@ const ClientTableComponent = ({
             size="small"
             color="primary"
             sx={{ textDecoration: "underline !important", fontWeight: 700 }}
-            onClick={openModel(request)}
+            onClick={openStatus(request)}
+            id={request.id.toString()}
           >
             اتخاذ الاجراء
           </Button>
@@ -148,7 +149,7 @@ const ClientTableComponent = ({
                   </Button>
                 </TableCell>
                 <TableCell>
-                  {request.order_step_form[0].order_step[0].management?.name ||
+                  {request.order_step_form[0].order_step[0].department?.name ||
                     "----"}
                 </TableCell>
                 <TableCell id={`${request.step_status_id}`}>
@@ -192,6 +193,11 @@ type PropsType = {
   openModel: (res: PanelData) => () => void;
   openStatus: (res: PanelData) => () => void;
   openDetails: (res: PanelData) => () => void;
+  setRequests: Dispatch<
+    SetStateAction<
+      StepStatusData[] | PanelData[] | "loading" | "none" | "error"
+    >
+  >;
 };
 
 export default ClientTableComponent;

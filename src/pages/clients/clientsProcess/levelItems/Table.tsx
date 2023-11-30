@@ -45,7 +45,7 @@ const TableComponent = ({
                   <Select
                     label={"القسم"}
                     size={"small"}
-                    value={level.management_id}
+                    value={level.department_id}
                     disabled={formDisabled}
                     onChange={(e) => {
                       dispatch({
@@ -54,7 +54,7 @@ const TableComponent = ({
                       });
                     }}
                   >
-                    {dataForm?.Management?.map(({ id, name }) => (
+                    {dataForm?.department?.map(({ id, name }) => (
                       <MenuItem key={id} value={id}>
                         {name}
                       </MenuItem>

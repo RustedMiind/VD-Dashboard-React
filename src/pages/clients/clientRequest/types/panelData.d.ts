@@ -32,7 +32,7 @@ export interface PanelData {
           collection: number;
           step_number: number;
           branch_id: number;
-          management_id: number;
+          department_id: number;
           employee_id: number;
           status: number;
           accept: number;
@@ -42,7 +42,7 @@ export interface PanelData {
           created_at?: string;
           updated_at?: string;
           deleted_at?: string;
-          management?: {
+          department: {
             id: number;
             name: string;
           };

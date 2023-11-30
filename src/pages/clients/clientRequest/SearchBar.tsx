@@ -5,7 +5,6 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterComponent from "./Filter/Filter";
 import { ActionTypes } from "./Filter/reducer";
 import { Filter } from "./types";
-import { Box } from "@mui/material";
 
 const SearchBar = ({
   applySearch,

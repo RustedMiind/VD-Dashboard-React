@@ -1,6 +1,6 @@
 export interface StepType {
   employee_id: number;
-  management_id: number;
+  department_id: number;
   accept?: 0 | 1;
   approval?: 0 | 1;
   period: number;

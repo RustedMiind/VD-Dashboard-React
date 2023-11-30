@@ -5,7 +5,7 @@ const dispatch = (state: StepType) => {
     switch (action.type) {
       case "SET_MANAGEMENT":
         console.log(action.payload);
-        return { ...state, management_id: action.payload };
+        return { ...state, department_id: action.payload };
       case "SET_EMPLOYEE":
         return { ...state, employee_id: action.payload };
       case "SET_ACCEPT":

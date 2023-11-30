@@ -1,20 +1,37 @@
 export interface StepStatusData {
   id: number;
   name: string;
-  created_date?: string;
+  created_date: string;
   type: "individual" | "company";
   branch_id: number;
   order_type: number;
   order_step_form: [
     {
       id: number;
-      status: number;
-      note: string;
-      order_step_id: number;
-      end_date?: string;
+      end_date: string;
       client_id: number;
-      statuses: number;
-      order_step: [];
+      note?: string | null;
+      order_step_id: number;
+      status: number;
+      statuses?: null;
+      order_step: [
+        {
+          id: number;
+          department_id: number;
+          employee_id: number;
+          employees: {
+            id: number;
+            name: string;
+            first_name: string;
+            second_name: string;
+            last_name: string;
+          };
+          department: {
+            id: number;
+            name: string;
+          };
+        }
+      ];
     }
   ];
 }

@@ -27,7 +27,7 @@ const LevelItem = ({
   useEffect(() => {
     dispatch({ type: "SET_RESET", payload: level });
   }, [
-    level.management_id,
+    level.department_id,
     level.employee_id,
     level.accept,
     level.approval,

@@ -15,13 +15,13 @@ const FilterComponent = ({
   filters,
   setSelectedType,
 }: PropsType) => {
-  const [managements, setManagements] = useState<undefined | []>(undefined);
+  const [department, setDepartment] = useState<undefined | []>(undefined);
 
   useEffect(() => {
     axios
-      .get<{ Management: [] }>(Api("employee/client/order/steps/use"))
+      .get<{ department: [] }>(Api("employee/client/order/steps/use"))
       .then((res) => {
-        setManagements(res.data.Management);
+        setDepartment(res.data?.department);
       });
   }, [opened]);
   return (
@@ -89,7 +89,9 @@ const FilterComponent = ({
         >
           <MenuItem value={0}>كل الانواع</MenuItem>
           {requestTypes.map((reqType) => (
-            <MenuItem value={reqType.value}>{reqType.name}</MenuItem>
+            <MenuItem key={reqType.value} value={reqType.value}>
+              {reqType.name}
+            </MenuItem>
           ))}
         </TextField>
       </Grid>
@@ -109,8 +111,10 @@ const FilterComponent = ({
           }}
         >
           <MenuItem value={0}>كل الاقسام</MenuItem>
-          {managements?.map(({ id, name }) => (
-            <MenuItem value={id}>{name}</MenuItem>
+          {department?.map(({ id, name }) => (
+            <MenuItem key={id} value={id}>
+              {name}
+            </MenuItem>
           ))}
         </TextField>
       </Grid>

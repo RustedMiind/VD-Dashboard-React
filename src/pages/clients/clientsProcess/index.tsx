@@ -13,7 +13,7 @@ import { FormData } from "./types/FormData";
 
 const InitLevel: StepType = {
   branch_id: 0,
-  management_id: 0,
+  department_id: 0,
   period: 0,
   form_id: 0,
   employee_id: 0,
@@ -42,6 +42,7 @@ const ClientProcess = () => {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
+            console.log(res.data);
             setDataForm(res.data);
             resSolve();
           })
@@ -76,7 +77,7 @@ const ClientProcess = () => {
   const submitData = () => {
     const data = process.levels?.map(
       ({
-        management_id,
+        department_id,
         period,
         form_id,
         employee_id,
@@ -84,7 +85,7 @@ const ClientProcess = () => {
         approval,
       }): Partial<StepType> => {
         return {
-          management_id,
+          department_id,
           period,
           form_id,
           employee_id,

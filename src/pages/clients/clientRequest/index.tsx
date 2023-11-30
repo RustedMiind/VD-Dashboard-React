@@ -3,19 +3,20 @@ import { Api } from "../../../constants";
 import { Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
 import LoadingTable from "../../../components/LoadingTable";
-import { PanelData } from "./types";
+import { PanelData, StepStatusData } from "./types";
 import reducer, { FiltersInit } from "./Filter/reducer";
 import ClientTableComponent from "./Table";
 import SearchBar from "./SearchBar";
 import { CountType } from "../../../types/Count";
 import RequestTypesToggles from "./Toggles";
 import StatusDialog from "./StatusDialog";
+import DetailsDialog from "./DetailsDialog";
 
 const ClientRequests = () => {
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [currentTab, setCurrentTab] = useState<number>(-1);
   const [requests, setRequests] = useState<
-    PanelData[] | "loading" | "none" | "error"
+    PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
   const [dialogRequest, setDialogRequest] = useState<PanelData | null>(null);
   const [dialogOpen, setDialogOpen] = useState<
@@ -29,7 +30,6 @@ const ClientRequests = () => {
 
   const getRequests = () => {
     setRequests("loading");
-    console.log(filters);
     axios
       .get<{ data: PanelData[]; count: CountType[] }>(
         Api("employee/client/order"),
@@ -80,16 +80,22 @@ const ClientRequests = () => {
 
   useEffect(getRequests, [selectedType, currentTab]);
   const IS_REQUESTS_EXISTS = typeof requests === "object";
-  let filtered: PanelData[] | undefined = IS_REQUESTS_EXISTS
+  let filtered: PanelData[] | any | undefined = IS_REQUESTS_EXISTS
     ? requests
     : undefined;
 
   return (
     <>
+      <DetailsDialog
+        open={dialogOpen === "details"}
+        requestId={dialogRequest?.id}
+        onClose={handleCloseDialog}
+      />
       <StatusDialog
         open={dialogOpen === "status"}
-        request={dialogRequest}
         onClose={handleCloseDialog}
+        setRequests={setRequests}
+        id={dialogRequest?.id}
       />
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
@@ -137,6 +143,7 @@ const ClientRequests = () => {
               openStatus={handleOpenStatus}
               openDetails={handleOpenDetails}
               requests={filtered}
+              setRequests={setRequests}
             />
           )}
 
