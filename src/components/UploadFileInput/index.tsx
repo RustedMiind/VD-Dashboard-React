@@ -21,6 +21,7 @@ function UploadFileInput(props: PropsType) {
         fileExtension={getFileExtension(props.value)}
         fileSize={`${(props.value.size / 1024 ** 2).toFixed(2)}MB`}
         height={height}
+        hideFileSize={props.size === "sm"}
       />
     );
   } else
