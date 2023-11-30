@@ -38,7 +38,7 @@ const ClientTableComponent = ({
             size="small"
             color="primary"
             sx={{ textDecoration: "underline !important", fontWeight: 700 }}
-            onClick={openStatus(request)}
+            onClick={openModel(request)}
             id={request.id.toString()}
           >
             اتخاذ الاجراء

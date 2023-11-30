@@ -16,11 +16,13 @@ import {
 import { FormData } from "../types/FormData";
 import { StepType } from "../types/Step";
 import React from "react";
+import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 
 const TableComponent = ({
   formDisabled,
   level,
   dataForm,
+  departments,
   dispatch,
 }: PropsType) => {
   return (
@@ -170,6 +172,7 @@ type PropsType = {
   level: StepType;
   dataForm: FormData;
   dispatch: React.Dispatch<any>;
+  departments: DepartmentWithEmployeesType[] | undefined | null;
 };
 
 export default TableComponent;

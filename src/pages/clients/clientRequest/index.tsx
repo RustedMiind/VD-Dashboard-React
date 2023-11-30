@@ -11,6 +11,7 @@ import { CountType } from "../../../types/Count";
 import RequestTypesToggles from "./Toggles";
 import StatusDialog from "./StatusDialog";
 import DetailsDialog from "./DetailsDialog";
+import ModelDialog from "./ModelDialog";
 
 const ClientRequests = () => {
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
@@ -86,6 +87,11 @@ const ClientRequests = () => {
 
   return (
     <>
+      <ModelDialog
+        open={dialogOpen === "model"}
+        onClose={handleCloseDialog}
+        requestId={dialogRequest?.id}
+      />
       <DetailsDialog
         open={dialogOpen === "details"}
         requestId={dialogRequest?.id}

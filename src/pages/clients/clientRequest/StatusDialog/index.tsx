@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { formatDate } from "../../../../methods";
-import { PanelData, StepStatusData } from "../types";
+import { PanelData, StepStatusData, StepStatuses } from "../types";
 import {
   Box,
   Chip,
@@ -19,9 +19,8 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 
 const StatusDialog = ({ open, onClose, id }: PropsType) => {
-  const [details, setDetails] = useState<StepStatusData[] | undefined>(
-    undefined
-  );
+  const [details, setDetails] = useState<StepStatuses[] | undefined>(undefined);
+  const [date, setDate] = useState<string>("");
 
   useEffect(() => {
     if (open && id) {
@@ -31,7 +30,8 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
           Api(`employee/client/order/statusOrder?client_id=${id}`)
         )
         .then(({ data }) => {
-          setDetails(data.data);
+          setDetails(data.data[0].order_step_form);
+          setDate(formatDate(data.data[0].created_date));
         });
     }
   }, [open]);
@@ -40,17 +40,16 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
     let chip: JSX.Element = <></>;
 
     switch (value) {
-      case 2:
-        chip = <Chip color="primary" variant={variant} label="تحت الاجراء" />;
-
+      case 0:
+        chip = <Chip color="primary" variant={variant} label="قيد العمل" />;
         break;
       case 99:
         chip = <Chip color="error" variant={variant} label="مرفوض" />;
         break;
-      case 33:
+      case 100:
         chip = <Chip color="success" variant={variant} label="مقبول" />;
         break;
-      case 100:
+      case 33:
         chip = <Chip color="success" variant={variant} label="معتمد" />;
         break;
       default:
@@ -78,28 +77,20 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
               </TableHead>
               <TableBody>
                 {details?.map((step) => {
-                  const note = step?.order_step_form[0]?.note;
+                  const note = step?.note;
                   return (
                     <TableRow key={step.id}>
                       <TableCell>
-                        {
-                          step.order_step_form[0]?.order_step[0]?.employees
-                            ?.name
-                        }
+                        {step?.order_step[0]?.employees?.name}
                       </TableCell>
-                      <TableCell>{formatDate(step?.created_date)}</TableCell>
+                      <TableCell>{date}</TableCell>
+                      <TableCell>{formatDate(step?.end_date)}</TableCell>
                       <TableCell>
-                        {formatDate(step?.order_step_form[0]?.end_date)}
+                        {step?.order_step?.map((item) => {
+                          return item?.department?.name;
+                        })}
                       </TableCell>
-                      <TableCell>
-                        {
-                          step.order_step_form[0]?.order_step[0]?.department
-                            ?.name
-                        }
-                      </TableCell>
-                      <TableCell>
-                        {generateChip(step.order_step_form[0]?.status)}
-                      </TableCell>
+                      <TableCell>{generateChip(step?.status)}</TableCell>
                       <TableCell>
                         <Box
                           component="span"
