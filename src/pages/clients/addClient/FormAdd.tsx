@@ -9,6 +9,7 @@ import {
   Radio,
   FormControlLabel,
   MenuItem,
+  Autocomplete,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
 import { styled } from "@mui/material/styles";
@@ -25,7 +26,10 @@ const paddingSize = 0.1;
 export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<any | undefined>(undefined);
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
-  const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
+  const [brokers, setBrokers] = useState<Broker[]>([]);
+  const [currentBroker, setCurrentBroker] = useState<number | undefined>(
+    undefined
+  );
   const [formData, dispatch] = useReducer(reducer, individualInitial);
   const [errors, setErrors] = useState<
     Partial<FormData & { card_image: string }> | undefined
@@ -79,7 +83,7 @@ export default function FormAdd() {
       })
       .catch((err) => {
         setBranches(undefined);
-        setBrokers(undefined);
+        setBrokers([]);
         console.log("err", err);
       });
   }, []);
@@ -366,7 +370,7 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        {/* <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
               الوسيط <RequiredSymbol />
@@ -393,6 +397,48 @@ export default function FormAdd() {
                   </MenuItem>
                 ))}
               </TextField>
+            )}
+
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+              {errors?.broker_id}
+            </Typography>
+          </Stack>
+        </Grid> */}
+
+        <Grid item p={paddingSize} md={6}>
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              الوسيط <RequiredSymbol />
+            </Typography>
+            {(clientEdit === null || clientEdit?.broker_id) && (
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={brokers?.map((broker) => {
+                  return broker.name;
+                })}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    onSelect={(e: any) => {
+                      brokers.map((broker) => {
+                        if (broker.name === e.target.value) {
+                          dispatch({
+                            type: "BROKER_ID",
+                            payload: broker.id,
+                          });
+                        }
+                      });
+                    }}
+                    {...params}
+                    label="الوسيط"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
+              />
             )}
 
             <Typography variant="body2" color="error" sx={{ ml: 2 }}>

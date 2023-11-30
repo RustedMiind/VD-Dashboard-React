@@ -27,9 +27,9 @@ export interface Contract {
   payments?: ContractPayment[];
   branch?: Branch;
   client?: ClientRequest;
-  // card_image: null;
-  // deleted_at: null;
-  // end_date: null;
-  // management: null;
-  // levers: [];
+  card_image: null;
+  deleted_at: null;
+  end_date: null;
+  management: null;
+  levers: [];
 }
