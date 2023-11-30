@@ -1,6 +1,9 @@
-export class forceDownloadHandler {
-  constructor(private readonly url: string) {}
-  forceDownload() {
+export class ForceDownload {
+  url: string;
+  constructor(url: string) {
+    this.url = url;
+  }
+  download() {
     const link = document.createElement("a");
     link.href = this.url;
     const fileName = this.url.substring(this.url.lastIndexOf("/") + 1);
