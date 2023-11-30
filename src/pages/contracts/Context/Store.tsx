@@ -9,8 +9,6 @@ export const ContractContext = createContext<IndexValue | null>(null);
 
 export function IndexContextProvider({ children }: childrenProps) {
   let [selectedIds, setSelectedIds] = useState<number[]>([]);
-  console.log(selectedIds, "index");
-  console.log(selectedIds);
   return (
     <ContractContext.Provider value={{ selectedIds, setSelectedIds }}>
       {children}

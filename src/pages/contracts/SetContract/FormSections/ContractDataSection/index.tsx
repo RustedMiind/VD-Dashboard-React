@@ -1,6 +1,7 @@
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useReducer, useContext } from "react";
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   Grid,
@@ -22,12 +23,17 @@ import { reducer, contractIntial } from "../../Components/reducer";
 import { useParams } from "react-router-dom";
 import BtnFile from "../../../../clients/addClient/BtnFile";
 import { objectToFormData } from "../../../../../methods";
+import { ContractsContext } from "../../../Context/ContractsContext";
+import { Contract } from "../../../../../types";
 
 const paddingSize = 0.1;
 
 const ContractData = () => {
-  const { type } = useParams();
+  let contractsContext = useContext(ContractsContext);
+  contractsContext.setContracts && contractsContext.setContracts();
+  const { type, id } = useParams();
   const [requests, setRequests] = useState<SelectOptions | null>(null);
+  const [editContract, setEditContract] = useState<Contract | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   const [toaster, setToaster] = useState<ToasterType>({
     open: false,
@@ -47,6 +53,17 @@ const ContractData = () => {
   useEffect(() => {
     dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
   }, [type]);
+
+  useEffect(() => {
+    axios
+      .get<{ data: Contract | null }>(Api(`employee/contract/${id}`))
+      .then((res) => {
+        setEditContract(res.data.data);
+      })
+      .catch((err) => {
+        setEditContract(null);
+      });
+  }, [id]);
 
   useEffect(() => {
     axios
@@ -158,6 +175,7 @@ const ContractData = () => {
         <Grid item p={paddingSize} md={6}>
           <TextInput
             title="موضوع العقد"
+            // defaultValue={editContract?.details}
             onDataChange={(e) => {
               dispatch({
                 type: "DETAILS",
@@ -185,21 +203,40 @@ const ContractData = () => {
             </LocalizationProvider>
           </Stack>
         </Grid>
+
         <Grid item p={paddingSize} md={6}>
-          <SelectItem
-            title={"اسم العميل"}
-            options={requests?.client?.map((client) => ({
-              title: client.name,
-              value: client.id,
-            }))}
-            setSelected={(e: any) => {
-              dispatch({
-                type: "CLIENT_ID",
-                payload: parseInt(e.target.value),
-              });
-            }}
+          <Typography sx={{ ml: 2 }} component="label">
+            اسم العميل
+          </Typography>
+          <Autocomplete
+            size="small"
+            disablePortal
+            id="combo-box-demo"
+            options={(requests?.client ?? []).map((client) => client.name)}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                onSelect={(e: any) => {
+                  requests?.client?.map((client) => {
+                    if (client.name === e.target.value) {
+                      dispatch({
+                        type: "CLIENT_ID",
+                        payload: client.id,
+                      });
+                    }
+                  });
+                }}
+                {...params}
+                placeholder="اختر اسم عميل"
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: "new-password", // disable autocomplete and autofill
+                }}
+              />
+            )}
           />
         </Grid>
+
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">

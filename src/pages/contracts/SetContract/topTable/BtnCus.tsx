@@ -9,12 +9,14 @@ import { useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { Contract } from "../../../../types";
 import { ContractsContext } from "../../Context/ContractsContext";
+import { useNavigate } from "react-router-dom";
 
 export default function BtnCus() {
   const deletedClientsIds = useContext(ContractContext);
   const contractsContext = useContext(ContractsContext);
+  let idEdit = deletedClientsIds?.selectedIds;
+  const navigate = useNavigate();
   function Delete() {
-    console.log(deletedClientsIds);
     axios
       .post<{ data: Contract }>(Api("employee/contract/delete"), {
         id: deletedClientsIds?.selectedIds,
@@ -27,6 +29,13 @@ export default function BtnCus() {
         console.log(err);
       });
   }
+
+  function Update() {
+    if (idEdit?.length == 1) {
+      navigate(`${idEdit[0]}/edit`);
+    }
+  }
+
   return (
     <Stack direction={"row"}>
       <Button
@@ -37,6 +46,8 @@ export default function BtnCus() {
         فلتر
       </Button>
       <Button
+        color="error"
+        disabled={idEdit?.length == 0}
         sx={{ borderRadius: "10px", ml: 2, my: 2, px: 3 }}
         variant="outlined"
         startIcon={<DeleteIcon />}
@@ -45,9 +56,11 @@ export default function BtnCus() {
         حذف
       </Button>
       <Button
+        disabled={idEdit?.length !== 1}
         sx={{ borderRadius: "10px", ml: 2, my: 2, px: 3 }}
         variant="outlined"
         startIcon={<CreditScoreIcon />}
+        onClick={Update}
       >
         تعديل
       </Button>

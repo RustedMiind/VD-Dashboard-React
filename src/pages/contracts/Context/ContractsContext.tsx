@@ -20,7 +20,6 @@ export function ContractsContextProvider({ children }: childrenProps) {
 
   useEffect(getAllContracts, []);
 
-  console.log(contracts, "context");
   function getAllContracts(params?: any) {
     axios
       .get<Partial<ContractResponse>>(Api("employee/contract"), { params })
