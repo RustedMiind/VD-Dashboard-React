@@ -152,7 +152,7 @@ function ContractTasks() {
             </TableHead>
             <TableBody>
               {ContractDetails?.contract?.tasks?.map((task) => (
-                <TableRow>
+                <TableRow sx={{ background: "white" }}>
                   <TableCell>{task.id}</TableCell>
                   <TableCell>{task.name}</TableCell>
                   <TableCell>{task.period}</TableCell>

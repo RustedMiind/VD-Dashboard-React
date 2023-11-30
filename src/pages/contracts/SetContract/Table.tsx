@@ -6,6 +6,9 @@ import {
   TableCell,
   Checkbox,
   Stack,
+  Typography,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import IconButton from "@mui/material/IconButton";
@@ -18,6 +21,8 @@ import { NavLink } from "react-router-dom";
 function ContractsTable({ value }: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
+  const [rowsCount, setRowsCount] = useState(5);
+  const toView = contracts?.data?.slice(0, rowsCount);
   function CheckboxHandler(id: number) {
     return function (e: any, checked: boolean) {
       const idIndex = selectedIdsContext?.selectedIds?.findIndex(
@@ -45,11 +50,11 @@ function ContractsTable({ value }: PropsType) {
 
   return (
     <Stack>
-      <TableContainer sx={{ height: 500 }}>
-        <Table aria-label="simple table" stickyHeader>
+      <TableContainer>
+        <Table>
           <TableHeader value={value} />
           <TableBody>
-            {contracts?.data?.map((request) => {
+            {toView?.map((request) => {
               return (
                 <TableRow>
                   <TableCell>
@@ -86,6 +91,31 @@ function ContractsTable({ value }: PropsType) {
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        sx={{ position: "absolute", top: "100%", pb: 3 }}
+      >
+        <Typography> عدد العرض في الصفحة</Typography>
+        <TextField
+          size="small"
+          value={rowsCount}
+          select
+          onChange={(e) => {
+            setRowsCount(parseInt(e.target.value) || 10);
+          }}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={25}>25</MenuItem>
+          <MenuItem value={100}>100</MenuItem>
+          <MenuItem value={250}>250</MenuItem>
+          <MenuItem value={500}>500</MenuItem>
+          <MenuItem value={1000}>1000</MenuItem>
+          <MenuItem value={10000}>10000</MenuItem>
+          <MenuItem value={contracts?.data?.length}>عرض الكل</MenuItem>
+        </TextField>
+      </Stack>
     </Stack>
   );
 }

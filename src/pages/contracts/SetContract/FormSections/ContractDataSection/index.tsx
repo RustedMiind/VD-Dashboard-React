@@ -1,5 +1,14 @@
 import { useEffect, useState, useReducer } from "react";
-import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Snackbar,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -20,6 +29,21 @@ const ContractData = () => {
   const { type } = useParams();
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
+  const [toaster, setToaster] = useState<ToasterType>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  function updateToaster(partial: Partial<ToasterType>) {
+    setToaster({ ...toaster, ...partial });
+  }
+  function updateAndOpenToaster(partial: Partial<ToasterType>) {
+    updateToaster({ ...partial, open: true });
+  }
+  function handleCloseToaster() {
+    updateToaster({ open: false });
+  }
+
   useEffect(() => {
     dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
   }, [type]);
@@ -41,9 +65,17 @@ const ContractData = () => {
       .post(Api("employee/contract/store"), objectToFormData(contractData))
       .then((response) => {
         console.log(response);
+        updateAndOpenToaster({
+          severity: "success",
+          message: "تم حفظ العقد بنجاح",
+        });
       })
       .catch((error) => {
         console.log(error);
+        updateAndOpenToaster({
+          severity: "error",
+          message: "تعذر في حفظ العقد ",
+        });
       });
   };
 
@@ -175,7 +207,7 @@ const ContractData = () => {
             </Typography>
             <TextField
               id="outlined-address-input"
-              type="text"
+              type="number"
               required
               size="small"
               placeholder="قيمه العقد"
@@ -189,11 +221,9 @@ const ContractData = () => {
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Grid item p={paddingSize} md={6}>
-            <Stack>
-              <BtnFile dispatch={dispatch} />
-            </Stack>
-          </Grid>
+          <Stack width={"480px"}>
+            <BtnFile dispatch={dispatch} />
+          </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <SelectItem
@@ -215,8 +245,27 @@ const ContractData = () => {
       <Button fullWidth type="submit" variant="contained">
         حفظ
       </Button>
+      <Snackbar
+        open={toaster.open}
+        autoHideDuration={6000}
+        onClose={handleCloseToaster}
+        // action={action}
+      >
+        <Alert
+          onClose={handleCloseToaster}
+          severity={toaster.severity}
+          sx={{ width: "100%" }}
+        >
+          {toaster.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
 
+export type ToasterType = {
+  open: boolean;
+  message: string;
+  severity: "error" | "info" | "success" | "warning";
+};
 export default ContractData;

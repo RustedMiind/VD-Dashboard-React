@@ -47,7 +47,7 @@ function Panal() {
   };
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", position: "relative" }}>
         <Box
           sx={{ borderColor: "divider", mb: 2 }}
           display={"flex"}
@@ -65,15 +65,7 @@ function Panal() {
         </Box>
         {contracts?.data?.length !== 0 ? (
           <CustomTabPanel value={value} index={0}>
-            <Paper
-              sx={{
-                p: 2,
-                bgcolor: "Background",
-                overflow: "hidden",
-                backgroundColor: "#F3F5F7",
-              }}
-              elevation={4}
-            >
+            <Paper sx={{ p: 3 }}>
               <Button
                 variant="contained"
                 startIcon={<AddCircleOutlineIcon />}
@@ -91,19 +83,8 @@ function Panal() {
         )}
 
         <CustomTabPanel value={value} index={1}>
-          <Paper
-            // variant="outlined"
-            sx={{
-              p: 2,
-              bgcolor: "Background",
-              overflow: "hidden",
-              backgroundColor: "#F3F5F7",
-            }}
-            elevation={4}
-          >
-            <TopTable value={value} />
-            <ContractsTable value={value} />
-          </Paper>
+          <TopTable value={value} />
+          <ContractsTable value={value} />
         </CustomTabPanel>
       </Box>
     </>

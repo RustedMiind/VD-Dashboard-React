@@ -35,7 +35,7 @@ export default function TableHeader({ value }: PropType) {
           />
         </TableCell>
         <TableCell>رقم العقد</TableCell>
-        <TableCell>
+        <TableCell sx={{ width: 0.12 }}>
           {value === 0 ? "نوع العقد" : "تاريخ الورود"}
           <IconButton
             aria-label="SwapVertIcon"
