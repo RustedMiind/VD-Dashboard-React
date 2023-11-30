@@ -12,11 +12,10 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
-import { styled } from "@mui/material/styles";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
-import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
@@ -511,6 +510,9 @@ export default function FormAdd() {
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
               <BtnFile errors={errors} dispatch={dispatch} />
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.card_image}
+              </Typography>
             </Stack>
           </Grid>
         )}
@@ -548,6 +550,9 @@ export default function FormAdd() {
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
               <BtnFile errors={errors} dispatch={dispatch} />
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.card_image}
+              </Typography>
             </Stack>
           </Grid>
         )}
