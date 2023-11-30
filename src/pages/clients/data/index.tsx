@@ -58,8 +58,8 @@ function ClientData() {
 
         <Paper
           sx={{
-            bgcolor: "Background",
             overflow: "hidden",
+            mb: 7,
           }}
           elevation={4}
         >
