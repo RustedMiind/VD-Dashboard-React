@@ -1,11 +1,11 @@
 export interface ContractPayment {
   id: number;
-  contract_id: number;
+  contract_id: string;
   name: string;
-  amount: number;
-  period: number;
+  amount: string;
+  period: string;
   created_at: string;
   updated_at: string;
-  // status: null;
+  status?: string;
   // deleted_at: null;
 }

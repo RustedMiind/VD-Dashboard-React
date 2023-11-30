@@ -27,6 +27,7 @@ import { ContractDetailsContext } from "../../ContractDetailsContext";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { ContractTask } from "../../../../../types";
+import { ToasterType } from "../../../../../types/other/ToasterStateType";
 
 function ContractTasks() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -182,11 +183,5 @@ function ContractTasks() {
     </>
   );
 }
-
-export type ToasterType = {
-  open: boolean;
-  message: string;
-  severity: "error" | "info" | "success" | "warning";
-};
 
 export default ContractTasks;
