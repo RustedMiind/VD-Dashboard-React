@@ -1,7 +1,10 @@
 import { Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import UploadFileInput from "../../../components/UploadFileInput";
-function BtnFile(props: any) {
+function BtnFile(
+  props: any
+  // دي ايه ؟؟؟
+) {
   const [file, setFile] = useState<File | undefined>(undefined);
 
   return (
@@ -13,6 +16,7 @@ function BtnFile(props: any) {
         value={file}
         setValue={setFile}
         dispatch={props.dispatch}
+        // وايه الdispatch دي جت منين ؟؟
       />
     </Stack>
   );
