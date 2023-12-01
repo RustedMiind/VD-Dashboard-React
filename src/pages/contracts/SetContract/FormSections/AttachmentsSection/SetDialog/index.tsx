@@ -18,6 +18,7 @@ import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import UploadFileInput from "../../../../../../components/UploadFileInput";
 import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
+import { objectToFormData } from "../../../../../../methods";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="medium" fullWidth variant="outlined" />;
@@ -38,19 +39,31 @@ function SetDialog(props: PropsType) {
       setSendState("loading");
 
       (props.edit
-        ? axios.patch(
-            Api(`employee/contract/payment/${props.attachmentData.id}`)
-            // {
-            //   amount: state.amount,
-            //   status: state.status,
-            //   name: state.name,
-            //   period: state.period,
-            // }
+        ? axios.post(
+            Api(`employee/contract/lever/${props.attachmentData.id}`),
+            objectToFormData({
+              contract_id: ContractDetails.contract?.id,
+              card_image: state.file,
+              name: state.name,
+              type: state.type,
+              code: state.code,
+            }),
+            {
+              params: {
+                _method: "PATCH",
+              },
+            }
           )
-        : axios.post(Api("employee/contract/payment/store"), {
-            contract_id: ContractDetails.contract?.id,
-            ...state,
-          })
+        : axios.post(
+            Api("employee/contract/lever/store"),
+            objectToFormData({
+              contract_id: ContractDetails.contract?.id,
+              card_image: state.file,
+              name: state.name,
+              type: state.type,
+              code: state.code,
+            })
+          )
       )
         .then(() => {
           setSendState("success");

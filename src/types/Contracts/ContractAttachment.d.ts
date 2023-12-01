@@ -1,7 +1,7 @@
 export interface ContractAttachment {
   id: string;
   name: string;
-  period: string;
+  code: string;
   type: string;
   card_image: string;
   contract_id: string;

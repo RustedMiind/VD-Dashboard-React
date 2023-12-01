@@ -139,7 +139,7 @@ function AttachmentSection() {
           sx={{ mb: 1 }}
           onClick={handleOpenAddDialog}
         >
-          اضافة مهمه
+          اضافة مرفق
         </Button>
       </Box>
       <Stack>
@@ -162,7 +162,7 @@ function AttachmentSection() {
                     <TableRow>
                       <TableCell>{lever.id}</TableCell>
                       <TableCell>{lever.name}</TableCell>
-                      <TableCell>{lever.period}</TableCell>
+                      <TableCell>{lever.code}</TableCell>
                       <TableCell>{lever.type}</TableCell>
                       <TableCell>
                         <Button

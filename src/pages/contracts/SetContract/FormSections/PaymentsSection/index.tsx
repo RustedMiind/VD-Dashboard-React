@@ -133,7 +133,7 @@ function Payments() {
           sx={{ mb: 1 }}
           onClick={handleOpenAddDialog}
         >
-          اضافة مهمه
+          اضافة دفعة
         </Button>
       </Box>
       <Stack>
