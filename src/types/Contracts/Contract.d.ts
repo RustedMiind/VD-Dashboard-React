@@ -1,5 +1,6 @@
 import { Branch } from "../Branch";
 import { EmployeeType } from "../Employee";
+import { ContractAttachment } from "./ContractAttachment";
 import { ContractPayment } from "./ContractPayment";
 import { ContractTask } from "./ContractTask";
 import { ContractType } from "./ContractType";
@@ -27,9 +28,9 @@ export interface Contract {
   payments?: ContractPayment[];
   branch?: Branch;
   client?: ClientRequest;
-  card_image: null;
-  deleted_at: null;
-  end_date: null;
-  management: null;
-  levers: [];
+  levers?: ContractAttachment[];
+  // card_image: null;
+  // deleted_at: null;
+  // end_date: null;
+  // management: null;
 }

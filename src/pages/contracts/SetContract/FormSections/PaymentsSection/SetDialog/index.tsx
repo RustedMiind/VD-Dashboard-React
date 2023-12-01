@@ -4,28 +4,22 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, MenuItem, Snackbar } from "@mui/material";
+import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
-import { AddTaskFormInit, AddTaskFormType, reducer } from "./reducer";
+import { AddTaskFormInit, reducer } from "./reducer";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import { ContractTask } from "../../../../../../types";
+import { ContractPayment, ContractTask } from "../../../../../../types";
 import { ToasterType } from "../../../../../../types/other/ToasterStateType";
+
+// Icons
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
 }
-
-/*
-
-Activate Delete Button
-Activate Update Button
-Add Toaster With State of Sending State 'error' || "success"
-Get Contract Data After updating any of its sub fields
-
-*/
 
 type TextfieldPropsType = TextFieldProps;
 
@@ -42,13 +36,16 @@ function SetDialog(props: PropsType) {
       setSendState("loading");
 
       (props.edit
-        ? axios.patch(Api(`employee/contract/task/${props.taskData.id}`), {
-            amount: state.amount,
-            employee_id: state.employee_id,
-            name: state.name,
-            period: state.period,
-          })
-        : axios.post(Api("employee/contract/task/store"), {
+        ? axios.patch(
+            Api(`employee/contract/payment/${props.paymentData.id}`),
+            {
+              amount: state.amount,
+              status: state.status,
+              name: state.name,
+              period: state.period,
+            }
+          )
+        : axios.post(Api("employee/contract/payment/store"), {
             contract_id: ContractDetails.contract?.id,
             ...state,
           })
@@ -74,7 +71,7 @@ function SetDialog(props: PropsType) {
     }
   }
   useEffect(() => {
-    if (props.edit) dispatch({ type: "SET_ALL", payload: props.taskData });
+    if (props.edit) dispatch({ type: "SET_ALL", payload: props.paymentData });
     else dispatch({ type: "SET_RESET", payload: undefined });
   }, [props.edit, props.open]);
 
@@ -89,13 +86,13 @@ function SetDialog(props: PropsType) {
         onSubmit={handleSubmit}
       >
         <DialogTitle>
-          {props.edit ? "تعديل المهمة" : "اضافة مهمة جديدة"}
+          {props.edit ? "تعديل الدفعة" : "اضافة دفعة جديدة"}
         </DialogTitle>
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
               <FormTextField
-                label="اسم المهمة"
+                label="اسم الدفعة"
                 value={state.name}
                 onChange={(e) => {
                   dispatch({ type: "SET_NAME", payload: e.target.value });
@@ -104,7 +101,7 @@ function SetDialog(props: PropsType) {
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
-                label="مدة المهمة"
+                label="مدة الدفعة"
                 value={state.period}
                 onChange={(e) => {
                   dispatch({ type: "SET_PERIOD", payload: e.target.value });
@@ -113,7 +110,7 @@ function SetDialog(props: PropsType) {
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
-                label="قيمة المهمة"
+                label="قيمة الدفعة"
                 value={state.amount}
                 onChange={(e) => {
                   dispatch({ type: "SET_AMOUNT", payload: e.target.value });
@@ -122,23 +119,27 @@ function SetDialog(props: PropsType) {
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
-                label="المسؤول عن المهمة"
+                label="اختيار حالة الدفعة"
                 select
-                value={state.employee_id}
+                value={state.status}
                 onChange={(e) => {
                   dispatch({
-                    type: "SET_EMPLOYEE_ID",
+                    type: "SET_STATUS",
                     payload: e.target.value,
                   });
                 }}
               >
-                {ContractDetails.use?.employees?.map((employee) => (
-                  <MenuItem key={employee.id} value={employee.id}>
-                    {employee.name}
-                  </MenuItem>
+                <MenuItem value={"-30"}>بعد 30 يوم</MenuItem>
+                <MenuItem value={"-60"}>بعد 60 يوم</MenuItem>
+                <MenuItem value={undefined} disabled>
+                  <ListItemIcon>
+                    <ArrowDropDownIcon />
+                  </ListItemIcon>
+                  بعد انتهاء مهمة
+                </MenuItem>
+                {ContractDetails.contract?.tasks?.map((task) => (
+                  <MenuItem value={task.id}> {task.name} </MenuItem>
                 ))}
-                <MenuItem value="2">محمد</MenuItem>
-                <MenuItem value="3">علي</MenuItem>
               </FormTextField>
             </Grid>
           </Grid>
@@ -173,7 +174,7 @@ type PropsType = {
 } & (
   | {
       edit: true;
-      taskData: ContractTask;
+      paymentData: ContractPayment;
     }
   | { edit?: false }
 );

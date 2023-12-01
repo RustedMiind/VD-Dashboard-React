@@ -4,28 +4,25 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, MenuItem, Snackbar } from "@mui/material";
+import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
-import { AddTaskFormInit, AddTaskFormType, reducer } from "./reducer";
+import { AddAttachmentFormInit, reducer } from "./reducer";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import { ContractTask } from "../../../../../../types";
+import { ContractPayment, ContractTask } from "../../../../../../types";
 import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 
+// Icons
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import UploadFileInput from "../../../../../../components/UploadFileInput";
+import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
+import { objectToFormData } from "../../../../../../methods";
+
 function FormTextField(props: TextfieldPropsType) {
-  return <TextField {...props} size="small" fullWidth variant="outlined" />;
+  return <TextField {...props} size="medium" fullWidth variant="outlined" />;
 }
-
-/*
-
-Activate Delete Button
-Activate Update Button
-Add Toaster With State of Sending State 'error' || "success"
-Get Contract Data After updating any of its sub fields
-
-*/
 
 type TextfieldPropsType = TextFieldProps;
 
@@ -34,7 +31,7 @@ function SetDialog(props: PropsType) {
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");
-  const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
+  const [state, dispatch] = useReducer(reducer, AddAttachmentFormInit);
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -42,16 +39,31 @@ function SetDialog(props: PropsType) {
       setSendState("loading");
 
       (props.edit
-        ? axios.patch(Api(`employee/contract/task/${props.taskData.id}`), {
-            amount: state.amount,
-            employee_id: state.employee_id,
-            name: state.name,
-            period: state.period,
-          })
-        : axios.post(Api("employee/contract/task/store"), {
-            contract_id: ContractDetails.contract?.id,
-            ...state,
-          })
+        ? axios.post(
+            Api(`employee/contract/lever/${props.attachmentData.id}`),
+            objectToFormData({
+              contract_id: ContractDetails.contract?.id,
+              card_image: state.file,
+              name: state.name,
+              type: state.type,
+              code: state.code,
+            }),
+            {
+              params: {
+                _method: "PATCH",
+              },
+            }
+          )
+        : axios.post(
+            Api("employee/contract/lever/store"),
+            objectToFormData({
+              contract_id: ContractDetails.contract?.id,
+              card_image: state.file,
+              name: state.name,
+              type: state.type,
+              code: state.code,
+            })
+          )
       )
         .then(() => {
           setSendState("success");
@@ -74,14 +86,15 @@ function SetDialog(props: PropsType) {
     }
   }
   useEffect(() => {
-    if (props.edit) dispatch({ type: "SET_ALL", payload: props.taskData });
+    if (props.edit)
+      dispatch({ type: "SET_ALL", payload: props.attachmentData });
     else dispatch({ type: "SET_RESET", payload: undefined });
   }, [props.edit, props.open]);
 
   return (
     <>
       <Dialog
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
         open={props.open}
         onClose={props.handleClose}
@@ -89,13 +102,22 @@ function SetDialog(props: PropsType) {
         onSubmit={handleSubmit}
       >
         <DialogTitle>
-          {props.edit ? "تعديل المهمة" : "اضافة مهمة جديدة"}
+          {props.edit ? "تعديل المرفق" : "اضافة مرفق جديدة"}
         </DialogTitle>
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
               <FormTextField
-                label="اسم المهمة"
+                label="رقم المرفق"
+                value={state.code}
+                onChange={(e) => {
+                  dispatch({ type: "SET_CODE", payload: e.target.value });
+                }}
+              />
+            </Grid>
+            <Grid p={1} item md={6}>
+              <FormTextField
+                label="اسم المرفق"
                 value={state.name}
                 onChange={(e) => {
                   dispatch({ type: "SET_NAME", payload: e.target.value });
@@ -104,42 +126,21 @@ function SetDialog(props: PropsType) {
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
-                label="مدة المهمة"
-                value={state.period}
+                label="نوع المرفق"
+                value={state.type}
                 onChange={(e) => {
-                  dispatch({ type: "SET_PERIOD", payload: e.target.value });
+                  dispatch({ type: "SET_TYPE", payload: e.target.value });
                 }}
               />
             </Grid>
             <Grid p={1} item md={6}>
-              <FormTextField
-                label="قيمة المهمة"
-                value={state.amount}
-                onChange={(e) => {
-                  dispatch({ type: "SET_AMOUNT", payload: e.target.value });
+              <UploadFileInput
+                value={state.file}
+                subTitle=""
+                setValue={(file) => {
+                  dispatch({ type: "SET_FILE", payload: file });
                 }}
               />
-            </Grid>
-            <Grid p={1} item md={6}>
-              <FormTextField
-                label="المسؤول عن المهمة"
-                select
-                value={state.employee_id}
-                onChange={(e) => {
-                  dispatch({
-                    type: "SET_EMPLOYEE_ID",
-                    payload: e.target.value,
-                  });
-                }}
-              >
-                {ContractDetails.use?.employees?.map((employee) => (
-                  <MenuItem key={employee.id} value={employee.id}>
-                    {employee.name}
-                  </MenuItem>
-                ))}
-                <MenuItem value="2">محمد</MenuItem>
-                <MenuItem value="3">علي</MenuItem>
-              </FormTextField>
             </Grid>
           </Grid>
         </DialogContent>
@@ -173,7 +174,7 @@ type PropsType = {
 } & (
   | {
       edit: true;
-      taskData: ContractTask;
+      attachmentData: ContractAttachment;
     }
   | { edit?: false }
 );
