@@ -9,10 +9,7 @@ function TableHeader(props: any) {
   function checkAllHandler(e: any) {
     const allChecked: number[] = props.requests?.reduce(
       (accumlator: any, newValue: any) => {
-        if (
-          !newValue.contracts?.length &&
-          newValue.Contract_status !== "منتهي"
-        ) {
+        if (!newValue.contracts?.length && newValue.contracts === null) {
           accumlator.push(newValue.id);
         }
         return accumlator;

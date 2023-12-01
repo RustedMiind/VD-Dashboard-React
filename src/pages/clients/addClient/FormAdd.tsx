@@ -321,7 +321,7 @@ export default function FormAdd() {
             </Typography>
             <TextField
               id="outlined-phone-input"
-              type="text"
+              type="number"
               required
               size="small"
               placeholder=" رقم الجوال"

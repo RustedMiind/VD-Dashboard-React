@@ -9,7 +9,7 @@ function TextInput(props: PropsType) {
         <TextField
           // defaultValue={props.defaultValue}
           id="outlined-phone-input"
-          type="text"
+          type={props.type}
           required
           size="small"
           placeholder={props.title}
@@ -26,6 +26,7 @@ type PropsType = {
   onDataChange?: (
     change: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
+  type: string;
 };
 
 export default TextInput;

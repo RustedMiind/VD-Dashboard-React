@@ -141,6 +141,7 @@ const ContractData = () => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <TextInput
+            type="number"
             title={"مدة العقد"}
             onDataChange={(e) => {
               dispatch({
@@ -152,6 +153,7 @@ const ContractData = () => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <TextInput
+            type="number"
             title={"رقم العقد"}
             onDataChange={(e) => {
               dispatch({
@@ -164,7 +166,7 @@ const ContractData = () => {
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             isDisabled={true}
-            selected={+(type || 1)}
+            selected={+(type || 4)}
             options={requests?.contractType?.map((type) => ({
               title: type.name,
               value: type.id,
@@ -174,6 +176,7 @@ const ContractData = () => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <TextInput
+            type="text"
             title="موضوع العقد"
             // defaultValue={editContract?.details}
             onDataChange={(e) => {

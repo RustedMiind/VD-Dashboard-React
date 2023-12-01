@@ -13,6 +13,7 @@ export interface ClientRequest {
   broker_id: null;
   status_id: null;
   Contract_status: "منتهي";
+  contracts_count: number;
   broker: null;
   status: null;
   contracts: Contract[];
