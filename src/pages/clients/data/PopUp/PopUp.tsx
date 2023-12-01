@@ -50,8 +50,8 @@ function PopUp({ open, setOpen }: any) {
     console.log(searchClient);
 
     if (
-      searchClient.name != "" ||
-      searchClient.phone != "" ||
+      searchClient.name !== "" ||
+      searchClient.phone !== "" ||
       searchClient.branch_id !== 0 ||
       searchClient.broker_id !== 0
     ) {
@@ -144,7 +144,7 @@ function PopUp({ open, setOpen }: any) {
           <Grid item p={paddingSize} md={6}>
             <Stack>
               <Typography component="label" sx={{ ml: 2 }}>
-                {searchClient.type == "individual"
+                {searchClient.type === "individual"
                   ? "اسم العميل *"
                   : "اسم الشركه *"}
               </Typography>

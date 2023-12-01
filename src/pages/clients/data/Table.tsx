@@ -35,7 +35,6 @@ function ClientRequestsTable(props: PropsType) {
   const chekedArray: IdListType = {
     id: [],
   };
-  const str = 5;
   const handlePrint = () => {
     tableRef.current.print();
   };
