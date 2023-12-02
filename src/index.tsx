@@ -101,7 +101,7 @@ function RunProd() {
 }
 function RunDev() {
   axios
-    .post<{ data: { token: string; user: any } }>(Api("employee/login"), {
+    .post<{ data: { token: string; user: unknown } }>(Api("employee/login"), {
       email: devUser.email,
       password: devUser.password,
       imei: "5153153",

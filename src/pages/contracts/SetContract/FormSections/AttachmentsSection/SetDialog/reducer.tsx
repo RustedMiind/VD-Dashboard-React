@@ -14,7 +14,7 @@ interface AmountActionType extends ReducerAction<string> {
 interface FileActionType extends ReducerAction<File | undefined> {
   type: "SET_FILE";
 }
-interface ResetActionType extends ReducerAction<any> {
+interface ResetActionType extends ReducerAction<unknown> {
   type: "SET_RESET";
 }
 

@@ -39,7 +39,7 @@ interface AmountActionType extends ReducerAction<string> {
 interface ManagerActionType extends ReducerAction<string> {
   type: "SET_EMPLOYEE_ID";
 }
-interface ResetActionType extends ReducerAction<any> {
+interface ResetActionType extends ReducerAction<unknown> {
   type: "SET_RESET";
 }
 interface SetAllActionType extends ReducerAction<AddTaskFormType> {

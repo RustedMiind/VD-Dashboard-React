@@ -11,7 +11,7 @@ interface PeriodActionType extends ReducerAction<string> {
 interface AmountActionType extends ReducerAction<string> {
   type: "SET_AMOUNT";
 }
-interface ResetActionType extends ReducerAction<any> {
+interface ResetActionType extends ReducerAction<unknown> {
   type: "SET_RESET";
 }
 interface SetAllActionType extends ReducerAction<Partial<AddPaymentFormType>> {
