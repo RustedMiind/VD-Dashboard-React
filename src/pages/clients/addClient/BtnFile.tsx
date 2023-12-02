@@ -24,7 +24,7 @@ function BtnFile(props: any) {
       <UploadFileInput
         value={file}
         setValue={setFile}
-        dispatch={props.dispatch}
+        // dispatch={props.dispatch}
       />
     </Stack>
   );
