@@ -22,12 +22,14 @@ import { ProceduresModelTypeCode, Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 import { modelNamesIds } from "../ModelTypes";
 import SelectManagerDialog from "./SelectManagerDialog";
+import { EmployeeType } from "../../../../types";
 
 function TableComponent({
   level,
   formDisabled,
   dispatch,
   departments,
+  employees,
 }: PropsType) {
   return (
     <TableContainer>
@@ -49,13 +51,10 @@ function TableComponent({
                 <SelectManagerDialog
                   deparment_id={level.department_id}
                   departments={departments}
+                  disabled={level.employee_id !== -1}
                   setDepartmentId={(value: number) => {
                     dispatch({
-                      type: "SET_EMPLOYEE",
-                      payload: 0,
-                    });
-                    dispatch({
-                      type: "SET_MANAGER",
+                      type: "SET_DEPARTMENT",
                       payload: value,
                     });
                   }}
@@ -67,14 +66,14 @@ function TableComponent({
                 <FormControl
                   fullWidth
                   size={"small"}
-                  // disabled={props.disabled}
+                  // disabled={level.department_id !== null}
                 >
                   <InputLabel size="small">الموظف</InputLabel>
                   <Select
                     label={"الموظف"}
                     size={"small"}
-                    value={level.employee_id}
-                    disabled={formDisabled}
+                    value={level.employee_id || null}
+                    disabled={formDisabled || level.department_id !== -1}
                     onChange={(e) => {
                       console.log(departments);
                       dispatch({
@@ -83,19 +82,12 @@ function TableComponent({
                       });
                     }}
                   >
-                    {departments
-                      .find(
-                        (department) =>
-                          department.departmentId === level.department_id
-                      )
-                      ?.employees.map((employee) => (
-                        <MenuItem
-                          key={employee.employee_id}
-                          value={employee.employee_id}
-                        >
-                          {employee.employeeName}
-                        </MenuItem>
-                      ))}
+                    <MenuItem value={-1}>لن يتم اختيار موظف</MenuItem>
+                    {employees?.map((employee) => (
+                      <MenuItem key={employee?.id} value={employee?.id}>
+                        {employee?.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Box>
@@ -187,6 +179,7 @@ type PropsType = {
   dispatch: React.Dispatch<ActionTypes>;
   level: Step;
   departments: DepartmentWithEmployeesType[];
+  employees: Partial<EmployeeType>[] | null;
 };
 
 export default TableComponent;

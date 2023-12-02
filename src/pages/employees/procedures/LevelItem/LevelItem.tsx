@@ -11,6 +11,7 @@ import { Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 import useReducer, { ActionTypes } from "./reducer";
 import TableComponent from "./Table";
+import { EmployeeType } from "../../../../types";
 
 function LevelItem(props: PropsType) {
   const [expanded, setExpanded] = useState(false);
@@ -114,6 +115,7 @@ function LevelItem(props: PropsType) {
         <AccordionDetails sx={{ bgcolor: "background.paper", my: 0 }}>
           <TableComponent
             departments={props.departments}
+            employees={props.employees}
             dispatch={dispatch}
             formDisabled={formDisabled}
             level={level}
@@ -128,6 +130,7 @@ type PropsType = {
   onDelete?: () => void;
   level: Step;
   departments: DepartmentWithEmployeesType[];
+  employees: Partial<EmployeeType>[] | null;
   updateLevel: (payload: Step) => void;
   name: string;
 };
