@@ -1,10 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import UploadFileInput from "../../../components/UploadFileInput";
-function BtnFile(
-  props: any
-  // دي ايه ؟؟؟
-) {
+function BtnFile({ dispatch }: any) {
   const [file, setFile] = useState<File | undefined>(undefined);
 
   return (
@@ -14,9 +11,13 @@ function BtnFile(
       </Typography>
       <UploadFileInput
         value={file}
-        setValue={setFile}
-        dispatch={props.dispatch}
-        // وايه الdispatch دي جت منين ؟؟
+        setValue={(file) => {
+          setFile(file);
+          dispatch({
+            type: "CARD_IMAGE",
+            payload: file,
+          });
+        }}
       />
     </Stack>
   );

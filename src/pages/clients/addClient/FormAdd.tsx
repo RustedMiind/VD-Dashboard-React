@@ -366,41 +366,6 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-        {/* <Grid item p={paddingSize} md={6}>
-          <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              الوسيط <RequiredSymbol />
-            </Typography>
-            {(clientEdit === null || clientEdit?.broker_id) && (
-              <TextField
-                id="outlined-select-currency"
-                size="small"
-                select
-                defaultValue={clientEdit?.broker_id}
-                label="الوسيط"
-                InputLabelProps={{ sx: { color: "#abc2db" } }}
-                onChange={(e) => {
-                  console.log(e.target);
-                  dispatch({
-                    type: "BROKER_ID",
-                    payload: parseInt(e.target.value),
-                  });
-                }}
-              >
-                {brokers?.map((broker) => (
-                  <MenuItem key={broker.id} value={broker.id}>
-                    {broker.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-              {errors?.broker_id}
-            </Typography>
-          </Stack>
-        </Grid> */}
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -506,7 +471,7 @@ export default function FormAdd() {
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
-              <BtnFile errors={errors} dispatch={dispatch} />
+              <BtnFile dispatch={dispatch} />
               <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>
@@ -546,7 +511,7 @@ export default function FormAdd() {
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
-              <BtnFile errors={errors} dispatch={dispatch} />
+              <BtnFile dispatch={dispatch} />
               <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>
