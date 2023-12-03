@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -20,6 +21,7 @@ import { FormData, individualInitial, reducer } from "../../addClient/reducer";
 import { Api } from "../../../../constants";
 import { useNavigate } from "react-router-dom";
 import { Branch, Broker } from "../../../../types";
+import { Snackbar } from "@mui/material";
 type PropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +32,20 @@ function PopUp({ open, setOpen }: PropsType) {
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
   const paddingSize = 0.1;
-
+  const [toaster, setToaster] = useState<ToasterType>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  function updateToaster(partial: Partial<ToasterType>) {
+    setToaster({ ...toaster, ...partial });
+  }
+  function updateAndOpenToaster(partial: Partial<ToasterType>) {
+    updateToaster({ ...partial, open: true });
+  }
+  function handleCloseToaster() {
+    updateToaster({ open: false });
+  }
   useEffect(() => {
     axios
       .get<{ branches: Branch[]; brokers: Broker[] }>(
@@ -52,31 +67,33 @@ function PopUp({ open, setOpen }: PropsType) {
   const getClient = () => {
     console.log(searchClient);
 
-    if (
-      searchClient.name != "" ||
-      searchClient.phone != "" ||
-      searchClient.branch_id !== 0 ||
-      searchClient.broker_id !== 0
-    ) {
-      axios
-        .get<{ data: FormData }>(Api(`employee/client/edit`), {
-          params: {
-            name: searchClient.name,
-            phone: searchClient.phone,
-            branch_id: searchClient.branch_id,
-            broker_id: searchClient.broker_id,
-          },
-        })
-        .then(({ data }) => {
-          if (data.data) {
-            navigate(`${data.data.name}/edit`);
-          }
-        })
-        .catch((err) => {
-          console.log("err", err);
+    axios
+      .get<{ data: FormData }>(Api(`employee/client/edit`), {
+        params: {
+          name: searchClient.name,
+          phone: searchClient.phone,
+          branch_id: searchClient.branch_id,
+          broker_id: searchClient.broker_id,
+        },
+      })
+      .then(({ data }) => {
+        if (data.data) {
+          navigate(`${data.data.name}/edit`);
+        }
+        updateAndOpenToaster({
+          severity: "error",
+          message: "لا يوجد عميل بهذه البيانات",
         });
-    } else {
-    }
+      })
+      .catch((err) => {
+        console.log("no");
+
+        console.log("errdswd", err);
+        updateAndOpenToaster({
+          severity: "error",
+          message: "تعذر في حفظ العقد ",
+        });
+      });
   };
   function changeTypeHandler(type: "individual" | "company") {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,8 +268,28 @@ function PopUp({ open, setOpen }: PropsType) {
           </Grid>
         </Grid>
       </Box>
+      <Snackbar
+        open={toaster.open}
+        autoHideDuration={6000}
+        onClose={handleCloseToaster}
+        // action={action}
+      >
+        <Alert
+          onClose={handleCloseToaster}
+          severity={toaster.severity}
+          sx={{ width: "100%" }}
+        >
+          {toaster.message}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 }
 
 export default PopUp;
+
+export type ToasterType = {
+  open: boolean;
+  message: string;
+  severity: "error" | "info" | "success" | "warning";
+};

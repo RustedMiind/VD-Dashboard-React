@@ -152,7 +152,7 @@ const ContractData = () => {
               required
               size="small"
               // defaultValue={editContract?.period}
-              placeholder={editContract ? editContract?.period : "قيمة العقد"}
+              value={contractData ? contractData?.period : "قيمة العقد"}
               onChange={(e) => {
                 dispatch({
                   type: "PERIOD",
@@ -174,7 +174,7 @@ const ContractData = () => {
               required
               size="small"
               // defaultValue={editContract?.period}
-              placeholder={editContract ? editContract?.code : "رقم العقد"}
+              value={contractData ? contractData?.code : "رقم العقد"}
               onChange={(e) => {
                 dispatch({
                   type: "CODE",
