@@ -1,19 +1,9 @@
-import { Stack, Typography, Box, Button, Grid, Paper } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import UploadFileInput from "../../../components/UploadFileInput";
+import { Dispatch } from "react";
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: "1px",
-  position: "absolute",
-  whiteSpace: "nowrap",
-  width: "1px",
-});
-function BtnFile(props: any) {
-  // const [selectedFile, setSelectedFile] = useState<any>(null);
+function BtnFile(props: BtnFileProps) {
   const [file, setFile] = useState<File | undefined>(undefined);
 
   return (
@@ -23,11 +13,23 @@ function BtnFile(props: any) {
       </Typography>
       <UploadFileInput
         value={file}
-        setValue={setFile}
-        // dispatch={props.dispatch}
+        setValue={(file) => {
+          setFile(file);
+          props.dispatch({
+            type: "CARD_IMAGE",
+            payload: file,
+          });
+        }}
       />
     </Stack>
   );
 }
 
 export default BtnFile;
+interface BtnFileProps {
+  dispatch: Dispatch<CardImageAction>;
+}
+interface CardImageAction {
+  type: "CARD_IMAGE";
+  payload: File;
+}

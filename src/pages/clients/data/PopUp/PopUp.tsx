@@ -16,12 +16,15 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
-import { individualInitial, reducer } from "../../addClient/reducer";
+import { FormData, individualInitial, reducer } from "../../addClient/reducer";
 import { Api } from "../../../../constants";
 import { useNavigate } from "react-router-dom";
 import { Branch, Broker } from "../../../../types";
-
-function PopUp({ open, setOpen }: any) {
+type PropsType = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+function PopUp({ open, setOpen }: PropsType) {
   const [searchClient, dispatch] = useReducer(reducer, individualInitial);
   const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
@@ -64,7 +67,7 @@ function PopUp({ open, setOpen }: any) {
             broker_id: searchClient.broker_id,
           },
         })
-        .then(({ data }: any) => {
+        .then(({ data }) => {
           if (data.data) {
             navigate(`${data.data.name}/edit`);
           }
@@ -80,7 +83,9 @@ function PopUp({ open, setOpen }: any) {
       if (e.target.checked) dispatch({ type: "TYPE", payload: type });
     };
   }
-  function submitHandle(e: any) {
+  function submitHandle(
+    e: React.FormEvent<HTMLFormElement> | React.FormEvent<HTMLButtonElement>
+  ) {
     e.preventDefault();
     getClient();
   }

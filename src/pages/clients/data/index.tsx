@@ -1,6 +1,6 @@
 import { Stack, Typography, Box, Paper, Button } from "@mui/material";
 import SearchBar from "./SearchBar";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ClientRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
@@ -12,9 +12,7 @@ import PopUp from "./PopUp/PopUp";
 import { IndexContextProvider } from "../Context/Store";
 
 function ClientData() {
-  const [open, setOpen] = useState<
-    Boolean | React.Dispatch<React.SetStateAction<Boolean>>
-  >(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   // search bar
   const [requests, setRequests] = useState<ClientRequest[] | null>(null);

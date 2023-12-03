@@ -147,6 +147,7 @@ export type ActionTypes =
 // | SetFormIndividualAcionType;
 
 export interface BaseFormData {
+  id?: number;
   name: string;
   card_id?: number | null;
   register_number?: number | null;
