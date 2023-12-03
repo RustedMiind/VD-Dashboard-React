@@ -8,13 +8,11 @@ import { StepType } from "../types/Step";
 import { FormData } from "../types/FormData";
 import TableComponent from "./Table";
 import useReducer from "./reducer";
-import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 
 const LevelItem = ({
   dataForm,
   nameBtn,
   level,
-  departments,
   updateLevel,
   onDelete,
 }: PropsType) => {
@@ -101,7 +99,6 @@ const LevelItem = ({
             formDisabled={formDisabled}
             level={localLevel}
             dispatch={dispatch}
-            departments={departments}
           />
         </AccordionDetails>
       </Accordion>
@@ -115,7 +112,6 @@ type PropsType = {
   dataForm: FormData;
   updateLevel: (payload: StepType) => void;
   nameBtn: string;
-  departments: DepartmentWithEmployeesType[] | undefined | null;
 };
 
 export default LevelItem;

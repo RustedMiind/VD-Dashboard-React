@@ -9,9 +9,6 @@ import { Api } from "../../../constants";
 import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
-import HandleDepartmentWithEmployees, {
-  DepartmentWithEmployeesType,
-} from "../../../methods/HandleData/HandleDepartmentWithEmployees";
 
 const InitLevel: StepType = {
   branch_id: 0,
@@ -33,9 +30,6 @@ const ClientProcess = () => {
     levels: [InitLevel],
   });
   const [getLevelsData, setLevelsData] = useState();
-  const [departments, setDepartments] = useState<
-    DepartmentWithEmployeesType[] | null
-  >();
 
   const snackbarClose = () => {
     setSendState("none");
@@ -47,26 +41,8 @@ const ClientProcess = () => {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
-            console.log(res.data);
+            console.log(res.data.department_workAt);
             setDataForm(res.data);
-            resSolve();
-          })
-          .catch((err) => {
-            console.log(err);
-            setEndPointStatus("error");
-            reject(err);
-          });
-      } else resSolve();
-    });
-  };
-
-  const getDepartments = () => {
-    return new Promise<void>((resSolve, reject) => {
-      if (!departments) {
-        axios
-          .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
-          .then((res) => {
-            setDepartments(HandleDepartmentWithEmployees(res.data.employee));
             resSolve();
           })
           .catch((err) => {
@@ -134,7 +110,6 @@ const ClientProcess = () => {
   const loadLevels = () => {
     getFormData().catch(console.log);
     getLevels().catch(console.log);
-    getDepartments().then(getLevels).catch(console.log);
   };
 
   const updateLevel = (index: number) => {
@@ -212,7 +187,6 @@ const ClientProcess = () => {
                           }
                         : undefined
                     }
-                    departments={departments}
                   />
                 );
               })}

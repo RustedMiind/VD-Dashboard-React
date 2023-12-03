@@ -16,15 +16,15 @@ import {
 import { FormData } from "../types/FormData";
 import { StepType } from "../types/Step";
 import React from "react";
-import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
+import SelectManager from "./SelectManager";
 
 const TableComponent = ({
   formDisabled,
   level,
   dataForm,
-  departments,
   dispatch,
 }: PropsType) => {
+  // console.log(level.department_id);
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -42,27 +42,21 @@ const TableComponent = ({
           <TableRow>
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl fullWidth size={"small"}>
-                  <InputLabel size="small">القسم</InputLabel>
-                  <Select
-                    label={"القسم"}
-                    size={"small"}
-                    value={level.department_id}
-                    disabled={formDisabled}
-                    onChange={(e) => {
-                      dispatch({
-                        type: "SET_MANAGEMENT",
-                        payload: e.target.value as number,
-                      });
-                    }}
-                  >
-                    {dataForm?.department?.map(({ id, name }) => (
-                      <MenuItem key={id} value={id}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <SelectManager
+                  formDisabled={formDisabled || level?.employee_id !== 0}
+                  department_id={level.department_id}
+                  departments={dataForm?.department_workAt}
+                  setDepartmentId={(value: number) => {
+                    dispatch({
+                      type: "SET_EMPLOYEE",
+                      payload: 0,
+                    });
+                    dispatch({
+                      type: "SET_MANAGEMENT",
+                      payload: value,
+                    });
+                  }}
+                />
               </Box>
             </TableCell>
 
@@ -73,20 +67,28 @@ const TableComponent = ({
                   <Select
                     label={"الموظف"}
                     size={"small"}
-                    disabled={formDisabled}
                     value={level.employee_id}
+                    disabled={level?.department_id !== 0 || formDisabled}
                     onChange={(e) => {
+                      console.log(dataForm?.department_workAt);
                       dispatch({
                         type: "SET_EMPLOYEE",
                         payload: e.target.value as number,
                       });
                     }}
                   >
-                    {dataForm?.employees?.map(({ id, name }) => (
-                      <MenuItem key={id} value={id}>
-                        {name}
-                      </MenuItem>
-                    ))}
+                    {dataForm?.department_workAt.map((department) =>
+                      department.work_ats.map((employee) => {
+                        return (
+                          <MenuItem
+                            key={employee.employee_id}
+                            value={employee.employee_id}
+                          >
+                            {employee.employeeName}
+                          </MenuItem>
+                        );
+                      })
+                    )}
                   </Select>
                 </FormControl>
               </Box>
@@ -172,7 +174,6 @@ type PropsType = {
   level: StepType;
   dataForm: FormData;
   dispatch: React.Dispatch<any>;
-  departments: DepartmentWithEmployeesType[] | undefined | null;
 };
 
 export default TableComponent;

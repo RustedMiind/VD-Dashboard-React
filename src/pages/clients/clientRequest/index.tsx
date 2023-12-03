@@ -19,6 +19,7 @@ const ClientRequests = () => {
   const [requests, setRequests] = useState<
     PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
+  console.log(requests.length);
   const [dialogRequest, setDialogRequest] = useState<PanelData | null>(null);
   const [dialogOpen, setDialogOpen] = useState<
     undefined | "model" | "status" | "details"
