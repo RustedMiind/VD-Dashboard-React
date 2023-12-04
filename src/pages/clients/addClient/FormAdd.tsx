@@ -151,7 +151,6 @@ export default function FormAdd() {
       .post(Api(`employee/client/update/${clientEdit?.id}`), toSend)
       .then((res) => {
         setToaster({ type: "success" });
-        console.log(formData);
         navigate("/react/clients");
       })
       .catch((err) => {
