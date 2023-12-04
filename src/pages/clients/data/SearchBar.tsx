@@ -17,7 +17,6 @@ function SearchBar(props: PropsType) {
           size="small"
           sx={{ flexGrow: 1 }}
           onChange={(e: any) => {
-            
             props.setSearch(e.target.value);
           }}
           // disabled

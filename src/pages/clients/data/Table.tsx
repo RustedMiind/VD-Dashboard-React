@@ -35,7 +35,6 @@ function ClientRequestsTable(props: PropsType) {
   const chekedArray: IdListType = {
     id: [],
   };
-  const str = 5;
   const handlePrint = () => {
     tableRef.current.print();
   };
@@ -79,7 +78,7 @@ function ClientRequestsTable(props: PropsType) {
                       <Row
                         text={
                           <Checkbox
-                            disabled={request.Contract_status === "منتهي"}
+                            disabled={request.contracts !== null}
                             checked={selectedItems.includes(request.id)}
                             value={request.id}
                             onChange={CheckboxHandler}

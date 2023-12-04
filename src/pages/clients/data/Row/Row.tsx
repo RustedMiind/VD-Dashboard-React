@@ -7,7 +7,6 @@ function Row(props: any) {
 
 export default Row;
 
-
 export type PropsType = {
   requests: ClientRequest[] | undefined;
 };

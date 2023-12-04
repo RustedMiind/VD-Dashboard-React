@@ -26,9 +26,6 @@ export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<any | undefined>(undefined);
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[]>([]);
-  const [currentBroker, setCurrentBroker] = useState<number | undefined>(
-    undefined
-  );
   const [formData, dispatch] = useReducer(reducer, individualInitial);
   const [errors, setErrors] = useState<
     Partial<FormData & { card_image: string }> | undefined
@@ -234,7 +231,7 @@ export default function FormAdd() {
       <Grid container>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            {formData.type == "individual" ? (
+            {formData.type === "individual" ? (
               <Typography component="label" sx={{ ml: 2 }}>
                 اسم العميل
                 <RequiredSymbol />
@@ -252,7 +249,7 @@ export default function FormAdd() {
               size="small"
               value={formData.name}
               placeholder={
-                formData.type == "individual" ? "اسم العميل" : "اسم الشركه"
+                formData.type === "individual" ? "اسم العميل" : "اسم الشركه"
               }
               onChange={(e) => {
                 dispatch({
@@ -269,7 +266,7 @@ export default function FormAdd() {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            {formData.type == "individual" ? (
+            {formData.type === "individual" ? (
               <Typography component="label" sx={{ ml: 2 }}>
                 رقم الهويه <RequiredSymbol />
               </Typography>
@@ -284,18 +281,18 @@ export default function FormAdd() {
               type="number"
               required
               placeholder={
-                formData.type == "individual" ? "رقم الهويه" : "السجل التجاري"
+                formData.type === "individual" ? "رقم الهويه" : "السجل التجاري"
               }
               size="small"
               value={
-                formData.type == "individual"
+                formData.type === "individual"
                   ? formData.card_id
                   : formData.register_number
               }
               onChange={(e) => {
                 dispatch({
                   type:
-                    formData.type == "individual"
+                    formData.type === "individual"
                       ? "CARD_ID"
                       : "REGISTER_NUMBER",
 
@@ -321,7 +318,7 @@ export default function FormAdd() {
             </Typography>
             <TextField
               id="outlined-phone-input"
-              type="text"
+              type="number"
               required
               size="small"
               placeholder=" رقم الجوال"
@@ -369,41 +366,6 @@ export default function FormAdd() {
             </Typography>
           </Stack>
         </Grid>
-        {/* <Grid item p={paddingSize} md={6}>
-          <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              الوسيط <RequiredSymbol />
-            </Typography>
-            {(clientEdit === null || clientEdit?.broker_id) && (
-              <TextField
-                id="outlined-select-currency"
-                size="small"
-                select
-                defaultValue={clientEdit?.broker_id}
-                label="الوسيط"
-                InputLabelProps={{ sx: { color: "#abc2db" } }}
-                onChange={(e) => {
-                  console.log(e.target);
-                  dispatch({
-                    type: "BROKER_ID",
-                    payload: parseInt(e.target.value),
-                  });
-                }}
-              >
-                {brokers?.map((broker) => (
-                  <MenuItem key={broker.id} value={broker.id}>
-                    {broker.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-              {errors?.broker_id}
-            </Typography>
-          </Stack>
-        </Grid> */}
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -509,7 +471,7 @@ export default function FormAdd() {
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
-              <BtnFile errors={errors} dispatch={dispatch} />
+              <BtnFile dispatch={dispatch} />
               <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>
@@ -549,7 +511,7 @@ export default function FormAdd() {
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
-              <BtnFile errors={errors} dispatch={dispatch} />
+              <BtnFile dispatch={dispatch} />
               <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>

@@ -1,11 +1,11 @@
-import { Button } from "@mui/material";
+import { Alert, Button, Snackbar } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Stack } from "@mui/system";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ContractContext } from "../../Context/Store";
 import { Contract } from "../../../../types";
 import { ContractsContext } from "../../Context/ContractsContext";
@@ -15,6 +15,21 @@ export default function BtnCus() {
   const deletedClientsIds = useContext(ContractContext);
   const contractsContext = useContext(ContractsContext);
   let idEdit = deletedClientsIds?.selectedIds;
+  const [toaster, setToaster] = useState<ToasterType>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  function updateToaster(partial: Partial<ToasterType>) {
+    setToaster({ ...toaster, ...partial });
+  }
+  function updateAndOpenToaster(partial: Partial<ToasterType>) {
+    updateToaster({ ...partial, open: true });
+  }
+  function handleCloseToaster() {
+    updateToaster({ open: false });
+  }
+
   const navigate = useNavigate();
   function Delete() {
     axios
@@ -24,9 +39,18 @@ export default function BtnCus() {
       .then((res) => {
         console.log(res);
         contractsContext.setContracts && contractsContext.setContracts();
+        updateAndOpenToaster({
+          severity: "success",
+          message: "تم حذف العقد بنجاح",
+        });
+        deletedClientsIds?.setSelectedIds([]);
       })
       .catch((err) => {
         console.log(err);
+        updateAndOpenToaster({
+          severity: "error",
+          message: "تعذر في حذف العقد ",
+        });
       });
   }
 
@@ -64,6 +88,25 @@ export default function BtnCus() {
       >
         تعديل
       </Button>
+      <Snackbar
+        open={toaster.open}
+        autoHideDuration={6000}
+        onClose={handleCloseToaster}
+        // action={action}
+      >
+        <Alert
+          onClose={handleCloseToaster}
+          severity={toaster.severity}
+          sx={{ width: "100%" }}
+        >
+          {toaster.message}
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 }
+export type ToasterType = {
+  open: boolean;
+  message: string;
+  severity: "error" | "info" | "success" | "warning";
+};

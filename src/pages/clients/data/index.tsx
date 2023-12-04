@@ -1,6 +1,6 @@
 import { Stack, Typography, Box, Paper, Button } from "@mui/material";
 import SearchBar from "./SearchBar";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ClientRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
