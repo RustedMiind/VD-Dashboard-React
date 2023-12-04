@@ -1,4 +1,6 @@
-function toValidId(id: string | number): number | null {
+function toValidId(id: string | number | null): number | null {
+  if (!id) return null;
+
   let intId: number;
 
   switch (typeof id) {
