@@ -82,7 +82,7 @@ function ClientRequestsTable(props: PropsType) {
                     <TableRow key={index}>
                       <TableCell>
                         <Checkbox
-                          disabled={request.Contract_status !== "لا يوجد عقود"}
+                          disabled={request.contracts_count !== 0}
                           checked={selectedItems.includes(request.id)}
                           value={request.id}
                           onChange={CheckboxHandler}
@@ -198,7 +198,7 @@ function ClientRequestsTable(props: PropsType) {
                 width: "200px",
                 position: "absolute",
                 right: "40px",
-                zIndex: "100000000",
+                zIndex: "1",
                 mt: 3,
               }}
               onClick={handlePrint}

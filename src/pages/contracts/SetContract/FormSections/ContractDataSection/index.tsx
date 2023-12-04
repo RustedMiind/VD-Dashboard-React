@@ -1,7 +1,6 @@
 import { useEffect, useState, useReducer, useContext } from "react";
 import {
   Alert,
-  Autocomplete,
   Box,
   Button,
   Grid,
@@ -29,7 +28,7 @@ import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
 const paddingSize = 0.1;
-
+const initialDate = { $D: 4, $M: 12, $y: 2023 };
 const ContractData = (props: PropsType) => {
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
@@ -38,6 +37,12 @@ const ContractData = (props: PropsType) => {
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [editContract, setEditContract] = useState<Contract | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
+  const [clientName, setClientName] = useState<string>("");
+  // const date = contractData?.date ? new Date(contractData.date) : null;
+  // const datePickerValue = date
+  //   ? { $D: date.getDate(), $M: date.getMonth() + 1, $y: date.getFullYear() }
+  //   : null;
+
   const [toaster, setToaster] = useState<ToasterType>({
     open: false,
     message: "",
@@ -244,7 +249,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <SelectItem
-            isDisabled={!props.edit}
+            isDisabled
             selected={+(type || 4)}
             options={requests?.contractType?.map((type) => ({
               title: type.name,
@@ -284,8 +289,8 @@ const ContractData = (props: PropsType) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer sx={{ p: 0 }} components={["DatePicker"]}>
                 <DatePicker
+                  value={initialDate}
                   slotProps={{ textField: { size: "small" } }}
-                  label="تاريخ العقد"
                   onChange={(e: DatePickerEvent | null) => {
                     if (e) {
                       let date = `${e.$D}-${e.$M}-${e.$y}`;
@@ -298,10 +303,31 @@ const ContractData = (props: PropsType) => {
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Typography sx={{ ml: 2 }} component="label">
-            اسم العميل
-          </Typography>
-          <Autocomplete
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              اسم العميل
+            </Typography>
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              value={contractData?.client_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                dispatch({
+                  type: "CLIENT_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {requests?.client?.map((client) => (
+                <MenuItem key={client.id} value={client.id}>
+                  {client.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
+          {/* <Autocomplete
             size="small"
             disablePortal
             id="combo-box-demo"
@@ -312,6 +338,7 @@ const ContractData = (props: PropsType) => {
                 onSelect={(e: React.ChangeEvent<HTMLInputElement>) => {
                   requests?.client?.map((client) => {
                     if (client.name === e.target.value) {
+                      setClientName(client.name);
                       dispatch({
                         type: "CLIENT_ID",
                         payload: client.id,
@@ -327,7 +354,7 @@ const ContractData = (props: PropsType) => {
                 }}
               />
             )}
-          />
+          /> */}
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
@@ -352,7 +379,12 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack width={"480px"}>
-            <BtnFile dispatch={dispatch} />
+            <BtnFile
+              file={contractData.card_image}
+              setFile={(file: File) => {
+                dispatch({ type: "CARD_IMAGE", payload: file });
+              }}
+            />
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -389,7 +421,6 @@ const ContractData = (props: PropsType) => {
         open={toaster.open}
         autoHideDuration={6000}
         onClose={handleCloseToaster}
-        // action={action}
       >
         <Alert
           onClose={handleCloseToaster}

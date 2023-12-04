@@ -372,6 +372,30 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
+              الوسيط
+            </Typography>
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              value={formData?.broker_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                dispatch({
+                  type: "BROKER_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {brokers.map((broker) => (
+                <MenuItem key={broker.id} value={broker.id}>
+                  {broker.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
+          {/* <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
               الوسيط <RequiredSymbol />
             </Typography>
             {(clientEdit === null || clientEdit?.broker_id) && (
@@ -414,7 +438,7 @@ export default function FormAdd() {
             <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.broker_id}
             </Typography>
-          </Stack>
+          </Stack> */}
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
@@ -476,7 +500,12 @@ export default function FormAdd() {
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
-              <BtnFile dispatch={dispatch} />
+              <BtnFile
+                file={formData.card_image}
+                setFile={(file: File) => {
+                  dispatch({ type: "CARD_IMAGE", payload: file });
+                }}
+              />
               <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>
@@ -516,7 +545,12 @@ export default function FormAdd() {
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
             <Stack width={"480px"}>
-              <BtnFile dispatch={dispatch} />
+              <BtnFile
+                file={formData.card_image}
+                setFile={(file: File) => {
+                  dispatch({ type: "CARD_IMAGE", payload: file });
+                }}
+              />
               <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>

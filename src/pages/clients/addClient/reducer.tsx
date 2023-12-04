@@ -67,12 +67,14 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           letter_head: action.payload.letter_head,
           phone: action.payload.phone,
           type: "company",
+          cardImageUrl: action.payload.card_image as unknown as string,
         };
       } else if (action.payload.type === "individual") {
         return {
           branch_id: action.payload.branch_id,
           broker_id: action.payload.broker_id,
           card_image: null,
+          cardImageUrl: action.payload.card_image as unknown as string,
           email: action.payload.email,
           name: action.payload.name,
           phone: action.payload.phone,
@@ -158,6 +160,7 @@ export interface BaseFormData {
   card_image?: File | null;
   email: string;
   agent_name?: string;
+  cardImageUrl?: string;
 }
 
 export interface IndividualFormType extends BaseFormData {

@@ -97,7 +97,6 @@ function ClientData() {
               </>
             )}
           </Box>
-
           <ClientRequestsTable requests={requests} />
         </Paper>
       </IndexContextProvider>

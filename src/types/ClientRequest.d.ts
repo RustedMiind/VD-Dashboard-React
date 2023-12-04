@@ -21,4 +21,5 @@ export interface ClientRequest {
   broker: null;
   status_id: null;
   broker_id: null;
+  contracts_count: number;
 }
