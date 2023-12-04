@@ -40,21 +40,17 @@ const ClientRequests = () => {
           params: {
             typeClient: filters.typeClient || null,
             search: filters.search || null,
-            ...{
-              dateFrom: filters.dateFrom || null,
-              dateTo: filters.dateTo || null,
-              statusOrder: filters.statusOrder || null,
-              branch_id: filters.branch_id || null,
-              typeOrder: filters.typeOrder || null,
-              sortBy: filters.sortBy || null,
-            },
+            dateFrom: filters.dateFrom || null,
+            dateTo: filters.dateTo || null,
+            branch_id: filters.branch_id || null,
+            typeOrder: filters.typeOrder || null,
+            sortBy: filters.sortBy || null,
           },
         }
       )
       .then(({ data }) => {
         setRequests(data.data);
         setCounts(data.count);
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -96,6 +92,7 @@ const ClientRequests = () => {
         open={dialogOpen === "model"}
         onClose={handleCloseDialog}
         requestId={dialogRequest?.id}
+        stepId={dialogRequest?.step_id}
       />
       <DetailsDialog
         open={dialogOpen === "details"}

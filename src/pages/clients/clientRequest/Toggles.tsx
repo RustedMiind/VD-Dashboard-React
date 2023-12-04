@@ -30,6 +30,7 @@ const RequestTypesToggles = ({ selected, setSelected, counts }: PropsType) => {
         return (
           <Badge key={chip.name} badgeContent={count} max={19} color="error">
             <Chip
+              disabled={chip.disabled}
               color="primary"
               onClick={setCurrent(chip.value)}
               variant={current ? "filled" : "outlined"}

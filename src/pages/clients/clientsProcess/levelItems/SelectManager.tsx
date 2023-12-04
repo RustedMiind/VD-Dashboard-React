@@ -16,9 +16,10 @@ const SelectManager = ({
   setDepartmentId,
   departments,
   formDisabled,
+  employee_id,
+  disabled,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
-  console.log(department_id);
   return (
     <>
       <Button
@@ -47,17 +48,19 @@ const SelectManager = ({
               <Select
                 label={"القسم"}
                 size={"small"}
-                value={department_id}
-                disabled={formDisabled}
+                value={department_id || 0}
+                disabled={formDisabled || employee_id !== 0}
                 onChange={(e) => {
                   setDepartmentId(e.target.value as number);
                 }}
               >
-                {departments.map((department) => (
-                  <MenuItem key={department.id} value={department.id}>
-                    {department.name}
-                  </MenuItem>
-                ))}
+                {departments?.map((department) => {
+                  return (
+                    <MenuItem key={department.id} value={department.id}>
+                      {department.name}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </Box>
@@ -68,9 +71,11 @@ const SelectManager = ({
 };
 
 type PropsType = {
-  department_id: number;
+  department_id: number | null;
   setDepartmentId: (value: number) => void;
   formDisabled: boolean;
+  employee_id: number;
+  disabled: boolean;
   departments: [
     {
       id: number;

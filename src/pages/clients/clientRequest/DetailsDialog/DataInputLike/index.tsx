@@ -38,7 +38,7 @@ function DataInputLike(props: PropsType) {
 type PropsType = {
   cols?: number;
   title?: string;
-  value?: string | number;
+  value?: string | number | null;
   multiLine?: boolean;
 };
 

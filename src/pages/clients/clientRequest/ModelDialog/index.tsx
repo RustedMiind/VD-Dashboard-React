@@ -14,14 +14,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { StepData } from "../types";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 import { Api } from "../../../../constants";
 import { ModelFormInitialState, reducer } from "./reducer";
 import { ModelStatusType } from "./ModelTypes";
 
-const ModelDialog = ({ open, onClose, requestId }: PropsType) => {
+const ModelDialog = ({ open, onClose, requestId, stepId }: PropsType) => {
   const [formData, dispatch] = useReducer(reducer, ModelFormInitialState);
   const [status, setStatus] = useState<{
     type: "success" | "error";
@@ -32,62 +31,42 @@ const ModelDialog = ({ open, onClose, requestId }: PropsType) => {
     message: "تم الارسال بنجاح",
     show: false,
   });
-
+  console.log();
   useEffect(() => {
     if (open && requestId) {
-      axios
-        .get<{ data: StepData[] }>(
-          Api(`employee/client/order/showOrder?client_id=${requestId}`)
-        )
-        .then(({ data }) => {
-          dispatch({
-            type: "SET_CLIENT_ID",
-            payload: requestId,
-          });
-          dispatch({
-            type: "SET_STEP_ID",
-            payload: data.data[0]?.order_step_form[0]?.order_step_id,
-          });
-          dispatch({
-            type: "SET_FORM_ID",
-            payload: data.data[0]?.order_step_form[0]?.form_id,
-          });
-          dispatch({
-            type: "SET_BRANCH_ID",
-            payload: data.data[0]?.branch_id,
-          });
-          dispatch({
-            type: "SET_COLLECTION",
-            payload: data.data[0]?.order_step_form[0]?.collection,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      dispatch({ type: "SET_CLIENT_ID", payload: requestId });
     }
   }, [open]);
 
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     console.log(formData);
-    axios
-      .post(Api("employee/client/order/addStep"), formData)
-      .then((res) => {
-        console.log(res);
-        setStatus({
-          type: "success",
-          message: "تم اتخاذ الاجراء بنجاح",
-          show: true,
+    if (formData.client_id && formData.status) {
+      axios
+        .post(Api(`employee/client/order/addStep/${stepId}`), formData)
+        .then((res) => {
+          console.log(res);
+          setStatus({
+            type: "success",
+            message: "تم اتخاذ الاجراء بنجاح",
+            show: true,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          setStatus({
+            type: "error",
+            message: err.response.data.message || "",
+            show: true,
+          });
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        setStatus({
-          type: "error",
-          message: err.response.data.message || "",
-          show: true,
-        });
+    } else {
+      setStatus({
+        type: "error",
+        message: "يجب تعبئة جميع الحقول",
+        show: true,
       });
+    }
   };
 
   return (
@@ -181,6 +160,7 @@ type PropsType = {
   open: boolean;
   onClose: () => void;
   requestId?: number;
+  stepId?: number;
 };
 
 export default ModelDialog;

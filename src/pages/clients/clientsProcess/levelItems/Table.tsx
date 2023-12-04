@@ -24,7 +24,7 @@ const TableComponent = ({
   dataForm,
   dispatch,
 }: PropsType) => {
-  // console.log(level.department_id);
+  console.log(level);
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -43,14 +43,12 @@ const TableComponent = ({
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
                 <SelectManager
-                  formDisabled={formDisabled || level?.employee_id !== 0}
+                  formDisabled={formDisabled}
                   department_id={level.department_id}
+                  employee_id={level.employee_id}
+                  disabled={level.employee_id !== 0}
                   departments={dataForm?.department_workAt}
                   setDepartmentId={(value: number) => {
-                    dispatch({
-                      type: "SET_EMPLOYEE",
-                      payload: 0,
-                    });
                     dispatch({
                       type: "SET_MANAGEMENT",
                       payload: value,
@@ -68,15 +66,15 @@ const TableComponent = ({
                     label={"الموظف"}
                     size={"small"}
                     value={level.employee_id}
-                    disabled={level?.department_id !== 0 || formDisabled}
+                    disabled={formDisabled || level.department_id !== null}
                     onChange={(e) => {
-                      console.log(dataForm?.department_workAt);
                       dispatch({
                         type: "SET_EMPLOYEE",
                         payload: e.target.value as number,
                       });
                     }}
                   >
+                    <MenuItem value={0}>اختار الموظف</MenuItem>
                     {dataForm?.department_workAt.map((department) =>
                       department.work_ats.map((employee) => {
                         return (

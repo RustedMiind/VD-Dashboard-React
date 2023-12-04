@@ -12,7 +12,7 @@ import { FormData } from "./types/FormData";
 
 const InitLevel: StepType = {
   branch_id: 0,
-  department_id: 0,
+  department_id: null,
   period: 0,
   form_id: 0,
   employee_id: 0,
@@ -26,6 +26,7 @@ const ClientProcess = () => {
     useState<EndPointStateType>("none");
   const [sendState, setSendState] = useState<SendStateType>("none");
   const [dataForm, setDataForm] = useState<FormData | null>();
+  console.log(dataForm);
   const [process, setProcess] = useState<ProcedureType>({
     levels: [InitLevel],
   });
@@ -41,7 +42,7 @@ const ClientProcess = () => {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
-            console.log(res.data.department_workAt);
+            console.log(res.data);
             setDataForm(res.data);
             resSolve();
           })
@@ -60,6 +61,7 @@ const ClientProcess = () => {
         axios
           .get(Api("employee/client/order/steps"))
           .then((res) => {
+            console.log(res.data);
             setLevelsData(res.data);
             setLevels(res.data.data);
             resSolve();

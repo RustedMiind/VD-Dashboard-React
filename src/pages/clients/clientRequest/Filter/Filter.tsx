@@ -8,6 +8,7 @@ import { Filter, OrderByType } from "../types";
 import { requestTypes } from "../RequestTypes";
 import axios from "axios";
 import { Api } from "../../../../constants";
+import { NULL } from "sass";
 
 const FilterComponent = ({
   opened,
@@ -89,7 +90,11 @@ const FilterComponent = ({
         >
           <MenuItem value={0}>كل الانواع</MenuItem>
           {requestTypes.map((reqType) => (
-            <MenuItem key={reqType.value} value={reqType.value}>
+            <MenuItem
+              key={reqType.value}
+              disabled={reqType.disabled}
+              value={reqType.value}
+            >
               {reqType.name}
             </MenuItem>
           ))}
@@ -154,7 +159,7 @@ const FilterComponent = ({
             });
           }}
         >
-          <MenuItem value={"asc"}>تصاعدي</MenuItem>
+          <MenuItem value={0}>تصاعدي</MenuItem>
           <MenuItem value={"desc"}>تنازلي</MenuItem>
         </TextField>
       </Grid>

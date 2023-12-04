@@ -33,8 +33,13 @@ const TabsAndAdd = ({
           setCurrentTab(v);
         }}
       >
-        {requestsIds.map(({ id, name }) => (
-          <Tab key={id} label={name} value={id} disabled={disabled} />
+        {requestsIds.map(({ id, name, disabledState }) => (
+          <Tab
+            key={id}
+            label={name}
+            value={id}
+            disabled={disabled || disabledState}
+          />
         ))}
       </Tabs>
     </Box>

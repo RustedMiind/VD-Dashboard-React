@@ -81,7 +81,7 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
                   return (
                     <TableRow key={step.id}>
                       <TableCell>
-                        {step?.order_step[0]?.employees?.name}
+                        {step?.order_step[0]?.employees?.name || "لا يوجد موظف"}
                       </TableCell>
                       <TableCell>{date}</TableCell>
                       <TableCell>{formatDate(step?.end_date)}</TableCell>

@@ -4,31 +4,36 @@ export interface StepData {
   created_date: string;
   type: "individual" | "company";
   branch_id: number;
+  collection: number;
+  order_count: number;
   step_id: number;
   branch_name: string;
-  note: null;
+  note?: string | null;
   form_id: number;
-  order_type_name: string;
+  order_type_name?: null;
+  step_status: string;
+  step_status_id: number;
   order_step_form: [
     {
       id: number;
       collection: number;
-      status: number;
-      note: string;
+      status: 100 | 33 | 99 | 1 | 2 | 0;
+      note?: string | null;
       order_step_id: number;
       step_number: number;
       form_id: number;
       client_id: number;
+      employee_id: number;
       last_status_id: number;
-      created_at: string;
-      updated_at: string;
-      deleted_at: null;
+      created_at?: string | null;
+      updated_at?: string | null;
+      deleted_at?: string | null;
       order_step: [
         {
           id: number;
           collection: number;
           step_number: number;
-          branch_id: number;
+          branch_id?: null;
           department_id: number;
           employee_id: number;
           status: number;
@@ -36,13 +41,10 @@ export interface StepData {
           approval: number;
           period: number;
           form_id: number;
-          created_at: string;
-          updated_at: string;
-          deleted_at: null;
-          department: {
-            id: number;
-            name: string;
-          };
+          created_at?: string | null;
+          updated_at?: string | null;
+          deleted_at?: string | null;
+          department: null;
         }
       ];
     }
