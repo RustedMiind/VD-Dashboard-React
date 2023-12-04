@@ -426,7 +426,7 @@ export default function FormAdd() {
               id="outlined-select-currency"
               size="small"
               select
-              defaultValue={clientEdit && clientEdit.branch_id}
+              value={formData?.branch_id}
               onChange={(e) => {
                 dispatch({
                   type: "BRANCH_ID",
