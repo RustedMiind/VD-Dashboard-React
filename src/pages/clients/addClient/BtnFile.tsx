@@ -11,13 +11,8 @@ function BtnFile({ dispatch }: any) {
       </Typography>
       <UploadFileInput
         value={file}
-        setValue={(file) => {
-          setFile(file);
-          dispatch({
-            type: "CARD_IMAGE",
-            payload: file,
-          });
-        }}
+        setValue={setFile}
+        // dispatch={props.dispatch}
       />
     </Stack>
   );

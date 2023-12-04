@@ -20,7 +20,7 @@ export function ContractsContextProvider({ children }: childrenProps) {
 
   useEffect(getAllContracts, []);
 
-  function getAllContracts(params?: any) {
+  function getAllContracts(params?: unknown) {
     axios
       .get<Partial<ContractResponse>>(Api("employee/contract"), { params })
       .then((res) => {
@@ -41,7 +41,7 @@ export function ContractsContextProvider({ children }: childrenProps) {
 }
 type ContractContextType = {
   contracts: Partial<ContractResponse> | null;
-  setContracts: ((param?: any) => void) | null;
+  setContracts: ((param?: unknown) => void) | null;
 };
 
 interface ContractResponse {
