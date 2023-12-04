@@ -16,7 +16,6 @@ import {
   TableCell,
   TextField,
 } from "@mui/material";
-import SelectCustom from "../../../../components/MuiCustom";
 import { ActionTypes } from "./reducer";
 import { ProceduresModelTypeCode, Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
