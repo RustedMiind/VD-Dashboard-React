@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Grid,
+  MenuItem,
   Snackbar,
   Stack,
   TextField,
@@ -25,13 +26,14 @@ import { objectToFormData } from "../../../../../methods";
 import { ContractsContext } from "../../../Context/ContractsContext";
 import { Contract } from "../../../../../types";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
+import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
 const paddingSize = 0.1;
 
 const ContractData = (props: PropsType) => {
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
-  const { type } = useParams();
+  const { type, id } = useParams();
   const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [editContract, setEditContract] = useState<Contract | null>(null);
@@ -56,7 +58,7 @@ const ContractData = (props: PropsType) => {
       console.log("NOT NOT NOT In Edit Mode ");
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
     } else if (contractDetails.contract) {
-      console.log("In Edit Mode ");
+      // console.log("In Edit Mode ");
       dispatch({
         type: "SET_ALL",
         payload: {
@@ -90,21 +92,42 @@ const ContractData = (props: PropsType) => {
 
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post(Api("employee/contract/store"), objectToFormData(contractData))
-      .then((response) => {
-        updateAndOpenToaster({
-          severity: "success",
-          message: "تم حفظ العقد بنجاح",
+    if (!props.edit) {
+      axios
+        .post(Api("employee/contract/store"), objectToFormData(contractData))
+        .then((response) => {
+          updateAndOpenToaster({
+            severity: "success",
+            message: "تم حفظ العقد بنجاح",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          updateAndOpenToaster({
+            severity: "error",
+            message: "تعذر في حفظ العقد ",
+          });
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        updateAndOpenToaster({
-          severity: "error",
-          message: "تعذر في حفظ العقد ",
+    } else {
+      axios
+        .post(
+          Api(`employee/contract/update/${id}`),
+          objectToFormData(contractData)
+        )
+        .then((response) => {
+          updateAndOpenToaster({
+            severity: "success",
+            message: "تم تعديل العقد بنجاح",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          updateAndOpenToaster({
+            severity: "error",
+            message: "تعذر في تعديل العقد ",
+          });
         });
-      });
+    }
   };
 
   return (
@@ -121,37 +144,60 @@ const ContractData = (props: PropsType) => {
     >
       <Grid container paddingBottom={2}>
         <Grid item p={paddingSize} md={6}>
-          <SelectItem
-            title="نوع الفرع"
-            options={requests?.branches?.map((branch) => ({
-              title: branch.name,
-              value: branch.id,
-            }))}
-            setSelected={(e) => {
-              console.log(e.target.value);
-              dispatch({
-                type: "BRANCH_ID",
-                payload: parseInt(e.target.value),
-              });
-            }}
-          />
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              الفرع <RequiredSymbol />
+            </Typography>
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              value={contractData?.branch_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                dispatch({
+                  type: "BRANCH_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {requests?.branches?.map((branch) => (
+                <MenuItem key={branch.id} value={branch.id}>
+                  {branch.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <SelectItem
-            options={requests?.management?.map((manage) => ({
-              title: manage.name,
-              value: manage.id,
-            }))}
-            setSelected={(e) => {
-              console.log(e.target.value);
-              dispatch({
-                type: "MANAGEMENT_ID",
-                payload: parseInt(e.target.value),
-              });
-            }}
-            title="الادارة"
-          />
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              الادارة <RequiredSymbol />
+            </Typography>
+            <Grid item p={paddingSize} md={6}>
+              <TextField
+                id="outlined-select-currency"
+                size="small"
+                select
+                value={contractData?.management_id}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  dispatch({
+                    type: "MANAGEMENT_ID",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
+              >
+                {requests?.management?.map((manage) => (
+                  <MenuItem key={manage.id} value={manage.id}>
+                    {manage.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+          </Stack>
         </Grid>
+
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -219,7 +265,8 @@ const ContractData = (props: PropsType) => {
               required
               size="small"
               // defaultValue={editContract?.period}
-              placeholder={editContract ? editContract?.details : "موضوع العقد"}
+              placeholder="موضوع العقد"
+              value={contractData ? contractData?.details : "موضوع العقد"}
               onChange={(e) => {
                 dispatch({
                   type: "DETAILS",
@@ -293,6 +340,7 @@ const ContractData = (props: PropsType) => {
               required
               size="small"
               placeholder="قيمه العقد"
+              value={contractData ? contractData?.amount : "قيمه العقد"}
               onChange={(e) => {
                 dispatch({
                   type: "AMOUNT",
@@ -308,20 +356,30 @@ const ContractData = (props: PropsType) => {
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <SelectItem
-            options={requests?.employees?.map((employee) => ({
-              title: employee.name,
-              value: employee.id,
-            }))}
-            setSelected={(e) => {
-              console.log(e.target.value);
-              dispatch({
-                type: "EMPLOYEE_ID",
-                payload: parseInt(e.target.value),
-              });
-            }}
-            title="المهندس المسؤول"
-          />
+          <Typography sx={{ ml: 2 }} component="label">
+            المهندس المسؤول <RequiredSymbol />
+          </Typography>
+          <Grid item p={paddingSize} md={6}>
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              value={contractData?.employee_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                dispatch({
+                  type: "EMPLOYEE_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {requests?.employees?.map((employee) => (
+                <MenuItem key={employee.id} value={employee.id}>
+                  {employee.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
         </Grid>
       </Grid>
       <Button fullWidth type="submit" variant="contained">
