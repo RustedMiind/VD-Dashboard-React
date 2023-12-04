@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   MenuItem,
   Autocomplete,
+  SelectChangeEvent,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
 import { useState, useEffect, useReducer } from "react";
@@ -23,7 +24,7 @@ import BtnFile from "./BtnFile";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 const paddingSize = 0.1;
 export default function FormAdd() {
-  const [clientEdit, setclientEdit] = useState<any | undefined>(undefined);
+  const [clientEdit, setclientEdit] = useState<FormData | null>(null);
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[]>([]);
   const [formData, dispatch] = useReducer(reducer, individualInitial);
@@ -50,7 +51,7 @@ export default function FormAdd() {
 
   async function GetDataClient() {
     try {
-      const { data } = await axios.get<{ data: any }>(
+      const { data } = await axios.get<{ data: FormData }>(
         Api(`employee/client/edit`),
         {
           params: {
@@ -58,7 +59,9 @@ export default function FormAdd() {
           },
         }
       );
+
       setclientEdit(data.data);
+
       let { card_image, ...FormWithoutImage } = data.data;
       dispatch({ type: "SET_TYPE_WITH_CHECK", payload: data.data });
     } catch (error) {
@@ -85,7 +88,7 @@ export default function FormAdd() {
   }, []);
 
   // function handle submit
-  function submitHandle(e: any) {
+  function submitHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     axios
       .post(Api("employee/client/store"), objectToFormData(formData))
@@ -99,10 +102,10 @@ export default function FormAdd() {
         // setPhoneError(err.response.data.data.phone[0]);
 
         let errorObj: { key: string; value: string }[] = [];
-        let tempObj: any = {};
+        let tempObj: { [key: string]: string } = {};
 
-        for (let i in err.response.data.data) {
-          const current = err.response.data.data[i] as string[];
+        for (let i in err.response?.data?.data) {
+          const current: string[] = err.response?.data?.data[i] || [];
           current.join(", ");
           errorObj.push({ key: i, value: current.join(", ") });
         }
@@ -135,7 +138,7 @@ export default function FormAdd() {
     }
   }
   //Edit handle
-  function EditHandle(e: any) {
+  function EditHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("card image", formData.card_image);
     let { card_image, ...withoutImage } = formData;
@@ -147,17 +150,16 @@ export default function FormAdd() {
     // const toSend = objectToFormData(temp);
 
     axios
-      .post(Api(`employee/client/update/${clientEdit.id}`), toSend)
+      .post(Api(`employee/client/update/${clientEdit?.id}`), toSend)
       .then((res) => {
         setToaster({ type: "success" });
-        console.log(formData);
         navigate("/react/clients");
       })
       .catch((err) => {
         console.log(err);
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
-        let tempObj: any = {};
+        let tempObj: { [key: string]: string } = {};
         for (let i in err.response.data.data) {
           const current = err.response.data.data[i] as string[];
           current.join(", ");
@@ -198,7 +200,9 @@ export default function FormAdd() {
       }}
       noValidate
       autoComplete="on"
-      onSubmit={clientEdit ? EditHandle : submitHandle}
+      onSubmit={(e) => {
+        clientEdit ? EditHandle(e) : submitHandle(e);
+      }}
     >
       <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
         {clientEdit ? "تعديل بيانات العميل" : "اضافه عميل"}
@@ -373,6 +377,7 @@ export default function FormAdd() {
             </Typography>
             {(clientEdit === null || clientEdit?.broker_id) && (
               <Autocomplete
+                size="small"
                 disablePortal
                 id="combo-box-demo"
                 options={brokers?.map((broker) => {
@@ -381,9 +386,14 @@ export default function FormAdd() {
                 sx={{ width: 300 }}
                 renderInput={(params) => (
                   <TextField
-                    onSelect={(e: any) => {
+                    onSelect={(
+                      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+                    ) => {
                       brokers.map((broker) => {
-                        if (broker.name === e.target.value) {
+                        if (
+                          broker.name ===
+                          (event.target as HTMLTextAreaElement).value
+                        ) {
                           dispatch({
                             type: "BROKER_ID",
                             payload: broker.id,
@@ -392,7 +402,7 @@ export default function FormAdd() {
                       });
                     }}
                     {...params}
-                    label="الوسيط"
+                    placeholder="الوسيط"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: "new-password", // disable autocomplete and autofill
@@ -412,28 +422,24 @@ export default function FormAdd() {
             <Typography sx={{ ml: 2 }} component="label">
               الفرع <RequiredSymbol />
             </Typography>
-            {(clientEdit === null || clientEdit?.branch_id) && (
-              <TextField
-                label="الفرع"
-                id="outlined-select-currency"
-                size="small"
-                InputLabelProps={{ sx: { color: "#abc2db" } }}
-                select
-                defaultValue={clientEdit?.branch_id}
-                onChange={(e) => {
-                  dispatch({
-                    type: "BRANCH_ID",
-                    payload: parseInt(e.target.value),
-                  });
-                }}
-              >
-                {branches?.map((branch) => (
-                  <MenuItem key={branch.id} value={branch.id}>
-                    {branch.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              defaultValue={clientEdit && clientEdit.branch_id}
+              onChange={(e) => {
+                dispatch({
+                  type: "BRANCH_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {branches?.map((branch) => (
+                <MenuItem key={branch.id} value={branch.id}>
+                  {branch.name}
+                </MenuItem>
+              ))}
+            </TextField>
 
             <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.branch_id}

@@ -14,7 +14,10 @@ export default function TableHeader({ value }: PropType) {
   //   selectedIds?.setIndex(chekedArray);
   // }, [selectedItems]);
 
-  const selectAllHandler = (e: any, checked: boolean) => {
+  const selectAllHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
     let values: number[] | undefined = contracts?.data?.map((contract) => {
       return contract.id;
     });

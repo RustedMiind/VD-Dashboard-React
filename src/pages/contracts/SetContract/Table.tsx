@@ -24,7 +24,7 @@ function ContractsTable({ value }: PropsType) {
   const [rowsCount, setRowsCount] = useState(5);
   const toView = contracts?.data?.slice(0, rowsCount);
   function CheckboxHandler(id: number) {
-    return function (e: any, checked: boolean) {
+    return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
       const idIndex = selectedIdsContext?.selectedIds?.findIndex(
         (itemId) => itemId === id
       );

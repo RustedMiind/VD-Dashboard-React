@@ -12,9 +12,7 @@ import PopUp from "./PopUp/PopUp";
 import { IndexContextProvider } from "../Context/Store";
 
 function ClientData() {
-  const [open, setOpen] = useState<
-    Boolean | React.Dispatch<React.SetStateAction<Boolean>>
-  >(false);
+  const [open, setOpen] = useState(false);
 
   // search bar
   const [requests, setRequests] = useState<ClientRequest[] | null>(null);

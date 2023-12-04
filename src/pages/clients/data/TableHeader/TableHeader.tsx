@@ -1,12 +1,13 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
-function TableHeader(props: any) {
+import { ClientRequest } from "../../../../types";
+function TableHeader(props: PropsType) {
   const style = {
     background: "#F3F5F7",
     fontSize: "16px",
     fontWeight: "bold",
   };
 
-  function checkAllHandler(e: any) {
+  function checkAllHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const allChecked: number[] = props.requests?.reduce(
       (accumlator: any, newValue: any) => {
         if (!newValue.contracts?.length && newValue.contracts === null) {
@@ -27,7 +28,7 @@ function TableHeader(props: any) {
     <TableHead>
       <TableRow>
         <TableCell sx={style}>
-          <Checkbox onClick={checkAllHandler} />
+          <Checkbox onChange={checkAllHandler} />
         </TableCell>
         <TableCell sx={style}>اسم المالك</TableCell>
         <TableCell sx={style}>رقم التليفون</TableCell>
@@ -43,3 +44,7 @@ function TableHeader(props: any) {
 }
 
 export default TableHeader;
+type PropsType = {
+  requests: ClientRequest[] | null;
+  setSelectedItems: (items: number[]) => void;
+};

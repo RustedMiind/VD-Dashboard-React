@@ -15,7 +15,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem from "../../Components/Select";
-import TextInput from "../../Components/TextInput";
 import { SelectOptions } from "./SelectOptions";
 import { Api } from "../../../../../constants";
 import axios from "axios";
@@ -76,12 +75,11 @@ const ContractData = () => {
       });
   }, []);
 
-  const addContractHandler = (e: any) => {
+  const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
       .post(Api("employee/contract/store"), objectToFormData(contractData))
       .then((response) => {
-        console.log(response);
         updateAndOpenToaster({
           severity: "success",
           message: "تم حفظ العقد بنجاح",
@@ -104,7 +102,9 @@ const ContractData = () => {
       }}
       noValidate
       autoComplete="off"
-      onSubmit={addContractHandler}
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        addContractHandler(e);
+      }}
     >
       <Grid container>
         <Grid item p={paddingSize} md={6}>
@@ -140,29 +140,50 @@ const ContractData = () => {
           />
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <TextInput
-            type="number"
-            title={"مدة العقد"}
-            onDataChange={(e) => {
-              dispatch({
-                type: "PERIOD",
-                payload: parseInt(e.target.value),
-              });
-            }}
-          />
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              مدة العقد
+            </Typography>
+            <TextField
+              // defaultValue={props.defaultValue}
+              id="outlined-phone-input"
+              type="text"
+              required
+              size="small"
+              // defaultValue={editContract?.period}
+              value={contractData ? contractData?.period : "قيمة العقد"}
+              onChange={(e) => {
+                dispatch({
+                  type: "PERIOD",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            />
+          </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <TextInput
-            type="number"
-            title={"رقم العقد"}
-            onDataChange={(e) => {
-              dispatch({
-                type: "CODE",
-                payload: parseInt(e.target.value),
-              });
-            }}
-          />
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              رقم العقد
+            </Typography>
+            <TextField
+              // defaultValue={props.defaultValue}
+              id="outlined-phone-input"
+              type="text"
+              required
+              size="small"
+              // defaultValue={editContract?.period}
+              value={contractData ? contractData?.code : "رقم العقد"}
+              onChange={(e) => {
+                dispatch({
+                  type: "CODE",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            />
+          </Stack>
         </Grid>
+
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             isDisabled={true}
@@ -175,18 +196,28 @@ const ContractData = () => {
           />
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <TextInput
-            type="text"
-            title="موضوع العقد"
-            // defaultValue={editContract?.details}
-            onDataChange={(e) => {
-              dispatch({
-                type: "DETAILS",
-                payload: e.target.value,
-              });
-            }}
-          />
+          <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              موضوع العقد
+            </Typography>
+            <TextField
+              // defaultValue={props.defaultValue}
+              id="outlined-phone-input"
+              type="text"
+              required
+              size="small"
+              // defaultValue={editContract?.period}
+              placeholder={editContract ? editContract?.details : "موضوع العقد"}
+              onChange={(e) => {
+                dispatch({
+                  type: "DETAILS",
+                  payload: e.target.value,
+                });
+              }}
+            />
+          </Stack>
         </Grid>
+
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -197,9 +228,11 @@ const ContractData = () => {
                 <DatePicker
                   slotProps={{ textField: { size: "small" } }}
                   label="تاريخ العقد"
-                  onChange={(e: any) => {
-                    let date = `${e.$D}-${e.$M}-${e.$y}`;
-                    dispatch({ type: "DATE", payload: date });
+                  onChange={(e: DatePickerEvent | null) => {
+                    if (e) {
+                      let date = `${e.$D}-${e.$M}-${e.$y}`;
+                      dispatch({ type: "DATE", payload: date });
+                    }
                   }}
                 />
               </DemoContainer>
@@ -219,7 +252,7 @@ const ContractData = () => {
             sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField
-                onSelect={(e: any) => {
+                onSelect={(e: React.ChangeEvent<HTMLInputElement>) => {
                   requests?.client?.map((client) => {
                     if (client.name === e.target.value) {
                       dispatch({
@@ -309,3 +342,8 @@ export type ToasterType = {
   severity: "error" | "info" | "success" | "warning";
 };
 export default ContractData;
+interface DatePickerEvent {
+  $D: number;
+  $M: number;
+  $y: number;
+}

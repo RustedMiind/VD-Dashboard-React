@@ -43,5 +43,5 @@ export default DeleteBtn;
 
 export type PropsType = {
   requests: ClientRequest[] | null;
-  setRequests: any;
+  setRequests: React.Dispatch<React.SetStateAction<ClientRequest[] | null>>;
 };

@@ -4,7 +4,7 @@ import FilePreview from "../FilePreview";
 import { getFileExtension } from "../../methods/getFileExtension";
 
 function UploadFileInput(props: PropsType) {
-  let height = 56;
+  let height = 50;
   switch (props.size) {
     case "sm":
       height = 40;
@@ -49,13 +49,7 @@ function UploadFileInput(props: PropsType) {
                 const files = e.target.files || [];
                 if (files) {
                   const file = files[0];
-
                   props.setValue(file);
-
-                  props.dispatch({
-                    type: "CARD_IMAGE",
-                    payload: file,
-                  });
                 }
               }}
               name=""
@@ -84,7 +78,6 @@ type PropsType = {
   setValue: (file: File) => void;
   fileLink?: string;
   size?: "sm" | "md";
-  dispatch?: any;
 };
 
 export default UploadFileInput;

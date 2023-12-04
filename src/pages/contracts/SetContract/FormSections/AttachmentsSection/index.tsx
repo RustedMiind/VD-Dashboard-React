@@ -19,16 +19,11 @@ import { Api } from "../../../../../constants";
 import axios from "axios";
 import SetDialog from "./SetDialog";
 import { ContractAttachment } from "../../../../../types/Contracts/ContractAttachment";
-import { ForceDownload } from "../../../../../methods/forceDownloadHandler";
 
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditNoteIcon from "@mui/icons-material/EditNote";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
-import DownloadIcon from "@mui/icons-material/Download";
-import FolderIcon from "@mui/icons-material/Folder";
 import PrintIcon from "@mui/icons-material/Print";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
