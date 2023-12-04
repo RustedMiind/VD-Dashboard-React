@@ -4,7 +4,7 @@ import FilePreview from "../FilePreview";
 import { getFileExtension } from "../../methods/getFileExtension";
 
 function UploadFileInput(props: PropsType) {
-  let height = 56;
+  let height = 50;
   switch (props.size) {
     case "sm":
       height = 40;
