@@ -1,3 +1,5 @@
+import { ReducerAction } from "../../../../../types";
+
 export const contractIntial: BaseContractType = {
   code: 0,
   date: "",
@@ -39,6 +41,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       return { ...state, employee_id: action.payload };
     case "MANAGEMENT_ID":
       return { ...state, management_id: action.payload };
+    case "SET_ALL":
+      return { ...state, ...action.payload };
 
     default:
       return state;
@@ -81,9 +85,8 @@ interface ManagementIDActionType extends ReducerAction<number> {
 interface EmployeeIDActionType extends ReducerAction<number> {
   type: "EMPLOYEE_ID";
 }
-interface ReducerAction<P> {
-  type: string;
-  payload: P;
+interface SetAllActionType extends ReducerAction<BaseContractType> {
+  type: "SET_ALL";
 }
 
 export type ActionTypes =
@@ -98,7 +101,8 @@ export type ActionTypes =
   | BranchIDActionType
   | CardImageActionType
   | ManagementIDActionType
-  | EmployeeIDActionType;
+  | EmployeeIDActionType
+  | SetAllActionType;
 
 export interface BaseContractType {
   code: number;

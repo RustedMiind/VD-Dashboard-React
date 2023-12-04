@@ -48,7 +48,7 @@ export default function CreateContracts(props: PropsType) {
           }}
           title="بيانات العقد"
         >
-          <ContractData />
+          <ContractData edit={!isCreate} />
         </SectionAccordion>
 
         <SectionAccordion

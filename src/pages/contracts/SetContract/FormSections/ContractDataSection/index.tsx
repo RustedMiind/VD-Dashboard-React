@@ -18,19 +18,21 @@ import SelectItem from "../../Components/Select";
 import { SelectOptions } from "./SelectOptions";
 import { Api } from "../../../../../constants";
 import axios from "axios";
-import { reducer, contractIntial } from "../../Components/reducer";
+import { reducer, contractIntial } from "./reducer";
 import { useParams } from "react-router-dom";
 import BtnFile from "../../../../clients/addClient/BtnFile";
 import { objectToFormData } from "../../../../../methods";
 import { ContractsContext } from "../../../Context/ContractsContext";
 import { Contract } from "../../../../../types";
+import { ContractDetailsContext } from "../../ContractDetailsContext";
 
 const paddingSize = 0.1;
 
-const ContractData = () => {
+const ContractData = (props: PropsType) => {
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
-  const { type, id } = useParams();
+  const { type } = useParams();
+  const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [editContract, setEditContract] = useState<Contract | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
@@ -50,20 +52,30 @@ const ContractData = () => {
   }
 
   useEffect(() => {
-    dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
-  }, [type]);
-
-  useEffect(() => {
-    axios
-      .get<{ data: Contract | null }>(Api(`employee/contract/${id}`))
-      .then((res) => {
-        setEditContract(res.data.data);
-        console.log("client_edit", res.data.data);
-      })
-      .catch((err) => {
-        setEditContract(null);
+    if (!props.edit) {
+      console.log("NOT NOT NOT In Edit Mode ");
+      dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
+    } else if (contractDetails.contract) {
+      console.log("In Edit Mode ");
+      dispatch({
+        type: "SET_ALL",
+        payload: {
+          amount: contractDetails.contract.amount,
+          branch_id: contractDetails.contract.branch_id,
+          card_image: null,
+          client_id: contractDetails.contract.client_id,
+          code: parseInt(contractDetails.contract.code) || 0,
+          contract_type_id: contractDetails.contract.contract_type_id,
+          date: contractDetails.contract.date,
+          details: contractDetails.contract.details,
+          employee_id: contractDetails.contract.employee_id,
+          management_id: contractDetails.contract.management_id,
+          period: parseInt(contractDetails.contract.period) || 0,
+          type: contractDetails.contract.type?.id || 1,
+        },
       });
-  }, [id]);
+    }
+  }, [props.edit, !!contractDetails.contract]);
 
   useEffect(() => {
     axios
@@ -186,7 +198,7 @@ const ContractData = () => {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <SelectItem
-            isDisabled={true}
+            isDisabled={!props.edit}
             selected={+(type || 4)}
             options={requests?.contractType?.map((type) => ({
               title: type.name,
@@ -344,3 +356,7 @@ interface DatePickerEvent {
   $M: number;
   $y: number;
 }
+
+type PropsType = {
+  edit: boolean;
+};

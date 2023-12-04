@@ -7,28 +7,19 @@ function TableHeader(props: PropsType) {
     fontWeight: "bold",
   };
 
-  function checkAllHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    const allChecked: number[] = props.requests?.reduce(
-      (accumlator: any, newValue: any) => {
-        if (!newValue.contracts?.length && newValue.contracts === null) {
-          accumlator.push(newValue.id);
-        }
-        return accumlator;
-      },
-      []
-    );
-
-    if (e.target.checked) {
-      props.setSelectedItems(allChecked);
-    } else {
-      props.setSelectedItems([]);
-    }
+  function checkAllHandler(e: unknown, checked: boolean) {
+    const allChecked: number[] = checked
+      ? (props.requests
+          ?.map((request) => request.id)
+          .filter((id) => typeof id === "number") as number[])
+      : [];
+    props.setSelectedItems(allChecked);
   }
   return (
     <TableHead>
       <TableRow>
         <TableCell sx={style}>
-          <Checkbox onChange={checkAllHandler} />
+          <Checkbox checked={props.isAllSelected} onChange={checkAllHandler} />
         </TableCell>
         <TableCell sx={style}>اسم المالك</TableCell>
         <TableCell sx={style}>رقم التليفون</TableCell>
@@ -47,4 +38,5 @@ export default TableHeader;
 type PropsType = {
   requests: ClientRequest[] | null;
   setSelectedItems: (items: number[]) => void;
+  isAllSelected?: boolean;
 };
