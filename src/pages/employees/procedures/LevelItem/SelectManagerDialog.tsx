@@ -38,20 +38,17 @@ function SelectManagerDialog(props: PropsType) {
         <DialogTitle>اختر اسم القسم</DialogTitle>
         <DialogContent>
           <Box my={3}>
-            <FormControl
-              fullWidth
-              size={"small"}
-              // disabled={props.disabled}
-            >
+            <FormControl fullWidth size={"small"} disabled={props.disabled}>
               <InputLabel size="small">القسم</InputLabel>
               <Select
                 label={"القسم"}
                 size={"small"}
-                value={props.deparment_id}
+                value={props.deparment_id || null}
                 onChange={(e) => {
                   props.setDepartmentId(e.target.value as number);
                 }}
               >
+                <MenuItem value={-1}>لن يتم اختيار قسم</MenuItem>
                 {props.departments.map((department) => (
                   <MenuItem
                     key={department.departmentId}
@@ -82,9 +79,10 @@ function SelectManagerDialog(props: PropsType) {
 */
 
 type PropsType = {
-  deparment_id: number;
+  deparment_id: number | null;
   setDepartmentId: (value: number) => void;
   departments: DepartmentWithEmployeesType[];
+  disabled?: boolean;
 };
 
 export default SelectManagerDialog;

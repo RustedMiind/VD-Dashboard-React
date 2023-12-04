@@ -4,11 +4,24 @@ import { Step } from "../types";
 
 function dispatch(state: Step) {
   return function (action: ActionTypes): Step {
+    console.log(state);
     switch (action.type) {
-      case "SET_MANAGER":
-        return { ...state, department_id: action.payload };
+      case "SET_DEPARTMENT":
+        if (state.employee_id !== -1) return state;
+        else {
+          // if (action.payload === -1) {
+          //   return { ...state, department_id: null };
+          // } else
+          return { ...state, department_id: action.payload };
+        }
       case "SET_EMPLOYEE":
-        return { ...state, employee_id: action.payload };
+        if (state.department_id !== -1) return state;
+        else {
+          // if (action.payload === -1) {
+          //   return { ...state, employee_id: null };
+          // } else
+          return { ...state, employee_id: action.payload };
+        }
       case "SET_APPROVED":
         if (state.action === 1) {
           return { ...state, action: 3 };
@@ -46,7 +59,7 @@ function dispatch(state: Step) {
 }
 
 interface ManagerActionType extends ReducerAction<number> {
-  type: "SET_MANAGER";
+  type: "SET_DEPARTMENT";
 }
 interface EmployeeActionType extends ReducerAction<number> {
   type: "SET_EMPLOYEE";
