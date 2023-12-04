@@ -49,13 +49,7 @@ function UploadFileInput(props: PropsType) {
                 const files = e.target.files || [];
                 if (files) {
                   const file = files[0];
-
                   props.setValue(file);
-
-                  props.dispatch({
-                    type: "CARD_IMAGE",
-                    payload: file,
-                  });
                 }
               }}
               name=""

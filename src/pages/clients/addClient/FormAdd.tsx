@@ -58,7 +58,9 @@ export default function FormAdd() {
           },
         }
       );
+
       setclientEdit(data.data);
+
       let { card_image, ...FormWithoutImage } = data.data;
       dispatch({ type: "SET_TYPE_WITH_CHECK", payload: data.data });
     } catch (error) {
@@ -85,7 +87,7 @@ export default function FormAdd() {
   }, []);
 
   // function handle submit
-  function submitHandle(e: any) {
+  function submitHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     axios
       .post(Api("employee/client/store"), objectToFormData(formData))
@@ -99,7 +101,7 @@ export default function FormAdd() {
         // setPhoneError(err.response.data.data.phone[0]);
 
         let errorObj: { key: string; value: string }[] = [];
-        let tempObj: any = {};
+        let tempObj: { [key: string]: string } = {};
 
         for (let i in err.response.data.data) {
           const current = err.response.data.data[i] as string[];
@@ -135,7 +137,7 @@ export default function FormAdd() {
     }
   }
   //Edit handle
-  function EditHandle(e: any) {
+  function EditHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("card image", formData.card_image);
     let { card_image, ...withoutImage } = formData;
@@ -157,7 +159,7 @@ export default function FormAdd() {
         console.log(err);
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
-        let tempObj: any = {};
+        let tempObj: { [key: string]: string } = {};
         for (let i in err.response.data.data) {
           const current = err.response.data.data[i] as string[];
           current.join(", ");

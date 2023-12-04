@@ -21,7 +21,7 @@ import { Api } from "../../../../constants";
 import { useNavigate } from "react-router-dom";
 import { Branch, Broker } from "../../../../types";
 
-function PopUp({ open, setOpen }: any) {
+function PopUp({ open, setOpen }: PropsType) {
   const [searchClient, dispatch] = useReducer(reducer, individualInitial);
   const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
@@ -80,7 +80,9 @@ function PopUp({ open, setOpen }: any) {
       if (e.target.checked) dispatch({ type: "TYPE", payload: type });
     };
   }
-  function submitHandle(e: any) {
+  function submitHandle(
+    e: React.FormEvent<HTMLFormElement> | React.FormEvent<HTMLButtonElement>
+  ) {
     e.preventDefault();
     getClient();
   }
@@ -251,3 +253,7 @@ function PopUp({ open, setOpen }: any) {
 }
 
 export default PopUp;
+type PropsType = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
