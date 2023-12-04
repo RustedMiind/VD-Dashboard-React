@@ -123,7 +123,7 @@ function EmployeesRequestsTable(props: PropsType) {
           </Typography>
         )}
       </TableContainer>
-      <Stack p={2} direction="row" alignItems="center" spacing={1}>
+      {/* <Stack p={2} direction="row" alignItems="center" spacing={1}>
         <Typography> عدد العرض في الصفحة</Typography>
         <TextField
           size="small"
@@ -140,7 +140,7 @@ function EmployeesRequestsTable(props: PropsType) {
           <MenuItem value={2500}>2500</MenuItem>
           <MenuItem value={10000}>10000</MenuItem>
         </TextField>
-      </Stack>
+      </Stack> */}
     </>
   );
 
