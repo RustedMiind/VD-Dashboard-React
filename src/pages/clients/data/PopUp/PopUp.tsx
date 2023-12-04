@@ -166,7 +166,7 @@ function PopUp({ open, setOpen }: PropsType) {
           <Grid item p={paddingSize} md={6}>
             <Stack>
               <Typography component="label" sx={{ ml: 2 }}>
-                {searchClient.type == "individual"
+                {searchClient.type === "individual"
                   ? "اسم العميل *"
                   : "اسم الشركه *"}
               </Typography>

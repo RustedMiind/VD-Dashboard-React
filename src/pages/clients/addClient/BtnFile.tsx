@@ -8,7 +8,7 @@ function BtnFile(props: BtnFileProps) {
 
   return (
     <Stack width={1}>
-      <Typography sx={{ ml: 2 }} component="label">
+      <Typography sx={{ ml: 2, mb: 1 }} component="label">
         صورة الهوية
       </Typography>
       <UploadFileInput

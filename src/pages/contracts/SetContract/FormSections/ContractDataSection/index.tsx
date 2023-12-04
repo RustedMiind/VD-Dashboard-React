@@ -15,7 +15,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem from "../../Components/Select";
-import TextInput from "../../Components/TextInput";
 import { SelectOptions } from "./SelectOptions";
 import { Api } from "../../../../../constants";
 import axios from "axios";
@@ -188,7 +187,7 @@ const ContractData = () => {
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             isDisabled={true}
-            selected={+(type || 1)}
+            selected={+(type || 4)}
             options={requests?.contractType?.map((type) => ({
               title: type.name,
               value: type.id,
