@@ -31,6 +31,7 @@ function ClientRequestsTable(props: PropsType) {
   const tableContext = useContext(TableContext);
   const [rowsCount, setRowsCount] = useState(5);
   const toView = props.requests?.slice(0, rowsCount);
+  const isAllSelected = selectedItems.length === props.requests?.length;
   const chekedArray: IdListType = {
     id: [],
   };
@@ -69,6 +70,7 @@ function ClientRequestsTable(props: PropsType) {
               <TableHeader
                 requests={props.requests}
                 setSelectedItems={setSelectedItems}
+                isAllSelected={isAllSelected}
               />
             ) : (
               <NotFound title="لا يوجد عملاء" />
