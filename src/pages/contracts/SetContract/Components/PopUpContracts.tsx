@@ -92,7 +92,7 @@ export default function PopUpContracts(props: PropType) {
                   value={type.id}
                   control={<Radio />}
                   label={type.name}
-                  // disabled={type.name !== "ادخال مباشر"}
+                  disabled={type.name !== "ادخال مباشر"}
                   onChange={(e: React.SyntheticEvent<Element, Event>) => {
                     setIsChecked("4");
                   }}

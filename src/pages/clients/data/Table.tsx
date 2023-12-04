@@ -80,7 +80,7 @@ function ClientRequestsTable(props: PropsType) {
                     <TableRow key={index}>
                       <TableCell>
                         <Checkbox
-                          disabled={request.Contract_status === "منتهي"}
+                          disabled={request.Contract_status !== "لا يوجد عقود"}
                           checked={selectedItems.includes(request.id)}
                           value={request.id}
                           onChange={CheckboxHandler}
