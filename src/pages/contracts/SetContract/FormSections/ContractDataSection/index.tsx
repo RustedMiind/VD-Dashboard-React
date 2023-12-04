@@ -58,6 +58,7 @@ const ContractData = () => {
       .get<{ data: Contract | null }>(Api(`employee/contract/${id}`))
       .then((res) => {
         setEditContract(res.data.data);
+        console.log("client_edit", res.data.data);
       })
       .catch((err) => {
         setEditContract(null);
@@ -106,7 +107,7 @@ const ContractData = () => {
         addContractHandler(e);
       }}
     >
-      <Grid container>
+      <Grid container paddingBottom={2}>
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             title="نوع الفرع"
@@ -183,7 +184,6 @@ const ContractData = () => {
             />
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <SelectItem
             isDisabled={true}
@@ -217,7 +217,6 @@ const ContractData = () => {
             />
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -239,7 +238,6 @@ const ContractData = () => {
             </LocalizationProvider>
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Typography sx={{ ml: 2 }} component="label">
             اسم العميل
@@ -272,7 +270,6 @@ const ContractData = () => {
             )}
           />
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">

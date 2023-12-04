@@ -10,7 +10,6 @@ import {
   FormControlLabel,
   MenuItem,
   Autocomplete,
-  SelectChangeEvent,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
 import { useState, useEffect, useReducer } from "react";
