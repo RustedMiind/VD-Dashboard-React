@@ -177,7 +177,7 @@ const ClientProcess = () => {
                 const MORE_THAN_ONE = arr.length > 1;
                 return (
                   <LevelItem
-                    key={level.branch_id}
+                    key={level.id}
                     level={level}
                     updateLevel={updateLevel(index)}
                     nameBtn={`المرحلة ${index + 1}`}

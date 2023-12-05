@@ -17,6 +17,7 @@ import { FormData } from "../types/FormData";
 import { StepType } from "../types/Step";
 import React from "react";
 import SelectManager from "./SelectManager";
+import { ActionType } from "./reducer";
 
 const TableComponent = ({
   formDisabled,
@@ -171,7 +172,7 @@ type PropsType = {
   formDisabled: boolean;
   level: StepType;
   dataForm: FormData;
-  dispatch: React.Dispatch<any>;
+  dispatch: React.Dispatch<ActionType>;
 };
 
 export default TableComponent;

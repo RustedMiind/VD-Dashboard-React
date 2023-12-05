@@ -1,4 +1,5 @@
 export interface StepType {
+  id?: number;
   employee_id: number;
   department_id: number | null | 0;
   accept?: 0 | 1;

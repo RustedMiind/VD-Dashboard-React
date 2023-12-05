@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { formatDate } from "../../../../methods";
-import { PanelData, StepStatusData, StepStatuses } from "../types";
+import { PanelData, StepStatusData, StepStatus } from "../types";
 import {
   Box,
   Chip,
@@ -19,23 +19,22 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 
 const StatusDialog = ({ open, onClose, id }: PropsType) => {
-  const [details, setDetails] = useState<StepStatuses[] | undefined>(undefined);
-  const [date, setDate] = useState<string>("");
+  const [details, setDetails] = useState<Partial<StepStatus>[]>();
+  const [date, setDate] = useState("");
 
   useEffect(() => {
     if (open && id) {
-      setDetails(undefined);
       axios
         .get<{ data: StepStatusData[] }>(
           Api(`employee/client/order/statusOrder?client_id=${id}`)
         )
         .then(({ data }) => {
-          setDetails(data.data[0].order_step_form);
-          setDate(formatDate(data.data[0].created_date));
+          setDetails(data.data[0].order_step_form || []);
+          setDate(formatDate(data.data[0].created_date) || "");
         });
     }
   }, [open]);
-  const generateChip = (value: number): JSX.Element => {
+  const generateChip = (value: number | undefined): JSX.Element => {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
 
@@ -78,10 +77,12 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
               <TableBody>
                 {details?.map((step) => {
                   const note = step?.note;
+
+                  const orderStep = step?.order_step && step?.order_step[0];
                   return (
                     <TableRow key={step.id}>
                       <TableCell>
-                        {step?.order_step[0]?.employees?.name || "لا يوجد موظف"}
+                        {orderStep?.employees?.name || "لا يوجد موظف"}
                       </TableCell>
                       <TableCell>{date}</TableCell>
                       <TableCell>{formatDate(step?.end_date)}</TableCell>

@@ -20,7 +20,9 @@ const ClientRequests = () => {
     PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
   console.log(requests.length);
-  const [dialogRequest, setDialogRequest] = useState<PanelData | null>(null);
+  const [dialogRequest, setDialogRequest] = useState<
+    PanelData | StepStatusData | null
+  >(null);
   const [dialogOpen, setDialogOpen] = useState<
     undefined | "model" | "status" | "details"
   >(undefined);
@@ -57,20 +59,20 @@ const ClientRequests = () => {
       });
   };
 
-  const handleOpenModel = (request: PanelData) => {
+  const handleOpenModel = (request: PanelData | StepStatusData) => {
     return () => {
       setDialogRequest(request);
       setDialogOpen("model");
     };
   };
 
-  const handleOpenStatus = (request: PanelData) => {
+  const handleOpenStatus = (request: PanelData | StepStatusData) => {
     return () => {
       setDialogRequest(request);
       setDialogOpen("status");
     };
   };
-  const handleOpenDetails = (request: PanelData) => {
+  const handleOpenDetails = (request: PanelData | StepStatusData) => {
     return () => {
       setDialogRequest(request);
       setDialogOpen("details");
@@ -82,7 +84,7 @@ const ClientRequests = () => {
 
   useEffect(getRequests, [selectedType, currentTab]);
   const IS_REQUESTS_EXISTS = typeof requests === "object";
-  let filtered: PanelData[] | any | undefined = IS_REQUESTS_EXISTS
+  let filtered: PanelData[] | StepStatusData[] | undefined = IS_REQUESTS_EXISTS
     ? requests
     : undefined;
 
@@ -151,7 +153,6 @@ const ClientRequests = () => {
               openStatus={handleOpenStatus}
               openDetails={handleOpenDetails}
               requests={filtered}
-              setRequests={setRequests}
             />
           )}
 

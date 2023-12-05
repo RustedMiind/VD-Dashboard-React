@@ -7,7 +7,7 @@ import { AccordionDetails } from "@mui/material";
 import { StepType } from "../types/Step";
 import { FormData } from "../types/FormData";
 import TableComponent from "./Table";
-import useReducer from "./reducer";
+import useReducer, { ActionType } from "./reducer";
 
 const LevelItem = ({
   dataForm,
@@ -19,7 +19,7 @@ const LevelItem = ({
   const [expanded, setExpanded] = useState(false);
   const [update, setUpdate] = useState(false);
   const reducer = useReducer(level);
-  const dispatch = (action: any) => {
+  const dispatch = (action: ActionType) => {
     updateLevel(reducer(action));
   };
   const localLevel = level;

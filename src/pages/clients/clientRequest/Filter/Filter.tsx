@@ -8,7 +8,6 @@ import { Filter, OrderByType } from "../types";
 import { requestTypes } from "../RequestTypes";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { NULL } from "sass";
 
 const FilterComponent = ({
   opened,
@@ -152,6 +151,7 @@ const FilterComponent = ({
           label="الترتيب"
           size="small"
           select
+          value={filters.sortBy}
           onChange={(e) => {
             dispatch({
               type: "SET_ORDER_BY_SORT",

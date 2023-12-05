@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { PanelData, StepStatusData } from "./types";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { formatDate } from "../../../methods";
 
 const ClientTableComponent = ({
@@ -22,15 +22,13 @@ const ClientTableComponent = ({
   openStatus,
   openModel,
   openDetails,
-  setRequests,
 }: PropsType) => {
   const [rowsCount, setRowsCount] = useState(10);
   const view = requests.slice(0, rowsCount);
 
-  function generateChip(request: PanelData): JSX.Element {
+  function generateChip(request: PanelData | StepStatusData): JSX.Element {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
-
     switch (request.step_status_id) {
       case 1:
         chip = (
@@ -112,65 +110,56 @@ const ClientTableComponent = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {view.map((request) => (
-              /*
-              on edit(){
-                setModelDialogState(
-                  {
-                    clientId,
-                    employeeId,
-                    requestId: request.id,
-
-                  }
-                )
-              }
-              */
-              //
-              <TableRow key={request.id}>
-                <TableCell>{request.id}</TableCell>
-                <TableCell>
-                  <Box
-                    component="span"
-                    sx={{
-                      display: "inline-block",
-                      maxWidth: 150,
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {request.name}
-                  </Box>
-                </TableCell>
-                <TableCell>{formatDate(request.created_date)}</TableCell>
-                <TableCell>
-                  {request.type === "individual" ? "فرد" : "شركة"}
-                </TableCell>
-                <TableCell>{request.branch_name}</TableCell>
-                <TableCell>
-                  <Button
-                    size="small"
-                    color="primary"
-                    sx={{
-                      minWidth: 0,
-                      textDecoration: "underline !important",
-                      fontWeight: 700,
-                    }}
-                    onClick={openDetails(request)}
-                  >
-                    {request.order_type_name}
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  {request.order_step_form[0].order_step[0].department?.name ||
-                    "----"}
-                </TableCell>
-                <TableCell id={`${request.step_status_id}`}>
-                  {generateChip(request)}
-                </TableCell>
-                <TableCell>{request.note || "----"}</TableCell>
-              </TableRow>
-            ))}
+            {view.map((request) => {
+              const department =
+                request.order_step_form[0] &&
+                request.order_step_form[0].order_step &&
+                request.order_step_form[0].order_step[0] &&
+                request.order_step_form[0].order_step[0].department;
+              return (
+                <TableRow key={request.id}>
+                  <TableCell>{request.id}</TableCell>
+                  <TableCell>
+                    <Box
+                      component="span"
+                      sx={{
+                        display: "inline-block",
+                        maxWidth: 150,
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {request.name}
+                    </Box>
+                  </TableCell>
+                  <TableCell>{formatDate(request.created_date)}</TableCell>
+                  <TableCell>
+                    {request.type === "individual" ? "فرد" : "شركة"}
+                  </TableCell>
+                  <TableCell>{request.branch_name}</TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      color="primary"
+                      sx={{
+                        minWidth: 0,
+                        textDecoration: "underline !important",
+                        fontWeight: 700,
+                      }}
+                      onClick={openDetails(request)}
+                    >
+                      {request.order_type_name}
+                    </Button>
+                  </TableCell>
+                  <TableCell>{department?.name || "----"}</TableCell>
+                  <TableCell id={`${request.step_status_id}`}>
+                    {generateChip(request)}
+                  </TableCell>
+                  <TableCell>{request.note || "----"}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
         {requests.length === 0 && (
@@ -202,15 +191,10 @@ const ClientTableComponent = ({
 };
 
 type PropsType = {
-  requests: PanelData[];
-  openModel: (res: PanelData) => () => void;
-  openStatus: (res: PanelData) => () => void;
-  openDetails: (res: PanelData) => () => void;
-  setRequests: Dispatch<
-    SetStateAction<
-      StepStatusData[] | PanelData[] | "loading" | "none" | "error"
-    >
-  >;
+  requests: PanelData[] | StepStatusData[];
+  openModel: (res: PanelData | StepStatusData) => () => void;
+  openStatus: (res: PanelData | StepStatusData) => () => void;
+  openDetails: (res: PanelData | StepStatusData) => () => void;
 };
 
 export default ClientTableComponent;

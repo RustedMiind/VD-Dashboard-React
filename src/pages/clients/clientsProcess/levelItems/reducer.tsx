@@ -1,7 +1,8 @@
+import { ReducerAction } from "../../../../types";
 import { StepType } from "../types/Step";
 
 const dispatch = (state: StepType) => {
-  return function (action: any): StepType {
+  return function (action: ActionType): StepType {
     switch (action.type) {
       case "SET_MANAGEMENT":
         console.log(action.payload);
@@ -31,5 +32,42 @@ const dispatch = (state: StepType) => {
     }
   };
 };
+
+interface SetManagement extends ReducerAction<number> {
+  type: "SET_MANAGEMENT";
+}
+
+interface SetEmployee extends ReducerAction<number> {
+  type: "SET_EMPLOYEE";
+}
+
+interface SetAccept extends ReducerAction<number> {
+  type: "SET_ACCEPT";
+}
+
+interface SetApproval extends ReducerAction<number> {
+  type: "SET_APPROVAL";
+}
+
+interface SetDuration extends ReducerAction<string> {
+  type: "SET_DURATION";
+}
+
+interface SetModel extends ReducerAction<number> {
+  type: "SET_MODEL";
+}
+
+interface SetReset extends ReducerAction<StepType> {
+  type: "SET_RESET";
+}
+
+export type ActionType =
+  | SetManagement
+  | SetEmployee
+  | SetAccept
+  | SetApproval
+  | SetDuration
+  | SetModel
+  | SetReset;
 
 export default dispatch;
