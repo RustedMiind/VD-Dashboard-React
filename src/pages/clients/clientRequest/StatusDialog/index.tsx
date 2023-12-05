@@ -40,7 +40,7 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
 
     switch (value) {
       case 0:
-        chip = <Chip color="primary" variant={variant} label="قيد العمل" />;
+        chip = <Chip color="primary" variant={variant} label="تحت الاجراء" />;
         break;
       case 99:
         chip = <Chip color="error" variant={variant} label="مرفوض" />;
