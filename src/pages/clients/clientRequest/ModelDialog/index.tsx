@@ -20,7 +20,13 @@ import { Api } from "../../../../constants";
 import { ModelFormInitialState, reducer } from "./reducer";
 import { ModelStatusType } from "./ModelTypes";
 
-const ModelDialog = ({ open, onClose, requestId, stepId }: PropsType) => {
+const ModelDialog = ({
+  open,
+  onClose,
+  requestId,
+  stepId,
+  setRequests,
+}: PropsType) => {
   const [formData, dispatch] = useReducer(reducer, ModelFormInitialState);
   const [status, setStatus] = useState<{
     type: "success" | "error";
@@ -41,16 +47,18 @@ const ModelDialog = ({ open, onClose, requestId, stepId }: PropsType) => {
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     console.log(formData);
-    if (formData.client_id && formData.status) {
+    if (formData.client_id) {
       axios
         .post(Api(`employee/client/order/addStep/${stepId}`), formData)
         .then((res) => {
+          setRequests();
           console.log(res);
           setStatus({
             type: "success",
             message: "تم اتخاذ الاجراء بنجاح",
             show: true,
           });
+          onClose();
         })
         .catch((err) => {
           console.log(err);
@@ -159,6 +167,7 @@ const ModelDialog = ({ open, onClose, requestId, stepId }: PropsType) => {
 type PropsType = {
   open: boolean;
   onClose: () => void;
+  setRequests: () => void;
   requestId?: number;
   stepId?: number;
 };

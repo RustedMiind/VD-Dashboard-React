@@ -95,6 +95,7 @@ const ClientRequests = () => {
         onClose={handleCloseDialog}
         requestId={dialogRequest?.id}
         stepId={dialogRequest?.step_id}
+        setRequests={getRequests}
       />
       <DetailsDialog
         open={dialogOpen === "details"}

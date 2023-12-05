@@ -174,7 +174,7 @@ const ClientProcess = () => {
             {endPointStatus === "none" &&
               process.levels?.map((level, index, arr) => {
                 const IS_LAST_ITEM = index === arr.length - 1;
-                const MORE_THAN_ONE = arr.length > 1;
+                // const MORE_THAN_ONE = arr.length > 1;
                 return (
                   <LevelItem
                     key={level.id}
@@ -183,7 +183,7 @@ const ClientProcess = () => {
                     nameBtn={`المرحلة ${index + 1}`}
                     dataForm={dataForm}
                     onDelete={
-                      IS_LAST_ITEM && MORE_THAN_ONE
+                      IS_LAST_ITEM
                         ? () => {
                             removeLevel(index);
                           }

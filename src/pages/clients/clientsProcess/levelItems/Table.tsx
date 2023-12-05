@@ -2,6 +2,7 @@ import {
   Box,
   Checkbox,
   FormControl,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -127,6 +128,11 @@ const TableComponent = ({
                 label="مدة التجاوز"
                 disabled={formDisabled}
                 value={level.period}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">ساعة</InputAdornment>
+                  ),
+                }}
                 onChange={(e) => {
                   dispatch({
                     type: "SET_DURATION",
