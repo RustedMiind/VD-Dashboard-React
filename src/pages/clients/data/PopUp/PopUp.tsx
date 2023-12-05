@@ -31,7 +31,6 @@ function PopUp({ open, setOpen }: PropsType) {
   const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
-  const paddingSize = 0.1;
   const [toaster, setToaster] = useState<ToasterType>({
     open: false,
     message: "",
@@ -65,35 +64,38 @@ function PopUp({ open, setOpen }: PropsType) {
     setOpen(false);
   };
   const getClient = () => {
-    console.log(searchClient);
-
-    axios
-      .get<{ data: FormData }>(Api(`employee/client/edit`), {
-        params: {
-          name: searchClient.name,
-          phone: searchClient.phone,
-          branch_id: searchClient.branch_id,
-          broker_id: searchClient.broker_id,
-        },
-      })
-      .then(({ data }) => {
-        if (data.data) {
-          navigate(`${data.data.name}/edit`);
-        }
-        updateAndOpenToaster({
-          severity: "error",
-          message: "لا يوجد عميل بهذه البيانات",
+    if (
+      searchClient.name !== "" ||
+      searchClient.phone !== "" ||
+      searchClient.branch_id !== 0 ||
+      searchClient.broker_id !== 0
+    ) {
+      axios
+        .get<{ data: FormData }>(Api(`employee/client/edit`), {
+          params: {
+            name: searchClient.name,
+            phone: searchClient.phone,
+            branch_id: searchClient.branch_id,
+            broker_id: searchClient.broker_id,
+          },
+        })
+        .then(({ data }) => {
+          if (data.data) {
+            navigate(`${data.data.name}/edit`);
+          } else {
+            updateAndOpenToaster({
+              severity: "error",
+              message: "لا يوجد عميل بهذه البيانات",
+            });
+          }
+        })
+        .catch((err) => {
+          updateAndOpenToaster({
+            severity: "error",
+            message: "تعذر في حفظ العقد ",
+          });
         });
-      })
-      .catch((err) => {
-        console.log("no");
-
-        console.log("errdswd", err);
-        updateAndOpenToaster({
-          severity: "error",
-          message: "تعذر في حفظ العقد ",
-        });
-      });
+    }
   };
   function changeTypeHandler(type: "individual" | "company") {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,19 +165,19 @@ function PopUp({ open, setOpen }: PropsType) {
           </Box>
         </RadioGroup>
         <Grid container>
-          <Grid item p={paddingSize} md={6}>
+          <Grid item md={6}>
             <Stack>
               <Typography component="label" sx={{ ml: 2 }}>
                 {searchClient.type === "individual"
-                  ? "اسم العميل *"
-                  : "اسم الشركه *"}
+                  ? "اسم العميل"
+                  : "اسم الشركه"}
               </Typography>
               <TextField
                 id="outlined-name-input"
                 type="text"
                 required
                 size="small"
-                value={searchClient.name}
+                value={searchClient?.name}
                 onChange={(e) => {
                   dispatch({
                     type: "NAME",
@@ -185,17 +187,17 @@ function PopUp({ open, setOpen }: PropsType) {
               />
             </Stack>
           </Grid>
-          <Grid item p={paddingSize} md={6}>
+          <Grid item md={6}>
             <Stack>
               <Typography sx={{ ml: 2 }} component="label">
-                رقم الجوال *
+                رقم الجوال
               </Typography>
               <TextField
                 id="outlined-phone-input"
                 type="text"
                 required
                 size="small"
-                value={searchClient.phone}
+                value={searchClient?.phone}
                 onChange={(e) => {
                   console.log(e.target.value);
 
@@ -208,7 +210,7 @@ function PopUp({ open, setOpen }: PropsType) {
             </Stack>
           </Grid>
 
-          <Grid item p={paddingSize} md={6}>
+          <Grid item md={6}>
             <Stack>
               <Typography sx={{ ml: 2 }} component="label">
                 الوسيط
@@ -225,17 +227,17 @@ function PopUp({ open, setOpen }: PropsType) {
                 }}
               >
                 {brokers?.map((broker) => (
-                  <MenuItem key={broker.id} value={broker.id}>
-                    {broker.name}
+                  <MenuItem key={broker?.id} value={broker?.id}>
+                    {broker?.name}
                   </MenuItem>
                 ))}
               </TextField>
             </Stack>
           </Grid>
-          <Grid item p={paddingSize} md={6}>
+          <Grid item md={6}>
             <Stack>
               <Typography sx={{ ml: 2 }} component="label">
-                الفرع *
+                الفرع
               </Typography>
               <TextField
                 id="outlined-select-currency"
@@ -249,14 +251,14 @@ function PopUp({ open, setOpen }: PropsType) {
                 }}
               >
                 {branches?.map((branch) => (
-                  <MenuItem key={branch.id} value={branch.id}>
-                    {branch.name}
+                  <MenuItem key={branch?.id} value={branch?.id}>
+                    {branch?.name}
                   </MenuItem>
                 ))}
               </TextField>
             </Stack>
           </Grid>
-          <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>
+          <Grid item md={9} sx={{ marginX: "auto", mt: 2 }}>
             <Button
               fullWidth
               onSubmit={submitHandle}

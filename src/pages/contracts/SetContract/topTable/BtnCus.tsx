@@ -37,7 +37,6 @@ export default function BtnCus() {
         id: deletedClientsIds?.selectedIds,
       })
       .then((res) => {
-        console.log(res);
         contractsContext.setContracts && contractsContext.setContracts();
         updateAndOpenToaster({
           severity: "success",

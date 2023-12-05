@@ -21,7 +21,6 @@ function TextInput(props: PropsType) {
 
 type PropsType = {
   title: string;
-  // defaultValue?: string | undefined | number;
   onDataChange?: (
     change: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;

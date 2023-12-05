@@ -27,7 +27,6 @@ import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
 const paddingSize = 0.1;
-const initialDate = { $D: 4, $M: 12, $y: 2023 };
 const ContractData = (props: PropsType) => {
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
@@ -279,7 +278,6 @@ const ContractData = (props: PropsType) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer sx={{ p: 0 }} components={["DatePicker"]}>
                 <DatePicker
-                  value={initialDate}
                   slotProps={{ textField: { size: "small" } }}
                   onChange={(e: DatePickerEvent | null) => {
                     if (e) {

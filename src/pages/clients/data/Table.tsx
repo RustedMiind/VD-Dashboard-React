@@ -31,7 +31,6 @@ function ClientRequestsTable(props: PropsType) {
   const tableContext = useContext(TableContext);
   const [rowsCount, setRowsCount] = useState(5);
   const toView = props.requests?.slice(0, rowsCount);
-  const isAllSelected = selectedItems.length === props.requests?.length;
   const chekedArray: IdListType = {
     id: [],
   };
@@ -60,7 +59,19 @@ function ClientRequestsTable(props: PropsType) {
       });
     }
   }
-
+  const isAllSelected =
+    props.requests?.filter((req) => {
+      return req.contracts_count === 0;
+    }).length === selectedItems.length && selectedItems.length;
+  function checkAllHandler(checked: boolean) {
+    const allChecked: number[] = checked
+      ? (props.requests
+          ?.map((request) => request.contracts_count === 0 && request.id)
+          .filter((id) => typeof id === "number") as number[])
+      : [];
+    setSelectedItems(allChecked);
+    console.log(isAllSelected);
+  }
   return (
     <>
       <Stack>
@@ -68,9 +79,9 @@ function ClientRequestsTable(props: PropsType) {
           <Table ref={tableRef}>
             {props.requests?.length !== 0 ? (
               <TableHeader
+                checkAllHandler={checkAllHandler}
                 requests={props.requests}
-                setSelectedItems={setSelectedItems}
-                isAllSelected={isAllSelected}
+                isAllSelected={!!isAllSelected}
               />
             ) : (
               <NotFound title="لا يوجد عملاء" />
