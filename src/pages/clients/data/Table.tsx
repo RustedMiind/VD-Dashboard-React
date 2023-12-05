@@ -70,7 +70,6 @@ function ClientRequestsTable(props: PropsType) {
           .filter((id) => typeof id === "number") as number[])
       : [];
     setSelectedItems(allChecked);
-    console.log(isAllSelected);
   }
   return (
     <>
