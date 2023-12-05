@@ -1,4 +1,4 @@
-import { Badge, Stack } from "@mui/material";
+import { Badge, Button, Stack } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
@@ -15,7 +15,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { Notification } from "../../../types/Notifications";
 import axios from "axios";
-import { Api } from "../../../constants";
+import { Api, Domain } from "../../../constants";
 
 function Notifications() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -88,6 +88,16 @@ function Notifications() {
             <Divider light />
           </>
         ))}
+        <Button
+          component={"a"}
+          href={Domain("admin/notifications")}
+          fullWidth
+          variant="contained"
+          size="large"
+          color="secondary"
+        >
+          عرض الكل
+        </Button>
       </Menu>
     </React.Fragment>
   );
