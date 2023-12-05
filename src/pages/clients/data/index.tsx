@@ -12,9 +12,7 @@ import PopUp from "./PopUp/PopUp";
 import { IndexContextProvider } from "../Context/Store";
 
 function ClientData() {
-  const [open, setOpen] = useState<
-    Boolean | React.Dispatch<React.SetStateAction<Boolean>>
-  >(false);
+  const [open, setOpen] = useState(false);
 
   // search bar
   const [requests, setRequests] = useState<ClientRequest[] | null>(null);
@@ -58,8 +56,8 @@ function ClientData() {
 
         <Paper
           sx={{
-            bgcolor: "Background",
             overflow: "hidden",
+            mb: 7,
           }}
           elevation={4}
         >
@@ -80,20 +78,25 @@ function ClientData() {
               >
                 اضافة عميل جديد
               </Button>
-              <Button
-                sx={{ ml: 2 }}
-                variant="contained"
-                onClick={handleClickOpen}
-              >
-                تعديل بيانات عميل
-              </Button>
+              {requests?.length !== 0 && (
+                <>
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="contained"
+                    onClick={handleClickOpen}
+                  >
+                    تعديل بيانات عميل
+                  </Button>
+                </>
+              )}
               <PopUp open={open} setOpen={setOpen} />
             </Box>
-            <Box>
-              <DeleteBtn setRequests={setRequests} requests={requests} />
-            </Box>
+            {requests?.length !== 0 && (
+              <>
+                <DeleteBtn setRequests={setRequests} requests={requests} />
+              </>
+            )}
           </Box>
-
           <ClientRequestsTable requests={requests} />
         </Paper>
       </IndexContextProvider>

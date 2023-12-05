@@ -1,0 +1,30 @@
+export interface Branch {
+  active: number;
+  city_id: number;
+  created_at: string;
+  email: string;
+  id: number;
+  is_clients: number;
+  is_mangers: number;
+  is_papers: number;
+  is_projects: number;
+  is_services: number;
+  is_shifts: number;
+  latitude: string;
+  longitude: string;
+  manager_id: number;
+  name: string;
+  phone: string;
+  share_client: number;
+  share_manager: number;
+  share_paper: number;
+  share_service: number;
+  share_shift: number;
+  shift_id: number;
+  type: string;
+  updated_at: string;
+  // address: null;
+  // deleted_at: null;
+  // parent_id: null;
+  // polygon: null;
+}

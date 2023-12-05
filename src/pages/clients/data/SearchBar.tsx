@@ -16,8 +16,9 @@ function SearchBar(props: PropsType) {
           value={props.search}
           size="small"
           sx={{ flexGrow: 1 }}
-          onChange={(e: any) => {
-            
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
             props.setSearch(e.target.value);
           }}
           // disabled

@@ -9,13 +9,9 @@ import {
   Radio,
   FormControlLabel,
   MenuItem,
-  Alert,
-  Snackbar,
+  Autocomplete,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
-import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { TypeAdd } from "./AddClient";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
@@ -23,21 +19,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
+import BtnFile from "./BtnFile";
+import RequiredSymbol from "../../../components/RequiredSymbol";
 const paddingSize = 0.1;
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: "1px",
-  overflow: "hidden",
-  position: "absolute",
-  whiteSpace: "nowrap",
-  width: "1px",
-});
-
 export default function FormAdd() {
-  const [clientEdit, setclientEdit] = useState<any | undefined>(undefined);
+  const [clientEdit, setclientEdit] = useState<FormData | null>(null);
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
-  const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
+  const [brokers, setBrokers] = useState<Broker[]>([]);
   const [formData, dispatch] = useReducer(reducer, individualInitial);
   const [errors, setErrors] = useState<
     Partial<FormData & { card_image: string }> | undefined
@@ -61,10 +49,8 @@ export default function FormAdd() {
   }
 
   async function GetDataClient() {
-    console.log(objectResponse);
-
     try {
-      const { data } = await axios.get<{ data: any }>(
+      const { data } = await axios.get<{ data: FormData }>(
         Api(`employee/client/edit`),
         {
           params: {
@@ -72,7 +58,9 @@ export default function FormAdd() {
           },
         }
       );
+
       setclientEdit(data.data);
+
       let { card_image, ...FormWithoutImage } = data.data;
       dispatch({ type: "SET_TYPE_WITH_CHECK", payload: data.data });
     } catch (error) {
@@ -93,13 +81,13 @@ export default function FormAdd() {
       })
       .catch((err) => {
         setBranches(undefined);
-        setBrokers(undefined);
+        setBrokers([]);
         console.log("err", err);
       });
   }, []);
 
   // function handle submit
-  function submitHandle(e: any) {
+  function submitHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     axios
       .post(Api("employee/client/store"), objectToFormData(formData))
@@ -113,10 +101,10 @@ export default function FormAdd() {
         // setPhoneError(err.response.data.data.phone[0]);
 
         let errorObj: { key: string; value: string }[] = [];
-        let tempObj: any = {};
+        let tempObj: { [key: string]: string } = {};
 
-        for (let i in err.response.data.data) {
-          const current = err.response.data.data[i] as string[];
+        for (let i in err.response?.data?.data) {
+          const current: string[] = err.response?.data?.data[i] || [];
           current.join(", ");
           errorObj.push({ key: i, value: current.join(", ") });
         }
@@ -126,7 +114,6 @@ export default function FormAdd() {
         setErrors(tempObj);
       });
     if (card_idError) {
-      console.log("dalog2");
       return (
         <PopUpError
           card_idError={card_idError}
@@ -138,7 +125,6 @@ export default function FormAdd() {
       );
     }
     if (phoneError) {
-      console.log("dalog");
       return (
         <PopUpError
           phoneError={phoneError}
@@ -151,7 +137,7 @@ export default function FormAdd() {
     }
   }
   //Edit handle
-  function EditHandle(e: any) {
+  function EditHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("card image", formData.card_image);
     let { card_image, ...withoutImage } = formData;
@@ -163,17 +149,16 @@ export default function FormAdd() {
     // const toSend = objectToFormData(temp);
 
     axios
-      .post(Api(`employee/client/update/${clientEdit.id}`), toSend)
+      .post(Api(`employee/client/update/${clientEdit?.id}`), toSend)
       .then((res) => {
         setToaster({ type: "success" });
-        console.log(formData);
         navigate("/react/clients");
       })
       .catch((err) => {
         console.log(err);
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
-        let tempObj: any = {};
+        let tempObj: { [key: string]: string } = {};
         for (let i in err.response.data.data) {
           const current = err.response.data.data[i] as string[];
           current.join(", ");
@@ -213,8 +198,10 @@ export default function FormAdd() {
         "& .MuiTextField-root": { m: 1, width: "50ch" },
       }}
       noValidate
-      autoComplete="off"
-      onSubmit={clientEdit ? EditHandle : submitHandle}
+      autoComplete="on"
+      onSubmit={(e) => {
+        clientEdit ? EditHandle(e) : submitHandle(e);
+      }}
     >
       <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
         {clientEdit ? "تعديل بيانات العميل" : "اضافه عميل"}
@@ -230,7 +217,7 @@ export default function FormAdd() {
                 onChange={changeTypeHandler("individual")}
               />
             }
-            label="فرد    "
+            label="فرد"
           />
           <FormControlLabel
             control={
@@ -247,9 +234,17 @@ export default function FormAdd() {
       <Grid container>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography component="label" sx={{ ml: 2 }}>
-              {formData.type == "individual" ? "اسم العميل *" : "اسم الشركه *"}
-            </Typography>
+            {formData.type === "individual" ? (
+              <Typography component="label" sx={{ ml: 2 }}>
+                اسم العميل
+                <RequiredSymbol />
+              </Typography>
+            ) : (
+              <Typography component="label" sx={{ ml: 2 }}>
+                اسم الشركه
+                <RequiredSymbol />
+              </Typography>
+            )}
             <TextField
               id="outlined-name-input"
               type="text"
@@ -257,7 +252,7 @@ export default function FormAdd() {
               size="small"
               value={formData.name}
               placeholder={
-                formData.type == "individual" ? "اسم العميل" : "اسم الشركه"
+                formData.type === "individual" ? "اسم العميل" : "اسم الشركه"
               }
               onChange={(e) => {
                 dispatch({
@@ -267,35 +262,40 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.name}
             </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              {formData.type == "individual"
-                ? "رقم الهويه * "
-                : "السجل التجاري *"}
-            </Typography>
+            {formData.type === "individual" ? (
+              <Typography component="label" sx={{ ml: 2 }}>
+                رقم الهويه <RequiredSymbol />
+              </Typography>
+            ) : (
+              <Typography component="label" sx={{ ml: 2 }}>
+                السجل التجاري <RequiredSymbol />
+              </Typography>
+            )}
             <TextField
+              fullWidth
               id="outlined-idNumber-input"
               type="number"
               required
               placeholder={
-                formData.type == "individual" ? "رقم الهويه" : "السجل التجاري"
+                formData.type === "individual" ? "رقم الهويه" : "السجل التجاري"
               }
               size="small"
               value={
-                formData.type == "individual"
+                formData.type === "individual"
                   ? formData.card_id
                   : formData.register_number
               }
               onChange={(e) => {
                 dispatch({
                   type:
-                    formData.type == "individual"
+                    formData.type === "individual"
                       ? "CARD_ID"
                       : "REGISTER_NUMBER",
 
@@ -303,19 +303,25 @@ export default function FormAdd() {
                 });
               }}
             />
-            <Typography variant="body2" color="error">
-              {errors?.card_id}
-            </Typography>
+            {formData.type === "individual" ? (
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.card_id}
+              </Typography>
+            ) : (
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.register_number}
+              </Typography>
+            )}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              رقم الجوال *
+              رقم الجوال <RequiredSymbol />
             </Typography>
             <TextField
               id="outlined-phone-input"
-              type="text"
+              type="number"
               required
               size="small"
               placeholder=" رقم الجوال"
@@ -326,9 +332,18 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
-              {errors?.phone}
-            </Typography>
+            {errors?.phone && (
+              <Typography color="error" variant="body2" sx={{ ml: 2 }}>
+                {errors?.phone}
+                {/* <Typography
+                  sx={{ color: "#F19B02" }}
+                  component={NavLink}
+                  to="www.google.com"
+                >
+                  اضغط هنا للمزيد
+                </Typography> */}
+              </Typography>
+            )}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -349,7 +364,7 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.email}
             </Typography>
           </Stack>
@@ -359,66 +374,97 @@ export default function FormAdd() {
             <Typography sx={{ ml: 2 }} component="label">
               الوسيط
             </Typography>
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              value={formData?.broker_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                dispatch({
+                  type: "BROKER_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {brokers.map((broker) => (
+                <MenuItem key={broker.id} value={broker.id}>
+                  {broker.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
+          {/* <Stack>
+            <Typography sx={{ ml: 2 }} component="label">
+              الوسيط <RequiredSymbol />
+            </Typography>
             {(clientEdit === null || clientEdit?.broker_id) && (
-              <TextField
-                id="outlined-select-currency"
+              <Autocomplete
                 size="small"
-                select
-                defaultValue={clientEdit?.broker_id}
-                placeholder="الوسيط"
-                onChange={(e) => {
-                  console.log(e.target);
-                  dispatch({
-                    type: "BROKER_ID",
-                    payload: parseInt(e.target.value),
-                  });
-                }}
-              >
-                {brokers?.map((broker) => (
-                  <MenuItem key={broker.id} value={broker.id}>
-                    {broker.name}
-                  </MenuItem>
-                ))}
-              </TextField>
+                disablePortal
+                id="combo-box-demo"
+                options={brokers?.map((broker) => {
+                  return broker.name;
+                })}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField
+                    onSelect={(
+                      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+                    ) => {
+                      brokers.map((broker) => {
+                        if (
+                          broker.name ===
+                          (event.target as HTMLTextAreaElement).value
+                        ) {
+                          dispatch({
+                            type: "BROKER_ID",
+                            payload: broker.id,
+                          });
+                        }
+                      });
+                    }}
+                    {...params}
+                    placeholder="الوسيط"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
+              />
             )}
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.broker_id}
             </Typography>
-          </Stack>
+          </Stack> */}
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
-              الفرع *
+              الفرع <RequiredSymbol />
             </Typography>
-            {(clientEdit === null || clientEdit?.branch_id) && (
-              <TextField
-                id="outlined-select-currency"
-                size="small"
-                select
-                placeholder="الفرع"
-                defaultValue={clientEdit?.branch_id}
-                onChange={(e) => {
-                  dispatch({
-                    type: "BRANCH_ID",
-                    payload: parseInt(e.target.value),
-                  });
-                }}
-              >
-                {branches?.map((branch) => (
-                  <MenuItem
-                    key={branch.id}
-                    value={branch.id}
-                    // selected={branch?.id === clientEdit?.branch_id}
-                  >
-                    {branch.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
+            <TextField
+              id="outlined-select-currency"
+              size="small"
+              select
+              value={formData?.branch_id}
+              onChange={(e) => {
+                dispatch({
+                  type: "BRANCH_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {branches?.map((branch) => (
+                <MenuItem key={branch.id} value={branch.id}>
+                  {branch.name}
+                </MenuItem>
+              ))}
+            </TextField>
 
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.branch_id}
             </Typography>
           </Stack>
@@ -426,7 +472,7 @@ export default function FormAdd() {
         {formData.type === "company" && (
           <>
             <Grid item p={paddingSize} md={6}>
-              <Stack>
+              <Stack width={1}>
                 <Typography sx={{ ml: 2 }} component="label">
                   اسم الوكيل
                 </Typography>
@@ -435,6 +481,7 @@ export default function FormAdd() {
                   type="text"
                   required
                   size="small"
+                  fullWidth
                   placeholder="اسم الوكيل"
                   defaultValue={clientEdit ? clientEdit.agent_name : ""}
                   value={formData.agent_name}
@@ -443,15 +490,37 @@ export default function FormAdd() {
                   }}
                 />
 
-                <Typography variant="body2" color="error">
+                <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                   {errors?.agent_name}
                 </Typography>
               </Stack>
             </Grid>
           </>
         )}
-        <Grid item p={paddingSize} md={6}>
-          <Stack width="100%" maxWidth="100%">
+        {formData.type === "company" && (
+          <Grid item p={paddingSize} md={6}>
+            <Stack width={"480px"}>
+              <BtnFile
+                file={formData.card_image}
+                setFile={(file: File) => {
+                  dispatch({ type: "CARD_IMAGE", payload: file });
+                }}
+              />
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                {errors?.card_image}
+              </Typography>
+            </Stack>
+          </Grid>
+        )}
+        <Grid item p={paddingSize} md={formData.type === "individual" ? 6 : 12}>
+          <Stack
+            sx={{
+              "& .MuiTextField-root": {
+                m: 1,
+                width: formData.type === "company" ? "116.5ch" : "50ch",
+              },
+            }}
+          >
             <Typography sx={{ ml: 2 }} component="label">
               عنوان المراسلات
             </Typography>
@@ -460,7 +529,7 @@ export default function FormAdd() {
               type="text"
               required
               size="small"
-              placeholder=""
+              placeholder="عنوان المراسلات"
               fullWidth
               defaultValue={clientEdit ? clientEdit.letter_head : ""}
               value={formData.letter_head}
@@ -468,69 +537,32 @@ export default function FormAdd() {
                 dispatch({ type: "LETTER_HEAD", payload: e.target.value });
               }}
             />
-            <Typography variant="body2" color="error">
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
               {errors?.letter_head}
             </Typography>
           </Stack>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
-          <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              ارفاق صورة الهويه
-            </Typography>
-            <Box sx={{ mt: 1, ml: 1 }}>
-              <Button
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-              >
-                ارفاق صورة
-                <VisuallyHiddenInput
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files) {
-                      const file = files[0];
-                      dispatch({ type: "CARD_IMAGE", payload: file });
-                      console.log(typeof file);
-                    }
-                  }}
-                  type="file"
-                />
-              </Button>
-
-              <Typography variant="body2" color="error">
+        {formData.type === "individual" && (
+          <Grid item p={paddingSize} md={6}>
+            <Stack width={"480px"}>
+              <BtnFile
+                file={formData.card_image}
+                setFile={(file: File) => {
+                  dispatch({ type: "CARD_IMAGE", payload: file });
+                }}
+              />
+              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
                 {errors?.card_image}
               </Typography>
-            </Box>
-          </Stack>
-        </Grid>
+            </Stack>
+          </Grid>
+        )}
         <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>
           <Button fullWidth type="submit" variant="contained">
             حفظ
           </Button>
         </Grid>
       </Grid>
-
-      {/* alert */}
-      <Snackbar
-        open={toaster.type === "success"}
-        autoHideDuration={6000}
-        onClose={() => {
-          setToaster({ type: "null" });
-        }}
-        message="Note archived"
-      >
-        <Alert
-          {...(toaster.type === "success"
-            ? { severity: "success" }
-            : { severity: "error" })}
-          sx={{ width: "100%" }}
-        >
-          {toaster.type === "success"
-            ? "تم الحفظ بنجاح"
-            : "تعذر في الحفظ, تأكد من ادخال البيانات بالشكل الصحيح"}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

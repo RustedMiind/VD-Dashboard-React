@@ -67,12 +67,14 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           letter_head: action.payload.letter_head,
           phone: action.payload.phone,
           type: "company",
+          cardImageUrl: action.payload.card_image as unknown as string,
         };
       } else if (action.payload.type === "individual") {
         return {
           branch_id: action.payload.branch_id,
           broker_id: action.payload.broker_id,
           card_image: null,
+          cardImageUrl: action.payload.card_image as unknown as string,
           email: action.payload.email,
           name: action.payload.name,
           phone: action.payload.phone,
@@ -119,7 +121,7 @@ interface BrokerIdActionType extends ReducerAction<number> {
 interface LetterHeadActionType extends ReducerAction<string> {
   type: "LETTER_HEAD";
 }
-interface CardImageActionType extends ReducerAction<File> {
+interface CardImageActionType extends ReducerAction<File | null> {
   type: "CARD_IMAGE";
 }
 interface AgentNameActionType extends ReducerAction<string> {
@@ -147,6 +149,7 @@ export type ActionTypes =
 // | SetFormIndividualAcionType;
 
 export interface BaseFormData {
+  id?: number;
   name: string;
   card_id?: number | null;
   register_number?: number | null;
@@ -154,9 +157,10 @@ export interface BaseFormData {
   branch_id: number;
   broker_id: number;
   letter_head: string;
-  card_image: File | null;
+  card_image?: File | null;
   email: string;
   agent_name?: string;
+  cardImageUrl?: string;
 }
 
 export interface IndividualFormType extends BaseFormData {

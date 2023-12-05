@@ -11,14 +11,16 @@ import HandleDepartmentWithEmployees, {
 import { Api } from "../../../constants";
 import TabsAndAdd from "./TabsAndAdd";
 import LevelsPlaceholder from "./LevelsPlaceholder";
+import { EmployeeType } from "../../../types";
+import { conversions } from "../../../methods/conversions";
 
 const InitLevel: Step = {
   action: 0,
-  department_id: 0,
+  department_id: conversions.idOrNullToInt(null),
   id: 0,
   type: 0,
   duration: 0,
-  employee_id: 1,
+  employee_id: conversions.idOrNullToInt(null),
   model: 1,
 };
 
@@ -27,13 +29,15 @@ function EmploeesRequestsProcedures() {
   const [sendState, setSendState] = useState<SendStateType>("none");
   const [endpointStatus, setendpointStatus] =
     useState<EnpoindStateType>("none");
-  const [proceduce, setProcedure] = useState<ProcedureType>({
+  const [procedure, setProcedure] = useState<ProcedureType>({
     levels: [InitLevel],
   });
   const [departments, setDepartments] = useState<
     DepartmentWithEmployeesType[] | null
   >();
-
+  const [employees, setEmployees] = useState<Partial<EmployeeType>[] | null>(
+    null
+  );
   useEffect(loadLevels, [currentTab]);
 
   return (
@@ -65,13 +69,14 @@ function EmploeesRequestsProcedures() {
         {departments && (
           <Stack>
             {endpointStatus === "none" &&
-              proceduce.levels.map((level, index, arr) => {
+              procedure.levels.map((level, index, arr) => {
                 const IS_LAST_ITEM = index === arr.length - 1;
                 const MORE_THAN_ONE = arr.length > 1;
                 return (
                   <LevelItem
                     key={level.id}
                     level={level}
+                    employees={employees}
                     updateLevel={updateLevel(index)}
                     name={`المرحلة ${index + 1}`}
                     onDelete={
@@ -95,7 +100,7 @@ function EmploeesRequestsProcedures() {
             loading={sendState === "sending"}
             disabled={endpointStatus !== "none"}
           >
-            ارسال التعديلات
+            حفظ
           </LoadingButton>
         </Stack>
       </Paper>
@@ -125,17 +130,17 @@ function EmploeesRequestsProcedures() {
   }
 
   function setLevels(payload: Step[]) {
-    setProcedure({ ...proceduce, levels: payload });
+    setProcedure({ ...procedure, levels: payload });
   }
 
   function addLevel() {
-    const instance = [...proceduce.levels];
+    const instance = [...procedure.levels];
     instance.push(InitLevel);
     setLevels(instance);
   }
 
   function removeLevel(val: number) {
-    const instance = [...proceduce.levels];
+    const instance = [...procedure.levels];
 
     instance.splice(val, 1);
     // const filtered = instance.filter((v) => v !== val);
@@ -145,7 +150,7 @@ function EmploeesRequestsProcedures() {
 
   function updateLevel(index: number) {
     return (payload: Step) => {
-      const instance = [...proceduce.levels];
+      const instance = [...procedure.levels];
       instance.splice(index, 1, payload);
       // const filtered = instance.filter((v) => v !== val);
       // setLevels(filtered);
@@ -154,15 +159,15 @@ function EmploeesRequestsProcedures() {
   }
 
   function submitData() {
-    const data = proceduce.levels.map((r): Partial<Step> => {
+    const data = procedure.levels.map((dto): Partial<Step> => {
       // return { ...t, type: currentTab };
       return {
         type: currentTab,
-        action: r.action,
-        duration: r.duration,
-        employee_id: r.employee_id,
-        department_id: r.department_id,
-        model: r.model,
+        action: dto.action,
+        duration: dto.duration,
+        employee_id: conversions.toValidId(dto.employee_id),
+        department_id: conversions.toValidId(dto.department_id),
+        model: dto.model,
       };
     });
     console.log(data);
@@ -185,7 +190,7 @@ function EmploeesRequestsProcedures() {
     setLevels([]);
     setendpointStatus("loading");
 
-    getDepartments().then(getLevels).catch(console.log);
+    getDepartments().then(getEmoloyees).then(getLevels).catch(console.log);
   }
   function getDepartments() {
     return new Promise<void>((ressolve, reject) => {
@@ -209,13 +214,41 @@ function EmploeesRequestsProcedures() {
       } else ressolve();
     });
   }
+  function getEmoloyees() {
+    return new Promise<void>((ressolve, reject) => {
+      if (!employees) {
+        axios
+          .post<{ data: Partial<EmployeeType>[] }>(Api("employee/employees"))
+          .then((res) => {
+            console.log(res);
+            console.log("employees : ", res);
+            setEmployees(res.data.data);
+            ressolve();
+          })
+          .catch((err) => {
+            console.log(err);
+            setendpointStatus("error");
+            reject(err);
+          });
+      } else ressolve();
+    });
+  }
 
   function getLevels() {
     return new Promise<void>((ressolve, reject) => {
       axios
-        .post(Api("employee/general-requests/steps"), { type: currentTab })
+        .post<{ steps: Step[] }>(Api("employee/general-requests/steps"), {
+          type: currentTab,
+        })
         .then(({ data }) => {
-          setLevels(data.steps);
+          setLevels(
+            data.steps.map((step) => ({
+              ...step,
+              department_id:
+                step.department_id === null ? -1 : step.department_id,
+              employee_id: step.employee_id === null ? -1 : step.employee_id,
+            }))
+          );
           console.log("Steps : ", data);
           setendpointStatus("none");
           ressolve();

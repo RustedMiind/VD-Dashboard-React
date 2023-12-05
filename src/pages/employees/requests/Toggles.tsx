@@ -28,7 +28,7 @@ function RequestTypesToggles({ selected, setSelected, counts }: PropsType) {
         const current = selected === chip.value;
         const count = findCount(index + 1)?.count || 0;
         return (
-          <Badge key={chip.name} badgeContent={count} max={19} color="error">
+          <Badge key={chip.name} badgeContent={count} color="error">
             <Chip
               color="primary"
               onClick={setCurrent(chip.value)}

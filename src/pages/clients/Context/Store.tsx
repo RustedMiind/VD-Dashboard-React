@@ -6,10 +6,6 @@ type childrenProps = {
   children: React.ReactNode;
 };
 
-type IndexValue = {
-  index: IdListType | undefined;
-  setIndex: React.Dispatch<React.SetStateAction<IdListType | undefined>>;
-};
 export const TableContext = createContext<IndexValue | null>(null);
 
 export function IndexContextProvider({ children }: childrenProps) {
@@ -20,3 +16,7 @@ export function IndexContextProvider({ children }: childrenProps) {
     </TableContext.Provider>
   );
 }
+type IndexValue = {
+  index: IdListType | undefined;
+  setIndex: React.Dispatch<React.SetStateAction<IdListType | undefined>>;
+};

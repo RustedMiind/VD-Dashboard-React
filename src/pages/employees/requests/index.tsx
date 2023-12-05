@@ -12,10 +12,13 @@ import StatusDialog from "./StatusDialog";
 import reducer, { FiltersInit } from "./Filters/reducer";
 import DetailsDialog from "./DetailsDialog";
 import { CountType } from "../../../types/Count";
+import Pagination from "./Pagination";
+import { LaravelPagination } from "../../../types/LaravelPagination";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState<number>(-1);
-
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [requests, setRequests] = useState<
     EmployeeRequest[] | "loading" | "none" | "error"
@@ -37,7 +40,7 @@ function EmplyeesRequests() {
     ? requests
     : undefined;
 
-  useEffect(resetTable, [selectedType, currentTab]);
+  useEffect(resetTable, [selectedType, currentTab, currentPage]);
 
   return (
     <>
@@ -102,10 +105,9 @@ function EmplyeesRequests() {
           // variant="outlined"
           sx={{
             //
-            bgcolor: "Background",
             overflow: "hidden",
           }}
-          elevation={4}
+          elevation={0}
         >
           {filtered && (
             <EmployeesRequestsTable
@@ -115,9 +117,7 @@ function EmplyeesRequests() {
               requests={filtered}
             />
           )}
-          {requests === "loading" && (
-            <LoadingTable rows={8} cols={7} height={500} />
-          )}
+          {requests === "loading" && <LoadingTable rows={10} cols={7} />}
           {requests === "error" && (
             <Typography
               variant="h4"
@@ -134,6 +134,16 @@ function EmplyeesRequests() {
             </Typography>
           )}
         </Paper>
+        <Pagination
+          disabled={requests === "loading"}
+          page={currentPage}
+          onChange={(e, x) => {
+            setCurrentPage(x);
+          }}
+          siblingCount={2}
+          boundaryCount={1}
+          count={totalPages}
+        />
       </Stack>
     </>
   );
@@ -165,27 +175,29 @@ function EmplyeesRequests() {
     setRequests("loading");
     console.log(filters);
     axios
-      .get<{ requests: EmployeeRequest[]; count: CountType[] }>(
-        Api("employee/general-requests/requests"),
-        {
-          params: {
-            type: selectedType,
-            search: search || null,
-            ...{
-              edate: filters.edate || null,
-              sdate: filters.sdate || null,
-              order: filters.order,
-              action: currentTab !== -1 ? currentTab : null,
-              status:
-                typeof filters.status === "number" ? filters.status : null,
-              department_id: filters.department_id || null,
-            },
+      .get<{
+        requests: LaravelPagination<EmployeeRequest[]>;
+        count: CountType[];
+      }>(Api("employee/general-requests/requests"), {
+        params: {
+          type: selectedType,
+          search: search || null,
+          ...{
+            page: currentPage,
+            edate: filters.edate || null,
+            sdate: filters.sdate || null,
+            order: filters.order,
+            action: currentTab !== -1 ? currentTab : null,
+            status: typeof filters.status === "number" ? filters.status : null,
+            department_id: filters.department_id || null,
           },
-        }
-      )
+        },
+      })
       .then(({ data }) => {
-        setRequests(data.requests);
+        setRequests(data.requests.data);
         setCounts(data.count);
+        setCurrentPage(data.requests.current_page);
+        setTotalPages(data.requests.last_page);
         console.log(data);
       })
       .catch((err) => {

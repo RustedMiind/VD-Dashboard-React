@@ -15,10 +15,10 @@ import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
 import { DevUserType } from "./DevUserType";
 import { DevUser } from "./DevUser";
 
-// console.table({
-//   Version: "1.1.4",
-//   Comment: "Activated End Date filter in employees requests",
-// });
+console.table({
+  Version: "1.2.2",
+  Comment: "Added Mission Expectet time to details dialog",
+});
 
 const devUser: DevUserType = DevUser;
 /* 
@@ -101,7 +101,7 @@ function RunProd() {
 }
 function RunDev() {
   axios
-    .post<{ data: { token: string; user: any } }>(Api("employee/login"), {
+    .post<{ data: { token: string; user: unknown } }>(Api("employee/login"), {
       email: devUser.email,
       password: devUser.password,
       imei: "5153153",

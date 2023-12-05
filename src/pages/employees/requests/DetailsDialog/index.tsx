@@ -12,6 +12,13 @@ import { RequestDetails } from "../../../../types/RequestDetails";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { objectToArrayWithArName } from "../../../../methods/objToArrWithAr";
+import DataInputLike from "../../../../components/DataInputLike";
+import { formatDate } from "../../../../methods";
+import VacationDetails from "./VacationDetails";
+import WorkNeeds from "./WorkNeeds";
+import MissionDetails from "./MissionDetails";
+import CarFixDetails from "./CarFixDetails";
+import CustodyDetails from "./CustodyDetails";
 
 function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
@@ -30,57 +37,42 @@ function DetailsDialog(props: PropsType) {
     }
   }, [props.open]);
 
-  const detailsWithAr = details
-    ? objectToArrayWithArName({ ...details, ...details.requestable })
-    : [];
-
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth>
+    <Dialog open={props.open} onClose={props.onClose} maxWidth="sm" fullWidth>
       <DialogTitle>نوع الطلب</DialogTitle>
       <DialogContent>
         <Grid container>
           {details && (
             <>
-              <Grid item md={6} p={1} px={2}>
-                <Typography variant="body1" fontWeight={700} gutterBottom>
-                  اسم الموظف
-                </Typography>
-                <TextField
-                  value={details?.employee?.name || ""}
-                  disabled
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item md={6} p={1} px={2}>
-                <Typography variant="body1" fontWeight={700} gutterBottom>
-                  نوع الطلب
-                </Typography>
-                <TextField
-                  value={details?.requestable?.typeInArabic || ""}
-                  disabled
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
+              <DataInputLike
+                title="اسم الموظف"
+                value={details?.employee?.name}
+              />
+              <DataInputLike
+                title="تاريخ الورود"
+                value={formatDate(details?.created_at)}
+              />
+              <DataInputLike
+                title="نوع الطلب"
+                value={details?.requestable?.typeInArabic}
+              />
+              {((): React.ReactElement | "" | undefined => {
+                switch (details.type) {
+                  case 1:
+                    return <VacationDetails details={details} />;
+                  case 2:
+                    return <MissionDetails details={details} />;
+                  case 4:
+                    return <CustodyDetails details={details} />;
+                  case 5:
+                    return <WorkNeeds details={details} />;
+                  case 6:
+                    return <CarFixDetails details={details} />;
+                  default:
+                    return <></>;
+                }
+              })()}
             </>
-          )}
-          {detailsWithAr.map(
-            (item) =>
-              (typeof item.value === "string" ||
-                typeof item.value === "number") && (
-                <Grid item key={item.key} md={6} p={1} px={2}>
-                  <Typography variant="body1" fontWeight={700} gutterBottom>
-                    {item.name}
-                  </Typography>
-                  <TextField
-                    value={item.value}
-                    disabled
-                    fullWidth
-                    size="small"
-                  />
-                </Grid>
-              )
           )}
         </Grid>
       </DialogContent>

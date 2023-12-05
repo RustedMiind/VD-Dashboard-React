@@ -27,7 +27,6 @@ function DeleteBtn(props: PropsType) {
     <Button
       variant="outlined"
       startIcon={<DeleteIcon />}
-      disabled={!!!deleteClients?.index?.id}
       sx={{
         ml: 3,
         width: "100px",
@@ -44,5 +43,5 @@ export default DeleteBtn;
 
 export type PropsType = {
   requests: ClientRequest[] | null;
-  setRequests: any;
+  setRequests: React.Dispatch<React.SetStateAction<ClientRequest[] | null>>;
 };

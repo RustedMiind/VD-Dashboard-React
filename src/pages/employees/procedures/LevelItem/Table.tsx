@@ -16,17 +16,19 @@ import {
   TableCell,
   TextField,
 } from "@mui/material";
-import SelectCustom from "../../../../components/MuiCustom";
 import { ActionTypes } from "./reducer";
 import { ProceduresModelTypeCode, Step } from "../types";
 import { DepartmentWithEmployeesType } from "../../../../methods/HandleData/HandleDepartmentWithEmployees";
 import { modelNamesIds } from "../ModelTypes";
+import SelectManagerDialog from "./SelectManagerDialog";
+import { EmployeeType } from "../../../../types";
 
 function TableComponent({
   level,
   formDisabled,
   dispatch,
   departments,
+  employees,
 }: PropsType) {
   return (
     <TableContainer>
@@ -45,38 +47,17 @@ function TableComponent({
           <TableRow>
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl
-                  fullWidth
-                  size={"small"}
-                  // disabled={props.disabled}
-                >
-                  <InputLabel size="small">القسم</InputLabel>
-                  <Select
-                    label={"القسم"}
-                    size={"small"}
-                    value={level.department_id}
-                    disabled={formDisabled}
-                    onChange={(e) => {
-                      dispatch({
-                        type: "SET_EMPLOYEE",
-                        payload: 0,
-                      });
-                      dispatch({
-                        type: "SET_MANAGER",
-                        payload: e.target.value as number,
-                      });
-                    }}
-                  >
-                    {departments.map((department) => (
-                      <MenuItem
-                        key={department.departmentId}
-                        value={department.departmentId}
-                      >
-                        {department.departmentName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <SelectManagerDialog
+                  deparment_id={level.department_id}
+                  departments={departments}
+                  disabled={level.employee_id !== -1}
+                  setDepartmentId={(value: number) => {
+                    dispatch({
+                      type: "SET_DEPARTMENT",
+                      payload: value,
+                    });
+                  }}
+                />
               </Box>
             </TableCell>
             <TableCell>
@@ -84,14 +65,14 @@ function TableComponent({
                 <FormControl
                   fullWidth
                   size={"small"}
-                  // disabled={props.disabled}
+                  // disabled={level.department_id !== null}
                 >
                   <InputLabel size="small">الموظف</InputLabel>
                   <Select
                     label={"الموظف"}
                     size={"small"}
-                    value={level.employee_id}
-                    disabled={formDisabled}
+                    value={level.employee_id || null}
+                    disabled={formDisabled || level.department_id !== -1}
                     onChange={(e) => {
                       console.log(departments);
                       dispatch({
@@ -100,19 +81,12 @@ function TableComponent({
                       });
                     }}
                   >
-                    {departments
-                      .find(
-                        (department) =>
-                          department.departmentId === level.department_id
-                      )
-                      ?.employees.map((employee) => (
-                        <MenuItem
-                          key={employee.employee_id}
-                          value={employee.employee_id}
-                        >
-                          {employee.employeeName}
-                        </MenuItem>
-                      ))}
+                    <MenuItem value={-1}>لن يتم اختيار موظف</MenuItem>
+                    {employees?.map((employee) => (
+                      <MenuItem key={employee?.id} value={employee?.id}>
+                        {employee?.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Box>
@@ -204,6 +178,7 @@ type PropsType = {
   dispatch: React.Dispatch<ActionTypes>;
   level: Step;
   departments: DepartmentWithEmployeesType[];
+  employees: Partial<EmployeeType>[] | null;
 };
 
 export default TableComponent;
