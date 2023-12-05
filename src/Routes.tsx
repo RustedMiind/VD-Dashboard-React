@@ -5,6 +5,8 @@ import EmploeesRequestsProcedures from "./pages/employees/procedures";
 import ClientData from "./pages/clients/data";
 import AddClient from "./pages/clients/addClient/AddClient";
 import Contracts from "./pages/contracts/data";
+import ClientRequests from "./pages/clients/clientRequest";
+import ClientProcess from "./pages/clients/clientsProcess";
 import AddContracts from "./pages/contracts/SetContract";
 // import ContractsNotFound from "./pages/contracts/SetContract/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
@@ -25,6 +27,8 @@ function RoutesComponent() {
           <Route path="" element={<ClientData />} />
           <Route path="add" element={<AddClient />} />
           <Route path=":name/edit" element={<AddClient />} />
+          <Route path="requests" element={<ClientRequests />} />
+          <Route path="procedures" element={<ClientProcess />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
