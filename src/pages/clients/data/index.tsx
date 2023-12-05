@@ -37,7 +37,6 @@ function ClientData() {
   }
   // Get Clients
   useEffect(getRequests, []);
-  // const filtered = searchResult?.length?searchResult:requests
 
   return (
     <Stack>

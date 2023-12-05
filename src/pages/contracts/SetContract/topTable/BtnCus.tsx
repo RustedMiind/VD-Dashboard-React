@@ -37,7 +37,6 @@ export default function BtnCus() {
         id: deletedClientsIds?.selectedIds,
       })
       .then((res) => {
-        console.log(res);
         contractsContext.setContracts && contractsContext.setContracts();
         updateAndOpenToaster({
           severity: "success",
@@ -55,7 +54,7 @@ export default function BtnCus() {
   }
 
   function Update() {
-    if (idEdit?.length == 1) {
+    if (idEdit?.length === 1) {
       navigate(`${idEdit[0]}/edit`);
     }
   }
@@ -71,7 +70,7 @@ export default function BtnCus() {
       </Button>
       <Button
         color="error"
-        disabled={idEdit?.length == 0}
+        disabled={idEdit?.length === 0}
         sx={{ borderRadius: "10px", ml: 2, my: 2, px: 3 }}
         variant="outlined"
         startIcon={<DeleteIcon />}
@@ -92,7 +91,6 @@ export default function BtnCus() {
         open={toaster.open}
         autoHideDuration={6000}
         onClose={handleCloseToaster}
-        // action={action}
       >
         <Alert
           onClose={handleCloseToaster}

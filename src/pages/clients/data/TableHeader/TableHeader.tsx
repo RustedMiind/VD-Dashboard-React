@@ -1,19 +1,16 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import { ClientRequest } from "../../../../types";
 function TableHeader(props: PropsType) {
-  function checkAllHandler(e: unknown, checked: boolean) {
-    const allChecked: number[] = checked
-      ? (props.requests
-          ?.map((request) => request.id)
-          .filter((id) => typeof id === "number") as number[])
-      : [];
-    props.setSelectedItems(allChecked);
-  }
   return (
     <TableHead>
       <TableRow>
         <TableCell>
-          <Checkbox checked={props.isAllSelected} onChange={checkAllHandler} />
+          <Checkbox
+            checked={props.isAllSelected}
+            onChange={(e, checked) => {
+              props.checkAllHandler(checked);
+            }}
+          />
         </TableCell>
         <TableCell>اسم المالك</TableCell>
         <TableCell>رقم التليفون</TableCell>
@@ -31,6 +28,6 @@ function TableHeader(props: PropsType) {
 export default TableHeader;
 type PropsType = {
   requests: ClientRequest[] | null;
-  setSelectedItems: (items: number[]) => void;
-  isAllSelected?: boolean;
+  isAllSelected: boolean;
+  checkAllHandler: (checked: boolean) => void;
 };

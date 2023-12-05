@@ -23,26 +23,17 @@ import { useParams } from "react-router-dom";
 import BtnFile from "../../../../clients/addClient/BtnFile";
 import { objectToFormData } from "../../../../../methods";
 import { ContractsContext } from "../../../Context/ContractsContext";
-import { Contract } from "../../../../../types";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
 const paddingSize = 0.1;
-const initialDate = { $D: 4, $M: 12, $y: 2023 };
 const ContractData = (props: PropsType) => {
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
   const { type, id } = useParams();
   const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
-  const [editContract, setEditContract] = useState<Contract | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
-  const [clientName, setClientName] = useState<string>("");
-  // const date = contractData?.date ? new Date(contractData.date) : null;
-  // const datePickerValue = date
-  //   ? { $D: date.getDate(), $M: date.getMonth() + 1, $y: date.getFullYear() }
-  //   : null;
-
   const [toaster, setToaster] = useState<ToasterType>({
     open: false,
     message: "",
@@ -63,7 +54,6 @@ const ContractData = (props: PropsType) => {
       console.log("NOT NOT NOT In Edit Mode ");
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
     } else if (contractDetails.contract) {
-      // console.log("In Edit Mode ");
       dispatch({
         type: "SET_ALL",
         payload: {
@@ -202,7 +192,6 @@ const ContractData = (props: PropsType) => {
             </Grid>
           </Stack>
         </Grid>
-
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography sx={{ ml: 2 }} component="label">
@@ -289,7 +278,6 @@ const ContractData = (props: PropsType) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer sx={{ p: 0 }} components={["DatePicker"]}>
                 <DatePicker
-                  value={initialDate}
                   slotProps={{ textField: { size: "small" } }}
                   onChange={(e: DatePickerEvent | null) => {
                     if (e) {

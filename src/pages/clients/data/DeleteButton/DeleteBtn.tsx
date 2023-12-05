@@ -8,11 +8,11 @@ import { ClientRequest } from "../../../../types";
 
 function DeleteBtn(props: PropsType) {
   const deleteClients = useContext(TableContext);
+
   function Delete() {
     axios
       .post(Api("employee/client/delete"), deleteClients?.index)
       .then((res) => {
-        console.log(res);
         const filtered =
           props.requests?.filter(
             (req) => !deleteClients?.index?.id?.includes(req.id)
@@ -25,6 +25,7 @@ function DeleteBtn(props: PropsType) {
   }
   return (
     <Button
+      disabled={deleteClients?.index?.id.length == 0}
       variant="outlined"
       startIcon={<DeleteIcon />}
       sx={{

@@ -9,7 +9,6 @@ import {
   Radio,
   FormControlLabel,
   MenuItem,
-  Autocomplete,
 } from "@mui/material";
 import { FormData, individualInitial, reducer } from "./reducer";
 import { useState, useEffect, useReducer } from "react";
@@ -30,8 +29,6 @@ export default function FormAdd() {
   const [errors, setErrors] = useState<
     Partial<FormData & { card_image: string }> | undefined
   >(undefined);
-  const [card_idError, setCard_idError] = useState<string>("");
-  const [phoneError, setPhoneError] = useState<string>("");
   const [open, setOpen] = useState(false);
   // object respose
   const objectResponse = useParams();
@@ -85,10 +82,13 @@ export default function FormAdd() {
         console.log("err", err);
       });
   }, []);
-
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
   // function handle submit
   function submitHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     axios
       .post(Api("employee/client/store"), objectToFormData(formData))
       .then((res) => {
@@ -97,12 +97,8 @@ export default function FormAdd() {
       })
       .catch((err) => {
         setToaster({ type: "error" });
-        // setCard_idError(err.response.data.data.card_id[0]);
-        // setPhoneError(err.response.data.data.phone[0]);
-
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: { [key: string]: string } = {};
-
         for (let i in err.response?.data?.data) {
           const current: string[] = err.response?.data?.data[i] || [];
           current.join(", ");
@@ -113,28 +109,6 @@ export default function FormAdd() {
         });
         setErrors(tempObj);
       });
-    if (card_idError) {
-      return (
-        <PopUpError
-          card_idError={card_idError}
-          open={open}
-          handleClose={() => {
-            setOpen(false);
-          }}
-        />
-      );
-    }
-    if (phoneError) {
-      return (
-        <PopUpError
-          phoneError={phoneError}
-          open={open}
-          handleClose={() => {
-            setOpen(false);
-          }}
-        />
-      );
-    }
   }
   //Edit handle
   function EditHandle(e: React.FormEvent<HTMLFormElement>) {
@@ -167,28 +141,7 @@ export default function FormAdd() {
         errorObj.forEach((item) => {
           tempObj[item.key] = item.value;
         });
-        // setCard_idError(err.response.data.data.card_id[0]);
-        // setPhoneError(err.response.data.data.phone[0]);
       });
-
-    // if (card_idError) {
-    //   return (
-    //     <PopUpError
-    //       card_idError={card_idError}
-    //       open={open}
-    //       handleClose={handleCloseDialog}
-    //     />
-    //   );
-    // }
-    // if (phoneError) {
-    //   return (
-    //     <PopUpError
-    //       phoneError={phoneError}
-    //       open={open}
-    //       handleClose={handleCloseDialog}
-    //     />
-    //   );
-    // }
   }
 
   return (
@@ -331,18 +284,24 @@ export default function FormAdd() {
                 dispatch({ type: "PHONE_NUMBER", payload: e.target.value });
               }}
             />
-
             {errors?.phone && (
-              <Typography color="error" variant="body2" sx={{ ml: 2 }}>
-                {errors?.phone}
-                {/* <Typography
-                  sx={{ color: "#F19B02" }}
-                  component={NavLink}
-                  to="www.google.com"
+              <Box display={"flex"} flexDirection={"row"} color="warning.main">
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  {errors?.phone}
+                </Typography>
+                <Typography
+                  sx={{ ml: 1, cursor: "pointer", textDecoration: "underline" }}
+                  onClick={handleClickOpen}
                 >
-                  اضغط هنا للمزيد
-                </Typography> */}
-              </Typography>
+                  لمعرفة المزيد
+                </Typography>
+                <PopUpError
+                  open={open}
+                  setOpen={setOpen}
+                  phoneError={errors.phone}
+                  handleClose={handleClickOpen}
+                />
+              </Box>
             )}
           </Stack>
         </Grid>

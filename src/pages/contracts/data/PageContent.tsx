@@ -7,8 +7,6 @@ import { ContractsContext } from "../Context/ContractsContext";
 
 function PageContent() {
   let contractsContext = useContext(ContractsContext);
-
-  //  object have data to search
   const DataToSearch: TypeDataToSearch = {
     client_phone: "",
     client_id: 0,
