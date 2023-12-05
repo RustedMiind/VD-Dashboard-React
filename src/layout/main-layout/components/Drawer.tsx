@@ -60,7 +60,13 @@ const routesCollections: RoutesCollectionType[] = [
       },
       {
         name: "طلبات العملاء",
-        path: "clients/requests",
+        path: "/clients/requests",
+        react: true,
+      },
+      {
+        name: "اجراءات العملاء",
+        path: "/clients/procedures",
+        react: true,
       },
     ],
   },

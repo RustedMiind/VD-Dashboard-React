@@ -12,8 +12,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
 import { Api, Domain } from "./constants";
 import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
-import { DevUser } from "./DevUser";
 import { DevUserType } from "./DevUserType";
+import { DevUser } from "./DevUser";
 
 console.table({
   Version: "1.2.2",
