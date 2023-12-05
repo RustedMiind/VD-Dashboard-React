@@ -13,6 +13,10 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
       lightest: "#F3F5F7",
     },
+    secondary: {
+      main: "#F19B02",
+      contrastText: "#FFF",
+    },
     success: {
       main: "#18CB5F",
       lightest: "#D4EEDE",
@@ -26,9 +30,6 @@ export const theme = createTheme({
       main: "#F19B02",
       lightest: "#FDF0D9",
     },
-    // secondary: {
-    //   main: "#004693",
-    // },
     background: {
       paper: "#F3F5F7",
       default: "#FFFFFF",
