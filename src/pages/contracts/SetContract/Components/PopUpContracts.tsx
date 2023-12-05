@@ -1,4 +1,4 @@
-import { FormControl, Modal } from "@mui/base";
+import { FormControl } from "@mui/base";
 import {
   Dialog,
   Button,
@@ -26,7 +26,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 export default function PopUpContracts(props: PropType) {
-  // const [option, setOption] = useContext(ContractCreationOptionContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contract_id, setContract_id] = useState<number | undefined>(undefined);
   const [isChecked, setIsChecked] = useState<string>();

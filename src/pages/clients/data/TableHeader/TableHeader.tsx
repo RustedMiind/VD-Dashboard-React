@@ -1,6 +1,7 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import { ClientRequest } from "../../../../types";
 function TableHeader(props: PropsType) {
+  console.log(props.requests);
   function checkAllHandler(e: unknown, checked: boolean) {
     const allChecked: number[] = checked
       ? (props.requests

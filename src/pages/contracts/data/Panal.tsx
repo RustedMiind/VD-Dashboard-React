@@ -5,7 +5,6 @@ import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
 import { ContractsContext } from "../Context/ContractsContext";
-import NotFound from "../../../components/NotFound";
 import ContractsNotFound from "../SetContract/ContractsNotFound.1";
 function Panal() {
   const { contracts } = useContext(ContractsContext);

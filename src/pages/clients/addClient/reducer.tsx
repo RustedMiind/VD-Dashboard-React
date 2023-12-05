@@ -9,6 +9,7 @@ export const companyInitial: CompanyFormType = {
   phone: "",
   email: "",
   name: "",
+  cardImageUrl: "",
 };
 export const individualInitial: IndividualFormType = {
   type: "individual",
@@ -20,6 +21,7 @@ export const individualInitial: IndividualFormType = {
   name: "",
   phone: "",
   email: "",
+  cardImageUrl: "",
 };
 
 export function reducer(state: FormData, action: ActionTypes): FormData {
@@ -67,14 +69,14 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           letter_head: action.payload.letter_head,
           phone: action.payload.phone,
           type: "company",
-          cardImageUrl: action.payload.card_image as unknown as string,
+          cardImageUrl: action.payload.card_image?.name,
         };
       } else if (action.payload.type === "individual") {
         return {
           branch_id: action.payload.branch_id,
           broker_id: action.payload.broker_id,
           card_image: null,
-          cardImageUrl: action.payload.card_image as unknown as string,
+          cardImageUrl: action.payload.card_image?.name,
           email: action.payload.email,
           name: action.payload.name,
           phone: action.payload.phone,
@@ -84,6 +86,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
         };
       } else return state;
 
+    case "CARD_IMAGE_URL":
+      return { ...state, cardImageUrl: action.payload };
     default:
       return state;
   }
@@ -130,12 +134,14 @@ interface AgentNameActionType extends ReducerAction<string> {
 interface SetFormWithCheckAcionType extends ReducerAction<FormData> {
   type: "SET_TYPE_WITH_CHECK";
 }
+interface CardImageUrlActionType extends ReducerAction<string | undefined> {
+  type: "CARD_IMAGE_URL";
+}
 
 export type ActionTypes =
   | TypeActionType
   | RegisterNumberActionType
   | NameActionType
-  // | CompanyNameActionType
   | CardIdActionType
   | PhoneNumberActionType
   | EmailActionType
@@ -144,7 +150,9 @@ export type ActionTypes =
   | LetterHeadActionType
   | CardImageActionType
   | AgentNameActionType
-  | SetFormWithCheckAcionType;
+  | SetFormWithCheckAcionType
+  | CardImageUrlActionType;
+// | CompanyNameActionType
 // | SetFormCompanyAcionType
 // | SetFormIndividualAcionType;
 

@@ -7,7 +7,6 @@ function TextInput(props: PropsType) {
           {props.title}
         </Typography>
         <TextField
-          // defaultValue={props.defaultValue}
           id="outlined-phone-input"
           type={props.type}
           required
