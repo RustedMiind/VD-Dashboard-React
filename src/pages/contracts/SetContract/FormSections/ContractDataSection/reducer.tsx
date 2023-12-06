@@ -1,10 +1,10 @@
 import { ReducerAction } from "../../../../../types";
 
 export const contractIntial: BaseContractType = {
-  code: 0,
+  code: null,
   date: "",
-  amount: 0,
-  period: 0,
+  amount: null,
+  period: null,
   details: "",
   type: 0,
   contract_type_id: 0,
@@ -105,18 +105,18 @@ export type ActionTypes =
   | SetAllActionType;
 
 export interface BaseContractType {
-  code: number;
+  code: number | null;
   date: string;
   card_image: File | null;
   type: number | null;
   details: string;
-  contract_type_id: number;
+  contract_type_id: number | null;
   client_id: number;
   branch_id: number;
   management_id: number;
   employee_id: number;
-  amount: number;
-  period: number;
+  amount: number | null;
+  period: number | null;
 }
 
 export type FormData = BaseContractType;
