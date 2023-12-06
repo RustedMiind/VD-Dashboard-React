@@ -12,6 +12,8 @@ import AddContracts from "./pages/contracts/SetContract";
 import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
+import ClientDetails from "./pages/clients/clientDeatails";
+
 
 function RoutesComponent() {
   return (
@@ -25,6 +27,7 @@ function RoutesComponent() {
         </Route>
         <Route path="clients">
           <Route path="" element={<ClientData />} />
+          <Route path="details/:id" element={<ClientDetails />} />
           <Route path="add" element={<AddClient />} />
           <Route path=":name/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />
