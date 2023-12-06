@@ -17,12 +17,16 @@ import { useContext, useState } from "react";
 import { ContractContext } from "../Context/Store";
 import { ContractsContext } from "../Context/ContractsContext";
 import { NavLink } from "react-router-dom";
+import { Contract } from "../../../types";
 
-function ContractsTable({ value }: PropsType) {
+function ContractsTable({ value, contractSearch }: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
   const [rowsCount, setRowsCount] = useState(5);
-  const toView = contracts?.data?.slice(0, rowsCount);
+  const toView =
+    contractSearch.length === 0
+      ? contracts?.data?.slice(0, rowsCount)
+      : contractSearch?.slice(0, rowsCount);
   function CheckboxHandler(id: number) {
     return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
       const idIndex = selectedIdsContext?.selectedIds?.findIndex(
@@ -122,6 +126,7 @@ function ContractsTable({ value }: PropsType) {
 
 type PropsType = {
   value: number;
+  contractSearch: Contract[];
 };
 
 export default ContractsTable;

@@ -198,12 +198,11 @@ const ContractData = (props: PropsType) => {
               مدة العقد
             </Typography>
             <TextField
-              // defaultValue={props.defaultValue}
               id="outlined-phone-input"
-              type="text"
+              type="number"
+              placeholder="مدة العقد"
               required
               size="small"
-              // defaultValue={editContract?.period}
               value={contractData ? contractData?.period : "قيمة العقد"}
               onChange={(e) => {
                 dispatch({
@@ -220,13 +219,12 @@ const ContractData = (props: PropsType) => {
               رقم العقد
             </Typography>
             <TextField
-              // defaultValue={props.defaultValue}
               id="outlined-phone-input"
-              type="text"
+              type="number"
               required
               size="small"
-              // defaultValue={editContract?.period}
-              value={contractData ? contractData?.code : "رقم العقد"}
+              placeholder="رقم العقد"
+              value={contractData?.code}
               onChange={(e) => {
                 dispatch({
                   type: "CODE",

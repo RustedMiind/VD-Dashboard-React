@@ -41,7 +41,7 @@ function SearchBar(props: PropsType) {
             props.DataToSearch.employee_name = e.target.value;
           }}
         />
-        <Button variant="contained" onClick={props.search}>
+        <Button variant="contained" onClick={props.getAllContracts}>
           بحث
         </Button>
       </Stack>
@@ -51,6 +51,7 @@ function SearchBar(props: PropsType) {
 type PropsType = {
   requests: Contract[] | undefined;
   DataToSearch: TypeDataToSearch;
-  search: () => void;
+  // search: () => void;
+  getAllContracts: () => void;
 };
 export default SearchBar;
