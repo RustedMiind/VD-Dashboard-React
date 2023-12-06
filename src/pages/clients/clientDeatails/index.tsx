@@ -38,8 +38,8 @@ function ClientDetails() {
         </Grid>
       </Grid>
 
-      <Paper elevation={1} square={true}>
-        <Grid container p={2}>
+      <Paper elevation={1} square={true} >
+        <Grid container p={2} py={2}>
           <Grid item md={6}>
             <Grid container>
               <Typography variant="h6" mb={2}>
