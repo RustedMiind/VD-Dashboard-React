@@ -29,6 +29,7 @@ export default function FormAdd() {
   const [errors, setErrors] = useState<
     Partial<FormData & { card_image: string }> | undefined
   >(undefined);
+  const [phoneStore, setPhoneStore] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   // object respose
   const objectResponse = useParams();
@@ -83,7 +84,7 @@ export default function FormAdd() {
       });
   }, []);
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(!open);
   };
   // function handle submit
   function submitHandle(e: React.FormEvent<HTMLFormElement>) {
@@ -104,10 +105,21 @@ export default function FormAdd() {
           current.join(", ");
           errorObj.push({ key: i, value: current.join(", ") });
         }
+
         errorObj.forEach((item) => {
           tempObj[item.key] = item.value;
         });
+        console.log(err.response?.data?.msg);
+
+        if (err.response?.data?.msg == "رقم الهاتف مقرر من قبل") {
+          setPhoneStore(err.response?.data?.msg);
+        }
         setErrors(tempObj);
+        errorObj.forEach((error) => {
+          if (error.key === "card_id") {
+            setOpen(!open);
+          }
+        });
       });
   }
   //Edit handle
@@ -129,7 +141,6 @@ export default function FormAdd() {
         navigate("/react/clients");
       })
       .catch((err) => {
-        console.log(err);
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: { [key: string]: string } = {};
@@ -256,15 +267,19 @@ export default function FormAdd() {
                 });
               }}
             />
-            {formData.type === "individual" ? (
-              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-                {errors?.card_id}
-              </Typography>
-            ) : (
-              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-                {errors?.register_number}
-              </Typography>
-            )}
+
+            <PopUpError
+              open={open}
+              setOpen={setOpen}
+              handleClickOpen={handleClickOpen}
+              card_idError={errors?.card_id?.toString()}
+              phoneError={errors?.phone}
+              checkPhone={() => {
+                dispatch({ type: "CHECK_PHONE", payload: null });
+                setOpen(!open);
+              }}
+              registerError={errors?.register_number?.toString()}
+            />
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -284,24 +299,30 @@ export default function FormAdd() {
                 dispatch({ type: "PHONE_NUMBER", payload: e.target.value });
               }}
             />
-            {errors?.phone && (
-              <Box display={"flex"} flexDirection={"row"} color="warning.main">
+            {errors?.phone ? (
+              <Box display={"flex"} flexDirection={"row"} color="error.main">
                 <Typography variant="body2" sx={{ ml: 2 }}>
                   {errors?.phone}
                 </Typography>
+              </Box>
+            ) : phoneStore ? (
+              <Box display={"flex"} flexDirection={"row"} color="warning.main">
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  رقم الهاتف مسجل مسبقا
+                </Typography>
                 <Typography
-                  sx={{ ml: 1, cursor: "pointer", textDecoration: "underline" }}
+                  sx={{
+                    ml: 1,
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  }}
                   onClick={handleClickOpen}
                 >
                   لمعرفة المزيد
                 </Typography>
-                <PopUpError
-                  open={open}
-                  setOpen={setOpen}
-                  phoneError={errors.phone}
-                  handleClose={handleClickOpen}
-                />
               </Box>
+            ) : (
+              ""
             )}
           </Stack>
         </Grid>
