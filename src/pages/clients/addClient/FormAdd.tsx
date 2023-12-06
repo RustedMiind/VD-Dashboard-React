@@ -291,6 +291,7 @@ export default function FormAdd() {
               id="outlined-phone-input"
               type="number"
               required
+              disabled={!formData.check_phone?.length}
               size="small"
               placeholder=" رقم الجوال"
               defaultValue={clientEdit ? clientEdit.phone : ""}

@@ -43,13 +43,17 @@ export default function PopUpError({
         flexDirection={"column"}
       >
         <ErrorIcon
-          color="warning"
+          color={card_idError ? "error" : "warning"}
           sx={{ fontSize: "86px", alignSelf: "center" }}
         />
-        <Typography sx={{ mt: 4 }}>
+        <Typography
+          sx={{ mt: 4, fontSize: "24px" }}
+          color={card_idError ? "error" : "secondary.main"}
+        >
           {card_idError || registerError
-            ? card_idError
-            : " رقم الجوال مسجل مسبقاهل تريد الاستمرار؟"}
+            ? "لا يمكن حفظ بيانات العميل رقم الهوية مسجل مسبقا"
+            : ` رقم الجوال مسجل مسبقا
+             هل تريد الاستمرار؟`}
         </Typography>
         <Box
           sx={{
