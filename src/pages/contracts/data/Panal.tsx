@@ -6,8 +6,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
 import { ContractsContext } from "../Context/ContractsContext";
 import ContractsNotFound from "../SetContract/ContractsNotFound.1";
-import { Contract } from "../../../types";
-function Panal({ contractSearch }: PropsType) {
+function Panal() {
   const { contracts } = useContext(ContractsContext);
 
   const [open, setOpen] = React.useState(false);
@@ -75,7 +74,7 @@ function Panal({ contractSearch }: PropsType) {
                 اضافة عقد
               </Button>
               <TopTable value={value} />
-              <ContractsTable value={value} contractSearch={contractSearch} />
+              <ContractsTable value={value} />
             </Paper>
           </CustomTabPanel>
         ) : (
@@ -84,7 +83,7 @@ function Panal({ contractSearch }: PropsType) {
 
         <CustomTabPanel value={value} index={1}>
           <TopTable value={value} />
-          <ContractsTable value={value} contractSearch={contractSearch} />
+          <ContractsTable value={value} />
         </CustomTabPanel>
       </Box>
     </>
@@ -92,7 +91,3 @@ function Panal({ contractSearch }: PropsType) {
 }
 
 export default Panal;
-
-type PropsType = {
-  contractSearch: Contract[];
-};
