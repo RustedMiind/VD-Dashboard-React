@@ -153,25 +153,21 @@ function EmployeesRequestsTable(props: PropsType) {
       case -1:
         if (HAS_ACCESS) {
           chip = (
-            <Button
-              size="small"
+            <Chip
               color="primary"
-              sx={{ textDecoration: "underline !important", fontWeight: 700 }}
               onClick={props.openModel(request)}
-            >
-              اتخاذ الاجراء
-            </Button>
+              variant={"filled"}
+              label="اتخاذ الاجراء"
+            />
           );
         } else {
           chip = (
-            <Button
-              size="small"
+            <Chip
               color="primary"
-              sx={{ textDecoration: "underline !important", fontWeight: 700 }}
               onClick={props.openStatus(request)}
-            >
-              تحت الاجراء
-            </Button>
+              variant={variant}
+              label="تحت الاجراء"
+            />
           );
         }
         break;
