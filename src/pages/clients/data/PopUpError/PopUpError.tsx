@@ -51,7 +51,7 @@ export default function PopUpError({
           color={card_idError ? "error" : "secondary.main"}
         >
           {card_idError || registerError
-            ? "لا يمكن حفظ بيانات العميل رقم الهوية مسجل مسبقا"
+            ? card_idError
             : ` رقم الجوال مسجل مسبقا
              هل تريد الاستمرار؟`}
         </Typography>
