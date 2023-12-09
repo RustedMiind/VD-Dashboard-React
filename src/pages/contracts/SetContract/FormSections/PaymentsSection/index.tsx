@@ -158,7 +158,7 @@ function Payments() {
                       <TableCell>{payment.name}</TableCell>
                       <TableCell>{payment.period}</TableCell>
                       <TableCell>{payment.amount}</TableCell>
-                      <TableCell>{payment.status}</TableCell>
+                      <TableCell>{payment.status_name}</TableCell>
                       <TableCell>
                         <IconButton
                           size="small"
