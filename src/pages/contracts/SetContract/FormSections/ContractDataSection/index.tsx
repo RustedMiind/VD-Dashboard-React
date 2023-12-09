@@ -19,18 +19,20 @@ import { SelectOptions } from "./SelectOptions";
 import { Api } from "../../../../../constants";
 import axios from "axios";
 import { reducer, contractIntial } from "./reducer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BtnFile from "../../../../clients/addClient/BtnFile";
 import { objectToFormData } from "../../../../../methods";
 import { ContractsContext } from "../../../Context/ContractsContext";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
+import { Contract } from "../../../../../types";
 
 const paddingSize = 0.1;
 const ContractData = (props: PropsType) => {
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
   const { type, id } = useParams();
+  const navigate = useNavigate();
   const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
@@ -89,12 +91,18 @@ const ContractData = (props: PropsType) => {
     e.preventDefault();
     if (!props.edit) {
       axios
-        .post(Api("employee/contract/store"), objectToFormData(contractData))
-        .then((response) => {
+        .post<{ data: Contract }>(
+          Api("employee/contract/store"),
+          objectToFormData(contractData)
+        )
+        .then((res) => {
           updateAndOpenToaster({
             severity: "success",
             message: "تم حفظ العقد بنجاح",
           });
+          setTimeout(() => {
+            navigate(`../${res.data.data.id}/edit`);
+          }, 2000);
         })
         .catch((error) => {
           console.log(error);
