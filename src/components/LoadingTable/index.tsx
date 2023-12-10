@@ -17,7 +17,7 @@ function LoadingTable(props: PropsType) {
   const cols = generateUndefinedArray(props.cols) || 20;
   return (
     <TableContainer sx={{ height: props.height || undefined }}>
-      <Table aria-label="loadin table" stickyHeader>
+      <Table aria-label="loadin table">
         <TableHead>
           <TableRow>
             {cols.map((col) => (
