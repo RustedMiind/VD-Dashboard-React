@@ -3,16 +3,11 @@ import UploadFileInput from "../../../components/UploadFileInput";
 
 function BtnFile(props: BtnFileProps) {
   return (
-    <>
-      <Typography sx={{ ml: 2 }} component="label">
-        صورة الهوية
-      </Typography>
-      <UploadFileInput
-        size="sm"
-        value={props.file || undefined}
-        setValue={props.setFile}
-      />
-    </>
+    <UploadFileInput
+      size="sm"
+      value={props.file || undefined}
+      setValue={props.setFile}
+    />
   );
 }
 

@@ -421,18 +421,18 @@ export default function FormAdd() {
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
             <Typography component="label">ارفاق الملف</Typography>
-            {formData.card_image ? (
+            {clientEdit ? (
+              <FilePreview
+                height={40}
+                fileName="Image"
+                fileLink={formData.cardImageUrl}
+              />
+            ) : (
               <BtnFile
                 file={formData.card_image}
                 setFile={(file: File) => {
                   dispatch({ type: "CARD_IMAGE", payload: file });
                 }}
-              />
-            ) : (
-              <FilePreview
-                height={40}
-                fileName="Image"
-                fileLink={formData.cardImageUrl}
               />
             )}
             <Typography variant="body2" color="error">
@@ -462,12 +462,21 @@ export default function FormAdd() {
         </Grid>
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
-            <BtnFile
-              file={formData.card_image}
-              setFile={(file: File) => {
-                dispatch({ type: "CARD_IMAGE", payload: file });
-              }}
-            />
+            <Typography component="label">ارفاق الملف</Typography>
+            {clientEdit ? (
+              <FilePreview
+                height={40}
+                fileName="Image"
+                fileLink={formData.cardImageUrl}
+              />
+            ) : (
+              <BtnFile
+                file={formData.card_image}
+                setFile={(file: File) => {
+                  dispatch({ type: "CARD_IMAGE", payload: file });
+                }}
+              />
+            )}
             <Typography variant="body2" color="error">
               {errors?.card_image}
             </Typography>

@@ -28,11 +28,11 @@ import RequiredSymbol from "../../../../../components/RequiredSymbol";
 import { Contract } from "../../../../../types";
 import dayjs, { Dayjs } from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
+import FilePreview from "../../../../../components/FilePreview";
 
 const ContractData = (props: PropsType) => {
-  const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-17"));
   let contractsContext = useContext(ContractsContext);
-  contractsContext.setContracts && contractsContext.setContracts();
+  // contractsContext.setContracts && contractsContext.setContracts();
   const { type, id } = useParams();
   const navigate = useNavigate();
   const contractDetails = useContext(ContractDetailsContext);
@@ -62,21 +62,8 @@ const ContractData = (props: PropsType) => {
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
     } else if (contractDetails.contract) {
       dispatch({
-        type: "SET_ALL",
-        payload: {
-          amount: contractDetails.contract.amount,
-          branch_id: contractDetails.contract.branch_id,
-          card_image: null,
-          client_id: contractDetails.contract.client_id,
-          code: parseInt(contractDetails.contract.code) || 0,
-          contract_type_id: contractDetails.contract.contract_type_id,
-          date: contractDetails.contract.date,
-          details: contractDetails.contract.details,
-          employee_id: contractDetails.contract.employee_id,
-          management_id: contractDetails.contract.management_id,
-          period: parseInt(contractDetails.contract.period) || 0,
-          type: contractDetails.contract.type?.id || 1,
-        },
+        type: "DTO_TO_FORM",
+        payload: contractDetails.contract,
       });
     }
   }, [props.edit, !!contractDetails.contract]);
@@ -141,8 +128,6 @@ const ContractData = (props: PropsType) => {
   return (
     <Box
       component="form"
-      noValidate
-      autoComplete="off"
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         addContractHandler(e);
       }}
@@ -364,12 +349,17 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
+            <FilePreview
+              height={40}
+              fileName="Image"
+              fileLink={contractData.cardImageUrl}
+            />
             <BtnFile
               file={contractData.card_image}
               setFile={(file: File) => {
                 dispatch({ type: "CARD_IMAGE", payload: file });
               }}
-            />{" "}
+            />
           </GridChildren>
         </Grid>
         <Grid item md={6}>
