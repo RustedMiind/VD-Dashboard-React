@@ -291,7 +291,6 @@ export default function FormAdd() {
               disabled={!formData.check_phone?.length}
               size="small"
               placeholder=" رقم الجوال"
-              defaultValue={clientEdit ? clientEdit.phone : ""}
               value={formData.phone}
               onChange={(e) => {
                 dispatch({ type: "PHONE_NUMBER", payload: e.target.value });
@@ -364,51 +363,6 @@ export default function FormAdd() {
               ))}
             </TextField>
           </Stack>
-          {/* <Stack>
-            <Typography  component="label">
-              الوسيط <RequiredSymbol />
-            </Typography>
-            {(clientEdit === null || clientEdit?.broker_id) && (
-              <Autocomplete
-                size="small"
-                disablePortal
-                id="combo-box-demo"
-                options={brokers?.map((broker) => {
-                  return broker.name;
-                })}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField
-                    onSelect={(
-                      event: React.MouseEvent<HTMLDivElement, MouseEvent>
-                    ) => {
-                      brokers.map((broker) => {
-                        if (
-                          broker.name ===
-                          (event.target as HTMLTextAreaElement).value
-                        ) {
-                          dispatch({
-                            type: "BROKER_ID",
-                            payload: broker.id,
-                          });
-                        }
-                      });
-                    }}
-                    {...params}
-                    placeholder="الوسيط"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "new-password", // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-              />
-            )}
-
-            <Typography variant="body2" color="error" >
-              {errors?.broker_id}
-            </Typography>
-          </Stack> */}
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>

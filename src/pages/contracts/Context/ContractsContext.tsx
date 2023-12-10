@@ -17,7 +17,7 @@ export const ContractsContext = createContext<ContractContextType>({
 
 export function ContractsContextProvider({ children }: childrenProps) {
   let [contracts, setContracts] = useState<ContextContracts>("none");
-  let [limit, setLimit] = useState<number>(10);
+  let [limit, setLimit] = useState<number>(5);
 
   useEffect(getAllContracts, []);
 

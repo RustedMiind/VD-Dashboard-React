@@ -28,7 +28,7 @@ import RequiredSymbol from "../../../../../components/RequiredSymbol";
 import { Contract } from "../../../../../types";
 import dayjs, { Dayjs } from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
-const paddingSize = 0.1;
+
 const ContractData = (props: PropsType) => {
   const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-17"));
   let contractsContext = useContext(ContractsContext);
@@ -44,7 +44,7 @@ const ContractData = (props: PropsType) => {
     severity: "success",
   });
   function GridChildren(props: { children: React.ReactNode }) {
-    return <Stack px={1}>{props.children}</Stack>;
+    return <Stack p={1}>{props.children}</Stack>;
   }
   function updateToaster(partial: Partial<ToasterType>) {
     setToaster({ ...toaster, ...partial });
@@ -141,9 +141,6 @@ const ContractData = (props: PropsType) => {
   return (
     <Box
       component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1 },
-      }}
       noValidate
       autoComplete="off"
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
@@ -151,7 +148,7 @@ const ContractData = (props: PropsType) => {
       }}
     >
       <Grid container width={0.9} paddingBottom={2}>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               الفرع <RequiredSymbol />
@@ -175,7 +172,7 @@ const ContractData = (props: PropsType) => {
             </TextField>
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               الادارة <RequiredSymbol />
@@ -200,7 +197,7 @@ const ContractData = (props: PropsType) => {
             </TextField>
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               مدة العقد
@@ -220,7 +217,7 @@ const ContractData = (props: PropsType) => {
             />
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               رقم العقد
@@ -240,7 +237,7 @@ const ContractData = (props: PropsType) => {
             />
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <SelectItem
               isDisabled
@@ -253,7 +250,7 @@ const ContractData = (props: PropsType) => {
             />
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               موضوع العقد
@@ -273,7 +270,7 @@ const ContractData = (props: PropsType) => {
             />
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               تاريخ العقد
@@ -292,7 +289,7 @@ const ContractData = (props: PropsType) => {
             />
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               اسم العميل
@@ -345,7 +342,7 @@ const ContractData = (props: PropsType) => {
             )}
           /> */}
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               قيمه العقد
@@ -365,7 +362,7 @@ const ContractData = (props: PropsType) => {
             />
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <BtnFile
               file={contractData.card_image}
@@ -375,7 +372,7 @@ const ContractData = (props: PropsType) => {
             />{" "}
           </GridChildren>
         </Grid>
-        <Grid item p={paddingSize} md={6}>
+        <Grid item md={6}>
           <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               المهندس المسؤول <RequiredSymbol />
@@ -401,7 +398,7 @@ const ContractData = (props: PropsType) => {
             </TextField>
           </GridChildren>
         </Grid>
-        <Grid item mt={4} p={paddingSize} md={11} sx={{ mx: "auto" }}>
+        <Grid item mt={4} md={11} sx={{ mx: "auto" }}>
           <GridChildren>
             <Button type="submit" variant="contained">
               حفظ
