@@ -8,6 +8,7 @@ function BtnFile(props: BtnFileProps) {
         صورة الهوية
       </Typography>
       <UploadFileInput
+        size="sm"
         value={props.file || undefined}
         setValue={props.setFile}
       />

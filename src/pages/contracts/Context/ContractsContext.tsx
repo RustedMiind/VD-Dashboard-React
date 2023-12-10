@@ -11,10 +11,13 @@ type childrenProps = {
 export const ContractsContext = createContext<ContractContextType>({
   contracts: "none",
   setContracts: null,
+  limit: 0,
+  setLimit: null,
 });
 
 export function ContractsContextProvider({ children }: childrenProps) {
   let [contracts, setContracts] = useState<ContextContracts>("none");
+  let [limit, setLimit] = useState<number>(10);
 
   useEffect(getAllContracts, []);
 
@@ -30,9 +33,19 @@ export function ContractsContextProvider({ children }: childrenProps) {
       });
   }
 
+  function setLimitAndUpdate(rows: number) {
+    setLimit(rows);
+    getAllContracts({ limit: rows });
+  }
+
   return (
     <ContractsContext.Provider
-      value={{ contracts, setContracts: getAllContracts }}
+      value={{
+        contracts,
+        setContracts: getAllContracts,
+        limit,
+        setLimit: setLimitAndUpdate,
+      }}
     >
       {children}
     </ContractsContext.Provider>
@@ -41,6 +54,8 @@ export function ContractsContextProvider({ children }: childrenProps) {
 type ContractContextType = {
   contracts: ContextContracts;
   setContracts: ((param?: unknown) => void) | null;
+  limit: number | null;
+  setLimit: ((rows: number) => void) | null;
 };
 
 export interface ContractResponse {
