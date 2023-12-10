@@ -66,9 +66,6 @@ function SearchBar() {
                   DataToSearch.client_id = parseInt(e.target.value);
                 }}
               >
-                <MenuItem>
-                  <em>اسم العميل</em>
-                </MenuItem>
                 {contractSearch?.map((request) => (
                   <MenuItem key={request.id} value={request.id}>
                     {request.name}

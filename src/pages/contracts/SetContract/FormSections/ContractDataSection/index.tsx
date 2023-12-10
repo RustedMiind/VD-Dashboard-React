@@ -10,9 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem from "../../Components/Select";
 import { SelectOptions } from "./SelectOptions";
@@ -22,17 +20,18 @@ import { reducer, contractIntial } from "./reducer";
 import { useNavigate, useParams } from "react-router-dom";
 import BtnFile from "../../../../clients/addClient/BtnFile";
 import { objectToFormData } from "../../../../../methods";
-import { ContractsContext } from "../../../Context/ContractsContext";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 import { Contract } from "../../../../../types";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
 import FilePreview from "../../../../../components/FilePreview";
 
+function GridChildren(props: { children: React.ReactNode }) {
+  return <Stack p={1}>{props.children}</Stack>;
+}
+
 const ContractData = (props: PropsType) => {
-  let contractsContext = useContext(ContractsContext);
-  // contractsContext.setContracts && contractsContext.setContracts();
   const { type, id } = useParams();
   const navigate = useNavigate();
   const contractDetails = useContext(ContractDetailsContext);
@@ -43,9 +42,6 @@ const ContractData = (props: PropsType) => {
     message: "",
     severity: "success",
   });
-  function GridChildren(props: { children: React.ReactNode }) {
-    return <Stack p={1}>{props.children}</Stack>;
-  }
   function updateToaster(partial: Partial<ToasterType>) {
     setToaster({ ...toaster, ...partial });
   }
@@ -135,7 +131,7 @@ const ContractData = (props: PropsType) => {
       <Grid container width={0.9} paddingBottom={2}>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
+            <Typography component="label">
               الفرع <RequiredSymbol />
             </Typography>
             <TextField
@@ -159,7 +155,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
+            <Typography component="label">
               الادارة <RequiredSymbol />
             </Typography>
             <TextField
@@ -184,9 +180,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
-              مدة العقد
-            </Typography>
+            <Typography component="label">مدة العقد</Typography>
             <TextField
               type="number"
               placeholder="مدة العقد"
@@ -204,9 +198,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
-              رقم العقد
-            </Typography>
+            <Typography component="label">رقم العقد</Typography>
             <TextField
               type="number"
               required
@@ -237,9 +229,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
-              موضوع العقد
-            </Typography>
+            <Typography component="label">موضوع العقد</Typography>
             <TextField
               type="text"
               required
@@ -257,9 +247,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
-              تاريخ العقد
-            </Typography>
+            <Typography component="label">تاريخ العقد</Typography>
             <DatePicker
               slotProps={{ textField: { size: "small" } }}
               sx={{ w: 1 }}
@@ -276,9 +264,7 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
-              اسم العميل
-            </Typography>
+            <Typography component="label">اسم العميل</Typography>
             <TextField
               size="small"
               select
@@ -298,40 +284,10 @@ const ContractData = (props: PropsType) => {
               ))}
             </TextField>
           </GridChildren>
-          {/* <Autocomplete
-            size="small"
-            disablePortal
-            id="combo-box-demo"
-            options={(requests?.client ?? []).map((client) => client.name)}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField
-                onSelect={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  requests?.client?.map((client) => {
-                    if (client.name === e.target.value) {
-                      setClientName(client.name);
-                      dispatch({
-                        type: "CLIENT_ID",
-                        payload: client.id,
-                      });
-                    }
-                  });
-                }}
-                {...params}
-                placeholder="اختر اسم عميل"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            )}
-          /> */}
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
-              قيمه العقد
-            </Typography>
+            <Typography component="label">قيمه العقد</Typography>
             <TextField
               type="number"
               required
@@ -349,22 +305,26 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <FilePreview
-              height={40}
-              fileName="Image"
-              fileLink={contractData.cardImageUrl}
-            />
-            <BtnFile
-              file={contractData.card_image}
-              setFile={(file: File) => {
-                dispatch({ type: "CARD_IMAGE", payload: file });
-              }}
-            />
+            <Typography component="label">ارفاق الملف</Typography>
+            {!!props.edit ? (
+              <FilePreview
+                height={40}
+                fileName="Image"
+                fileLink={contractData.cardImageUrl}
+              />
+            ) : (
+              <BtnFile
+                file={contractData.card_image}
+                setFile={(file: File) => {
+                  dispatch({ type: "CARD_IMAGE", payload: file });
+                }}
+              />
+            )}
           </GridChildren>
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography sx={{ ml: 2 }} component="label">
+            <Typography component="label">
               المهندس المسؤول <RequiredSymbol />
             </Typography>
             <TextField

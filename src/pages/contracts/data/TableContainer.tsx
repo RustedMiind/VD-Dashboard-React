@@ -58,7 +58,7 @@ function TableContainer() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="بيانات العقود" />
+            <Tab label="بيانات العقود" disabled />
             <Tab label="ادارة العقود" disabled />
           </Tabs>
           <PopUpContracts handleClose={handleClose} open={open} />

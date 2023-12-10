@@ -49,7 +49,9 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
         period: parseInt(action.payload.period),
         date: action.payload.date,
         client_id: action.payload.client_id,
-        cardImageUrl: Domain("storage/" + action.payload.card_image),
+        cardImageUrl: Domain(
+          "storage/" + action.payload.card_image
+        ) as unknown as string,
         branch_id: action.payload.branch_id,
         code: parseInt(action.payload.code),
         contract_type_id: action.payload.contract_type_id,
@@ -62,7 +64,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
 
     case "SET_ALL":
       return { ...state, ...action.payload };
-
+    case "CARD_IMAGE_URL":
+      return { ...state, cardImageUrl: action.payload };
     default:
       return state;
   }
