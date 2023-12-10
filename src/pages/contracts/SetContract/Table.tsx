@@ -22,7 +22,10 @@ function ContractsTable({ value }: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
   const [rowsCount, setRowsCount] = useState(5);
-  const toView = contracts?.data?.slice(0, rowsCount);
+  const toView =
+    typeof contracts === "object"
+      ? contracts?.data?.slice(0, rowsCount)
+      : undefined;
   function CheckboxHandler(id: number) {
     return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
       const idIndex = selectedIdsContext?.selectedIds?.findIndex(
@@ -67,7 +70,7 @@ function ContractsTable({ value }: PropsType) {
                     />
                   </TableCell>
                   <TableCell>{request.code}</TableCell>
-                  <TableCell>{request.type.name}</TableCell>
+                  <TableCell>{request.type?.name}</TableCell>
                   <TableCell>{request.client?.name}</TableCell>
                   <TableCell>{request.branch.name}</TableCell>
                   <TableCell>{request.client?.phone}</TableCell>
@@ -113,7 +116,11 @@ function ContractsTable({ value }: PropsType) {
           <MenuItem value={500}>500</MenuItem>
           <MenuItem value={1000}>1000</MenuItem>
           <MenuItem value={10000}>10000</MenuItem>
-          <MenuItem value={contracts?.data?.length}>عرض الكل</MenuItem>
+          <MenuItem
+            value={typeof contracts === "object" ? contracts?.data?.length : 10}
+          >
+            عرض الكل
+          </MenuItem>
         </TextField>
       </Stack>
     </Stack>

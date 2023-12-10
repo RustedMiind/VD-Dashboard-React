@@ -13,9 +13,12 @@ export default function TableHeader({ value }: PropType) {
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    let values: number[] | undefined = contracts?.data?.map((contract) => {
-      return contract.id;
-    });
+    let values: number[] | undefined =
+      typeof contracts === "object"
+        ? contracts?.data?.map((contract) => {
+            return contract.id;
+          })
+        : [];
     if (checked) selectedIdsContext?.setSelectedIds(values || []);
     else selectedIdsContext?.setSelectedIds([]);
   };
@@ -23,13 +26,15 @@ export default function TableHeader({ value }: PropType) {
     <TableHead>
       <TableRow>
         <TableCell>
-          <Checkbox
-            checked={
-              selectedIdsContext?.selectedIds?.length ===
-              contracts?.data?.length
-            }
-            onChange={selectAllHandler}
-          />
+          {typeof contracts === "object" && (
+            <Checkbox
+              checked={
+                selectedIdsContext?.selectedIds?.length ===
+                contracts?.data?.length
+              }
+              onChange={selectAllHandler}
+            />
+          )}
         </TableCell>
         <TableCell>رقم العقد</TableCell>
         <TableCell sx={{ width: 0.12 }}>

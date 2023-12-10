@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import SearchBar from "./SearchBar";
-import Panal from "./Panal";
+import TableContainer from "./TableContainer";
 import { IndexContextProvider } from "../Context/Store";
 
 function PageContent() {
@@ -8,7 +8,7 @@ function PageContent() {
     <IndexContextProvider>
       <Stack>
         <SearchBar />
-        <Panal />
+        <TableContainer />
       </Stack>
     </IndexContextProvider>
   );

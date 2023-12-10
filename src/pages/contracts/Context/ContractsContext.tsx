@@ -9,25 +9,24 @@ type childrenProps = {
 };
 
 export const ContractsContext = createContext<ContractContextType>({
-  contracts: null,
+  contracts: "none",
   setContracts: null,
 });
 
 export function ContractsContextProvider({ children }: childrenProps) {
-  let [contracts, setContracts] = useState<Partial<ContractResponse> | null>(
-    null
-  );
+  let [contracts, setContracts] = useState<ContextContracts>("none");
 
   useEffect(getAllContracts, []);
 
   function getAllContracts(params?: unknown) {
+    setContracts("loading");
     axios
       .get<Partial<ContractResponse>>(Api("employee/contract"), { params })
       .then((res) => {
         setContracts(res.data);
       })
       .catch((err) => {
-        setContracts(null);
+        setContracts("error");
       });
   }
 
@@ -40,7 +39,7 @@ export function ContractsContextProvider({ children }: childrenProps) {
   );
 }
 type ContractContextType = {
-  contracts: Partial<ContractResponse> | null;
+  contracts: ContextContracts;
   setContracts: ((param?: unknown) => void) | null;
 };
 
@@ -51,3 +50,9 @@ export interface ContractResponse {
   contract_payment: number;
   contract_end: number;
 }
+
+type ContextContracts =
+  | Partial<ContractResponse>
+  | "none"
+  | "loading"
+  | "error";

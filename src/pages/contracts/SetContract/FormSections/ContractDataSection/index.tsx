@@ -26,9 +26,11 @@ import { ContractsContext } from "../../../Context/ContractsContext";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 import { Contract } from "../../../../../types";
-
+import dayjs, { Dayjs } from "dayjs";
+import { DateFormatString } from "../../../../../constants/DateFormat";
 const paddingSize = 0.1;
 const ContractData = (props: PropsType) => {
+  const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-17"));
   let contractsContext = useContext(ContractsContext);
   contractsContext.setContracts && contractsContext.setContracts();
   const { type, id } = useParams();
@@ -41,6 +43,9 @@ const ContractData = (props: PropsType) => {
     message: "",
     severity: "success",
   });
+  function GridChildren(props: { children: React.ReactNode }) {
+    return <Stack px={1}>{props.children}</Stack>;
+  }
   function updateToaster(partial: Partial<ToasterType>) {
     setToaster({ ...toaster, ...partial });
   }
@@ -137,7 +142,7 @@ const ContractData = (props: PropsType) => {
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "50ch" },
+        "& .MuiTextField-root": { m: 1 },
       }}
       noValidate
       autoComplete="off"
@@ -145,19 +150,17 @@ const ContractData = (props: PropsType) => {
         addContractHandler(e);
       }}
     >
-      <Grid container paddingBottom={2}>
+      <Grid container width={0.9} paddingBottom={2}>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               الفرع <RequiredSymbol />
             </Typography>
             <TextField
-              id="outlined-select-currency"
               size="small"
               select
               value={contractData?.branch_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 dispatch({
                   type: "BRANCH_ID",
                   payload: parseInt(e.target.value),
@@ -170,48 +173,44 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
-          </Stack>
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               الادارة <RequiredSymbol />
             </Typography>
-            <Grid item p={paddingSize} md={6}>
-              <TextField
-                id="outlined-select-currency"
-                size="small"
-                select
-                value={contractData?.management_id}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  dispatch({
-                    type: "MANAGEMENT_ID",
-                    payload: parseInt(e.target.value),
-                  });
-                }}
-              >
-                {requests?.management?.map((manage) => (
-                  <MenuItem key={manage.id} value={manage.id}>
-                    {manage.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-          </Stack>
+            <TextField
+              size="small"
+              select
+              value={contractData?.management_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                dispatch({
+                  type: "MANAGEMENT_ID",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            >
+              {requests?.management?.map((manage) => (
+                <MenuItem key={manage.id} value={manage.id}>
+                  {manage.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               مدة العقد
             </Typography>
             <TextField
-              id="outlined-phone-input"
               type="number"
               placeholder="مدة العقد"
               required
               size="small"
-              value={contractData ? contractData?.period : "قيمة العقد"}
+              value={contractData?.period}
               onChange={(e) => {
                 dispatch({
                   type: "PERIOD",
@@ -219,15 +218,14 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
-          </Stack>
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               رقم العقد
             </Typography>
             <TextField
-              id="outlined-phone-input"
               type="number"
               required
               size="small"
@@ -240,33 +238,32 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
-          </Stack>
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <SelectItem
-            isDisabled
-            selected={+(type || 4)}
-            options={requests?.contractType?.map((type) => ({
-              title: type.name,
-              value: type.id,
-            }))}
-            title="نوع العقد"
-          />
+          <GridChildren>
+            <SelectItem
+              isDisabled
+              selected={+(type || 4)}
+              options={requests?.contractType?.map((type) => ({
+                title: type.name,
+                value: type.id,
+              }))}
+              title="نوع العقد"
+            />
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               موضوع العقد
             </Typography>
             <TextField
-              // defaultValue={props.defaultValue}
-              id="outlined-phone-input"
               type="text"
               required
               size="small"
-              // defaultValue={editContract?.period}
               placeholder="موضوع العقد"
-              value={contractData ? contractData?.details : "موضوع العقد"}
+              value={contractData?.details}
               onChange={(e) => {
                 dispatch({
                   type: "DETAILS",
@@ -274,35 +271,33 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
-          </Stack>
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               تاريخ العقد
             </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer sx={{ p: 0 }} components={["DatePicker"]}>
-                <DatePicker
-                  slotProps={{ textField: { size: "small" } }}
-                  onChange={(e: DatePickerEvent | null) => {
-                    if (e) {
-                      let date = `${e.$D}-${e.$M}-${e.$y}`;
-                      dispatch({ type: "DATE", payload: date });
-                    }
-                  }}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </Stack>
+            <DatePicker
+              slotProps={{ textField: { size: "small" } }}
+              sx={{ w: 1 }}
+              disableFuture
+              value={dayjs(contractData.date)}
+              onChange={(newValue) => {
+                dispatch({
+                  type: "DATE",
+                  payload: newValue?.format(DateFormatString) || "",
+                });
+              }}
+            />
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               اسم العميل
             </Typography>
             <TextField
-              id="outlined-select-currency"
               size="small"
               select
               value={contractData?.client_id}
@@ -320,7 +315,7 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
-          </Stack>
+          </GridChildren>
           {/* <Autocomplete
             size="small"
             disablePortal
@@ -351,12 +346,11 @@ const ContractData = (props: PropsType) => {
           /> */}
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack>
+          <GridChildren>
             <Typography sx={{ ml: 2 }} component="label">
               قيمه العقد
             </Typography>
             <TextField
-              id="outlined-address-input"
               type="number"
               required
               size="small"
@@ -369,23 +363,23 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
-          </Stack>
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Stack width={"480px"}>
+          <GridChildren>
             <BtnFile
               file={contractData.card_image}
               setFile={(file: File) => {
                 dispatch({ type: "CARD_IMAGE", payload: file });
               }}
-            />
-          </Stack>
+            />{" "}
+          </GridChildren>
         </Grid>
         <Grid item p={paddingSize} md={6}>
-          <Typography sx={{ ml: 2 }} component="label">
-            المهندس المسؤول <RequiredSymbol />
-          </Typography>
-          <Grid item p={paddingSize} md={6}>
+          <GridChildren>
+            <Typography sx={{ ml: 2 }} component="label">
+              المهندس المسؤول <RequiredSymbol />
+            </Typography>
             <TextField
               id="outlined-select-currency"
               size="small"
@@ -405,12 +399,16 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
-          </Grid>
+          </GridChildren>
+        </Grid>
+        <Grid item mt={4} p={paddingSize} md={11} sx={{ mx: "auto" }}>
+          <GridChildren>
+            <Button type="submit" variant="contained">
+              حفظ
+            </Button>{" "}
+          </GridChildren>
         </Grid>
       </Grid>
-      <Button fullWidth type="submit" variant="contained">
-        حفظ
-      </Button>
       <Snackbar
         open={toaster.open}
         autoHideDuration={6000}
@@ -434,12 +432,6 @@ export type ToasterType = {
   severity: "error" | "info" | "success" | "warning";
 };
 export default ContractData;
-interface DatePickerEvent {
-  $D: number;
-  $M: number;
-  $y: number;
-}
-
 type PropsType = {
   edit: boolean;
 };

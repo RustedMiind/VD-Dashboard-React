@@ -20,6 +20,7 @@ import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
 import BtnFile from "./BtnFile";
 import RequiredSymbol from "../../../components/RequiredSymbol";
+import FilePreview from "../../../components/FilePreview";
 const paddingSize = 0.1;
 export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<FormData | null>(null);
@@ -159,7 +160,7 @@ export default function FormAdd() {
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "50ch" },
+        "& .MuiTextField-root": { m: 1 },
       }}
       noValidate
       autoComplete="on"
@@ -195,7 +196,7 @@ export default function FormAdd() {
           />
         </Box>
       </RadioGroup>
-      <Grid container>
+      <Grid container width={0.9}>
         <Grid item p={paddingSize} md={6}>
           <Stack>
             {formData.type === "individual" ? (
@@ -243,7 +244,6 @@ export default function FormAdd() {
               </Typography>
             )}
             <TextField
-              fullWidth
               id="outlined-idNumber-input"
               type="number"
               required
@@ -462,7 +462,6 @@ export default function FormAdd() {
                   type="text"
                   required
                   size="small"
-                  fullWidth
                   placeholder="اسم الوكيل"
                   defaultValue={clientEdit ? clientEdit.agent_name : ""}
                   value={formData.agent_name}
@@ -480,28 +479,23 @@ export default function FormAdd() {
         )}
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
-            <Stack width={"480px"}>
+            {formData.card_image ? (
               <BtnFile
                 file={formData.card_image}
                 setFile={(file: File) => {
                   dispatch({ type: "CARD_IMAGE", payload: file });
                 }}
               />
-              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-                {errors?.card_image}
-              </Typography>
-            </Stack>
+            ) : (
+              <FilePreview fileName="Image" fileLink={formData.cardImageUrl} />
+            )}
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+              {errors?.card_image}
+            </Typography>
           </Grid>
         )}
         <Grid item p={paddingSize} md={formData.type === "individual" ? 6 : 12}>
-          <Stack
-            sx={{
-              "& .MuiTextField-root": {
-                m: 1,
-                width: formData.type === "company" ? "116.5ch" : "50ch",
-              },
-            }}
-          >
+          <Stack>
             <Typography sx={{ ml: 2 }} component="label">
               عنوان المراسلات
             </Typography>
@@ -511,7 +505,6 @@ export default function FormAdd() {
               required
               size="small"
               placeholder="عنوان المراسلات"
-              fullWidth
               defaultValue={clientEdit ? clientEdit.letter_head : ""}
               value={formData.letter_head}
               onChange={(e) => {
@@ -525,17 +518,15 @@ export default function FormAdd() {
         </Grid>
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
-            <Stack width={"480px"}>
-              <BtnFile
-                file={formData.card_image}
-                setFile={(file: File) => {
-                  dispatch({ type: "CARD_IMAGE", payload: file });
-                }}
-              />
-              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-                {errors?.card_image}
-              </Typography>
-            </Stack>
+            <BtnFile
+              file={formData.card_image}
+              setFile={(file: File) => {
+                dispatch({ type: "CARD_IMAGE", payload: file });
+              }}
+            />
+            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+              {errors?.card_image}
+            </Typography>
           </Grid>
         )}
         <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>
