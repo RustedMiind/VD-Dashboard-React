@@ -7,7 +7,6 @@ export const objectToFormData = (object: any): FormData => {
       formData.append(key, object[key]);
     }
   }
-  console.log(object);
 
   return formData;
 };
