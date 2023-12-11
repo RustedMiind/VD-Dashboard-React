@@ -241,6 +241,7 @@ export default function FormAdd() {
               </Typography>
             )}
             <TextField
+              disabled={!!clientEdit}
               id="outlined-idNumber-input"
               type="number"
               required
@@ -462,7 +463,9 @@ export default function FormAdd() {
         </Grid>
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
-            <Typography component="label">ارفاق الملف</Typography>
+            <Typography component="label">
+              ارفاق الملف <RequiredSymbol />{" "}
+            </Typography>
             {clientEdit ? (
               <FilePreview
                 height={40}
