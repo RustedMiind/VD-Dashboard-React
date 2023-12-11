@@ -5,3 +5,9 @@
 :root {
   --main: #004693;
 }
+
+.print-hidden {
+  @media print {
+    display: "none";
+  }
+}

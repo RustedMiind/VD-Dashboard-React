@@ -145,13 +145,25 @@ export default function FormAdd() {
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: { [key: string]: string } = {};
-        for (let i in err.response.data.data) {
-          const current = err.response.data.data[i] as string[];
+        for (let i in err.response?.data?.data) {
+          const current: string[] = err.response?.data?.data[i] || [];
           current.join(", ");
           errorObj.push({ key: i, value: current.join(", ") });
         }
+
         errorObj.forEach((item) => {
           tempObj[item.key] = item.value;
+        });
+        console.log(err.response?.data?.msg);
+
+        if (err.response?.data?.msg == "رقم الهاتف مقرر من قبل") {
+          setPhoneStore(err.response?.data?.msg);
+        }
+        setErrors(tempObj);
+        errorObj.forEach((error) => {
+          if (error.key === "card_id") {
+            setOpen(!open);
+          }
         });
       });
   }
@@ -232,11 +244,17 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             {formData.type === "individual" ? (
-              <Typography component="label">
+              <Typography
+                component="label"
+                color={clientEdit ? "text.disabled" : ""}
+              >
                 رقم الهويه <RequiredSymbol />
               </Typography>
             ) : (
-              <Typography component="label">
+              <Typography
+                component="label"
+                color={clientEdit ? "text.disabled" : ""}
+              >
                 السجل التجاري <RequiredSymbol />
               </Typography>
             )}
@@ -278,11 +296,21 @@ export default function FormAdd() {
               }}
               registerError={errors?.register_number?.toString()}
             />
+            {/* {errors?.register_number && (
+              <Box display={"flex"} flexDirection={"row"} color="error.main">
+                <Typography variant="body2">
+                  {errors.register_number}
+                </Typography>
+              </Box>
+            )} */}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography component="label">
+            <Typography
+              component="label"
+              color={clientEdit ? "text.disabled" : ""}
+            >
               رقم الجوال <RequiredSymbol />
             </Typography>
             <TextField
@@ -322,7 +350,11 @@ export default function FormAdd() {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography component="label">البريد الالكتروني</Typography>
+            <Typography component="label">
+              البريد الالكتروني
+              {"  "}
+              <RequiredSymbol />
+            </Typography>
             <TextField
               id="outlined-email-input"
               type="email"
@@ -363,6 +395,9 @@ export default function FormAdd() {
                 </MenuItem>
               ))}
             </TextField>
+            <Typography variant="body2" color="error">
+              {errors?.broker_id}
+            </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -388,7 +423,6 @@ export default function FormAdd() {
                 </MenuItem>
               ))}
             </TextField>
-
             <Typography variant="body2" color="error">
               {errors?.branch_id}
             </Typography>

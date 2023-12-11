@@ -1,4 +1,12 @@
-import { Box, Button, Grid, MenuItem, Stack, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { ClientRequest, Contract } from "../../../types";
 import { TypeDataToSearch } from "./PageContent";
 import { useContext, useEffect, useState } from "react";
@@ -55,6 +63,7 @@ function SearchBar() {
               />
             </GridChildren>
           </Grid>
+
           <Grid item md={4}>
             <GridChildren>
               <TextField

@@ -251,7 +251,6 @@ const ContractData = (props: PropsType) => {
             <DatePicker
               slotProps={{ textField: { size: "small" } }}
               sx={{ w: 1 }}
-              disableFuture
               value={dayjs(contractData.date)}
               onChange={(newValue) => {
                 dispatch({
