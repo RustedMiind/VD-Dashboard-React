@@ -113,9 +113,10 @@ function ClientRequestsTable(props: PropsType) {
                           overflow: "hidden",
                         }}
                       >
-                        <NavLink to={`details/${request.id}`} >
+                        {/* <NavLink to={`details/${request.id}`} >
                           {request.name}
-                        </NavLink>
+                        </NavLink> */}
+                        {request.name}
                       </TableCell>
 
                       <TableCell>{request.phone}</TableCell>

@@ -13,7 +13,7 @@ import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
 import ClientDetails from "./pages/clients/clientDeatails";
-
+import Vacations from "./pages/vacations";
 
 function RoutesComponent() {
   return (
@@ -44,6 +44,9 @@ function RoutesComponent() {
             <Route path="" element={<div>Contract Page</div>} />
             <Route path="edit" element={<CreateContracts type="edit" />} />
           </Route>
+        </Route>
+        <Route path="vacations">
+          <Route path="" element={<Vacations />} />
         </Route>
         <Route path="*" element={<div>صفحة خاطئة</div>} />
       </Route>
