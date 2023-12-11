@@ -42,6 +42,9 @@ const ContractData = (props: PropsType) => {
     message: "",
     severity: "success",
   });
+  const [errors, setErrors] = useState<
+    Partial<FormData & { card_image: string }> | undefined
+  >(undefined);
   function updateToaster(partial: Partial<ToasterType>) {
     setToaster({ ...toaster, ...partial });
   }
@@ -92,12 +95,26 @@ const ContractData = (props: PropsType) => {
             navigate(`../${res.data.data.id}/edit`);
           }, 2000);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          console.log(err?.response?.data?.data?.card_image[0], "dkjdjd");
+
           updateAndOpenToaster({
             severity: "error",
             message: "تعذر في حفظ العقد ",
           });
+          let errorObj: { key: string; value: string }[] = [];
+          let tempObj: { [key: string]: string } = {};
+          // for (let i in err.response?.data?.data) {
+          //   const current: string[] = err.response?.data?.data[i] || [];
+          //   current.join(", ");
+          //   errorObj.push({ key: i, value: current.join(", ") });
+          // }
+
+          // errorObj.forEach((item) => {
+          //   tempObj[item.key] = item.value;
+          // });
+          setErrors(tempObj);
+          console.log(errors);
         });
     } else {
       axios
