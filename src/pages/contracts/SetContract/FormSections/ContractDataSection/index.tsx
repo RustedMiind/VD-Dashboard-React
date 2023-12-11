@@ -203,6 +203,9 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
+            <Typography variant="body2" color="error">
+              {errors?.period && errors?.period[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -220,6 +223,9 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
+            <Typography variant="body2" color="error">
+              {errors?.code && errors?.code[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -301,7 +307,6 @@ const ContractData = (props: PropsType) => {
             <Typography component="label">قيمه العقد</Typography>
             <TextField
               type="number"
-              required
               size="small"
               placeholder="قيمه العقد"
               value={contractData ? contractData?.amount : "قيمه العقد"}
@@ -312,6 +317,9 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
+            <Typography variant="body2" color="error">
+              {errors?.amount && errors?.amount[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -401,10 +409,13 @@ type PropsType = {
 };
 
 type ErrorObject = {
+  code?: string[] | null;
   date?: string[] | null;
   branch_id?: string[] | null;
   client_id?: string[] | null;
   employee_id?: string[] | null;
   management_id?: string[] | null;
   card_image?: string[] | null;
+  period?: string[] | null;
+  amount?: string[] | null;
 };
