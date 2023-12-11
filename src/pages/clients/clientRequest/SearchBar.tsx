@@ -5,6 +5,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterComponent from "./Filter/Filter";
 import { ActionTypes } from "./Filter/reducer";
 import { Filter } from "./types";
+import ReactToPrint from "react-to-print";
 
 const SearchBar = ({
   applySearch,
@@ -13,6 +14,9 @@ const SearchBar = ({
   dispatch,
   filters,
   setSelectedType,
+  selectedType,
+  tableRef,
+  handlePrint,
 }: PropsType) => {
   const [filtersOpened, setFiltersOpened] = useState(false);
 
@@ -43,14 +47,19 @@ const SearchBar = ({
         <Button variant="contained" type="submit" onClick={applySearch}>
           بحث
         </Button>
-        <Button
-          startIcon={<PrintIcon />}
-          type="button"
-          variant="contained"
-          onClick={window.print}
-        >
-          طباعة
-        </Button>
+        <ReactToPrint
+          trigger={() => (
+            <Button
+              variant="contained"
+              type="button"
+              startIcon={<PrintIcon />}
+              onClick={handlePrint}
+            >
+              طباعة
+            </Button>
+          )}
+          content={() => tableRef.current}
+        />
         <Button
           startIcon={<FilterAltIcon />}
           onClick={() => {
@@ -63,6 +72,7 @@ const SearchBar = ({
         </Button>
       </Stack>
       <FilterComponent
+        selectedType={selectedType}
         opened={filtersOpened}
         dispatch={dispatch}
         filters={filters}
@@ -78,7 +88,10 @@ type PropsType = {
   applySearch: () => void;
   dispatch: React.Dispatch<ActionTypes>;
   filters: Filter;
+  selectedType: number | undefined;
   setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
+  tableRef: React.RefObject<HTMLTableElement>;
+  handlePrint: () => void;
 };
 
 export default SearchBar;

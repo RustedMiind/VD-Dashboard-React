@@ -106,10 +106,10 @@ const FilterComponent = ({
           label="القسم"
           size="small"
           select
-          value={filters.branch_id}
+          value={filters.department_id}
           onChange={(e) => {
             dispatch({
-              type: "SET_BRANCH",
+              type: "SET_DEPARTMENT",
               payload: e.target.value as unknown as number | null,
             });
           }}
@@ -129,7 +129,7 @@ const FilterComponent = ({
           label="حالة الطلب"
           size="small"
           select
-          value={filters.statusOrder}
+          value={filters.status}
           onChange={(e) => {
             dispatch({
               type: "SET_ORDER_STATUS",
@@ -138,7 +138,6 @@ const FilterComponent = ({
           }}
         >
           <MenuItem value={0}>كل الحالات</MenuItem>
-          <MenuItem value={1}>تحت الاجراء</MenuItem>
           <MenuItem value={99}>مرفوض</MenuItem>
           <MenuItem value={100}>مقبول</MenuItem>
           <MenuItem value={33}>معتمد</MenuItem>
@@ -171,6 +170,7 @@ type PropsType = {
   opened: boolean;
   dispatch: React.Dispatch<ActionTypes>;
   filters: Filter;
+  selectedType: number | undefined;
   setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 

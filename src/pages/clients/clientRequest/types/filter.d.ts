@@ -1,10 +1,10 @@
 export interface Filter {
   dateFrom?: string | null;
   dateTo?: string | null;
-  branch_id?: number | null;
+  department_id?: number | null;
   typeOrder?: string | null;
   search?: string | null;
-  statusOrder?: number | null;
+  status?: number | null;
   sortBy?: OrderByType;
   typeClient?: "individual" | "company" | "";
 }

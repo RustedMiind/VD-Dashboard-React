@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Api } from "../../../constants";
 import { Box, Paper, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import LoadingTable from "../../../components/LoadingTable";
 import { PanelData, StepStatusData } from "./types";
 import reducer, { FiltersInit } from "./Filter/reducer";
@@ -14,6 +14,13 @@ import DetailsDialog from "./DetailsDialog";
 import ModelDialog from "./ModelDialog";
 
 const ClientRequests = () => {
+  const tableRef: React.RefObject<HTMLTableElement> =
+    useRef<HTMLTableElement>(null);
+  const handlePrint = () => {
+    if (tableRef.current) {
+      window.print();
+    }
+  };
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [currentTab, setCurrentTab] = useState<number>(-1);
   const [requests, setRequests] = useState<
@@ -41,12 +48,15 @@ const ClientRequests = () => {
         {
           params: {
             typeClient: filters.typeClient || null,
-            search: filters.search || null,
-            dateFrom: filters.dateFrom || null,
-            dateTo: filters.dateTo || null,
-            branch_id: filters.branch_id || null,
-            typeOrder: filters.typeOrder || null,
-            sortBy: filters.sortBy || null,
+            search: search || null,
+            ...{
+              dateFrom: filters.dateFrom || null,
+              dateTo: filters.dateTo || null,
+              department_id: filters.department_id || null,
+              typeOrder: filters.typeOrder || null,
+              sortBy: filters.sortBy || null,
+              status: filters.status || null,
+            },
           },
         }
       )
@@ -120,6 +130,9 @@ const ClientRequests = () => {
           dispatch={dispatch}
           filters={filters}
           setSelectedType={setSelectedType}
+          selectedType={selectedType}
+          tableRef={tableRef}
+          handlePrint={handlePrint}
         />
 
         <Box
@@ -140,11 +153,15 @@ const ClientRequests = () => {
             value={currentTab}
             onChange={(e, v) => {
               setCurrentTab(v);
+              dispatch({
+                type: "SET_ORDER_BY_CLIENT",
+                payload: v,
+              });
             }}
           >
-            <Tab label="الكل" value={-1} />
-            <Tab label="فرد" value={0} />
-            <Tab label="شركة" value={1} />
+            <Tab label="الكل" value={""} />
+            <Tab label="فرد" value={"individual"} />
+            <Tab label="شركة" value={"company"} />
           </Tabs>
         </Box>
         <Paper sx={{ overflow: "hidden" }} elevation={0}>
@@ -153,6 +170,7 @@ const ClientRequests = () => {
               openModel={handleOpenModel}
               openStatus={handleOpenStatus}
               openDetails={handleOpenDetails}
+              tableRef={tableRef}
               requests={filtered}
             />
           )}
