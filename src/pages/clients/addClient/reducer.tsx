@@ -10,6 +10,7 @@ export const companyInitial: CompanyFormType = {
   email: "",
   name: "",
   cardImageUrl: "",
+  check_phone: "check",
 };
 export const individualInitial: IndividualFormType = {
   type: "individual",
@@ -22,6 +23,7 @@ export const individualInitial: IndividualFormType = {
   phone: "",
   email: "",
   cardImageUrl: "",
+  check_phone: "check",
 };
 
 export function reducer(state: FormData, action: ActionTypes): FormData {
@@ -56,6 +58,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       return { ...state, card_image: action.payload };
     case "AGENT_NAME":
       return { ...state, agent_name: action.payload };
+    case "CHECK_PHONE":
+      return { ...state, check_phone: action.payload };
     case "SET_TYPE_WITH_CHECK":
       if (action.payload.type === "company") {
         return {
@@ -70,6 +74,7 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           phone: action.payload.phone,
           type: "company",
           cardImageUrl: action.payload.card_image?.name,
+          check_phone: action.payload.check_phone,
         };
       } else if (action.payload.type === "individual") {
         return {
@@ -83,6 +88,7 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           type: "individual",
           card_id: action.payload.card_id,
           letter_head: action.payload.letter_head,
+          check_phone: action.payload.check_phone,
         };
       } else return state;
 
@@ -131,6 +137,9 @@ interface CardImageActionType extends ReducerAction<File | null> {
 interface AgentNameActionType extends ReducerAction<string> {
   type: "AGENT_NAME";
 }
+interface CheckPhoneActionType extends ReducerAction<string | null> {
+  type: "CHECK_PHONE";
+}
 interface SetFormWithCheckAcionType extends ReducerAction<FormData> {
   type: "SET_TYPE_WITH_CHECK";
 }
@@ -151,7 +160,8 @@ export type ActionTypes =
   | CardImageActionType
   | AgentNameActionType
   | SetFormWithCheckAcionType
-  | CardImageUrlActionType;
+  | CardImageUrlActionType
+  | CheckPhoneActionType;
 // | CompanyNameActionType
 // | SetFormCompanyAcionType
 // | SetFormIndividualAcionType;
@@ -169,6 +179,7 @@ export interface BaseFormData {
   email: string;
   agent_name?: string;
   cardImageUrl?: string;
+  check_phone?: string | null;
 }
 
 export interface IndividualFormType extends BaseFormData {

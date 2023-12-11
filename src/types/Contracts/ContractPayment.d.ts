@@ -7,5 +7,6 @@ export interface ContractPayment {
   created_at: string;
   updated_at: string;
   status?: string;
+  status_name?: string;
   // deleted_at: null;
 }

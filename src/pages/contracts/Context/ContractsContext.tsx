@@ -44,7 +44,7 @@ type ContractContextType = {
   setContracts: ((param?: unknown) => void) | null;
 };
 
-interface ContractResponse {
+export interface ContractResponse {
   data: Contract[];
   contract_work: number;
   contract_stop: number;
