@@ -21,6 +21,7 @@ import PrintIcon from "@mui/icons-material/Print";
 import ReactToPrint from "react-to-print";
 import NotFound from "../../../components/NotFound";
 import { MenuItem } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 export type IdListType = {
   id: number[];
@@ -71,6 +72,10 @@ function ClientRequestsTable(props: PropsType) {
       : [];
     setSelectedItems(allChecked);
   }
+
+
+  console.log(props.requests);
+
   return (
     <>
       <Stack>
@@ -108,6 +113,9 @@ function ClientRequestsTable(props: PropsType) {
                           overflow: "hidden",
                         }}
                       >
+                        {/* <NavLink to={`details/${request.id}`} >
+                          {request.name}
+                        </NavLink> */}
                         {request.name}
                       </TableCell>
 
