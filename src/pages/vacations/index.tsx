@@ -1,29 +1,53 @@
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { generateUndefinedArray } from "./../../methods/generateUndefinedArray";
-import { Box, Button, CardActions, Grid, Stack } from "@mui/material";
-
-const array = generateUndefinedArray(5);
-const btnarray = generateUndefinedArray(3);
+import { useEffect, useState } from "react";
+import { Api } from "../../constants";
+import axios from "axios";
+import {
+  Box,
+  Button,
+  CardActions,
+  Grid,
+  Stack,
+  CardMedia,
+  Typography,
+  Card,
+  IconButton,
+} from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 function Vacations() {
+  const [vacationsArr, setVacationsData] = useState<VacationsArr[] | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    axios
+      .get<{ date: VacationsArr[] }>(Api("employee/vacation"))
+      .then((data) => {
+        console.log(data.data.date);
+        setVacationsData(data.data.date);
+      })
+      .catch((err) => {
+        setVacationsData(undefined);
+      });
+  }, []);
+
   return (
     <Stack>
       <Typography variant="h5" sx={{ fontWeight: 700 }}>
         إعدادات الأجازات
       </Typography>
-      <Grid container spacing={3} mt={1}>
-        {array.map(() => (
-          <Grid item xs={4}>
+      <Grid container spacing={4} mt={1}>
+        {vacationsArr?.map((vacation, index) => (
+          <Grid item xs={4} key={index}>
             <Card>
               <Box sx={{ position: "relative" }}>
                 <CardMedia
                   component="img"
                   height={220}
-                  image="https://images.pexels.com/photos/1662159/pexels-photo-1662159.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  image="https://w0.peakpx.com/wallpaper/340/751/HD-wallpaper-city-aerial-view-road-buildings-coast-thumbnail.jpg"
                   alt="green iguana"
                 />
+
                 <Stack
                   sx={{
                     top: 0,
@@ -33,7 +57,7 @@ function Vacations() {
                     alignItems: "center",
                     justifyContent: "center",
                     background:
-                      " linear-gradient(180deg, rgba(243, 245, 247, 0.7) 0%, #F3F5F7 72.18%)",
+                      "linear-gradient(180deg, rgba(243, 245, 247, 0.5) 0%, #dadcde 72.18%)",
                   }}
                 >
                   <Typography
@@ -42,9 +66,12 @@ function Vacations() {
                       fontWeight: 700,
                     }}
                   >
-                    اسم الفرع
+                    {vacation.name}
                   </Typography>
                 </Stack>
+                <IconButton sx={{ position: "absolute", top: 0, right: 0, color:'primary.main' }}>
+                  <SettingsIcon />
+                </IconButton>
               </Box>
               <Box
                 sx={{
@@ -60,8 +87,9 @@ function Vacations() {
                     direction: "row",
                   }}
                 >
-                  {btnarray.map(() => (
+                  {vacation.vacation_dates.map((vacationDate, index) => (
                     <Box
+                      key={index}
                       sx={{
                         borderRadius: 1,
                         bgcolor: "Background",
@@ -70,7 +98,7 @@ function Vacations() {
                       }}
                     >
                       <Button size="large" color="primary" fullWidth>
-                        2023
+                        {vacationDate.year}
                       </Button>
                     </Box>
                   ))}
@@ -85,3 +113,17 @@ function Vacations() {
 }
 
 export default Vacations;
+
+type VacationsArr = {
+  id: number;
+  name: string;
+  vacation_dates: VacationDate[];
+};
+
+type VacationDate = {
+  id: number;
+  branch_id: number;
+  year: number;
+  created_at: null;
+  updated_at: null;
+};
