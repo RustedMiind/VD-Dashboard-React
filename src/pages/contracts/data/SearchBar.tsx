@@ -1,10 +1,22 @@
-import { Button, MenuItem, Stack, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { ClientRequest, Contract } from "../../../types";
 import { TypeDataToSearch } from "./PageContent";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { ContractsContext } from "../Context/ContractsContext";
+
+function GridChildren(props: { children: React.ReactNode }) {
+  return <Stack px={1}>{props.children}</Stack>;
+}
 
 function SearchBar() {
   const DataToSearch: TypeDataToSearch = {
@@ -35,51 +47,64 @@ function SearchBar() {
       contractsContext.setContracts(DataToSearch);
   }
   return (
-    <>
-      <Stack direction="row" gap={4} my={2}>
-        <TextField
-          placeholder="رقم تليفون العميل"
-          type="number"
-          size="small"
-          sx={{ flexGrow: 1 }}
-          onChange={(e) => {
-            DataToSearch.client_phone = e.target.value;
-          }}
-        />
-        <TextField
-          label="اسم العميل"
-          select
-          InputLabelProps={{ sx: { color: "#abc2db" } }}
-          id="outlined-select-currency"
-          size="small"
-          sx={{ flexGrow: 2 }}
-          onChange={(e) => {
-            DataToSearch.client_id = parseInt(e.target.value);
-          }}
-        >
-          <MenuItem>
-            <em>اسم العميل</em>
-          </MenuItem>
-          {contractSearch?.map((request) => (
-            <MenuItem key={request.id} value={request.id}>
-              {request.name}
-            </MenuItem>
-          ))}
-        </TextField>
+    <Box component="form" noValidate autoComplete="on">
+      <Grid container>
+        <Grid item sx={{ display: "flex", flexDirection: "row" }} md={10}>
+          <Grid item md={4}>
+            <GridChildren>
+              <TextField
+                label="رقم تليفون العميل"
+                type="number"
+                size="small"
+                fullWidth
+                onChange={(e) => {
+                  DataToSearch.client_phone = e.target.value;
+                }}
+              />
+            </GridChildren>
+          </Grid>
 
-        <TextField
-          placeholder="المهندس المسؤول"
-          size="small"
-          sx={{ flexGrow: 1 }}
-          onChange={(e) => {
-            DataToSearch.employee_name = e.target.value;
-          }}
-        />
-        <Button variant="contained" onClick={search}>
-          بحث
-        </Button>
-      </Stack>
-    </>
+          <Grid item md={4}>
+            <GridChildren>
+              <TextField
+                label="اسم العميل"
+                select
+                fullWidth
+                size="small"
+                onChange={(e) => {
+                  DataToSearch.client_id = parseInt(e.target.value);
+                }}
+              >
+                {contractSearch?.map((request) => (
+                  <MenuItem key={request.id} value={request.id}>
+                    {request.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </GridChildren>
+          </Grid>
+          <Grid item md={4}>
+            <GridChildren>
+              <TextField
+                fullWidth
+                label="المهندس المسؤول"
+                size="small"
+                onChange={(e) => {
+                  DataToSearch.employee_name = e.target.value;
+                }}
+              />
+            </GridChildren>
+          </Grid>
+        </Grid>
+        <Grid item md={2}>
+          <GridChildren>
+            <Button variant="contained" fullWidth onClick={search}>
+              بحث
+            </Button>
+          </GridChildren>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

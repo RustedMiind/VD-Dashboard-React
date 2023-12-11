@@ -1,17 +1,19 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import { ClientRequest } from "../../../../types";
+import { NotPrintableTableCell } from "../Table";
 function TableHeader(props: PropsType) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>
+        <NotPrintableTableCell>
           <Checkbox
             checked={props.isAllSelected}
             onChange={(e, checked) => {
               props.checkAllHandler(checked);
             }}
           />
-        </TableCell>
+        </NotPrintableTableCell>
+
         <TableCell>اسم المالك</TableCell>
         <TableCell>رقم التليفون</TableCell>
         <TableCell>البريد الالكتروني</TableCell>
@@ -19,7 +21,7 @@ function TableHeader(props: PropsType) {
         <TableCell>الفرع</TableCell>
         <TableCell>حالة مشاريع العمل</TableCell>
         <TableCell>اسم الوكيل</TableCell>
-        <TableCell></TableCell>
+        <NotPrintableTableCell></NotPrintableTableCell>
       </TableRow>
     </TableHead>
   );

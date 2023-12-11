@@ -20,9 +20,11 @@ import { Api } from "../../../constants";
 import { objectToFormData } from "../../../methods";
 import BtnFile from "./BtnFile";
 import RequiredSymbol from "../../../components/RequiredSymbol";
-const paddingSize = 0.1;
+import FilePreview from "../../../components/FilePreview";
+import { Client } from "../../../types/Clients";
+const paddingSize = 1;
 export default function FormAdd() {
-  const [clientEdit, setclientEdit] = useState<FormData | null>(null);
+  const [clientEdit, setclientEdit] = useState<Client | null>(null);
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[]>([]);
   const [formData, dispatch] = useReducer(reducer, individualInitial);
@@ -48,19 +50,18 @@ export default function FormAdd() {
 
   async function GetDataClient() {
     try {
-      const { data } = await axios.get<{ data: FormData }>(
-        Api(`employee/client/edit`),
-        {
-          params: {
-            name: objectResponse.name,
-          },
-        }
-      );
+      const { data } = await axios.get<{
+        data: Client;
+      }>(Api(`employee/client/edit`), {
+        params: {
+          name: objectResponse.name,
+        },
+      });
 
       setclientEdit(data.data);
 
       let { card_image, ...FormWithoutImage } = data.data;
-      dispatch({ type: "SET_TYPE_WITH_CHECK", payload: data.data });
+      dispatch({ type: "SET_DTO", payload: data.data });
     } catch (error) {
       console.log(error);
     }
@@ -144,13 +145,25 @@ export default function FormAdd() {
         setToaster({ type: "error" });
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: { [key: string]: string } = {};
-        for (let i in err.response.data.data) {
-          const current = err.response.data.data[i] as string[];
+        for (let i in err.response?.data?.data) {
+          const current: string[] = err.response?.data?.data[i] || [];
           current.join(", ");
           errorObj.push({ key: i, value: current.join(", ") });
         }
+
         errorObj.forEach((item) => {
           tempObj[item.key] = item.value;
+        });
+        console.log(err.response?.data?.msg);
+
+        if (err.response?.data?.msg == "رقم الهاتف مقرر من قبل") {
+          setPhoneStore(err.response?.data?.msg);
+        }
+        setErrors(tempObj);
+        errorObj.forEach((error) => {
+          if (error.key === "card_id") {
+            setOpen(!open);
+          }
         });
       });
   }
@@ -158,9 +171,6 @@ export default function FormAdd() {
   return (
     <Box
       component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "50ch" },
-      }}
       noValidate
       autoComplete="on"
       onSubmit={(e) => {
@@ -195,16 +205,16 @@ export default function FormAdd() {
           />
         </Box>
       </RadioGroup>
-      <Grid container>
+      <Grid container width={0.9}>
         <Grid item p={paddingSize} md={6}>
           <Stack>
             {formData.type === "individual" ? (
-              <Typography component="label" sx={{ ml: 2 }}>
+              <Typography component="label">
                 اسم العميل
                 <RequiredSymbol />
               </Typography>
             ) : (
-              <Typography component="label" sx={{ ml: 2 }}>
+              <Typography component="label">
                 اسم الشركه
                 <RequiredSymbol />
               </Typography>
@@ -226,7 +236,7 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+            <Typography variant="body2" color="error">
               {errors?.name}
             </Typography>
           </Stack>
@@ -234,16 +244,22 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             {formData.type === "individual" ? (
-              <Typography component="label" sx={{ ml: 2 }}>
+              <Typography
+                component="label"
+                color={clientEdit ? "text.disabled" : ""}
+              >
                 رقم الهويه <RequiredSymbol />
               </Typography>
             ) : (
-              <Typography component="label" sx={{ ml: 2 }}>
+              <Typography
+                component="label"
+                color={clientEdit ? "text.disabled" : ""}
+              >
                 السجل التجاري <RequiredSymbol />
               </Typography>
             )}
             <TextField
-              fullWidth
+              disabled={!!clientEdit}
               id="outlined-idNumber-input"
               type="number"
               required
@@ -280,11 +296,21 @@ export default function FormAdd() {
               }}
               registerError={errors?.register_number?.toString()}
             />
+            {/* {errors?.register_number && (
+              <Box display={"flex"} flexDirection={"row"} color="error.main">
+                <Typography variant="body2">
+                  {errors.register_number}
+                </Typography>
+              </Box>
+            )} */}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
+            <Typography
+              component="label"
+              color={clientEdit ? "text.disabled" : ""}
+            >
               رقم الجوال <RequiredSymbol />
             </Typography>
             <TextField
@@ -294,7 +320,6 @@ export default function FormAdd() {
               disabled={!formData.check_phone?.length}
               size="small"
               placeholder=" رقم الجوال"
-              defaultValue={clientEdit ? clientEdit.phone : ""}
               value={formData.phone}
               onChange={(e) => {
                 dispatch({ type: "PHONE_NUMBER", payload: e.target.value });
@@ -302,15 +327,11 @@ export default function FormAdd() {
             />
             {errors?.phone ? (
               <Box display={"flex"} flexDirection={"row"} color="error.main">
-                <Typography variant="body2" sx={{ ml: 2 }}>
-                  {errors?.phone}
-                </Typography>
+                <Typography variant="body2">{errors?.phone}</Typography>
               </Box>
             ) : phoneStore ? (
               <Box display={"flex"} flexDirection={"row"} color="warning.main">
-                <Typography variant="body2" sx={{ ml: 2 }}>
-                  رقم الهاتف مسجل مسبقا
-                </Typography>
+                <Typography variant="body2">رقم الهاتف مسجل مسبقا</Typography>
                 <Typography
                   sx={{
                     ml: 1,
@@ -329,8 +350,10 @@ export default function FormAdd() {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
+            <Typography component="label">
               البريد الالكتروني
+              {"  "}
+              <RequiredSymbol />
             </Typography>
             <TextField
               id="outlined-email-input"
@@ -345,16 +368,14 @@ export default function FormAdd() {
               }}
             />
 
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+            <Typography variant="body2" color="error">
               {errors?.email}
             </Typography>
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              الوسيط
-            </Typography>
+            <Typography component="label">الوسيط</Typography>
             <TextField
               id="outlined-select-currency"
               size="small"
@@ -374,56 +395,14 @@ export default function FormAdd() {
                 </MenuItem>
               ))}
             </TextField>
-          </Stack>
-          {/* <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
-              الوسيط <RequiredSymbol />
-            </Typography>
-            {(clientEdit === null || clientEdit?.broker_id) && (
-              <Autocomplete
-                size="small"
-                disablePortal
-                id="combo-box-demo"
-                options={brokers?.map((broker) => {
-                  return broker.name;
-                })}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField
-                    onSelect={(
-                      event: React.MouseEvent<HTMLDivElement, MouseEvent>
-                    ) => {
-                      brokers.map((broker) => {
-                        if (
-                          broker.name ===
-                          (event.target as HTMLTextAreaElement).value
-                        ) {
-                          dispatch({
-                            type: "BROKER_ID",
-                            payload: broker.id,
-                          });
-                        }
-                      });
-                    }}
-                    {...params}
-                    placeholder="الوسيط"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "new-password", // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-              />
-            )}
-
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+            <Typography variant="body2" color="error">
               {errors?.broker_id}
             </Typography>
-          </Stack> */}
+          </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography sx={{ ml: 2 }} component="label">
+            <Typography component="label">
               الفرع <RequiredSymbol />
             </Typography>
             <TextField
@@ -444,8 +423,7 @@ export default function FormAdd() {
                 </MenuItem>
               ))}
             </TextField>
-
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+            <Typography variant="body2" color="error">
               {errors?.branch_id}
             </Typography>
           </Stack>
@@ -454,15 +432,12 @@ export default function FormAdd() {
           <>
             <Grid item p={paddingSize} md={6}>
               <Stack width={1}>
-                <Typography sx={{ ml: 2 }} component="label">
-                  اسم الوكيل
-                </Typography>
+                <Typography component="label">اسم الوكيل</Typography>
                 <TextField
                   id="outlined-address-input"
                   type="text"
                   required
                   size="small"
-                  fullWidth
                   placeholder="اسم الوكيل"
                   defaultValue={clientEdit ? clientEdit.agent_name : ""}
                   value={formData.agent_name}
@@ -471,7 +446,7 @@ export default function FormAdd() {
                   }}
                 />
 
-                <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+                <Typography variant="body2" color="error">
                   {errors?.agent_name}
                 </Typography>
               </Stack>
@@ -480,62 +455,68 @@ export default function FormAdd() {
         )}
         {formData.type === "company" && (
           <Grid item p={paddingSize} md={6}>
-            <Stack width={"480px"}>
+            <Typography component="label">ارفاق الملف</Typography>
+            {clientEdit ? (
+              <FilePreview
+                height={40}
+                fileName="Image"
+                fileLink={formData.cardImageUrl}
+              />
+            ) : (
               <BtnFile
                 file={formData.card_image}
                 setFile={(file: File) => {
                   dispatch({ type: "CARD_IMAGE", payload: file });
                 }}
               />
-              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-                {errors?.card_image}
-              </Typography>
-            </Stack>
+            )}
+            <Typography variant="body2" color="error">
+              {errors?.card_image}
+            </Typography>
           </Grid>
         )}
         <Grid item p={paddingSize} md={formData.type === "individual" ? 6 : 12}>
-          <Stack
-            sx={{
-              "& .MuiTextField-root": {
-                m: 1,
-                width: formData.type === "company" ? "116.5ch" : "50ch",
-              },
-            }}
-          >
-            <Typography sx={{ ml: 2 }} component="label">
-              عنوان المراسلات
-            </Typography>
+          <Stack>
+            <Typography component="label">عنوان المراسلات</Typography>
             <TextField
               id="outlined-address-input"
               type="text"
               required
               size="small"
               placeholder="عنوان المراسلات"
-              fullWidth
               defaultValue={clientEdit ? clientEdit.letter_head : ""}
               value={formData.letter_head}
               onChange={(e) => {
                 dispatch({ type: "LETTER_HEAD", payload: e.target.value });
               }}
             />
-            <Typography variant="body2" color="error" sx={{ ml: 2 }}>
+            <Typography variant="body2" color="error">
               {errors?.letter_head}
             </Typography>
           </Stack>
         </Grid>
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
-            <Stack width={"480px"}>
+            <Typography component="label">
+              ارفاق الملف <RequiredSymbol />{" "}
+            </Typography>
+            {clientEdit ? (
+              <FilePreview
+                height={40}
+                fileName="Image"
+                fileLink={formData.cardImageUrl}
+              />
+            ) : (
               <BtnFile
                 file={formData.card_image}
                 setFile={(file: File) => {
                   dispatch({ type: "CARD_IMAGE", payload: file });
                 }}
               />
-              <Typography variant="body2" color="error" sx={{ ml: 2 }}>
-                {errors?.card_image}
-              </Typography>
-            </Stack>
+            )}
+            <Typography variant="body2" color="error">
+              {errors?.card_image}
+            </Typography>
           </Grid>
         )}
         <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>

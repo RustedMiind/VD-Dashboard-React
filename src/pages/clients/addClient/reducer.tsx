@@ -1,3 +1,7 @@
+import { Domain } from "../../../constants";
+import { ReducerAction } from "../../../types";
+import { Client } from "../../../types/Clients/Client";
+
 export const companyInitial: CompanyFormType = {
   type: "company",
   agent_name: "",
@@ -73,7 +77,7 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           letter_head: action.payload.letter_head,
           phone: action.payload.phone,
           type: "company",
-          cardImageUrl: action.payload.card_image?.name,
+          cardImageUrl: action.payload.card_image as unknown as string,
           check_phone: action.payload.check_phone,
         };
       } else if (action.payload.type === "individual") {
@@ -81,7 +85,7 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           branch_id: action.payload.branch_id,
           broker_id: action.payload.broker_id,
           card_image: null,
-          cardImageUrl: action.payload.card_image?.name,
+          cardImageUrl: action.payload.card_image as unknown as string,
           email: action.payload.email,
           name: action.payload.name,
           phone: action.payload.phone,
@@ -91,7 +95,41 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           check_phone: action.payload.check_phone,
         };
       } else return state;
-
+    case "SET_DTO":
+      if (action.payload.type === "company") {
+        return {
+          branch_id: action.payload.branch_id,
+          broker_id: action.payload.broker_id,
+          name: action.payload.name,
+          card_image: null,
+          register_number: parseInt(action.payload.register_number),
+          email: action.payload.email,
+          agent_name: action.payload.agent_name,
+          letter_head: action.payload.letter_head,
+          phone: action.payload.phone,
+          type: "company",
+          cardImageUrl: Domain(
+            ("storage/" + action.payload.card_image) as unknown as string
+          ),
+          check_phone: null,
+        };
+      } else if (action.payload.type === "individual") {
+        return {
+          branch_id: action.payload.branch_id,
+          broker_id: action.payload.broker_id,
+          card_image: null,
+          cardImageUrl: Domain(
+            ("storage/" + action.payload.card_image) as unknown as string
+          ),
+          email: action.payload.email,
+          name: action.payload.name,
+          phone: action.payload.phone,
+          type: "individual",
+          card_id: action.payload.card_id,
+          letter_head: action.payload.letter_head,
+          check_phone: null,
+        };
+      } else return state;
     case "CARD_IMAGE_URL":
       return { ...state, cardImageUrl: action.payload };
     default:
@@ -99,10 +137,6 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
   }
 }
 
-interface ReducerAction<P> {
-  type: string;
-  payload: P;
-}
 interface TypeActionType extends ReducerAction<"individual" | "company"> {
   type: "TYPE";
 }
@@ -137,7 +171,7 @@ interface CardImageActionType extends ReducerAction<File | null> {
 interface AgentNameActionType extends ReducerAction<string> {
   type: "AGENT_NAME";
 }
-interface CheckPhoneActionType extends ReducerAction<string | null> {
+interface CheckPhoneActionType extends ReducerAction<"check" | null> {
   type: "CHECK_PHONE";
 }
 interface SetFormWithCheckAcionType extends ReducerAction<FormData> {
@@ -145,6 +179,9 @@ interface SetFormWithCheckAcionType extends ReducerAction<FormData> {
 }
 interface CardImageUrlActionType extends ReducerAction<string | undefined> {
   type: "CARD_IMAGE_URL";
+}
+interface SetDtoToFormActionType extends ReducerAction<Client> {
+  type: "SET_DTO";
 }
 
 export type ActionTypes =
@@ -161,7 +198,8 @@ export type ActionTypes =
   | AgentNameActionType
   | SetFormWithCheckAcionType
   | CardImageUrlActionType
-  | CheckPhoneActionType;
+  | CheckPhoneActionType
+  | SetDtoToFormActionType;
 // | CompanyNameActionType
 // | SetFormCompanyAcionType
 // | SetFormIndividualAcionType;
@@ -179,7 +217,7 @@ export interface BaseFormData {
   email: string;
   agent_name?: string;
   cardImageUrl?: string;
-  check_phone?: string | null;
+  check_phone?: "check" | null;
 }
 
 export interface IndividualFormType extends BaseFormData {

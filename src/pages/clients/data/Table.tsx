@@ -11,7 +11,6 @@ import {
   TextField,
   TableCell,
 } from "@mui/material";
-
 import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext, useState, useEffect, useRef } from "react";
@@ -21,8 +20,14 @@ import PrintIcon from "@mui/icons-material/Print";
 import ReactToPrint from "react-to-print";
 import NotFound from "../../../components/NotFound";
 import { MenuItem } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import StatusChip from "../../../components/StatusChip";
 
+export const NotPrintableTableCell = styled(TableCell)({
+  "@media print": {
+    display: "none",
+  },
+});
 export type IdListType = {
   id: number[];
 };
@@ -73,7 +78,6 @@ function ClientRequestsTable(props: PropsType) {
     setSelectedItems(allChecked);
   }
 
-
   console.log(props.requests);
 
   return (
@@ -95,14 +99,15 @@ function ClientRequestsTable(props: PropsType) {
                 {toView?.map((request, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell>
+                      <NotPrintableTableCell>
                         <Checkbox
                           disabled={request.contracts_count !== 0}
                           checked={selectedItems.includes(request.id)}
                           value={request.id}
                           onChange={CheckboxHandler}
                         />
-                      </TableCell>
+                      </NotPrintableTableCell>
+
                       <TableCell
                         sx={{
                           color: "#F19B02",
@@ -129,46 +134,19 @@ function ClientRequestsTable(props: PropsType) {
                       <TableCell>{request.branch?.name}</TableCell>
                       <TableCell>
                         {request.Contract_status === "منتهي" ? (
-                          <Chip
-                            sx={{
-                              color: "#CB1818",
-                              background: "#EED4D4",
-                              borderRadius: "9px",
-                            }}
-                            variant="outlined"
-                            label="منتهي"
-                          />
+                          <StatusChip color="error" label="منتهي" />
                         ) : request.Contract_status === "لا يوجد عقود" ? (
-                          <Chip
-                            sx={{
-                              color: "#A7A7A7",
-                              background: "#EBEBEB",
-                              borderRadius: "9px",
-                              textAlign: "center",
-                            }}
-                            variant="outlined"
-                            label="لا يوجد عقود"
-                          />
+                          <StatusChip color="primary" label="لا يوجد عقود" />
                         ) : (
-                          <Chip
-                            sx={{
-                              color: "#18CB5F",
-                              background: "#D4EEDE",
-                              borderRadius: "9px",
-                              textAlign: "center",
-                            }}
-                            variant="outlined"
-                            label="جاري العمل"
-                          />
+                          <StatusChip color="success" label="جاري العمل" />
                         )}
                       </TableCell>
-
                       <TableCell>
                         {request.agent_name ? request.agent_name : "-"}
                       </TableCell>
-                      <TableCell>
+                      <NotPrintableTableCell>
                         <SettingsIcon />
-                      </TableCell>
+                      </NotPrintableTableCell>
                     </TableRow>
                   );
                 })}
