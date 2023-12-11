@@ -42,9 +42,7 @@ const ContractData = (props: PropsType) => {
     message: "",
     severity: "success",
   });
-  const [errors, setErrors] = useState<
-    Partial<FormData & { card_image: string }> | undefined
-  >(undefined);
+  const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
   function updateToaster(partial: Partial<ToasterType>) {
     setToaster({ ...toaster, ...partial });
   }
@@ -96,25 +94,14 @@ const ContractData = (props: PropsType) => {
           }, 2000);
         })
         .catch((err) => {
-          console.log(err?.response?.data?.data?.card_image[0], "dkjdjd");
-
           updateAndOpenToaster({
             severity: "error",
             message: "تعذر في حفظ العقد ",
           });
-          let errorObj: { key: string; value: string }[] = [];
-          let tempObj: { [key: string]: string } = {};
-          // for (let i in err.response?.data?.data) {
-          //   const current: string[] = err.response?.data?.data[i] || [];
-          //   current.join(", ");
-          //   errorObj.push({ key: i, value: current.join(", ") });
-          // }
 
-          // errorObj.forEach((item) => {
-          //   tempObj[item.key] = item.value;
-          // });
-          setErrors(tempObj);
-          console.log(errors);
+          const current: ErrorObject | undefined = err?.response?.data?.data;
+
+          setErrors(current);
         });
     } else {
       axios
@@ -129,7 +116,8 @@ const ContractData = (props: PropsType) => {
           });
         })
         .catch((error) => {
-          console.log(error);
+          const current: ErrorObject | undefined = error?.response?.data?.data;
+          setErrors(current);
           updateAndOpenToaster({
             severity: "error",
             message: "تعذر في تعديل العقد ",
@@ -168,6 +156,9 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
+            <Typography variant="body2" color="error">
+              {errors?.branch_id && errors?.branch_id[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -180,7 +171,6 @@ const ContractData = (props: PropsType) => {
               select
               value={contractData?.management_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 dispatch({
                   type: "MANAGEMENT_ID",
                   payload: parseInt(e.target.value),
@@ -193,6 +183,9 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
+            <Typography variant="body2" color="error">
+              {errors?.management_id && errors?.management_id[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -201,7 +194,6 @@ const ContractData = (props: PropsType) => {
             <TextField
               type="number"
               placeholder="مدة العقد"
-              required
               size="small"
               value={contractData?.period}
               onChange={(e) => {
@@ -218,7 +210,6 @@ const ContractData = (props: PropsType) => {
             <Typography component="label">رقم العقد</Typography>
             <TextField
               type="number"
-              required
               size="small"
               placeholder="رقم العقد"
               value={contractData?.code}
@@ -249,7 +240,6 @@ const ContractData = (props: PropsType) => {
             <Typography component="label">موضوع العقد</Typography>
             <TextField
               type="text"
-              required
               size="small"
               placeholder="موضوع العقد"
               value={contractData?.details}
@@ -277,6 +267,9 @@ const ContractData = (props: PropsType) => {
               }}
             />
           </GridChildren>
+          <Typography variant="body2" color="error">
+            {errors?.date && errors?.date[0]}
+          </Typography>
         </Grid>
         <Grid item md={6}>
           <GridChildren>
@@ -286,7 +279,6 @@ const ContractData = (props: PropsType) => {
               select
               value={contractData?.client_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 dispatch({
                   type: "CLIENT_ID",
                   payload: parseInt(e.target.value),
@@ -299,6 +291,9 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
+            <Typography variant="body2" color="error">
+              {errors?.client_id && errors?.client_id[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -337,6 +332,9 @@ const ContractData = (props: PropsType) => {
               />
             )}
           </GridChildren>
+          <Typography variant="body2" color="error">
+            {errors?.card_image && errors?.card_image[0]}
+          </Typography>
         </Grid>
         <Grid item md={6}>
           <GridChildren>
@@ -362,6 +360,9 @@ const ContractData = (props: PropsType) => {
                 </MenuItem>
               ))}
             </TextField>
+            <Typography variant="body2" color="error">
+              {errors?.employee_id && errors?.employee_id[0]}
+            </Typography>
           </GridChildren>
         </Grid>
         <Grid item mt={4} md={11} sx={{ mx: "auto" }}>
@@ -397,4 +398,13 @@ export type ToasterType = {
 export default ContractData;
 type PropsType = {
   edit: boolean;
+};
+
+type ErrorObject = {
+  date?: string[] | null;
+  branch_id?: string[] | null;
+  client_id?: string[] | null;
+  employee_id?: string[] | null;
+  management_id?: string[] | null;
+  card_image?: string[] | null;
 };
