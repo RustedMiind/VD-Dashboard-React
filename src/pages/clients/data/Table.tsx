@@ -77,6 +77,9 @@ function ClientRequestsTable(props: PropsType) {
       : [];
     setSelectedItems(allChecked);
   }
+
+  console.log(props.requests);
+
   return (
     <>
       <Stack>
@@ -115,6 +118,9 @@ function ClientRequestsTable(props: PropsType) {
                           overflow: "hidden",
                         }}
                       >
+                        {/* <NavLink to={`details/${request.id}`} >
+                          {request.name}
+                        </NavLink> */}
                         {request.name}
                       </TableCell>
 

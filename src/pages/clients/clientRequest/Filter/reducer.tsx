@@ -10,9 +10,9 @@ const reducer = (state: Filter, action: ActionTypes): Filter => {
     case "SET_ORDER_TYPE":
       return { ...state, typeOrder: action.payload };
     case "SET_ORDER_STATUS":
-      return { ...state, statusOrder: action.payload };
-    case "SET_BRANCH":
-      return { ...state, branch_id: action.payload };
+      return { ...state, status: action.payload };
+    case "SET_DEPARTMENT":
+      return { ...state, department_id: action.payload };
     case "SET_ORDER_BY_SORT":
       return { ...state, sortBy: action.payload };
     case "SET_SEARCH":
@@ -38,8 +38,8 @@ interface OrderTypeActionType extends ReducerAction<string> {
 interface StatusActionType extends ReducerAction<number | null | undefined> {
   type: "SET_ORDER_STATUS";
 }
-interface BranchActionType extends ReducerAction<number | null> {
-  type: "SET_BRANCH";
+interface DepartmentActionType extends ReducerAction<number | null> {
+  type: "SET_DEPARTMENT";
 }
 interface OrderBySortActionType extends ReducerAction<OrderByType> {
   type: "SET_ORDER_BY_SORT";
@@ -56,8 +56,8 @@ interface OrderByClient extends ReducerAction<"individual" | "company"> {
 export const FiltersInit: Filter = {
   dateFrom: "",
   dateTo: "",
-  statusOrder: 0,
-  branch_id: 0,
+  status: 0,
+  department_id: 0,
   typeOrder: "",
   search: "",
   sortBy: "desc",
@@ -68,7 +68,7 @@ export type ActionTypes =
   | EndDateActionType
   | StartDateActionType
   | OrderTypeActionType
-  | BranchActionType
+  | DepartmentActionType
   | StatusActionType
   | OrderBySortActionType
   | SearchActionType
