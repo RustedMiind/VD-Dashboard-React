@@ -22,6 +22,7 @@ const ClientTableComponent = ({
   openStatus,
   openModel,
   openDetails,
+  tableRef,
 }: PropsType) => {
   const [rowsCount, setRowsCount] = useState(10);
   const view = requests.slice(0, rowsCount);
@@ -55,7 +56,7 @@ const ClientTableComponent = ({
           </Button>
         );
         break;
-      case 33:
+      case 100:
         chip = (
           <Chip
             color="success"
@@ -65,7 +66,7 @@ const ClientTableComponent = ({
           />
         );
         break;
-      case 100:
+      case 33:
         chip = (
           <Chip
             color="success"
@@ -94,7 +95,7 @@ const ClientTableComponent = ({
 
   return (
     <>
-      <TableContainer sx={{ minHeight: 500 }}>
+      <TableContainer sx={{ minHeight: 500 }} ref={tableRef}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -195,6 +196,7 @@ type PropsType = {
   openModel: (res: PanelData | StepStatusData) => () => void;
   openStatus: (res: PanelData | StepStatusData) => () => void;
   openDetails: (res: PanelData | StepStatusData) => () => void;
+  tableRef: React.RefObject<HTMLTableElement>;
 };
 
 export default ClientTableComponent;

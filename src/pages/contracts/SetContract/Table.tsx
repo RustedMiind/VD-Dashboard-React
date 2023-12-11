@@ -13,16 +13,15 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import IconButton from "@mui/material/IconButton";
 import TableHeader from "./topTable/TableHeader";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ContractContext } from "../Context/Store";
 import { ContractsContext } from "../Context/ContractsContext";
 import { NavLink } from "react-router-dom";
 
 function ContractsTable({ value }: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
-  const { contracts } = useContext(ContractsContext);
-  const [rowsCount, setRowsCount] = useState(5);
-  const toView = contracts?.data?.slice(0, rowsCount);
+  const { contracts, limit, setLimit } = useContext(ContractsContext);
+  const toView = typeof contracts === "object" ? contracts?.data : undefined;
   function CheckboxHandler(id: number) {
     return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
       const idIndex = selectedIdsContext?.selectedIds?.findIndex(
@@ -67,7 +66,7 @@ function ContractsTable({ value }: PropsType) {
                     />
                   </TableCell>
                   <TableCell>{request.code}</TableCell>
-                  <TableCell>{request.type.name}</TableCell>
+                  <TableCell>{request.type?.name}</TableCell>
                   <TableCell>{request.client?.name}</TableCell>
                   <TableCell>{request.branch.name}</TableCell>
                   <TableCell>{request.client?.phone}</TableCell>
@@ -100,20 +99,21 @@ function ContractsTable({ value }: PropsType) {
         <Typography> عدد العرض في الصفحة</Typography>
         <TextField
           size="small"
-          value={rowsCount}
+          value={limit}
           select
           onChange={(e) => {
-            setRowsCount(parseInt(e.target.value) || 10);
+            setLimit && setLimit(parseInt(e.target.value) || -1);
           }}
         >
           <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
           <MenuItem value={100}>100</MenuItem>
           <MenuItem value={250}>250</MenuItem>
           <MenuItem value={500}>500</MenuItem>
           <MenuItem value={1000}>1000</MenuItem>
           <MenuItem value={10000}>10000</MenuItem>
-          <MenuItem value={contracts?.data?.length}>عرض الكل</MenuItem>
+          <MenuItem value={-1}>عرض الكل</MenuItem>
         </TextField>
       </Stack>
     </Stack>

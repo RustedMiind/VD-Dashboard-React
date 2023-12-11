@@ -29,7 +29,7 @@ export interface Contract {
   branch?: Branch;
   client?: ClientRequest;
   levers?: ContractAttachment[];
-  // card_image: null;
+  card_image?: string;
   // deleted_at: null;
   // end_date: null;
   // management: null;
