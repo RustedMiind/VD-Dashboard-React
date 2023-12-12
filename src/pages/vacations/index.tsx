@@ -3,6 +3,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { generateUndefinedArray } from "./../../methods/generateUndefinedArray";
 import { Box, Button, CardActions, Grid, Stack } from "@mui/material";
+import AddDialog from "./AddDialog";
+import ErrorDialog from "./ErrorDialog";
+import ShowVactionDialog from "./ShowVactionDialog";
 
 const array = generateUndefinedArray(5);
 const btnarray = generateUndefinedArray(3);
@@ -80,6 +83,9 @@ function Vacations() {
           </Grid>
         ))}
       </Grid>
+      <AddDialog />
+      <ErrorDialog />
+      <ShowVactionDialog />
     </Stack>
   );
 }
