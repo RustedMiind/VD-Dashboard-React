@@ -25,6 +25,25 @@ function RoutesComponent() {
           <Route path="requests" element={<EmplyeesRequests />} />
           <Route path="procedures" element={<EmploeesRequestsProcedures />} />
         </Route>
+        <Route path="datalib">
+          <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
+          <Route path="vacations">
+            <Route path="" element={<>{/* Vacations Setting Page */}</>} />
+            <Route
+              path=":branchId"
+              element={<>{/* Vacations Setting Page */}</>}
+            >
+              <Route
+                path=""
+                element={<>{/* Branch Vacations Setting Page */}</>}
+              />
+              <Route
+                path=":year"
+                element={<>{/* Branch Vacations In Year Setting  Page */}</>}
+              />
+            </Route>
+          </Route>
+        </Route>
         <Route path="clients">
           <Route path="" element={<ClientData />} />
           <Route path="details/:id" element={<ClientDetails />} />
