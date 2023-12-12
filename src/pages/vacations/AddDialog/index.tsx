@@ -8,16 +8,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useParams } from "react-router";
 
-export default function AddDialog() {
-  const [open, setOpen] = useState(true);
-  const params = useParams();
+export default function AddDialog(props: TypeProps) {
   const selectVacation: addSelect = {
     branch_id: undefined,
     year: undefined,
@@ -26,7 +22,6 @@ export default function AddDialog() {
 
   // start axios get data
   function setData() {
-    console.log(selectVacation);
     axios
       .post<addSelect>(Api("employee/vacation"), selectVacation)
       .then((res) => {
@@ -37,16 +32,9 @@ export default function AddDialog() {
       });
   }
   // end axios get data
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <>
-      <Dialog maxWidth={"sm"} fullWidth open={open} onClose={handleClose}>
+      <Dialog maxWidth={"sm"} fullWidth open={props.open}>
         <DialogTitle sx={{ fontWeight: "600", textAlign: "center" }}>
           اضافة محدد
         </DialogTitle>
@@ -106,9 +94,9 @@ export default function AddDialog() {
 }
 type TypeProps = {
   open: boolean;
-  onClose: () => void;
-  setTableData: () => void;
-  openErrorDialog: () => void;
+  // onClose: () => void;
+  // setTableData: () => void;
+  // openErrorDialog: () => void;
 };
 type Year = {
   $y: number;
