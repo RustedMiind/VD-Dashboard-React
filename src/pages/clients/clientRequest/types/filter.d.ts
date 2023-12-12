@@ -7,6 +7,7 @@ export interface Filter {
   status?: number | null;
   sortBy?: OrderByType;
   typeClient?: "individual" | "company" | "";
+  limit?: number;
 }
 
 export type OrderByType = "desc" | null;

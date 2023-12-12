@@ -16,6 +16,7 @@ import {
 import { PanelData, StepStatusData } from "./types";
 import { useState } from "react";
 import { formatDate } from "../../../methods";
+import { ActionTypes } from "./Filter/reducer";
 
 const ClientTableComponent = ({
   requests,
@@ -23,9 +24,11 @@ const ClientTableComponent = ({
   openModel,
   openDetails,
   tableRef,
+  dispatch,
+  applySearch,
 }: PropsType) => {
-  const [rowsCount, setRowsCount] = useState(10);
-  const view = requests.slice(0, rowsCount);
+  const [rowsCount, setRowsCount] = useState(-1);
+  // const view = requests.slice(0, rowsCount);
 
   function generateChip(request: PanelData | StepStatusData): JSX.Element {
     const variant = "outlined";
@@ -92,7 +95,7 @@ const ClientTableComponent = ({
 
     return chip;
   }
-
+  // const view = requests.slice(0, rowsCount);
   return (
     <>
       <TableContainer sx={{ minHeight: 500 }} ref={tableRef}>
@@ -111,7 +114,7 @@ const ClientTableComponent = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {view.map((request) => {
+            {requests.map((request) => {
               const department =
                 request.order_step_form[0] &&
                 request.order_step_form[0].order_step &&
@@ -176,9 +179,15 @@ const ClientTableComponent = ({
           value={rowsCount}
           select
           onChange={(e) => {
-            setRowsCount(parseInt(e.target.value) || 10);
+            setRowsCount(parseInt(e.target.value) || -1);
+            dispatch({
+              type: "SET_LIMIT",
+              payload: parseInt(e.target.value) || -1,
+            });
+            // applySearch();
           }}
         >
+          <MenuItem value={-1}>الكل</MenuItem>
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
@@ -197,6 +206,8 @@ type PropsType = {
   openStatus: (res: PanelData | StepStatusData) => () => void;
   openDetails: (res: PanelData | StepStatusData) => () => void;
   tableRef: React.RefObject<HTMLTableElement>;
+  dispatch: React.Dispatch<ActionTypes>;
+  applySearch: () => void;
 };
 
 export default ClientTableComponent;
