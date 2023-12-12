@@ -8,19 +8,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useParams } from "react-router";
 
 export default function AddDialog() {
   const [open, setOpen] = useState(true);
+  const params = useParams();
   const selectVacation: addSelect = {
     branch_id: undefined,
     year: undefined,
     spicefic: "",
   };
+
   // start axios get data
   function setData() {
     console.log(selectVacation);
@@ -101,7 +104,12 @@ export default function AddDialog() {
     </>
   );
 }
-
+type TypeProps = {
+  open: boolean;
+  onClose: () => void;
+  setTableData: () => void;
+  openErrorDialog: () => void;
+};
 type Year = {
   $y: number;
 };
