@@ -4,23 +4,26 @@ import Toolbar from "@mui/material/Toolbar";
 import Navbar from "./components/Navbar";
 import DrawerComponent from "./components/Drawer";
 import { Children } from "../../types/Children";
+import BreadCrumbContextProvider from "./BreadCrumbContext/Provider";
 
 const drawerWidth = 240;
 
 export default function MainLayout(props: PropsType) {
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <Navbar width={drawerWidth} />
-      <DrawerComponent width={drawerWidth} />
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-      >
-        <Toolbar />
-        {props.children}
+    <BreadCrumbContextProvider>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <Navbar width={drawerWidth} />
+        <DrawerComponent width={drawerWidth} />
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+        >
+          <Toolbar />
+          {props.children}
+        </Box>
       </Box>
-    </Box>
+    </BreadCrumbContextProvider>
   );
 }
 

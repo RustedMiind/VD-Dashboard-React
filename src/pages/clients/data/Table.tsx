@@ -98,14 +98,14 @@ function ClientRequestsTable(props: PropsType) {
             )}
             {props.requests && (
               <TableBody>
-                {toView?.map((request, index) => {
+                {toView?.map((client, index) => {
                   return (
                     <TableRow key={index}>
                       <NotPrintableTableCell>
                         <Checkbox
-                          disabled={request.contracts_count !== 0}
-                          checked={selectedItems.includes(request.id)}
-                          value={request.id}
+                          disabled={client.contracts_count !== 0}
+                          checked={selectedItems.includes(client.id)}
+                          value={client.id}
                           onChange={CheckboxHandler}
                         />
                       </NotPrintableTableCell>
@@ -120,31 +120,31 @@ function ClientRequestsTable(props: PropsType) {
                           overflow: "hidden",
                         }}
                       >
-                        {/* <NavLink to={`details/${request.id}`} >
-                          {request.name}
+                        {/* <NavLink to={`details/${client.id}`} >
+                          {client.name}
                         </NavLink> */}
-                        {request.name}
+                        {client.name}
                       </TableCell>
 
-                      <TableCell>{request.phone}</TableCell>
+                      <TableCell>{client.phone}</TableCell>
 
-                      <TableCell>{request.email} </TableCell>
+                      <TableCell>{client.email} </TableCell>
 
                       <TableCell>
-                        {request.register_number || request.card_id}
+                        {client.register_number || client.card_id}
                       </TableCell>
-                      <TableCell>{request.branch?.name}</TableCell>
+                      <TableCell>{client.branch?.name}</TableCell>
                       <TableCell>
-                        {request.Contract_status === "منتهي" ? (
+                        {client.Contract_status === "منتهي" ? (
                           <StatusChip color="error" label="منتهي" />
-                        ) : request.Contract_status === "لا يوجد عقود" ? (
+                        ) : client.Contract_status === "لا يوجد عقود" ? (
                           <StatusChip color="primary" label="لا يوجد عقود" />
                         ) : (
                           <StatusChip color="success" label="جاري العمل" />
                         )}
                       </TableCell>
                       <TableCell>
-                        {request.agent_name ? request.agent_name : "-"}
+                        {client.agent_name ? client.agent_name : "-"}
                       </TableCell>
                       <NotPrintableTableCell>
                         <IconButton>

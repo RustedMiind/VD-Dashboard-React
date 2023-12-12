@@ -37,7 +37,7 @@ export default function FormAdd() {
   const [errors, setErrors] = useState<
     Partial<FormData & { card_image: string }> | undefined
   >(undefined);
-  const [phoneStore, setPhoneStore] = useState<string | null>(null);
+  const [phoneDuplicateConfirm, setPhoneDuplicateConfirm] = useState(false);
   const [isUniquePhoneNumber, setIsUniquePhoneNumber] =
     useState<IsUniqueType>("unknown");
   const [isUniqueIdNumber, setIsUniqueIdNumber] =
@@ -51,8 +51,25 @@ export default function FormAdd() {
   const [toaster, setToaster] = useState<{
     type: "error" | "success" | "null";
   }>({ type: "error" });
-  const navigate = useNavigate();
+  const submitDisabled =
+    (isUniqueIdNumber !== "unique" && isUniqueRegisterNumber !== "unique") ||
+    (isUniquePhoneNumber !== "unique" && !phoneDuplicateConfirm);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    setIsUniquePhoneNumber("unknown");
+  }, [formData.phone]);
+  useEffect(() => {
+    setIsUniqueIdNumber("unknown");
+  }, [formData.card_id]);
+  useEffect(() => {
+    setIsUniqueRegisterNumber("unknown");
+  }, [formData.register_number]);
+  useEffect(() => {
+    setIsUniqueIdNumber("unknown");
+    setIsUniqueRegisterNumber("unknown");
+    setPhoneDuplicateConfirm(false);
+  }, [formData.type]);
   // function handle Type
   function changeTypeHandler(type: "individual" | "company") {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,9 +141,6 @@ export default function FormAdd() {
         });
         console.log(err.response?.data?.msg);
 
-        if (err.response?.data?.msg == "رقم الهاتف مقرر من قبل") {
-          setPhoneStore(err.response?.data?.msg);
-        }
         setErrors(tempObj);
         errorObj.forEach((error) => {
           if (error.key === "card_id") {
@@ -168,9 +182,6 @@ export default function FormAdd() {
         });
         console.log(err.response?.data?.msg);
 
-        if (err.response?.data?.msg == "رقم الهاتف مقرر من قبل") {
-          setPhoneStore(err.response?.data?.msg);
-        }
         setErrors(tempObj);
         errorObj.forEach((error) => {
           if (error.key === "card_id") {
@@ -273,7 +284,6 @@ export default function FormAdd() {
             <TextField
               disabled={!!clientEdit}
               id="outlined-idNumber-input"
-              type="number"
               required
               onBlur={
                 formData.type === "individual"
@@ -317,18 +327,12 @@ export default function FormAdd() {
               card_idError={errors?.card_id?.toString()}
               phoneError={errors?.phone}
               checkPhone={() => {
+                setPhoneDuplicateConfirm(true);
                 dispatch({ type: "CHECK_PHONE", payload: null });
                 setOpen(!open);
               }}
               registerError={errors?.register_number?.toString()}
             />
-            {/* {errors?.register_number && (
-              <Box display={"flex"} flexDirection={"row"} color="error.main">
-                <Typography variant="body2">
-                  {errors.register_number}
-                </Typography>
-              </Box>
-            )} */}
           </Stack>
         </Grid>
         <Grid item p={paddingSize} md={6}>
@@ -341,7 +345,6 @@ export default function FormAdd() {
             </Typography>
             <TextField
               id="outlined-phone-input"
-              type="number"
               required
               disabled={!formData.check_phone?.length}
               size="small"
@@ -363,7 +366,7 @@ export default function FormAdd() {
               <Box display={"flex"} flexDirection={"row"} color="error.main">
                 <Typography variant="body2">{errors?.phone}</Typography>
               </Box>
-            ) : phoneStore ? (
+            ) : isUniquePhoneNumber === "used" ? (
               <Box display={"flex"} flexDirection={"row"} color="warning.main">
                 <Typography variant="body2">رقم الهاتف مسجل مسبقا</Typography>
                 <Typography
@@ -554,7 +557,12 @@ export default function FormAdd() {
           </Grid>
         )}
         <Grid item p={paddingSize} md={9} sx={{ marginX: "auto", mt: 2 }}>
-          <Button fullWidth type="submit" variant="contained">
+          <Button
+            fullWidth
+            type="submit"
+            disabled={submitDisabled}
+            variant="contained"
+          >
             حفظ
           </Button>
         </Grid>

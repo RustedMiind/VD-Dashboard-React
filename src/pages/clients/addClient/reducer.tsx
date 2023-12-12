@@ -1,4 +1,5 @@
 import { Domain } from "../../../constants";
+import { isStringAllNumbers } from "../../../methods";
 import { ReducerAction } from "../../../types";
 import { Client } from "../../../types/Clients/Client";
 
@@ -7,7 +8,7 @@ export const companyInitial: CompanyFormType = {
   agent_name: "",
   branch_id: "0",
   broker_id: "0",
-  register_number: null,
+  register_number: "",
   card_image: null,
   letter_head: "",
   phone: "",
@@ -20,7 +21,7 @@ export const individualInitial: IndividualFormType = {
   type: "individual",
   branch_id: "0",
   broker_id: "0",
-  card_id: null,
+  card_id: "",
   card_image: null,
   letter_head: "",
   name: "",
@@ -45,11 +46,18 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
     // case "COMPANY_NAME":
     //   return { ...state, company_name: action.payload };
     case "CARD_ID":
-      return { ...state, card_id: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, card_id: action.payload };
+      else return state;
     case "REGISTER_NUMBER":
-      return { ...state, register_number: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, register_number: action.payload };
+      else return state;
+
     case "PHONE_NUMBER":
-      return { ...state, phone: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, phone: action.payload };
+      else return state;
     case "EMAIL":
       return { ...state, email: action.payload };
     case "BRANCH_ID":
