@@ -10,13 +10,20 @@ function Breadcrumb() {
 
   return (
     <Breadcrumbs separator={<NavigateBeforeIcon />}>
-      {breadcrumbContext.links.map((link) => (
-        <Button component={NavLink} sx={{ fontWeight: 700 }} to={link.path}>
+      {breadcrumbContext.links.map((link, index, arr) => (
+        <Button
+          disabled={exclude.includes(link.title) || index === arr.length - 1}
+          component={NavLink}
+          sx={{ fontWeight: 700 }}
+          to={link.path}
+        >
           {link.title}
         </Button>
       ))}
     </Breadcrumbs>
   );
 }
+
+const exclude = ["الموظفين", "مكتبة البيانات"];
 
 export default Breadcrumb;
