@@ -72,7 +72,16 @@ function ContractsTable({ value }: PropsType) {
                   <TableCell>{request.client?.phone}</TableCell>
                   <TableCell>{request.period}</TableCell>
                   <TableCell>{request.end_date_period}</TableCell>
-                  <TableCell>{request.employee?.name}</TableCell>
+                  <TableCell
+                    sx={{
+                      maxWidth: "50px",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {request.employee?.name}
+                  </TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
