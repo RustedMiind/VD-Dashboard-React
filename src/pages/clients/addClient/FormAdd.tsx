@@ -305,7 +305,7 @@ export default function FormAdd() {
                       ? "CARD_ID"
                       : "REGISTER_NUMBER",
 
-                  payload: parseInt(e.target.value),
+                  payload: e.target.value,
                 });
               }}
             />
@@ -419,7 +419,7 @@ export default function FormAdd() {
                 console.log(e.target.value);
                 dispatch({
                   type: "BROKER_ID",
-                  payload: parseInt(e.target.value),
+                  payload: e.target.value,
                 });
               }}
             >
@@ -447,7 +447,7 @@ export default function FormAdd() {
               onChange={(e) => {
                 dispatch({
                   type: "BRANCH_ID",
-                  payload: parseInt(e.target.value),
+                  payload: e.target.value,
                 });
               }}
             >
