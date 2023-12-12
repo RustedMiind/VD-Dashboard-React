@@ -9,7 +9,12 @@ import {
   Radio,
   FormControlLabel,
   MenuItem,
+  InputAdornment,
+  CircularProgress,
 } from "@mui/material";
+import WarningIcon from "@mui/icons-material/Warning";
+import CheckIcon from "@mui/icons-material/Check";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { FormData, individualInitial, reducer } from "./reducer";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
@@ -22,6 +27,7 @@ import BtnFile from "./BtnFile";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 import FilePreview from "../../../components/FilePreview";
 import { Client } from "../../../types/Clients";
+import { AccountCircle } from "@mui/icons-material";
 const paddingSize = 1;
 export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<Client | null>(null);
@@ -32,6 +38,12 @@ export default function FormAdd() {
     Partial<FormData & { card_image: string }> | undefined
   >(undefined);
   const [phoneStore, setPhoneStore] = useState<string | null>(null);
+  const [isUniquePhoneNumber, setIsUniquePhoneNumber] =
+    useState<IsUniqueType>("unknown");
+  const [isUniqueIdNumber, setIsUniqueIdNumber] =
+    useState<IsUniqueType>("unknown");
+  const [isUniqueRegisterNumber, setIsUniqueRegisterNumber] =
+    useState<IsUniqueType>("unknown");
   const [open, setOpen] = useState(false);
   // object respose
   const objectResponse = useParams();
@@ -263,6 +275,20 @@ export default function FormAdd() {
               id="outlined-idNumber-input"
               type="number"
               required
+              onBlur={
+                formData.type === "individual"
+                  ? checkIsUniqueIdNumber
+                  : checkIsRegisterNumber
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {formData.type === "individual"
+                      ? returnShapeToView(isUniqueIdNumber, "error")
+                      : returnShapeToView(isUniqueRegisterNumber, "error")}
+                  </InputAdornment>
+                ),
+              }}
               placeholder={
                 formData.type === "individual" ? "رقم الهويه" : "السجل التجاري"
               }
@@ -321,6 +347,14 @@ export default function FormAdd() {
               size="small"
               placeholder=" رقم الجوال"
               value={formData.phone}
+              onBlur={checkIsUniquePhoneNumber}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {returnShapeToView(isUniquePhoneNumber)}
+                  </InputAdornment>
+                ),
+              }}
               onChange={(e) => {
                 dispatch({ type: "PHONE_NUMBER", payload: e.target.value });
               }}
@@ -527,4 +561,60 @@ export default function FormAdd() {
       </Grid>
     </Box>
   );
+
+  function returnShapeToView(
+    type: IsUniqueType,
+    warn?: "error" | "warning"
+  ): React.ReactNode {
+    switch (type) {
+      case "loading":
+        return <CircularProgress size={24} />;
+      case "unique":
+        return <CheckIcon color="success" />;
+      case "used":
+        if (warn === "error") {
+          return <WarningIcon color="error" />;
+        }
+        return <ErrorOutlineIcon color="warning" />;
+      default:
+        return <></>;
+    }
+  }
+
+  function isUniqueByKey(
+    setter: React.Dispatch<React.SetStateAction<IsUniqueType>>,
+    url: string,
+    body: Partial<{ register_number: string; card_id: string; mobile: string }>
+  ) {
+    setter("loading");
+    axios
+      .post(url, body)
+      .then(() => {
+        setter("unique");
+      })
+      .catch(() => {
+        setter("used");
+      });
+  }
+  function checkIsUniquePhoneNumber() {
+    isUniqueByKey(setIsUniquePhoneNumber, Api("employee/client/mobile-check"), {
+      mobile: formData.phone,
+    });
+  }
+  function checkIsUniqueIdNumber() {
+    isUniqueByKey(setIsUniqueIdNumber, Api("employee/client/card-id-check"), {
+      card_id: formData.card_id?.toString(),
+    });
+  }
+  function checkIsRegisterNumber() {
+    isUniqueByKey(
+      setIsUniqueRegisterNumber,
+      Api("employee/client/register-id-check"),
+      {
+        register_number: formData.register_number?.toString(),
+      }
+    );
+  }
 }
+
+type IsUniqueType = "loading" | "unique" | "unknown" | "used";
