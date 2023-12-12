@@ -50,7 +50,7 @@ function DetailsTable(props: PropsType) {
                   <TableCell align="center">{item.vacationNumber}</TableCell>
                   <TableCell align="center">{item.vacationDayNumber}</TableCell>
                   <TableCell align="center">
-                    <StatusChip color="success" label="معتمد" />
+                    <StatusChip color={item.status.name==="مسودة"?"warning":"success"} label={item.status.name} />
                   </TableCell>
                   <TableCell align="center">{item.vacationDayNumberUsed}</TableCell>
                   <TableCell align="center">{item.vacationDayNumberstay}</TableCell>
