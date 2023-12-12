@@ -13,7 +13,8 @@ import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
 import ClientDetails from "./pages/clients/clientDeatails";
-import Vacations from "./pages/vacations";
+import Vacations from "./pages/vacations/VacationsSettings";
+import VacationDetails from "./pages/vacations/branchDetails";
 
 function RoutesComponent() {
   return (
@@ -28,10 +29,10 @@ function RoutesComponent() {
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           <Route path="vacations">
-            <Route path="" element={<>{/* Vacations Setting Page */}</>} />
+            <Route path="" element={<Vacations />} />
             <Route
               path=":branchId"
-              element={<>{/* Vacations Setting Page */}</>}
+              element={<VacationDetails />}
             >
               <Route
                 path=""
@@ -63,9 +64,6 @@ function RoutesComponent() {
             <Route path="" element={<div>Contract Page</div>} />
             <Route path="edit" element={<CreateContracts type="edit" />} />
           </Route>
-        </Route>
-        <Route path="vacations">
-          <Route path="" element={<Vacations />} />
         </Route>
         <Route path="*" element={<div>صفحة خاطئة</div>} />
       </Route>
