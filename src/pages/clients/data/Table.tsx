@@ -10,6 +10,7 @@ import {
   Typography,
   TextField,
   TableCell,
+  IconButton,
 } from "@mui/material";
 import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -22,6 +23,7 @@ import NotFound from "../../../components/NotFound";
 import { MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import StatusChip from "../../../components/StatusChip";
+import { NavLink } from "react-router-dom";
 
 export const NotPrintableTableCell = styled(TableCell)({
   "@media print": {
@@ -145,7 +147,9 @@ function ClientRequestsTable(props: PropsType) {
                         {request.agent_name ? request.agent_name : "-"}
                       </TableCell>
                       <NotPrintableTableCell>
-                        <SettingsIcon />
+                        <IconButton>
+                          <SettingsIcon />
+                        </IconButton>
                       </NotPrintableTableCell>
                     </TableRow>
                   );
