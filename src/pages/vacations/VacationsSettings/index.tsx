@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Api } from "../../constants";
+import { Api } from "../../../constants";
 import axios from "axios";
 import {
   Box,
@@ -10,9 +10,9 @@ import {
   CardMedia,
   Typography,
   Card,
-  IconButton,
+  CardActionArea,
 } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { NavLink } from "react-router-dom";
 
 function Vacations() {
   const [vacationsArr, setVacationsData] = useState<VacationsArr[] | undefined>(
@@ -23,7 +23,6 @@ function Vacations() {
     axios
       .get<{ date: VacationsArr[] }>(Api("employee/vacation"))
       .then((data) => {
-        console.log(data.data.date);
         setVacationsData(data.data.date);
       })
       .catch((err) => {
@@ -40,14 +39,17 @@ function Vacations() {
         {vacationsArr?.map((vacation, index) => (
           <Grid item xs={4} key={index}>
             <Card>
-              <Box sx={{ position: "relative" }}>
+              <CardActionArea
+                component={NavLink}
+                to={`${vacation.id}`}
+                sx={{ position: "relative" }}
+              >
                 <CardMedia
                   component="img"
                   height={220}
                   image="https://w0.peakpx.com/wallpaper/340/751/HD-wallpaper-city-aerial-view-road-buildings-coast-thumbnail.jpg"
                   alt="green iguana"
                 />
-
                 <Stack
                   sx={{
                     top: 0,
@@ -69,10 +71,7 @@ function Vacations() {
                     {vacation.name}
                   </Typography>
                 </Stack>
-                <IconButton sx={{ position: "absolute", top: 0, right: 0, color:'primary.main' }}>
-                  <SettingsIcon />
-                </IconButton>
-              </Box>
+              </CardActionArea>
               <Box
                 sx={{
                   backgroundColor: "primary.main",
@@ -87,21 +86,23 @@ function Vacations() {
                     direction: "row",
                   }}
                 >
-                  {vacation.vacation_dates.map((vacationDate, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        borderRadius: 1,
-                        bgcolor: "Background",
-                        maxWidth: 0.318,
-                        minWidth: 0.318,
-                      }}
-                    >
-                      <Button size="large" color="primary" fullWidth>
-                        {vacationDate.year}
-                      </Button>
-                    </Box>
-                  ))}
+                  {vacation.vacation_dates.map(
+                    (vacationDate, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          borderRadius: 1,
+                          bgcolor: "Background",
+                          maxWidth: 0.318,
+                          minWidth: 0.318,
+                        }}
+                      >
+                        <Button size="large" color="primary" fullWidth>
+                          {vacationDate.year}
+                        </Button>
+                      </Box>
+                    )
+                  )}
                 </CardActions>
               </Box>
             </Card>
@@ -118,6 +119,16 @@ type VacationsArr = {
   id: number;
   name: string;
   vacation_dates: VacationDate[];
+  vacationbranch: VacationBranch;
+};
+
+type VacationBranch = {
+  branch_id: number;
+  card_image: null;
+  created_at: null;
+  id: number;
+  status_id: number;
+  updated_at: null;
 };
 
 type VacationDate = {
