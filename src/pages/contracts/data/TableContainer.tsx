@@ -58,12 +58,40 @@ function TableContainer() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="بيانات العقود" disabled />
-            <Tab label="ادارة العقود" disabled />
+            <Tab label="بيانات العقود" />
+            <Tab label="ادارة العقود" />
           </Tabs>
           <PopUpContracts handleClose={handleClose} open={open} />
         </Box>
         <CustomTabPanel value={value} index={0}>
+          <Paper sx={{ p: 3 }}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlineIcon />}
+              sx={{ mr: 5 }}
+              onClick={handleClickOpen}
+            >
+              اضافة عقد
+            </Button>
+            <TopTable value={value} />
+            {typeof contracts === "string" && contracts === "loading" && (
+              <LoadingTable rows={4} cols={5} />
+            )}
+            {typeof contracts === "string" && contracts === "error" && (
+              <Typography variant="h5" color={"error"}>
+                فشل في تحميل العقود
+              </Typography>
+            )}
+            {typeof contracts === "object" &&
+              (contracts?.data?.length ? (
+                <ContractsTable value={value} />
+              ) : (
+                <ContractsNotFound />
+              ))}
+          </Paper>
+        </CustomTabPanel>
+        
+        <CustomTabPanel value={value} index={1}>
           <Paper sx={{ p: 3 }}>
             <Button
               variant="contained"
