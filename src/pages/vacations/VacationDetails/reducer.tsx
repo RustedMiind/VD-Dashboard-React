@@ -8,19 +8,9 @@ const reducer = (
 ): VacationFormType => {
   switch (action.type) {
     case "SET_DATE_FROM":
-      return getDateDiffNegativeAllowed(
-        new Date(state.date_to),
-        new Date(action.payload)
-      ) >= 0 || !state.date_to
-        ? { ...state, date_from: action.payload }
-        : state;
+      return { ...state, date_from: action.payload };
     case "SET_DATE_TO":
-      return getDateDiffNegativeAllowed(
-        new Date(action.payload),
-        new Date(state.date_from)
-      ) >= 0 || !state.date_from
-        ? { ...state, date_to: action.payload }
-        : state;
+      return { ...state, date_to: action.payload };
     case "SET_VACATION_ID":
       return { ...state, vacation_date_id: action.payload };
     case "SET_VACATION_NAME":
