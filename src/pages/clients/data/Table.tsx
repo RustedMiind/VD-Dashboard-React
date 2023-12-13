@@ -110,19 +110,22 @@ function ClientRequestsTable(props: PropsType) {
                         />
                       </NotPrintableTableCell>
 
-                      <TableCell
-                        sx={{
-                          textDecoration: "underline",
-                          maxWidth: "100px",
-                          whiteSpace: "nowrap",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {/* <NavLink to={`details/${client.id}`} >
+                      <TableCell>
+                        <Typography
+                          variant="body1"
+                          color={"secondary.main"}
+                          sx={{
+                            textDecoration: "underline",
+                            maxWidth: "100px",
+                            whiteSpace: "nowrap",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                          }}
+                          component={NavLink}
+                          to={`details/${client.id}`}
+                        >
                           {client.name}
-                        </NavLink> */}
-                        {client.name}
+                        </Typography>
                       </TableCell>
 
                       <TableCell>{client.phone}</TableCell>

@@ -6,18 +6,32 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { ClientDetailsType } from "../../../types/Clients";
 
 function createData(title: string, value: number, theme: string) {
   return { title, value, theme };
 }
 
-const rows = [
-  createData("المدفوع", 5000, "green"),
-  createData("المتبقي", 1000, "orange"),
-  createData("المنتهي", 4000, "red"),
-];
+export default function BasicTable({ clientData }: PropsType) {
+  // clientData && console.log(clientData.payment.amount);
 
-export default function BasicTable() {
+  const rows = [
+    createData(
+      "المدفوع",
+      clientData?.payment?.amount_payment as number,
+      "warning.main"
+    ),
+    createData(
+      "المتبقي",
+      clientData?.payment?.amount_motabaky as number,
+      "success.main"
+    ),
+    createData(
+      "المطلوب",
+      clientData?.payment?.amount_required as number,
+      "primary.main"
+    ),
+  ];
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -25,13 +39,14 @@ export default function BasicTable() {
     for (let i = 0; i < rows.length; i++) {
       calcTotal += rows[i].value;
     }
+
     setTotal(calcTotal);
-  }, []);
+  }, [clientData?.payment?.amount_required]);
 
   return (
-    <Paper elevation={2}>
+    <Paper elevation={2} sx={{ m: 3 }}>
       <TableContainer component={Paper} sx={{ bgcolor: "Background" }}>
-        <Table aria-label="simple table">
+        <Table>
           <TableHead
             sx={{
               ".MuiTableCell-root": {
@@ -50,8 +65,6 @@ export default function BasicTable() {
               <TableRow key={row.title}>
                 <TableCell
                   component="th"
-                  scope="row"
-                  align="left"
                   sx={{
                     color: `${row.theme}`,
                   }}
@@ -63,7 +76,9 @@ export default function BasicTable() {
                   sx={{
                     color: `${row.theme}`,
                   }}
-                >{`${row.value}SAR`}</TableCell>
+                >
+                  {`${row.value}SAR`}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -72,3 +87,6 @@ export default function BasicTable() {
     </Paper>
   );
 }
+type PropsType = {
+  clientData: ClientDetailsType | null;
+};

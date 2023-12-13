@@ -32,6 +32,7 @@ export interface Contract {
   client?: ClientRequest;
   levers?: ContractAttachment[];
   card_image?: string;
+  Contract_status: string;
   // deleted_at: null;
   // end_date: null;
   // management: null;

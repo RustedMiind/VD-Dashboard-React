@@ -9,8 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { VacationsDetailsType } from "../branchDetails";
 
 export default function ShowVactionDialog(props: TypeProps) {
+  console.log(props.vacationsData);
+
   const handleClose = () => {
     props.setOpen(!props.open);
   };
@@ -41,18 +44,22 @@ export default function ShowVactionDialog(props: TypeProps) {
               <TextField
                 disabled
                 size="small"
+                value={
+                  props.vacationsData &&
+                  props.vacationsData[0].vacationDayNumber
+                }
                 fullWidth
                 sx={{ ml: 2 }}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                }}
               />
             </Grid>
             <Grid item md={6} my={2}>
               <Typography> عدد الايام</Typography>
               <TextField
                 disabled
-                value={" 2 يوم"}
+                value={
+                  props.vacationsData &&
+                  props.vacationsData[0].vacationDayNumberUsed + " يوم"
+                }
                 size="small"
                 fullWidth
                 onChange={(e) => {
@@ -122,4 +129,5 @@ type Year = {
 type TypeProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  vacationsData?: VacationsDetailsType[];
 };
