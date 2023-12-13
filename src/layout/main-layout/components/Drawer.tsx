@@ -29,6 +29,11 @@ const routesCollections: RoutesCollectionType[] = [
       { name: "المستخدمين", path: "users" },
     ],
   },
+  // {
+  //   name: "مكتبة البيانات",
+  //   icon: AutoAwesomeMosaicIcon,
+  //   routes: [{ name: "إدارة الإجازات", path: "/vacations", react: true}],
+  // },
   {
     name: "الهيكل التنظيمي",
     icon: AutoAwesomeMosaicIcon,

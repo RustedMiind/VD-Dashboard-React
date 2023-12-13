@@ -6,7 +6,6 @@ import img1 from "../../../assets/images/branch-empty.png";
 
 export default function ContractsNotFound() {
   const [open, setOpen] = React.useState(false);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -28,8 +27,7 @@ export default function ContractsNotFound() {
       >
         <React.Fragment>
           <Stack>
-            <img src={img1} />
-
+            <img src={img1} alt="Not found" />
             <Typography sx={{ fontSize: "28px", fontWeight: "700" }}>
               لا يوجد عقود متاحة
             </Typography>

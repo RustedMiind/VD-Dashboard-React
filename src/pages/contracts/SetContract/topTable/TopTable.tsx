@@ -24,10 +24,13 @@ export default function TopTable({ value }: PropType) {
         </Stack>
       )}
       <Stack
-        direction={"row"}
+        direction={"row-reverse"}
         justifyContent={value === 0 ? "space-between" : "end"}
       >
-        {value === 0 && (
+        <Box>
+          <BtnCus />
+        </Box>
+        {typeof contractsContext.contracts === "object" && value === 0 && (
           <Stack direction={"row"} spacing={2} mb={1}>
             <DoubleChips
               color="success"
@@ -37,7 +40,7 @@ export default function TopTable({ value }: PropType) {
             <DoubleChips
               color="warning"
               label="متأخر"
-              value={contractsContext.contracts?.contract_payment}
+              value={contractsContext.contracts?.contract_late}
             />
             <DoubleChips
               color="error"
@@ -51,9 +54,6 @@ export default function TopTable({ value }: PropType) {
             />
           </Stack>
         )}
-        <Box>
-          <BtnCus />
-        </Box>
       </Stack>
     </Stack>
   );

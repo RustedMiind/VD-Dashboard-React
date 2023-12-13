@@ -179,7 +179,7 @@ const ClientRequests = () => {
           )}
 
           {requests === "loading" && (
-            <LoadingTable rows={8} cols={7} height={500} />
+            <LoadingTable rows={8} cols={7} />
           )}
 
           {requests === "error" && (

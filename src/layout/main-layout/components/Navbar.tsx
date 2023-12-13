@@ -6,7 +6,7 @@ import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 import IconButton from "@mui/material/IconButton";
-import { Domain } from "../../../constants";
+import Notifications from "./Notifications";
 
 function Navbar(props: PropsType) {
   return (
@@ -28,11 +28,7 @@ function Navbar(props: PropsType) {
           noWrap
           component="div"
         ></Typography>
-        <IconButton disabled size="medium" sx={{ ml: 2 }}>
-          <Badge badgeContent={0} color="error">
-            <NotificationsIcon color="action" />
-          </Badge>
-        </IconButton>
+        <Notifications />
         <AccountMenu />
       </Toolbar>
     </AppBar>

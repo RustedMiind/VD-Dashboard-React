@@ -11,6 +11,9 @@ import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
 import VacationsTable from "./pages/clients/vacations";
+import ClientDetails from "./pages/clients/clientDeatails";
+import VacationDetails from "./pages/vacations/branchDetails";
+import VacationsSettings from "./pages/vacations/VacationsSettings";
 
 function RoutesComponent() {
   return (
@@ -22,8 +25,25 @@ function RoutesComponent() {
           <Route path="requests" element={<EmplyeesRequests />} />
           <Route path="procedures" element={<EmploeesRequestsProcedures />} />
         </Route>
+        <Route path="datalib">
+          <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
+          <Route path="vacations">
+            <Route path="" element={<VacationsSettings />} />
+            <Route path=":branchId" element={<VacationDetails />}>
+              <Route
+                path=""
+                element={<>{/* Branch Vacations Setting Page */}</>}
+              />
+              <Route
+                path=":year"
+                element={<>{/* Branch Vacations In Year Setting  Page */}</>}
+              />
+            </Route>
+          </Route>
+        </Route>
         <Route path="clients">
           <Route path="" element={<ClientData />} />
+          <Route path="details/:id" element={<ClientDetails />} />
           <Route path="add" element={<AddClient />} />
           <Route path=":name/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />

@@ -1,10 +1,11 @@
-import { ReducerAction } from "../../../../../types";
+import { Domain } from "../../../../../constants";
+import { Contract, ReducerAction } from "../../../../../types";
 
 export const contractIntial: BaseContractType = {
-  code: 0,
+  code: null,
   date: "",
-  amount: 0,
-  period: 0,
+  amount: null,
+  period: null,
   details: "",
   type: 0,
   contract_type_id: 0,
@@ -13,6 +14,7 @@ export const contractIntial: BaseContractType = {
   card_image: null,
   management_id: 0,
   employee_id: 0,
+  cardImageUrl: "",
 };
 
 export function reducer(state: FormData, action: ActionTypes): FormData {
@@ -41,9 +43,29 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       return { ...state, employee_id: action.payload };
     case "MANAGEMENT_ID":
       return { ...state, management_id: action.payload };
+    case "DTO_TO_FORM":
+      return {
+        amount: action.payload.amount,
+        period: parseInt(action.payload.period),
+        date: action.payload.date,
+        client_id: action.payload.client_id,
+        cardImageUrl: Domain(
+          "storage/" + action.payload.card_image
+        ) as unknown as string,
+        branch_id: action.payload.branch_id,
+        code: parseInt(action.payload.code),
+        contract_type_id: action.payload.contract_type_id,
+        details: action.payload.details,
+        employee_id: action.payload.employee_id,
+        management_id: action.payload.management_id,
+        type: action.payload.type?.id,
+        card_image: null,
+      };
+
     case "SET_ALL":
       return { ...state, ...action.payload };
-
+    case "CARD_IMAGE_URL":
+      return { ...state, cardImageUrl: action.payload };
     default:
       return state;
   }
@@ -85,6 +107,12 @@ interface ManagementIDActionType extends ReducerAction<number> {
 interface EmployeeIDActionType extends ReducerAction<number> {
   type: "EMPLOYEE_ID";
 }
+interface CardImageUrlActionType extends ReducerAction<string | undefined> {
+  type: "CARD_IMAGE_URL";
+}
+interface DtoToFormActionType extends ReducerAction<Contract> {
+  type: "DTO_TO_FORM";
+}
 interface SetAllActionType extends ReducerAction<BaseContractType> {
   type: "SET_ALL";
 }
@@ -101,22 +129,25 @@ export type ActionTypes =
   | BranchIDActionType
   | CardImageActionType
   | ManagementIDActionType
+  | CardImageUrlActionType
   | EmployeeIDActionType
+  | DtoToFormActionType
   | SetAllActionType;
 
 export interface BaseContractType {
-  code: number;
+  code: number | null;
   date: string;
   card_image: File | null;
   type: number | null;
   details: string;
-  contract_type_id: number;
+  contract_type_id: number | null;
   client_id: number;
   branch_id: number;
   management_id: number;
   employee_id: number;
-  amount: number;
-  period: number;
+  amount: number | null;
+  period: number | null;
+  cardImageUrl?: string;
 }
 
 export type FormData = BaseContractType;

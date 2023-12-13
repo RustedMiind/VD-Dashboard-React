@@ -59,7 +59,7 @@ const ClientTableComponent = ({
           </Button>
         );
         break;
-      case 33:
+      case 100:
         chip = (
           <Chip
             color="success"
@@ -69,7 +69,7 @@ const ClientTableComponent = ({
           />
         );
         break;
-      case 100:
+      case 33:
         chip = (
           <Chip
             color="success"

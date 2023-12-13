@@ -29,6 +29,7 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
           Api(`employee/client/order/statusOrder?client_id=${id}`)
         )
         .then(({ data }) => {
+          console.log(data);
           setDetails(data.data[0].order_step_form || []);
           setDate(formatDate(data.data[0].created_date) || "");
         });
@@ -78,11 +79,11 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
                 {details?.map((step) => {
                   const note = step?.note;
 
-                  const orderStep = step?.order_step && step?.order_step[0];
+                  // const orderStep = step?.order_step && step?.order_step[0];
                   return (
                     <TableRow key={step.id}>
                       <TableCell>
-                        {orderStep?.employees?.name || "لا يوجد موظف"}
+                        {step?.employee?.name || "لا يوجد موظف"}
                       </TableCell>
                       <TableCell>{date}</TableCell>
                       <TableCell>{formatDate(step?.end_date)}</TableCell>

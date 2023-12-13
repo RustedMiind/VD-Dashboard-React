@@ -10,8 +10,8 @@ import {
   Typography,
   TextField,
   TableCell,
+  IconButton,
 } from "@mui/material";
-
 import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext, useState, useEffect, useRef } from "react";
@@ -21,7 +21,15 @@ import PrintIcon from "@mui/icons-material/Print";
 import ReactToPrint from "react-to-print";
 import NotFound from "../../../components/NotFound";
 import { MenuItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import StatusChip from "../../../components/StatusChip";
+import { NavLink } from "react-router-dom";
 
+export const NotPrintableTableCell = styled(TableCell)({
+  "@media print": {
+    display: "none",
+  },
+});
 export type IdListType = {
   id: number[];
 };
@@ -31,7 +39,6 @@ function ClientRequestsTable(props: PropsType) {
   const tableContext = useContext(TableContext);
   const [rowsCount, setRowsCount] = useState(5);
   const toView = props.requests?.slice(0, rowsCount);
-  const isAllSelected = selectedItems.length === props.requests?.length;
   const chekedArray: IdListType = {
     id: [],
   };
@@ -60,6 +67,20 @@ function ClientRequestsTable(props: PropsType) {
       });
     }
   }
+  const isAllSelected =
+    props.requests?.filter((req) => {
+      return req.contracts_count === 0;
+    }).length === selectedItems.length && selectedItems.length;
+  function checkAllHandler(checked: boolean) {
+    const allChecked: number[] = checked
+      ? (props.requests
+          ?.map((request) => request.contracts_count === 0 && request.id)
+          .filter((id) => typeof id === "number") as number[])
+      : [];
+    setSelectedItems(allChecked);
+  }
+
+  console.log(props.requests);
 
   return (
     <>
@@ -68,9 +89,9 @@ function ClientRequestsTable(props: PropsType) {
           <Table ref={tableRef}>
             {props.requests?.length !== 0 ? (
               <TableHeader
+                checkAllHandler={checkAllHandler}
                 requests={props.requests}
-                setSelectedItems={setSelectedItems}
-                isAllSelected={isAllSelected}
+                isAllSelected={!!isAllSelected}
               />
             ) : (
               <NotFound title="لا يوجد عملاء" />
@@ -80,17 +101,17 @@ function ClientRequestsTable(props: PropsType) {
                 {toView?.map((request, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell>
+                      <NotPrintableTableCell>
                         <Checkbox
                           disabled={request.contracts_count !== 0}
                           checked={selectedItems.includes(request.id)}
                           value={request.id}
                           onChange={CheckboxHandler}
                         />
-                      </TableCell>
+                      </NotPrintableTableCell>
+
                       <TableCell
                         sx={{
-                          color: "#F19B02",
                           textDecoration: "underline",
                           maxWidth: "100px",
                           whiteSpace: "nowrap",
@@ -98,7 +119,9 @@ function ClientRequestsTable(props: PropsType) {
                           overflow: "hidden",
                         }}
                       >
-                        {request.name}
+                        <NavLink to={`details/${request.id}`}>
+                          {request.name}
+                        </NavLink>
                       </TableCell>
 
                       <TableCell>{request.phone}</TableCell>
@@ -111,46 +134,21 @@ function ClientRequestsTable(props: PropsType) {
                       <TableCell>{request.branch?.name}</TableCell>
                       <TableCell>
                         {request.Contract_status === "منتهي" ? (
-                          <Chip
-                            sx={{
-                              color: "#CB1818",
-                              background: "#EED4D4",
-                              borderRadius: "9px",
-                            }}
-                            variant="outlined"
-                            label="منتهي"
-                          />
+                          <StatusChip color="error" label="منتهي" />
                         ) : request.Contract_status === "لا يوجد عقود" ? (
-                          <Chip
-                            sx={{
-                              color: "#A7A7A7",
-                              background: "#EBEBEB",
-                              borderRadius: "9px",
-                              textAlign: "center",
-                            }}
-                            variant="outlined"
-                            label="لا يوجد عقود"
-                          />
+                          <StatusChip color="primary" label="لا يوجد عقود" />
                         ) : (
-                          <Chip
-                            sx={{
-                              color: "#18CB5F",
-                              background: "#D4EEDE",
-                              borderRadius: "9px",
-                              textAlign: "center",
-                            }}
-                            variant="outlined"
-                            label="جاري العمل"
-                          />
+                          <StatusChip color="success" label="جاري العمل" />
                         )}
                       </TableCell>
-
                       <TableCell>
                         {request.agent_name ? request.agent_name : "-"}
                       </TableCell>
-                      <TableCell>
-                        <SettingsIcon />
-                      </TableCell>
+                      <NotPrintableTableCell>
+                        <IconButton>
+                          <SettingsIcon />
+                        </IconButton>
+                      </NotPrintableTableCell>
                     </TableRow>
                   );
                 })}

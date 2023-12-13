@@ -1,56 +1,111 @@
-import { Button, MenuItem, Stack, TextField } from "@mui/material";
-import { Contract } from "../../../types";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { ClientRequest, Contract } from "../../../types";
 import { TypeDataToSearch } from "./PageContent";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { Api } from "../../../constants";
+import { ContractsContext } from "../Context/ContractsContext";
 
-function SearchBar(props: PropsType) {
+function GridChildren(props: { children: React.ReactNode }) {
+  return <Stack px={1}>{props.children}</Stack>;
+}
+
+function SearchBar() {
+  const DataToSearch: TypeDataToSearch = {
+    client_phone: "",
+    client_id: 0,
+    employee_name: "",
+  };
+  let [contractSearch, setContractSearch] = useState<ClientRequest[] | null>(
+    null
+  );
+
+  useEffect(() => {
+    axios
+      .get<Contract>(Api("employee/contract/use"))
+      .then((res) => {
+        setContractSearch(res?.data.client);
+      })
+      .catch((err) => {
+        console.log(err);
+
+        setContractSearch(null);
+      });
+  }, []);
+  let contractsContext = useContext(ContractsContext);
+
+  function search() {
+    contractsContext.setContracts &&
+      contractsContext.setContracts(DataToSearch);
+  }
   return (
-    <>
-      <Stack direction="row" gap={4} my={2}>
-        <TextField
-          placeholder="رقم تليفون العميل"
-          type="number"
-          size="small"
-          sx={{ flexGrow: 1 }}
-          onChange={(e) => {
-            props.DataToSearch.client_phone = e.target.value;
-          }}
-        />
-        <TextField
-          label="اسم العميل"
-          select
-          InputLabelProps={{ sx: { color: "#abc2db" } }}
-          id="outlined-select-currency"
-          size="small"
-          sx={{ flexGrow: 2 }}
-          onChange={(e) => {
-            props.DataToSearch.client_id = parseInt(e.target.value);
-          }}
-        >
-          {props.requests?.map((request) => (
-            <MenuItem key={request.code} value={request.client_id}>
-              {request.client?.name}
-            </MenuItem>
-          ))}
-        </TextField>
+    <Box component="form" noValidate autoComplete="on">
+      <Grid container>
+        <Grid item sx={{ display: "flex", flexDirection: "row" }} md={10}>
+          <Grid item md={4}>
+            <GridChildren>
+              <TextField
+                label="رقم تليفون العميل"
+                type="number"
+                size="small"
+                fullWidth
+                onChange={(e) => {
+                  DataToSearch.client_phone = e.target.value;
+                }}
+              />
+            </GridChildren>
+          </Grid>
 
-        <TextField
-          placeholder="المهندس المسؤول"
-          size="small"
-          sx={{ flexGrow: 1 }}
-          onChange={(e) => {
-            props.DataToSearch.employee_name = e.target.value;
-          }}
-        />
-        <Button variant="contained" onClick={props.search}>
-          بحث
-        </Button>
-      </Stack>
-    </>
+          <Grid item md={4}>
+            <GridChildren>
+              <TextField
+                label="اسم العميل"
+                select
+                fullWidth
+                size="small"
+                onChange={(e) => {
+                  DataToSearch.client_id = parseInt(e.target.value);
+                }}
+              >
+                {contractSearch?.map((request) => (
+                  <MenuItem key={request.id} value={request.id}>
+                    {request.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </GridChildren>
+          </Grid>
+          <Grid item md={4}>
+            <GridChildren>
+              <TextField
+                fullWidth
+                label="المهندس المسؤول"
+                size="small"
+                onChange={(e) => {
+                  DataToSearch.employee_name = e.target.value;
+                }}
+              />
+            </GridChildren>
+          </Grid>
+        </Grid>
+        <Grid item md={2}>
+          <GridChildren>
+            <Button variant="contained" fullWidth onClick={search}>
+              بحث
+            </Button>
+          </GridChildren>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
-type PropsType = {
-  requests: Contract[] | undefined;
-  DataToSearch: TypeDataToSearch;
-  search: () => void;
-};
+
 export default SearchBar;

@@ -1,27 +1,24 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { ContractsContext } from "../../Context/ContractsContext";
 
 export default function TableHeader({ value }: PropType) {
   const { contracts } = useContext(ContractsContext);
   let selectedIdsContext = useContext(ContractContext);
-  // const [selectedItems, setSelectedItems] = useState<number[] | undefined>([]);
-  // const chekedArray: number[] | undefined = selectedItems;
-  // useEffect(() => {
-  //   selectedIds?.setIndex(chekedArray);
-  // }, [selectedItems]);
 
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    let values: number[] | undefined = contracts?.data?.map((contract) => {
-      return contract.id;
-    });
-    // setSelectedItems(values)
+    let values: number[] | undefined =
+      typeof contracts === "object"
+        ? contracts?.data?.map((contract) => {
+            return contract.id;
+          })
+        : [];
     if (checked) selectedIdsContext?.setSelectedIds(values || []);
     else selectedIdsContext?.setSelectedIds([]);
   };
@@ -29,22 +26,20 @@ export default function TableHeader({ value }: PropType) {
     <TableHead>
       <TableRow>
         <TableCell>
-          <Checkbox
-            checked={
-              selectedIdsContext?.selectedIds?.length ===
-              contracts?.data?.length
-            }
-            onChange={selectAllHandler}
-          />
+          {typeof contracts === "object" && (
+            <Checkbox
+              checked={
+                selectedIdsContext?.selectedIds?.length ===
+                contracts?.data?.length
+              }
+              onChange={selectAllHandler}
+            />
+          )}
         </TableCell>
         <TableCell>رقم العقد</TableCell>
         <TableCell sx={{ width: 0.12 }}>
           {value === 0 ? "نوع العقد" : "تاريخ الورود"}
-          <IconButton
-            aria-label="SwapVertIcon"
-            color="primary"
-            // onClick={() => }
-          >
+          <IconButton aria-label="SwapVertIcon" color="primary">
             <SwapVertIcon />
           </IconButton>
         </TableCell>
