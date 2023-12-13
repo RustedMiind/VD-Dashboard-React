@@ -13,7 +13,7 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { useState } from "react";
 import SetDialog from "./SetDialog";
-import { EmployeeExcType } from "../types";
+import { EmployeeType } from "../../../../types";
 
 const TableData = ({
   employeeRequest,
@@ -81,7 +81,7 @@ const TableData = ({
 };
 
 type PropsType = {
-  employeeRequest?: EmployeeExcType[] | undefined;
+  employeeRequest?: EmployeeType[] | undefined;
   vacationRequest: "post" | "put" | "null";
   setVacationRequest: React.Dispatch<
     React.SetStateAction<"post" | "put" | "null">

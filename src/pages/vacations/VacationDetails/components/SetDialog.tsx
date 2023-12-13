@@ -14,13 +14,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useReducer } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
-import { EmployeeExcType } from "../types";
 import reducer, { VacationsInitial } from "../reducer";
 import dayjs from "dayjs";
 import { DateFormatString } from "../../../../constants/DateFormat";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { getDateDiff, getDateDiffNegativeAllowed } from "../../../../methods";
+import { EmployeeType } from "../../../../types";
 
 const PopupVacations = ({
   open,
@@ -164,7 +164,10 @@ const PopupVacations = ({
             <DatePicker
               shouldDisableDate={disabledInFromDate}
               slotProps={{
-                textField: { size: "small", error: !isValidDateRange },
+                textField: {
+                  size: "small",
+                  error: !isValidDateRange && !!vacationForm.date_from,
+                },
               }}
               label="التاريخ من"
               sx={{ width: 1 }}
@@ -191,7 +194,10 @@ const PopupVacations = ({
               label="التاريخ الى"
               sx={{ width: 1 }}
               slotProps={{
-                textField: { size: "small", error: !isValidDateRange },
+                textField: {
+                  size: "small",
+                  error: !isValidDateRange && !!vacationForm.date_to,
+                },
               }}
               value={vacationForm.date_to ? dayjs(vacationForm.date_to) : null}
               onChange={(newValue) =>
@@ -273,7 +279,7 @@ type PropsType = {
   open: boolean;
   handleClose?: () => void;
   title: string;
-  employeeRequest?: EmployeeExcType[] | undefined;
+  employeeRequest?: EmployeeType[] | undefined;
 };
 
 export default PopupVacations;
