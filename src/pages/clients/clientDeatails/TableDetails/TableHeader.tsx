@@ -11,25 +11,29 @@ function TableHeader() {
           حالات العقد
         </Typography>
 
-        <StatusChip color="primary" label={0} ml={1} />
-        <StatusChip color="warning" label={0} ml={1} />
-        <StatusChip color="success" label={0} ml={1} />
+        <StatusChip color="primary" label={0} />
+        <StatusChip color="warning" label={0} />
+        <StatusChip color="success" label={0} />
         <StatusChip color="secondary" label={0} />
       </Grid>
-      <Grid item xs={6}>
-        <Stack component="form" direction="row">
-          <TextField label="بحث" fullWidth size="small" />
-          <Button variant="contained" type="submit">
+      <Grid item xs={6} display={"flex"} flexDirection={"row"}>
+        <TextField component={"form"} label="بحث" fullWidth size="small" />
+        <Box>
+          <Button variant="contained" type="submit" sx={{ ml: 5 }}>
             بحث
           </Button>
-        </Stack>
+        </Box>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4} display={"flex"} justifyContent={"end"}>
         <Box>
-          <Button variant="outlined" startIcon={<DeleteIcon />}>
+          <Button variant="outlined" color="error" startIcon={<DeleteIcon />}>
             حذف
           </Button>
-          <Button variant="outlined" startIcon={<CreditScoreIcon />}>
+          <Button
+            variant="outlined"
+            sx={{ ml: 2 }}
+            startIcon={<CreditScoreIcon />}
+          >
             تعديل
           </Button>
         </Box>

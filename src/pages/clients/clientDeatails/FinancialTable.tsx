@@ -19,17 +19,17 @@ export default function BasicTable({ clientData }: PropsType) {
     createData(
       "المدفوع",
       clientData?.payment?.amount_payment as number,
-      "green"
+      "warning.main"
     ),
     createData(
       "المتبقي",
       clientData?.payment?.amount_motabaky as number,
-      "orange"
+      "success.main"
     ),
     createData(
       "المطلوب",
       clientData?.payment?.amount_required as number,
-      "red"
+      "primary.main"
     ),
   ];
   const [total, setTotal] = useState(0);
@@ -46,7 +46,7 @@ export default function BasicTable({ clientData }: PropsType) {
   return (
     <Paper elevation={2} sx={{ m: 3 }}>
       <TableContainer component={Paper} sx={{ bgcolor: "Background" }}>
-        <Table aria-label="simple table">
+        <Table>
           <TableHead
             sx={{
               ".MuiTableCell-root": {
