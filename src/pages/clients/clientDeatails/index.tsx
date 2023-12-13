@@ -3,17 +3,19 @@ import { Stack, Typography, Grid, Box, Paper } from "@mui/material";
 import FinantialTable from "./FinancialTable";
 import { PieChart } from "@mui/x-charts";
 import TableDetails from "./TableDetails";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../constants";
+import { ClientDetailsType } from "../../../types/Clients";
 
 function ClientDetails() {
   const { id } = useParams();
+  const [ClientData, setClientData] = useState<ClientDetailsType | null>(null);
   useEffect(() => {
     axios
-      .get<{ data: any }>(Api(`employee/contract/project/${id}`))
+      .get<ClientDetailsType>(Api(`employee/contract/project/${id}`))
       .then((res) => {
-        console.log(res.data);
+        setClientData(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -28,7 +30,10 @@ function ClientDetails() {
             <Typography variant="subtitle2" color="gray" mb={1}>
               الاسم
             </Typography>
-            <Typography>بيجاد السيد العشري</Typography>
+            <Typography>
+              {ClientData?.data[0].client?.name &&
+                ClientData?.data[0].client?.name}
+            </Typography>
           </Box>
         </Grid>
         <Grid item xs={3}>
@@ -90,7 +95,7 @@ function ClientDetails() {
       </Paper>
 
       <Stack>
-        <TableDetails />
+        <TableDetails ClientData={ClientData} />
       </Stack>
     </Stack>
   );
