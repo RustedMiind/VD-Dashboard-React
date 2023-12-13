@@ -14,13 +14,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useReducer } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
-import { EmployeeExcType } from "../types";
 import reducer, { VacationsInitial } from "../reducer";
 import dayjs from "dayjs";
 import { DateFormatString } from "../../../../constants/DateFormat";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { getDateDiff } from "../../../../methods";
+import { getDateDiff, getDateDiffNegativeAllowed } from "../../../../methods";
+import { EmployeeType } from "../../../../types";
 
 const PopupVacations = ({
   open,
@@ -33,16 +33,17 @@ const PopupVacations = ({
   console.log(vacationForm);
   const numberOfDays =
     Math.round(
-      getDateDiff(
-        new Date(vacationForm.date_from),
-        new Date(vacationForm.date_to)
+      getDateDiffNegativeAllowed(
+        new Date(vacationForm.date_to),
+        new Date(vacationForm.date_from)
       ) /
         (1000 * 60 * 60 * 24)
     ) || 0;
+  const isValidDateRange = numberOfDays > 0;
   const toShow =
-    typeof numberOfDays === "number"
+    typeof numberOfDays === "number" && numberOfDays > 0
       ? numberOfDays
-      : "برجاء ادخال تواريخ صحيحة";
+      : "برجاء ادخال فترة اجازة صحيحة";
   const handleSendVacation = () => {
     if (vacationRequest === "post") {
       axios
@@ -66,8 +67,27 @@ const PopupVacations = ({
         });
     }
   };
+  const disabledInToDate = (date: dayjs.Dayjs | null) => {
+    // Disable dates after the selected date
+    if (date) {
+      const dateFrom = dayjs(vacationForm.date_from);
+      return date.isBefore(dateFrom) || date.isSame(dateFrom);
+      // || date.year() !== 2022;
+    }
+    return false;
+  };
+  const disabledInFromDate = (date: dayjs.Dayjs | null) => {
+    // Disable dates after the selected date
+    if (date) {
+      const dateTo = dayjs(vacationForm.date_to);
+      return date.isAfter(dateTo) || date.isSame(dateTo);
+      // || date.year() !== 2022;
+    }
+    return false;
+  };
 
-  const handleChangeForm = () => {
+  const handleChangeForm = (e: React.FormEvent<HTMLDivElement>) => {
+    e.preventDefault();
     console.log(vacationForm);
     handleSendVacation();
   };
@@ -77,6 +97,7 @@ const PopupVacations = ({
       open={open}
       onClose={handleClose}
       component={"form"}
+      onSubmit={handleChangeForm}
       maxWidth="md"
       fullWidth
     >
@@ -141,17 +162,26 @@ const PopupVacations = ({
               التاريخ من
             </Typography>
             <DatePicker
-              slotProps={{ textField: { size: "small" } }}
+              shouldDisableDate={disabledInFromDate}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  error: !isValidDateRange && !!vacationForm.date_from,
+                },
+              }}
               label="التاريخ من"
               sx={{ width: 1 }}
-              value={dayjs(vacationForm.date_from)}
+              value={
+                vacationForm.date_from ? dayjs(vacationForm.date_from) : null
+              }
               onChange={(newValue) =>
+                newValue &&
+                newValue.format &&
                 dispatch({
                   type: "SET_DATE_FROM",
                   payload: newValue?.format(DateFormatString) || "",
                 })
               }
-              disableFuture
             />
           </Grid>
 
@@ -160,11 +190,19 @@ const PopupVacations = ({
               التاريخ الى
             </Typography>
             <DatePicker
+              shouldDisableDate={disabledInToDate}
               label="التاريخ الى"
               sx={{ width: 1 }}
-              slotProps={{ textField: { size: "small" } }}
-              value={dayjs(vacationForm.date_to)}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  error: !isValidDateRange && !!vacationForm.date_to,
+                },
+              }}
+              value={vacationForm.date_to ? dayjs(vacationForm.date_to) : null}
               onChange={(newValue) =>
+                newValue &&
+                newValue.format &&
                 dispatch({
                   type: "SET_DATE_TO",
                   payload: newValue?.format(DateFormatString) || "",
@@ -220,7 +258,8 @@ const PopupVacations = ({
       </DialogContent>
       <Button
         variant="contained"
-        onClick={handleChangeForm}
+        type="submit"
+        disabled={!isValidDateRange}
         sx={{
           mb: 4,
           width: "fit-content",
@@ -240,7 +279,7 @@ type PropsType = {
   open: boolean;
   handleClose?: () => void;
   title: string;
-  employeeRequest?: EmployeeExcType[] | undefined;
+  employeeRequest?: EmployeeType[] | undefined;
 };
 
 export default PopupVacations;

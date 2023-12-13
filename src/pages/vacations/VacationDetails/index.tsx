@@ -4,30 +4,33 @@ import TableData from "./components/Table";
 import PrintIcon from "@mui/icons-material/Print";
 import { useEffect, useState } from "react";
 import PopupVacations from "./components/SetDialog";
-import { EmployeeExcType } from "./types";
 import axios from "axios";
 import { Api } from "../../../constants";
+import { useParams } from "react-router-dom";
+import { EmployeeType } from "../../../types";
 
 const VacationsTable = () => {
   const [open, setOpen] = useState(false);
+  const { year, branchId } = useParams();
   const [vacationRequest, setVacationRequest] = useState<
     "post" | "put" | "null"
   >("null");
   const [employeeRequest, setEmployeeRequest] = useState<
-    EmployeeExcType[] | undefined
+    EmployeeType[] | undefined
   >();
   console.log(employeeRequest);
   const getEmployeeRequest = () => {
-    axios
-      .get<{ employees: { data: EmployeeExcType[] } }>(
-        Api("employee/employees/in-same-branch/39")
-      )
-      .then(({ data }) => {
-        setEmployeeRequest(data.employees.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    branchId &&
+      axios
+        .get<{ employees: { data: EmployeeType[] } }>(
+          Api("employee/employees/in-same-branch/" + branchId)
+        )
+        .then(({ data }) => {
+          setEmployeeRequest(data.employees.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   };
   useEffect(() => {
     getEmployeeRequest();
