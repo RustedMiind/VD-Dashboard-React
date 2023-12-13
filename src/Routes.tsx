@@ -13,8 +13,8 @@ import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
 import ClientDetails from "./pages/clients/clientDeatails";
-import Vacations from "./pages/vacations/VacationsSettings";
 import VacationDetails from "./pages/vacations/branchDetails";
+import VacationsSettings from "./pages/vacations/VacationsSettings";
 
 function RoutesComponent() {
   return (
@@ -29,7 +29,7 @@ function RoutesComponent() {
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           <Route path="vacations">
-            <Route path="" element={<Vacations />} />
+            <Route path="" element={<VacationsSettings />} />
             <Route
               path=":branchId"
               element={<VacationDetails />}

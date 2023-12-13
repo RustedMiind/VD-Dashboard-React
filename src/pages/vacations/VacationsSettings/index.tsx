@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
-function Vacations() {
+function VacationsSettings() {
   const [vacationsArr, setVacationsData] = useState<VacationsArr[] | undefined>(
     undefined
   );
@@ -31,10 +31,11 @@ function Vacations() {
   }, []);
 
   return (
-    <Stack>
+    <Stack bgcolor={"orange"} maxWidth={1}>
       <Typography variant="h5" sx={{ fontWeight: 700 }}>
         إعدادات الأجازات
       </Typography>
+
       <Grid container spacing={4} mt={1}>
         {vacationsArr?.map((vacation, index) => (
           <Grid item xs={4} key={index}>
@@ -113,7 +114,7 @@ function Vacations() {
   );
 }
 
-export default Vacations;
+export default VacationsSettings;
 
 type VacationsArr = {
   id: number;

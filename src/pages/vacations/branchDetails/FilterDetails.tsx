@@ -1,7 +1,7 @@
 import { Button, Grid, MenuItem, TextField } from "@mui/material";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { DatePicker } from "@mui/x-date-pickers";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 function FilterDetails() {
   const [yearFilter, setYearFilter] = useState();
@@ -24,6 +24,9 @@ function FilterDetails() {
             disableFuture
             views={["year"]}
             value={yearFilter}
+            // onChange={(e) => {
+            //   setYearFilter(e.target.value);
+            // }}
           />
         </Grid>
         <Grid item xs={2}>
