@@ -15,7 +15,11 @@ import { useState } from "react";
 import PopupVacations from "./PopupVacations";
 import { EmployeeExcType } from "../types";
 
-const TableData = ({ employeeRequest }: PropsType) => {
+const TableData = ({
+  employeeRequest,
+  vacationRequest,
+  setVacationRequest,
+}: PropsType) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -45,7 +49,10 @@ const TableData = ({ employeeRequest }: PropsType) => {
                   <Stack direction={"row"} gap={1}>
                     <IconButton
                       aria-label="add to shopping cart"
-                      onClick={() => setOpen(!open)}
+                      onClick={() => {
+                        setVacationRequest("put");
+                        setOpen(true);
+                      }}
                     >
                       <BorderColorOutlinedIcon />
                     </IconButton>
@@ -63,6 +70,7 @@ const TableData = ({ employeeRequest }: PropsType) => {
         </TableContainer>
       </Paper>
       <PopupVacations
+        vacationRequest={vacationRequest}
         open={open}
         handleClose={() => setOpen(false)}
         title="تعديل الاجازة"
@@ -74,6 +82,10 @@ const TableData = ({ employeeRequest }: PropsType) => {
 
 type PropsType = {
   employeeRequest?: EmployeeExcType[] | undefined;
+  vacationRequest: "post" | "put" | "null";
+  setVacationRequest: React.Dispatch<
+    React.SetStateAction<"post" | "put" | "null">
+  >;
 };
 
 export default TableData;

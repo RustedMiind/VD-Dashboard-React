@@ -10,6 +10,9 @@ import { Api } from "../../../constants";
 
 const VacationsTable = () => {
   const [open, setOpen] = useState(false);
+  const [vacationRequest, setVacationRequest] = useState<
+    "post" | "put" | "null"
+  >("null");
   const [employeeRequest, setEmployeeRequest] = useState<
     EmployeeExcType[] | undefined
   >();
@@ -20,7 +23,6 @@ const VacationsTable = () => {
         Api("employee/employees/in-same-branch/39")
       )
       .then(({ data }) => {
-        // console.log(data);
         setEmployeeRequest(data.employees.data);
       })
       .catch((err) => {
@@ -37,11 +39,18 @@ const VacationsTable = () => {
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1, width: "fit-content", alignSelf: "flex-end" }}
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setVacationRequest("post");
+            setOpen(true);
+          }}
         >
           اضافة اجازة
         </Button>
-        <TableData employeeRequest={employeeRequest} />
+        <TableData
+          employeeRequest={employeeRequest}
+          setVacationRequest={setVacationRequest}
+          vacationRequest={vacationRequest}
+        />
         <Stack direction={"row"} gap={1} sx={{ justifyContent: "flex-end" }}>
           <Button
             startIcon={<PrintIcon />}
@@ -72,6 +81,7 @@ const VacationsTable = () => {
         </Stack>
       </Stack>
       <PopupVacations
+        vacationRequest={vacationRequest}
         open={open}
         handleClose={() => setOpen(!open)}
         title="اضافة اجازة"
