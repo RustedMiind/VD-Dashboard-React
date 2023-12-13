@@ -31,7 +31,7 @@ function VacationsSettings() {
   }, []);
 
   return (
-    <Stack bgcolor={"orange"} maxWidth={1}>
+    <Stack>
       <Typography variant="h5" sx={{ fontWeight: 700 }}>
         إعدادات الأجازات
       </Typography>

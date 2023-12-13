@@ -30,20 +30,7 @@ function BranchDetails() {
     setDialogState("details");
   };
 
-  // const setTableData = () => {
-  //   setVacationsData("loading");
-  //   axios
-  //     .get<{ data: BranchDetailsType }>(Api(`empoloyee/vacation/${branchId}`))
-  //     .then((data) => {
-  //       console.log(data);
-  //       // setVacationsData({});
-  //     })
-  //     .catch((error) => {
-  //       // setVacationsData("error");
-  //     });
-  // };
-  useEffect(() => {
-    console.log("from use effect");
+  const setTableData = () => {
     setVacationsData("loading");
     axios
       .get<{ date: VacationsDetailsType[] }>(
@@ -56,6 +43,9 @@ function BranchDetails() {
       .catch((err) => {
         setVacationsData("error");
       });
+  };
+  useEffect(() => {
+    setTableData();
   }, []);
 
   return (
