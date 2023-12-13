@@ -17,7 +17,12 @@ export default function MainLayout(props: PropsType) {
         <DrawerComponent width={drawerWidth} />
         <Box
           component="main"
-          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+          sx={{
+            flexGrow: 1,
+            maxWidth: `calc(100vw - ${drawerWidth + 16}px)`,
+            bgcolor: "background.default",
+            p: 3,
+          }}
         >
           <Toolbar />
           {props.children}
