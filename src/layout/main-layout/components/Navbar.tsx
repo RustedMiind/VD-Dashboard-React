@@ -7,6 +7,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 
 import IconButton from "@mui/material/IconButton";
 import Notifications from "./Notifications";
+import { Stack } from "@mui/system";
+import Breadcrumb from "./Breadcrumb";
 
 function Navbar(props: PropsType) {
   return (
@@ -22,12 +24,9 @@ function Navbar(props: PropsType) {
       elevation={2}
     >
       <Toolbar>
-        <Typography
-          flexGrow={1}
-          variant="h6"
-          noWrap
-          component="div"
-        ></Typography>
+        <Stack flexGrow={1}>
+          <Breadcrumb />
+        </Stack>
         <Notifications />
         <AccountMenu />
       </Toolbar>

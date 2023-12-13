@@ -6,7 +6,7 @@ import { ContractTask } from "./ContractTask";
 import { ContractType } from "./ContractType";
 
 export interface Contract {
-  Contract_status:string;
+  Contract_status: string;
   id: number;
   code: string;
   period: string;
@@ -18,7 +18,7 @@ export interface Contract {
   client_id: number;
   branch_id: number;
   management_id: number;
-  management: Management;
+  management?: Management;
   status_id: number;
   employee_id: number;
   created_at: string;

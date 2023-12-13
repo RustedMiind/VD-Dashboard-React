@@ -7,11 +7,10 @@ import AddClient from "./pages/clients/addClient/AddClient";
 import Contracts from "./pages/contracts/data";
 import ClientRequests from "./pages/clients/clientRequest";
 import ClientProcess from "./pages/clients/clientsProcess";
-import AddContracts from "./pages/contracts/SetContract";
-// import ContractsNotFound from "./pages/contracts/SetContract/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
+import VacationsTable from "./pages/vacations/VacationDetails";
 import ClientDetails from "./pages/clients/clientDeatails";
 import VacationDetails from "./pages/vacations/branchDetails";
 import VacationsSettings from "./pages/vacations/VacationsSettings";
@@ -30,15 +29,9 @@ function RoutesComponent() {
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           <Route path="vacations">
             <Route path="" element={<VacationsSettings />} />
-            <Route path=":branchId" >
-              <Route
-                path=""
-                element={<VacationDetails />}
-              />
-              <Route
-                path=":year"
-                element={<>{/* Branch Vacations In Year Setting  Page */}</>}
-              />
+            <Route path=":branchId">
+              <Route path="" element={<VacationDetails />} />
+              <Route path=":year" element={<VacationsTable />} />
             </Route>
           </Route>
         </Route>
