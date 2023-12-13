@@ -13,8 +13,9 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { useState } from "react";
 import PopupVacations from "./PopupVacations";
+import { EmployeeExcType } from "../types";
 
-const TableData = () => {
+const TableData = ({ employeeRequest }: PropsType) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -65,9 +66,14 @@ const TableData = () => {
         open={open}
         handleClose={() => setOpen(false)}
         title="تعديل الاجازة"
+        employeeRequest={employeeRequest}
       />
     </>
   );
+};
+
+type PropsType = {
+  employeeRequest?: EmployeeExcType[] | undefined;
 };
 
 export default TableData;

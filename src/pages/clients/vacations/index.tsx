@@ -2,11 +2,34 @@ import { Button, Stack } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TableData from "./components/Table";
 import PrintIcon from "@mui/icons-material/Print";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupVacations from "./components/PopupVacations";
+import { EmployeeExcType } from "./types";
+import axios from "axios";
+import { Api } from "../../../constants";
 
 const VacationsTable = () => {
   const [open, setOpen] = useState(false);
+  const [employeeRequest, setEmployeeRequest] = useState<
+    EmployeeExcType[] | undefined
+  >();
+  console.log(employeeRequest);
+  const getEmployeeRequest = () => {
+    axios
+      .get<{ employees: { data: EmployeeExcType[] } }>(
+        Api("employee/employees/in-same-branch/39")
+      )
+      .then(({ data }) => {
+        // console.log(data);
+        setEmployeeRequest(data.employees.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getEmployeeRequest();
+  }, []);
   return (
     <>
       <Stack>
@@ -18,7 +41,7 @@ const VacationsTable = () => {
         >
           اضافة اجازة
         </Button>
-        <TableData />
+        <TableData employeeRequest={employeeRequest} />
         <Stack direction={"row"} gap={1} sx={{ justifyContent: "flex-end" }}>
           <Button
             startIcon={<PrintIcon />}
@@ -52,6 +75,7 @@ const VacationsTable = () => {
         open={open}
         handleClose={() => setOpen(!open)}
         title="اضافة اجازة"
+        employeeRequest={employeeRequest}
       />
     </>
   );

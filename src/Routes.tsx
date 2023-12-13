@@ -7,11 +7,10 @@ import AddClient from "./pages/clients/addClient/AddClient";
 import Contracts from "./pages/contracts/data";
 import ClientRequests from "./pages/clients/clientRequest";
 import ClientProcess from "./pages/clients/clientsProcess";
-import AddContracts from "./pages/contracts/SetContract";
-// import ContractsNotFound from "./pages/contracts/SetContract/ContractsNotFound.1";
 import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
 import ForTest from "./pages/forTest";
+import VacationsTable from "./pages/clients/vacations";
 
 function RoutesComponent() {
   return (
@@ -29,6 +28,7 @@ function RoutesComponent() {
           <Route path=":name/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />
           <Route path="procedures" element={<ClientProcess />} />
+          <Route path="table" element={<VacationsTable />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />

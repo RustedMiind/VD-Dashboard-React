@@ -19,9 +19,16 @@ import Checkbox from "@mui/material/Checkbox";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
+import { EmployeeExcType } from "../types";
 
-const PopupVacations = ({ open, handleClose, title }: PropsType) => {
+const PopupVacations = ({
+  open,
+  handleClose,
+  title,
+  employeeRequest,
+}: PropsType) => {
   const [personName, setPersonName] = useState<string[]>([]);
+  console.log(employeeRequest);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
     const {
@@ -111,8 +118,8 @@ const PopupVacations = ({ open, handleClose, title }: PropsType) => {
                 renderValue={(selected) => selected.join(", ")}
                 MenuProps={MenuProps}
               >
-                {names.map((name) => (
-                  <MenuItem key={name} value={name}>
+                {employeeRequest?.map(({ name, id }) => (
+                  <MenuItem key={id} value={name}>
                     <Checkbox checked={personName.indexOf(name) > -1} />
                     <ListItemText primary={name} />
                   </MenuItem>
@@ -166,6 +173,7 @@ type PropsType = {
   open: boolean;
   handleClose?: () => void;
   title: string;
+  employeeRequest?: EmployeeExcType[] | undefined;
 };
 
 export default PopupVacations;
