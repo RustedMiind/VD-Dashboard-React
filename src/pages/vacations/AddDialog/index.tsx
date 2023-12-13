@@ -25,12 +25,13 @@ export default function AddDialog(props: PropsType) {
     specific: null,
   };
   const [massageError, setMassageError] = useState<string | null>(null);
-  function setData() {
+  function sendData() {
     axios
       .post<addSelect>(Api("employee/vacation"), selectVacation)
       .then((res) => {
         console.log(res);
         props.onClose();
+        props.setData();
       })
       .catch((err) => {
         if (err.response.data.msg != "Validation errors") {
@@ -92,7 +93,7 @@ export default function AddDialog(props: PropsType) {
             justifyContent: "center",
           }}
         >
-          <Button variant="contained" sx={{ mb: 2 }} onClick={setData}>
+          <Button variant="contained" sx={{ mb: 2 }} onClick={sendData}>
             حفظ
           </Button>
         </DialogActions>
@@ -117,6 +118,7 @@ type PropsType = {
   onClose: () => void;
   openErrorDialog: () => void;
   openAddDialog: () => void;
+  setData: () => void;
 };
 type Year = {
   $y: number;
