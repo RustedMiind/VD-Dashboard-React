@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
-// import TopTable from "../SetContract/topTable/TopTable";
-import ContractsTable from "../SetContract/Table";
+import ContractsTable from "../SetContract/Table/Table";
 import {
   Typography,
   Box,
@@ -12,16 +11,14 @@ import {
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
-import ContractsNotFound from "../SetContract/ContractsNotFound.1";
+import ContractsNotFound from "../SetContract/Components/ContractsNotFound.1";
 import LoadingTable from "../../../components/LoadingTable";
 import DoubleChips from "../../../components/DoubleStatusChips";
-import BtnCus from "../SetContract/topTable/BtnCus";
+import BtnCus from "../SetContract/Table/BtnCus";
 import { ContractsContext } from "./../Context/ContractsContext";
 
 function TableContainer() {
   const { contracts } = useContext(ContractsContext);
-
-  // let contractsContext = useContext(ContractsContext);
 
   const [open, setOpen] = React.useState(false);
 
@@ -58,7 +55,7 @@ function TableContainer() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const [secondTabValue, setSecondTabValue] = useState<number>(0 | 1);
+  const [secondTabValue, setSecondTabValue] = useState<0 | 1>(0);
 
   return (
     <>
@@ -89,7 +86,6 @@ function TableContainer() {
             >
               اضافة عقد
             </Button>
-            {/* <TopTable value={value} /> */}
 
             <Typography sx={{ mt: 2 }}>حالات العقود</Typography>
             <Stack
@@ -152,7 +148,6 @@ function TableContainer() {
             >
               اضافة عقد
             </Button>
-            {/* <TopTable value={value} /> */}
             <Stack direction={"row"} spacing={0} mt={2}>
               <Button
                 variant={secondTabValue === 0 ? "contained" : "outlined"}
