@@ -14,9 +14,6 @@ export default function ContractsNotFound() {
   };
   return (
     <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        بيانات العقود
-      </Typography>
       <Paper
         sx={{
           height: "58vh",

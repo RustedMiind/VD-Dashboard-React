@@ -19,7 +19,8 @@ import { ContractsContext } from "../Context/ContractsContext";
 import { NavLink } from "react-router-dom";
 import GenerateStatusChip from "./StatusChips";
 
-function ContractsTable({ value }: PropsType) {
+
+function ContractsTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts, limit, setLimit } = useContext(ContractsContext);
   const toView = typeof contracts === "object" ? contracts?.data : undefined;
@@ -53,8 +54,8 @@ function ContractsTable({ value }: PropsType) {
     <Stack>
       <TableContainer>
         <Table>
-          <TableHeader value={value} />
-          {value === 0 ? (
+          <TableHeader value={props.value} />
+          {props.value === 0 ? (
             <TableBody>
               {toView?.map((request) => {
                 return (
@@ -102,45 +103,47 @@ function ContractsTable({ value }: PropsType) {
             </TableBody>
           ) : (
             <TableBody>
-              {toView?.map((request) => {
-                return (
-                  <TableRow>
-                    <TableCell>
-                      <Checkbox
-                        checked={selectedIdsContext?.selectedIds?.includes(
-                          request.id
-                        )}
-                        value={request.id}
-                        onChange={CheckboxHandler(request.id)}
-                      />
-                    </TableCell>
-                    <TableCell>{request.code}</TableCell>
-                    <TableCell>{request.date}</TableCell>
-                    <TableCell>{request.type?.name}</TableCell>
-                    <TableCell>{request.client?.name}</TableCell>
-                    <TableCell>{request.branch.name}</TableCell>
-                    <TableCell>{request.management.name}</TableCell>
-                    <TableCell>
-                      <GenerateStatusChip
-                        statusId={request.status_id}
-                        contractStatus={request.Contract_status}
-                      />
-                    </TableCell>
-                    <TableCell>{request.status_id}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        color="primary"
-                        aria-label="add to shopping cart"
-                        component={NavLink}
-                        to={`${request.id}/edit`}
-                        size="small"
-                      >
-                        <SettingsIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {props.secondTabValue === 0 &&
+                toView?.map((request) => {
+                  return (
+                    <TableRow>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedIdsContext?.selectedIds?.includes(
+                            request.id
+                          )}
+                          value={request.id}
+                          onChange={CheckboxHandler(request.id)}
+                        />
+                      </TableCell>
+                      <TableCell>{request.code}</TableCell>
+                      <TableCell>{request.date}</TableCell>
+                      <TableCell>{request.type?.name}</TableCell>
+                      <TableCell>{request.client?.name}</TableCell>
+                      <TableCell>{request.branch.name}</TableCell>
+                      <TableCell>{request.management.name}</TableCell>
+                      <TableCell>
+                        <GenerateStatusChip
+                          statusId={request.status_id}
+                          contractStatus={request.Contract_status}
+                        />
+                      </TableCell>
+                      <TableCell>{request.status_id}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          aria-label="add to shopping cart"
+                          component={NavLink}
+                          to={`${request.id}/edit`}
+                          size="small"
+                        >
+                          <SettingsIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              {/* {props.secondTabValue === 1 && <ContractsNotFound />} */}
             </TableBody>
           )}
         </Table>
@@ -176,7 +179,8 @@ function ContractsTable({ value }: PropsType) {
 }
 
 type PropsType = {
-  value: number;
+  value?: number;
+  secondTabValue?: number;
 };
 
 export default ContractsTable;
