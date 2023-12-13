@@ -1,8 +1,8 @@
 import { Button, Paper, Stack, Typography } from "@mui/material";
 import * as React from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import PopUpContracts from "./Components/PopUpContracts";
-import img1 from "../../../assets/images/branch-empty.png";
+import PopUpContracts from "./PopUpContracts";
+import img1 from "../../../../assets/images/branch-empty.png";
 
 export default function ContractsNotFound() {
   const [open, setOpen] = React.useState(false);
@@ -14,9 +14,6 @@ export default function ContractsNotFound() {
   };
   return (
     <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        بيانات العقود
-      </Typography>
       <Paper
         sx={{
           height: "58vh",
