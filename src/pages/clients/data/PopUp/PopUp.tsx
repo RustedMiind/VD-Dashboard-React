@@ -67,8 +67,8 @@ function PopUp({ open, setOpen }: PropsType) {
     if (
       searchClient.name !== "" ||
       searchClient.phone !== "" ||
-      searchClient.branch_id !== 0 ||
-      searchClient.broker_id !== 0
+      searchClient.branch_id !== "0" ||
+      searchClient.broker_id !== "0"
     ) {
       axios
         .get<{ data: FormData }>(Api(`employee/client/edit`), {
@@ -222,7 +222,7 @@ function PopUp({ open, setOpen }: PropsType) {
                 onChange={(e) => {
                   dispatch({
                     type: "BROKER_ID",
-                    payload: parseInt(e.target.value),
+                    payload: e.target.value,
                   });
                 }}
               >
@@ -246,7 +246,7 @@ function PopUp({ open, setOpen }: PropsType) {
                 onChange={(e) => {
                   dispatch({
                     type: "BRANCH_ID",
-                    payload: parseInt(e.target.value),
+                    payload: e.target.value,
                   });
                 }}
               >
