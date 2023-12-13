@@ -5,24 +5,12 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-
-export default function ErrorDialog() {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+import { DialogState } from "../branchDetails/FilterDetails";
+export default function ErrorDialog(props: PropsType) {
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={props.open} onClose={props.onClose}>
       <DialogContent sx={{ px: 4, pt: 6 }}>
-        <Typography fontWeight={700}>
-          المحدد لنفس العام (2023) مضاف من قبل يرجى تعديل البيانات
-        </Typography>
+        <Typography fontWeight={700}>{props.massage}</Typography>
       </DialogContent>
       <DialogActions
         sx={{
@@ -30,7 +18,11 @@ export default function ErrorDialog() {
           justifyContent: "center",
         }}
       >
-        <Button variant="contained" sx={{ my: 2, px: 5 }} onClick={handleClose}>
+        <Button
+          variant="contained"
+          sx={{ my: 2, px: 5 }}
+          onClick={props.onClose}
+        >
           رجوع
         </Button>
       </DialogActions>
@@ -38,9 +30,8 @@ export default function ErrorDialog() {
   );
 }
 
-type PropType = {
-  open?: boolean;
-  onClose?: () => void;
-  setTableData?: () => void;
-  openErrorDialog?: () => void;
+type PropsType = {
+  open: boolean;
+  onClose: () => void;
+  massage: string | null;
 };

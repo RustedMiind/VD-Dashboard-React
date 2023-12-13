@@ -4,13 +4,25 @@ import { DatePicker } from "@mui/x-date-pickers";
 import AddDialog from "../AddDialog";
 import { useState } from "react";
 import { useParams } from "react-router";
+import ErrorDialog from "../ErrorDialog";
 
 function FilterDetails() {
   const { branchId } = useParams();
-  const [open, setOpen] = useState<boolean>(false);
-  const handleClickOpen = () => {
-    setOpen(true);
+
+  const [dialogState, setDialogState] = useState<DialogState>("none");
+  const closeDialog = () => {
+    setDialogState("none");
   };
+  const openErrorDialog = () => {
+    setDialogState("error");
+  };
+  const openAddDialog = () => {
+    setDialogState("add");
+  };
+  const openDetailsDialog = () => {
+    setDialogState("details");
+  };
+
   return (
     <Grid container width={1} py={2}>
       <Grid container spacing={2} md={10}>
@@ -44,16 +56,31 @@ function FilterDetails() {
           color="primary"
           fullWidth
           onClick={() => {
-            handleClickOpen();
+            openAddDialog();
           }}
         >
           <AddCircleOutlineRoundedIcon sx={{ mr: 1 }} />
           إضافة محدد
         </Button>
-        {/* <AddDialog open={open} branch_id={branchId} /> */}
+        {branchId && (
+          <AddDialog
+            open={dialogState === "add"}
+            branch_id={branchId}
+            onClose={closeDialog}
+            openErrorDialog={openErrorDialog}
+            openAddDialog={openAddDialog}
+          />
+        )}
+        <ErrorDialog
+          open={dialogState === "error"}
+          onClose={openAddDialog}
+          massage={"error message"}
+        />
       </Grid>
     </Grid>
   );
 }
 
 export default FilterDetails;
+
+export type DialogState = "none" | "error" | "add" | "details";

@@ -112,7 +112,6 @@ function ClientRequestsTable(props: PropsType) {
 
                       <TableCell
                         sx={{
-                          color: "#F19B02",
                           textDecoration: "underline",
                           maxWidth: "100px",
                           whiteSpace: "nowrap",
@@ -120,10 +119,9 @@ function ClientRequestsTable(props: PropsType) {
                           overflow: "hidden",
                         }}
                       >
-                        {/* <NavLink to={`details/${request.id}`} >
+                        <NavLink to={`details/${request.id}`}>
                           {request.name}
-                        </NavLink> */}
-                        {request.name}
+                        </NavLink>
                       </TableCell>
 
                       <TableCell>{request.phone}</TableCell>

@@ -15,21 +15,6 @@ function BranchDetails() {
     VacationsDetailsType[] | "loading" | "error"
   >("loading");
 
-  const [dialogState, setDialogState] = useState<DialogState>("none");
-
-  const closeDialog = () => {
-    setDialogState("none");
-  };
-  const openErrorDialog = () => {
-    setDialogState("error");
-  };
-  const openAddDialog = () => {
-    setDialogState("add");
-  };
-  const openDetailsDialog = () => {
-    setDialogState("details");
-  };
-
   // const setTableData = () => {
   //   setVacationsData("loading");
   //   axios
@@ -46,7 +31,9 @@ function BranchDetails() {
     console.log("from use effect");
     setVacationsData("loading");
     axios
-      .get<{ date: VacationsDetailsType[] }>(Api(`employee/vacation/${branchId}`))
+      .get<{ date: VacationsDetailsType[] }>(
+        Api(`employee/vacation/${branchId}`)
+      )
       .then((data) => {
         console.log(data.data.date);
         setVacationsData(data.data.date);
@@ -79,5 +66,3 @@ export type VacationsDetailsType = {
   created_at: null;
   updated_at: null;
 };
-
-type DialogState = "none" | "error" | "add" | "details";

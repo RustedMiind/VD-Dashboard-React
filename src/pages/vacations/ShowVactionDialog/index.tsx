@@ -9,20 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
-import dayjs from "dayjs";
 
-export default function ShowVactionDialog() {
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+export default function ShowVactionDialog(props: TypeProps) {
   const handleClose = () => {
-    setOpen(false);
+    props.setOpen(!props.open);
   };
+
   return (
     <>
-      <Dialog maxWidth={"sm"} fullWidth open={open} onClose={handleClose}>
+      <Dialog maxWidth={"sm"} fullWidth open={props.open}>
         <Typography sx={{ fontWeight: "800", textAlign: "center", pt: 5 }}>
           عرض الاجازة
         </Typography>
@@ -123,4 +118,8 @@ export default function ShowVactionDialog() {
 
 type Year = {
   $y: number;
+};
+type TypeProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

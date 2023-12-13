@@ -62,7 +62,7 @@ export interface ContractResponse {
   data: Contract[];
   contract_work: number;
   contract_stop: number;
-  contract_payment: number;
+  contract_late: number;
   contract_end: number;
 }
 

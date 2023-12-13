@@ -40,7 +40,7 @@ export default function TopTable({ value }: PropType) {
             <DoubleChips
               color="warning"
               label="متأخر"
-              value={contractsContext.contracts?.contract_payment}
+              value={contractsContext.contracts?.contract_late}
             />
             <DoubleChips
               color="error"
