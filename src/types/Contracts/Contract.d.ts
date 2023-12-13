@@ -7,6 +7,7 @@ import { ContractType } from "./ContractType";
 
 export interface Contract {
   Contract_status: string;
+  last_status:string;
   id: number;
   code: string;
   period: string;

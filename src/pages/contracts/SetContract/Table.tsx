@@ -50,6 +50,8 @@ function ContractsTable(props: PropsType) {
     };
   }
 
+  console.log(toView);
+
   return (
     <Stack>
       <TableContainer>
@@ -128,7 +130,7 @@ function ContractsTable(props: PropsType) {
                           contractStatus={request.Contract_status}
                         />
                       </TableCell>
-                      <TableCell>{request.status_id}</TableCell>
+                      <TableCell>{request.last_status}</TableCell>
                       <TableCell>
                         <IconButton
                           color="primary"
