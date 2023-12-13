@@ -13,7 +13,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { VacationsDetailsType } from ".";
 import StatusChip from "../../../components/StatusChip";
-import { validateDate } from "@mui/x-date-pickers/internals";
 
 function DetailsTable(props: PropsType) {
   return (
@@ -45,34 +44,16 @@ function DetailsTable(props: PropsType) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* <TableRow>
-                <TableCell>2019</TableCell>
-                <TableCell align="center">6</TableCell>
-                <TableCell align="center">17 يوم</TableCell>
-                <TableCell align="center">
-                  <StatusChip color="success" label="معتمد" />
-                </TableCell>
-                <TableCell align="center">17 يوم</TableCell>
-                <TableCell align="center">0</TableCell>
-                <TableCell align="center">
-                  <IconButton aria-label="delete">
-                    <EditNoteIcon />
-                  </IconButton>
-                  <IconButton aria-label="delete">
-                    <VisibilityIcon color="primary" />
-                  </IconButton>
-                </TableCell>
-              </TableRow> */}
               {props.vacationsData?.map((item,index) => (
                 <TableRow key={index}>
                   <TableCell>{item.year}</TableCell>
-                  <TableCell align="center">6</TableCell>
-                  <TableCell align="center">17 يوم</TableCell>
+                  <TableCell align="center">{item.vacationNumber}</TableCell>
+                  <TableCell align="center">{item.vacationDayNumber}</TableCell>
                   <TableCell align="center">
-                    <StatusChip color="success" label="معتمد" />
+                    <StatusChip color={item.status.name==="مسودة"?"warning":"success"} label={item.status.name} />
                   </TableCell>
-                  <TableCell align="center">17 يوم</TableCell>
-                  <TableCell align="center">0</TableCell>
+                  <TableCell align="center">{item.vacationDayNumberUsed}</TableCell>
+                  <TableCell align="center">{item.vacationDayNumberstay}</TableCell>
                   <TableCell align="center">
                     <IconButton aria-label="delete">
                       <EditNoteIcon />

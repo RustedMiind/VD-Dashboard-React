@@ -30,23 +30,12 @@ function BranchDetails() {
     setDialogState("details");
   };
 
-  // const setTableData = () => {
-  //   setVacationsData("loading");
-  //   axios
-  //     .get<{ data: BranchDetailsType }>(Api(`empoloyee/vacation/${branchId}`))
-  //     .then((data) => {
-  //       console.log(data);
-  //       // setVacationsData({});
-  //     })
-  //     .catch((error) => {
-  //       // setVacationsData("error");
-  //     });
-  // };
-  useEffect(() => {
-    console.log("from use effect");
+  const setTableData = () => {
     setVacationsData("loading");
     axios
-      .get<{ date: VacationsDetailsType[] }>(Api(`employee/vacation/${branchId}`))
+      .get<{ date: VacationsDetailsType[] }>(
+        Api(`employee/vacation/${branchId}`)
+      )
       .then((data) => {
         console.log(data.data.date);
         setVacationsData(data.data.date);
@@ -54,6 +43,9 @@ function BranchDetails() {
       .catch((err) => {
         setVacationsData("error");
       });
+  };
+  useEffect(() => {
+    setTableData();
   }, []);
 
   return (
@@ -78,6 +70,20 @@ export type VacationsDetailsType = {
   status_id: number;
   created_at: null;
   updated_at: null;
+  vacationNumber: number;
+  vacationDayNumber: number;
+  vacationDayNumberUsed: number;
+  vacationDayNumberstay: number;
+  status: {
+    id: number;
+    name: string;
+    type: string;
+    color: null;
+    active: number;
+    created_at: null;
+    updated_at: null;
+    deleted_at: null;
+  };
 };
 
 type DialogState = "none" | "error" | "add" | "details";
