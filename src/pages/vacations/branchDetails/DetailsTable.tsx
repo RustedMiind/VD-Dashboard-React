@@ -13,7 +13,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { VacationsDetailsType } from ".";
 import StatusChip from "../../../components/StatusChip";
-import { validateDate } from "@mui/x-date-pickers/internals";
 import { useState } from "react";
 import ShowVactionDialog from "../ShowVactionDialog";
 

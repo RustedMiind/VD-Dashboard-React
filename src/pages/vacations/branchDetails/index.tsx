@@ -50,7 +50,7 @@ function BranchDetails() {
 
   return (
     <Stack>
-      <FilterDetails />
+      <FilterDetails setTableData={setTableData} />
       {vacationsData === "loading" && <LoadingTable rows={5} cols={5} />}
       {vacationsData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
       {typeof vacationsData === "object" && (
