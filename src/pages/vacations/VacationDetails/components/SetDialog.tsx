@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import { DateFormatString } from "../../../../constants/DateFormat";
 import axios from "axios";
 import { Api } from "../../../../constants";
+import { getDateDiff } from "../../../../methods";
 
 const PopupVacations = ({
   open,
@@ -29,7 +30,19 @@ const PopupVacations = ({
   vacationRequest,
 }: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
-
+  console.log(vacationForm);
+  const numberOfDays =
+    Math.round(
+      getDateDiff(
+        new Date(vacationForm.date_from),
+        new Date(vacationForm.date_to)
+      ) /
+        (1000 * 60 * 60 * 24)
+    ) || 0;
+  const toShow =
+    typeof numberOfDays === "number"
+      ? numberOfDays
+      : "برجاء ادخال تواريخ صحيحة";
   const handleSendVacation = () => {
     if (vacationRequest === "post") {
       axios
@@ -101,13 +114,19 @@ const PopupVacations = ({
           </Grid>
 
           <Grid item md={6} p={1} px={2}>
-            <Typography variant="body1" fontWeight={700} gutterBottom>
+            <Typography
+              variant="body1"
+              color={"text.disabled"}
+              fontWeight={700}
+              gutterBottom
+            >
               عدد الايام
             </Typography>
             <TextField
               size="small"
               sx={{ width: 1 }}
-              value={vacationForm.number_days}
+              value={toShow}
+              disabled
               onChange={(e) =>
                 dispatch({
                   type: "SET_NUMBER_DAYS",

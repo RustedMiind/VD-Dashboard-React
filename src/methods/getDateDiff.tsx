@@ -12,5 +12,5 @@ export function getDateDiff(
   date1: Date | undefined,
   date2: Date | undefined
 ): number {
-  return getDateDiffNegativeAllowed(date1, date2);
+  return Math.abs(getDateDiffNegativeAllowed(date1, date2));
 }
