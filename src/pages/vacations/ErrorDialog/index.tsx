@@ -5,7 +5,6 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { DialogState } from "../branchDetails/FilterDetails";
 export default function ErrorDialog(props: PropsType) {
   return (
     <Dialog open={props.open} onClose={props.onClose}>
