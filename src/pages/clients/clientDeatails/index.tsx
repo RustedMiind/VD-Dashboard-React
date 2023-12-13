@@ -16,6 +16,7 @@ function ClientDetails() {
       .get<ClientDetailsType>(Api(`employee/contract/project/${id}`))
       .then((res) => {
         setClientData(res?.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -30,9 +31,7 @@ function ClientDetails() {
             <Typography variant="subtitle2" color="gray" mb={1}>
               الاسم
             </Typography>
-            <Typography>
-              {clientData?.data.length && clientData?.data[0]?.client?.name}
-            </Typography>
+            <Typography>{clientData?.client?.name}</Typography>
           </Box>
         </Grid>
         <Grid item xs={3}>
@@ -40,10 +39,7 @@ function ClientDetails() {
             <Typography variant="subtitle2" color="gray" mb={1}>
               البريد الالكتروني
             </Typography>
-            <Typography>
-              {clientData?.data[0].client?.email &&
-                clientData?.data[0].client?.email}
-            </Typography>
+            <Typography>{clientData?.client?.email}</Typography>
           </Box>
         </Grid>
         <Grid item xs={3}>
@@ -51,9 +47,7 @@ function ClientDetails() {
             <Typography variant="subtitle2" color="gray" mb={1}>
               رقم التليفون
             </Typography>
-            <Typography>
-              {clientData?.data.length && clientData?.data[0].client?.phone}
-            </Typography>
+            <Typography>{clientData?.client?.phone}</Typography>
           </Box>
         </Grid>
       </Grid>
@@ -70,7 +64,7 @@ function ClientDetails() {
               </Grid>
             </Grid>
           </Grid>
-          {clientData?.data.length && (
+          {clientData?.data.length !== 0 && (
             <Grid display="flex" justifyContent={"end"} item md={6}>
               <Box>
                 <Typography textAlign={"center"} variant="h6" mb={2}>

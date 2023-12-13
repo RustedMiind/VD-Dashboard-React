@@ -15,6 +15,7 @@ export interface ClientDetailsType {
   data: Contractuse[];
   payment: payment;
   msg: string;
+  client?: Client;
 }
 
 interface payment {
@@ -47,7 +48,6 @@ interface Contractuse {
   tasks?: ContractTask[];
   payments?: ContractPayment[];
   branch?: Branch;
-  client?: Client;
   levers?: ContractAttachment[];
   card_image?: string;
   Contract_status: string;

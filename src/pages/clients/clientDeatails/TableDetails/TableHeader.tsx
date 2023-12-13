@@ -26,29 +26,21 @@ function TableHeader() {
             position: "relative",
           }}
         >
-          <TextField label="بحث" sx={{ flexGrow: 1 }} size="small" />
+          <TextField label="بحث" fullWidth size="small" />
           <Button variant="contained" type="submit">
             بحث
           </Button>
         </Stack>
       </Grid>
-      <Grid item xs={3} display={"left"}>
-        <Stack direction="row">
-          <Button
-            sx={{ borderRadius: "10px", ml: 2, px: 4 }}
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-          >
+      <Grid item xs={3}>
+        <Box>
+          <Button variant="outlined" startIcon={<DeleteIcon />}>
             حذف
           </Button>
-          <Button
-            sx={{ borderRadius: "10px", ml: 2, px: 4 }}
-            variant="outlined"
-            startIcon={<CreditScoreIcon />}
-          >
+          <Button variant="outlined" startIcon={<CreditScoreIcon />}>
             تعديل
           </Button>
-        </Stack>
+        </Box>
       </Grid>
     </Grid>
   );
