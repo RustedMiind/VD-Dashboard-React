@@ -15,6 +15,7 @@ import { VacationsDetailsType } from ".";
 import StatusChip from "../../../components/StatusChip";
 import { useState } from "react";
 import ShowVactionDialog from "../ShowVactionDialog";
+import { NavLink } from "react-router-dom";
 
 function DetailsTable(props: PropsType) {
   const [open, setOpen] = useState<boolean>(false);
@@ -70,9 +71,11 @@ function DetailsTable(props: PropsType) {
                     {item.vacationDayNumberstay}
                   </TableCell>
                   <TableCell align="center">
-                    <IconButton aria-label="delete">
-                      <EditNoteIcon />
-                    </IconButton>
+                    <NavLink to={`${item.id}`}>
+                      <IconButton aria-label="delete">
+                        <EditNoteIcon />
+                      </IconButton>
+                    </NavLink>
                     <IconButton
                       aria-label="delete"
                       onClick={() => openDialog()}
