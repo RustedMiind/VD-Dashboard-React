@@ -5,7 +5,7 @@ function StatusChip(props: PropsType) {
     <Chip
       variant="outlined"
       color={props.color}
-      sx={{ bgcolor: `${props.color}.lightest` }}
+      sx={{ bgcolor: `${props.color}.lightest`, marginRight: props.ml }}
       label={props.label}
     />
   );
@@ -14,6 +14,7 @@ function StatusChip(props: PropsType) {
 type PropsType = {
   color: MuiMainColors;
   label: number | undefined | string;
+  ml?: number;
 };
 
 export type MuiMainColors =

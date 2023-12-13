@@ -86,7 +86,11 @@ function DetailsTable(props: PropsType) {
           </Table>
         </TableContainer>
       </Stack>
-      <ShowVactionDialog open={open} setOpen={setOpen} />
+      <ShowVactionDialog
+        open={open}
+        setOpen={setOpen}
+        vacationsData={props.vacationsData}
+      />
     </Paper>
   );
 }
