@@ -1,12 +1,26 @@
+import { getDateDiffNegativeAllowed } from "../../../methods";
 import { ReducerAction } from "../../../types";
 import { VacationFormType } from "./types";
 
-const reducer = (state: VacationFormType, action: ActionTypes) => {
+const reducer = (
+  state: VacationFormType,
+  action: ActionTypes
+): VacationFormType => {
   switch (action.type) {
     case "SET_DATE_FROM":
-      return { ...state, date_from: action.payload };
+      return getDateDiffNegativeAllowed(
+        new Date(state.date_to),
+        new Date(action.payload)
+      ) >= 0 || !state.date_to
+        ? { ...state, date_from: action.payload }
+        : state;
     case "SET_DATE_TO":
-      return { ...state, date_to: action.payload };
+      return getDateDiffNegativeAllowed(
+        new Date(action.payload),
+        new Date(state.date_from)
+      ) >= 0 || !state.date_from
+        ? { ...state, date_to: action.payload }
+        : state;
     case "SET_VACATION_ID":
       return { ...state, vacation_date_id: action.payload };
     case "SET_VACATION_NAME":

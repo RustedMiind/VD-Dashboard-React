@@ -119,7 +119,7 @@ function ContractsTable({ value }: PropsType) {
                     <TableCell>{request.type?.name}</TableCell>
                     <TableCell>{request.client?.name}</TableCell>
                     <TableCell>{request.branch.name}</TableCell>
-                    <TableCell>{request.management.name}</TableCell>
+                    <TableCell>{request.management?.name}</TableCell>
                     <TableCell>
                       <GenerateStatusChip
                         statusId={request.status_id}
