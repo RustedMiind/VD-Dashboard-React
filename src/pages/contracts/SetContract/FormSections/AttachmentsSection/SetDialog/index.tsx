@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
-import { AddAttachmentFormInit, reducer } from "./reducer";
+
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
@@ -19,6 +19,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import UploadFileInput from "../../../../../../components/UploadFileInput";
 import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
 import { objectToFormData } from "../../../../../../methods";
+import { AddAttachmentFormInit, reducer } from "./reducer";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="medium" fullWidth variant="outlined" />;

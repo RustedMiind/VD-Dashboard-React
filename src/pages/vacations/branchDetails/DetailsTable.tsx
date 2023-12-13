@@ -13,8 +13,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { VacationsDetailsType } from ".";
 import StatusChip from "../../../components/StatusChip";
+import { validateDate } from "@mui/x-date-pickers/internals";
+import { useState } from "react";
+import ShowVactionDialog from "../ShowVactionDialog";
 
 function DetailsTable(props: PropsType) {
+  const [open, setOpen] = useState<boolean>(false);
+  function openDialog() {
+    setOpen(!open);
+  }
   return (
     <Paper>
       <Stack p={2}>
@@ -44,21 +51,33 @@ function DetailsTable(props: PropsType) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.vacationsData?.map((item,index) => (
+              {props.vacationsData?.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>{item.year}</TableCell>
                   <TableCell align="center">{item.vacationNumber}</TableCell>
                   <TableCell align="center">{item.vacationDayNumber}</TableCell>
                   <TableCell align="center">
-                    <StatusChip color={item.status.name==="مسودة"?"warning":"success"} label={item.status.name} />
+                    <StatusChip
+                      color={
+                        item.status.name === "مسودة" ? "warning" : "success"
+                      }
+                      label={item.status.name}
+                    />
                   </TableCell>
-                  <TableCell align="center">{item.vacationDayNumberUsed}</TableCell>
-                  <TableCell align="center">{item.vacationDayNumberstay}</TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumberUsed}
+                  </TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumberstay}
+                  </TableCell>
                   <TableCell align="center">
                     <IconButton aria-label="delete">
                       <EditNoteIcon />
                     </IconButton>
-                    <IconButton aria-label="delete">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => openDialog()}
+                    >
                       <VisibilityIcon color="primary" />
                     </IconButton>
                   </TableCell>
@@ -68,6 +87,7 @@ function DetailsTable(props: PropsType) {
           </Table>
         </TableContainer>
       </Stack>
+      <ShowVactionDialog open={open} setOpen={setOpen} />
     </Paper>
   );
 }

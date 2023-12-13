@@ -3,11 +3,22 @@ import { Stack, Typography, Grid, Box, Paper } from "@mui/material";
 import FinantialTable from "./FinancialTable";
 import { PieChart } from "@mui/x-charts";
 import TableDetails from "./TableDetails";
+import { useEffect } from "react";
+import axios from "axios";
+import { Api } from "../../../constants";
 
 function ClientDetails() {
   const { id } = useParams();
-
-  console.log(id);
+  useEffect(() => {
+    axios
+      .get<{ data: any }>(Api(`employee/contract/project/${id}`))
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Stack>
@@ -38,8 +49,8 @@ function ClientDetails() {
         </Grid>
       </Grid>
 
-      <Paper elevation={1} square={true} >
-        <Grid container p={2} py={2}>
+      <Paper>
+        <Grid container>
           <Grid item md={6}>
             <Grid container>
               <Typography variant="h6" mb={2}>
@@ -50,9 +61,9 @@ function ClientDetails() {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item md={6}>
+          <Grid display="flex" justifyContent={"end"} item md={6}>
             <Box>
-              <Typography variant="h6" mb={2} align="center">
+              <Typography textAlign={"center"} variant="h6" mb={2}>
                 بيان للمشاريع
               </Typography>
               <PieChart
@@ -79,7 +90,7 @@ function ClientDetails() {
       </Paper>
 
       <Stack>
-        <TableDetails  />
+        <TableDetails />
       </Stack>
     </Stack>
   );

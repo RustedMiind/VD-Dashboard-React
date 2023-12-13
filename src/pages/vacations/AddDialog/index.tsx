@@ -7,46 +7,47 @@ import {
   Grid,
   TextField,
   Typography,
+  IconButton,
 } from "@mui/material";
-import { useState } from "react";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useParams } from "react-router";
+import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import { DialogState } from "../branchDetails/FilterDetails";
+import ErrorDialog from "../ErrorDialog";
 
-export default function AddDialog() {
-  const [open, setOpen] = useState(true);
-  const params = useParams();
+export default function AddDialog(props: PropsType) {
   const selectVacation: addSelect = {
-    branch_id: undefined,
+    branch_id: parseInt(props.branch_id),
     year: undefined,
-    spicefic: "",
+    specific: null,
   };
-
-  // start axios get data
+  const [massageError, setMassageError] = useState<string | null>(null);
   function setData() {
-    console.log(selectVacation);
     axios
       .post<addSelect>(Api("employee/vacation"), selectVacation)
       .then((res) => {
         console.log(res);
+        props.onClose();
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.data.msg != "Validation errors") {
+          setMassageError(err.response.data.msg);
+          props.openErrorDialog();
+        }
       });
   }
-  // end axios get data
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <>
-      <Dialog maxWidth={"sm"} fullWidth open={open} onClose={handleClose}>
+      <Dialog
+        maxWidth={"sm"}
+        fullWidth
+        open={props.open}
+        onClose={props.onClose}
+      >
         <DialogTitle sx={{ fontWeight: "600", textAlign: "center" }}>
           اضافة محدد
         </DialogTitle>
@@ -60,6 +61,7 @@ export default function AddDialog() {
 
               <DatePicker
                 disablePast
+                // value={selectVacation.year as number}
                 views={["year"]}
                 slotProps={{ textField: { size: "small" } }}
                 onChange={(e: Year | null) => {
@@ -78,7 +80,7 @@ export default function AddDialog() {
                 fullWidth
                 sx={{ ml: 2 }}
                 onChange={(e) => {
-                  selectVacation.spicefic = e.target.value;
+                  selectVacation.specific = e.target.value;
                 }}
               />
             </Grid>
@@ -90,31 +92,37 @@ export default function AddDialog() {
             justifyContent: "center",
           }}
         >
-          <Button
-            variant="contained"
-            sx={{ mb: 2 }}
-            onClick={() => {
-              setData();
-            }}
-          >
+          <Button variant="contained" sx={{ mb: 2 }} onClick={setData}>
             حفظ
           </Button>
         </DialogActions>
+        <IconButton
+          aria-label="close"
+          onClick={props.onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Dialog>
     </>
   );
 }
-type TypeProps = {
+type PropsType = {
   open: boolean;
+  branch_id: string;
   onClose: () => void;
-  setTableData: () => void;
   openErrorDialog: () => void;
+  openAddDialog: () => void;
 };
 type Year = {
   $y: number;
 };
 type addSelect = {
-  branch_id: number | undefined;
+  branch_id: number;
   year: number | undefined;
-  spicefic: string;
+  specific?: string | null;
 };

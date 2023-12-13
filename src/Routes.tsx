@@ -30,10 +30,7 @@ function RoutesComponent() {
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           <Route path="vacations">
             <Route path="" element={<VacationsSettings />} />
-            <Route
-              path=":branchId"
-              element={<VacationDetails />}
-            >
+            <Route path=":branchId" element={<VacationDetails />}>
               <Route
                 path=""
                 element={<>{/* Branch Vacations Setting Page */}</>}
