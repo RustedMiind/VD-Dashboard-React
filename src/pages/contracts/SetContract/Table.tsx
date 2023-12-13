@@ -17,11 +17,13 @@ import { useContext } from "react";
 import { ContractContext } from "../Context/Store";
 import { ContractsContext } from "../Context/ContractsContext";
 import { NavLink } from "react-router-dom";
+import GenerateStatusChip from "./StatusChips";
 
 function ContractsTable({ value }: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts, limit, setLimit } = useContext(ContractsContext);
   const toView = typeof contracts === "object" ? contracts?.data : undefined;
+
   function CheckboxHandler(id: number) {
     return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
       const idIndex = selectedIdsContext?.selectedIds?.findIndex(
@@ -52,51 +54,95 @@ function ContractsTable({ value }: PropsType) {
       <TableContainer>
         <Table>
           <TableHeader value={value} />
-          <TableBody>
-            {toView?.map((request) => {
-              return (
-                <TableRow>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedIdsContext?.selectedIds?.includes(
-                        request.id
-                      )}
-                      value={request.id}
-                      onChange={CheckboxHandler(request.id)}
-                    />
-                  </TableCell>
-                  <TableCell>{request.code}</TableCell>
-                  <TableCell>{request.type?.name}</TableCell>
-                  <TableCell>{request.client?.name}</TableCell>
-                  <TableCell>{request.branch.name}</TableCell>
-                  <TableCell>{request.client?.phone}</TableCell>
-                  <TableCell>{request.period}</TableCell>
-                  <TableCell>{request.end_date_period}</TableCell>
-                  <TableCell
-                    sx={{
-                      maxWidth: "50px",
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {request.employee?.name}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      color="primary"
-                      aria-label="add to shopping cart"
-                      component={NavLink}
-                      to={`${request.id}/edit`}
-                      size="small"
+          {value === 0 ? (
+            <TableBody>
+              {toView?.map((request) => {
+                return (
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIdsContext?.selectedIds?.includes(
+                          request.id
+                        )}
+                        value={request.id}
+                        onChange={CheckboxHandler(request.id)}
+                      />
+                    </TableCell>
+                    <TableCell>{request.code}</TableCell>
+                    <TableCell>{request.type?.name}</TableCell>
+                    <TableCell>{request.client?.name}</TableCell>
+                    <TableCell>{request.branch.name}</TableCell>
+                    <TableCell>{request.client?.phone}</TableCell>
+                    <TableCell>{request.period}</TableCell>
+                    <TableCell>{request.end_date_period}</TableCell>
+                    <TableCell
+                      sx={{
+                        maxWidth: "50px",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                      }}
                     >
-                      <SettingsIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+                      {request.employee?.name}
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        color="primary"
+                        aria-label="add to shopping cart"
+                        component={NavLink}
+                        to={`${request.id}/edit`}
+                        size="small"
+                      >
+                        <SettingsIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          ) : (
+            <TableBody>
+              {toView?.map((request) => {
+                return (
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedIdsContext?.selectedIds?.includes(
+                          request.id
+                        )}
+                        value={request.id}
+                        onChange={CheckboxHandler(request.id)}
+                      />
+                    </TableCell>
+                    <TableCell>{request.code}</TableCell>
+                    <TableCell>{request.date}</TableCell>
+                    <TableCell>{request.type?.name}</TableCell>
+                    <TableCell>{request.client?.name}</TableCell>
+                    <TableCell>{request.branch.name}</TableCell>
+                    <TableCell>{request.management.name}</TableCell>
+                    <TableCell>
+                      <GenerateStatusChip
+                        statusId={request.status_id}
+                        contractStatus={request.Contract_status}
+                      />
+                    </TableCell>
+                    <TableCell>{request.status_id}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        color="primary"
+                        aria-label="add to shopping cart"
+                        component={NavLink}
+                        to={`${request.id}/edit`}
+                        size="small"
+                      >
+                        <SettingsIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          )}
         </Table>
       </TableContainer>
       <Stack
