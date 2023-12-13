@@ -1,23 +1,18 @@
 import {
   Button,
+  Chip,
   Dialog,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
   IconButton,
-  InputLabel,
-  ListItemText,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Checkbox from "@mui/material/Checkbox";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 import { EmployeeExcType } from "../types";
 import reducer, { VacationsInitial } from "../reducer";
@@ -33,13 +28,12 @@ const PopupVacations = ({
   employeeRequest,
   vacationRequest,
 }: PropsType) => {
-  const [personName, setPersonName] = useState<string[]>([]);
-  const [vacation, dispatch] = useReducer(reducer, VacationsInitial);
+  const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
 
   const handleSendVacation = () => {
     if (vacationRequest === "post") {
       axios
-        .post(Api("employee/client/vacations/store"), vacation)
+        .post(Api("employee/client/vacations/store"), vacationForm)
         .then((res) => {
           console.log(res);
         })
@@ -50,7 +44,7 @@ const PopupVacations = ({
 
     if (vacationRequest === "put") {
       axios
-        .put(Api("employee/client/vacations/update"), vacation)
+        .put(Api("employee/client/vacations/update"), vacationForm)
         .then((res) => {
           console.log(res);
         })
@@ -61,16 +55,10 @@ const PopupVacations = ({
   };
 
   const handleChangeForm = () => {
-    console.log(vacation);
+    console.log(vacationForm);
     handleSendVacation();
   };
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
-  };
   return (
     <Dialog
       open={open}
@@ -105,7 +93,7 @@ const PopupVacations = ({
             <TextField
               size="small"
               sx={{ width: 1 }}
-              value={vacation.vacation_name}
+              value={vacationForm.vacation_name}
               onChange={(e) =>
                 dispatch({ type: "SET_VACATION_NAME", payload: e.target.value })
               }
@@ -119,7 +107,7 @@ const PopupVacations = ({
             <TextField
               size="small"
               sx={{ width: 1 }}
-              value={vacation.number_days}
+              value={vacationForm.number_days}
               onChange={(e) =>
                 dispatch({
                   type: "SET_NUMBER_DAYS",
@@ -137,7 +125,7 @@ const PopupVacations = ({
               slotProps={{ textField: { size: "small" } }}
               label="التاريخ من"
               sx={{ width: 1 }}
-              value={dayjs(vacation.date_from)}
+              value={dayjs(vacationForm.date_from)}
               onChange={(newValue) =>
                 dispatch({
                   type: "SET_DATE_FROM",
@@ -156,7 +144,7 @@ const PopupVacations = ({
               label="التاريخ الى"
               sx={{ width: 1 }}
               slotProps={{ textField: { size: "small" } }}
-              value={dayjs(vacation.date_to)}
+              value={dayjs(vacationForm.date_to)}
               onChange={(newValue) =>
                 dispatch({
                   type: "SET_DATE_TO",
@@ -171,47 +159,43 @@ const PopupVacations = ({
             <Typography variant="body1" fontWeight={700} gutterBottom>
               اضافة موظفين لا تنطبق عليهم*
             </Typography>
-            <FormControl sx={{ width: "100%" }}>
-              <InputLabel id="demo-multiple-checkbox-label">
-                الموظفين
-              </InputLabel>
-              <Select
-                labelId="demo-multiple-checkbox-label"
-                id="demo-multiple-checkbox"
-                multiple
-                value={personName}
-                onChange={(e) => {
-                  handleChange(e);
-                  console.log(e.target.value);
-                  dispatch({
-                    type: "SET_EMPLOYEES",
-                    payload: e.target.value as [],
-                  });
-                }}
-                input={<OutlinedInput label="" />}
-                renderValue={(selected) => {
-                  return selected
-                    .map(
-                      (selectedId) =>
-                        employeeRequest?.find(
-                          // eslint-disable-next-line eqeqeq
-                          (employee) => employee.id.toString() == selectedId
-                        )?.name
-                    )
-                    .join(", ");
-                }}
-                MenuProps={MenuProps}
-              >
-                {employeeRequest?.map(({ name, id }) => (
-                  <MenuItem key={id} value={id}>
-                    <Checkbox
-                      checked={personName.indexOf(id.toString()) > -1}
-                    />
-                    <ListItemText primary={name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              variant="outlined"
+              size="small"
+              multiple
+              multiline
+              value={vacationForm.exception_employees}
+              onChange={(e) => {
+                const values = e.target.value;
+                Array.isArray(values) &&
+                  dispatch({ type: "SET_EMPLOYEES", payload: values });
+              }}
+              renderValue={(selected) => {
+                const selectedNames = vacationForm.exception_employees.map(
+                  (id) => {
+                    const selectedOption = employeeRequest?.find(
+                      (employee) => employee.id === id
+                    );
+                    return selectedOption;
+                  }
+                );
+                return selectedNames.map((chip) => (
+                  <Chip
+                    key={chip?.id}
+                    size="small"
+                    label={chip?.name}
+                    sx={{ ml: 1 }}
+                  />
+                ));
+              }}
+            >
+              {employeeRequest?.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.name}
+                </MenuItem>
+              ))}
+            </Select>
           </Grid>
         </Grid>
       </DialogContent>
@@ -230,17 +214,6 @@ const PopupVacations = ({
       </Button>
     </Dialog>
   );
-};
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
 };
 
 type PropsType = {

@@ -1,13 +1,14 @@
 import { Domain } from "../../../constants";
+import { isStringAllNumbers } from "../../../methods";
 import { ReducerAction } from "../../../types";
 import { Client } from "../../../types/Clients/Client";
 
 export const companyInitial: CompanyFormType = {
   type: "company",
   agent_name: "",
-  branch_id: 0,
-  broker_id: 0,
-  register_number: null,
+  branch_id: "0",
+  broker_id: "0",
+  register_number: "",
   card_image: null,
   letter_head: "",
   phone: "",
@@ -18,9 +19,9 @@ export const companyInitial: CompanyFormType = {
 };
 export const individualInitial: IndividualFormType = {
   type: "individual",
-  branch_id: 0,
-  broker_id: 0,
-  card_id: null,
+  branch_id: "0",
+  broker_id: "0",
+  card_id: "",
   card_image: null,
   letter_head: "",
   name: "",
@@ -45,11 +46,18 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
     // case "COMPANY_NAME":
     //   return { ...state, company_name: action.payload };
     case "CARD_ID":
-      return { ...state, card_id: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, card_id: action.payload };
+      else return state;
     case "REGISTER_NUMBER":
-      return { ...state, register_number: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, register_number: action.payload };
+      else return state;
+
     case "PHONE_NUMBER":
-      return { ...state, phone: action.payload };
+      if (isStringAllNumbers(action.payload))
+        return { ...state, phone: action.payload };
+      else return state;
     case "EMAIL":
       return { ...state, email: action.payload };
     case "BRANCH_ID":
@@ -98,11 +106,11 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
     case "SET_DTO":
       if (action.payload.type === "company") {
         return {
-          branch_id: action.payload.branch_id,
-          broker_id: action.payload.broker_id,
+          branch_id: action.payload.branch_id.toString(),
+          broker_id: action.payload.broker_id.toString(),
           name: action.payload.name,
           card_image: null,
-          register_number: parseInt(action.payload.register_number),
+          register_number: action.payload.register_number,
           email: action.payload.email,
           agent_name: action.payload.agent_name,
           letter_head: action.payload.letter_head,
@@ -115,8 +123,8 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
         };
       } else if (action.payload.type === "individual") {
         return {
-          branch_id: action.payload.branch_id,
-          broker_id: action.payload.broker_id,
+          branch_id: action.payload.branch_id?.toString(),
+          broker_id: action.payload.broker_id?.toString(),
           card_image: null,
           cardImageUrl: Domain(
             ("storage/" + action.payload.card_image) as unknown as string
@@ -144,10 +152,10 @@ interface NameActionType extends ReducerAction<string> {
   type: "NAME";
 }
 
-interface CardIdActionType extends ReducerAction<number | null> {
+interface CardIdActionType extends ReducerAction<string> {
   type: "CARD_ID";
 }
-interface RegisterNumberActionType extends ReducerAction<number | null> {
+interface RegisterNumberActionType extends ReducerAction<string> {
   type: "REGISTER_NUMBER";
 }
 interface PhoneNumberActionType extends ReducerAction<string> {
@@ -156,10 +164,10 @@ interface PhoneNumberActionType extends ReducerAction<string> {
 interface EmailActionType extends ReducerAction<string> {
   type: "EMAIL";
 }
-interface BranchActionType extends ReducerAction<number> {
+interface BranchActionType extends ReducerAction<string> {
   type: "BRANCH_ID";
 }
-interface BrokerIdActionType extends ReducerAction<number> {
+interface BrokerIdActionType extends ReducerAction<string> {
   type: "BROKER_ID";
 }
 interface LetterHeadActionType extends ReducerAction<string> {
@@ -207,11 +215,11 @@ export type ActionTypes =
 export interface BaseFormData {
   id?: number;
   name: string;
-  card_id?: number | null;
-  register_number?: number | null;
+  card_id?: string | null;
+  register_number?: string | null;
   phone: string;
-  branch_id: number;
-  broker_id: number;
+  branch_id: string;
+  broker_id: string;
   letter_head: string;
   card_image?: File | null;
   email: string;
