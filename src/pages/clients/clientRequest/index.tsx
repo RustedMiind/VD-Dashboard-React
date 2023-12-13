@@ -26,6 +26,7 @@ const ClientRequests = () => {
   const [requests, setRequests] = useState<
     PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
+  console.log(requests);
   console.log(requests.length);
   const [dialogRequest, setDialogRequest] = useState<
     PanelData | StepStatusData | null
@@ -47,16 +48,15 @@ const ClientRequests = () => {
         Api("employee/client/order"),
         {
           params: {
+            limit: filters.limit || null,
             typeClient: filters.typeClient || null,
             search: search || null,
-            ...{
-              dateFrom: filters.dateFrom || null,
-              dateTo: filters.dateTo || null,
-              department_id: filters.department_id || null,
-              typeOrder: filters.typeOrder || null,
-              sortBy: filters.sortBy || null,
-              status: filters.status || null,
-            },
+            dateFrom: filters.dateFrom || null,
+            dateTo: filters.dateTo || null,
+            department_id: filters.department_id || null,
+            typeOrder: filters.typeOrder || null,
+            sortBy: filters.sortBy || null,
+            status: filters.status || null,
           },
         }
       )
@@ -65,6 +65,7 @@ const ClientRequests = () => {
         setCounts(data.count);
       })
       .catch((err) => {
+        setRequests("error");
         console.log(err);
       });
   };
@@ -172,6 +173,8 @@ const ClientRequests = () => {
               openDetails={handleOpenDetails}
               tableRef={tableRef}
               requests={filtered}
+              dispatch={dispatch}
+              applySearch={getRequests}
             />
           )}
 

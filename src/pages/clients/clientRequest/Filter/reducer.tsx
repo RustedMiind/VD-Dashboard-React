@@ -19,6 +19,8 @@ const reducer = (state: Filter, action: ActionTypes): Filter => {
       return { ...state, search: action.payload };
     case "SET_ORDER_BY_CLIENT":
       return { ...state, typeClient: action.payload };
+    case "SET_LIMIT":
+      return { ...state, limit: action.payload };
     default:
       return state;
   }
@@ -53,6 +55,10 @@ interface OrderByClient extends ReducerAction<"individual" | "company"> {
   type: "SET_ORDER_BY_CLIENT";
 }
 
+interface Limit extends ReducerAction<number> {
+  type: "SET_LIMIT";
+}
+
 export const FiltersInit: Filter = {
   dateFrom: "",
   dateTo: "",
@@ -62,6 +68,7 @@ export const FiltersInit: Filter = {
   search: "",
   sortBy: "desc",
   typeClient: "",
+  limit: -1,
 };
 
 export type ActionTypes =
@@ -72,6 +79,7 @@ export type ActionTypes =
   | StatusActionType
   | OrderBySortActionType
   | SearchActionType
-  | OrderByClient;
+  | OrderByClient
+  | Limit;
 
 export default reducer;
