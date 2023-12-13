@@ -11,29 +11,20 @@ import { EmployeeType } from "../../../types";
 
 const VacationsTable = () => {
   const [open, setOpen] = useState(false);
-  const { year, branchId } = useParams();
+  const { yearId, branchId } = useParams();
   const [vacationRequest, setVacationRequest] = useState<
     "post" | "put" | "null"
   >("null");
   const [employeeRequest, setEmployeeRequest] = useState<
     EmployeeType[] | undefined
   >();
+  const [vacationDays, setVacationDays] = useState<"loading" | "error" | {}>();
+
   console.log(employeeRequest);
-  const getEmployeeRequest = () => {
-    branchId &&
-      axios
-        .get<{ employees: { data: EmployeeType[] } }>(
-          Api("employee/employees/in-same-branch/" + branchId)
-        )
-        .then(({ data }) => {
-          setEmployeeRequest(data.employees.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-  };
+
   useEffect(() => {
     getEmployeeRequest();
+    yearId && getYearVacations(yearId);
   }, []);
   return (
     <>
@@ -92,6 +83,23 @@ const VacationsTable = () => {
       />
     </>
   );
+
+  function getEmployeeRequest() {
+    branchId &&
+      axios
+        .get<{ employees: EmployeeType[] }>(
+          Api("employee/employees/in-same-branch/" + branchId)
+        )
+        .then(({ data }) => {
+          setEmployeeRequest(data.employees);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
+  function getYearVacations(yearId: string) {
+    axios.get(Api(`employee/vacation-day/${yearId}`));
+  }
 };
 
 export default VacationsTable;
