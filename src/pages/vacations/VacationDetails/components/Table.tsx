@@ -12,7 +12,7 @@ import {
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { useState } from "react";
-import PopupVacations from "./PopupVacations";
+import SetDialog from "./SetDialog";
 import { EmployeeExcType } from "../types";
 
 const TableData = ({
@@ -69,7 +69,7 @@ const TableData = ({
           </Table>
         </TableContainer>
       </Paper>
-      <PopupVacations
+      <SetDialog
         vacationRequest={vacationRequest}
         open={open}
         handleClose={() => setOpen(false)}
