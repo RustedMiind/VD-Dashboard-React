@@ -14,12 +14,12 @@ export default function TopTable({ value }: PropType) {
       {value === 0 ? (
         <Typography sx={{ mt: 2 }}>حالات العقود</Typography>
       ) : (
-        <Stack direction={"row"} spacing={2}>
+        <Stack direction={"row"} spacing={2} mt={2}>
           <Button variant="contained" sx={{ width: "50%" }}>
-            العقود المنشأه
+            العقود المنشأة
           </Button>
           <Button variant="outlined" sx={{ width: "50%" }}>
-            العقود المحوله
+            العقود المحولة
           </Button>
         </Stack>
       )}

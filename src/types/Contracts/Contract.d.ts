@@ -6,6 +6,7 @@ import { ContractTask } from "./ContractTask";
 import { ContractType } from "./ContractType";
 
 export interface Contract {
+  Contract_status: string;
   id: number;
   code: string;
   period: string;
@@ -17,6 +18,7 @@ export interface Contract {
   client_id: number;
   branch_id: number;
   management_id: number;
+  management?: Management;
   status_id: number;
   employee_id: number;
   created_at: string;
@@ -35,3 +37,33 @@ export interface Contract {
   // end_date: null;
   // management: null;
 }
+type Management = {
+  active: number;
+  branch_id: number;
+  childrens: Childrens[];
+  created_at: string;
+  deleted_at: null;
+  directChildren: number;
+  id: number;
+  manager_id: number;
+  name: string;
+  note: null;
+  parent_id: null;
+  type: string;
+  updated_at: string;
+};
+export type Childrens = {
+  active: number;
+  branch_id: number;
+  childrens: Childrens[];
+  created_at: string;
+  deleted_at: null;
+  directChildren: number;
+  id: number;
+  manager_id: number;
+  name: string;
+  note: null;
+  parent_id: number;
+  type: string;
+  updated_at: string;
+};
