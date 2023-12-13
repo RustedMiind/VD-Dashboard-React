@@ -54,13 +54,22 @@ function DetailsTable(props: PropsType) {
               {props.vacationsData?.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>{item.year}</TableCell>
-                  <TableCell align="center"></TableCell>
-                  <TableCell align="center">17 يوم</TableCell>
+                  <TableCell align="center">{item.vacationNumber}</TableCell>
+                  <TableCell align="center">{item.vacationDayNumber}</TableCell>
                   <TableCell align="center">
-                    <StatusChip color="success" label="معتمد" />
+                    <StatusChip
+                      color={
+                        item.status.name === "مسودة" ? "warning" : "success"
+                      }
+                      label={item.status.name}
+                    />
                   </TableCell>
-                  <TableCell align="center">17 يوم</TableCell>
-                  <TableCell align="center">0</TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumberUsed}
+                  </TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumberstay}
+                  </TableCell>
                   <TableCell align="center">
                     <IconButton aria-label="delete">
                       <EditNoteIcon />
