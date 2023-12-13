@@ -6,7 +6,7 @@ import AddDialog from "../AddDialog";
 import ErrorDialog from "../ErrorDialog";
 import { useParams } from "react-router-dom";
 
-function FilterDetails() {
+function FilterDetails(props: PropsType) {
   const [yearFilter, setYearFilter] = useState();
   const [statusFilter, setStatusFilter] = useState<{
     name: string;
@@ -84,6 +84,7 @@ function FilterDetails() {
       </Grid>
       {branchId && (
         <AddDialog
+          setData={props.setTableData}
           open={dialogState === "add"}
           branch_id={branchId}
           onClose={closeDialog}
@@ -103,3 +104,7 @@ function FilterDetails() {
 export type DialogState = "none" | "error" | "add" | "details";
 
 export default FilterDetails;
+
+type PropsType = {
+  setTableData: () => void;
+};
