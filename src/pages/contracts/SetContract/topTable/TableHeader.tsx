@@ -46,12 +46,11 @@ export default function TableHeader({ value }: PropType) {
         <TableCell>{value === 0 ? "اسم العميل " : "النوع"}</TableCell>
         <TableCell>{value === 0 ? "الفرع" : "المالك"}</TableCell>
         <TableCell>{value === 0 ? " تليفون العميل " : "الفرع"}</TableCell>
-        <TableCell>{value === 0 ? "مدة العقد" : "اسم الاداره"}</TableCell>
-        <TableCell>{value === 0 ? "تاريخ انتهاء العقد" : "الحاله"}</TableCell>
+        <TableCell>{value === 0 ? "مدة العقد" : "اسم الادارة"}</TableCell>
+        <TableCell>{value === 0 ? "تاريخ انتهاء العقد" : "الحالة"}</TableCell>
         <TableCell>
-          {value === 0 ? "المهندس المسؤول" : "الحاله السابقه"}
+          {value === 0 ? "المهندس المسؤول" : "الحالة السابقة"}
         </TableCell>
-        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );
