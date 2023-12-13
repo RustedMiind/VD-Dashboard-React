@@ -29,15 +29,9 @@ function RoutesComponent() {
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           <Route path="vacations">
             <Route path="" element={<VacationsSettings />} />
-            <Route path=":branchId" >
-              <Route
-                path=""
-                element={<VacationDetails />}
-              />
-              <Route
-                path=":year"
-                element={<>{/* Branch Vacations In Year Setting  Page */}</>}
-              />
+            <Route path=":branchId">
+              <Route path="" element={<VacationDetails />} />
+              <Route path=":year" element={<VacationsTable />} />
             </Route>
           </Route>
         </Route>
@@ -48,7 +42,6 @@ function RoutesComponent() {
           <Route path=":name/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />
           <Route path="procedures" element={<ClientProcess />} />
-          <Route path="table" element={<VacationsTable />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
