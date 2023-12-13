@@ -17,15 +17,7 @@ function TableHeader() {
         <StatusChip color="secondary" label={0} />
       </Grid>
       <Grid item xs={6}>
-        <Stack
-          component="form"
-          direction="row"
-          gap={1}
-          sx={{
-            button: { px: 4 },
-            position: "relative",
-          }}
-        >
+        <Stack component="form" direction="row">
           <TextField label="بحث" fullWidth size="small" />
           <Button variant="contained" type="submit">
             بحث
