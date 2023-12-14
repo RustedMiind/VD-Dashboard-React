@@ -12,6 +12,8 @@ import RequestTypesToggles from "./Toggles";
 import StatusDialog from "./StatusDialog";
 import DetailsDialog from "./DetailsDialog";
 import ModelDialog from "./ModelDialog";
+import { FormData } from "../clientsProcess/types/FormData";
+import { OrderType } from "../clientsProcess/types/OrderType";
 
 const ClientRequests = () => {
   const tableRef: React.RefObject<HTMLTableElement> =
@@ -26,8 +28,6 @@ const ClientRequests = () => {
   const [requests, setRequests] = useState<
     PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
-  console.log(requests);
-  console.log(requests.length);
   const [dialogRequest, setDialogRequest] = useState<
     PanelData | StepStatusData | null
   >(null);
@@ -39,6 +39,7 @@ const ClientRequests = () => {
   );
   const [search, setSearch] = useState("");
   const [counts, setCounts] = useState<CountType[] | null>(null);
+  const [orderType, setOrderType] = useState<OrderType[]>();
 
   const getRequests = () => {
     setRequests("loading");
@@ -70,6 +71,21 @@ const ClientRequests = () => {
       });
   };
 
+  const getFormData = () => {
+    return new Promise<void>((resSolve, reject) => {
+      axios
+        .get<FormData>(Api("employee/client/order/steps/use"))
+        .then((res) => {
+          setOrderType(res.data.typeOrder);
+          resSolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  };
+
   const handleOpenModel = (request: PanelData | StepStatusData) => {
     return () => {
       setDialogRequest(request);
@@ -93,7 +109,10 @@ const ClientRequests = () => {
     setDialogOpen(undefined);
   };
 
-  useEffect(getRequests, [selectedType, currentTab]);
+  useEffect(() => {
+    getRequests();
+    getFormData();
+  }, [selectedType, currentTab, filters.limit]);
   const IS_REQUESTS_EXISTS = typeof requests === "object";
   let filtered: PanelData[] | StepStatusData[] | undefined = IS_REQUESTS_EXISTS
     ? requests
@@ -134,6 +153,7 @@ const ClientRequests = () => {
           selectedType={selectedType}
           tableRef={tableRef}
           handlePrint={handlePrint}
+          orderType={orderType}
         />
 
         <Box
@@ -148,6 +168,8 @@ const ClientRequests = () => {
             selected={selectedType}
             setSelected={setSelectedType}
             counts={counts}
+            orderType={orderType}
+            dispatch={dispatch}
           />
           <Tabs
             aria-label="basic tabs example"
@@ -174,13 +196,11 @@ const ClientRequests = () => {
               tableRef={tableRef}
               requests={filtered}
               dispatch={dispatch}
-              applySearch={getRequests}
+              limit={filters.limit}
             />
           )}
 
-          {requests === "loading" && (
-            <LoadingTable rows={8} cols={7} />
-          )}
+          {requests === "loading" && <LoadingTable rows={8} cols={7} />}
 
           {requests === "error" && (
             <Typography

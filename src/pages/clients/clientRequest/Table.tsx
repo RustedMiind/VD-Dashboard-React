@@ -25,10 +25,9 @@ const ClientTableComponent = ({
   openDetails,
   tableRef,
   dispatch,
-  applySearch,
+  limit,
 }: PropsType) => {
-  const [rowsCount, setRowsCount] = useState(-1);
-  // const view = requests.slice(0, rowsCount);
+  const [rowsCount, setRowsCount] = useState(limit);
 
   function generateChip(request: PanelData | StepStatusData): JSX.Element {
     const variant = "outlined";
@@ -95,7 +94,6 @@ const ClientTableComponent = ({
 
     return chip;
   }
-  // const view = requests.slice(0, rowsCount);
   return (
     <>
       <TableContainer sx={{ minHeight: 500 }} ref={tableRef}>
@@ -179,12 +177,11 @@ const ClientTableComponent = ({
           value={rowsCount}
           select
           onChange={(e) => {
-            setRowsCount(parseInt(e.target.value) || -1);
+            setRowsCount(parseInt(e.target.value));
             dispatch({
               type: "SET_LIMIT",
-              payload: parseInt(e.target.value) || -1,
+              payload: parseInt(e.target.value),
             });
-            // applySearch();
           }}
         >
           <MenuItem value={-1}>الكل</MenuItem>
@@ -207,7 +204,7 @@ type PropsType = {
   openDetails: (res: PanelData | StepStatusData) => () => void;
   tableRef: React.RefObject<HTMLTableElement>;
   dispatch: React.Dispatch<ActionTypes>;
-  applySearch: () => void;
+  limit: number | undefined;
 };
 
 export default ClientTableComponent;
