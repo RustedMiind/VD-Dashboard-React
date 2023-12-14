@@ -1,6 +1,7 @@
 import { getDateDiffNegativeAllowed } from "../../../../methods";
-import { ReducerAction } from "../../../../types";
-import { VacationFormType } from "../types";
+import { ReducerAction, Vacation } from "../../../../types";
+import { VacationsDetailsType } from "../../branchDetails";
+import { VacationFormType } from "./VacationFormType";
 
 const reducer = (
   state: VacationFormType,
@@ -19,6 +20,10 @@ const reducer = (
       return { ...state, number_days: action.payload };
     case "SET_EMPLOYEES":
       return { ...state, exception_employees: action.payload };
+    case "SET_ALL":
+      return action.payload;
+    case "SET_RESET":
+      return VacationsInitial;
     default:
       return state;
   }
@@ -48,6 +53,13 @@ interface EmployeeActionType extends ReducerAction<number[]> {
   type: "SET_EMPLOYEES";
 }
 
+interface SetAllActionType extends ReducerAction<VacationFormType> {
+  type: "SET_ALL";
+}
+
+interface SetResetActionType extends ReducerAction<unknown> {
+  type: "SET_RESET";
+}
 export const VacationsInitial: VacationFormType = {
   date_from: "",
   date_to: "",
@@ -63,6 +75,33 @@ export type ActionTypes =
   | VacationIdActionType
   | NumberDaysActionType
   | EmployeeActionType
-  | VacationNameActionType;
+  | VacationNameActionType
+  | SetAllActionType
+  | SetResetActionType;
 
 export default reducer;
+
+export function StateToCreateDto(
+  state: VacationFormType,
+  vacationDateId: number | string
+) {
+  return {
+    date_from: state.date_from,
+    date_to: state.date_to,
+    name: state.vacation_name,
+    vacation_date_id: vacationDateId,
+    exception_employees: state.exception_employees,
+    number_days: state.number_days,
+  };
+}
+
+export function DtoToStateType(dto: Vacation): VacationFormType {
+  return {
+    date_from: dto.date_from,
+    date_to: dto.date_to,
+    exception_employees: dto.employees?.map((employee) => employee.id) || [],
+    number_days: dto.number_days,
+    vacation_name: dto.name,
+    vacation_date_id: dto.vacation_date_id,
+  };
+}

@@ -13,14 +13,11 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { useState } from "react";
 import SetDialog from "../SetDialog";
-import { EmployeeType } from "../../../../types";
+import { EmployeeType, Vacation } from "../../../../types";
+import { formatDate, getDateDiff } from "../../../../methods";
+import { convertMsToDays } from "../../../../methods/conversions/msToDays";
 
-const TableData = ({
-  employeeRequest,
-  vacationRequest,
-  setVacationRequest,
-}: PropsType) => {
-  const [open, setOpen] = useState(false);
+const TableData = (props: PropsType) => {
   return (
     <>
       <Paper>
@@ -40,52 +37,42 @@ const TableData = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>تعديل</TableCell>
-                <TableCell>تعديل</TableCell>
-                <TableCell>تعديل</TableCell>
-                <TableCell>تعديل</TableCell>
-                <TableCell>
-                  <Stack direction={"row"} gap={1}>
-                    <IconButton
-                      aria-label="add to shopping cart"
-                      onClick={() => {
-                        setVacationRequest("put");
-                        setOpen(true);
-                      }}
-                    >
-                      <BorderColorOutlinedIcon />
-                    </IconButton>
-                    <IconButton
-                      color="primary"
-                      aria-label="add to shopping cart"
-                    >
-                      <RemoveRedEyeOutlinedIcon />
-                    </IconButton>
-                  </Stack>
-                </TableCell>
-              </TableRow>
+              {props.vacations.map((vacation) => (
+                <TableRow>
+                  <TableCell>{vacation.name}</TableCell>
+                  <TableCell>
+                    {convertMsToDays(
+                      getDateDiff(
+                        new Date(vacation.date_from),
+                        new Date(vacation.date_to)
+                      )
+                    )}
+                  </TableCell>
+                  <TableCell>{formatDate(vacation.date_from)}</TableCell>
+                  <TableCell>{formatDate(vacation.date_to)}</TableCell>
+                  <TableCell>
+                    <Stack direction={"row"} gap={1}>
+                      <IconButton onClick={props.openUpdateDialog(vacation)}>
+                        <BorderColorOutlinedIcon />
+                      </IconButton>
+                      <IconButton color="primary">
+                        <RemoveRedEyeOutlinedIcon />
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-      <SetDialog
-        vacationRequest={vacationRequest}
-        open={open}
-        handleClose={() => setOpen(false)}
-        title="تعديل الاجازة"
-        employeeRequest={employeeRequest}
-      />
     </>
   );
 };
 
 type PropsType = {
-  employeeRequest?: EmployeeType[] | undefined;
-  vacationRequest: "post" | "put" | "null";
-  setVacationRequest: React.Dispatch<
-    React.SetStateAction<"post" | "put" | "null">
-  >;
+  openUpdateDialog: (vacation: Vacation) => () => void;
+  vacations: Vacation[];
 };
 
 export default TableData;
