@@ -1,12 +1,13 @@
 import { Box, Button, Tab, Tabs } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { requestsIds } from "./RequestIds";
+import { OrderType } from "./types/OrderType";
 
 const TabsAndAdd = ({
   currentTab,
   setCurrentTab,
   addLevel,
-  disabled,
+  orderType,
+  setOrderTypeId,
 }: PropsType) => {
   return (
     <Box
@@ -31,15 +32,11 @@ const TabsAndAdd = ({
         value={currentTab}
         onChange={(e, v) => {
           setCurrentTab(v);
+          setOrderTypeId(v);
         }}
       >
-        {requestsIds.map(({ id, name, disabledState }) => (
-          <Tab
-            key={id}
-            label={name}
-            value={id}
-            disabled={disabled || disabledState}
-          />
+        {orderType.map(({ id, name }) => (
+          <Tab key={id} label={name} value={id} />
         ))}
       </Tabs>
     </Box>
@@ -51,6 +48,8 @@ type PropsType = {
   currentTab: number;
   setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
   disabled?: boolean;
+  orderType: OrderType[];
+  setOrderTypeId: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default TabsAndAdd;

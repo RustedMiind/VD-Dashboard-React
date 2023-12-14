@@ -6,6 +6,7 @@ import FilterComponent from "./Filter/Filter";
 import { ActionTypes } from "./Filter/reducer";
 import { Filter } from "./types";
 import ReactToPrint from "react-to-print";
+import { OrderType } from "../clientsProcess/types/OrderType";
 
 const SearchBar = ({
   applySearch,
@@ -17,6 +18,7 @@ const SearchBar = ({
   selectedType,
   tableRef,
   handlePrint,
+  orderType,
 }: PropsType) => {
   const [filtersOpened, setFiltersOpened] = useState(false);
 
@@ -77,6 +79,7 @@ const SearchBar = ({
         dispatch={dispatch}
         filters={filters}
         setSelectedType={setSelectedType}
+        orderType={orderType}
       />
     </>
   );
@@ -92,6 +95,7 @@ type PropsType = {
   setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
   tableRef: React.RefObject<HTMLTableElement>;
   handlePrint: () => void;
+  orderType: OrderType[] | undefined;
 };
 
 export default SearchBar;
