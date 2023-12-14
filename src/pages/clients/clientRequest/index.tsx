@@ -24,7 +24,7 @@ const ClientRequests = () => {
     }
   };
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
-  const [currentTab, setCurrentTab] = useState<number>(-1);
+  const [currentTab, setCurrentTab] = useState<string>("");
   const [requests, setRequests] = useState<
     PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
@@ -170,6 +170,7 @@ const ClientRequests = () => {
             counts={counts}
             orderType={orderType}
             dispatch={dispatch}
+            orderTypeId={filters.typeOrder || 1}
           />
           <Tabs
             aria-label="basic tabs example"
