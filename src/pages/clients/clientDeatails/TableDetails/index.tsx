@@ -18,8 +18,6 @@ import TableHeader from "./TableHeader";
 import { ClientDetailsType } from "../../../../types/Clients";
 import StatusChip from "../../../../components/StatusChip";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
 function TableDetails({ ClientData, setToSearch }: PropsType) {
   return (
     <Stack>
@@ -82,7 +80,7 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
           <Stack direction="row" justifyContent={"space-between"}>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography> عدد العرض في الصفحة</Typography>
-              <TextField size="small" select onChange={(e) => {}}>
+              <TextField size="small" select>
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={25}>25</MenuItem>
                 <MenuItem value={100}>100</MenuItem>
@@ -94,9 +92,7 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
               </TextField>
             </Stack>
             <Stack p={2}>
-              <Typography component={NavLink} to={""}>
-                عرض الكل
-              </Typography>
+              <Typography>عرض الكل</Typography>
             </Stack>
           </Stack>
         </>
@@ -108,6 +104,6 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
 }
 type PropsType = {
   ClientData: ClientDetailsType | null;
-  setToSearch: React.Dispatch<React.SetStateAction<number | null>>;
+  setToSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 export default TableDetails;

@@ -1,11 +1,12 @@
-import { Grid, Typography, Button, TextField, Box } from "@mui/material";
+import { Grid, Typography, Button, TextField, Box, Stack } from "@mui/material";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StatusChip from "../../../../components/StatusChip";
 import { useState } from "react";
+import { isStringAllNumbers } from "../../../../methods";
 
 function TableHeader(props: PropsType) {
-  const [searchCode, setSearchCode] = useState<number | null>(null);
+  const [searchCode, setSearchCode] = useState<string>();
   return (
     <Grid container px={2} py={1} alignItems={"center"}>
       <Grid item xs={2}>
@@ -16,17 +17,17 @@ function TableHeader(props: PropsType) {
         >
           حالة العقود
         </Typography>
-        <Box width={0.8} display={"flex"} justifyContent={"space-between"}>
+        <Stack spacing={1} direction={"row"}>
           <StatusChip color="primary" label={0} />
           <StatusChip color="warning" label={0} />
           <StatusChip color="error" label={0} />
           <StatusChip color="secondary" label={0} />
-        </Box>
+        </Stack>
       </Grid>
       <Grid item xs={6} display={"flex"} flexDirection={"row"}>
         <TextField
           onChange={(e) => {
-            setSearchCode(parseInt(e.target.value));
+            isStringAllNumbers(e.target.value);
           }}
           label="بحث"
           fullWidth
@@ -62,6 +63,6 @@ function TableHeader(props: PropsType) {
   );
 }
 type PropsType = {
-  setToSearch: React.Dispatch<React.SetStateAction<number | null>>;
+  setToSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 export default TableHeader;
