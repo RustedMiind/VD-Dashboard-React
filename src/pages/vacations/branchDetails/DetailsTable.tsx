@@ -19,6 +19,8 @@ import { NavLink } from "react-router-dom";
 
 function DetailsTable(props: PropsType) {
   const [open, setOpen] = useState<boolean>(false);
+  const [itemId, setItemId] = useState<number>();
+
   function openDialog() {
     setOpen(!open);
   }
@@ -51,8 +53,8 @@ function DetailsTable(props: PropsType) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.vacationsData?.map((item, index) => (
-                <TableRow key={index}>
+              {props.vacationsData?.map((item) => (
+                <TableRow key={item.id}>
                   <TableCell>{item.year}</TableCell>
                   <TableCell align="center">{item.vacationNumber}</TableCell>
                   <TableCell align="center">{item.vacationDayNumber}</TableCell>
@@ -78,7 +80,10 @@ function DetailsTable(props: PropsType) {
                     </NavLink>
                     <IconButton
                       aria-label="delete"
-                      onClick={() => openDialog()}
+                      onClick={() => {
+                        setItemId(item.id)
+                        openDialog();
+                      }}
                     >
                       <VisibilityIcon color="primary" />
                     </IconButton>
@@ -92,6 +97,7 @@ function DetailsTable(props: PropsType) {
       <ShowVactionDialog
         open={open}
         setOpen={setOpen}
+        itemId={itemId}
         vacationsData={props.vacationsData}
       />
     </Paper>
