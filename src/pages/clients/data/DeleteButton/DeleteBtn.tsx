@@ -14,9 +14,11 @@ function DeleteBtn(props: PropsType) {
       .post(Api("employee/client/delete"), deleteClients?.index)
       .then((res) => {
         const filtered =
-          props.requests?.filter(
-            (req) => !deleteClients?.index?.id?.includes(req.id)
-          ) || props.requests;
+          (typeof props.requests === "object" &&
+            props.requests?.filter(
+              (req) => !deleteClients?.index?.id?.includes(req.id)
+            )) ||
+          props.requests;
         props.setRequests(filtered);
       })
       .catch((err) => {
@@ -43,6 +45,8 @@ function DeleteBtn(props: PropsType) {
 export default DeleteBtn;
 
 export type PropsType = {
-  requests: ClientRequest[] | null;
-  setRequests: React.Dispatch<React.SetStateAction<ClientRequest[] | null>>;
+  requests: ClientRequest[] | "loading" | "error";
+  setRequests: React.Dispatch<
+    React.SetStateAction<ClientRequest[] | "loading" | "error">
+  >;
 };
