@@ -10,7 +10,9 @@ const RequestTypesToggles = ({
   counts,
   orderType,
   dispatch,
+  orderTypeId,
 }: PropsType) => {
+  console.log(orderTypeId);
   const setCurrent = (value: number) => {
     return () => {
       if (selected === value) setSelected(undefined);
@@ -35,14 +37,13 @@ const RequestTypesToggles = ({
       }}
     >
       {orderType?.map((chip, index) => {
-        const current = selected === chip.id;
         const count = findCount(index + 1)?.count || 0;
         return (
           <Badge key={chip.name} badgeContent={count} max={19} color="error">
             <Chip
               color="primary"
               onClick={setCurrent(chip.id)}
-              variant={current ? "filled" : "outlined"}
+              variant={orderTypeId === chip.id ? "filled" : "outlined"}
               label={chip.name}
             />
           </Badge>
@@ -57,6 +58,7 @@ type PropsType = {
   setSelected: React.Dispatch<React.SetStateAction<number | undefined>>;
   counts: CountType[] | null;
   orderType?: OrderType[] | null;
+  orderTypeId: number;
   dispatch: React.Dispatch<ActionTypes>;
 };
 
