@@ -5,15 +5,16 @@ import { DateFormatString } from "../../../../constants/DateFormat";
 import { ActionTypes } from "./reducer";
 import dayjs from "dayjs";
 import { Filter, OrderByType } from "../types";
-import { requestTypes } from "../RequestTypes";
 import axios from "axios";
 import { Api } from "../../../../constants";
+import { OrderType } from "../../clientsProcess/types/OrderType";
 
 const FilterComponent = ({
   opened,
   dispatch,
   filters,
   setSelectedType,
+  orderType,
 }: PropsType) => {
   const [department, setDepartment] = useState<undefined | []>(undefined);
 
@@ -82,18 +83,18 @@ const FilterComponent = ({
           onChange={(e) => {
             if (typeof e.target.value === "number" && e.target.value > 0) {
               setSelectedType(e.target.value as unknown as number);
+              dispatch({
+                type: "SET_ORDER_TYPE",
+                payload: e.target.value as number,
+              });
             } else {
               setSelectedType(undefined);
             }
           }}
         >
           <MenuItem value={0}>كل الانواع</MenuItem>
-          {requestTypes.map((reqType) => (
-            <MenuItem
-              key={reqType.value}
-              disabled={reqType.disabled}
-              value={reqType.value}
-            >
+          {orderType?.map((reqType) => (
+            <MenuItem key={reqType.id} value={reqType.id}>
               {reqType.name}
             </MenuItem>
           ))}
@@ -172,6 +173,7 @@ type PropsType = {
   filters: Filter;
   selectedType: number | undefined;
   setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
+  orderType: OrderType[] | undefined;
 };
 
 export default FilterComponent;

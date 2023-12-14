@@ -1,13 +1,23 @@
 import React from "react";
 import { CountType } from "../../../types/Count";
 import { Badge, Chip, Stack } from "@mui/material";
-import { requestTypes } from "./RequestTypes";
+import { OrderType } from "../clientsProcess/types/OrderType";
+import { ActionTypes } from "./Filter/reducer";
 
-const RequestTypesToggles = ({ selected, setSelected, counts }: PropsType) => {
+const RequestTypesToggles = ({
+  selected,
+  setSelected,
+  counts,
+  orderType,
+  dispatch,
+}: PropsType) => {
   const setCurrent = (value: number) => {
     return () => {
       if (selected === value) setSelected(undefined);
-      else setSelected(value);
+      else {
+        setSelected(value);
+        dispatch({ type: "SET_ORDER_TYPE", payload: value });
+      }
     };
   };
 
@@ -24,15 +34,14 @@ const RequestTypesToggles = ({ selected, setSelected, counts }: PropsType) => {
         mb: 1,
       }}
     >
-      {requestTypes.map((chip, index) => {
-        const current = selected === chip.value;
+      {orderType?.map((chip, index) => {
+        const current = selected === chip.id;
         const count = findCount(index + 1)?.count || 0;
         return (
           <Badge key={chip.name} badgeContent={count} max={19} color="error">
             <Chip
-              disabled={chip.disabled}
               color="primary"
-              onClick={setCurrent(chip.value)}
+              onClick={setCurrent(chip.id)}
               variant={current ? "filled" : "outlined"}
               label={chip.name}
             />
@@ -47,6 +56,8 @@ type PropsType = {
   selected: number | undefined;
   setSelected: React.Dispatch<React.SetStateAction<number | undefined>>;
   counts: CountType[] | null;
+  orderType?: OrderType[] | null;
+  dispatch: React.Dispatch<ActionTypes>;
 };
 
 export default RequestTypesToggles;
