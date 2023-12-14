@@ -9,7 +9,7 @@ import { Api } from "../../../constants";
 import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
-import { OrderType } from "./types/TypeOrder";
+import { OrderType } from "./types/OrderType";
 
 const InitLevel: StepType = {
   branch_id: 0,

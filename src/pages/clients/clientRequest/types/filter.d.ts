@@ -2,7 +2,7 @@ export interface Filter {
   dateFrom?: string | null;
   dateTo?: string | null;
   department_id?: number | null;
-  typeOrder?: string | null;
+  typeOrder?: number | null;
   search?: string | null;
   status?: number | null;
   sortBy?: OrderByType;

@@ -1,3 +1,5 @@
+import { EmployeeType } from "../../../../types";
+
 export interface FormData {
   contractForm: [];
   department: [];
@@ -18,10 +20,7 @@ export interface FormData {
         {
           created_at: string;
           departmentName: string;
-          employee: {
-            name: string;
-            id: number;
-          };
+          employee?: EmployeeType;
           employeeName: string;
           employee_id: number;
           id: number;

@@ -1,6 +1,6 @@
 import { Box, Button, Tab, Tabs } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { OrderType } from "./types/TypeOrder";
+import { OrderType } from "./types/OrderType";
 
 const TabsAndAdd = ({
   currentTab,
