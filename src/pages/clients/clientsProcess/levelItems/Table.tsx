@@ -20,12 +20,7 @@ import React from "react";
 import SelectManager from "./SelectManager";
 import { ActionType } from "./reducer";
 
-const TableComponent = ({
-  formDisabled,
-  level,
-  dataForm,
-  dispatch,
-}: PropsType) => {
+const TableComponent = ({ level, dataForm, dispatch }: PropsType) => {
   console.log(dataForm);
   return (
     <TableContainer>
@@ -45,10 +40,8 @@ const TableComponent = ({
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
                 <SelectManager
-                  formDisabled={formDisabled}
                   department_id={level.department_id}
                   employee_id={level.employee_id}
-                  disabled={level.employee_id !== 0}
                   departments={dataForm?.department_workAt}
                   setDepartmentId={(value: number) => {
                     dispatch({
@@ -68,7 +61,7 @@ const TableComponent = ({
                     label={"الموظف"}
                     size={"small"}
                     value={level.employee_id}
-                    disabled={formDisabled || level.department_id !== null}
+                    disabled={level.department_id !== null}
                     onChange={(e) => {
                       dispatch({
                         type: "SET_EMPLOYEE",
@@ -99,7 +92,6 @@ const TableComponent = ({
               <Checkbox
                 name="accepted"
                 checked={level.accept === 1}
-                disabled={formDisabled}
                 onChange={(e, checked) => {
                   dispatch({
                     type: "SET_ACCEPT",
@@ -112,7 +104,6 @@ const TableComponent = ({
             <TableCell>
               <Checkbox
                 name="approved"
-                disabled={formDisabled}
                 checked={level.approval === 1}
                 onChange={(e, checked) => {
                   dispatch({
@@ -127,7 +118,6 @@ const TableComponent = ({
               <TextField
                 size="small"
                 label="مدة التجاوز"
-                disabled={formDisabled}
                 value={level.period}
                 InputProps={{
                   endAdornment: (
@@ -150,7 +140,6 @@ const TableComponent = ({
                   <Select
                     label={"النموذج"}
                     size={"small"}
-                    disabled={formDisabled}
                     value={level.form_id}
                     onChange={(e) => {
                       dispatch({
@@ -176,7 +165,6 @@ const TableComponent = ({
 };
 
 type PropsType = {
-  formDisabled: boolean;
   level: StepType;
   dataForm: FormData;
   dispatch: React.Dispatch<ActionType>;

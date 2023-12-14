@@ -2,7 +2,6 @@ import { Alert, Snackbar, Stack, Typography } from "@mui/material";
 import TabsAndAdd from "./TabsAndAdd";
 import { useEffect, useState } from "react";
 import { Paper } from "@mui/material";
-import LevelsSkeleton from "./LevelsSkeleton";
 import { LoadingButton } from "@mui/lab";
 import axios from "axios";
 import { Api } from "../../../constants";
@@ -10,6 +9,7 @@ import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
 import { OrderType } from "./types/OrderType";
+import LevelsPlaceholder from "./LevelsPlaceholder";
 
 const InitLevel: StepType = {
   branch_id: 0,
@@ -45,6 +45,7 @@ const ClientProcess = () => {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
+            setEndPointStatus("none");
             setTypeOrder(res.data.typeOrder);
             setDataForm(res.data);
             resSolve();
@@ -63,6 +64,8 @@ const ClientProcess = () => {
       axios
         .get(Api(`employee/client/order/steps/${typeOrderId}`))
         .then((res) => {
+          setEndPointStatus("none");
+          console.log(res.data.data);
           setLevels(res.data.data);
           resSolve();
         })
@@ -111,6 +114,7 @@ const ClientProcess = () => {
   };
 
   const loadLevels = () => {
+    setEndPointStatus("loading");
     getFormData().catch(console.log);
     getLevels().catch(console.log);
   };
@@ -160,7 +164,7 @@ const ClientProcess = () => {
       <Paper sx={{ p: 2 }}>
         {endPointStatus === "loading" && (
           <Stack>
-            <LevelsSkeleton />
+            <LevelsPlaceholder />
           </Stack>
         )}
 

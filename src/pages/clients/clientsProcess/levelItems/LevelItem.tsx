@@ -36,8 +36,6 @@ const LevelItem = ({
     level.branch_id,
   ]);
 
-  const formDisabled = !update;
-
   return (
     <Stack my={0.5}>
       <Accordion
@@ -96,7 +94,6 @@ const LevelItem = ({
         <AccordionDetails sx={{ bgcolor: "background.paper", my: 0 }}>
           <TableComponent
             dataForm={dataForm}
-            formDisabled={formDisabled}
             level={localLevel}
             dispatch={dispatch}
           />
