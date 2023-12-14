@@ -14,12 +14,12 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useReducer } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
-import reducer, { VacationsInitial } from "../reducer";
+import reducer, { VacationsInitial } from "./reducer";
 import dayjs from "dayjs";
 import { DateFormatString } from "../../../../constants/DateFormat";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { getDateDiff, getDateDiffNegativeAllowed } from "../../../../methods";
+import { getDateDiffNegativeAllowed } from "../../../../methods";
 import { EmployeeType } from "../../../../types";
 
 const PopupVacations = ({

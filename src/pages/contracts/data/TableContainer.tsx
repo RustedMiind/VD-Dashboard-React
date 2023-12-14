@@ -1,12 +1,22 @@
-import React, { useContext } from "react";
-import TopTable from "../SetContract/topTable/TopTable";
-import ContractsTable from "../SetContract/Table";
-import { Typography, Box, Tabs, Tab, Paper, Button } from "@mui/material";
+import React, { useContext, useState } from "react";
+import ContractsTable from "../SetContract/Table/Table";
+import {
+  Typography,
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+  Button,
+  Stack,
+} from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PopUpContracts from "../SetContract/Components/PopUpContracts";
-import { ContractsContext } from "../Context/ContractsContext";
-import ContractsNotFound from "../SetContract/ContractsNotFound.1";
+import ContractsNotFound from "../SetContract/Components/ContractsNotFound.1";
 import LoadingTable from "../../../components/LoadingTable";
+import DoubleChips from "../../../components/DoubleStatusChips";
+import BtnCus from "../SetContract/Table/BtnCus";
+import { ContractsContext } from "./../Context/ContractsContext";
+
 function TableContainer() {
   const { contracts } = useContext(ContractsContext);
 
@@ -41,10 +51,12 @@ function TableContainer() {
       </div>
     );
   }
-  const [value, setValue] = React.useState<number>(0);
+  const [value, setValue] = useState<number>(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const [secondTabValue, setSecondTabValue] = useState<0 | 1>(0);
+
   return (
     <>
       <Box sx={{ width: "100%", position: "relative", mt: 2 }}>
@@ -63,6 +75,7 @@ function TableContainer() {
           </Tabs>
           <PopUpContracts handleClose={handleClose} open={open} />
         </Box>
+
         <CustomTabPanel value={value} index={0}>
           <Paper sx={{ p: 3 }}>
             <Button
@@ -73,7 +86,41 @@ function TableContainer() {
             >
               اضافة عقد
             </Button>
-            <TopTable value={value} />
+
+            <Typography sx={{ mt: 2 }}>حالات العقود</Typography>
+            <Stack
+              direction={"row-reverse"}
+              justifyContent={value === 0 ? "space-between" : "end"}
+            >
+              <Box>
+                <BtnCus />
+              </Box>
+              {typeof contracts === "object" && value === 0 && (
+                <Stack direction={"row"} spacing={2} mb={1}>
+                  <DoubleChips
+                    color="success"
+                    label="ساري"
+                    value={contracts?.contract_work}
+                  />
+                  <DoubleChips
+                    color="warning"
+                    label="متأخر"
+                    value={contracts?.contract_late}
+                  />
+                  <DoubleChips
+                    color="error"
+                    label="متوقف"
+                    value={contracts?.contract_stop}
+                  />
+                  <DoubleChips
+                    color="primary"
+                    label="منتهي"
+                    value={contracts?.contract_end}
+                  />
+                </Stack>
+              )}
+            </Stack>
+
             {typeof contracts === "string" && contracts === "loading" && (
               <LoadingTable rows={4} cols={5} />
             )}
@@ -90,7 +137,7 @@ function TableContainer() {
               ))}
           </Paper>
         </CustomTabPanel>
-        
+
         <CustomTabPanel value={value} index={1}>
           <Paper sx={{ p: 3 }}>
             <Button
@@ -101,7 +148,62 @@ function TableContainer() {
             >
               اضافة عقد
             </Button>
-            <TopTable value={value} />
+            <Stack direction={"row"} spacing={0} mt={2}>
+              <Button
+                variant={secondTabValue === 0 ? "contained" : "outlined"}
+                sx={{ width: "50%" }}
+                onClick={() => {
+                  setSecondTabValue(0);
+                }}
+              >
+                العقود المنشأة
+              </Button>
+              <Button
+                variant={secondTabValue === 1 ? "contained" : "outlined"}
+                sx={{ width: "50%" }}
+                onClick={() => {
+                  setSecondTabValue(1);
+                }}
+              >
+                العقود المحولة
+              </Button>
+            </Stack>
+
+            {secondTabValue === 0 && (
+              <Stack
+                direction={"row-reverse"}
+                justifyContent={value === 0 ? "end" : "space-between"}
+              >
+                <Box>
+                  <BtnCus />
+                </Box>
+                {typeof contracts === "object" && (
+                  <Stack direction={"row"} spacing={2} mb={1}>
+                    <DoubleChips
+                      color="success"
+                      label="ساري"
+                      value={contracts?.contract_work}
+                    />
+                    <DoubleChips
+                      color="warning"
+                      label="متأخر"
+                      value={contracts?.contract_late}
+                    />
+                    <DoubleChips
+                      color="error"
+                      label="متوقف"
+                      value={contracts?.contract_stop}
+                    />
+                    <DoubleChips
+                      color="primary"
+                      label="منتهي"
+                      value={contracts?.contract_end}
+                    />
+                  </Stack>
+                )}
+              </Stack>
+            )}
+
             {typeof contracts === "string" && contracts === "loading" && (
               <LoadingTable rows={4} cols={5} />
             )}
@@ -111,10 +213,12 @@ function TableContainer() {
               </Typography>
             )}
             {typeof contracts === "object" &&
-              (contracts?.data?.length ? (
-                <ContractsTable value={value} />
+              (contracts?.data?.length && secondTabValue === 0 ? (
+                <ContractsTable value={value} secondTabValue={secondTabValue} />
               ) : (
-                <ContractsNotFound />
+                <Stack pt={4}>
+                  <ContractsNotFound />
+                </Stack>
               ))}
           </Paper>
         </CustomTabPanel>

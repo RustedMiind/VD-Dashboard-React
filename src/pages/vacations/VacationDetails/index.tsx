@@ -3,7 +3,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TableData from "./components/Table";
 import PrintIcon from "@mui/icons-material/Print";
 import { useEffect, useState } from "react";
-import PopupVacations from "./components/SetDialog";
+import PopupVacations from "./SetDialog";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { useParams } from "react-router-dom";

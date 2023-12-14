@@ -5,14 +5,12 @@ import Payments from "./FormSections/PaymentsSection";
 import Attachments from "./FormSections/AttachmentsSection";
 import SectionAccordion from "./Components/SectionAccordion";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import ContractDetailsContextProvider from "./ContractDetailsContext";
 
 export default function CreateContracts(props: PropsType) {
   const isCreate = props.type === "create";
   const [opened, setOpened] = useState<null | number>(1);
-  const { id } = useParams();
-
+  
   const currentOpened = (index: number) => opened === index;
   const setCurrentOpened = (index: number) => {
     if (index === opened) {
@@ -25,13 +23,6 @@ export default function CreateContracts(props: PropsType) {
       setOpened(1);
     } else {
       setOpened(null);
-    }
-
-    if (!isCreate) {
-      // get contract data and assign it to each component state
-      // Using the {id} Param
-    } else {
-      // do nothing
     }
   }, [isCreate]);
 
