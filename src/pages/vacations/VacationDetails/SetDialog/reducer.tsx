@@ -1,6 +1,6 @@
-import { getDateDiffNegativeAllowed } from "../../../methods";
-import { ReducerAction } from "../../../types";
-import { VacationFormType } from "./types";
+import { getDateDiffNegativeAllowed } from "../../../../methods";
+import { ReducerAction } from "../../../../types";
+import { VacationFormType } from "../types";
 
 const reducer = (
   state: VacationFormType,
