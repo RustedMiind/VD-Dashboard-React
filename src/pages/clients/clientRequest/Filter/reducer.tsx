@@ -68,7 +68,7 @@ export const FiltersInit: Filter = {
   search: "",
   sortBy: "desc",
   typeClient: "",
-  limit: -1,
+  limit: 10,
 };
 
 export type ActionTypes =
