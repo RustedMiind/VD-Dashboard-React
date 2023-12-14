@@ -184,13 +184,13 @@ const ClientTableComponent = ({
             });
           }}
         >
-          <MenuItem value={-1}>الكل</MenuItem>
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
           <MenuItem value={500}>500</MenuItem>
           <MenuItem value={2500}>2500</MenuItem>
           <MenuItem value={10000}>10000</MenuItem>
+          <MenuItem value={-1}>الكل</MenuItem>
         </TextField>
       </Stack>
     </>
