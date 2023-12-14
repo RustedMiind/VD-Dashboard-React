@@ -18,6 +18,10 @@ export interface FormData {
         {
           created_at: string;
           departmentName: string;
+          employee: {
+            name: string;
+            id: number;
+          };
           employeeName: string;
           employee_id: number;
           id: number;
