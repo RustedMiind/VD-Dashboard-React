@@ -11,11 +11,13 @@ import {
 import { VacationsDetailsType } from "../branchDetails";
 
 export default function ShowVactionDialog(props: TypeProps) {
-  console.log(props.vacationsData);
-
   const handleClose = () => {
     props.setOpen(!props.open);
   };
+  const vacationDataObject = props.vacationsData?.filter((item) => {
+    return item.id === props.itemId;
+  });
+  console.log(vacationDataObject && vacationDataObject[0]?.id);
 
   return (
     <>
@@ -38,7 +40,7 @@ export default function ShowVactionDialog(props: TypeProps) {
                   <TextField
                     disabled
                     size="small"
-                    value={props.vacationsData && props.vacationsData[0].year}
+                    value={vacationDataObject && vacationDataObject[0]?.year}
                     fullWidth
                   />
                 </Grid>
@@ -48,8 +50,8 @@ export default function ShowVactionDialog(props: TypeProps) {
                     disabled
                     size="small"
                     value={
-                      props.vacationsData &&
-                      props.vacationsData[0].vacationNumber
+                      vacationDataObject &&
+                      vacationDataObject[0]?.vacationNumber
                     }
                     fullWidth
                     sx={{ ml: 2 }}
@@ -60,8 +62,8 @@ export default function ShowVactionDialog(props: TypeProps) {
                   <TextField
                     disabled
                     value={
-                      props.vacationsData &&
-                      props.vacationsData[0].vacationDayNumber + " يوم"
+                      vacationDataObject &&
+                      vacationDataObject[0]?.vacationNumber + " يوم"
                     }
                     size="small"
                     fullWidth
@@ -75,7 +77,7 @@ export default function ShowVactionDialog(props: TypeProps) {
                   <TextField
                     disabled
                     value={
-                      props.vacationsData && props.vacationsData[0].status.name
+                      vacationDataObject && vacationDataObject[0]?.status.name
                     }
                     size="small"
                     fullWidth
@@ -89,8 +91,8 @@ export default function ShowVactionDialog(props: TypeProps) {
                   <Typography>المستخدم</Typography>
                   <TextField
                     value={
-                      props.vacationsData &&
-                      props.vacationsData[0].vacationDayNumberUsed
+                      vacationDataObject &&
+                      vacationDataObject[0]?.vacationDayNumberUsed
                     }
                     disabled
                     size="small"
@@ -104,8 +106,8 @@ export default function ShowVactionDialog(props: TypeProps) {
                   <Typography sx={{ ml: 2 }}>المتبقي</Typography>
                   <TextField
                     value={
-                      props.vacationsData &&
-                      props.vacationsData[0].vacationDayNumberstay
+                      vacationDataObject &&
+                      vacationDataObject[0]?.vacationDayNumberstay
                     }
                     disabled
                     size="small"
@@ -147,4 +149,5 @@ type TypeProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   vacationsData?: VacationsDetailsType[];
+  itemId: number | undefined;
 };
