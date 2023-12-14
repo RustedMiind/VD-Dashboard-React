@@ -8,3 +8,4 @@ export * from "./Children";
 export * from "./EmployeeRequest";
 export * from "./Department";
 export * from "./Requestable";
+export * from "./Vacations";
