@@ -77,7 +77,7 @@ export default function BasicTable({ clientData }: PropsType) {
                     color: `${row.theme}`,
                   }}
                 >
-                  {`${row.value}SAR`}
+                  {row.value && `${row.value} SAR`}
                 </TableCell>
               </TableRow>
             ))}
