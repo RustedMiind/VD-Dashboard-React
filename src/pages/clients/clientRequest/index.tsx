@@ -93,7 +93,7 @@ const ClientRequests = () => {
     setDialogOpen(undefined);
   };
 
-  useEffect(getRequests, [selectedType, currentTab]);
+  useEffect(getRequests, [selectedType, currentTab, filters.limit]);
   const IS_REQUESTS_EXISTS = typeof requests === "object";
   let filtered: PanelData[] | StepStatusData[] | undefined = IS_REQUESTS_EXISTS
     ? requests
@@ -174,13 +174,11 @@ const ClientRequests = () => {
               tableRef={tableRef}
               requests={filtered}
               dispatch={dispatch}
-              applySearch={getRequests}
+              limit={filters.limit}
             />
           )}
 
-          {requests === "loading" && (
-            <LoadingTable rows={8} cols={7} />
-          )}
+          {requests === "loading" && <LoadingTable rows={8} cols={7} />}
 
           {requests === "error" && (
             <Typography

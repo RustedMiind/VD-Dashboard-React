@@ -9,6 +9,7 @@ import { Api } from "../../../constants";
 import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
+import { OrderType } from "./types/TypeOrder";
 
 const InitLevel: StepType = {
   branch_id: 0,
@@ -18,19 +19,21 @@ const InitLevel: StepType = {
   employee_id: 0,
   accept: 0,
   approval: 0,
+  type_id: 0,
 };
 
 const ClientProcess = () => {
   const [currentTab, setCurrentTab] = useState(1);
+  const [typeOrder, setTypeOrder] = useState<OrderType[]>();
+  const [typeOrderId, setTypeOrderId] = useState<number>(1);
   const [endPointStatus, setEndPointStatus] =
     useState<EndPointStateType>("none");
   const [sendState, setSendState] = useState<SendStateType>("none");
   const [dataForm, setDataForm] = useState<FormData | null>();
-  console.log(dataForm);
   const [process, setProcess] = useState<ProcedureType>({
     levels: [InitLevel],
   });
-  const [getLevelsData, setLevelsData] = useState();
+  console.log(process.levels);
 
   const snackbarClose = () => {
     setSendState("none");
@@ -42,7 +45,7 @@ const ClientProcess = () => {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
-            console.log(res.data);
+            setTypeOrder(res.data.typeOrder);
             setDataForm(res.data);
             resSolve();
           })
@@ -57,21 +60,17 @@ const ClientProcess = () => {
 
   const getLevels = () => {
     return new Promise<void>((resSolve, reject) => {
-      if (!getLevelsData) {
-        axios
-          .get(Api("employee/client/order/steps"))
-          .then((res) => {
-            console.log(res.data);
-            setLevelsData(res.data);
-            setLevels(res.data.data);
-            resSolve();
-          })
-          .catch((err) => {
-            console.log(err);
-            setEndPointStatus("error");
-            reject(err);
-          });
-      } else resSolve();
+      axios
+        .get(Api(`employee/client/order/steps/${typeOrderId}`))
+        .then((res) => {
+          setLevels(res.data.data);
+          resSolve();
+        })
+        .catch((err) => {
+          console.log(err);
+          setEndPointStatus("error");
+          reject(err);
+        });
     });
   };
 
@@ -84,6 +83,7 @@ const ClientProcess = () => {
         employee_id,
         accept,
         approval,
+        type_id,
       }): Partial<StepType> => {
         return {
           department_id,
@@ -92,13 +92,14 @@ const ClientProcess = () => {
           employee_id,
           accept,
           approval,
+          type_id: typeOrderId,
         };
       }
     );
     console.log(data);
     setSendState("sending");
     axios
-      .post(Api("employee/client/order/steps/store"), data)
+      .post(Api(`employee/client/order/steps/store/${typeOrderId}`), data)
       .then((res) => {
         console.log("Done", res);
         setSendState("success");
@@ -139,7 +140,7 @@ const ClientProcess = () => {
     setLevels(instance);
   }
 
-  useEffect(loadLevels, [currentTab]);
+  useEffect(loadLevels, [currentTab, typeOrderId]);
 
   return (
     <Stack>
@@ -152,6 +153,8 @@ const ClientProcess = () => {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         disabled={endPointStatus !== "none"}
+        orderType={typeOrder || []}
+        setOrderTypeId={setTypeOrderId}
       />
 
       <Paper sx={{ p: 2 }}>
@@ -174,7 +177,6 @@ const ClientProcess = () => {
             {endPointStatus === "none" &&
               process.levels?.map((level, index, arr) => {
                 const IS_LAST_ITEM = index === arr.length - 1;
-                // const MORE_THAN_ONE = arr.length > 1;
                 return (
                   <LevelItem
                     key={level.id}
@@ -193,6 +195,12 @@ const ClientProcess = () => {
                 );
               })}
           </Stack>
+        )}
+
+        {process?.levels?.length === 0 && (
+          <Typography variant="h5" textAlign="center" p={2} py={4}>
+            لم يتم ايجاد اي من المراحل المطلوبة
+          </Typography>
         )}
 
         <Stack mt={2} direction={"row-reverse"}>

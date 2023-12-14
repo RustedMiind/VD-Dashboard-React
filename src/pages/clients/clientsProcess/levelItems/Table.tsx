@@ -26,7 +26,7 @@ const TableComponent = ({
   dataForm,
   dispatch,
 }: PropsType) => {
-  console.log(level);
+  console.log(dataForm);
   return (
     <TableContainer>
       <Table aria-label="simple table">
