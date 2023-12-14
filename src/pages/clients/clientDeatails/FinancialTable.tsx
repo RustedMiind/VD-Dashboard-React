@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ClientDetailsType } from "../../../types/Clients";
+import { Typography } from "@mui/material";
 
 function createData(title: string, value: number, theme: string) {
   return { title, value, theme };
@@ -44,7 +45,7 @@ export default function BasicTable({ clientData }: PropsType) {
   }, [clientData?.payment?.amount_required]);
 
   return (
-    <Paper elevation={2} sx={{ m: 3 }}>
+    <Paper elevation={2}>
       <TableContainer component={Paper} sx={{ bgcolor: "Background" }}>
         <Table>
           <TableHead
@@ -57,7 +58,9 @@ export default function BasicTable({ clientData }: PropsType) {
           >
             <TableRow>
               <TableCell align="left">الإجمالي</TableCell>
-              <TableCell align="right">{`${total}SAR`}</TableCell>
+              <TableCell align="right">
+                <Typography display={"inline-block"}>SAR</Typography> {total}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -77,7 +80,8 @@ export default function BasicTable({ clientData }: PropsType) {
                     color: `${row.theme}`,
                   }}
                 >
-                  {row.value && `${row.value} SAR`}
+                  <Typography display={"inline-block"}>SAR</Typography>{" "}
+                  {row.value && `${row.value}`}
                 </TableCell>
               </TableRow>
             ))}

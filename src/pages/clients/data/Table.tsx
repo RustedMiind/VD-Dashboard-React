@@ -79,9 +79,6 @@ function ClientRequestsTable(props: PropsType) {
       : [];
     setSelectedItems(allChecked);
   }
-
-  console.log(props.requests);
-
   return (
     <>
       <Stack>
@@ -190,7 +187,19 @@ function ClientRequestsTable(props: PropsType) {
           <MenuItem value={props.requests?.length}>عرض الكل</MenuItem>
         </TextField>
       </Stack>
-      {props.requests?.length !== 0 && (
+      <Stack
+        p={2}
+        sx={{
+          position: "absolute",
+          right: "20px",
+        }}
+      >
+        <Typography component={NavLink} to={""}>
+          عرض الكل
+        </Typography>
+      </Stack>
+
+      {/* {props.requests?.length !== 0 && (
         <ReactToPrint
           trigger={() => (
             <Button
@@ -210,7 +219,7 @@ function ClientRequestsTable(props: PropsType) {
           )}
           content={() => tableRef.current}
         />
-      )}
+      )} */}
     </>
   );
 }
