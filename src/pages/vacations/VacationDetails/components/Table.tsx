@@ -12,7 +12,7 @@ import {
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { useState } from "react";
-import SetDialog from "./SetDialog";
+import SetDialog from "../SetDialog";
 import { EmployeeType } from "../../../../types";
 
 const TableData = ({
