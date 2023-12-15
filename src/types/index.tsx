@@ -9,3 +9,4 @@ export * from "./EmployeeRequest";
 export * from "./Department";
 export * from "./Requestable";
 export * from "./Vacations";
+export * from "./ChangeTypeValues";
