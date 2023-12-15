@@ -10,18 +10,17 @@ import { ClientDetailsType } from "../../../types/Clients";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+import ContractsNotFound from "../../contracts/SetContract/Components/ContractsNotFound.1";
 function ClientDetails() {
-  const { id } = useParams();
+  const params = useParams();
   const [clientData, setClientData] = useState<
     ClientDetailsType | "loading" | "error"
   >("loading");
   const [toSearch, setToSearch] = useState<string>();
-  console.log(toSearch);
-
   useEffect(() => {
     setClientData("loading");
     axios
-      .get<ClientDetailsType>(Api(`employee/contract/project/${id}`), {
+      .get<ClientDetailsType>(Api(`employee/contract/project/${params.id}`), {
         params: {
           code: toSearch,
         },
@@ -127,7 +126,11 @@ function ClientDetails() {
           </Paper>
 
           <Stack>
-            <TableDetails ClientData={clientData} setToSearch={setToSearch} />
+            {clientData.data.length ? (
+              <TableDetails ClientData={clientData} setToSearch={setToSearch} />
+            ) : (
+              <ContractsNotFound />
+            )}
           </Stack>
         </Stack>
       )}

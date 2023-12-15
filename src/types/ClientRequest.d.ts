@@ -12,7 +12,7 @@ export interface ClientRequest {
   branch_id: number;
   contracts: Contract[];
   branch: Branch;
-  Contract_status: string;
+  contract_status: string;
   agent_name: string | null;
   letter_head: string;
   card_image: File;
@@ -22,4 +22,5 @@ export interface ClientRequest {
   status_id: null;
   broker_id: null;
   contracts_count: number;
+  contract_status_id: num;
 }

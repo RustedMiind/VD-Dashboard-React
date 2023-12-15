@@ -3,7 +3,6 @@ import {
   Table,
   TableRow,
   TableBody,
-  Chip,
   Checkbox,
   Stack,
   Button,
@@ -40,7 +39,6 @@ function ClientRequestsTable(props: PropsType) {
   const chekedArray: IdListType = {
     id: [],
   };
-  const [displayButton, setDisplayButton] = useState<0 | 1>(0);
   const tableRef: React.RefObject<HTMLTableElement> =
     useRef<HTMLTableElement>(null);
   const handlePrint = () => {
@@ -131,10 +129,10 @@ function ClientRequestsTable(props: PropsType) {
                       {client.register_number || client.card_id}
                     </TableCell>
                     <TableCell>{client.branch?.name}</TableCell>
-                    <TableCell>
-                      {client.Contract_status === "منتهي" ? (
+                    <TableCell sx={{ textAlign: "center" }}>
+                      {client.contract_status_id === 2 ? (
                         <StatusChip color="error" label="منتهي" />
-                      ) : client.Contract_status === "لا يوجد عقود" ? (
+                      ) : client.contract_status_id === 0 ? (
                         <StatusChip color="primary" label="لا يوجد عقود" />
                       ) : (
                         <StatusChip color="success" label="جاري العمل" />

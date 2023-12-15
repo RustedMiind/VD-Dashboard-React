@@ -1,11 +1,17 @@
 import { Button, Paper, Stack, Typography } from "@mui/material";
-import * as React from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PopUpContracts from "./PopUpContracts";
 import img1 from "../../../../assets/images/branch-empty.png";
+import { useState } from "react";
+import { Box } from "@mui/material";
 
 export default function ContractsNotFound() {
-  const [open, setOpen] = React.useState(false);
+  const pathName = window.location.pathname;
+  const [bgPaper, setBgPaper] = useState<string>("");
+  // function changeBgPaper() {
+  //   repathName.includes("details") && setBgPaper("white");
+  // }
+  const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -20,13 +26,15 @@ export default function ContractsNotFound() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          bgcolor: pathName.includes("details") ? "white" : "",
+          // bgcolor: { bgPaper },
         }}
       >
-        <React.Fragment>
-          <Stack>
-            <img src={img1} alt="Not found" />
+        <Stack alignItems={"center"}>
+          <img src={img1} alt="Not found" width={"250"} />
+          <Stack alignItems={"center"}>
             <Typography sx={{ fontSize: "28px", fontWeight: "700" }}>
-              لا يوجد عقود متاحة
+              لا يوجد عقود لم يتم البدء في عمل تعاقدات
             </Typography>
             <Button
               variant="contained"
@@ -36,9 +44,9 @@ export default function ContractsNotFound() {
             >
               انشاء عقد جديد
             </Button>
-            <PopUpContracts handleClose={handleClose} open={open} />
           </Stack>
-        </React.Fragment>
+          <PopUpContracts handleClose={handleClose} open={open} />
+        </Stack>
       </Paper>
     </Stack>
   );

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material";
 import axios from "axios";
@@ -26,8 +26,14 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 export default function PopUpContracts(props: PropType) {
+  const location = useLocation();
+  const currentPath = location.pathname;
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contract_id, setContract_id] = useState<number | undefined>(undefined);
+  const newPath = currentPath.replace(
+    `${currentPath}`,
+    `/react/contracts/create/${contract_id}`
+  );
   const [isChecked, setIsChecked] = useState<string>();
 
   useEffect(() => {
@@ -102,7 +108,7 @@ export default function PopUpContracts(props: PropType) {
           <Button
             variant="contained"
             component={NavLink}
-            to={`create/${contract_id}`}
+            to={`${newPath}`}
             sx={{ my: 5 }}
             disabled={!!!isChecked}
           >

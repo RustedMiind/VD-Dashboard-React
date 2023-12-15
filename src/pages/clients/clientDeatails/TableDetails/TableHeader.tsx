@@ -27,7 +27,7 @@ function TableHeader(props: PropsType) {
       <Grid item xs={6} display={"flex"} flexDirection={"row"}>
         <TextField
           onChange={(e) => {
-            isStringAllNumbers(e.target.value);
+            setSearchCode(e.target.value);
           }}
           label="بحث"
           fullWidth
