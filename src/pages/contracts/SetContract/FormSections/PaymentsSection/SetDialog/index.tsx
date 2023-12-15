@@ -11,7 +11,11 @@ import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import { ContractPayment, ContractTask } from "../../../../../../types";
+import {
+  ChangeTypeValues,
+  ContractPayment,
+  ContractTask,
+} from "../../../../../../types";
 import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 
 // Icons
@@ -29,7 +33,9 @@ type TextfieldPropsType = TextFieldProps;
 
 function SetDialog(props: PropsType) {
   const ContractDetails = useContext(ContractDetailsContext);
-  const [errorState, setErrorState] = useState<Partial<AddPaymentFormType>>({});
+  const [errorState, setErrorState] = useState<
+    ChangeTypeValues<Partial<AddPaymentFormType>, string>
+  >({});
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");

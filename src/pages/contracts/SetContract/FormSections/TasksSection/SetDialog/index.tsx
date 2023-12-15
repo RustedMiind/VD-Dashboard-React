@@ -44,7 +44,9 @@ function SetDialog(props: PropsType) {
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");
-  const [errorState, setErrorState] = useState<Partial<AddTaskFormType>>({});
+  const [errorState, setErrorState] = useState<
+    ChangeTypeValues<Partial<AddTaskFormType>, string>
+  >({});
   const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
