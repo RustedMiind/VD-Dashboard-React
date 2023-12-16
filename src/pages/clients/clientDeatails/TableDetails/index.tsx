@@ -18,7 +18,7 @@ import TableHeader from "./TableHeader";
 import { ClientDetailsType } from "../../../../types/Clients";
 import StatusChip from "../../../../components/StatusChip";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
-function TableDetails({ ClientData, setToSearch }: PropsType) {
+function TableDetails({ ClientData, setToSearch, setLimit, limit }: PropsType) {
   return (
     <Stack>
       <TableHeader setToSearch={setToSearch} />
@@ -60,7 +60,7 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
                             label={item.Contract_status}
                           />
                         </TableCell>
-                        <TableCell>----</TableCell>
+                        <TableCell>0</TableCell>
                         <TableCell>----</TableCell>
                         <TableCell>{item.branch.name}</TableCell>
                         <TableCell>----</TableCell>
@@ -79,7 +79,14 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
         <Stack direction="row" justifyContent={"space-between"}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography> عدد العرض في الصفحة</Typography>
-            <TextField size="small" select>
+            <TextField
+              value={limit}
+              onChange={(e) => {
+                setLimit(e.target.value);
+              }}
+              size="small"
+              select
+            >
               <MenuItem value={5}>5</MenuItem>
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={100}>100</MenuItem>
@@ -87,11 +94,21 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
               <MenuItem value={500}>500</MenuItem>
               <MenuItem value={1000}>1000</MenuItem>
               <MenuItem value={10000}>10000</MenuItem>
-              <MenuItem>عرض الكل</MenuItem>
+              <MenuItem value={"-1"}>عرض الكل</MenuItem>
             </TextField>
           </Stack>
           <Stack p={2}>
-            <Typography>عرض الكل</Typography>
+            <Typography
+              sx={{
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setLimit("-1");
+              }}
+            >
+              عرض الكل
+            </Typography>
           </Stack>
         </Stack>
       </>
@@ -101,5 +118,7 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
 type PropsType = {
   ClientData: ClientDetailsType | null;
   setToSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
+  limit: string;
+  setLimit: React.Dispatch<React.SetStateAction<string>>;
 };
 export default TableDetails;

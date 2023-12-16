@@ -17,12 +17,14 @@ function ClientDetails() {
     ClientDetailsType | "loading" | "error"
   >("loading");
   const [toSearch, setToSearch] = useState<string>();
+  const [limit, setLimit] = useState<string>("5");
   useEffect(() => {
     setClientData("loading");
     axios
       .get<ClientDetailsType>(Api(`employee/contract/project/${params.id}`), {
         params: {
           code: toSearch,
+          limit,
         },
       })
       .then((res) => {
@@ -32,7 +34,7 @@ function ClientDetails() {
         setClientData("error");
         console.log(err);
       });
-  }, [toSearch]);
+  }, [toSearch, limit]);
 
   return (
     <>
@@ -127,7 +129,12 @@ function ClientDetails() {
 
           <Stack>
             {clientData.data.length ? (
-              <TableDetails ClientData={clientData} setToSearch={setToSearch} />
+              <TableDetails
+                ClientData={clientData}
+                setToSearch={setToSearch}
+                setLimit={setLimit}
+                limit={limit}
+              />
             ) : (
               <ContractsNotFound />
             )}
