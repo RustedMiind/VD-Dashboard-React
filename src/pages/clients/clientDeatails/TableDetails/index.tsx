@@ -22,7 +22,15 @@ import EmptyPlaceholder from "../../../../components/EmptyPlaceholder";
 function TableDetails({ ClientData, setToSearch }: PropsType) {
   return (
     <Stack>
-      <TableHeader setToSearch={setToSearch} />
+      <TableHeader
+        contractsCounts={{
+          end: ClientData?.contract_end || 0,
+          late: ClientData?.contract_late || 0,
+          stopped: ClientData?.contract_stop || 0,
+          work: ClientData?.contract_work || 0,
+        }}
+        setToSearch={setToSearch}
+      />
       {/* Table */}
       {ClientData?.data.length ? (
         <>
