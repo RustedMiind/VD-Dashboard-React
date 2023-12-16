@@ -82,11 +82,7 @@ export default function FormAdd() {
     try {
       const { data } = await axios.get<{
         data: Client;
-      }>(Api(`employee/client/edit`), {
-        params: {
-          id: params.id,
-        },
-      });
+      }>(Api(`employee/client/edit/${params.id}`), {});
 
       setclientEdit(data.data);
 
