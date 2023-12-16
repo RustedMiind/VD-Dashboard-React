@@ -13,6 +13,7 @@ import { IndexContextProvider } from "../Context/Store";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
 import { Client } from "../../../types/Clients";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function ClientData() {
   const [open, setOpen] = useState(false);
@@ -22,11 +23,24 @@ function ClientData() {
   );
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState<string>("5");
-  console.log(limit);
-
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  let anyClientHasContracts = false;
+  typeof requests === "object" &&
+    selectedItems.forEach((id) => {
+      !!requests.find(
+        (client) =>
+          client.id === id &&
+          client.contracts_count &&
+          client.contracts_count > 0
+      ) && (anyClientHasContracts = true);
+    });
+
+  const deleteDisabled = selectedItems.length === 0 || anyClientHasContracts;
+  const updateDisabled = selectedItems.length !== 1;
   function getRequests(advancedSearchParams?: unknown) {
     setRequests("loading");
     axios
@@ -95,6 +109,9 @@ function ClientData() {
                     variant="contained"
                     onClick={handleClickOpen}
                     startIcon={<EditIcon />}
+                    disabled={updateDisabled}
+                    component={NavLink}
+                    to={`${selectedItems[0]}/edit`}
                   >
                     تعديل بيانات عميل
                   </Button>
@@ -108,13 +125,14 @@ function ClientData() {
                 getClients={getRequests}
               />
             </Box>
-            {requests?.length !== 0 && (
-              <>
-                {typeof requests === "object" && (
-                  <DeleteBtn setRequests={setRequests} requests={requests} />
-                )}
-              </>
-            )}
+            <Button
+              color="error"
+              variant="outlined"
+              disabled={deleteDisabled}
+              startIcon={<DeleteIcon />}
+            >
+              حذف
+            </Button>
           </Box>
           {requests === "loading" && <LoadingTable rows={5} cols={9} />}
           {requests === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
@@ -123,6 +141,8 @@ function ClientData() {
               requests={requests}
               setLimit={setLimit}
               limit={limit}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
             />
           )}
         </Paper>
