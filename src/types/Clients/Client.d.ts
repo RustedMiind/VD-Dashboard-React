@@ -39,5 +39,5 @@ export interface Client {
   branch?: Branch; // Assuming Branch is another interface
   contracts_count?: number;
   contract_status?: string;
-  status_id?: numbers;
+  contract_status_id?: number;
 }

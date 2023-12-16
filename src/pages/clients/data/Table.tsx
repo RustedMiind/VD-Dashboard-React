@@ -131,13 +131,22 @@ function ClientRequestsTable(props: PropsType) {
                     </TableCell>
                     <TableCell>{client.branch?.name}</TableCell>
                     <TableCell>
-                      {client.contract_status === "منتهي" ? (
-                        <StatusChip color="error" label="منتهي" />
-                      ) : client.contract_status === "لا يوجد عقود" ? (
-                        <StatusChip color="primary" label="لا يوجد عقود" />
-                      ) : (
-                        <StatusChip color="success" label="جاري العمل" />
-                      )}
+                      {((): React.ReactNode => {
+                        switch (client.contract_status_id) {
+                          case 0:
+                            return (
+                              <StatusChip color="primary" label="ﻻ يوجد عقود" />
+                            );
+                          case 1:
+                            return (
+                              <StatusChip color="success" label="جاري العمل" />
+                            );
+                          case 2:
+                            return <StatusChip color="error" label="منتهي" />;
+                          default:
+                            <></>;
+                        }
+                      })()}
                     </TableCell>
                     <TableCell>
                       {client.agent_name ? client.agent_name : "-"}

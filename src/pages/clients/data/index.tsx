@@ -6,6 +6,7 @@ import { Api } from "../../../constants";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
 import ClientRequestsTable from "./Table";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteBtn from "./DeleteButton/DeleteBtn";
 import SearchDialog from "./SearchDialog";
 import { IndexContextProvider } from "../Context/Store";
@@ -26,11 +27,11 @@ function ClientData() {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  function getRequests() {
+  function getRequests(advancedSearchParams?: unknown) {
     setRequests("loading");
     axios
       .get<{ data: Client[] }>(Api("employee/client"), {
-        params: {
+        params: advancedSearchParams || {
           search,
           limit,
         },
@@ -55,6 +56,9 @@ function ClientData() {
           search={search}
           setSearch={setSearch}
           getRequests={getRequests}
+          openAdvancedSearchDialog={() => {
+            setOpen(true);
+          }}
         />
         <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
           العملاء
@@ -90,6 +94,7 @@ function ClientData() {
                     sx={{ ml: 2 }}
                     variant="contained"
                     onClick={handleClickOpen}
+                    startIcon={<EditIcon />}
                   >
                     تعديل بيانات عميل
                   </Button>
@@ -100,9 +105,7 @@ function ClientData() {
                 onClose={() => {
                   setOpen(false);
                 }}
-                applySearch={(clients: Client[]) => {
-                  setRequests(clients);
-                }}
+                getClients={getRequests}
               />
             </Box>
             {requests?.length !== 0 && (
