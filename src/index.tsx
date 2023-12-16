@@ -16,8 +16,8 @@ import { DevUserType } from "./DevUserType";
 import { DevUser } from "./DevUser";
 
 console.table({
-  Version: "1.2.2",
-  Comment: "Added Mission Expectet time to details dialog",
+  Version: "1.3.0",
+  Comment: "Rebased the logic for contracts and clients",
 });
 
 const devUser: DevUserType = DevUser;

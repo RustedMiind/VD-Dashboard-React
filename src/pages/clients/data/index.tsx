@@ -27,6 +27,16 @@ function ClientData() {
   const handleClickOpen = () => {
     setOpen(true);
   };
+  function deleteClients() {
+    axios
+      .post(Api("employee/client/delete"), { id: selectedItems })
+      .then(() => {
+        getRequests();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   let anyClientHasContracts = false;
   typeof requests === "object" &&
@@ -51,6 +61,7 @@ function ClientData() {
         },
       })
       .then(({ data }) => {
+        setSelectedItems([]);
         setRequests(data.data);
       })
       .catch((err) => {
@@ -130,6 +141,7 @@ function ClientData() {
               variant="outlined"
               disabled={deleteDisabled}
               startIcon={<DeleteIcon />}
+              onClick={deleteClients}
             >
               حذف
             </Button>

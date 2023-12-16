@@ -2,4 +2,8 @@ function isStringAllNumbers(str: string): boolean {
   return /^[0-9]+$/.test(str) || str === "";
 }
 
-export { isStringAllNumbers };
+function isStringAllCharacters(str: string): boolean {
+  return /^[A-Za-z\s]+$/.test(str) || str === "";
+}
+
+export { isStringAllNumbers, isStringAllCharacters };
