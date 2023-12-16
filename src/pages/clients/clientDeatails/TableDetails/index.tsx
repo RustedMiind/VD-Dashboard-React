@@ -18,6 +18,7 @@ import TableHeader from "./TableHeader";
 import { ClientDetailsType } from "../../../../types/Clients";
 import StatusChip from "../../../../components/StatusChip";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
+import EmptyPlaceholder from "../../../../components/EmptyPlaceholder";
 function TableDetails({ ClientData, setToSearch }: PropsType) {
   return (
     <Stack>
@@ -97,7 +98,7 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
           </Stack>
         </>
       ) : (
-        "لا يوجد عقود"
+        <EmptyPlaceholder label="ﻻ يوجد عقود, لم يتم البدء في عمل تعاقدات" />
       )}
     </Stack>
   );

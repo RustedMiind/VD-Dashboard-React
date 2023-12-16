@@ -4,7 +4,7 @@ import { TableBody, TableRow } from "@mui/material";
 import { ChangeEvent, useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { ContractsContext } from "../../Context/ContractsContext";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 import { NavLink } from "react-router-dom";
 
 function ContractsDataTable(props: PropsType) {
@@ -27,10 +27,10 @@ function ContractsDataTable(props: PropsType) {
             <TableCell>{request.code}</TableCell>
             <TableCell>{request.type?.name}</TableCell>
             <TableCell>{request.client?.name}</TableCell>
-            <TableCell>{request.branch.name}</TableCell>
+            <TableCell>{request.branch?.name}</TableCell>
             <TableCell>{request.client?.phone}</TableCell>
-            <TableCell>{request.period}</TableCell>
-            <TableCell>{request.end_date_period}</TableCell>
+            <TableCell>{request.period} يوم</TableCell>
+            <TableCell>{request.end_date_period} يوم</TableCell>
             <TableCell
               sx={{
                 maxWidth: "50px",

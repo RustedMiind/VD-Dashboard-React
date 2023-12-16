@@ -24,7 +24,7 @@ import { Branch, Broker } from "../../../../types";
 import { Snackbar } from "@mui/material";
 import { Client } from "../../../../types/Clients";
 
-function PopUp({ open, onClose, applySearch }: PropsType) {
+function PopUp({ open, onClose, getClients }: PropsType) {
   const [searchClient, dispatch] = useReducer(reducer, individualInitial);
   const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
@@ -76,7 +76,14 @@ function PopUp({ open, onClose, applySearch }: PropsType) {
         })
         .then(({ data }) => {
           if (data.data.length) {
-            applySearch(data.data);
+            getClients({
+              advancedSearch: true,
+              name: searchClient.name,
+              phone: searchClient.phone,
+              branch_id: searchClient.branch_id,
+              broker_id: searchClient.broker_id,
+            });
+            onClose();
           }
           // Logic for openEdit page not filter
           // if (data.data) {
@@ -294,7 +301,7 @@ export default PopUp;
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  applySearch: (clients: Client[]) => void;
+  getClients: (params?: unknown) => void;
 };
 
 export type ToasterType = {

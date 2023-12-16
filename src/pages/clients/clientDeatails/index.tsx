@@ -106,14 +106,14 @@ function ClientDetails() {
                       colors={["#FBB4AE", "#FED9A6", "#CCEBC5", "#D0DCE9"]}
                       series={[
                         {
-                          paddingAngle: 4,
-                          innerRadius: 5,
-                          cornerRadius: 7,
+                          paddingAngle: 0,
+                          innerRadius: 10,
+                          cornerRadius: 5,
                           data: [
-                            { id: 0, value: 10, label: "متوقف" },
-                            { id: 1, value: 15, label: "series B" },
-                            { id: 2, value: 20, label: "series C" },
-                            { id: 3, value: 20, label: "series E" },
+                            { id: 0, value: 0, label: "متوقف" },
+                            { id: 1, value: 0, label: "متأخر" },
+                            { id: 2, value: 1, label: "ساري" },
+                            { id: 3, value: 0, label: "منتهي" },
                           ],
                         },
                       ]}
