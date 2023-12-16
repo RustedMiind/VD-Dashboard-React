@@ -2,7 +2,6 @@ export * from "./Branches";
 export * from "./Brokers";
 export * from "./Contracts";
 export * from "./Employee";
-export * from "./ClientRequest";
 export * from "./ReducerActionType";
 export * from "./Children";
 export * from "./EmployeeRequest";

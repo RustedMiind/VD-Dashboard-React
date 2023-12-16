@@ -7,12 +7,13 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { ClientRequest, Contract } from "../../../types";
+import { Contract } from "../../../types";
 import { TypeDataToSearch } from "./PageContent";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { ContractsContext } from "../Context/ContractsContext";
+import { Client } from "../../../types/Clients";
 
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack px={1}>{props.children}</Stack>;
@@ -24,9 +25,7 @@ function SearchBar() {
     client_id: 0,
     employee_name: "",
   };
-  let [contractSearch, setContractSearch] = useState<ClientRequest[] | null>(
-    null
-  );
+  let [contractSearch, setContractSearch] = useState<Client[] | null>(null);
 
   useEffect(() => {
     axios
