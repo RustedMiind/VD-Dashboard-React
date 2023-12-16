@@ -59,7 +59,7 @@ function ClientData() {
   }
   // Get Clients
   useEffect(getRequests, [limit]);
-
+  console.log(selectedItems);
   return (
     <Stack>
       <IndexContextProvider>
