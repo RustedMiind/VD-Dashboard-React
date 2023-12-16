@@ -45,15 +45,16 @@ export default function FormAdd() {
   const [isUniqueRegisterNumber, setIsUniqueRegisterNumber] =
     useState<IsUniqueType>("unknown");
   const [open, setOpen] = useState(false);
-  // object respose
-  const objectResponse = useParams();
+  const params = useParams();
+  const IS_EDIT_MODE = !!params.id;
   //toster
   const [toaster, setToaster] = useState<{
     type: "error" | "success" | "null";
   }>({ type: "error" });
   const submitDisabled =
-    (isUniqueIdNumber !== "unique" && isUniqueRegisterNumber !== "unique") ||
-    (isUniquePhoneNumber !== "unique" && !phoneDuplicateConfirm);
+    !IS_EDIT_MODE &&
+    ((isUniqueIdNumber !== "unique" && isUniqueRegisterNumber !== "unique") ||
+      (isUniquePhoneNumber !== "unique" && !phoneDuplicateConfirm));
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function FormAdd() {
         data: Client;
       }>(Api(`employee/client/edit`), {
         params: {
-          name: objectResponse.name,
+          id: params.id,
         },
       });
 
@@ -97,7 +98,7 @@ export default function FormAdd() {
   }
   // useEffect get branches , broker and clientRespose
   useEffect(() => {
-    if (objectResponse?.name) GetDataClient();
+    if (params?.id) GetDataClient();
     else setclientEdit(null);
     axios
       .get<{ branches: Branch[]; brokers: Broker[] }>(
