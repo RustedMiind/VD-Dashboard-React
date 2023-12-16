@@ -11,15 +11,25 @@ import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import { ContractPayment, ContractTask } from "../../../../../../types";
+import {
+  ChangeTypeValues,
+  ContractPayment,
+  ContractTask,
+} from "../../../../../../types";
 import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 
 // Icons
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import UploadFileInput from "../../../../../../components/UploadFileInput";
 import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
-import { objectToFormData } from "../../../../../../methods";
-import { AddAttachmentFormInit, reducer } from "./reducer";
+import { ArrayToMultiline, objectToFormData } from "../../../../../../methods";
+import {
+  AddAttachmentFormInit,
+  AddAttachmentFormType,
+  reducer,
+} from "./reducer";
+import { AxiosErrorType } from "../../../../../../types/Axios";
+import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="medium" fullWidth variant="outlined" />;
@@ -33,6 +43,9 @@ function SetDialog(props: PropsType) {
     "loading" | "error" | "success" | "none"
   >("none");
   const [state, dispatch] = useReducer(reducer, AddAttachmentFormInit);
+  const [errorState, setErrorState] = useState<
+    ChangeTypeValues<Partial<AddAttachmentFormType>, string>
+  >({});
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -76,14 +89,28 @@ function SetDialog(props: PropsType) {
           });
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
-        .catch((err) => {
-          console.log(err);
-          setSendState("error");
-          props.updateAndOpenToaster({
-            message: "تعذر في الحفظ",
-            severity: "error",
-          });
-        });
+        .catch(
+          (
+            err: AxiosErrorType<{
+              data: ChangeTypeValues<Partial<AddAttachmentFormType>, string[]>;
+            }>
+          ) => {
+            console.log(err);
+            setSendState("error");
+            props.updateAndOpenToaster({
+              message: "تعذر في الحفظ",
+              severity: "error",
+            });
+            if (err.response?.status === 422) {
+              setErrorState({
+                name: ArrayToMultiline(err.response.data?.data?.name),
+                code: ArrayToMultiline(err.response.data?.data?.code),
+                file: ArrayToMultiline(err.response.data?.data?.file),
+                type: ArrayToMultiline(err.response.data?.data?.type),
+              });
+            }
+          }
+        );
     }
   }
   useEffect(() => {
@@ -110,29 +137,35 @@ function SetDialog(props: PropsType) {
             <Grid p={1} item md={6}>
               <FormTextField
                 label="رقم المرفق"
+                error={!!errorState.code}
                 value={state.code}
                 onChange={(e) => {
                   dispatch({ type: "SET_CODE", payload: e.target.value });
                 }}
               />
+              <ErrorTypography>{errorState.code}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
                 label="اسم المرفق"
+                error={!!errorState.name}
                 value={state.name}
                 onChange={(e) => {
                   dispatch({ type: "SET_NAME", payload: e.target.value });
                 }}
               />
+              <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
                 label="نوع المرفق"
+                error={!!errorState.type}
                 value={state.type}
                 onChange={(e) => {
                   dispatch({ type: "SET_TYPE", payload: e.target.value });
                 }}
               />
+              <ErrorTypography>{errorState.type}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
               <UploadFileInput
@@ -142,6 +175,7 @@ function SetDialog(props: PropsType) {
                   dispatch({ type: "SET_FILE", payload: file });
                 }}
               />
+              <ErrorTypography>{errorState.file}</ErrorTypography>
             </Grid>
           </Grid>
         </DialogContent>

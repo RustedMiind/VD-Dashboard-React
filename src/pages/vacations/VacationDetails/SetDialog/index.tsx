@@ -12,25 +12,30 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
-import reducer, { VacationsInitial } from "../reducer";
+import reducer, {
+  DtoToStateType,
+  StateToCreateDto,
+  VacationsInitial,
+} from "./reducer";
 import dayjs from "dayjs";
 import { DateFormatString } from "../../../../constants/DateFormat";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { getDateDiff, getDateDiffNegativeAllowed } from "../../../../methods";
-import { EmployeeType } from "../../../../types";
+import { getDateDiffNegativeAllowed } from "../../../../methods";
+import { EmployeeType, Vacation } from "../../../../types";
+import { VacationsDetailsType } from "../../branchDetails";
+import { useParams } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
 
-const PopupVacations = ({
-  open,
-  handleClose,
-  title,
-  employeeRequest,
-  vacationRequest,
-}: PropsType) => {
+const PopupVacations = (props: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
+  const [formStatus, setFormStatus] = useState<"loading" | "none" | "error">(
+    "none"
+  );
   console.log(vacationForm);
+  const { yearId } = useParams();
   const numberOfDays =
     Math.round(
       getDateDiffNegativeAllowed(
@@ -39,32 +44,58 @@ const PopupVacations = ({
       ) /
         (1000 * 60 * 60 * 24)
     ) || 0;
+  const ActionIsUpdate = !!props.InitialVacationData;
   const isValidDateRange = numberOfDays > 0;
   const toShow =
     typeof numberOfDays === "number" && numberOfDays > 0
       ? numberOfDays
       : "برجاء ادخال فترة اجازة صحيحة";
-  const handleSendVacation = () => {
-    if (vacationRequest === "post") {
-      axios
-        .post(Api("employee/client/vacations/store"), vacationForm)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+  useEffect(() => {
+    if (ActionIsUpdate && !!props.InitialVacationData)
+      dispatch({
+        type: "SET_ALL",
+        payload: DtoToStateType(props.InitialVacationData),
+      });
+    else dispatch({ type: "SET_RESET", payload: undefined });
+  }, [ActionIsUpdate, props?.InitialVacationData?.id]);
+  const setVacation = () => {
+    if (yearId) {
+      if (ActionIsUpdate && props.InitialVacationData) {
+        setFormStatus("loading");
+        axios
+          .patch(
+            Api(`employee/vacation-day/${props.InitialVacationData.id}`),
 
-    if (vacationRequest === "put") {
-      axios
-        .put(Api("employee/client/vacations/update"), vacationForm)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+            StateToCreateDto(vacationForm, yearId)
+          )
+          .then((res) => {
+            setFormStatus("none");
+            console.log(res);
+            props.onClose();
+            props.setTableDate();
+          })
+          .catch((err) => {
+            setFormStatus("error");
+            console.log(err);
+          });
+      } else {
+        setFormStatus("loading");
+        axios
+          .post(
+            Api("employee/vacation-day"),
+            StateToCreateDto(vacationForm, yearId)
+          )
+          .then((res) => {
+            setFormStatus("none");
+            console.log(res);
+            props.onClose();
+            props.setTableDate();
+          })
+          .catch((err) => {
+            setFormStatus("error");
+            console.log(err);
+          });
+      }
     }
   };
   const disabledInToDate = (date: dayjs.Dayjs | null) => {
@@ -86,24 +117,24 @@ const PopupVacations = ({
     return false;
   };
 
-  const handleChangeForm = (e: React.FormEvent<HTMLDivElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     console.log(vacationForm);
-    handleSendVacation();
+    setVacation();
   };
 
   return (
     <Dialog
-      open={open}
-      onClose={handleClose}
+      open={props.open}
+      onClose={props.onClose}
       component={"form"}
-      onSubmit={handleChangeForm}
+      onSubmit={handleFormSubmit}
       maxWidth="md"
       fullWidth
     >
       <IconButton
         aria-label="close"
-        onClick={handleClose}
+        onClick={props.onClose}
         sx={{
           borderRadius: "10px",
           border: "1px solid",
@@ -117,7 +148,7 @@ const PopupVacations = ({
       >
         <CloseIcon />
       </IconButton>
-      <DialogTitle sx={{ textAlign: "center" }}>{title}</DialogTitle>
+      <DialogTitle sx={{ textAlign: "center" }}>{props.title}</DialogTitle>
       <DialogContent>
         <Grid container>
           <Grid item md={6} p={1} px={2}>
@@ -231,7 +262,7 @@ const PopupVacations = ({
               renderValue={(selected) => {
                 const selectedNames = vacationForm.exception_employees.map(
                   (id) => {
-                    const selectedOption = employeeRequest?.find(
+                    const selectedOption = props.employeesInBranch?.find(
                       (employee) => employee.id === id
                     );
                     return selectedOption;
@@ -247,7 +278,7 @@ const PopupVacations = ({
                 ));
               }}
             >
-              {employeeRequest?.map((option) => (
+              {props.employeesInBranch?.map((option) => (
                 <MenuItem key={option.id} value={option.id}>
                   {option.name}
                 </MenuItem>
@@ -256,7 +287,8 @@ const PopupVacations = ({
           </Grid>
         </Grid>
       </DialogContent>
-      <Button
+      <LoadingButton
+        loading={formStatus === "loading"}
         variant="contained"
         type="submit"
         disabled={!isValidDateRange}
@@ -269,17 +301,18 @@ const PopupVacations = ({
         }}
       >
         حفظ
-      </Button>
+      </LoadingButton>
     </Dialog>
   );
 };
 
 type PropsType = {
-  vacationRequest: "post" | "put" | "null";
   open: boolean;
-  handleClose?: () => void;
+  InitialVacationData?: Vacation;
+  onClose: () => void;
   title: string;
-  employeeRequest?: EmployeeType[] | undefined;
+  employeesInBranch?: EmployeeType[] | undefined;
+  setTableDate: () => void;
 };
 
 export default PopupVacations;

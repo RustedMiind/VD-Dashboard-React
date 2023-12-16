@@ -34,7 +34,10 @@ export interface Client {
   created_at: string;
   updated_at: string;
   // "deleted_at": null,
-  broker: Broker; // Assuming Broker is another interface
+  broker?: Broker; // Assuming Broker is another interface
   // "status": null,
-  branch: Branch; // Assuming Branch is another interface
+  branch?: Branch; // Assuming Branch is another interface
+  contracts_count?: number;
+  contract_status?: string;
+  status_id?: numbers;
 }

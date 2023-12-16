@@ -31,7 +31,7 @@ function RoutesComponent() {
             <Route path="" element={<VacationsSettings />} />
             <Route path=":branchId">
               <Route path="" element={<VacationDetails />} />
-              <Route path=":year" element={<VacationsTable />} />
+              <Route path=":yearId" element={<VacationsTable />} />
             </Route>
           </Route>
         </Route>

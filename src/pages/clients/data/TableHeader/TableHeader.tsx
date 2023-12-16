@@ -1,6 +1,6 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
-import { ClientRequest } from "../../../../types";
 import { NotPrintableTableCell } from "../Table";
+import { Client } from "../../../../types/Clients";
 function TableHeader(props: PropsType) {
   return (
     <TableHead>
@@ -29,7 +29,6 @@ function TableHeader(props: PropsType) {
 
 export default TableHeader;
 type PropsType = {
-  requests: ClientRequest[] | null;
   isAllSelected: boolean;
   checkAllHandler: (checked: boolean) => void;
 };

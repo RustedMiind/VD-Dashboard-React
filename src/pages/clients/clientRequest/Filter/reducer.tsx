@@ -34,7 +34,7 @@ interface EndDateActionType extends ReducerAction<string> {
   type: "SET_END_DATE";
 }
 
-interface OrderTypeActionType extends ReducerAction<string> {
+interface OrderTypeActionType extends ReducerAction<number> {
   type: "SET_ORDER_TYPE";
 }
 interface StatusActionType extends ReducerAction<number | null | undefined> {
@@ -64,11 +64,11 @@ export const FiltersInit: Filter = {
   dateTo: "",
   status: 0,
   department_id: 0,
-  typeOrder: "",
+  typeOrder: 1,
   search: "",
   sortBy: "desc",
   typeClient: "",
-  limit: -1,
+  limit: 10,
 };
 
 export type ActionTypes =

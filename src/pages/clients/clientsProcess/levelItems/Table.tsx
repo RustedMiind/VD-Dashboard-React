@@ -26,7 +26,7 @@ const TableComponent = ({
   dataForm,
   dispatch,
 }: PropsType) => {
-  console.log(level);
+  console.log(dataForm);
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -83,8 +83,9 @@ const TableComponent = ({
                           <MenuItem
                             key={employee.employee_id}
                             value={employee.employee_id}
+                            disabled={employee?.employee?.name === ""}
                           >
-                            {employee.employeeName}
+                            {employee?.employee?.name || "لا يوجد موظف"}
                           </MenuItem>
                         );
                       })
