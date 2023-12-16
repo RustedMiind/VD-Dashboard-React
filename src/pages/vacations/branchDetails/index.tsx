@@ -2,18 +2,28 @@ import { useParams } from "react-router-dom";
 import DetailsTable from "./DetailsTable";
 import FilterDetails from "./FilterDetails";
 import { Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../constants";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
+import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext";
 
 function BranchDetails() {
   const { branchId } = useParams();
 
+  const breadcrump = useContext(BreadCrumbContext);
   const [vacationsData, setVacationsData] = useState<
     VacationsDetailsType[] | "loading" | "error"
   >("loading");
+
+  useEffect(() => {
+    breadcrump.addLast &&
+      breadcrump.addLast({
+        path: `react/datalib/vacations/${branchId}`,
+        title: "اعدادات اجازات الفرع",
+      });
+  }, []);
 
   const [dialogState, setDialogState] = useState<DialogState>("none");
 

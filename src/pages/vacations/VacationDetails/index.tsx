@@ -2,16 +2,18 @@ import { Button, Paper, Stack, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TableData from "./components/Table";
 import PrintIcon from "@mui/icons-material/Print";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SetDialog from "./SetDialog";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { useParams } from "react-router-dom";
 import { EmployeeType, Vacation } from "../../../types";
 import LoadingTable from "../../../components/LoadingTable";
+import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext";
 
 const VacationsTable = () => {
   const { yearId, branchId } = useParams();
+  const breadcrump = useContext(BreadCrumbContext);
   const [vacationSetDialog, setVacationSetDialog] = useState<
     "add" | "update" | null
   >(null);
@@ -30,6 +32,19 @@ const VacationsTable = () => {
   useEffect(() => {
     getEmployeeRequest();
     yearId && getYearVacations(yearId);
+  }, []);
+  useEffect(() => {
+    breadcrump.addLast &&
+      breadcrump.addLast(
+        {
+          path: `react/datalib/vacations/${branchId}`,
+          title: "اعدادات اجازات الفرع",
+        },
+        {
+          path: `react/datalib/vacations/${branchId}/${yearId}`,
+          title: "اعدادات السنة",
+        }
+      );
   }, []);
   return (
     <Stack>

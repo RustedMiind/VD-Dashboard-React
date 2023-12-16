@@ -1,20 +1,14 @@
-import { Chip } from "@mui/material";
+import { Chip, ChipProps } from "@mui/material";
 
-function StatusChip(props: PropsType) {
+function StatusChip(props: ChipProps) {
   return (
     <Chip
       variant="outlined"
-      color={props.color}
       sx={{ bgcolor: `${props.color}.lightest` }}
-      label={props.label}
+      {...props}
     />
   );
 }
-
-type PropsType = {
-  color: MuiMainColors;
-  label: number | undefined | string;
-};
 
 export type MuiMainColors =
   | "success"

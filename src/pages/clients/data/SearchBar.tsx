@@ -5,6 +5,11 @@ function SearchBar(props: PropsType) {
     <>
       <Stack
         direction="row"
+        component={"form"}
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.getRequests();
+        }}
         gap={1}
         sx={{
           button: { px: 4 },
@@ -26,7 +31,8 @@ function SearchBar(props: PropsType) {
         <Button
           variant="contained"
           //  disabled
-          onClick={props.getRequests}
+          onClick={!props.search ? props.openAdvancedSearchDialog : undefined}
+          type={props.search ? "submit" : "button"}
         >
           بحث
         </Button>
@@ -39,6 +45,7 @@ type PropsType = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   getRequests: () => void;
+  openAdvancedSearchDialog: () => void;
 };
 
 export default SearchBar;

@@ -11,7 +11,6 @@ import {
   TableCell,
   IconButton,
 } from "@mui/material";
-import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext, useState, useEffect, useRef } from "react";
 import TableHeader from "./TableHeader/TableHeader";
@@ -23,6 +22,7 @@ import { MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import StatusChip from "../../../components/StatusChip";
 import { NavLink } from "react-router-dom";
+import { Client } from "../../../types/Clients";
 
 export const NotPrintableTableCell = styled(TableCell)({
   "@media print": {
@@ -34,7 +34,6 @@ export type IdListType = {
 };
 
 function ClientRequestsTable(props: PropsType) {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const tableContext = useContext(TableContext);
   const chekedArray: IdListType = {
     id: [],
@@ -46,35 +45,34 @@ function ClientRequestsTable(props: PropsType) {
       window.print();
     }
   };
-  chekedArray.id = selectedItems;
+  chekedArray.id = props.selectedItems;
   useEffect(() => {
     tableContext?.setIndex(chekedArray);
-  }, [selectedItems]);
+  }, [props.selectedItems]);
 
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
     if (isSelect) {
-      setSelectedItems([...selectedItems, value]);
+      props.setSelectedItems([...props.selectedItems, value]);
     } else {
-      setSelectedItems((prevData) => {
+      props.setSelectedItems((prevData) => {
         return prevData.filter((id) => {
           return id !== value;
         });
       });
     }
   }
-  const isAllSelected =
-    props.requests?.filter((req) => {
-      return req.contracts_count === 0;
-    }).length === selectedItems.length && selectedItems.length;
+  const isAllSelected = props.requests?.length === props.selectedItems.length;
+  // props.requests?.filter((req) => {
+  //   return req.contracts_count === 0;
+  // }).length === selectedItems.length && selectedItems.length;
   function checkAllHandler(checked: boolean) {
-    const allChecked: number[] = checked
-      ? (props.requests
-          ?.map((request) => request.contracts_count === 0 && request.id)
-          .filter((id) => typeof id === "number") as number[])
-      : [];
-    setSelectedItems(allChecked);
+    const allChecked: number[] =
+      checked && props.requests
+        ? props.requests?.map((client) => client.id)
+        : [];
+    props.setSelectedItems(allChecked);
   }
   return (
     <>
@@ -83,7 +81,6 @@ function ClientRequestsTable(props: PropsType) {
           {props.requests?.length !== 0 ? (
             <TableHeader
               checkAllHandler={checkAllHandler}
-              requests={props.requests}
               isAllSelected={!!isAllSelected}
             />
           ) : (
@@ -96,8 +93,7 @@ function ClientRequestsTable(props: PropsType) {
                   <TableRow key={index}>
                     <NotPrintableTableCell>
                       <Checkbox
-                        disabled={client.contracts_count !== 0}
-                        checked={selectedItems.includes(client.id)}
+                        checked={props.selectedItems.includes(client.id)}
                         value={client.id}
                         onChange={CheckboxHandler}
                       />
@@ -129,14 +125,27 @@ function ClientRequestsTable(props: PropsType) {
                       {client.register_number || client.card_id}
                     </TableCell>
                     <TableCell>{client.branch?.name}</TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {client.contract_status_id === 2 ? (
-                        <StatusChip color="error" label="منتهي" />
-                      ) : client.contract_status_id === 0 ? (
-                        <StatusChip color="primary" label="لا يوجد عقود" />
-                      ) : (
-                        <StatusChip color="success" label="جاري العمل" />
-                      )}
+                    <TableCell>
+                      {((): React.ReactNode => {
+                        switch (client.contract_status_id) {
+                          case 0:
+                            return (
+                              <StatusChip
+                                color="primary"
+                                disabled
+                                label="ﻻ يوجد عقود"
+                              />
+                            );
+                          case 1:
+                            return (
+                              <StatusChip color="success" label="جاري العمل" />
+                            );
+                          case 2:
+                            return <StatusChip color="error" label="منتهي" />;
+                          default:
+                            <>-</>;
+                        }
+                      })()}
                     </TableCell>
                     <TableCell>
                       {client.agent_name ? client.agent_name : "-"}
@@ -229,9 +238,11 @@ function ClientRequestsTable(props: PropsType) {
 }
 
 export type PropsType = {
-  requests: ClientRequest[] | null;
+  requests: Client[] | null;
   limit: string;
   setLimit: React.Dispatch<React.SetStateAction<string>>;
+  selectedItems: number[];
+  setSelectedItems: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default ClientRequestsTable;

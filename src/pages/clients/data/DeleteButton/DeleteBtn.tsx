@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { TableContext } from "../../Context/Store";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { ClientRequest } from "../../../../types";
+import { Client } from "../../../../types/Clients";
 
 function DeleteBtn(props: PropsType) {
   const deleteClients = useContext(TableContext);
@@ -45,8 +45,8 @@ function DeleteBtn(props: PropsType) {
 export default DeleteBtn;
 
 export type PropsType = {
-  requests: ClientRequest[] | "loading" | "error";
+  requests: Client[] | "loading" | "error";
   setRequests: React.Dispatch<
-    React.SetStateAction<ClientRequest[] | "loading" | "error">
+    React.SetStateAction<Client[] | "loading" | "error">
   >;
 };
