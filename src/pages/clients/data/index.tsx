@@ -8,7 +8,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
 import ClientRequestsTable from "./Table";
 import DeleteBtn from "./DeleteButton/DeleteBtn";
-import PopUp from "./PopUp/PopUp";
+import SearchDialog from "./SearchDialog";
 import { IndexContextProvider } from "../Context/Store";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
@@ -95,7 +95,7 @@ function ClientData() {
                   </Button>
                 </>
               )}
-              <PopUp open={open} setOpen={setOpen} />
+              <SearchDialog open={open} setOpen={setOpen} />
             </Box>
             {requests?.length !== 0 && (
               <>

@@ -81,6 +81,7 @@ function PopUp({ open, setOpen }: PropsType) {
         })
         .then(({ data }) => {
           if (data.data) {
+            // search
             navigate(`${data.data.name}/edit`);
           } else {
             updateAndOpenToaster({
