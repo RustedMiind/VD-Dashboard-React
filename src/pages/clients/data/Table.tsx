@@ -12,7 +12,6 @@ import {
   TableCell,
   IconButton,
 } from "@mui/material";
-import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext, useState, useEffect, useRef } from "react";
 import TableHeader from "./TableHeader/TableHeader";
@@ -24,6 +23,7 @@ import { MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import StatusChip from "../../../components/StatusChip";
 import { NavLink } from "react-router-dom";
+import { Client } from "../../../types/Clients";
 
 export const NotPrintableTableCell = styled(TableCell)({
   "@media print": {
@@ -85,7 +85,6 @@ function ClientRequestsTable(props: PropsType) {
           {props.requests?.length !== 0 ? (
             <TableHeader
               checkAllHandler={checkAllHandler}
-              requests={props.requests}
               isAllSelected={!!isAllSelected}
             />
           ) : (
@@ -132,9 +131,9 @@ function ClientRequestsTable(props: PropsType) {
                     </TableCell>
                     <TableCell>{client.branch?.name}</TableCell>
                     <TableCell>
-                      {client.Contract_status === "منتهي" ? (
+                      {client.contract_status === "منتهي" ? (
                         <StatusChip color="error" label="منتهي" />
-                      ) : client.Contract_status === "لا يوجد عقود" ? (
+                      ) : client.contract_status === "لا يوجد عقود" ? (
                         <StatusChip color="primary" label="لا يوجد عقود" />
                       ) : (
                         <StatusChip color="success" label="جاري العمل" />
@@ -231,7 +230,7 @@ function ClientRequestsTable(props: PropsType) {
 }
 
 export type PropsType = {
-  requests: ClientRequest[] | null;
+  requests: Client[] | null;
   limit: string;
   setLimit: React.Dispatch<React.SetStateAction<string>>;
 };

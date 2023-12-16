@@ -1,24 +1,24 @@
 import { Stack, Typography, Box, Paper, Button } from "@mui/material";
 import SearchBar from "./SearchBar";
 import React, { useEffect, useState } from "react";
-import { ClientRequest } from "../../../types";
 import axios from "axios";
 import { Api } from "../../../constants";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
 import ClientRequestsTable from "./Table";
 import DeleteBtn from "./DeleteButton/DeleteBtn";
-import PopUp from "./PopUp/PopUp";
+import SearchDialog from "./SearchDialog";
 import { IndexContextProvider } from "../Context/Store";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
+import { Client } from "../../../types/Clients";
 
 function ClientData() {
   const [open, setOpen] = useState(false);
   // search bar
-  const [requests, setRequests] = useState<
-    ClientRequest[] | "loading" | "error"
-  >("loading");
+  const [requests, setRequests] = useState<Client[] | "loading" | "error">(
+    "loading"
+  );
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState<string>("5");
   console.log(limit);
@@ -29,7 +29,7 @@ function ClientData() {
   function getRequests() {
     setRequests("loading");
     axios
-      .get<{ data: ClientRequest[] }>(Api("employee/client"), {
+      .get<{ data: Client[] }>(Api("employee/client"), {
         params: {
           search,
           limit,
@@ -95,7 +95,15 @@ function ClientData() {
                   </Button>
                 </>
               )}
-              <PopUp open={open} setOpen={setOpen} />
+              <SearchDialog
+                open={open}
+                onClose={() => {
+                  setOpen(false);
+                }}
+                applySearch={(clients: Client[]) => {
+                  setRequests(clients);
+                }}
+              />
             </Box>
             {requests?.length !== 0 && (
               <>

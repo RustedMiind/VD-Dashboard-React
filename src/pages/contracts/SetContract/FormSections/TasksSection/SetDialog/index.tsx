@@ -4,15 +4,25 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, MenuItem, Snackbar } from "@mui/material";
+import {
+  Alert,
+  Grid,
+  MenuItem,
+  Snackbar,
+  Typography,
+  TypographyProps,
+} from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { AddTaskFormInit, AddTaskFormType, reducer } from "./reducer";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import { ContractTask } from "../../../../../../types";
+import { ChangeTypeValues, ContractTask } from "../../../../../../types";
 import { ToasterType } from "../../../../../../types/other/ToasterStateType";
+import { AxiosErrorType } from "../../../../../../types/Axios";
+import { ArrayToMultiline } from "../../../../../../methods";
+import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -34,13 +44,16 @@ function SetDialog(props: PropsType) {
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");
+  const [errorState, setErrorState] = useState<
+    ChangeTypeValues<Partial<AddTaskFormType>, string>
+  >({});
   const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     if (ContractDetails.contract?.id) {
       setSendState("loading");
-
+      setErrorState({});
       (props.edit
         ? axios.patch(Api(`employee/contract/task/${props.taskData.id}`), {
             amount: state.amount,
@@ -63,14 +76,30 @@ function SetDialog(props: PropsType) {
           });
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
-        .catch((err) => {
-          console.log(err);
-          setSendState("error");
-          props.updateAndOpenToaster({
-            message: "تعذر في الحفظ",
-            severity: "error",
-          });
-        });
+        .catch(
+          (
+            err: AxiosErrorType<{
+              data: ChangeTypeValues<Partial<AddTaskFormType>, string[]>;
+            }>
+          ) => {
+            console.log(err);
+            setSendState("error");
+            props.updateAndOpenToaster({
+              message: "تعذر في الحفظ",
+              severity: "error",
+            });
+            if (err.response?.status === 422) {
+              setErrorState({
+                name: ArrayToMultiline(err.response.data?.data?.name),
+                amount: ArrayToMultiline(err.response.data?.data?.amount),
+                employee_id: ArrayToMultiline(
+                  err.response.data?.data?.employee_id
+                ),
+                period: ArrayToMultiline(err.response.data?.data?.period),
+              });
+            }
+          }
+        );
     }
   }
   useEffect(() => {
@@ -95,36 +124,45 @@ function SetDialog(props: PropsType) {
           <Grid container>
             <Grid p={1} item md={6}>
               <FormTextField
+                error={!!errorState.name}
                 label="اسم المهمة"
                 value={state.name}
                 onChange={(e) => {
                   dispatch({ type: "SET_NAME", payload: e.target.value });
                 }}
               />
+              <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
                 label="مدة المهمة"
                 value={state.period}
+                error={!!errorState.period}
                 onChange={(e) => {
                   dispatch({ type: "SET_PERIOD", payload: e.target.value });
                 }}
               />
+
+              <ErrorTypography>{errorState.period}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
                 label="قيمة المهمة"
                 value={state.amount}
+                error={!!errorState.amount}
                 onChange={(e) => {
                   dispatch({ type: "SET_AMOUNT", payload: e.target.value });
                 }}
               />
+
+              <ErrorTypography>{errorState.amount}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
               <FormTextField
                 label="المسؤول عن المهمة"
                 select
                 value={state.employee_id}
+                error={!!errorState.employee_id}
                 onChange={(e) => {
                   dispatch({
                     type: "SET_EMPLOYEE_ID",
@@ -140,6 +178,7 @@ function SetDialog(props: PropsType) {
                 <MenuItem value="2">محمد</MenuItem>
                 <MenuItem value="3">علي</MenuItem>
               </FormTextField>
+              <ErrorTypography>{errorState.employee_id}</ErrorTypography>
             </Grid>
           </Grid>
         </DialogContent>
