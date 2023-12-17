@@ -18,7 +18,7 @@ function ClientDetails() {
     ClientDetailsType | "loading" | "error"
   >("loading");
   const [toSearch, setToSearch] = useState<string>();
-  console.log(toSearch);
+  console.log(toSearch, "codeContract");
 
   useEffect(() => {
     setClientData("loading");

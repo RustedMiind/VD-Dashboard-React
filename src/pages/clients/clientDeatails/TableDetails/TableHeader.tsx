@@ -26,10 +26,10 @@ function TableHeader(props: PropsType) {
           حالة العقود
         </Typography>
         <Stack spacing={1} direction={"row"}>
-          <Chip color="warning" label={props.contractsCounts.end} />
-          <Chip color="success" label={props.contractsCounts.late} />
+          <Chip color="primary" label={props.contractsCounts.end} />
+          <Chip color="warning" label={props.contractsCounts.late} />
           <Chip color="error" label={props.contractsCounts.stopped} />
-          <Chip color="primary" label={props.contractsCounts.work} />
+          <Chip color="success" label={props.contractsCounts.work} />
         </Stack>
       </Stack>
       <Stack direction={"row"} flexGrow={1} gap={1}>

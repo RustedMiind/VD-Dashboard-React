@@ -98,7 +98,14 @@ function TableDetails({ ClientData, setToSearch, setLimit, limit }: PropsType) {
           <Stack direction="row" justifyContent={"space-between"}>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography> عدد العرض في الصفحة</Typography>
-              <TextField size="small" select value={limit}>
+              <TextField
+                onChange={(e) => {
+                  setLimit(e.target.value);
+                }}
+                size="small"
+                select
+                value={limit}
+              >
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={25}>25</MenuItem>
                 <MenuItem value={100}>100</MenuItem>
