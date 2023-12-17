@@ -25,6 +25,7 @@ import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
 import { AddPaymentFormType } from "../../PaymentsSection/SetDialog/reducer";
+import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -127,9 +128,14 @@ function SetDialog(props: PropsType) {
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
+              <Typography>
+                اسم المهمة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
                 error={!!errorState.name}
-                label="اسم المهمة"
+                placeholder="اسم المهمة"
                 value={state.name}
                 onChange={(e) => {
                   dispatch({ type: "SET_NAME", payload: e.target.value });
@@ -138,8 +144,13 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>
+                مدة المهمة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
-                label="مدة المهمة"
+                placeholder="مدة المهمة"
                 value={state.period}
                 error={!!errorState.period}
                 onChange={(e) => {
@@ -150,8 +161,9 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.period}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>قيمة المهمة</Typography>
               <FormTextField
-                label="قيمة المهمة"
+                placeholder="قيمة المهمة"
                 value={state.amount}
                 error={!!errorState.amount}
                 onChange={(e) => {
@@ -162,8 +174,8 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.amount}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>المسؤول عن المهمة</Typography>
               <FormTextField
-                label="المسؤول عن المهمة"
                 select
                 value={state.employee_id}
                 error={!!errorState.employee_id}

@@ -4,7 +4,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
+import {
+  Alert,
+  Grid,
+  ListItemIcon,
+  MenuItem,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { AddPaymentFormType, AddTaskFormInit, reducer } from "./reducer";
 import axios from "axios";
@@ -24,6 +31,7 @@ import { AxiosErrorType } from "../../../../../../types/Axios";
 import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
+import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -118,8 +126,13 @@ function SetDialog(props: PropsType) {
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
+              <Typography>
+                اسم الدفعة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
-                label="اسم الدفعة"
+                placeholder="اسم الدفعة"
                 error={!!errorState.name}
                 value={state.name}
                 onChange={(e) => {
@@ -129,8 +142,13 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>
+                مدة الدفعة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
-                label="مدة الدفعة"
+                placeholder="مدة الدفعة"
                 error={!!errorState.period}
                 value={state.period}
                 onChange={(e) => {
@@ -140,6 +158,7 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.period}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>قيمة الدفعة</Typography>
               <FormTextField
                 label="قيمة الدفعة"
                 error={!!errorState.amount}
@@ -151,6 +170,7 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.amount}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>اختيار حالة الدفعة</Typography>
               <FormTextField
                 label="اختيار حالة الدفعة"
                 error={!!errorState.status}
