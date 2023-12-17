@@ -46,12 +46,15 @@ const SelectManager = ({
               <Select
                 label={"القسم"}
                 size={"small"}
-                value={department_id || 0}
+                value={department_id}
                 disabled={employee_id !== 0}
                 onChange={(e) => {
                   setDepartmentId(e.target.value as number);
                 }}
               >
+                <MenuItem value={null as unknown as number}>
+                  اختار القسم
+                </MenuItem>
                 {departments?.map((department) => {
                   return (
                     <MenuItem key={department.id} value={department.id}>

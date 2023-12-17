@@ -21,7 +21,6 @@ import SelectManager from "./SelectManager";
 import { ActionType } from "./reducer";
 
 const TableComponent = ({ level, dataForm, dispatch }: PropsType) => {
-  console.log(dataForm);
   return (
     <TableContainer>
       <Table aria-label="simple table">
@@ -46,7 +45,7 @@ const TableComponent = ({ level, dataForm, dispatch }: PropsType) => {
                   setDepartmentId={(value: number) => {
                     dispatch({
                       type: "SET_MANAGEMENT",
-                      payload: value,
+                      payload: value as number,
                     });
                   }}
                 />
