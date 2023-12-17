@@ -1,4 +1,12 @@
-import { Grid, Typography, Button, TextField, Box, Stack } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  TextField,
+  Box,
+  Stack,
+  Chip,
+} from "@mui/material";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StatusChip from "../../../../components/StatusChip";
@@ -8,8 +16,8 @@ import { isStringAllNumbers } from "../../../../methods";
 function TableHeader(props: PropsType) {
   const [searchCode, setSearchCode] = useState<string>();
   return (
-    <Grid container px={2} py={1} alignItems={"center"}>
-      <Grid item xs={2}>
+    <Stack px={2} py={1} gap={8} direction="row" alignItems={"end"}>
+      <Stack gap={1}>
         <Typography
           variant="subtitle2"
           fontWeight={"800"}
@@ -18,13 +26,13 @@ function TableHeader(props: PropsType) {
           حالة العقود
         </Typography>
         <Stack spacing={1} direction={"row"}>
-          <StatusChip color="primary" label={0} />
-          <StatusChip color="warning" label={0} />
-          <StatusChip color="error" label={0} />
-          <StatusChip color="secondary" label={0} />
+          <Chip color="primary" label={props.contractsCounts.end} />
+          <Chip color="warning" label={props.contractsCounts.late} />
+          <Chip color="error" label={props.contractsCounts.stopped} />
+          <Chip color="success" label={props.contractsCounts.work} />
         </Stack>
-      </Grid>
-      <Grid item xs={6} display={"flex"} flexDirection={"row"}>
+      </Stack>
+      <Stack direction={"row"} flexGrow={1} gap={1}>
         <TextField
           onChange={(e) => {
             isStringAllNumbers(e.target.value);
@@ -39,30 +47,35 @@ function TableHeader(props: PropsType) {
               props.setToSearch(searchCode);
             }}
             variant="contained"
-            sx={{ ml: 5 }}
+            sx={{ px: 4 }}
           >
             بحث
           </Button>
         </Box>
-      </Grid>
-      <Grid item xs={4} display={"flex"} justifyContent={"end"}>
-        <Box>
-          <Button variant="outlined" color="error" startIcon={<DeleteIcon />}>
-            حذف
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ ml: 2 }}
-            startIcon={<CreditScoreIcon />}
-          >
-            تعديل
-          </Button>
-        </Box>
-      </Grid>
-    </Grid>
+      </Stack>
+      <Stack direction={"row"} gap={1}>
+        <Button
+          variant="outlined"
+          size="medium"
+          color="error"
+          startIcon={<DeleteIcon />}
+        >
+          حذف
+        </Button>
+        <Button variant="outlined" startIcon={<CreditScoreIcon />}>
+          تعديل
+        </Button>
+      </Stack>
+    </Stack>
   );
 }
 type PropsType = {
   setToSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
+  contractsCounts: {
+    end: number;
+    work: number;
+    late: number;
+    stopped: number;
+  };
 };
 export default TableHeader;

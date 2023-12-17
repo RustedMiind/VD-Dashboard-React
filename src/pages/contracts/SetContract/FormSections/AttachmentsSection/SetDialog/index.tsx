@@ -92,7 +92,10 @@ function SetDialog(props: PropsType) {
         .catch(
           (
             err: AxiosErrorType<{
-              data: ChangeTypeValues<Partial<AddAttachmentFormType>, string[]>;
+              data: ChangeTypeValues<
+                Partial<AddAttachmentFormType & { card_image: string }>,
+                string[]
+              >;
             }>
           ) => {
             console.log(err);
@@ -105,7 +108,7 @@ function SetDialog(props: PropsType) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
                 code: ArrayToMultiline(err.response.data?.data?.code),
-                file: ArrayToMultiline(err.response.data?.data?.file),
+                file: ArrayToMultiline(err.response.data?.data?.card_image),
                 type: ArrayToMultiline(err.response.data?.data?.type),
               });
             }

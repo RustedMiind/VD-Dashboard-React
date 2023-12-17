@@ -9,11 +9,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 function SectionAccordion(props: PropsType) {
   return (
     <Accordion
-      sx={{ mb: 3 }}
       onChange={(e, opened) => {
         !props.disabled && props.setOpened();
       }}
       expanded={props.opened && !props.disabled}
+      disableGutters
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}

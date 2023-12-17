@@ -110,10 +110,26 @@ function ClientDetails() {
                           innerRadius: 10,
                           cornerRadius: 5,
                           data: [
-                            { id: 0, value: 0, label: "متوقف" },
-                            { id: 1, value: 0, label: "متأخر" },
-                            { id: 2, value: 1, label: "ساري" },
-                            { id: 3, value: 0, label: "منتهي" },
+                            {
+                              id: 0,
+                              value: clientData.contract_stop,
+                              label: "متوقف",
+                            },
+                            {
+                              id: 1,
+                              value: clientData.contract_late,
+                              label: "متأخر",
+                            },
+                            {
+                              id: 2,
+                              value: clientData.contract_work,
+                              label: "ساري",
+                            },
+                            {
+                              id: 3,
+                              value: clientData.contract_end,
+                              label: "منتهي",
+                            },
                           ],
                         },
                       ]}
