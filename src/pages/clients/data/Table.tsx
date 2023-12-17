@@ -200,17 +200,14 @@ function ClientRequestsTable(props: PropsType) {
             right: "20px",
           }}
         >
-          <Typography
-            sx={{
-              textDecoration: "underline",
-              cursor: "pointer",
-            }}
+          <Button
+            sx={{ textDecoration: "underline" }}
             onClick={() => {
               props.setLimit("-1");
             }}
           >
             عرض الكل
-          </Typography>
+          </Button>
         </Stack>
       )}
       {props.requests?.length !== 0 && props.limit === "-1" && (
