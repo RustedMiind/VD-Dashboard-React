@@ -10,6 +10,7 @@ import { ClientDetailsType } from "../../../types/Clients";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+
 function ClientDetails() {
   const { id } = useParams();
   const [limit, setLimit] = useState<string>("5");
@@ -106,6 +107,7 @@ function ClientDetails() {
                     >
                       بيان للمشاريع
                     </Typography>
+
                     <PieChart
                       colors={["#FBB4AE", "#FED9A6", "#CCEBC5", "#D0DCE9"]}
                       series={[
@@ -113,6 +115,8 @@ function ClientDetails() {
                           paddingAngle: 0,
                           innerRadius: 10,
                           cornerRadius: 5,
+                          arcLabel: (item) => `${item.label} (${item.value})`,
+                          arcLabelMinAngle: 45,
                           data: [
                             {
                               id: 0,
@@ -135,6 +139,15 @@ function ClientDetails() {
                               label: "منتهي",
                             },
                           ],
+                          highlightScope: {
+                            faded: "global",
+                            highlighted: "item",
+                          },
+                          faded: {
+                            innerRadius: 30,
+                            additionalRadius: -30,
+                            color: "gray",
+                          },
                         },
                       ]}
                       width={400}
