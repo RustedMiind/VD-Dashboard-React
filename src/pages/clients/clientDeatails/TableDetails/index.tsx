@@ -19,7 +19,9 @@ import { ClientDetailsType } from "../../../../types/Clients";
 import StatusChip from "../../../../components/StatusChip";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 import EmptyPlaceholder from "../../../../components/EmptyPlaceholder";
-function TableDetails({ ClientData, setToSearch }: PropsType) {
+import { useNavigate } from "react-router-dom";
+function TableDetails({ ClientData, setToSearch, setLimit, limit }: PropsType) {
+  const navigate = useNavigate();
   return (
     <Stack>
       <TableHeader
@@ -76,7 +78,14 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
                           <TableCell>----</TableCell>
                           <TableCell>{item.employee?.name}</TableCell>
                           <TableCell>
-                            <FolderCopyOutlinedIcon />
+                            <IconButton
+                              onClick={() => {
+                                navigate(`/react/contracts/${item.id}/edit`);
+                              }}
+                              color="primary"
+                            >
+                              <FolderCopyOutlinedIcon />
+                            </IconButton>
                           </TableCell>
                         </TableRow>
                       </>
@@ -89,7 +98,14 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
           <Stack direction="row" justifyContent={"space-between"}>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography> عدد العرض في الصفحة</Typography>
-              <TextField size="small" select>
+              <TextField
+                onChange={(e) => {
+                  setLimit(e.target.value);
+                }}
+                size="small"
+                select
+                value={limit}
+              >
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={25}>25</MenuItem>
                 <MenuItem value={100}>100</MenuItem>
@@ -97,11 +113,21 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
                 <MenuItem value={500}>500</MenuItem>
                 <MenuItem value={1000}>1000</MenuItem>
                 <MenuItem value={10000}>10000</MenuItem>
-                <MenuItem>عرض الكل</MenuItem>
+                <MenuItem value={"-1"}>عرض الكل</MenuItem>
               </TextField>
             </Stack>
             <Stack p={2}>
-              <Typography>عرض الكل</Typography>
+              <Typography
+                sx={{
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setLimit("-1");
+                }}
+              >
+                عرض الكل
+              </Typography>
             </Stack>
           </Stack>
         </>
@@ -113,6 +139,8 @@ function TableDetails({ ClientData, setToSearch }: PropsType) {
 }
 type PropsType = {
   ClientData: ClientDetailsType | null;
+  limit: string;
+  setLimit: React.Dispatch<React.SetStateAction<string>>;
   setToSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 export default TableDetails;

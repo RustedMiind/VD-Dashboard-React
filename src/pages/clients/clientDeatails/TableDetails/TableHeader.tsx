@@ -35,7 +35,9 @@ function TableHeader(props: PropsType) {
       <Stack direction={"row"} flexGrow={1} gap={1}>
         <TextField
           onChange={(e) => {
-            isStringAllNumbers(e.target.value);
+            if (isStringAllNumbers(e.target.value)) {
+              setSearchCode(e.target.value);
+            }
           }}
           label="بحث"
           fullWidth
