@@ -29,6 +29,7 @@ export const theme = createTheme({
     warning: {
       main: "#F19B02",
       lightest: "#FDF0D9",
+      contrastText: "#FFF",
     },
     background: {
       paper: "#F3F5F7",

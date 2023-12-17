@@ -1,4 +1,19 @@
-import { Stack, TextField, Button } from "@mui/material";
+import { Stack, TextField, Button, InputAdornment } from "@mui/material";
+
+function searchByWhat(search: string): string {
+  if (search.length) {
+    if (search.startsWith("0")) return "البحث باستخدام رقم الجوال";
+    else if (
+      search.startsWith("1") ||
+      search.startsWith("2") ||
+      search.startsWith("4")
+    )
+      return "البحث باستخدام رقم الهوية";
+    else return "البحث باستخدام اسم العميل";
+  } else {
+    return "";
+  }
+}
 
 function SearchBar(props: PropsType) {
   return (
@@ -25,6 +40,13 @@ function SearchBar(props: PropsType) {
             e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
           ) => {
             props.setSearch(e.target.value);
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {searchByWhat(props.search)}
+              </InputAdornment>
+            ),
           }}
           // disabled
         />
