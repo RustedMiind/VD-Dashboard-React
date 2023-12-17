@@ -45,7 +45,6 @@ function SetDialog(props: PropsType) {
     e.preventDefault();
     if (ContractDetails.contract?.id) {
       setSendState("loading");
-
       (props.edit
         ? axios.patch(
             Api(`employee/contract/payment/${props.paymentData.id}`),
@@ -75,16 +74,23 @@ function SetDialog(props: PropsType) {
           (err: AxiosErrorType<LaravelValidationError<AddPaymentFormType>>) => {
             console.log(err);
             setSendState("error");
-            props.updateAndOpenToaster({
-              message: "تعذر في الحفظ",
-              severity: "error",
-            });
+
             if (err.response?.status === 422) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
                 amount: ArrayToMultiline(err.response.data?.data?.amount),
                 period: ArrayToMultiline(err.response.data?.data?.period),
                 status: ArrayToMultiline(err.response.data?.data?.status),
+              });
+            } else if (err.response?.status === 406) {
+              props.updateAndOpenToaster({
+                message: err.response?.data?.msg,
+                severity: "error",
+              });
+            } else {
+              props.updateAndOpenToaster({
+                message: "تعذر في الحفظ",
+                severity: "error",
               });
             }
           }
