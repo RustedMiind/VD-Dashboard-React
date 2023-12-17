@@ -12,6 +12,8 @@ import NotFound from "../../../components/NotFound";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 function ClientDetails() {
   const { id } = useParams();
+  const [limit, setLimit] = useState<string>("5");
+
   const [clientData, setClientData] = useState<
     ClientDetailsType | "loading" | "error"
   >("loading");
@@ -24,6 +26,7 @@ function ClientDetails() {
       .get<ClientDetailsType>(Api(`employee/contract/project/${id}`), {
         params: {
           code: toSearch,
+          limit,
         },
       })
       .then((res) => {
@@ -33,7 +36,7 @@ function ClientDetails() {
         setClientData("error");
         console.log(err);
       });
-  }, [toSearch]);
+  }, [toSearch, limit]);
 
   return (
     <>
@@ -143,7 +146,12 @@ function ClientDetails() {
           </Paper>
 
           <Stack>
-            <TableDetails ClientData={clientData} setToSearch={setToSearch} />
+            <TableDetails
+              setLimit={setLimit}
+              limit={limit}
+              ClientData={clientData}
+              setToSearch={setToSearch}
+            />
           </Stack>
         </Stack>
       )}
