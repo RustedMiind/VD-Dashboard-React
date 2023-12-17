@@ -12,7 +12,7 @@ export interface ClientDetailsType {
   contract_late: number;
   contract_stop: number;
   contract_work: number;
-  data: Contract[];
+  data?: (Contract & { remaining_time?: string; completion_rate?: string })[];
   payment?: Payment;
   msg: string;
   client?: Client;

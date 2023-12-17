@@ -14,7 +14,6 @@ import { useState } from "react";
 import { isStringAllNumbers } from "../../../../methods";
 
 function TableHeader(props: PropsType) {
-  const [searchCode, setSearchCode] = useState<string>();
   return (
     <Stack px={2} py={1} gap={8} direction="row" alignItems={"end"}>
       <Stack gap={1}>
@@ -32,25 +31,30 @@ function TableHeader(props: PropsType) {
           <Chip color="success" label={props.contractsCounts.work} />
         </Stack>
       </Stack>
-      <Stack direction={"row"} flexGrow={1} gap={1}>
+      <Stack
+        direction={"row"}
+        component={"form"}
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.getContractsData();
+        }}
+        flexGrow={1}
+        gap={1}
+      >
         <TextField
           onChange={(e) => {
-            if (isStringAllNumbers(e.target.value)) {
-              setSearchCode(e.target.value);
+            const value = e.target.value;
+            if (isStringAllNumbers(value)) {
+              props.setToSearch(value);
             }
           }}
+          value={props.search}
           label="بحث"
           fullWidth
           size="small"
         />
         <Box>
-          <Button
-            onClick={(e) => {
-              props.setToSearch(searchCode);
-            }}
-            variant="contained"
-            sx={{ px: 4 }}
-          >
+          <Button type="submit" variant="contained" sx={{ px: 4 }}>
             بحث
           </Button>
         </Box>
@@ -72,12 +76,14 @@ function TableHeader(props: PropsType) {
   );
 }
 type PropsType = {
-  setToSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setToSearch: React.Dispatch<React.SetStateAction<string>>;
+  search: string;
   contractsCounts: {
     end: number;
     work: number;
     late: number;
     stopped: number;
   };
+  getContractsData: () => void;
 };
 export default TableHeader;

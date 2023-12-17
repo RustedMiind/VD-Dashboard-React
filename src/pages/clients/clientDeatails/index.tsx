@@ -17,10 +17,11 @@ function ClientDetails() {
   const [clientData, setClientData] = useState<
     ClientDetailsType | "loading" | "error"
   >("loading");
-  const [toSearch, setToSearch] = useState<string>();
+  const [toSearch, setToSearch] = useState<string>("");
   console.log(toSearch, "codeContract");
 
-  useEffect(() => {
+  useEffect(getContractsData, [limit]);
+  function getContractsData() {
     setClientData("loading");
     axios
       .get<ClientDetailsType>(Api(`employee/contract/project/${id}`), {
@@ -36,7 +37,7 @@ function ClientDetails() {
         setClientData("error");
         console.log(err);
       });
-  }, [toSearch, limit]);
+  }
 
   return (
     <>
@@ -94,7 +95,7 @@ function ClientDetails() {
                   </Grid>
                 </Grid>
               </Grid>
-              {clientData?.data.length !== 0 && (
+              {clientData?.data?.length !== 0 && (
                 <Grid display="flex" justifyContent={"end"} item md={6}>
                   <Box>
                     <Typography
@@ -147,10 +148,12 @@ function ClientDetails() {
 
           <Stack>
             <TableDetails
+              search={toSearch}
               setLimit={setLimit}
               limit={limit}
               ClientData={clientData}
               setToSearch={setToSearch}
+              getContractsData={getContractsData}
             />
           </Stack>
         </Stack>
