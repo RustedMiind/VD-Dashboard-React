@@ -23,6 +23,8 @@ import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
+import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
+import { AddPaymentFormType } from "../../PaymentsSection/SetDialog/reducer";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -77,17 +79,9 @@ function SetDialog(props: PropsType) {
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
         .catch(
-          (
-            err: AxiosErrorType<{
-              data: ChangeTypeValues<Partial<AddTaskFormType>, string[]>;
-            }>
-          ) => {
+          (err: AxiosErrorType<LaravelValidationError<AddTaskFormType>>) => {
             console.log(err);
             setSendState("error");
-            props.updateAndOpenToaster({
-              message: "تعذر في الحفظ",
-              severity: "error",
-            });
             if (err.response?.status === 422) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
@@ -96,6 +90,16 @@ function SetDialog(props: PropsType) {
                   err.response.data?.data?.employee_id
                 ),
                 period: ArrayToMultiline(err.response.data?.data?.period),
+              });
+            } else if (err.response?.status === 406) {
+              props.updateAndOpenToaster({
+                message: err.response?.data?.msg,
+                severity: "error",
+              });
+            } else {
+              props.updateAndOpenToaster({
+                message: "تعذر في الحفظ",
+                severity: "error",
               });
             }
           }
