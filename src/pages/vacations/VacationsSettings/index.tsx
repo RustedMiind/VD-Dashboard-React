@@ -11,24 +11,31 @@ import {
   Typography,
   Card,
   CardActionArea,
+  Skeleton,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import NotFound from "../../../components/NotFound";
+import { generateUndefinedArray } from "../../../methods";
 
 function VacationsSettings() {
-  const [vacationsArr, setVacationsData] = useState<VacationsArr[] | undefined>(
-    undefined
-  );
+  const [vacationsData, setVacationsData] = useState<
+    VacationsArr[] | "loading" | "error" | "none"
+  >("none");
 
   useEffect(() => {
+    setVacationsData("loading");
     axios
       .get<{ date: VacationsArr[] }>(Api("employee/vacation"))
       .then((data) => {
         setVacationsData(data.data.date);
       })
       .catch((err) => {
-        setVacationsData(undefined);
+        setVacationsData("error");
       });
   }, []);
+
+  const loadingCard = generateUndefinedArray(4);
+  const loadingButtons = generateUndefinedArray(3);
 
   return (
     <Stack>
@@ -37,58 +44,101 @@ function VacationsSettings() {
       </Typography>
 
       <Grid container spacing={4} mt={1}>
-        {vacationsArr?.map((vacation, index) => (
-          <Grid item xs={4} key={index}>
-            <Card>
-              <CardActionArea
-                component={NavLink}
-                to={`${vacation.id}`}
-                sx={{ position: "relative" }}
-              >
-                <CardMedia
-                  component="img"
-                  height={220}
-                  image="https://w0.peakpx.com/wallpaper/340/751/HD-wallpaper-city-aerial-view-road-buildings-coast-thumbnail.jpg"
-                  alt="green iguana"
-                />
-                <Stack
+        {vacationsData === "loading" &&
+          loadingCard.map(() => (
+            <Grid item xs={4}>
+              <Card>
+                <Skeleton variant="rectangular" width={400} height={220} />
+                <Box
                   sx={{
-                    top: 0,
-                    position: "absolute",
-                    width: 1,
-                    height: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background:
-                      "linear-gradient(180deg, rgba(243, 245, 247, 0.5) 0%, #dadcde 72.18%)",
+                    backgroundColor: "wheat",
                   }}
+                  py={1}
                 >
-                  <Typography
-                    variant="h5"
+                  <CardActions
                     sx={{
-                      fontWeight: 700,
+                      overflowX: "auto",
+                      maxWidth: 1,
+                      width: 1,
+                      direction: "row",
                     }}
                   >
-                    {vacation.name}
-                  </Typography>
-                </Stack>
-              </CardActionArea>
-              <Box
-                sx={{
-                  backgroundColor: "primary.main",
-                }}
-                py={1}
-              >
-                <CardActions
-                  sx={{
-                    overflowX: "auto",
-                    maxWidth: 1,
-                    width: 1,
-                    direction: "row",
-                  }}
+                    {loadingButtons.map(() => (
+                      <Box
+                        sx={{
+                          borderRadius: 1,
+                          bgcolor: "white",
+                          maxWidth: 0.318,
+                          minWidth: 0.318,
+                        }}
+                      >
+                        <Button size="large" color="primary"  fullWidth>
+                          <Skeleton variant="rectangular" />
+                        </Button>
+                      </Box>
+                    ))}
+                  </CardActions>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+
+        {vacationsData === "error" && (
+          <NotFound title="حدث خطأ حاول مرة أخرى" />
+        )}
+
+        {typeof vacationsData === "object" &&
+          vacationsData?.map((vacation, index) => (
+            <Grid item xs={4} key={index}>
+              <Card>
+                <CardActionArea
+                  component={NavLink}
+                  to={`${vacation.id}`}
+                  sx={{ position: "relative" }}
                 >
-                  {vacation.vacation_dates.map(
-                    (vacationDate, index) => (
+                  <CardMedia
+                    component="img"
+                    height={220}
+                    image="https://w0.peakpx.com/wallpaper/340/751/HD-wallpaper-city-aerial-view-road-buildings-coast-thumbnail.jpg"
+                    alt="green iguana"
+                  />
+                  <Stack
+                    sx={{
+                      top: 0,
+                      position: "absolute",
+                      width: 1,
+                      height: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background:
+                        "linear-gradient(180deg, rgba(243, 245, 247, 0.5) 0%, #dadcde 72.18%)",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 700,
+                      }}
+                    >
+                      {vacation.name}
+                    </Typography>
+                  </Stack>
+                </CardActionArea>
+                <Box
+                  sx={{
+                    backgroundColor: "primary.main",
+                  }}
+                  py={1}
+                >
+                  <CardActions
+                    sx={{
+                      overflowX: "auto",
+                      maxWidth: 1,
+                      width: 1,
+                      direction: "row",
+                    }}
+                  >
+                    {vacation.vacation_dates.map((vacationDate, index) => (
                       <Box
                         key={index}
                         sx={{
@@ -102,13 +152,12 @@ function VacationsSettings() {
                           {vacationDate.year}
                         </Button>
                       </Box>
-                    )
-                  )}
-                </CardActions>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
+                    ))}
+                  </CardActions>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
     </Stack>
   );
