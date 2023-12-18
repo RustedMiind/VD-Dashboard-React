@@ -19,9 +19,6 @@ import { NotPrintableTableCell } from "../../../clients/data/Table";
 import { useEffect, useRef } from "react";
 
 const TableData = (props: PropsType) => {
-  const tableRef: React.RefObject<HTMLTableElement> =
-    useRef<HTMLTableElement>(null);
-
   return (
     <>
       <Paper>
@@ -30,7 +27,7 @@ const TableData = (props: PropsType) => {
             minHeight: 500,
           }}
         >
-          <Table aria-label="simple table" ref={tableRef}>
+          <Table aria-label="simple table" ref={props.tableRef}>
             <TableHead>
               <TableRow>
                 <TableCell>اسم الاجازة</TableCell>
@@ -81,6 +78,7 @@ const TableData = (props: PropsType) => {
 type PropsType = {
   openUpdateDialog: (vacation: Vacation) => () => void;
   vacations: Vacation[];
+  tableRef: React.RefObject<HTMLTableElement>;
 };
 
 export default TableData;

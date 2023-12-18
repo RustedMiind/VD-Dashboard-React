@@ -36,7 +36,6 @@ const VacationsTable = () => {
     useRef<HTMLTableElement>(null);
   const handlePrint = () => {
     if (tableRef?.current) {
-      window.print();
     }
   };
   const [vacations, setVacations] = useState<"loading" | "error" | Vacation[]>(
@@ -109,6 +108,7 @@ const VacationsTable = () => {
       </Button>
       {Array.isArray(vacations) && (
         <TableData
+          tableRef={tableRef}
           vacations={vacations}
           openUpdateDialog={handleOpenUpdateDialog}
         />
