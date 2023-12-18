@@ -5,19 +5,12 @@ import { useState } from "react";
 import AddDialog from "../AddDialog";
 import ErrorDialog from "../ErrorDialog";
 import { useParams } from "react-router-dom";
+import dayjs from "dayjs";
 
 function FilterDetails(props: PropsType) {
-  const [yearFilter, setYearFilter] = useState();
-  const [statusFilter, setStatusFilter] = useState<{
-    name: string;
-    value: Number;
-  }>({
-    name: "string",
-    value: 0,
-  });
-
   const { branchId } = useParams();
   const [dialogState, setDialogState] = useState<DialogState>("none");
+
   const closeDialog = () => {
     setDialogState("none");
   };
@@ -37,14 +30,14 @@ function FilterDetails(props: PropsType) {
         <Grid item xs={2}>
           <DatePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
-            label={'"العام"'}
+            label={"العام"}
             openTo="year"
-            disableFuture
+            disablePast
             views={["year"]}
-            value={yearFilter}
-            // onChange={(e) => {
-            //   setYearFilter(e.target.value);
-            // }}
+            value={dayjs(props.yearFilter)}
+            onChange={(date) => {
+              props.setYearFilter(date?.format() || "");
+            }}
           />
         </Grid>
         <Grid item xs={2}>
@@ -54,16 +47,14 @@ function FilterDetails(props: PropsType) {
             label="الحالة"
             size="small"
             sx={{ color: "primary" }}
-            value={statusFilter.value}
+            value={props.statusFilter}
             onChange={(e) => {
-              setStatusFilter({
-                ...statusFilter,
-                value: parseInt(e.target.value),
-              });
+              props.setStatusFilter(parseInt(e.target.value));
             }}
           >
-            <MenuItem value={10}>معتمد</MenuItem>
-            <MenuItem value={20}>مسودة</MenuItem>
+            <MenuItem value={-1}>الكل</MenuItem>
+            <MenuItem value={34}>مسودة</MenuItem>
+            <MenuItem value={35}>معتمد</MenuItem>
           </TextField>
         </Grid>
       </Grid>
@@ -107,4 +98,8 @@ export default FilterDetails;
 
 type PropsType = {
   setTableData: () => void;
+  statusFilter: number;
+  setStatusFilter: React.Dispatch<React.SetStateAction<number>>;
+  yearFilter: string;
+  setYearFilter: React.Dispatch<React.SetStateAction<string>>;
 };

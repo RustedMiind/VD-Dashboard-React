@@ -1,4 +1,4 @@
-import LevelItemPlaceholder from "./LevelItem/LevelItemPlaceholder";
+import LevelItemPlaceholder from "./LevelItemPlaceholder";
 
 function LevelsPlaceholder() {
   return (
