@@ -19,6 +19,7 @@ import LoadingTable from "../../../components/LoadingTable";
 import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext";
 import { LoadingButton } from "@mui/lab";
 import { ToasterType } from "../../../types/other/ToasterStateType";
+import ReactToPrint from "react-to-print";
 
 const VacationsTable = () => {
   const { yearId, branchId } = useParams();
@@ -125,21 +126,28 @@ const VacationsTable = () => {
         </Typography>
       )}
       <Stack direction={"row"} gap={1} justifyContent="flex-end">
-        <Button
-          startIcon={<PrintIcon />}
-          color="primary"
-          variant="outlined"
-          onClick={handlePrint}
-          sx={{
-            mt: 1,
-            width: "fit-content",
-            alignSelf: "flex-end",
-            px: 5,
-            py: 1,
-          }}
-        >
-          طباعة
-        </Button>
+        <ReactToPrint
+          trigger={() => (
+            <Button
+              sx={{
+                mt: 1,
+                width: "fit-content",
+                alignSelf: "flex-end",
+                px: 5,
+                py: 1,
+              }}
+              variant="outlined"
+              type="button"
+              color="primary"
+              startIcon={<PrintIcon />}
+              onClick={handlePrint}
+            >
+              طباعة
+            </Button>
+          )}
+          content={() => tableRef.current}
+        />
+
         <LoadingButton
           loading={sendState === "loading"}
           variant="contained"
