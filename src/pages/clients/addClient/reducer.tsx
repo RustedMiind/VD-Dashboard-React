@@ -1,5 +1,5 @@
 import { Domain } from "../../../constants";
-import { isStringAllNumbers } from "../../../methods";
+import { isStringAllCharacters, isStringAllNumbers } from "../../../methods";
 import { ReducerAction } from "../../../types";
 import { Client } from "../../../types/Clients/Client";
 
@@ -42,11 +42,19 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
         return state;
       }
     case "NAME":
-      return { ...state, name: action.payload };
+      if (isStringAllCharacters(action.payload))
+        return { ...state, name: action.payload };
+      else return state;
     // case "COMPANY_NAME":
     //   return { ...state, company_name: action.payload };
     case "CARD_ID":
-      if (isStringAllNumbers(action.payload))
+      if (
+        (isStringAllNumbers(action.payload) &&
+          (action.payload.startsWith("1") ||
+            action.payload.startsWith("2") ||
+            action.payload.startsWith("4"))) ||
+        action.payload === ""
+      )
         return { ...state, card_id: action.payload };
       else return state;
     case "REGISTER_NUMBER":
@@ -55,7 +63,11 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
       else return state;
 
     case "PHONE_NUMBER":
-      if (isStringAllNumbers(action.payload))
+      if (
+        (isStringAllNumbers(action.payload) &&
+          action.payload.startsWith("0")) ||
+        action.payload === ""
+      )
         return { ...state, phone: action.payload };
       else return state;
     case "EMAIL":

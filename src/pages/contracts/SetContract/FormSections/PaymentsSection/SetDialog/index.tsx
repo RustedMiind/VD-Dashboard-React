@@ -4,7 +4,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
+import {
+  Alert,
+  Grid,
+  ListItemIcon,
+  MenuItem,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { AddPaymentFormType, AddTaskFormInit, reducer } from "./reducer";
 import axios from "axios";
@@ -24,6 +31,7 @@ import { AxiosErrorType } from "../../../../../../types/Axios";
 import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
+import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -45,7 +53,6 @@ function SetDialog(props: PropsType) {
     e.preventDefault();
     if (ContractDetails.contract?.id) {
       setSendState("loading");
-
       (props.edit
         ? axios.patch(
             Api(`employee/contract/payment/${props.paymentData.id}`),
@@ -75,16 +82,23 @@ function SetDialog(props: PropsType) {
           (err: AxiosErrorType<LaravelValidationError<AddPaymentFormType>>) => {
             console.log(err);
             setSendState("error");
-            props.updateAndOpenToaster({
-              message: "تعذر في الحفظ",
-              severity: "error",
-            });
+
             if (err.response?.status === 422) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
                 amount: ArrayToMultiline(err.response.data?.data?.amount),
                 period: ArrayToMultiline(err.response.data?.data?.period),
                 status: ArrayToMultiline(err.response.data?.data?.status),
+              });
+            } else if (err.response?.status === 406) {
+              props.updateAndOpenToaster({
+                message: err.response?.data?.msg,
+                severity: "error",
+              });
+            } else {
+              props.updateAndOpenToaster({
+                message: "تعذر في الحفظ",
+                severity: "error",
               });
             }
           }
@@ -112,8 +126,13 @@ function SetDialog(props: PropsType) {
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
+              <Typography>
+                اسم الدفعة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
-                label="اسم الدفعة"
+                placeholder="اسم الدفعة"
                 error={!!errorState.name}
                 value={state.name}
                 onChange={(e) => {
@@ -123,8 +142,13 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>
+                مدة الدفعة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
-                label="مدة الدفعة"
+                placeholder="مدة الدفعة"
                 error={!!errorState.period}
                 value={state.period}
                 onChange={(e) => {
@@ -134,6 +158,7 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.period}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>قيمة الدفعة</Typography>
               <FormTextField
                 label="قيمة الدفعة"
                 error={!!errorState.amount}
@@ -145,6 +170,7 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.amount}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>اختيار حالة الدفعة</Typography>
               <FormTextField
                 label="اختيار حالة الدفعة"
                 error={!!errorState.status}

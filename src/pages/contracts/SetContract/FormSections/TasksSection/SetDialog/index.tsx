@@ -23,6 +23,9 @@ import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
+import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
+import { AddPaymentFormType } from "../../PaymentsSection/SetDialog/reducer";
+import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -77,17 +80,9 @@ function SetDialog(props: PropsType) {
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
         .catch(
-          (
-            err: AxiosErrorType<{
-              data: ChangeTypeValues<Partial<AddTaskFormType>, string[]>;
-            }>
-          ) => {
+          (err: AxiosErrorType<LaravelValidationError<AddTaskFormType>>) => {
             console.log(err);
             setSendState("error");
-            props.updateAndOpenToaster({
-              message: "تعذر في الحفظ",
-              severity: "error",
-            });
             if (err.response?.status === 422) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
@@ -96,6 +91,16 @@ function SetDialog(props: PropsType) {
                   err.response.data?.data?.employee_id
                 ),
                 period: ArrayToMultiline(err.response.data?.data?.period),
+              });
+            } else if (err.response?.status === 406) {
+              props.updateAndOpenToaster({
+                message: err.response?.data?.msg,
+                severity: "error",
+              });
+            } else {
+              props.updateAndOpenToaster({
+                message: "تعذر في الحفظ",
+                severity: "error",
               });
             }
           }
@@ -123,9 +128,14 @@ function SetDialog(props: PropsType) {
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
+              <Typography>
+                اسم المهمة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
                 error={!!errorState.name}
-                label="اسم المهمة"
+                placeholder="اسم المهمة"
                 value={state.name}
                 onChange={(e) => {
                   dispatch({ type: "SET_NAME", payload: e.target.value });
@@ -134,8 +144,13 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>
+                مدة المهمة
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
               <FormTextField
-                label="مدة المهمة"
+                placeholder="مدة المهمة"
                 value={state.period}
                 error={!!errorState.period}
                 onChange={(e) => {
@@ -146,8 +161,9 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.period}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>قيمة المهمة</Typography>
               <FormTextField
-                label="قيمة المهمة"
+                placeholder="قيمة المهمة"
                 value={state.amount}
                 error={!!errorState.amount}
                 onChange={(e) => {
@@ -158,8 +174,8 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.amount}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>المسؤول عن المهمة</Typography>
               <FormTextField
-                label="المسؤول عن المهمة"
                 select
                 value={state.employee_id}
                 error={!!errorState.employee_id}

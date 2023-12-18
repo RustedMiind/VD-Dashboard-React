@@ -6,12 +6,14 @@ import { Api } from "../../../constants";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
 import ClientRequestsTable from "./Table";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteBtn from "./DeleteButton/DeleteBtn";
 import SearchDialog from "./SearchDialog";
 import { IndexContextProvider } from "../Context/Store";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
 import { Client } from "../../../types/Clients";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function ClientData() {
   const [open, setOpen] = useState(false);
@@ -21,21 +23,45 @@ function ClientData() {
   );
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState<string>("5");
-  console.log(limit);
-
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const handleClickOpen = () => {
     setOpen(true);
   };
-  function getRequests() {
+  function deleteClients() {
+    axios
+      .post(Api("employee/client/delete"), { id: selectedItems })
+      .then(() => {
+        getRequests();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  let anyClientHasContracts = false;
+  typeof requests === "object" &&
+    selectedItems.forEach((id) => {
+      !!requests.find(
+        (client) =>
+          client.id === id &&
+          client.contracts_count &&
+          client.contracts_count > 0
+      ) && (anyClientHasContracts = true);
+    });
+
+  const deleteDisabled = selectedItems.length === 0 || anyClientHasContracts;
+  const updateDisabled = selectedItems.length !== 1;
+  function getRequests(advancedSearchParams?: unknown) {
     setRequests("loading");
     axios
       .get<{ data: Client[] }>(Api("employee/client"), {
-        params: {
+        params: advancedSearchParams || {
           search,
           limit,
         },
       })
       .then(({ data }) => {
+        setSelectedItems([]);
         setRequests(data.data);
       })
       .catch((err) => {
@@ -44,7 +70,7 @@ function ClientData() {
   }
   // Get Clients
   useEffect(getRequests, [limit]);
-
+  console.log(selectedItems);
   return (
     <Stack>
       <IndexContextProvider>
@@ -55,6 +81,9 @@ function ClientData() {
           search={search}
           setSearch={setSearch}
           getRequests={getRequests}
+          openAdvancedSearchDialog={() => {
+            setOpen(true);
+          }}
         />
         <Typography variant="h6" fontWeight={600} mb={3} mt={2}>
           العملاء
@@ -90,6 +119,10 @@ function ClientData() {
                     sx={{ ml: 2 }}
                     variant="contained"
                     onClick={handleClickOpen}
+                    startIcon={<EditIcon />}
+                    disabled={updateDisabled}
+                    component={NavLink}
+                    to={`${selectedItems[0]}/edit`}
                   >
                     تعديل بيانات عميل
                   </Button>
@@ -100,18 +133,18 @@ function ClientData() {
                 onClose={() => {
                   setOpen(false);
                 }}
-                applySearch={(clients: Client[]) => {
-                  setRequests(clients);
-                }}
+                getClients={getRequests}
               />
             </Box>
-            {requests?.length !== 0 && (
-              <>
-                {typeof requests === "object" && (
-                  <DeleteBtn setRequests={setRequests} requests={requests} />
-                )}
-              </>
-            )}
+            <Button
+              color="error"
+              variant="outlined"
+              disabled={deleteDisabled}
+              startIcon={<DeleteIcon />}
+              onClick={deleteClients}
+            >
+              حذف
+            </Button>
           </Box>
           {requests === "loading" && <LoadingTable rows={5} cols={9} />}
           {requests === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
@@ -120,6 +153,8 @@ function ClientData() {
               requests={requests}
               setLimit={setLimit}
               limit={limit}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
             />
           )}
         </Paper>

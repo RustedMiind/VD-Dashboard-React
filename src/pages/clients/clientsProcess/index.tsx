@@ -2,7 +2,6 @@ import { Alert, Snackbar, Stack, Typography } from "@mui/material";
 import TabsAndAdd from "./TabsAndAdd";
 import { useEffect, useState } from "react";
 import { Paper } from "@mui/material";
-import LevelsSkeleton from "./LevelsSkeleton";
 import { LoadingButton } from "@mui/lab";
 import axios from "axios";
 import { Api } from "../../../constants";
@@ -10,6 +9,7 @@ import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
 import { OrderType } from "./types/OrderType";
+import LevelsPlaceholder from "../../../components/PlaceHolder/LevelsPlaceholder";
 
 const InitLevel: StepType = {
   branch_id: 0,
@@ -40,31 +40,34 @@ const ClientProcess = () => {
   };
 
   const getFormData = () => {
-    return new Promise<void>((resSolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!dataForm) {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
+            // setEndPointStatus("none");
             setTypeOrder(res.data.typeOrder);
             setDataForm(res.data);
-            resSolve();
+            resolve();
           })
           .catch((err) => {
             console.log(err);
             setEndPointStatus("error");
             reject(err);
           });
-      } else resSolve();
+      } else resolve();
     });
   };
 
   const getLevels = () => {
-    return new Promise<void>((resSolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       axios
         .get(Api(`employee/client/order/steps/${typeOrderId}`))
         .then((res) => {
+          setEndPointStatus("none");
+          console.log(res.data.data);
           setLevels(res.data.data);
-          resSolve();
+          resolve();
         })
         .catch((err) => {
           console.log(err);
@@ -111,8 +114,8 @@ const ClientProcess = () => {
   };
 
   const loadLevels = () => {
-    getFormData().catch(console.log);
-    getLevels().catch(console.log);
+    setEndPointStatus("loading");
+    getFormData().then(getLevels).catch(console.log);
   };
 
   const updateLevel = (index: number) => {
@@ -160,7 +163,7 @@ const ClientProcess = () => {
       <Paper sx={{ p: 2 }}>
         {endPointStatus === "loading" && (
           <Stack>
-            <LevelsSkeleton />
+            <LevelsPlaceholder />
           </Stack>
         )}
 
@@ -197,7 +200,7 @@ const ClientProcess = () => {
           </Stack>
         )}
 
-        {process?.levels?.length === 0 && (
+        {process?.levels?.length === 0 && endPointStatus === "none" && (
           <Typography variant="h5" textAlign="center" p={2} py={4}>
             لم يتم ايجاد اي من المراحل المطلوبة
           </Typography>

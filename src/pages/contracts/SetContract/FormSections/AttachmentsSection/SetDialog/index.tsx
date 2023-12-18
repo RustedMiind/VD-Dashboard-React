@@ -4,7 +4,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Alert, Grid, ListItemIcon, MenuItem, Snackbar } from "@mui/material";
+import {
+  Alert,
+  Grid,
+  ListItemIcon,
+  MenuItem,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 import axios from "axios";
@@ -30,6 +37,7 @@ import {
 } from "./reducer";
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
+import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="medium" fullWidth variant="outlined" />;
@@ -92,7 +100,10 @@ function SetDialog(props: PropsType) {
         .catch(
           (
             err: AxiosErrorType<{
-              data: ChangeTypeValues<Partial<AddAttachmentFormType>, string[]>;
+              data: ChangeTypeValues<
+                Partial<AddAttachmentFormType & { card_image: string }>,
+                string[]
+              >;
             }>
           ) => {
             console.log(err);
@@ -105,7 +116,7 @@ function SetDialog(props: PropsType) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
                 code: ArrayToMultiline(err.response.data?.data?.code),
-                file: ArrayToMultiline(err.response.data?.data?.file),
+                file: ArrayToMultiline(err.response.data?.data?.card_image),
                 type: ArrayToMultiline(err.response.data?.data?.type),
               });
             }
@@ -135,8 +146,15 @@ function SetDialog(props: PropsType) {
         <DialogContent>
           <Grid container>
             <Grid p={1} item md={6}>
-              <FormTextField
-                label="رقم المرفق"
+              <Typography>
+                رقم المرفق
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
+              <TextField
+                size="small"
+                fullWidth
+                placeholder="رقم المرفق"
                 error={!!errorState.code}
                 value={state.code}
                 onChange={(e) => {
@@ -146,8 +164,15 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.code}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
-              <FormTextField
-                label="اسم المرفق"
+              <Typography>
+                اسم المرفق
+                {"  "}
+                <RequiredSymbol />
+              </Typography>
+              <TextField
+                placeholder="اسم المرفق"
+                fullWidth
+                size="small"
                 error={!!errorState.name}
                 value={state.name}
                 onChange={(e) => {
@@ -157,7 +182,10 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
-              <FormTextField
+              <Typography>اسم المرفق</Typography>
+              <TextField
+                fullWidth
+                size="small"
                 label="نوع المرفق"
                 error={!!errorState.type}
                 value={state.type}
@@ -168,7 +196,10 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.type}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
+              <Typography>ارفاق ملف</Typography>
+
               <UploadFileInput
+                size="sm"
                 value={state.file}
                 subTitle=""
                 setValue={(file) => {

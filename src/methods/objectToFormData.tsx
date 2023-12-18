@@ -3,7 +3,11 @@ export const objectToFormData = (object: any): FormData => {
   const formData = new FormData();
 
   for (const key in object) {
-    if (object.hasOwnProperty(key)) {
+    if (
+      object.hasOwnProperty(key) &&
+      object[key] !== null &&
+      object[key] !== undefined
+    ) {
       formData.append(key, object[key]);
     }
   }

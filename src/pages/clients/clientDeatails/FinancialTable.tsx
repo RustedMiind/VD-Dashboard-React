@@ -47,7 +47,7 @@ export default function BasicTable({ clientData }: PropsType) {
   return (
     <Paper elevation={2}>
       <TableContainer component={Paper} sx={{ bgcolor: "Background" }}>
-        <Table>
+        <Table size="small">
           <TableHead
             sx={{
               ".MuiTableCell-root": {

@@ -10,7 +10,7 @@ import HandleDepartmentWithEmployees, {
 } from "../../../methods/HandleData/HandleDepartmentWithEmployees";
 import { Api } from "../../../constants";
 import TabsAndAdd from "./TabsAndAdd";
-import LevelsPlaceholder from "./LevelsPlaceholder";
+import LevelsPlaceholder from "../../../components/PlaceHolder/LevelsPlaceholder";
 import { EmployeeType } from "../../../types";
 import { conversions } from "../../../methods/conversions";
 

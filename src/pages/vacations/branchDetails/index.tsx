@@ -26,7 +26,6 @@ function BranchDetails() {
   }, []);
 
   const [dialogState, setDialogState] = useState<DialogState>("none");
-
   const closeDialog = () => {
     setDialogState("none");
   };
@@ -58,9 +57,59 @@ function BranchDetails() {
     setTableData();
   }, []);
 
+  const [yearFilter, setYearFilter] = useState<string>("الكل");
+  const [statusFilter, setStatusFilter] = useState<number>(-1);
+
+  function getYearFromDateStr(dateStr: string): number | null {
+    const parsedDate = new Date(dateStr);
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate.getFullYear();
+    }
+    return null;
+  }
+
+  useEffect(() => {
+    let year = null;
+    let status_id = null;
+
+    if (statusFilter !== -1) {
+      status_id = statusFilter;
+    }
+    if (yearFilter !== "الكل") {
+      year = getYearFromDateStr(yearFilter);
+    }
+    
+    axios
+      .get<{ date: VacationsDetailsType[] }>(
+        Api(`employee/vacation/${branchId}`),
+        {
+          params: {
+            status_id: status_id || null,
+            year: year || null,
+          },
+        }
+      )
+      .then((data) => {
+        // console.log(data.data.date);
+        setVacationsData(data.data.date);
+      })
+      .catch((err) => {
+        setVacationsData("error");
+      });
+
+    console.log(yearFilter);
+    console.log(statusFilter);
+  }, [yearFilter, statusFilter]);
+
   return (
     <Stack>
-      <FilterDetails setTableData={setTableData} />
+      <FilterDetails
+        setTableData={setTableData}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        yearFilter={yearFilter}
+        setYearFilter={setYearFilter}
+      />
       {vacationsData === "loading" && <LoadingTable rows={5} cols={5} />}
       {vacationsData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
       {typeof vacationsData === "object" && (

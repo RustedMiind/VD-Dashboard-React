@@ -10,20 +10,25 @@ import { ClientDetailsType } from "../../../types/Clients";
 import LoadingTable from "../../../components/LoadingTable";
 import NotFound from "../../../components/NotFound";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+
 function ClientDetails() {
   const { id } = useParams();
+  const [limit, setLimit] = useState<string>("5");
+
   const [clientData, setClientData] = useState<
     ClientDetailsType | "loading" | "error"
   >("loading");
-  const [toSearch, setToSearch] = useState<string>();
-  console.log(toSearch);
+  const [toSearch, setToSearch] = useState<string>("");
+  console.log(toSearch, "codeContract");
 
-  useEffect(() => {
+  useEffect(getContractsData, [limit]);
+  function getContractsData() {
     setClientData("loading");
     axios
       .get<ClientDetailsType>(Api(`employee/contract/project/${id}`), {
         params: {
           code: toSearch,
+          limit,
         },
       })
       .then((res) => {
@@ -33,7 +38,7 @@ function ClientDetails() {
         setClientData("error");
         console.log(err);
       });
-  }, [toSearch]);
+  }
 
   return (
     <>
@@ -91,7 +96,7 @@ function ClientDetails() {
                   </Grid>
                 </Grid>
               </Grid>
-              {clientData?.data.length !== 0 && (
+              {clientData?.data?.length !== 0 && (
                 <Grid display="flex" justifyContent={"end"} item md={6}>
                   <Box>
                     <Typography
@@ -102,19 +107,47 @@ function ClientDetails() {
                     >
                       بيان للمشاريع
                     </Typography>
+
                     <PieChart
                       colors={["#FBB4AE", "#FED9A6", "#CCEBC5", "#D0DCE9"]}
                       series={[
                         {
-                          paddingAngle: 4,
-                          innerRadius: 5,
-                          cornerRadius: 7,
+                          paddingAngle: 0,
+                          innerRadius: 10,
+                          cornerRadius: 5,
+                          arcLabel: (item) => `${item.label} (${item.value})`,
+                          arcLabelMinAngle: 45,
                           data: [
-                            { id: 0, value: 10, label: "متوقف" },
-                            { id: 1, value: 15, label: "series B" },
-                            { id: 2, value: 20, label: "series C" },
-                            { id: 3, value: 20, label: "series E" },
+                            {
+                              id: 0,
+                              value: clientData.contract_stop,
+                              label: "متوقف",
+                            },
+                            {
+                              id: 1,
+                              value: clientData.contract_late,
+                              label: "متأخر",
+                            },
+                            {
+                              id: 2,
+                              value: clientData.contract_work,
+                              label: "ساري",
+                            },
+                            {
+                              id: 3,
+                              value: clientData.contract_end,
+                              label: "منتهي",
+                            },
                           ],
+                          highlightScope: {
+                            faded: "global",
+                            highlighted: "item",
+                          },
+                          faded: {
+                            innerRadius: 30,
+                            additionalRadius: -30,
+                            color: "gray",
+                          },
                         },
                       ]}
                       width={400}
@@ -127,7 +160,14 @@ function ClientDetails() {
           </Paper>
 
           <Stack>
-            <TableDetails ClientData={clientData} setToSearch={setToSearch} />
+            <TableDetails
+              search={toSearch}
+              setLimit={setLimit}
+              limit={limit}
+              ClientData={clientData}
+              setToSearch={setToSearch}
+              getContractsData={getContractsData}
+            />
           </Stack>
         </Stack>
       )}
