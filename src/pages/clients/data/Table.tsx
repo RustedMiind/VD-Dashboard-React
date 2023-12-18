@@ -12,7 +12,6 @@ import {
   TableCell,
   IconButton,
 } from "@mui/material";
-import { ClientRequest } from "../../../types";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext, useState, useEffect, useRef } from "react";
 import TableHeader from "./TableHeader/TableHeader";
@@ -24,6 +23,7 @@ import { MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import StatusChip from "../../../components/StatusChip";
 import { NavLink } from "react-router-dom";
+import { Client } from "../../../types/Clients";
 
 export const NotPrintableTableCell = styled(TableCell)({
   "@media print": {
@@ -35,10 +35,7 @@ export type IdListType = {
 };
 
 function ClientRequestsTable(props: PropsType) {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const tableContext = useContext(TableContext);
-  const [rowsCount, setRowsCount] = useState(5);
-  const toView = props.requests?.slice(0, rowsCount);
   const chekedArray: IdListType = {
     id: [],
   };
@@ -49,118 +46,123 @@ function ClientRequestsTable(props: PropsType) {
       window.print();
     }
   };
-  chekedArray.id = selectedItems;
+  chekedArray.id = props.selectedItems;
   useEffect(() => {
     tableContext?.setIndex(chekedArray);
-  }, [selectedItems]);
+  }, [props.selectedItems]);
 
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
     if (isSelect) {
-      setSelectedItems([...selectedItems, value]);
+      props.setSelectedItems([...props.selectedItems, value]);
     } else {
-      setSelectedItems((prevData) => {
+      props.setSelectedItems((prevData) => {
         return prevData.filter((id) => {
           return id !== value;
         });
       });
     }
   }
-  const isAllSelected =
-    props.requests?.filter((req) => {
-      return req.contracts_count === 0;
-    }).length === selectedItems.length && selectedItems.length;
+  const isAllSelected = props.requests?.length === props.selectedItems.length;
+  // props.requests?.filter((req) => {
+  //   return req.contracts_count === 0;
+  // }).length === selectedItems.length && selectedItems.length;
   function checkAllHandler(checked: boolean) {
-    const allChecked: number[] = checked
-      ? (props.requests
-          ?.map((request) => request.contracts_count === 0 && request.id)
-          .filter((id) => typeof id === "number") as number[])
-      : [];
-    setSelectedItems(allChecked);
+    const allChecked: number[] =
+      checked && props.requests
+        ? props.requests?.map((client) => client.id)
+        : [];
+    props.setSelectedItems(allChecked);
   }
-
-  console.log(props.requests);
-
   return (
     <>
-      <Stack>
-        <TableContainer>
-          <Table ref={tableRef}>
-            {props.requests?.length !== 0 ? (
-              <TableHeader
-                checkAllHandler={checkAllHandler}
-                requests={props.requests}
-                isAllSelected={!!isAllSelected}
-              />
-            ) : (
-              <NotFound title="لا يوجد عملاء" />
-            )}
-            {props.requests && (
-              <TableBody>
-                {toView?.map((client, index) => {
-                  return (
-                    <TableRow key={index}>
-                      <NotPrintableTableCell>
-                        <Checkbox
-                          disabled={client.contracts_count !== 0}
-                          checked={selectedItems.includes(client.id)}
-                          value={client.id}
-                          onChange={CheckboxHandler}
-                        />
-                      </NotPrintableTableCell>
+      <TableContainer>
+        <Table ref={tableRef}>
+          {props.requests?.length !== 0 ? (
+            <TableHeader
+              checkAllHandler={checkAllHandler}
+              isAllSelected={!!isAllSelected}
+            />
+          ) : (
+            <NotFound title="لا يوجد عملاء" />
+          )}
+          {props.requests && (
+            <TableBody>
+              {props.requests?.map((client, index) => {
+                return (
+                  <TableRow key={index}>
+                    <NotPrintableTableCell>
+                      <Checkbox
+                        checked={props.selectedItems.includes(client.id)}
+                        value={client.id}
+                        onChange={CheckboxHandler}
+                      />
+                    </NotPrintableTableCell>
 
-                      <TableCell>
-                        <Typography
-                          variant="body1"
-                          color={"secondary.main"}
-                          sx={{
-                            textDecoration: "underline",
-                            maxWidth: "100px",
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                          }}
-                          component={NavLink}
-                          to={`details/${client.id}`}
-                        >
-                          {client.name}
-                        </Typography>
-                      </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="body1"
+                        color={"secondary.main"}
+                        sx={{
+                          textDecoration: "underline",
+                          maxWidth: "100px",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                        }}
+                        component={NavLink}
+                        to={`details/${client.id}`}
+                      >
+                        {client.name}
+                      </Typography>
+                    </TableCell>
 
-                      <TableCell>{client.phone}</TableCell>
+                    <TableCell>{client.phone}</TableCell>
 
-                      <TableCell>{client.email} </TableCell>
+                    <TableCell>{client.email} </TableCell>
 
-                      <TableCell>
-                        {client.register_number || client.card_id}
-                      </TableCell>
-                      <TableCell>{client.branch?.name}</TableCell>
-                      <TableCell>
-                        {client.Contract_status === "منتهي" ? (
-                          <StatusChip color="error" label="منتهي" />
-                        ) : client.Contract_status === "لا يوجد عقود" ? (
-                          <StatusChip color="primary" label="لا يوجد عقود" />
-                        ) : (
-                          <StatusChip color="success" label="جاري العمل" />
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {client.agent_name ? client.agent_name : "-"}
-                      </TableCell>
-                      <NotPrintableTableCell>
-                        <IconButton>
-                          <SettingsIcon />
-                        </IconButton>
-                      </NotPrintableTableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            )}
-          </Table>
-        </TableContainer>
-      </Stack>
+                    <TableCell>
+                      {client.register_number || client.card_id}
+                    </TableCell>
+                    <TableCell>{client.branch?.name}</TableCell>
+                    <TableCell>
+                      {((): React.ReactNode => {
+                        switch (client.contract_status_id) {
+                          case 0:
+                            return (
+                              <StatusChip
+                                color="primary"
+                                disabled
+                                label="ﻻ يوجد عقود"
+                              />
+                            );
+                          case 1:
+                            return (
+                              <StatusChip color="success" label="جاري العمل" />
+                            );
+                          case 2:
+                            return <StatusChip color="error" label="منتهي" />;
+                          default:
+                            <>-</>;
+                        }
+                      })()}
+                    </TableCell>
+                    <TableCell>
+                      {client.agent_name ? client.agent_name : "-"}
+                    </TableCell>
+                    <NotPrintableTableCell>
+                      <IconButton>
+                        <SettingsIcon />
+                      </IconButton>
+                    </NotPrintableTableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
       <Stack
         p={2}
         direction="row"
@@ -174,10 +176,10 @@ function ClientRequestsTable(props: PropsType) {
         <Typography> عدد العرض في الصفحة</Typography>
         <TextField
           size="small"
-          value={rowsCount}
+          value={props.limit}
           select
           onChange={(e) => {
-            setRowsCount(parseInt(e.target.value) || 10);
+            props.setLimit(e.target.value);
           }}
         >
           <MenuItem value={5}>5</MenuItem>
@@ -187,10 +189,28 @@ function ClientRequestsTable(props: PropsType) {
           <MenuItem value={500}>500</MenuItem>
           <MenuItem value={1000}>1000</MenuItem>
           <MenuItem value={10000}>10000</MenuItem>
-          <MenuItem value={props.requests?.length}>عرض الكل</MenuItem>
+          <MenuItem value={"-1"}>عرض الكل</MenuItem>
         </TextField>
       </Stack>
-      {props.requests?.length !== 0 && (
+      {props.limit !== "-1" && (
+        <Stack
+          p={2}
+          sx={{
+            position: "absolute",
+            right: "20px",
+          }}
+        >
+          <Button
+            sx={{ textDecoration: "underline" }}
+            onClick={() => {
+              props.setLimit("-1");
+            }}
+          >
+            عرض الكل
+          </Button>
+        </Stack>
+      )}
+      {props.requests?.length !== 0 && props.limit === "-1" && (
         <ReactToPrint
           trigger={() => (
             <Button
@@ -216,7 +236,11 @@ function ClientRequestsTable(props: PropsType) {
 }
 
 export type PropsType = {
-  requests: ClientRequest[] | null;
+  requests: Client[] | null;
+  limit: string;
+  setLimit: React.Dispatch<React.SetStateAction<string>>;
+  selectedItems: number[];
+  setSelectedItems: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default ClientRequestsTable;

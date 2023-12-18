@@ -18,6 +18,7 @@ import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import BadgeIcon from "@mui/icons-material/Badge";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { AdminUrl } from "../../../constants/AdminUrl";
 
 const routesCollections: RoutesCollectionType[] = [
@@ -92,6 +93,22 @@ const routesCollections: RoutesCollectionType[] = [
       {
         name: "محددات المشاريع",
         path: "attendance/projects-shifts",
+      },
+    ],
+  },
+  {
+    name: "الاعدادات",
+    icon: AdminPanelSettingsIcon,
+    routes: [
+      {
+        name: "اعدادات لوحة التحكم",
+        path: "settings/dashboard",
+      },
+      { name: "اعدادات الموقع والتطبيق", path: "settings/platforms" },
+      {
+        name: "اعدادات الاجازات",
+        path: "/datalib/vacations",
+        react: true,
       },
     ],
   },

@@ -39,7 +39,7 @@ function RoutesComponent() {
           <Route path="" element={<ClientData />} />
           <Route path="details/:id" element={<ClientDetails />} />
           <Route path="add" element={<AddClient />} />
-          <Route path=":name/edit" element={<AddClient />} />
+          <Route path=":id/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />
           <Route path="procedures" element={<ClientProcess />} />
         </Route>

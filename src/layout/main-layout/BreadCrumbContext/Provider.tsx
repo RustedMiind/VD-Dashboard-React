@@ -8,31 +8,52 @@ import {
 import { pathTranslationArray } from "../../../constants/RoutePathTranslation";
 
 function BreadCrumbContextProvider(props: { children: React.ReactNode }) {
-  const [links, setLinks] = useState<BreadCrumbLinkType[]>([]);
+  const [customLinks, setCustomLinks] = useState<BreadCrumbLinkType[]>([]);
   function updateAll(links: BreadCrumbLinkType[]) {
-    setLinks(links);
+    setTimeout(() => {
+      setCustomLinks(links);
+    }, 200);
   }
   function updateLast(link: BreadCrumbLinkType) {
-    let instance: BreadCrumbLinkType[] = [...links].slice(0, links.length - 1);
+    let instance: BreadCrumbLinkType[] = linksArrayGenerator().slice(
+      0,
+      customLinks.length - 1
+    );
     instance.push(link);
-    setLinks(instance);
+    setTimeout(() => {
+      setCustomLinks(instance);
+    }, 200);
   }
   const location = useLocation();
+
+  function addLast(...link: BreadCrumbLinkType[]) {
+    setTimeout(() => {
+      setCustomLinks([...linksArrayGenerator(), ...link]);
+    }, 200);
+  }
+  function linksArrayGenerator(): BreadCrumbLinkType[] {
+    return translatePathObjects(
+      pathTranslationArray,
+      generatePathObjects(location.pathname)
+    ).map((path) => ({
+      title: path.name,
+      path: path.path,
+    }));
+  }
+
   useEffect(() => {
-    setLinks(
-      translatePathObjects(
-        pathTranslationArray,
-        generatePathObjects(location.pathname)
-      ).map((path) => ({
-        title: path.name,
-        path: path.path,
-      }))
-    );
+    setCustomLinks([]);
   }, [location.pathname]);
-  console.log(links);
 
   return (
-    <BreadCrumbContext.Provider value={{ links, updateAll, updateLast }}>
+    <BreadCrumbContext.Provider
+      value={{
+        links: customLinks.length ? customLinks : linksArrayGenerator(),
+        updateAll,
+        updateLast,
+        addLast,
+      }}
+    >
       {props.children}
     </BreadCrumbContext.Provider>
   );

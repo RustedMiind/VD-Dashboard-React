@@ -12,46 +12,16 @@ export interface ClientDetailsType {
   contract_late: number;
   contract_stop: number;
   contract_work: number;
-  data: Contractuse[];
-  payment: payment;
+  data?: (Contract & { remaining_time?: string; completion_rate?: string })[];
+  payment?: Payment;
   msg: string;
   client?: Client;
 }
 
-interface payment {
+interface Payment {
   id: number;
   amount: number;
   amount_payment: number;
   amount_motabaky: number;
   amount_required: number;
-}
-
-interface Contractuse {
-  id: number;
-  code: string;
-  period: string;
-  date: string;
-  details: string;
-  type: ContractType;
-  amount: number;
-  contract_type_id: number;
-  client_id: number;
-  branch_id: number;
-  management_id: number;
-  status_id: number;
-  employee_id: number;
-  created_at: string;
-  updated_at: string;
-  dateEnd: string;
-  end_date_period: number;
-  employee?: EmployeeType;
-  tasks?: ContractTask[];
-  payments?: ContractPayment[];
-  branch?: Branch;
-  levers?: ContractAttachment[];
-  card_image?: string;
-  Contract_status: string;
-  // deleted_at: null;
-  // end_date: null;
-  // management: null;
 }

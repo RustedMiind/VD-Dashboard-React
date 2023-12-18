@@ -8,6 +8,7 @@ type ContextType = {
   links: BreadCrumbLinkType[];
   updateAll?: (links: BreadCrumbLinkType[]) => void;
   updateLast?: (link: BreadCrumbLinkType) => void;
+  addLast?: (...link: BreadCrumbLinkType[]) => void;
 };
 
 export type BreadCrumbLinkType = {

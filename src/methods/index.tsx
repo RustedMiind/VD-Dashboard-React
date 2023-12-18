@@ -6,3 +6,4 @@ export * from "./objectToFormData";
 export * from "./generateUndefinedArray";
 export * from "./getDateDiff";
 export * from "./msToHoursMinutes";
+export * from "./arrayToMultiline";

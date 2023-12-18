@@ -40,34 +40,34 @@ const ClientProcess = () => {
   };
 
   const getFormData = () => {
-    return new Promise<void>((resSolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!dataForm) {
         axios
           .get<FormData>(Api("employee/client/order/steps/use"))
           .then((res) => {
-            setEndPointStatus("none");
+            // setEndPointStatus("none");
             setTypeOrder(res.data.typeOrder);
             setDataForm(res.data);
-            resSolve();
+            resolve();
           })
           .catch((err) => {
             console.log(err);
             setEndPointStatus("error");
             reject(err);
           });
-      } else resSolve();
+      } else resolve();
     });
   };
 
   const getLevels = () => {
-    return new Promise<void>((resSolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       axios
         .get(Api(`employee/client/order/steps/${typeOrderId}`))
         .then((res) => {
           setEndPointStatus("none");
           console.log(res.data.data);
           setLevels(res.data.data);
-          resSolve();
+          resolve();
         })
         .catch((err) => {
           console.log(err);
@@ -115,8 +115,7 @@ const ClientProcess = () => {
 
   const loadLevels = () => {
     setEndPointStatus("loading");
-    getFormData().catch(console.log);
-    getLevels().catch(console.log);
+    getFormData().then(getLevels).catch(console.log);
   };
 
   const updateLevel = (index: number) => {
@@ -201,7 +200,7 @@ const ClientProcess = () => {
           </Stack>
         )}
 
-        {process?.levels?.length === 0 && (
+        {process?.levels?.length === 0 && endPointStatus === "none" && (
           <Typography variant="h5" textAlign="center" p={2} py={4}>
             لم يتم ايجاد اي من المراحل المطلوبة
           </Typography>

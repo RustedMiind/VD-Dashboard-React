@@ -22,11 +22,9 @@ import { Api } from "../../../../constants";
 import { useNavigate } from "react-router-dom";
 import { Branch, Broker } from "../../../../types";
 import { Snackbar } from "@mui/material";
-type PropsType = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-function PopUp({ open, setOpen }: PropsType) {
+import { Client } from "../../../../types/Clients";
+
+function PopUp({ open, onClose, getClients }: PropsType) {
   const [searchClient, dispatch] = useReducer(reducer, individualInitial);
   const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
@@ -60,9 +58,6 @@ function PopUp({ open, setOpen }: PropsType) {
         console.log("err", err);
       });
   }, []);
-  const handleClose = () => {
-    setOpen(false);
-  };
   const getClient = () => {
     if (
       searchClient.name !== "" ||
@@ -71,7 +66,7 @@ function PopUp({ open, setOpen }: PropsType) {
       searchClient.broker_id !== "0"
     ) {
       axios
-        .get<{ data: FormData }>(Api(`employee/client/edit`), {
+        .get<{ data: Client[] }>(Api(`employee/client/search`), {
           params: {
             name: searchClient.name,
             phone: searchClient.phone,
@@ -80,9 +75,22 @@ function PopUp({ open, setOpen }: PropsType) {
           },
         })
         .then(({ data }) => {
-          if (data.data) {
-            navigate(`${data.data.name}/edit`);
-          } else {
+          if (data.data.length) {
+            getClients({
+              advancedSearch: true,
+              name: searchClient.name,
+              phone: searchClient.phone,
+              branch_id: searchClient.branch_id,
+              broker_id: searchClient.broker_id,
+            });
+            onClose();
+          }
+          // Logic for openEdit page not filter
+          // if (data.data) {
+          //   // search
+          //   navigate(`${data.data.name}/edit`);
+          // }
+          else {
             updateAndOpenToaster({
               severity: "error",
               message: "لا يوجد عميل بهذه البيانات",
@@ -111,7 +119,7 @@ function PopUp({ open, setOpen }: PropsType) {
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -126,7 +134,7 @@ function PopUp({ open, setOpen }: PropsType) {
           borderRadius: "8px",
         }}
         color="primary"
-        onClick={() => setOpen(!open)}
+        onClick={onClose}
       >
         <CloseIcon fontSize="inherit" />
       </IconButton>
@@ -289,6 +297,12 @@ function PopUp({ open, setOpen }: PropsType) {
 }
 
 export default PopUp;
+
+type PropsType = {
+  open: boolean;
+  onClose: () => void;
+  getClients: (params?: unknown) => void;
+};
 
 export type ToasterType = {
   open: boolean;
