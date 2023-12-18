@@ -17,7 +17,6 @@ const LevelItem = ({
   onDelete,
 }: PropsType) => {
   const [expanded, setExpanded] = useState(false);
-  const [update, setUpdate] = useState(false);
   const reducer = useReducer(level);
   const dispatch = (action: ActionType) => {
     updateLevel(reducer(action));
@@ -36,13 +35,11 @@ const LevelItem = ({
     level.branch_id,
   ]);
 
-  const formDisabled = !update;
-
   return (
     <Stack my={0.5}>
       <Accordion
         sx={{ bgcolor: "background.med", overflow: "hidden" }}
-        expanded={update || expanded}
+        expanded={expanded}
         elevation={0}
         disableGutters
       >
@@ -72,7 +69,6 @@ const LevelItem = ({
               <Button
                 onClick={() => {
                   setExpanded(!expanded);
-                  setUpdate(!update);
                 }}
                 variant={"outlined"}
                 disableElevation
@@ -96,7 +92,6 @@ const LevelItem = ({
         <AccordionDetails sx={{ bgcolor: "background.paper", my: 0 }}>
           <TableComponent
             dataForm={dataForm}
-            formDisabled={formDisabled}
             level={localLevel}
             dispatch={dispatch}
           />

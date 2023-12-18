@@ -15,9 +15,7 @@ const SelectManager = ({
   department_id,
   setDepartmentId,
   departments,
-  formDisabled,
   employee_id,
-  disabled,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
   return (
@@ -48,12 +46,15 @@ const SelectManager = ({
               <Select
                 label={"القسم"}
                 size={"small"}
-                value={department_id || 0}
-                disabled={formDisabled || employee_id !== 0}
+                value={department_id}
+                disabled={employee_id !== 0}
                 onChange={(e) => {
                   setDepartmentId(e.target.value as number);
                 }}
               >
+                <MenuItem value={null as unknown as number}>
+                  اختار القسم
+                </MenuItem>
                 {departments?.map((department) => {
                   return (
                     <MenuItem key={department.id} value={department.id}>
@@ -73,9 +74,7 @@ const SelectManager = ({
 type PropsType = {
   department_id: number | null;
   setDepartmentId: (value: number) => void;
-  formDisabled: boolean;
   employee_id: number;
-  disabled: boolean;
   departments: [
     {
       id: number;
