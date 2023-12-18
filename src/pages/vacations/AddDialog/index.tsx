@@ -24,7 +24,6 @@ export default function AddDialog(props: PropsType) {
     year: undefined,
     specific: null,
   };
-  const [massageError, setMassageError] = useState<string | null>(null);
   function sendData() {
     axios
       .post<addSelect>(Api("employee/vacation"), selectVacation)
@@ -35,7 +34,7 @@ export default function AddDialog(props: PropsType) {
       })
       .catch((err) => {
         if (err.response.data.msg != "Validation errors") {
-          setMassageError(err.response.data.msg);
+          props.setMassage(err.response.data.msg);
           props.openErrorDialog();
         }
       });
@@ -119,6 +118,7 @@ type PropsType = {
   openErrorDialog: () => void;
   openAddDialog: () => void;
   setData: () => void;
+  setMassage: React.Dispatch<React.SetStateAction<string>>;
 };
 type Year = {
   $y: number;
