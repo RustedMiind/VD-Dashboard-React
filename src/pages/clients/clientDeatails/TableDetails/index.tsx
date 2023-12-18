@@ -20,6 +20,7 @@ import StatusChip from "../../../../components/StatusChip";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 import EmptyPlaceholder from "../../../../components/EmptyPlaceholder";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 function TableDetails({
   ClientData,
   setToSearch,
@@ -28,11 +29,35 @@ function TableDetails({
   search,
   getContractsData,
 }: PropsType) {
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+  function checkAllHandler(checked: boolean) {
+    const allChecked: number[] =
+      checked && ClientData?.data
+        ? ClientData?.data?.map((contract) => contract.id)
+        : [];
+    setSelectedItems(allChecked);
+  }
+
+  function checkOneHandler(id: number) {
+    return (e: unknown, checked: boolean) => {
+      if (checked) {
+        // Add the selected item to the array if checked is true
+        setSelectedItems([...selectedItems, id]);
+      } else {
+        // Remove the selected item from the array if checked is false
+        setSelectedItems(selectedItems.filter((item) => item !== id));
+      }
+    };
+  }
+
   const navigate = useNavigate();
+
   console.log(ClientData, "clientData");
   return (
     <Stack>
       <TableHeader
+        selectedItems={selectedItems}
         getContractsData={getContractsData}
         search={search}
         contractsCounts={{
@@ -72,7 +97,10 @@ function TableDetails({
                     <>
                       <TableRow>
                         <TableCell>
-                          <Checkbox />
+                          <Checkbox
+                            checked={selectedItems.includes(item.id)}
+                            onChange={checkOneHandler(item.id)}
+                          />
                         </TableCell>
                         <TableCell>{item.code}</TableCell>
                         <TableCell>

@@ -12,8 +12,25 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import StatusChip from "../../../../components/StatusChip";
 import { useState } from "react";
 import { isStringAllNumbers } from "../../../../methods";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { useNavigate } from "react-router-dom";
 
 function TableHeader(props: PropsType) {
+  const deleteDisabled = props.selectedItems.length === 0;
+  const updateDisabled = props.selectedItems.length !== 1;
+  const navigate = useNavigate();
+  function onDelete() {
+    axios
+      .post(Api("employee/contract/delete"), {
+        id: props.selectedItems,
+      })
+      .then(() => {
+        props.getContractsData();
+      })
+      .catch(console.log);
+  }
+
   return (
     <Stack px={2} py={1} gap={8} direction="row" alignItems={"end"}>
       <Stack gap={1}>
@@ -65,10 +82,19 @@ function TableHeader(props: PropsType) {
           size="medium"
           color="error"
           startIcon={<DeleteIcon />}
+          disabled={deleteDisabled}
+          onClick={onDelete}
         >
           حذف
         </Button>
-        <Button variant="outlined" startIcon={<CreditScoreIcon />}>
+        <Button
+          onClick={() => {
+            navigate(`../../contracts/${props.selectedItems[0]}/edit`);
+          }}
+          variant="outlined"
+          startIcon={<CreditScoreIcon />}
+          disabled={updateDisabled}
+        >
           تعديل
         </Button>
       </Stack>
@@ -78,6 +104,7 @@ function TableHeader(props: PropsType) {
 type PropsType = {
   setToSearch: React.Dispatch<React.SetStateAction<string>>;
   search: string;
+  selectedItems: number[];
   contractsCounts: {
     end: number;
     work: number;
