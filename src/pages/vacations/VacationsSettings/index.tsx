@@ -11,7 +11,11 @@ import {
   Typography,
   Card,
   CardActionArea,
+  Tooltip,
+  Alert,
+  IconButton,
 } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { NavLink } from "react-router-dom";
 
 function VacationsSettings() {
@@ -63,6 +67,30 @@ function VacationsSettings() {
                       "linear-gradient(180deg, rgba(243, 245, 247, 0.5) 0%, #dadcde 72.18%)",
                   }}
                 >
+                  <Tooltip
+                    arrow
+                    color="primary"
+                    placement="top-end"
+                    leaveDelay={400}
+                    title={
+                      <Typography>
+                        لم يعتمد اضافة محدد الى الفرع، يرجى مراجعة البيانات.
+                      </Typography>
+                    }
+                  >
+                    <IconButton
+                      color="warning"
+                      size="small"
+                      sx={{
+                        bgcolor: "Background",
+                        position: "absolute",
+                        top: 4,
+                        right: 4,
+                      }}
+                    >
+                      <ErrorOutlineIcon />
+                    </IconButton>
+                  </Tooltip>
                   <Typography
                     variant="h5"
                     sx={{
@@ -87,23 +115,21 @@ function VacationsSettings() {
                     direction: "row",
                   }}
                 >
-                  {vacation.vacation_dates.map(
-                    (vacationDate, index) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          borderRadius: 1,
-                          bgcolor: "Background",
-                          maxWidth: 0.318,
-                          minWidth: 0.318,
-                        }}
-                      >
-                        <Button size="large" color="primary" fullWidth>
-                          {vacationDate.year}
-                        </Button>
-                      </Box>
-                    )
-                  )}
+                  {vacation.vacation_dates.map((vacationDate, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        borderRadius: 1,
+                        bgcolor: "Background",
+                        maxWidth: 0.318,
+                        minWidth: 0.318,
+                      }}
+                    >
+                      <Button size="large" color="primary" fullWidth>
+                        {vacationDate.year}
+                      </Button>
+                    </Box>
+                  ))}
                 </CardActions>
               </Box>
             </Card>
@@ -125,17 +151,17 @@ type VacationsArr = {
 
 type VacationBranch = {
   branch_id: number;
-  card_image: null;
-  created_at: null;
   id: number;
   status_id: number;
-  updated_at: null;
+  // card_image: null;
+  // created_at: null;
+  // updated_at: null;
 };
 
 type VacationDate = {
   id: number;
   branch_id: number;
   year: number;
-  created_at: null;
-  updated_at: null;
+  // created_at: null;
+  // updated_at: null;
 };
