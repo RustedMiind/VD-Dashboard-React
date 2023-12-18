@@ -9,7 +9,7 @@ import { StepType } from "./types/Step";
 import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
 import { OrderType } from "./types/OrderType";
-import LevelsPlaceholder from "./LevelsPlaceholder";
+import LevelsPlaceholder from "../../../components/PlaceHolder/LevelsPlaceholder";
 
 const InitLevel: StepType = {
   branch_id: 0,
