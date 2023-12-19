@@ -16,7 +16,6 @@ import { Vacation } from "../../../../types";
 import { formatDate, getDateDiff } from "../../../../methods";
 import { convertMsToDays } from "../../../../methods/conversions/msToDays";
 import { NotPrintableTableCell } from "../../../clients/data/Table";
-import { useEffect, useRef } from "react";
 
 const TableData = (props: PropsType) => {
   return (
@@ -42,8 +41,10 @@ const TableData = (props: PropsType) => {
             <TableBody>
               {props.vacations.map((vacation) => (
                 <TableRow>
-                  <TableCell>{vacation.name}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                    {vacation.name}
+                  </TableCell>
+                  <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
                     {convertMsToDays(
                       getDateDiff(
                         new Date(vacation.date_from),
@@ -51,10 +52,14 @@ const TableData = (props: PropsType) => {
                       )
                     )}
                   </TableCell>
-                  <TableCell>{formatDate(vacation.date_from)}</TableCell>
-                  <TableCell>{formatDate(vacation.date_to)}</TableCell>
+                  <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                    {formatDate(vacation.date_from)}
+                  </TableCell>
+                  <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                    {formatDate(vacation.date_to)}
+                  </TableCell>
                   <NotPrintableTableCell>
-                    <TableCell>
+                    <TableCell sx={{ paddingTop: 0, paddingBottom: 0 }}>
                       <Stack direction={"row"} gap={1}>
                         <IconButton onClick={props.openUpdateDialog(vacation)}>
                           <BorderColorOutlinedIcon />
