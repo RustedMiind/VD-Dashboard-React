@@ -1,5 +1,4 @@
 import {
-  Button,
   Chip,
   Dialog,
   DialogContent,
@@ -25,7 +24,6 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 import { getDateDiffNegativeAllowed } from "../../../../methods";
 import { EmployeeType, Vacation } from "../../../../types";
-import { VacationsDetailsType } from "../../branchDetails";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { ToasterType } from "../../../../types/other/ToasterStateType";

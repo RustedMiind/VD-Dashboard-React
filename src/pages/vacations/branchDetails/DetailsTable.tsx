@@ -17,6 +17,7 @@ import { useState } from "react";
 import ShowVactionDialog from "../ShowVactionDialog";
 import { NavLink } from "react-router-dom";
 import { DialogState } from "./FilterDetails";
+import EditIcon from "@mui/icons-material/Edit";
 
 function DetailsTable(props: PropsType) {
   const [open, setOpen] = useState<boolean>(false);
@@ -76,7 +77,7 @@ function DetailsTable(props: PropsType) {
                   <TableCell align="center">
                     <NavLink to={`${item.id}`}>
                       <IconButton>
-                        <EditNoteIcon />
+                        <EditIcon />
                       </IconButton>
                     </NavLink>
                     <IconButton

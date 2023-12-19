@@ -9,8 +9,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 import { Vacation } from "../../../../types";
 import { formatDate, getDateDiff } from "../../../../methods";
@@ -54,10 +54,10 @@ const TableData = (props: PropsType) => {
                   <NotPrintableTableCell>
                     <Stack direction={"row"} gap={1}>
                       <IconButton onClick={props.openUpdateDialog(vacation)}>
-                        <BorderColorOutlinedIcon />
+                        <EditIcon />
                       </IconButton>
                       <IconButton color="primary">
-                        <RemoveRedEyeOutlinedIcon />
+                        <RemoveRedEyeIcon />
                       </IconButton>
                     </Stack>
                   </NotPrintableTableCell>
