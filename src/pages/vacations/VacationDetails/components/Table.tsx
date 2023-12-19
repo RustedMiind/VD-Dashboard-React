@@ -34,9 +34,7 @@ const TableData = (props: PropsType) => {
                 <TableCell>عدد الايام </TableCell>
                 <TableCell>تاريخ البداية</TableCell>
                 <TableCell>تاريخ النهاية</TableCell>
-                <NotPrintableTableCell>
-                  <TableCell>الاعدادات</TableCell>
-                </NotPrintableTableCell>
+                <NotPrintableTableCell>الاعدادات</NotPrintableTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -54,16 +52,14 @@ const TableData = (props: PropsType) => {
                   <TableCell>{formatDate(vacation.date_from)}</TableCell>
                   <TableCell>{formatDate(vacation.date_to)}</TableCell>
                   <NotPrintableTableCell>
-                    <TableCell>
-                      <Stack direction={"row"} gap={1}>
-                        <IconButton onClick={props.openUpdateDialog(vacation)}>
-                          <BorderColorOutlinedIcon />
-                        </IconButton>
-                        <IconButton color="primary">
-                          <RemoveRedEyeOutlinedIcon />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
+                    <Stack direction={"row"}>
+                      <IconButton onClick={props.openUpdateDialog(vacation)}>
+                        <BorderColorOutlinedIcon />
+                      </IconButton>
+                      <IconButton color="primary">
+                        <RemoveRedEyeOutlinedIcon />
+                      </IconButton>
+                    </Stack>
                   </NotPrintableTableCell>
                 </TableRow>
               ))}

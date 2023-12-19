@@ -19,7 +19,6 @@ import { NavLink } from "react-router-dom";
 
 function DetailsTable(props: PropsType) {
   const [itemId, setItemId] = useState<number>();
-
   return (
     <Paper>
       <Stack p={2}>

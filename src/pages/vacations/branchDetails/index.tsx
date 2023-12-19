@@ -11,7 +11,7 @@ import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext
 
 function BranchDetails() {
   const { branchId } = useParams();
-
+  const [dialogState, setDialogState] = useState<DialogState>("none");
   const breadcrump = useContext(BreadCrumbContext);
   const [vacationsData, setVacationsData] = useState<
     VacationsDetailsType[] | "loading" | "error"
@@ -25,7 +25,6 @@ function BranchDetails() {
       });
   }, []);
 
-  const [dialogState, setDialogState] = useState<DialogState>("none");
   const closeDialog = () => {
     setDialogState("none");
   };
@@ -38,7 +37,6 @@ function BranchDetails() {
   const openDetailsDialog = () => {
     setDialogState("details");
   };
-
   const setTableData = () => {
     setVacationsData("loading");
     axios
