@@ -16,6 +16,7 @@ import StatusChip from "../../../components/StatusChip";
 import { useState } from "react";
 import ShowVactionDialog from "../ShowVactionDialog";
 import { NavLink } from "react-router-dom";
+import { DialogState } from "./FilterDetails";
 
 function DetailsTable(props: PropsType) {
   const [open, setOpen] = useState<boolean>(false);
@@ -74,15 +75,14 @@ function DetailsTable(props: PropsType) {
                   </TableCell>
                   <TableCell align="center">
                     <NavLink to={`${item.id}`}>
-                      <IconButton aria-label="delete">
+                      <IconButton>
                         <EditNoteIcon />
                       </IconButton>
                     </NavLink>
                     <IconButton
-                      aria-label="delete"
                       onClick={() => {
                         setItemId(item.id);
-                        openDialog();
+                        props.openDetailsDialog();
                       }}
                     >
                       <VisibilityIcon color="primary" />
@@ -95,8 +95,8 @@ function DetailsTable(props: PropsType) {
         </TableContainer>
       </Stack>
       <ShowVactionDialog
-        open={open}
-        setOpen={setOpen}
+        closeDialog={props.closeDialog}
+        open={props.dialogState == "details"}
         itemId={itemId}
         vacationsData={props.vacationsData}
       />
@@ -108,4 +108,7 @@ export default DetailsTable;
 
 type PropsType = {
   vacationsData?: VacationsDetailsType[];
+  openDetailsDialog: () => void;
+  dialogState: DialogState;
+  closeDialog: () => void;
 };
