@@ -164,6 +164,7 @@ const VacationsTable = () => {
         </LoadingButton>
       </Stack>
       <SetDialog
+        openToaster={updateAndOpenToaster}
         setTableDate={setTableData}
         open={!!vacationSetDialog}
         InitialVacationData={vacationToEdit}
