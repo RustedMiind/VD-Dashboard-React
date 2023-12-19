@@ -20,6 +20,9 @@ function FilterDetails(props: PropsType) {
   const openAddDialog = () => {
     setDialogState("add");
   };
+  const openDetailsDialog = () => {
+    setDialogState("details");
+  };
 
   return (
     <Grid container width={1} py={2}>
