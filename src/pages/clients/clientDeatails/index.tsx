@@ -144,9 +144,9 @@ function ClientDetails() {
                             highlighted: "item",
                           },
                           faded: {
-                            innerRadius: 30,
-                            additionalRadius: -30,
-                            color: "gray",
+                            innerRadius: 40,
+                            additionalRadius: -5,
+                            // color: "gray",
                           },
                         },
                       ]}

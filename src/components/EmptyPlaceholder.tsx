@@ -1,6 +1,7 @@
 import { Paper, Stack, Typography, Button } from "@mui/material";
 import EmptyFile from "../assets/images/branch-empty.png";
 import AddIcon from "@mui/icons-material/Add";
+import { NavLink } from "react-router-dom";
 
 function EmptyPlaceholder(props: PropsType) {
   return (
@@ -14,6 +15,8 @@ function EmptyPlaceholder(props: PropsType) {
         sx={{ bgcolor: "text.disabled" }}
         size="large"
         startIcon={<AddIcon />}
+        component={NavLink}
+        to="/react/contracts/create/4"
       >
         انشاء عقد جديد
       </Button>
