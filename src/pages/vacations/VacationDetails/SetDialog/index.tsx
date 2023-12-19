@@ -28,6 +28,7 @@ import { EmployeeType, Vacation } from "../../../../types";
 import { VacationsDetailsType } from "../../branchDetails";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
+import { ToasterType } from "../../../../types/other/ToasterStateType";
 
 const PopupVacations = (props: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
@@ -73,6 +74,10 @@ const PopupVacations = (props: PropsType) => {
             console.log(res);
             props.onClose();
             props.setTableDate();
+            props.openToaster({
+              severity: "success",
+              message: "تم تعديل الاجازة بنجاح",
+            });
           })
           .catch((err) => {
             setFormStatus("error");
@@ -90,6 +95,10 @@ const PopupVacations = (props: PropsType) => {
             console.log(res);
             props.onClose();
             props.setTableDate();
+            props.openToaster({
+              severity: "success",
+              message: "تم حفظ الاجازة بنجاح",
+            });
           })
           .catch((err) => {
             setFormStatus("error");
@@ -313,6 +322,7 @@ type PropsType = {
   title: string;
   employeesInBranch?: EmployeeType[] | undefined;
   setTableDate: () => void;
+  openToaster: (partial: Partial<ToasterType>) => void;
 };
 
 export default PopupVacations;
