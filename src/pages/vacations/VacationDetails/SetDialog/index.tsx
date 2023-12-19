@@ -27,6 +27,8 @@ import { EmployeeType, Vacation } from "../../../../types";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { ToasterType } from "../../../../types/other/ToasterStateType";
+import { AxiosErrorType } from "../../../../types/Axios";
+import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 
 const PopupVacations = (props: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
@@ -77,10 +79,16 @@ const PopupVacations = (props: PropsType) => {
               message: "تم تعديل الاجازة بنجاح",
             });
           })
-          .catch((err) => {
-            setFormStatus("error");
-            console.log(err);
-          });
+          .catch(
+            (err: AxiosErrorType<LaravelValidationError<{ err?: string }>>) => {
+              setFormStatus("error");
+              props.openToaster({
+                severity: "error",
+                message: err.response?.data?.msg || "تعذر في تعديل الاجازة",
+              });
+              console.log(err);
+            }
+          );
       } else {
         setFormStatus("loading");
         axios
@@ -98,10 +106,16 @@ const PopupVacations = (props: PropsType) => {
               message: "تم حفظ الاجازة بنجاح",
             });
           })
-          .catch((err) => {
-            setFormStatus("error");
-            console.log(err);
-          });
+          .catch(
+            (err: AxiosErrorType<LaravelValidationError<{ err?: string }>>) => {
+              setFormStatus("error");
+              props.openToaster({
+                severity: "error",
+                message: err.response?.data?.msg || "تعذر في اضافة الاجازة",
+              });
+              console.log(err);
+            }
+          );
       }
     }
   };
