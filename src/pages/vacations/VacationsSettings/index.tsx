@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Api } from "../../../constants";
 import axios from "axios";
+import BranchImage from "../../../assets/images/branch_image.jpg";
 import {
   Box,
   Button,
@@ -52,7 +53,7 @@ function VacationsSettings() {
                 <CardMedia
                   component="img"
                   height={220}
-                  image="https://w0.peakpx.com/wallpaper/340/751/HD-wallpaper-city-aerial-view-road-buildings-coast-thumbnail.jpg"
+                  image={BranchImage}
                   alt="green iguana"
                 />
                 <Stack
@@ -64,33 +65,35 @@ function VacationsSettings() {
                     alignItems: "center",
                     justifyContent: "center",
                     background:
-                      "linear-gradient(180deg, rgba(243, 245, 247, 0.5) 0%, #dadcde 72.18%)",
+                      "linear-gradient(180deg, rgba(243, 245, 247, 0.4) 20%, #dadcde 100%)",
                   }}
                 >
-                  <Tooltip
-                    arrow
-                    color="primary"
-                    placement="top-end"
-                    leaveDelay={400}
-                    title={
-                      <Typography>
-                        لم يعتمد اضافة محدد الى الفرع، يرجى مراجعة البيانات.
-                      </Typography>
-                    }
-                  >
-                    <IconButton
-                      color="warning"
-                      size="small"
-                      sx={{
-                        bgcolor: "Background",
-                        position: "absolute",
-                        top: 4,
-                        right: 4,
-                      }}
+                  {vacation?.vacationbranch?.status_id === 34 && (
+                    <Tooltip
+                      arrow
+                      color="primary"
+                      placement="top-end"
+                      leaveDelay={400}
+                      title={
+                        <Typography>
+                          لم يعتمد اضافة محدد الى الفرع، يرجى مراجعة البيانات.
+                        </Typography>
+                      }
                     >
-                      <ErrorOutlineIcon />
-                    </IconButton>
-                  </Tooltip>
+                      <IconButton
+                        color="warning"
+                        size="small"
+                        sx={{
+                          bgcolor: "Background",
+                          position: "absolute",
+                          top: 4,
+                          right: 4,
+                        }}
+                      >
+                        <ErrorOutlineIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   <Typography
                     variant="h5"
                     sx={{
@@ -125,7 +128,13 @@ function VacationsSettings() {
                         minWidth: 0.318,
                       }}
                     >
-                      <Button size="large" color="primary" fullWidth>
+                      <Button
+                        component={NavLink}
+                        to={`${vacation.id}/${vacationDate.id}`}
+                        size="large"
+                        color="primary"
+                        fullWidth
+                      >
                         {vacationDate.year}
                       </Button>
                     </Box>
