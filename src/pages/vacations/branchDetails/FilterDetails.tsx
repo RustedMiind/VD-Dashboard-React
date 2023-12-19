@@ -9,20 +9,7 @@ import dayjs from "dayjs";
 
 function FilterDetails(props: PropsType) {
   const { branchId } = useParams();
-  const [dialogState, setDialogState] = useState<DialogState>("none");
   const [massage, setMassage] = useState<string>("");
-  const closeDialog = () => {
-    setDialogState("none");
-  };
-  const openErrorDialog = () => {
-    setDialogState("error");
-  };
-  const openAddDialog = () => {
-    setDialogState("add");
-  };
-  const openDetailsDialog = () => {
-    setDialogState("details");
-  };
 
   return (
     <Grid container width={1} py={2}>
@@ -65,9 +52,7 @@ function FilterDetails(props: PropsType) {
           size="large"
           color="primary"
           fullWidth
-          onClick={() => {
-            openAddDialog();
-          }}
+          onClick={props.openAddDialog}
         >
           <AddCircleOutlineRoundedIcon sx={{ mr: 1 }} />
           إضافة محدد
@@ -76,17 +61,17 @@ function FilterDetails(props: PropsType) {
       {branchId && (
         <AddDialog
           setData={props.setTableData}
-          open={dialogState === "add"}
+          open={props.dialogState === "add"}
           branch_id={branchId}
-          onClose={closeDialog}
-          openErrorDialog={openErrorDialog}
-          openAddDialog={openAddDialog}
+          onClose={props.closeDialog}
+          openErrorDialog={props.openErrorDialog}
+          openAddDialog={props.openAddDialog}
           setMassage={setMassage}
         />
       )}
       <ErrorDialog
-        open={dialogState === "error"}
-        onClose={openAddDialog}
+        open={props.dialogState === "error"}
+        onClose={props.openAddDialog}
         massage={massage}
       />
     </Grid>
@@ -98,6 +83,10 @@ export type DialogState = "none" | "error" | "add" | "details";
 export default FilterDetails;
 
 type PropsType = {
+  closeDialog: () => void;
+  openErrorDialog: () => void;
+  openAddDialog: () => void;
+  dialogState: DialogState;
   setTableData: () => void;
   statusFilter: number;
   setStatusFilter: (status: number) => void;

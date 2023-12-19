@@ -11,7 +11,7 @@ import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext
 
 function BranchDetails() {
   const { branchId } = useParams();
-
+  const [dialogState, setDialogState] = useState<DialogState>("none");
   const breadcrump = useContext(BreadCrumbContext);
   const [vacationsData, setVacationsData] = useState<
     VacationsDetailsType[] | "loading" | "error"
@@ -20,6 +20,18 @@ function BranchDetails() {
     year: string | null;
     status: number;
   }>({ year: null, status: -1 });
+  const closeDialog = () => {
+    setDialogState("none");
+  };
+  const openErrorDialog = () => {
+    setDialogState("error");
+  };
+  const openAddDialog = () => {
+    setDialogState("add");
+  };
+  const openDetailsDialog = () => {
+    setDialogState("details");
+  };
   function setYearFilter(year: string | null) {
     setFilters({ ...filters, year });
   }
@@ -59,6 +71,10 @@ function BranchDetails() {
   return (
     <Stack>
       <FilterDetails
+        dialogState={dialogState}
+        closeDialog={closeDialog}
+        openErrorDialog={openErrorDialog}
+        openAddDialog={openAddDialog}
         setTableData={setTableData}
         statusFilter={filters.status}
         setStatusFilter={setStatusFilter}
@@ -68,7 +84,12 @@ function BranchDetails() {
       {vacationsData === "loading" && <LoadingTable rows={5} cols={5} />}
       {vacationsData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
       {typeof vacationsData === "object" && (
-        <DetailsTable vacationsData={vacationsData} />
+        <DetailsTable
+          vacationsData={vacationsData}
+          dialogState={dialogState}
+          closeDialog={closeDialog}
+          openDetailsDialog={openDetailsDialog}
+        />
       )}
     </Stack>
   );
