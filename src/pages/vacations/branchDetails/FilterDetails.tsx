@@ -99,7 +99,7 @@ export default FilterDetails;
 type PropsType = {
   setTableData: () => void;
   statusFilter: number;
-  setStatusFilter: React.Dispatch<React.SetStateAction<number>>;
-  yearFilter: string;
-  setYearFilter: React.Dispatch<React.SetStateAction<string>>;
+  setStatusFilter: (status: number) => void;
+  yearFilter: string | null;
+  setYearFilter: (year: string | null) => void;
 };
