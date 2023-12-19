@@ -59,7 +59,9 @@ function DetailsTable(props: PropsType) {
                 <TableRow key={item.id}>
                   <TableCell>{item.year}</TableCell>
                   <TableCell align="center">{item.vacationNumber}</TableCell>
-                  <TableCell align="center">{item.vacationDayNumber}</TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumber} يوم
+                  </TableCell>
                   <TableCell align="center">
                     <StatusChip
                       color={
@@ -69,10 +71,10 @@ function DetailsTable(props: PropsType) {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    {item.vacationDayNumberUsed}
+                    {item.vacationDayNumberUsed} يوم
                   </TableCell>
                   <TableCell align="center">
-                    {item.vacationDayNumberstay}
+                    {item.vacationDayNumberstay} يوم
                   </TableCell>
                   <TableCell align="center">
                     <NavLink to={`${item.id}`}>
