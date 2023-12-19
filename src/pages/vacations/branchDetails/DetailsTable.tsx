@@ -81,7 +81,7 @@ function DetailsTable(props: PropsType) {
                     <IconButton
                       aria-label="delete"
                       onClick={() => {
-                        setItemId(item.id)
+                        setItemId(item.id);
                         openDialog();
                       }}
                     >

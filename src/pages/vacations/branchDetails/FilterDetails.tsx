@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 function FilterDetails(props: PropsType) {
   const { branchId } = useParams();
   const [dialogState, setDialogState] = useState<DialogState>("none");
-
+  const [massage, setMassage] = useState<string>("");
   const closeDialog = () => {
     setDialogState("none");
   };
@@ -81,12 +81,13 @@ function FilterDetails(props: PropsType) {
           onClose={closeDialog}
           openErrorDialog={openErrorDialog}
           openAddDialog={openAddDialog}
+          setMassage={setMassage}
         />
       )}
       <ErrorDialog
         open={dialogState === "error"}
         onClose={openAddDialog}
-        massage={"error message"}
+        massage={massage}
       />
     </Grid>
   );
