@@ -11,9 +11,6 @@ import {
 import { VacationsDetailsType } from "../branchDetails";
 
 export default function ShowVactionDialog(props: TypeProps) {
-  const handleClose = () => {
-    props.setOpen(!props.open);
-  };
   const vacationDataObject = props.vacationsData?.filter((item) => {
     return item.id === props.itemId;
   });
@@ -27,7 +24,7 @@ export default function ShowVactionDialog(props: TypeProps) {
             maxWidth={"sm"}
             fullWidth
             open={props.open}
-            onClose={handleClose}
+            onClose={props.onClose}
           >
             <Typography sx={{ fontWeight: "800", textAlign: "center", pt: 5 }}>
               عرض الاجازة
@@ -129,7 +126,7 @@ export default function ShowVactionDialog(props: TypeProps) {
               <Button
                 variant="contained"
                 sx={{ my: 2, px: 7 }}
-                onClick={handleClose}
+                onClick={props.onClose}
               >
                 رجوع
               </Button>
@@ -147,7 +144,7 @@ export default function ShowVactionDialog(props: TypeProps) {
 
 type TypeProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
   vacationsData?: VacationsDetailsType[];
   itemId: number | undefined;
 };

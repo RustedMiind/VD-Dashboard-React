@@ -78,7 +78,7 @@ function BranchDetails() {
     if (yearFilter !== "الكل") {
       year = getYearFromDateStr(yearFilter);
     }
-    
+
     axios
       .get<{ date: VacationsDetailsType[] }>(
         Api(`employee/vacation/${branchId}`),
@@ -90,7 +90,6 @@ function BranchDetails() {
         }
       )
       .then((data) => {
-        // console.log(data.data.date);
         setVacationsData(data.data.date);
       })
       .catch((err) => {
@@ -101,19 +100,29 @@ function BranchDetails() {
     console.log(statusFilter);
   }, [yearFilter, statusFilter]);
 
+  const filterDetailsProps = {
+    setTableData,
+    statusFilter,
+    setStatusFilter,
+    yearFilter,
+    setYearFilter,
+    dialogState,
+    closeDialog,
+    openErrorDialog,
+    openAddDialog,
+  };
   return (
     <Stack>
-      <FilterDetails
-        setTableData={setTableData}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        yearFilter={yearFilter}
-        setYearFilter={setYearFilter}
-      />
+      <FilterDetails {...filterDetailsProps} />
       {vacationsData === "loading" && <LoadingTable rows={5} cols={5} />}
       {vacationsData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
       {typeof vacationsData === "object" && (
-        <DetailsTable vacationsData={vacationsData} />
+        <DetailsTable
+          vacationsData={vacationsData}
+          openDetailsDialog={openDetailsDialog}
+          closeDialog={closeDialog}
+          dialogState={dialogState}
+        />
       )}
     </Stack>
   );

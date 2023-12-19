@@ -18,12 +18,8 @@ import ShowVactionDialog from "../ShowVactionDialog";
 import { NavLink } from "react-router-dom";
 
 function DetailsTable(props: PropsType) {
-  const [open, setOpen] = useState<boolean>(false);
   const [itemId, setItemId] = useState<number>();
 
-  function openDialog() {
-    setOpen(!open);
-  }
   return (
     <Paper>
       <Stack p={2}>
@@ -82,7 +78,7 @@ function DetailsTable(props: PropsType) {
                       aria-label="delete"
                       onClick={() => {
                         setItemId(item.id);
-                        openDialog();
+                        props.openDetailsDialog();
                       }}
                     >
                       <VisibilityIcon color="primary" />
@@ -95,8 +91,8 @@ function DetailsTable(props: PropsType) {
         </TableContainer>
       </Stack>
       <ShowVactionDialog
-        open={open}
-        setOpen={setOpen}
+        open={props.dialogState === "details"}
+        onClose={props.closeDialog}
         itemId={itemId}
         vacationsData={props.vacationsData}
       />
@@ -108,4 +104,7 @@ export default DetailsTable;
 
 type PropsType = {
   vacationsData?: VacationsDetailsType[];
+  dialogState: "none" | "error" | "add" | "details";
+  openDetailsDialog: () => void;
+  closeDialog: () => void;
 };
