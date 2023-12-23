@@ -47,7 +47,8 @@ const TableData = (props: PropsType) => {
                         new Date(vacation.date_from),
                         new Date(vacation.date_to)
                       )
-                    )}
+                    )}{" "}
+                    يوم
                   </TableCell>
                   <TableCell>{formatDate(vacation.date_from)}</TableCell>
                   <TableCell>{formatDate(vacation.date_to)}</TableCell>
