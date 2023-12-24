@@ -36,13 +36,18 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
     case "CLIENT_ID":
       return { ...state, client_id: action.payload };
     case "BRANCH_ID":
-      return { ...state, branch_id: action.payload };
+      return {
+        ...state,
+        management_id: 0,
+        employee_id: 0,
+        branch_id: action.payload,
+      };
     case "CARD_IMAGE":
       return { ...state, card_image: action.payload };
     case "EMPLOYEE_ID":
       return { ...state, employee_id: action.payload };
     case "MANAGEMENT_ID":
-      return { ...state, management_id: action.payload };
+      return { ...state, employee_id: 0, management_id: action.payload };
     case "DTO_TO_FORM":
       return {
         amount: action.payload.amount,
@@ -113,7 +118,7 @@ interface CardImageUrlActionType extends ReducerAction<string | undefined> {
 interface DtoToFormActionType extends ReducerAction<Contract> {
   type: "DTO_TO_FORM";
 }
-interface SetAllActionType extends ReducerAction<BaseContractType> {
+interface SetAllActionType extends ReducerAction<Partial<BaseContractType>> {
   type: "SET_ALL";
 }
 
