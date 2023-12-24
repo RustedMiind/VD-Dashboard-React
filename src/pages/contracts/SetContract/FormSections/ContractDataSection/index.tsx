@@ -76,6 +76,17 @@ const ContractData = (props: PropsType) => {
       });
   }, []);
 
+  useEffect(() => {
+    contractDetails.refreshUse &&
+      contractDetails
+        .refreshUse({
+          branchId: contractData.branch_id,
+          managementId: contractData.management_id,
+        })
+        .then((result) => {})
+        .catch((err) => {});
+  }, [contractData.branch_id, contractData.management_id]);
+
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!props.edit) {
@@ -142,6 +153,7 @@ const ContractData = (props: PropsType) => {
             <TextField
               size="small"
               select
+              disabled={contractDetails.disableInputs}
               value={contractData?.branch_id}
               onChange={(e) => {
                 dispatch({
@@ -168,6 +180,9 @@ const ContractData = (props: PropsType) => {
             </Typography>
             <TextField
               size="small"
+              disabled={
+                contractDetails.disableInputs || !contractData.branch_id
+              }
               select
               value={contractData?.management_id}
               onChange={(e) => {
@@ -177,7 +192,7 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             >
-              {requests?.management?.map((manage) => (
+              {contractDetails?.use?.management?.map((manage) => (
                 <MenuItem key={manage.id} value={manage.id}>
                   {manage.name}
                 </MenuItem>
@@ -350,6 +365,9 @@ const ContractData = (props: PropsType) => {
               المهندس المسؤول <RequiredSymbol />
             </Typography>
             <TextField
+              disabled={
+                contractDetails.disableInputs || !contractData.management_id
+              }
               id="outlined-select-currency"
               size="small"
               select
@@ -362,7 +380,7 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             >
-              {requests?.employees?.map((employee) => (
+              {contractDetails?.use?.employees?.map((employee) => (
                 <MenuItem key={employee.id} value={employee.id}>
                   {employee.name}
                 </MenuItem>
