@@ -8,9 +8,10 @@ function SelectWithFilter({
   ...props
 }: PropsType) {
   const [filter, setFilter] = useState("");
-  const filtered = options?.filter((option) =>
-    option.label.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filtered = options?.map((option) => ({
+    exist: option.label.toLowerCase().includes(filter.toLowerCase()),
+    ...option,
+  }));
   return (
     <TextField select {...props}>
       <TextField
@@ -28,7 +29,11 @@ function SelectWithFilter({
         color="secondary"
       />
       {filtered?.map((option) => (
-        <MenuItem onKeyDown={(e) => e.stopPropagation()} value={option.value}>
+        <MenuItem
+          sx={{ display: option.exist ? undefined : "none" }}
+          onKeyDown={(e) => e.stopPropagation()}
+          value={option.value}
+        >
           {option.label}
         </MenuItem>
       ))}
