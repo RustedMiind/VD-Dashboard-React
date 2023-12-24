@@ -104,10 +104,28 @@ function TableDetails({
                         </TableCell>
                         <TableCell>{item.code}</TableCell>
                         <TableCell>
-                          <StatusChip
-                            color="success"
-                            label={item.Contract_status}
-                          />
+                          {((): React.ReactNode => {
+                            switch (item.status_id) {
+                              case 0:
+                                return (
+                                  <StatusChip
+                                    color="primary"
+                                    disabled
+                                    label="منتهي"
+                                  />
+                                );
+                              case 2:
+                                return (
+                                  <StatusChip color="success" label="ساري" />
+                                );
+                              case 1:
+                                return (
+                                  <StatusChip color="warning" label="متأخر" />
+                                );
+                              default:
+                                <>-</>;
+                            }
+                          })()}
                         </TableCell>
                         <TableCell>{`${item.completion_rate}%`}</TableCell>
                         <TableCell>-</TableCell>

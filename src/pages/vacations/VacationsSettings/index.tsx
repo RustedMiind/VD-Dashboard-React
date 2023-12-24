@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Api } from "../../../constants";
 import axios from "axios";
+import BranchImage from "../../../assets/images/branch_image.jpg";
 import {
   Box,
   Button,
@@ -11,15 +12,18 @@ import {
   Typography,
   Card,
   CardActionArea,
-  Skeleton,
+  Tooltip,
+  Alert,
+  IconButton,
 } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { NavLink } from "react-router-dom";
-import NotFound from "../../../components/NotFound";
-import { generateUndefinedArray } from "../../../methods";
+import BranchCardPlaceholder from "./BranchCardPlaceholder";
+import BranchLoadingPlaceholder from "./BranchLoadingPlaceholder";
 
 function VacationsSettings() {
-  const [vacationsData, setVacationsData] = useState<
-    VacationsArr[] | "loading" | "error" | "none"
+  const [vacationsArr, setVacationsData] = useState<
+    VacationsArr[] | "error" | "loading" | "none"
   >("none");
 
   useEffect(() => {
@@ -34,74 +38,24 @@ function VacationsSettings() {
       });
   }, []);
 
-  const loadingCard = generateUndefinedArray(4);
-  const loadingButtons = generateUndefinedArray(3);
-
   return (
     <Stack>
       <Typography variant="h5" sx={{ fontWeight: 700 }}>
         إعدادات الأجازات
       </Typography>
 
+      {vacationsArr === "loading" && <BranchLoadingPlaceholder />}
       <Grid container spacing={4} mt={1}>
-        {vacationsData === "loading" &&
-          loadingCard.map(() => (
-            <Grid item xs={4}>
-              <Card>
-                <Skeleton variant="rectangular" width={400} height={220} />
-                <Box
-                  sx={{
-                    backgroundColor: "wheat",
-                  }}
-                  py={1}
-                >
-                  <CardActions
-                    sx={{
-                      overflowX: "auto",
-                      maxWidth: 1,
-                      width: 1,
-                      direction: "row",
-                    }}
-                  >
-                    {loadingButtons.map(() => (
-                      <Box
-                        sx={{
-                          borderRadius: 1,
-                          bgcolor: "white",
-                          maxWidth: 0.318,
-                          minWidth: 0.318,
-                        }}
-                      >
-                        <Button size="large" color="primary"  fullWidth>
-                          <Skeleton variant="rectangular" />
-                        </Button>
-                      </Box>
-                    ))}
-                  </CardActions>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
-
-        {vacationsData === "error" && (
-          <NotFound title="حدث خطأ حاول مرة أخرى" />
-        )}
-
-        {typeof vacationsData === "object" &&
-          vacationsData?.map((vacation, index) => (
-            <Grid item xs={4} key={index}>
+        {Array.isArray(vacationsArr) &&
+          vacationsArr?.map((vacation) => (
+            <Grid item xs={4} key={vacation.id}>
               <Card>
                 <CardActionArea
                   component={NavLink}
                   to={`${vacation.id}`}
                   sx={{ position: "relative" }}
                 >
-                  <CardMedia
-                    component="img"
-                    height={220}
-                    image="https://w0.peakpx.com/wallpaper/340/751/HD-wallpaper-city-aerial-view-road-buildings-coast-thumbnail.jpg"
-                    alt="green iguana"
-                  />
+                  <CardMedia component="img" height={220} image={BranchImage} />
                   <Stack
                     sx={{
                       top: 0,
@@ -111,9 +65,35 @@ function VacationsSettings() {
                       alignItems: "center",
                       justifyContent: "center",
                       background:
-                        "linear-gradient(180deg, rgba(243, 245, 247, 0.5) 0%, #dadcde 72.18%)",
+                        "linear-gradient(180deg, rgba(243, 245, 247, 0.4) 20%, #dadcde 100%)",
                     }}
                   >
+                    {vacation?.vacationbranch?.status_id === 34 && (
+                      <Tooltip
+                        arrow
+                        color="primary"
+                        placement="top-end"
+                        leaveDelay={400}
+                        title={
+                          <Typography>
+                            لم يعتمد اضافة محدد الى الفرع، يرجى مراجعة البيانات.
+                          </Typography>
+                        }
+                      >
+                        <IconButton
+                          color="warning"
+                          size="small"
+                          sx={{
+                            bgcolor: "Background",
+                            position: "absolute",
+                            top: 4,
+                            right: 4,
+                          }}
+                        >
+                          <ErrorOutlineIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     <Typography
                       variant="h5"
                       sx={{
@@ -148,7 +128,13 @@ function VacationsSettings() {
                           minWidth: 0.318,
                         }}
                       >
-                        <Button size="large" color="primary" fullWidth>
+                        <Button
+                          component={NavLink}
+                          to={`${vacation.id}/${vacationDate.id}`}
+                          size="large"
+                          color="primary"
+                          fullWidth
+                        >
                           {vacationDate.year}
                         </Button>
                       </Box>
@@ -174,17 +160,17 @@ type VacationsArr = {
 
 type VacationBranch = {
   branch_id: number;
-  card_image: null;
-  created_at: null;
   id: number;
   status_id: number;
-  updated_at: null;
+  // card_image: null;
+  // created_at: null;
+  // updated_at: null;
 };
 
 type VacationDate = {
   id: number;
   branch_id: number;
   year: number;
-  created_at: null;
-  updated_at: null;
+  // created_at: null;
+  // updated_at: null;
 };

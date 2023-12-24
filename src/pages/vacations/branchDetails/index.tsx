@@ -11,21 +11,15 @@ import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext
 
 function BranchDetails() {
   const { branchId } = useParams();
-
+  const [dialogState, setDialogState] = useState<DialogState>("none");
   const breadcrump = useContext(BreadCrumbContext);
   const [vacationsData, setVacationsData] = useState<
     VacationsDetailsType[] | "loading" | "error"
   >("loading");
-
-  useEffect(() => {
-    breadcrump.addLast &&
-      breadcrump.addLast({
-        path: `react/datalib/vacations/${branchId}`,
-        title: "اعدادات اجازات الفرع",
-      });
-  }, []);
-
-  const [dialogState, setDialogState] = useState<DialogState>("none");
+  const [filters, setFilters] = useState<{
+    year: string | null;
+    status: number;
+  }>({ year: null, status: -1 });
   const closeDialog = () => {
     setDialogState("none");
   };
@@ -38,12 +32,32 @@ function BranchDetails() {
   const openDetailsDialog = () => {
     setDialogState("details");
   };
+  function setYearFilter(year: string | null) {
+    setFilters({ ...filters, year });
+  }
+  function setStatusFilter(status: number) {
+    setFilters({ ...filters, status });
+  }
+  useEffect(() => {
+    breadcrump.addLast &&
+      breadcrump.addLast({
+        path: `react/datalib/vacations/${branchId}`,
+        title: "اعدادات اجازات الفرع",
+      });
+  }, []);
+  useEffect(setTableData, [filters.status, filters.year]);
 
-  const setTableData = () => {
+  function setTableData() {
     setVacationsData("loading");
     axios
       .get<{ date: VacationsDetailsType[] }>(
-        Api(`employee/vacation/${branchId}`)
+        Api(`employee/vacation/${branchId}`),
+        {
+          params: {
+            year: filters.year,
+            status_id: filters.status === -1 ? null : filters.status,
+          },
+        }
       )
       .then((data) => {
         console.log(data.data.date);
@@ -52,68 +66,30 @@ function BranchDetails() {
       .catch((err) => {
         setVacationsData("error");
       });
-  };
-  useEffect(() => {
-    setTableData();
-  }, []);
-
-  const [yearFilter, setYearFilter] = useState<string>("الكل");
-  const [statusFilter, setStatusFilter] = useState<number>(-1);
-
-  function getYearFromDateStr(dateStr: string): number | null {
-    const parsedDate = new Date(dateStr);
-    if (!isNaN(parsedDate.getTime())) {
-      return parsedDate.getFullYear();
-    }
-    return null;
   }
-
-  useEffect(() => {
-    let year = null;
-    let status_id = null;
-
-    if (statusFilter !== -1) {
-      status_id = statusFilter;
-    }
-    if (yearFilter !== "الكل") {
-      year = getYearFromDateStr(yearFilter);
-    }
-    
-    axios
-      .get<{ date: VacationsDetailsType[] }>(
-        Api(`employee/vacation/${branchId}`),
-        {
-          params: {
-            status_id: status_id || null,
-            year: year || null,
-          },
-        }
-      )
-      .then((data) => {
-        // console.log(data.data.date);
-        setVacationsData(data.data.date);
-      })
-      .catch((err) => {
-        setVacationsData("error");
-      });
-
-    console.log(yearFilter);
-    console.log(statusFilter);
-  }, [yearFilter, statusFilter]);
 
   return (
     <Stack>
       <FilterDetails
+        dialogState={dialogState}
+        closeDialog={closeDialog}
+        openErrorDialog={openErrorDialog}
+        openAddDialog={openAddDialog}
         setTableData={setTableData}
-        statusFilter={statusFilter}
+        statusFilter={filters.status}
         setStatusFilter={setStatusFilter}
-        yearFilter={yearFilter}
+        yearFilter={filters.year}
         setYearFilter={setYearFilter}
       />
       {vacationsData === "loading" && <LoadingTable rows={5} cols={5} />}
       {vacationsData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
       {typeof vacationsData === "object" && (
-        <DetailsTable vacationsData={vacationsData} />
+        <DetailsTable
+          vacationsData={vacationsData}
+          dialogState={dialogState}
+          closeDialog={closeDialog}
+          openDetailsDialog={openDetailsDialog}
+        />
       )}
     </Stack>
   );

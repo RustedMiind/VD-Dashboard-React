@@ -16,6 +16,8 @@ import StatusChip from "../../../components/StatusChip";
 import { useState } from "react";
 import ShowVactionDialog from "../ShowVactionDialog";
 import { NavLink } from "react-router-dom";
+import { DialogState } from "./FilterDetails";
+import EditIcon from "@mui/icons-material/Edit";
 
 function DetailsTable(props: PropsType) {
   const [open, setOpen] = useState<boolean>(false);
@@ -57,7 +59,9 @@ function DetailsTable(props: PropsType) {
                 <TableRow key={item.id}>
                   <TableCell>{item.year}</TableCell>
                   <TableCell align="center">{item.vacationNumber}</TableCell>
-                  <TableCell align="center">{item.vacationDayNumber}</TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumber} يوم
+                  </TableCell>
                   <TableCell align="center">
                     <StatusChip
                       color={
@@ -67,22 +71,21 @@ function DetailsTable(props: PropsType) {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    {item.vacationDayNumberUsed}
+                    {item.vacationDayNumberUsed} يوم
                   </TableCell>
                   <TableCell align="center">
-                    {item.vacationDayNumberstay}
+                    {item.vacationDayNumberstay} يوم
                   </TableCell>
                   <TableCell align="center">
                     <NavLink to={`${item.id}`}>
-                      <IconButton aria-label="delete">
-                        <EditNoteIcon />
+                      <IconButton>
+                        <EditIcon />
                       </IconButton>
                     </NavLink>
                     <IconButton
-                      aria-label="delete"
                       onClick={() => {
                         setItemId(item.id);
-                        openDialog();
+                        props.openDetailsDialog();
                       }}
                     >
                       <VisibilityIcon color="primary" />
@@ -95,8 +98,8 @@ function DetailsTable(props: PropsType) {
         </TableContainer>
       </Stack>
       <ShowVactionDialog
-        open={open}
-        setOpen={setOpen}
+        closeDialog={props.closeDialog}
+        open={props.dialogState == "details"}
         itemId={itemId}
         vacationsData={props.vacationsData}
       />
@@ -108,4 +111,7 @@ export default DetailsTable;
 
 type PropsType = {
   vacationsData?: VacationsDetailsType[];
+  openDetailsDialog: () => void;
+  dialogState: DialogState;
+  closeDialog: () => void;
 };
