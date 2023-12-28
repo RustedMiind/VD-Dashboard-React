@@ -4,7 +4,7 @@ import TableBody from "./TableBody";
 
 function TendersTable() {
   return (
-    <Stack p={2}>
+    <Stack>
       <TableContainer
         component={Paper}
         sx={{
