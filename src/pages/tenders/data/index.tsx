@@ -7,10 +7,8 @@ function TendersData() {
     <Stack>
       <Paper>
         <ControlSection />
-        <TendersTable />
         {/*   - tender statuses   */}
-        {/*   - tenders table   */}
-        {/* end paper */}
+        <TendersTable />
       </Paper>
     </Stack>
   );
