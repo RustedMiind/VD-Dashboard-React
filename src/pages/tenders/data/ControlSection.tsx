@@ -6,7 +6,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 function ControlSection() {
   return (
-    <Stack direction={"row"} p={2} justifyContent={"space-between"}>
+    <Stack direction={"row"} justifyContent={"space-between"}>
       <Box>
         <Button startIcon={<AddCircleOutlineIcon />} variant="contained">
           إضافة منافسة
