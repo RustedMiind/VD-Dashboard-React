@@ -2,16 +2,18 @@ import { Paper, Stack } from "@mui/material";
 import ControlSection from "./ControlSection";
 import TendersTable from "./Table";
 import TendersFilters from "./Filters";
+import Counters from "./Counters";
 
 function TendersData() {
   return (
     <Stack>
       <TendersFilters />
-      <Paper sx={{ p: 2 }}>
+      <Stack component={Paper} spacing={2} p={3}>
         <ControlSection />
+        <Counters />
         {/*   - tender statuses   */}
         <TendersTable />
-      </Paper>
+      </Stack>
     </Stack>
   );
 }
