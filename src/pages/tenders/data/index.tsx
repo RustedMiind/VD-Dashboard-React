@@ -7,7 +7,7 @@ function TendersData() {
   return (
     <Stack>
       <TendersFilters />
-      <Paper>
+      <Paper sx={{ p: 2 }}>
         <ControlSection />
         {/*   - tender statuses   */}
         <TendersTable />
