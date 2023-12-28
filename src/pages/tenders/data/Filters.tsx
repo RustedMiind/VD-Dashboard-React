@@ -1,9 +1,9 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, GridProps, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
-function GridItem({ children }: { children: React.ReactNode }) {
+function GridItem({ children }: GridProps) {
   return (
-    <Grid item xs={6} lg={2} md={4}>
+    <Grid item xs={12} sm={6} lg={4} xl={2}>
       {children}
     </Grid>
   );
