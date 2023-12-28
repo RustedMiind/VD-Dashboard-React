@@ -14,18 +14,13 @@ function TendersFilters() {
     <Box component="form" pb={7}>
       <Grid container spacing={2}>
         <GridItem>
-          <TextField
-            fullWidth
-            label="اسم جهة المنافسة"
-            type="text"
-            size="small"
-          />
+          <TextField fullWidth label="اسم جهة المنافسة" size="small" />
         </GridItem>
         <GridItem>
-          <TextField fullWidth label="رقم الجهة" type="number" size="small" />
+          <TextField fullWidth label="رقم الجهة" size="small" />
         </GridItem>
         <GridItem>
-          <TextField fullWidth label="اسم المنافسة" type="text" size="small" />
+          <TextField fullWidth label="اسم المنافسة" size="small" />
         </GridItem>
         <GridItem>
           <DatePicker
