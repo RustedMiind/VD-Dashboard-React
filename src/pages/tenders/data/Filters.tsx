@@ -40,7 +40,7 @@ function TendersFilters() {
           />
         </GridItem>
         <GridItem>
-          <Button variant="contained" fullWidth>
+          <Button variant="contained" type="submit" fullWidth>
             بحث
           </Button>
         </GridItem>
