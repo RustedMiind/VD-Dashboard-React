@@ -11,7 +11,6 @@ function TendersData() {
       <Stack component={Paper} spacing={2} p={3}>
         <ControlSection />
         <Counters />
-        {/*   - tender statuses   */}
         <TendersTable />
       </Stack>
     </Stack>
