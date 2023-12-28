@@ -1,13 +1,15 @@
-import { Stack } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
+import ControlSection from "./ControlSection";
 
 function TendersData() {
   return (
     <Stack>
-      {/* paper */}
-      {/*   - Add & Filter delete edit   */}
-      {/*   - tender statuses   */}
-      {/*   - tenders table   */}
-      {/* end paper */}
+      <Paper>
+        <ControlSection />
+        {/*   - tender statuses   */}
+        {/*   - tenders table   */}
+        {/* end paper */}
+      </Paper>
     </Stack>
   );
 }
