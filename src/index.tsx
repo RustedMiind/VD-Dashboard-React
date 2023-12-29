@@ -56,7 +56,7 @@ function resetAuth() {
 }
 
 // Mount the application in mode Development or Production
-MountApp("production");
+MountApp("development");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
