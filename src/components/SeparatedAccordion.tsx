@@ -38,7 +38,7 @@ export function SeparatedAccordion({
             px={2}
             justifyContent="space-between"
           >
-            <Typography variant="h6" fontWeight={700}>
+            <Typography variant="subtitle1" fontWeight={700}>
               {title}
             </Typography>
             <IconButton color="primary" size="small">
