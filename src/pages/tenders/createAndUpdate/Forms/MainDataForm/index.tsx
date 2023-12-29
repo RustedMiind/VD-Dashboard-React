@@ -187,7 +187,7 @@ export default function MainDataForm() {
             type="text"
             required
             size="small"
-            placeholder={"نشاط المنافسة"}
+            placeholder={"مدة العقد"}
             onChange={(e) => {}}
           />
         </AddLabelToEl>
