@@ -4,7 +4,11 @@ import RequiredSymbol from "../RequiredSymbol";
 function AddLabelToEl(props: PropsType) {
   return (
     <Stack width={1}>
-      <Typography component="label" {...props.labelTypographyProps}>
+      <Typography
+        component="label"
+        gutterBottom
+        {...props.labelTypographyProps}
+      >
         {props.label} {props.required && <RequiredSymbol />}
       </Typography>
       {props.children}
