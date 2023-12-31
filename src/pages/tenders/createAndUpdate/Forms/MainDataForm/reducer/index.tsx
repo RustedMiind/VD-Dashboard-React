@@ -62,7 +62,7 @@ type TenderDataState = {
   requiredWarranty: string[];
 };
 
-const initialTenderDataState: TenderDataState = {
+export const initialTenderDataState: TenderDataState = {
   branchId: "",
   managementId: "",
   referenceNumber: "",
