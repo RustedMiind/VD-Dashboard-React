@@ -7,6 +7,7 @@ import {
   FormGroup,
   FormLabel,
   Grid,
+  InputAdornment,
   MenuItem,
   Radio,
   RadioGroup,
@@ -17,8 +18,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
-import { useContext } from "react";
+import { useContext, useReducer } from "react";
 import { TenderContext } from "../../TenderCondext";
+import { initialTenderDataState, reducer } from "./reducer";
+import generateReducerAction from "../../../../../methods/conversions/generateReducerAction";
+import dayjs from "dayjs";
 const obj = [
   { name: "جده", id: 1 },
   { name: "جده", id: 2 },
@@ -33,6 +37,7 @@ const applyMethod = [
 ];
 export default function MainDataForm() {
   const tenderContext = useContext(TenderContext);
+  const [form, dispatch] = useReducer(reducer, initialTenderDataState);
 
   return (
     <Grid
@@ -46,7 +51,14 @@ export default function MainDataForm() {
     >
       <GridItem>
         <AddLabelToEl label="نوع الفرع" required>
-          <TextField select size="small">
+          <TextField
+            select
+            size="small"
+            value={form.branchId}
+            onChange={(e) => {
+              dispatch(generateReducerAction("SET_BRANCH_ID", e.target.value));
+            }}
+          >
             {obj.map((option) => (
               <MenuItem key={option.id} value={option.name}>
                 {option.name}
@@ -57,7 +69,16 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="الادارة" required>
-          <TextField select size="small">
+          <TextField
+            select
+            size="small"
+            value={form.managementId}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_MANAGEMENT_ID", e.target.value)
+              );
+            }}
+          >
             {obj.map((option) => (
               <MenuItem key={option.id} value={option.name}>
                 {option.name}
@@ -73,7 +94,12 @@ export default function MainDataForm() {
             type="text"
             size="small"
             placeholder={"الرقم المرجعي للمنافسة "}
-            onChange={(e) => {}}
+            value={form.referenceNumber}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_REFERENCE_NUMBER", e.target.value)
+              );
+            }}
           />
         </AddLabelToEl>
       </GridItem>
@@ -87,7 +113,10 @@ export default function MainDataForm() {
             type="text"
             size="small"
             placeholder={"رقم المنافسة"}
-            onChange={(e) => {}}
+            value={form.number}
+            onChange={(e) => {
+              dispatch(generateReducerAction("SET_NUMBER", e.target.value));
+            }}
           />
         </AddLabelToEl>
       </GridItem>
@@ -97,7 +126,10 @@ export default function MainDataForm() {
             type="text"
             size="small"
             placeholder={"اسم المنافسة "}
-            onChange={(e) => {}}
+            value={form.name}
+            onChange={(e) => {
+              dispatch(generateReducerAction("SET_NAME", e.target.value));
+            }}
           />
         </AddLabelToEl>
       </GridItem>
@@ -106,10 +138,12 @@ export default function MainDataForm() {
           <DatePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
-            // value={dayjs(props.yearFilter)}
-            // onChange={(date) => {
-            //   props.setYearFilter(date?.format() || "");
-            // }}
+            value={dayjs(form.applyDate)}
+            onChange={(date) => {
+              dispatch(
+                generateReducerAction("SET_APPLY_DATE", date?.format() || "")
+              );
+            }}
           />
         </AddLabelToEl>
       </GridItem>
@@ -120,7 +154,15 @@ export default function MainDataForm() {
             size="small"
             select
             //   value={formData?.branch_id}
-            onChange={(e) => {}}
+            value={form.governmentalOrganizationId}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction(
+                  "SET_GOVERNMENTAL_ORGANIZATION_ID",
+                  e.target.value
+                )
+              );
+            }}
             options={obj.map((item) => ({
               label: item.name,
               value: item.id,
@@ -133,10 +175,12 @@ export default function MainDataForm() {
           <DatePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
-            // value={dayjs(props.yearFilter)}
-            // onChange={(date) => {
-            //   props.setYearFilter(date?.format() || "");
-            // }}
+            value={dayjs(form.endDate)}
+            onChange={(date) => {
+              dispatch(
+                generateReducerAction("SET_END_DATE", date?.format() || "")
+              );
+            }}
           />
         </AddLabelToEl>
       </GridItem>
@@ -146,13 +190,23 @@ export default function MainDataForm() {
             type="text"
             size="small"
             placeholder={"القيمة المالية"}
-            onChange={(e) => {}}
+            value={form.price}
+            onChange={(e) => {
+              dispatch(generateReducerAction("SET_PRICE", e.target.value));
+            }}
           />
         </AddLabelToEl>
       </GridItem>
       <GridItem>
         <AddLabelToEl label="نوع المنافسة" required>
-          <TextField select size="small">
+          <TextField
+            select
+            size="small"
+            value={form.typeId}
+            onChange={(e) => {
+              dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
+            }}
+          >
             {obj.map((option) => (
               <MenuItem key={option.id} value={option.name}>
                 {option.name}
@@ -163,7 +217,16 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="القسم التابع له المنافسة">
-          <TextField select size="small">
+          <TextField
+            select
+            size="small"
+            value={form.departmentId}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_DEPARTMENT_ID", e.target.value)
+              );
+            }}
+          >
             {obj.map((option) => (
               <MenuItem key={option.id} value={option.name}>
                 {option.name}
@@ -178,7 +241,10 @@ export default function MainDataForm() {
             type="text"
             size="small"
             placeholder={"نشاط المنافسة"}
-            onChange={(e) => {}}
+            value={form.activity}
+            onChange={(e) => {
+              dispatch(generateReducerAction("SET_ACTIVITY", e.target.value));
+            }}
           />
         </AddLabelToEl>
       </GridItem>
@@ -187,11 +253,20 @@ export default function MainDataForm() {
           <TextField
             type="text"
             size="small"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">يوم</InputAdornment>,
+            }}
             placeholder={"مدة العقد"}
-            onChange={(e) => {}}
+            value={form.contractDuration}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_CONTRACT_DURATION", e.target.value)
+              );
+            }}
           />
         </AddLabelToEl>
       </GridItem>
+      {/* All below not statefull */}
       <Grid item xs={12}>
         <FormControl
           sx={{
