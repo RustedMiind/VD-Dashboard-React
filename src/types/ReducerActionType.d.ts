@@ -1,4 +1,4 @@
-export interface ReducerAction<P> {
-  type: string;
+export interface ReducerAction<P, T = string> {
+  type: T;
   payload: P;
 }

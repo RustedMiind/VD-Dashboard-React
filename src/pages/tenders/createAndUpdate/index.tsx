@@ -1,14 +1,16 @@
 import { Stack, Typography } from "@mui/material";
 import FormsSection from "./Forms";
+import { TenderContextProfider } from "./TenderCondext";
+import PageTitle from "./PageTitle";
 
 function CreateAndUpdateTender() {
   return (
-    <Stack>
-      <Typography variant="h5" fontWeight={600} mb={3}>
-        انشاء منافسة
-      </Typography>
-      <FormsSection />
-    </Stack>
+    <TenderContextProfider>
+      <Stack>
+        <PageTitle />
+        <FormsSection />
+      </Stack>
+    </TenderContextProfider>
   );
 }
 
