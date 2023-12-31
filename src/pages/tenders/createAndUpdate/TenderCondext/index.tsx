@@ -19,6 +19,8 @@ export function TenderContextProfider({
 
   const idToUse = params.id || id;
 
+  console.log("state id :", id, "param id :", params.id);
+
   function getTenderData() {
     if (idToUse) {
       setTender("loading");
@@ -28,6 +30,7 @@ export function TenderContextProfider({
           console.log(res.data);
           if (res.data.data) {
             setTender(res.data.data);
+            setId(res.data.data.id);
           } else {
             setTender("error");
           }

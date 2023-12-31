@@ -7,10 +7,10 @@ export type Tender = {
   created_at: string;
   updated_at: string;
   // deleted_at: null;
-  tenderdata: TenderData;
-  tender_tasks: [];
-  tender_files: [];
-  tender_amounts: [];
+  tenderdata?: TenderData;
+  tender_tasks?: [];
+  tender_files?: [];
+  tender_amounts?: [];
 };
 
 export type TenderData = {

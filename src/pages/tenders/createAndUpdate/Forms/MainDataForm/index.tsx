@@ -17,6 +17,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
+import { useContext } from "react";
+import { TenderContext } from "../../TenderCondext";
 const obj = [
   { name: "جده", id: 1 },
   { name: "جده", id: 2 },
@@ -30,8 +32,18 @@ const applyMethod = [
   { name: "اخرى", id: 4 },
 ];
 export default function MainDataForm() {
+  const tenderContext = useContext(TenderContext);
+
   return (
-    <Grid container spacing={2} component="form">
+    <Grid
+      container
+      spacing={2}
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        tenderContext.setTenderId && tenderContext.setTenderId(1);
+      }}
+    >
       <GridItem>
         <AddLabelToEl label="نوع الفرع" required>
           <TextField select size="small">
@@ -58,9 +70,7 @@ export default function MainDataForm() {
       <GridItem>
         <AddLabelToEl label="الرقم المرجعي للمنافسة" required>
           <TextField
-            id="outlined-name-input"
             type="text"
-            required
             size="small"
             placeholder={"الرقم المرجعي للمنافسة "}
             onChange={(e) => {}}
@@ -74,9 +84,7 @@ export default function MainDataForm() {
         */}
         <AddLabelToEl label="رقم المنافسة">
           <TextField
-            id="outlined-name-input"
             type="text"
-            required
             size="small"
             placeholder={"رقم المنافسة"}
             onChange={(e) => {}}
@@ -86,9 +94,7 @@ export default function MainDataForm() {
       <GridItem>
         <AddLabelToEl label="اسم المنافسة" required>
           <TextField
-            id="outlined-name-input"
             type="text"
-            required
             size="small"
             placeholder={"اسم المنافسة "}
             onChange={(e) => {}}
@@ -137,9 +143,7 @@ export default function MainDataForm() {
       <GridItem>
         <AddLabelToEl label="القيمة المالية" required>
           <TextField
-            id="outlined-name-input"
             type="text"
-            required
             size="small"
             placeholder={"القيمة المالية"}
             onChange={(e) => {}}
@@ -171,9 +175,7 @@ export default function MainDataForm() {
       <GridItem>
         <AddLabelToEl label="نشاط المنافسة">
           <TextField
-            id="outlined-name-input"
             type="text"
-            required
             size="small"
             placeholder={"نشاط المنافسة"}
             onChange={(e) => {}}
@@ -183,9 +185,7 @@ export default function MainDataForm() {
       <GridItem>
         <AddLabelToEl label="مدة العقد">
           <TextField
-            id="outlined-name-input"
             type="text"
-            required
             size="small"
             placeholder={"مدة العقد"}
             onChange={(e) => {}}
