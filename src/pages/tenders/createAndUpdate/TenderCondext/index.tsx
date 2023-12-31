@@ -25,6 +25,7 @@ export function TenderContextProfider({
       axios
         .get<{ data?: Tender }>(Api("employee/tender/" + idToUse))
         .then((res) => {
+          console.log(res.data);
           if (res.data.data) {
             setTender(res.data.data);
           } else {
@@ -39,9 +40,8 @@ export function TenderContextProfider({
 
   useEffect(getTenderData, [idToUse]);
 
-  let formStatus: TenderFormStatus = "loading";
-
-  const isUpdateMode = !!tender; // checks if the data from api exists,
+  let formStatus: TenderFormStatus = "create";
+  const isUpdateMode = typeof tender === "object"; // checks if the data from api exists,
   const isCompleted = typeof tender === "object" && !!tender?.is_done; // checks if all the form are done or not
 
   if (isUpdateMode) {
@@ -70,9 +70,4 @@ type ContextType = {
   setTenderId?: (id: number) => void;
 };
 
-export type TenderFormStatus =
-  | "update"
-  | "create"
-  | "complete"
-  | "loading"
-  | "error";
+export type TenderFormStatus = "update" | "create" | "complete";
