@@ -14,6 +14,8 @@ import VacationsTable from "./pages/vacations/VacationDetails";
 import ClientDetails from "./pages/clients/clientDeatails";
 import VacationDetails from "./pages/vacations/branchDetails";
 import VacationsSettings from "./pages/vacations/VacationsSettings";
+import TendersData from "./pages/tenders/data";
+import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
 
 function RoutesComponent() {
   return (
@@ -42,6 +44,11 @@ function RoutesComponent() {
           <Route path=":id/edit" element={<AddClient />} />
           <Route path="requests" element={<ClientRequests />} />
           <Route path="procedures" element={<ClientProcess />} />
+        </Route>
+        <Route path="tenders">
+          <Route path="" element={<TendersData />} />
+          <Route path="create" element={<CreateAndUpdateTender />} />
+          <Route path="edit/:id" element={<CreateAndUpdateTender />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
