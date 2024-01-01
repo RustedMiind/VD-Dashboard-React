@@ -19,15 +19,18 @@ import { FormData, individualInitial, reducer } from "./reducer";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Api } from "../../../constants";
+import { Api, Domain } from "../../../constants";
 import { objectToFormData } from "../../../methods";
 import BtnFile from "./BtnFile";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 import FilePreview from "../../../components/FilePreview";
 import { Client } from "../../../types/Clients";
 import { AccountCircle } from "@mui/icons-material";
+import SelectWithFilter from "../../../components/SelectWithFilter";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+
 const paddingSize = 1;
 export default function FormAdd() {
   const [clientEdit, setclientEdit] = useState<Client | null>(null);
@@ -408,8 +411,7 @@ export default function FormAdd() {
         <Grid item p={paddingSize} md={6}>
           <Stack>
             <Typography component="label">الوسيط</Typography>
-            <TextField
-              id="outlined-select-currency"
+            <SelectWithFilter
               size="small"
               select
               value={formData?.broker_id}
@@ -420,13 +422,24 @@ export default function FormAdd() {
                   payload: e.target.value,
                 });
               }}
-            >
-              {brokers.map((broker) => (
-                <MenuItem key={broker.id} value={broker.id}>
-                  {broker.name}
-                </MenuItem>
-              ))}
-            </TextField>
+              options={brokers.map((broker) => ({
+                label: broker.name,
+                value: broker.id,
+              }))}
+              onFilterEmpty={
+                <Stack alignItems="center" p={1}>
+                  <Button
+                    variant="outlined"
+                    component={"a"}
+                    href={Domain("admin/brokers/create")}
+                    startIcon={<PersonAddIcon />}
+                    fullWidth
+                  >
+                    اضافة وسيط
+                  </Button>
+                </Stack>
+              }
+            ></SelectWithFilter>
             <Typography variant="body2" color="error">
               {errors?.broker_id}
             </Typography>
@@ -437,7 +450,7 @@ export default function FormAdd() {
             <Typography component="label">
               الفرع <RequiredSymbol />
             </Typography>
-            <TextField
+            <SelectWithFilter
               id="outlined-select-currency"
               size="small"
               select
@@ -448,13 +461,13 @@ export default function FormAdd() {
                   payload: e.target.value,
                 });
               }}
-            >
-              {branches?.map((branch) => (
-                <MenuItem key={branch.id} value={branch.id}>
-                  {branch.name}
-                </MenuItem>
-              ))}
-            </TextField>
+              options={
+                branches?.map((branch) => ({
+                  label: branch.name,
+                  value: branch.id,
+                })) || []
+              }
+            />
             <Typography variant="body2" color="error">
               {errors?.branch_id}
             </Typography>

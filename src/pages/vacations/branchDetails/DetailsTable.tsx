@@ -17,6 +17,7 @@ import { useState } from "react";
 import ShowVactionDialog from "../ShowVactionDialog";
 import { NavLink } from "react-router-dom";
 import { DialogState } from "./FilterDetails";
+import EditIcon from "@mui/icons-material/Edit";
 
 function DetailsTable(props: PropsType) {
   const [open, setOpen] = useState<boolean>(false);
@@ -58,7 +59,9 @@ function DetailsTable(props: PropsType) {
                 <TableRow key={item.id}>
                   <TableCell>{item.year}</TableCell>
                   <TableCell align="center">{item.vacationNumber}</TableCell>
-                  <TableCell align="center">{item.vacationDayNumber}</TableCell>
+                  <TableCell align="center">
+                    {item.vacationDayNumber} يوم
+                  </TableCell>
                   <TableCell align="center">
                     <StatusChip
                       color={
@@ -68,15 +71,15 @@ function DetailsTable(props: PropsType) {
                     />
                   </TableCell>
                   <TableCell align="center">
-                    {item.vacationDayNumberUsed}
+                    {item.vacationDayNumberUsed} يوم
                   </TableCell>
                   <TableCell align="center">
-                    {item.vacationDayNumberstay}
+                    {item.vacationDayNumberstay} يوم
                   </TableCell>
                   <TableCell align="center">
                     <NavLink to={`${item.id}`}>
                       <IconButton>
-                        <EditNoteIcon />
+                        <EditIcon />
                       </IconButton>
                     </NavLink>
                     <IconButton

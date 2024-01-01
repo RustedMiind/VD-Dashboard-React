@@ -9,3 +9,5 @@ export * from "./Department";
 export * from "./Requestable";
 export * from "./Vacations";
 export * from "./ChangeTypeValues";
+export * from "./Tenders";
+export * from "./DB_Boolean";
