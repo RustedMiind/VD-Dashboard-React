@@ -1,5 +1,7 @@
 import { DB_Boolean } from "../";
 
+export type TenderFormOptions = {};
+
 export type Tender = {
   id: number;
   step_num: 2;

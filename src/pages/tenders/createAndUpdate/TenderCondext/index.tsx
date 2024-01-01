@@ -59,6 +59,7 @@ export function TenderContextProfider({
         tender,
         getTenderData,
         setTenderId: setId,
+        tenderId: idToUse,
       }}
     >
       {children}
@@ -70,6 +71,7 @@ type ContextType = {
   formStatus?: TenderFormStatus;
   tender?: Tender | "loading" | "error" | "none";
   getTenderData?: () => void;
+  tenderId?: number | string;
   setTenderId?: (id: number) => void;
 };
 

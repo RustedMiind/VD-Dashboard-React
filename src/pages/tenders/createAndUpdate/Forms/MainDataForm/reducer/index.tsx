@@ -68,32 +68,40 @@ export function reducer(
 
 export function stateToPostDto(state: TenderDataState): PostDto {
   return {
-    branch_id: parseInt(state.branchId),
+    branch_id: state.branchId,
     code_reference: state.referenceNumber,
-    department_id: parseInt(state.referenceNumber),
+    department_id: state.referenceNumber,
     end_date: state.endDate,
     strat_date: state.applyDate,
-    management_id: parseInt(state.managementId),
+    management_id: state.managementId,
     name: state.name,
-    organization_id: parseInt(state.governmentalOrganizationId),
-    price: parseInt(state.price),
-    type_id: parseInt(state.typeId),
-    warranty_id: state.requiredWarranty.map((i) => parseInt(i)),
+    organization_id: state.governmentalOrganizationId,
+    price: state.price,
+    type_id: state.typeId,
+    warranty_id: state.requiredWarranty,
+    activity: state.activity,
+    code_tender: state.number,
+    period: state.contractDuration,
+    apply_id: state.applyTypeId,
   };
 }
 
 type PostDto = {
-  department_id: number;
-  type_id: number;
-  branch_id: number;
-  management_id: number;
+  department_id: string;
+  type_id: string;
+  branch_id: string;
+  management_id: string;
   code_reference: string;
+  code_tender: string;
+  activity: string;
+  period: string;
   name: string;
   strat_date: string;
   end_date: string;
-  organization_id: number;
-  price: number;
-  warranty_id: number[];
+  organization_id: string;
+  price: string;
+  warranty_id: string[];
+  apply_id: string;
 };
 
 type TenderDataState = {

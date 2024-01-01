@@ -18,38 +18,51 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { TenderContext } from "../../TenderCondext";
-import { initialTenderDataState, reducer } from "./reducer";
+import { initialTenderDataState, reducer, stateToPostDto } from "./reducer";
 import generateReducerAction from "../../../../../methods/conversions/generateReducerAction";
 import dayjs from "dayjs";
-import LimitTypography from "../../../../../components/LimitTypograpgy";
+import axios from "axios";
+import { Api } from "../../../../../constants";
+import { TenderData } from "../../../../../types";
+
 const obj = [
-  { name: "جده", id: "1" },
-  { name: "جده", id: "2" },
-  { name: "جده", id: "3" },
-  { name: "جده", id: "4" },
+  {
+    id: "1",
+    name: "none",
+  },
 ];
-const applyMethod = [
-  { name: "فني ومالي", id: "1" },
-  { name: "فني", id: "2" },
-  { name: "مالي", id: "3" },
-  { name: "اخرى", id: "4" },
-];
+
 export default function MainDataForm() {
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const [options, setOptions] = useState<OptionsType>({});
 
+  useEffect(() => {}, []);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("loading");
+    axios
+      .post<{ data: TenderData }>(
+        Api(
+          `employee/tender/data${
+            tenderContext.tenderId ? "/" + tenderContext.tenderId : ""
+          }`
+        ),
+        stateToPostDto(form)
+      )
+      .then((res) => {
+        console.log(res);
+        tenderContext.setTenderId &&
+          tenderContext.setTenderId(res.data.data.id);
+      })
+      .catch(console.log);
+  }
   return (
-    <Grid
-      container
-      spacing={2}
-      component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        tenderContext.setTenderId && tenderContext.setTenderId(1);
-      }}
-    >
+    <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
       <GridItem>
         <AddLabelToEl label="نوع الفرع" required>
           <TextField
@@ -291,7 +304,7 @@ export default function MainDataForm() {
               );
             }}
           >
-            {applyMethod.map((method) => (
+            {obj.map((method) => (
               <FormControlLabel
                 value={method.id}
                 control={<Radio />}
@@ -306,7 +319,7 @@ export default function MainDataForm() {
         <Box display={"flex"} flexDirection={"row"}>
           <Typography alignSelf={"center"}>الضمان المطلوب</Typography>
           <FormGroup row sx={{ ml: 2 }}>
-            {applyMethod.map((method) => (
+            {obj.map((method) => (
               <FormControlLabel
                 checked={form.requiredWarranty.includes(method.id)}
                 sx={{ ml: 2 }}
@@ -331,3 +344,36 @@ export default function MainDataForm() {
     </Grid>
   );
 }
+
+type FormStatus = "none" | "loading" | "error";
+
+type OptionsType = {
+  branches?: OptionType[];
+  departments?: OptionType[];
+  managementes?: OptionType[];
+  departmentEmployees?: OptionType[];
+  allEmployees?: OptionType[];
+};
+
+type OptionType = { id: string; value: string };
+
+type TenderTypeType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TenderWarrantyType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TenderApplyMethodType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
