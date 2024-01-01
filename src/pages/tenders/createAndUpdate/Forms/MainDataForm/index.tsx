@@ -267,7 +267,6 @@ export default function MainDataForm() {
           />
         </AddLabelToEl>
       </GridItem>
-      {/* All below not statefull */}
       <Grid item xs={12}>
         <FormControl
           sx={{
