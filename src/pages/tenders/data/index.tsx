@@ -3,17 +3,20 @@ import ControlSection from "./ControlSection";
 import TendersTable from "./Table";
 import TendersFilters from "./Filters";
 import Counters from "./Counters";
+import { TenderTableContextProvider } from "./TableContext";
 
 function TendersData() {
   return (
-    <Stack>
-      <TendersFilters />
-      <Stack component={Paper} spacing={2} p={3}>
-        <ControlSection />
-        <Counters />
-        <TendersTable />
+    <TenderTableContextProvider>
+      <Stack>
+        <TendersFilters />
+        <Stack component={Paper} spacing={2} p={3}>
+          <ControlSection />
+          <Counters />
+          <TendersTable />
+        </Stack>
       </Stack>
-    </Stack>
+    </TenderTableContextProvider>
   );
 }
 
