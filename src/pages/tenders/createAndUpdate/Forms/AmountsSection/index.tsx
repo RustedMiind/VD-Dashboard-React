@@ -112,12 +112,7 @@ function AmountsSection() {
             }
           </Table>
         </TableContainer>
-        <SetDialog
-          open={open}
-          setOpen={setOpen}
-          handleOpenDialog={handleOpenDialog}
-          tenderAmount={amountToEdit}
-        />
+        <SetDialog open={open} setOpen={setOpen} tenderAmount={amountToEdit} />
       </Stack>
     </Stack>
   );

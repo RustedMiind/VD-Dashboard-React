@@ -9,13 +9,9 @@ import { TenderAmount } from "../../../../../../types/Tenders/TenderAmount";
 import { TenderContext } from "../../../TenderCondext";
 import { Api } from "../../../../../../constants";
 import axios from "axios";
+import { isStringAllNumbers } from "../../../../../../methods";
 
-export default function SetDialog({
-  open,
-  setOpen,
-  handleOpenDialog,
-  tenderAmount,
-}: TypeProps) {
+export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
   const tenderContext = useContext(TenderContext);
   useEffect(() => {
     if (tenderAmount) {
@@ -58,6 +54,7 @@ export default function SetDialog({
       .then((res) => {
         console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
+        setOpen(false);
       })
       .catch((err) => {
         console.log(err);
@@ -112,7 +109,8 @@ export default function SetDialog({
               <TextField
                 value={amountData.amount}
                 onChange={(e) => {
-                  updateAmountData({ amount: e.target.value });
+                  isStringAllNumbers(e.target.value) &&
+                    updateAmountData({ amount: e.target.value });
                 }}
                 placeholder="العدد"
                 fullWidth
@@ -124,7 +122,8 @@ export default function SetDialog({
               <TextField
                 value={amountData.aria}
                 onChange={(e) => {
-                  updateAmountData({ aria: e.target.value });
+                  isStringAllNumbers(e.target.value) &&
+                    updateAmountData({ aria: e.target.value });
                 }}
                 fullWidth
                 size="small"
@@ -148,7 +147,8 @@ export default function SetDialog({
               <TextField
                 value={amountData.priod}
                 onChange={(e) => {
-                  updateAmountData({ priod: e.target.value });
+                  isStringAllNumbers(e.target.value) &&
+                    updateAmountData({ priod: e.target.value });
                 }}
                 fullWidth
                 size="small"
@@ -174,7 +174,6 @@ export default function SetDialog({
 type TypeProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenDialog: () => void;
   tenderAmount?: TenderAmount;
 };
 
