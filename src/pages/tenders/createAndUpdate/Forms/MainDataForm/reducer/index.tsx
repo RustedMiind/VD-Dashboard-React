@@ -33,8 +33,21 @@ export function reducer(
       return { ...state, contractDuration: action.payload };
     case "SET_APPLY_TYPE_ID":
       return { ...state, applyTypeId: action.payload };
-    case "SET_REQUIRED_WARRANTY":
-      return { ...state, requiredWarranty: action.payload };
+    case "TOGGLE_WARRANTY_ID":
+      const warrantyId = action.payload;
+      if (state.requiredWarranty.includes(warrantyId)) {
+        return {
+          ...state,
+          requiredWarranty: state.requiredWarranty.filter(
+            (wr) => warrantyId !== wr
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          requiredWarranty: [...state.requiredWarranty, action.payload],
+        };
+      }
     case "SET_OBJECT":
       return { ...state, ...action.payload };
     case "SET_RESET":
@@ -97,8 +110,8 @@ interface SetActivity extends ReducerAction<string, "SET_ACTIVITY"> {}
 interface SetContractDuration
   extends ReducerAction<string, "SET_CONTRACT_DURATION"> {}
 interface SetApplyTypeId extends ReducerAction<string, "SET_APPLY_TYPE_ID"> {}
-interface SetRequiredWarranty
-  extends ReducerAction<string[], "SET_REQUIRED_WARRANTY"> {}
+interface ToggleWarrantyId
+  extends ReducerAction<string, "TOGGLE_WARRANTY_ID"> {}
 interface SetPartial
   extends ReducerAction<Partial<TenderDataState>, "SET_OBJECT"> {}
 interface SetReset
@@ -119,6 +132,6 @@ type ActionTypes =
   | SetActivity
   | SetContractDuration
   | SetApplyTypeId
-  | SetRequiredWarranty
+  | ToggleWarrantyId
   | SetPartial
   | SetReset;

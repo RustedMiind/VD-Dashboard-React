@@ -23,17 +23,18 @@ import { TenderContext } from "../../TenderCondext";
 import { initialTenderDataState, reducer } from "./reducer";
 import generateReducerAction from "../../../../../methods/conversions/generateReducerAction";
 import dayjs from "dayjs";
+import LimitTypography from "../../../../../components/LimitTypograpgy";
 const obj = [
-  { name: "جده", id: 1 },
-  { name: "جده", id: 2 },
-  { name: "جده", id: 3 },
-  { name: "جده", id: 4 },
+  { name: "جده", id: "1" },
+  { name: "جده", id: "2" },
+  { name: "جده", id: "3" },
+  { name: "جده", id: "4" },
 ];
 const applyMethod = [
-  { name: "فني ومالي", id: 1 },
-  { name: "فني", id: 2 },
-  { name: "مالي", id: 3 },
-  { name: "اخرى", id: 4 },
+  { name: "فني ومالي", id: "1" },
+  { name: "فني", id: "2" },
+  { name: "مالي", id: "3" },
+  { name: "اخرى", id: "4" },
 ];
 export default function MainDataForm() {
   const tenderContext = useContext(TenderContext);
@@ -284,6 +285,12 @@ export default function MainDataForm() {
             name="row-radio-buttons-group"
             aria-labelledby="demo-row-radio-buttons-group-label"
             sx={{ ml: 2 }}
+            value={form.applyTypeId}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_APPLY_TYPE_ID", e.target.value)
+              );
+            }}
           >
             {applyMethod.map((method) => (
               <FormControlLabel
@@ -302,9 +309,16 @@ export default function MainDataForm() {
           <FormGroup row sx={{ ml: 2 }}>
             {applyMethod.map((method) => (
               <FormControlLabel
+                checked={form.requiredWarranty.includes(method.id)}
                 sx={{ ml: 2 }}
                 control={<Checkbox />}
                 label={method.name}
+                value={method.id}
+                onChange={(e) => {
+                  dispatch(
+                    generateReducerAction("TOGGLE_WARRANTY_ID", method.id)
+                  );
+                }}
               />
             ))}
           </FormGroup>
