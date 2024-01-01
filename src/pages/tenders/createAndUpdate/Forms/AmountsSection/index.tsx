@@ -16,13 +16,45 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SetDialog from "./SetDialog";
+import { TenderContext } from "../../TenderCondext";
+import axios from "axios";
+import { Api } from "../../../../../constants";
+import { TenderAmount } from "../../../../../types/Tenders/TenderAmount";
 
 function AmountsSection() {
+  const tenderContext = useContext(TenderContext);
+  const [amountToEdit, setAmountToEdit] = useState<TenderAmount | undefined>(
+    undefined
+  );
+  const { tender } = useContext(TenderContext);
   const [open, setOpen] = useState<boolean>(false);
   function handleOpenDialog() {
-    setOpen(!open);
+    setOpen(true);
+  }
+  function openAddDialog() {
+    setAmountToEdit(undefined);
+    handleOpenDialog();
+  }
+  function openEditDialog(amount: TenderAmount) {
+    return function () {
+      setAmountToEdit(amount);
+      handleOpenDialog();
+    };
+  }
+  function DeleteAmount(id: number) {
+    return function () {
+      axios
+        .delete(Api(`employee/tender/amount/${id}`))
+        .then((res) => {
+          console.log(res);
+          tenderContext.getTenderData && tenderContext.getTenderData();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   }
   return (
     <Stack>
@@ -31,7 +63,7 @@ function AmountsSection() {
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
-          onClick={handleOpenDialog}
+          onClick={openAddDialog}
         >
           اضافة بند
         </Button>
@@ -51,28 +83,31 @@ function AmountsSection() {
             </TableHead>
             {
               <TableBody>
-                <TableRow>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>
-                    <IconButton
-                      size="small"
-                      //   onClick={handleOpenUpdateDialog(lever)}
-                    >
-                      <EditNoteIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      //   onClick={handleDelete(lever.id)}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                {typeof tender === "object" &&
+                  tender.tender_amounts?.map((amount) => (
+                    <TableRow>
+                      <TableCell>{amount.id}</TableCell>
+                      <TableCell>{amount.name}</TableCell>
+                      <TableCell>{amount.amount}</TableCell>
+                      <TableCell>{amount.aria}</TableCell>
+                      <TableCell>{amount.discription}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          size="small"
+                          onClick={openEditDialog(amount)}
+                        >
+                          <EditNoteIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={DeleteAmount(amount.id)}
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             }
           </Table>
@@ -81,6 +116,7 @@ function AmountsSection() {
           open={open}
           setOpen={setOpen}
           handleOpenDialog={handleOpenDialog}
+          tenderAmount={amountToEdit}
         />
       </Stack>
     </Stack>

@@ -50,8 +50,8 @@ function FormsSection() {
         <ManagersForm />
       </SeparatedAccordion>
       <SeparatedAccordion
-        expanded={isCurrentExpanded(3)}
-        onChange={expand(3)}
+        // expanded={isCurrentExpanded(3)}
+        // onChange={expand(3)}
         title="جدول الكميات"
       >
         <AmountsSection />

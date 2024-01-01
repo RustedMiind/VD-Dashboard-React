@@ -1,25 +1,76 @@
 import { DialogActions, IconButton, Typography } from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { TenderAmount } from "../../../../../../types/Tenders/TenderAmount";
+import { TenderContext } from "../../../TenderCondext";
+import { Api } from "../../../../../../constants";
+import axios from "axios";
 
 export default function SetDialog({
   open,
   setOpen,
   handleOpenDialog,
+  tenderAmount,
 }: TypeProps) {
+  const tenderContext = useContext(TenderContext);
+  useEffect(() => {
+    if (tenderAmount) {
+      updateAmountData({
+        amount: tenderAmount.amount,
+        aria: tenderAmount.aria,
+        discription: "",
+        name: tenderAmount.name,
+        priod: tenderAmount.priod,
+      });
+    } else {
+      setAmountData(intialAmountData);
+    }
+  }, [tenderAmount?.id, !!tenderAmount]);
+  const intialAmountData = {
+    tender_id: `${tenderContext?.tenderId}`,
+    name: "",
+    amount: "",
+    aria: "",
+    priod: "",
+    discription: "",
+  };
+  const [amountData, setAmountData] =
+    useState<TypeAmountData>(intialAmountData);
+  function updateAmountData(partial: Partial<TypeAmountData>) {
+    setAmountData({
+      ...amountData,
+      ...partial,
+    });
+  }
+  function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
+    e.preventDefault();
+    axios
+      .post(
+        Api(
+          `employee/tender/amount${tenderAmount ? "/" + tenderAmount.id : ""}`
+        ),
+        amountData
+      )
+      .then((res) => {
+        console.log(res);
+        tenderContext.getTenderData && tenderContext.getTenderData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
     <>
       <Dialog
         fullWidth
         open={open}
-        onClose={handleOpenDialog}
+        onClose={() => setOpen(false)}
         component="form"
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
       >
         <IconButton
           aria-label="delete"
@@ -32,7 +83,7 @@ export default function SetDialog({
             borderRadius: "8px",
           }}
           color="primary"
-          onClick={handleOpenDialog}
+          onClick={() => setOpen(false)}
         >
           <GridCloseIcon fontSize="inherit" />
         </IconButton>
@@ -46,23 +97,63 @@ export default function SetDialog({
                 اسم البند
                 <RequiredSymbol />
               </Typography>
-              <TextField size="small" fullWidth placeholder="اسم البند " />
+              <TextField
+                value={amountData.name}
+                onChange={(e) => {
+                  updateAmountData({ name: e.target.value });
+                }}
+                size="small"
+                fullWidth
+                placeholder="اسم البند "
+              />
             </Grid>
             <Grid p={1} item md={6}>
               <Typography>العدد</Typography>
-              <TextField placeholder="العدد" fullWidth size="small" />
+              <TextField
+                value={amountData.amount}
+                onChange={(e) => {
+                  updateAmountData({ amount: e.target.value });
+                }}
+                placeholder="العدد"
+                fullWidth
+                size="small"
+              />
             </Grid>
             <Grid p={1} item md={6}>
               <Typography> المساحة</Typography>
-              <TextField fullWidth size="small" placeholder="المساحة" />
+              <TextField
+                value={amountData.aria}
+                onChange={(e) => {
+                  updateAmountData({ aria: e.target.value });
+                }}
+                fullWidth
+                size="small"
+                placeholder="المساحة"
+              />
             </Grid>
             <Grid p={1} item md={6}>
               <Typography> وصف البند</Typography>
-              <TextField fullWidth size="small" placeholder="وصف البند" />
+              <TextField
+                value={amountData.discription}
+                onChange={(e) => {
+                  updateAmountData({ discription: e.target.value });
+                }}
+                fullWidth
+                size="small"
+                placeholder="وصف البند"
+              />
             </Grid>
             <Grid p={1} item md={6}>
               <Typography> المدة</Typography>
-              <TextField fullWidth size="small" placeholder="المدة" />
+              <TextField
+                value={amountData.priod}
+                onChange={(e) => {
+                  updateAmountData({ priod: e.target.value });
+                }}
+                fullWidth
+                size="small"
+                placeholder="المدة"
+              />
             </Grid>
           </Grid>
         </DialogContent>
@@ -85,4 +176,13 @@ type TypeProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenDialog: () => void;
   tenderAmount?: TenderAmount;
+};
+
+type TypeAmountData = {
+  tender_id?: string;
+  name: string;
+  amount: string;
+  aria: string;
+  priod: string;
+  discription: string;
 };
