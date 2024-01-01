@@ -1,5 +1,7 @@
 import { Box, Button, Grid, GridProps, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useContext } from "react";
+import { TableContext } from "./TableContext";
 
 function GridItem({ children }: GridProps) {
   return (
@@ -10,8 +12,18 @@ function GridItem({ children }: GridProps) {
 }
 
 function TendersFilters() {
+  const { setTenderTableData } = useContext(TableContext);
+  const dataToSearch: TypeDataToSearch = {
+    // nameTenderDirc: "",
+    // dirc_num: 0,
+    name: "",
+  };
+  function searchTender(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setTenderTableData && setTenderTableData(dataToSearch);
+  }
   return (
-    <Box component="form" pb={7}>
+    <Box onSubmit={searchTender} component="form" pb={7}>
       <Grid container spacing={2}>
         <GridItem>
           <TextField fullWidth label="اسم جهة المنافسة" size="small" />
@@ -20,7 +32,14 @@ function TendersFilters() {
           <TextField fullWidth label="رقم الجهة" size="small" />
         </GridItem>
         <GridItem>
-          <TextField fullWidth label="اسم المنافسة" size="small" />
+          <TextField
+            onChange={(e) => {
+              dataToSearch.name = e.target.value;
+            }}
+            fullWidth
+            label="اسم المنافسة"
+            size="small"
+          />
         </GridItem>
         <GridItem>
           <DatePicker
@@ -45,3 +64,7 @@ function TendersFilters() {
 }
 
 export default TendersFilters;
+
+type TypeDataToSearch = {
+  name?: string;
+};

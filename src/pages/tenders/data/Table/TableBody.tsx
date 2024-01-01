@@ -7,41 +7,67 @@ import {
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { generateUndefinedArray } from "../../../../methods";
+import { formatDate, generateUndefinedArray } from "../../../../methods";
+import { useContext } from "react";
+import { TableContext } from "../TableContext";
+import LimitTypography from "../../../../components/LimitTypograpgy";
+import StatusChip from "../../../../components/StatusChip";
 
 const arr = generateUndefinedArray(30);
 
 function TableBody() {
+  const { tenderTableData, setTenderId, tenderId } = useContext(TableContext);
+  function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    let isSelect = e.target.checked;
+    let value = parseInt(e.target.value);
+    if (isSelect) {
+      setTenderId && tenderId && setTenderId([...tenderId, value]);
+    } else {
+      setTenderId &&
+        setTenderId((prevData) => {
+          return prevData.filter((id) => {
+            return id !== value;
+          });
+        });
+    }
+  }
   return (
     <MuiTableBody>
-      {arr.map(() => (
-        <TableRow>
-          <TableCell>
-            <Checkbox />
-          </TableCell>
-          <TableCell>02</TableCell>
-          <TableCell>5362</TableCell>
-          <TableCell>جهة حكومية</TableCell>
-          <TableCell>جهة حكومية</TableCell>
-          <TableCell>12/5/2015</TableCell>
-          <TableCell>13/9/2025</TableCell>
-          <TableCell>غير مدفوع</TableCell>
-          <TableCell>سنة</TableCell>
-          <TableCell>قسم الموارد</TableCell>
-          <TableCell>مقبول</TableCell>
-          <TableCell>مقدمة</TableCell>
-          <TableCell>منتهي</TableCell>
-          <TableCell>جاري</TableCell>
-          <TableCell>مستبعد فني</TableCell>
-          <TableCell>
-            <NavLink to={"test"}>
+      {Array.isArray(tenderTableData) &&
+        tenderTableData.map((tender) => (
+          <TableRow>
+            <TableCell>
+              <Checkbox
+                checked={tenderId?.includes(tender.id)}
+                value={tender.id}
+                onChange={CheckboxHandler}
+              />
+            </TableCell>
+            <TableCell>{tender.tenderdata?.code_reference}</TableCell>
+            <TableCell>{tender.tenderdata?.code_tender}</TableCell>
+            <TableCell>جهة حكومية</TableCell>
+            <TableCell>
+              <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
+            </TableCell>
+            <TableCell>{tender.tenderdata?.end_date}</TableCell>
+            <TableCell>{tender.tenderdata?.strat_date}</TableCell>
+            <TableCell>
+              <StatusChip color={"primary"} disabled label={"غير مدفوع"} />
+            </TableCell>
+            <TableCell>{tender.tenderdata?.period} يوم</TableCell>
+            <TableCell>{tender.tenderdata?.department_id}</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>
               <IconButton color="primary">
                 <SettingsIcon />
               </IconButton>
-            </NavLink>
-          </TableCell>
-        </TableRow>
-      ))}
+            </TableCell>
+          </TableRow>
+        ))}
     </MuiTableBody>
   );
 }
