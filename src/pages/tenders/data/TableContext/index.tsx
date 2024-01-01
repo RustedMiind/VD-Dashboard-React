@@ -13,7 +13,9 @@ export function TenderTableContextProvider({
   const [tenderTableData, setTenderTableData] =
     useState<TenderStateType>("none");
   const [tenderId, setTenderId] = useState<number[]>([]);
-  console.log(tenderId);
+
+  let [limit, setLimit] = useState<string>("25");
+
   function getTender(params?: unknown) {
     setTenderTableData("loading");
     axios
@@ -31,7 +33,10 @@ export function TenderTableContextProvider({
       });
   }
   useEffect(getTender, []);
-
+  function setLimitAndUpdate(rows: string) {
+    setLimit(rows);
+    getTender({ limit: rows });
+  }
   return (
     <TableContext.Provider
       value={{
@@ -39,6 +44,8 @@ export function TenderTableContextProvider({
         setTenderTableData: getTender,
         tenderId,
         setTenderId,
+        limit,
+        setLimit: setLimitAndUpdate,
       }}
     >
       {children}
@@ -51,6 +58,8 @@ type ContextType = {
   setTenderTableData?: ((param?: unknown) => void) | null;
   tenderId?: number[];
   setTenderId?: React.Dispatch<React.SetStateAction<number[]>>;
+  limit?: string | null;
+  setLimit?: ((rows: string) => void) | null;
 };
 
 type TenderStateType = "none" | "error" | "loading" | Tender[] | "empty";
