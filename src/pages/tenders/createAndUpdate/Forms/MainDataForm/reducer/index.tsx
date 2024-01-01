@@ -1,3 +1,4 @@
+import { isStringAllNumbers } from "../../../../../../methods";
 import { ReducerAction } from "../../../../../../types";
 
 export function reducer(
@@ -10,9 +11,13 @@ export function reducer(
     case "SET_MANAGEMENT_ID":
       return { ...state, managementId: action.payload };
     case "SET_REFERENCE_NUMBER":
-      return { ...state, referenceNumber: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, referenceNumber: action.payload }
+        : state;
     case "SET_NUMBER":
-      return { ...state, number: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, number: action.payload }
+        : state;
     case "SET_NAME":
       return { ...state, name: action.payload };
     case "SET_APPLY_DATE":
@@ -22,7 +27,9 @@ export function reducer(
     case "SET_END_DATE":
       return { ...state, endDate: action.payload };
     case "SET_PRICE":
-      return { ...state, price: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, price: action.payload }
+        : state;
     case "SET_TYPE_ID":
       return { ...state, typeId: action.payload };
     case "SET_DEPARTMENT_ID":
@@ -30,7 +37,9 @@ export function reducer(
     case "SET_ACTIVITY":
       return { ...state, activity: action.payload };
     case "SET_CONTRACT_DURATION":
-      return { ...state, contractDuration: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, contractDuration: action.payload }
+        : state;
     case "SET_APPLY_TYPE_ID":
       return { ...state, applyTypeId: action.payload };
     case "TOGGLE_WARRANTY_ID":
@@ -56,6 +65,36 @@ export function reducer(
       return state;
   }
 }
+
+export function stateToPostDto(state: TenderDataState): PostDto {
+  return {
+    branch_id: parseInt(state.branchId),
+    code_reference: state.referenceNumber,
+    department_id: parseInt(state.referenceNumber),
+    end_date: state.endDate,
+    strat_date: state.applyDate,
+    management_id: parseInt(state.managementId),
+    name: state.name,
+    organization_id: parseInt(state.governmentalOrganizationId),
+    price: parseInt(state.price),
+    type_id: parseInt(state.typeId),
+    warranty_id: state.requiredWarranty.map((i) => parseInt(i)),
+  };
+}
+
+type PostDto = {
+  department_id: number;
+  type_id: number;
+  branch_id: number;
+  management_id: number;
+  code_reference: string;
+  name: string;
+  strat_date: string;
+  end_date: string;
+  organization_id: number;
+  price: number;
+  warranty_id: number[];
+};
 
 type TenderDataState = {
   branchId: string;
