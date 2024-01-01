@@ -1,5 +1,5 @@
 import { DB_Boolean, Department } from "../";
-import { TenderAmounts } from "./TenderAmounts";
+import { TenderAmounts } from "./TenderAmount";
 
 export type TenderFormOptions = {};
 

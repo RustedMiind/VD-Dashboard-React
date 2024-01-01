@@ -5,6 +5,7 @@ import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
+import { TenderAmount } from "../../../../../../types/Tenders/TenderAmount";
 
 export default function SetDialog({
   open,
@@ -83,4 +84,5 @@ type TypeProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenDialog: () => void;
+  tenderAmount?: TenderAmount;
 };
