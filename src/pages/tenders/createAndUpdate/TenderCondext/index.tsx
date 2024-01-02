@@ -23,7 +23,7 @@ export function TenderContextProfider({
 
   function getTenderData() {
     if (idToUse) {
-      setTender("loading");
+      typeof tender !== "object" && setTender("loading");
       axios
         .get<{ data?: Tender }>(Api("employee/tender/" + idToUse))
         .then((res) => {
