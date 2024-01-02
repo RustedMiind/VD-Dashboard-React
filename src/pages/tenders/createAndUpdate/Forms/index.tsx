@@ -5,6 +5,7 @@ import ManagersForm from "./ManagersForm";
 import { Stack } from "@mui/material";
 import { useContext, useState } from "react";
 import { TenderContext } from "../TenderCondext";
+import AmountsSection from "./AmountsSection";
 function FormsSection() {
   const tenderContext = useContext(TenderContext);
 
@@ -47,9 +48,13 @@ function FormsSection() {
       >
         <ManagersForm />
       </SeparatedAccordion>
-      <Typography variant="body1" color="initial">
-        Form 3
-      </Typography>
+      <SeparatedAccordion
+        expanded={isCurrentExpanded(3)}
+        onChange={expand(3)}
+        title="جدول الكميات"
+      >
+        <AmountsSection />
+      </SeparatedAccordion>
       <Typography variant="body1" color="initial">
         Form 4
       </Typography>

@@ -1,4 +1,5 @@
 import { DB_Boolean, Department } from "../";
+import { TenderAmounts } from "./TenderAmounts";
 
 export type TenderFormOptions = {};
 
@@ -12,7 +13,7 @@ export type Tender = {
   tenderdata?: TenderData;
   tender_tasks?: [];
   tender_files?: [];
-  tender_amounts?: [];
+  tender_amounts?: TenderAmounts[];
 };
 
 export type TenderData = {
