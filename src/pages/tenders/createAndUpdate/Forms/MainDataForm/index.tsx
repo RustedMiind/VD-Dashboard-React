@@ -42,6 +42,17 @@ export default function MainDataForm() {
   const [options, setOptions] = useState<OptionsType>({});
 
   useEffect(getOptions, [form.branchId, form.managementId]);
+  useEffect(() => {
+    if (
+      typeof tenderContext.tender === "object" &&
+      tenderContext.tender.tenderdata
+    ) {
+      dispatch({
+        type: "EXTRACT_DTO",
+        payload: tenderContext.tender.tenderdata,
+      });
+    }
+  }, [tenderContext.tenderId, typeof tenderContext.tender]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

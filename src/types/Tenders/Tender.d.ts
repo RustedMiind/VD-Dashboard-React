@@ -1,4 +1,5 @@
 import { DB_Boolean, Department } from "../";
+import { DbOptionType } from "../other/DbOptionType";
 import { TenderAmounts } from "./TenderAmount";
 import { TenderFile } from "./TenderFile";
 
@@ -31,12 +32,13 @@ export type TenderData = {
   price: number;
   type_id: number;
   department?: Department;
-  // "activity": null,
+  activity?: string;
   period: number;
   apply_id: number;
   created_at: string;
   updated_at: string;
   organization: Organization;
+  tender_warranties: (DbOptionType & { warranty_id: number })[];
   // "deleted_at": null
 };
 
