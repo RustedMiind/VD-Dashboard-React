@@ -20,13 +20,43 @@ import { useContext, useState } from "react";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import SetDialog from "./SetDialog";
 import { TenderContext } from "../../TenderCondext";
+import { TenderFile } from "../../../../../types/Tenders/TenderFile";
+import axios from "axios";
+import { Api } from "../../../../../constants";
 
 function AttachmentsSection() {
   const [open, setOpen] = useState<boolean>(false);
-  const { tender } = useContext(TenderContext);
+  const { tender, getTenderData } = useContext(TenderContext);
+  const [fileToEdit, setFileToEdit] = useState<TenderFile | undefined>(
+    undefined
+  );
   function handleOpenDialog() {
-    setOpen(!open);
+    setOpen(true);
   }
+  function openAddDialog() {
+    setFileToEdit(undefined);
+    handleOpenDialog();
+  }
+  function openEditDialog(file: TenderFile) {
+    return function () {
+      setFileToEdit(file);
+      handleOpenDialog();
+    };
+  }
+
+  function DeleteAmount(id: number) {
+    return function () {
+      axios
+        .delete(Api(`employee/tender/amount/${id}`))
+        .then((res) => {
+          getTenderData && getTenderData();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  }
+
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -34,7 +64,7 @@ function AttachmentsSection() {
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
-          onClick={handleOpenDialog}
+          onClick={openAddDialog}
         >
           اضافة مرفق
         </Button>
@@ -75,15 +105,12 @@ function AttachmentsSection() {
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      <IconButton
-                        size="small"
-                        //   onClick={handleOpenUpdateDialog(lever)}
-                      >
+                      <IconButton size="small" onClick={openEditDialog(file)}>
                         <EditNoteIcon />
                       </IconButton>
                       <IconButton
                         size="small"
-                        //   onClick={handleDelete(lever.id)}
+                        onClick={DeleteAmount(file.id)}
                         color="error"
                       >
                         <DeleteIcon />
@@ -97,8 +124,10 @@ function AttachmentsSection() {
         )}
         <SetDialog
           open={open}
-          setOpen={setOpen}
-          handleOpenDialog={handleOpenDialog}
+          onClose={() => {
+            setOpen(false);
+          }}
+          fileToEdit={fileToEdit}
         />
       </Stack>
     </Stack>
