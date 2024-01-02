@@ -14,7 +14,7 @@ import { TenderFile } from "../../../../../../types/Tenders/TenderFile";
 
 export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
   const [form, setForm] = useState<FormType>({ description: "", name: "" });
-  const { getTenderData } = useContext(TenderContext);
+  const { getTenderData, tenderId } = useContext(TenderContext);
   function updateForm(partial: Partial<FormType>) {
     setForm({ ...form, ...partial });
   }
@@ -34,7 +34,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
       .post(
         Api(`employee/tender/file${fileToEdit ? "/" + fileToEdit.id : ""}`),
         objectToFormData({
-          "tender id": 1,
+          "tender id": tenderId,
           description: form.description,
           name: form.name,
           image: form.file,

@@ -25,6 +25,7 @@ import axios from "axios";
 import { Api } from "../../../../../constants";
 
 function AttachmentsSection() {
+  const tenderContext = useContext(TenderContext);
   const [open, setOpen] = useState<boolean>(false);
   const { tender, getTenderData } = useContext(TenderContext);
   const [fileToEdit, setFileToEdit] = useState<TenderFile | undefined>(
@@ -44,7 +45,7 @@ function AttachmentsSection() {
     };
   }
 
-  function DeleteAmount(id: number) {
+  function DeleteFile(id: number) {
     return function () {
       axios
         .delete(Api(`employee/tender/amount/${id}`))
@@ -56,7 +57,17 @@ function AttachmentsSection() {
         });
     };
   }
-
+  function saveFile() {
+    axios
+      .get(Api(`employee/tender/file/save/${tenderContext.tenderId}`))
+      .then((res) => {
+        console.log(res);
+        tenderContext.getTenderData && tenderContext.getTenderData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -110,7 +121,7 @@ function AttachmentsSection() {
                       </IconButton>
                       <IconButton
                         size="small"
-                        onClick={DeleteAmount(file.id)}
+                        onClick={DeleteFile(file.id)}
                         color="error"
                       >
                         <DeleteIcon />
@@ -120,6 +131,11 @@ function AttachmentsSection() {
                 ))}
               </TableBody>
             </Table>
+            <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+              <Button type="submit" variant="contained" onClick={saveFile}>
+                حفظ
+              </Button>
+            </Box>
           </TableContainer>
         )}
         <SetDialog

@@ -27,7 +27,6 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
     }
   }, [tenderAmount?.id, !!tenderAmount]);
   const intialAmountData = {
-    tender_id: `${tenderContext?.tenderId}`,
     name: "",
     amount: "",
     aria: "",
@@ -49,7 +48,7 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
         Api(
           `employee/tender/amount${tenderAmount ? "/" + tenderAmount.id : ""}`
         ),
-        amountData
+        { ...amountData, tender_id: `${tenderContext?.tenderId}` }
       )
       .then((res) => {
         console.log(res);
@@ -70,7 +69,6 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
         onSubmit={handleSubmit}
       >
         <IconButton
-          aria-label="delete"
           size="small"
           sx={{
             position: "absolute",
@@ -163,7 +161,7 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
             variant="contained"
             type="submit"
           >
-            اضافة
+            {tenderAmount ? "تعديل" : "اضافة"}
           </LoadingButton>
         </DialogActions>
       </Dialog>

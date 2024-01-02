@@ -56,6 +56,17 @@ function AmountsSection() {
         });
     };
   }
+  function saveAmount() {
+    axios
+      .get(Api(`employee/tender/amount/save/${tenderContext.tenderId}`))
+      .then((res) => {
+        console.log(res);
+        tenderContext.getTenderData && tenderContext.getTenderData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -85,7 +96,7 @@ function AmountsSection() {
               <TableBody>
                 {typeof tender === "object" &&
                   tender.tender_amounts?.map((amount) => (
-                    <TableRow>
+                    <TableRow key={amount.id}>
                       <TableCell>{amount.id}</TableCell>
                       <TableCell>{amount.name}</TableCell>
                       <TableCell>{amount.amount}</TableCell>
@@ -111,6 +122,11 @@ function AmountsSection() {
               </TableBody>
             }
           </Table>
+          <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+            <Button type="submit" variant="contained" onClick={saveAmount}>
+              حفظ
+            </Button>
+          </Box>
         </TableContainer>
         <SetDialog open={open} setOpen={setOpen} tenderAmount={amountToEdit} />
       </Stack>

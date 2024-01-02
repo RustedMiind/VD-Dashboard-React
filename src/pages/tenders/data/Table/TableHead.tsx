@@ -10,7 +10,7 @@ function TableHead() {
     <MuiTableHead>
       <TableRow>
         <TableCell>
-          <Checkbox />
+          <Checkbox disabled />
         </TableCell>
         <TableCell>الرقم المرجعي</TableCell>
         <TableCell>رقم المنافسة</TableCell>
