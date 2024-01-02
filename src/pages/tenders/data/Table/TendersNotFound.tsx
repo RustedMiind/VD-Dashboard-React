@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import img1 from "../../../../assets/images/branch-empty.png";
 import { NavLink } from "react-router-dom";
 
-export default function TenderNotFound() {
+export default function TenderNotFound(props: PropsType) {
   return (
     <Stack>
       <Paper
@@ -25,8 +25,7 @@ export default function TenderNotFound() {
               <Button
                 startIcon={<AddCircleOutlineIcon />}
                 variant="contained"
-                component={NavLink}
-                to="create"
+                onClick={props.openCreateDialog}
               >
                 إضافة منافسة
               </Button>
@@ -37,3 +36,7 @@ export default function TenderNotFound() {
     </Stack>
   );
 }
+
+type PropsType = {
+  openCreateDialog: () => void;
+};

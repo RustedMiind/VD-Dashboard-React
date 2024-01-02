@@ -16,13 +16,17 @@ import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
 import { Typography } from "@mui/material";
 import TenderNotFound from "./TendersNotFound";
+import CreateDialog from "../CreateDialog";
 
-function TendersTable() {
+function TendersTable(props: PropsType) {
   const { tenderTableData, limit, setLimit } = useContext(TableContext);
+
   return (
     <Stack>
       {tenderTableData === "loading" && <LoadingTable rows={5} cols={9} />}
-      {tenderTableData === "empty" && <TenderNotFound />}
+      {tenderTableData === "empty" && (
+        <TenderNotFound openCreateDialog={props.openCreateDialog} />
+      )}
       {tenderTableData === "error" && (
         <NotFound title="حدث خطأ حاول مرة أخرى" />
       )}
@@ -86,5 +90,9 @@ function TendersTable() {
     </Stack>
   );
 }
+
+type PropsType = {
+  openCreateDialog: () => void;
+};
 
 export default TendersTable;

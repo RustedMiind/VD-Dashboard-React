@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { TableContext } from "./TableContext";
 import { NavLink } from "react-router-dom";
 
-function ControlSection() {
+function ControlSection(props: PropsType) {
   const { tenderId } = useContext(TableContext);
 
   return (
@@ -16,8 +16,7 @@ function ControlSection() {
         <Button
           startIcon={<AddCircleOutlineIcon />}
           variant="contained"
-          component={NavLink}
-          to="create"
+          onClick={props.openCreateDialog}
         >
           إضافة منافسة
         </Button>
@@ -47,5 +46,9 @@ function ControlSection() {
     </Stack>
   );
 }
+
+type PropsType = {
+  openCreateDialog: () => void;
+};
 
 export default ControlSection;

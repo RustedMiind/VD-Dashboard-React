@@ -49,22 +49,26 @@ export default function MainDataForm() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setFormStatus("loading");
-    axios
-      .post<{ data: TenderData }>(
-        Api(
-          `employee/tender/data${
-            tenderContext.tenderId ? "/" + tenderContext.tenderId : ""
-          }`
-        ),
-        stateToPostDto(form)
-      )
-      .then((res) => {
-        console.log(res);
-        tenderContext.setTenderId &&
-          tenderContext.setTenderId(res.data.data.id);
-      })
-      .catch(console.log);
+    if (typeof tenderContext.tender === "object") {
+      setFormStatus("loading");
+      axios
+        .post<{ data: TenderData }>(
+          Api(
+            `employee/tender/data${
+              tenderContext.tender?.tenderdata
+                ? "/" + tenderContext.tender.tenderdata.id
+                : ""
+            }`
+          ),
+          stateToPostDto(form)
+        )
+        .then((res) => {
+          console.log(res);
+          tenderContext.setTenderId &&
+            tenderContext.setTenderId(res.data.data.id);
+        })
+        .catch(console.log);
+    }
   }
   return (
     <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
