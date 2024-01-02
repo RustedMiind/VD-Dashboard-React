@@ -6,6 +6,7 @@ import { Stack } from "@mui/material";
 import { useContext, useState } from "react";
 import { TenderContext } from "../TenderCondext";
 import AmountsSection from "./AmountsSection";
+import AttachmentsSection from "./AttachmentsSection";
 function FormsSection() {
   const tenderContext = useContext(TenderContext);
 
@@ -55,9 +56,13 @@ function FormsSection() {
       >
         <AmountsSection />
       </SeparatedAccordion>
-      <Typography variant="body1" color="initial">
-        Form 4
-      </Typography>
+      <SeparatedAccordion
+        expanded={isCurrentExpanded(4)}
+        onChange={expand(4)}
+        title="مرفقات المنافسة"
+      >
+        <AttachmentsSection />
+      </SeparatedAccordion>
     </Stack>
   );
 }
