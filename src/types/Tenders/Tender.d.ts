@@ -1,4 +1,4 @@
-import { DB_Boolean } from "../";
+import { DB_Boolean, Department } from "../";
 
 export type TenderFormOptions = {};
 
@@ -28,6 +28,7 @@ export type TenderData = {
   organization_id: number;
   price: number;
   type_id: number;
+  department?: Department;
   // "activity": null,
   period: number;
   apply_id: number;

@@ -7,7 +7,12 @@ export function reducer(
 ): TenderDataState {
   switch (action.type) {
     case "SET_BRANCH_ID":
-      return { ...state, branchId: action.payload };
+      return {
+        ...state,
+        managementId: "",
+        departmentId: "",
+        branchId: action.payload,
+      };
     case "SET_MANAGEMENT_ID":
       return { ...state, managementId: action.payload };
     case "SET_REFERENCE_NUMBER":
@@ -70,7 +75,7 @@ export function stateToPostDto(state: TenderDataState): PostDto {
   return {
     branch_id: state.branchId,
     code_reference: state.referenceNumber,
-    department_id: state.referenceNumber,
+    department_id: state.departmentId,
     end_date: state.endDate,
     strat_date: state.applyDate,
     management_id: state.managementId,

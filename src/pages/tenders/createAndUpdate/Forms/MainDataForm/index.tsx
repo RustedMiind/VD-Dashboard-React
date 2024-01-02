@@ -26,6 +26,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { TenderData } from "../../../../../types";
+import getFormOptions from "../../getFormOptions";
 
 const obj = [
   {
@@ -40,7 +41,7 @@ export default function MainDataForm() {
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const [options, setOptions] = useState<OptionsType>({});
 
-  useEffect(() => {}, []);
+  useEffect(getOptions, [form.branchId, form.managementId]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -73,9 +74,9 @@ export default function MainDataForm() {
               dispatch(generateReducerAction("SET_BRANCH_ID", e.target.value));
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
+            {options.branches?.map((branch) => (
+              <MenuItem key={branch.value} value={branch.value}>
+                {branch.name}
               </MenuItem>
             ))}
           </TextField>
@@ -93,9 +94,9 @@ export default function MainDataForm() {
               );
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
+            {options.managementes?.map((management) => (
+              <MenuItem key={management.value} value={management.value}>
+                {management.name}
               </MenuItem>
             ))}
           </TextField>
@@ -177,9 +178,9 @@ export default function MainDataForm() {
                 )
               );
             }}
-            options={obj.map((item) => ({
+            options={options.organization?.map((item) => ({
               label: item.name,
-              value: item.id,
+              value: item.value,
             }))}
           />
         </AddLabelToEl>
@@ -221,8 +222,8 @@ export default function MainDataForm() {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
+            {options.tenderTypes?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>
             ))}
@@ -241,8 +242,8 @@ export default function MainDataForm() {
               );
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
+            {options.departments?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>
             ))}
@@ -304,9 +305,9 @@ export default function MainDataForm() {
               );
             }}
           >
-            {obj.map((method) => (
+            {options.applyMethods?.map((method) => (
               <FormControlLabel
-                value={method.id}
+                value={method.value}
                 control={<Radio />}
                 label={method.name}
               />
@@ -319,16 +320,17 @@ export default function MainDataForm() {
         <Box display={"flex"} flexDirection={"row"}>
           <Typography alignSelf={"center"}>الضمان المطلوب</Typography>
           <FormGroup row sx={{ ml: 2 }}>
-            {obj.map((method) => (
+            {options.warranties?.map((method) => (
               <FormControlLabel
-                checked={form.requiredWarranty.includes(method.id)}
+                key={method.value}
+                checked={form.requiredWarranty.includes(method.value)}
                 sx={{ ml: 2 }}
                 control={<Checkbox />}
                 label={method.name}
-                value={method.id}
+                value={method.value}
                 onChange={(e) => {
                   dispatch(
-                    generateReducerAction("TOGGLE_WARRANTY_ID", method.id)
+                    generateReducerAction("TOGGLE_WARRANTY_ID", method.value)
                   );
                 }}
               />
@@ -343,6 +345,35 @@ export default function MainDataForm() {
       </Grid>
     </Grid>
   );
+  function getOptions() {
+    getFormOptions({
+      branch_id: form.branchId,
+      management_id: form.managementId,
+    })
+      .then((data) => {
+        setOptions({
+          allEmployees: toOptionArr(data.employees_branch),
+          branches: toOptionArr(data.banches),
+          managementEmployee: toOptionArr(data.employees_management),
+          managementes: toOptionArr(data.managements),
+          departments: toOptionArr(data.departments),
+          applyMethods: toOptionArr(data.apply),
+          warranties: toOptionArr(data.warranty),
+          organization: toOptionArr(data.organization),
+          tenderTypes: toOptionArr(data.type),
+        });
+      })
+      .catch((err) => {});
+  }
+}
+
+function toOptionArr(
+  arr: { id: number; name: string }[] | undefined
+): OptionType[] | undefined {
+  return arr?.map((e) => ({
+    name: e.name,
+    value: e.id.toString(),
+  }));
 }
 
 type FormStatus = "none" | "loading" | "error";
@@ -351,11 +382,15 @@ type OptionsType = {
   branches?: OptionType[];
   departments?: OptionType[];
   managementes?: OptionType[];
-  departmentEmployees?: OptionType[];
+  managementEmployee?: OptionType[];
   allEmployees?: OptionType[];
+  applyMethods?: OptionType[];
+  warranties?: OptionType[];
+  organization?: OptionType[];
+  tenderTypes?: OptionType[];
 };
 
-type OptionType = { id: string; value: string };
+type OptionType = { name: string; value: string };
 
 type TenderTypeType = {
   id: number;
