@@ -43,6 +43,7 @@ function ManagersForm() {
         )
         .then((res) => {
           console.log(res);
+          tenderContext.getTenderData && tenderContext.getTenderData();
         })
         .catch(console.log);
   }
