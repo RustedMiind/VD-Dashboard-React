@@ -1,17 +1,49 @@
 import { DialogActions, IconButton, Typography } from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
-import React from "react";
+import React, { FormEvent, useContext, useState } from "react";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import UploadFileInput from "../../../../../../components/UploadFileInput";
+import axios from "axios";
+import { Api } from "../../../../../../constants";
+import { objectToFormData } from "../../../../../../methods";
+import { TenderContext } from "../../../TenderCondext";
 
 export default function SetDialog({
   open,
   setOpen,
   handleOpenDialog,
 }: TypeProps) {
+  const [form, setForm] = useState<FormType>({ description: "", name: "" });
+  const { getTenderData } = useContext(TenderContext);
+  function updateForm(partial: Partial<FormType>) {
+    setForm({ ...form, ...partial });
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
+    e.preventDefault();
+    axios
+      .post(
+        Api("employee/tender/file"),
+        objectToFormData({
+          "tender id": 1,
+          description: form.description,
+          name: form.name,
+          image: form.file,
+        })
+      )
+      .then((result) => {
+        setOpen(false);
+        getTenderData && getTenderData();
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <>
       <Dialog
@@ -19,7 +51,7 @@ export default function SetDialog({
         open={open}
         onClose={handleOpenDialog}
         component="form"
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
       >
         <IconButton
           aria-label="delete"
@@ -46,11 +78,27 @@ export default function SetDialog({
                 اسم المرفق
                 <RequiredSymbol />
               </Typography>
-              <TextField size="small" fullWidth placeholder="اسم المرفق " />
+              <TextField
+                size="small"
+                fullWidth
+                placeholder="اسم المرفق "
+                value={form.name}
+                onChange={(e) => {
+                  updateForm({ name: e.target.value });
+                }}
+              />
             </Grid>
             <Grid p={1} item md={6}>
               <Typography>وصف المرفق</Typography>
-              <TextField placeholder="وصف المرفق" fullWidth size="small" />
+              <TextField
+                placeholder="وصف المرفق"
+                fullWidth
+                size="small"
+                value={form.description}
+                onChange={(e) => {
+                  updateForm({ description: e.target.value });
+                }}
+              />
             </Grid>
             <Grid p={1} item md={12}>
               <Typography>ارفاق ملف</Typography>
@@ -58,8 +106,9 @@ export default function SetDialog({
               <UploadFileInput
                 size="sm"
                 subTitle=""
+                value={form.file}
                 setValue={(file) => {
-                  // dispatch({ type: "SET_FILE", payload: file });
+                  updateForm({ file });
                 }}
               />
             </Grid>
@@ -83,4 +132,10 @@ type TypeProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenDialog: () => void;
+};
+
+type FormType = {
+  name: string;
+  description: string;
+  file?: File;
 };
