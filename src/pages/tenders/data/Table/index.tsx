@@ -15,13 +15,14 @@ import { TableContext } from "../TableContext";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
 import { Typography } from "@mui/material";
+import TenderNotFound from "./TendersNotFound";
 
 function TendersTable() {
   const { tenderTableData, limit, setLimit } = useContext(TableContext);
   return (
     <Stack>
       {tenderTableData === "loading" && <LoadingTable rows={5} cols={9} />}
-      {tenderTableData === "empty" && <NotFound title="لا يوجد منافسات" />}
+      {tenderTableData === "empty" && <TenderNotFound />}
       {tenderTableData === "error" && (
         <NotFound title="حدث خطأ حاول مرة أخرى" />
       )}

@@ -13,7 +13,12 @@ function ControlSection() {
   return (
     <Stack direction={"row"} justifyContent={"space-between"}>
       <Box>
-        <Button startIcon={<AddCircleOutlineIcon />} variant="contained">
+        <Button
+          startIcon={<AddCircleOutlineIcon />}
+          variant="contained"
+          component={NavLink}
+          to="create"
+        >
           إضافة منافسة
         </Button>
       </Box>

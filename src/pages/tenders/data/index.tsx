@@ -3,9 +3,12 @@ import ControlSection from "./ControlSection";
 import TendersTable from "./Table";
 import TendersFilters from "./Filters";
 import Counters from "./Counters";
-import { TenderTableContextProvider } from "./TableContext";
+import { TableContext, TenderTableContextProvider } from "./TableContext";
+import { useContext } from "react";
 
 function TendersData() {
+  const { tenderTableData } = useContext(TableContext);
+
   return (
     <TenderTableContextProvider>
       <Stack>
