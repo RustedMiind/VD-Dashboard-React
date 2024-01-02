@@ -5,9 +5,8 @@ import {
   TableRow,
   Checkbox,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { formatDate, generateUndefinedArray } from "../../../../methods";
+import { generateUndefinedArray } from "../../../../methods";
 import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import LimitTypography from "../../../../components/LimitTypograpgy";
@@ -35,7 +34,7 @@ function TableBody() {
     <MuiTableBody>
       {Array.isArray(tenderTableData) &&
         tenderTableData.map((tender) => (
-          <TableRow>
+          <TableRow key={tender.id}>
             <TableCell>
               <Checkbox
                 checked={tenderId?.includes(tender.id)}
@@ -45,7 +44,7 @@ function TableBody() {
             </TableCell>
             <TableCell>{tender.tenderdata?.code_reference}</TableCell>
             <TableCell>{tender.tenderdata?.code_tender}</TableCell>
-            <TableCell>جهة حكومية</TableCell>
+            <TableCell>{tender.tenderdata?.organization?.name}</TableCell>
             <TableCell>
               <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
             </TableCell>

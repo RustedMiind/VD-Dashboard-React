@@ -35,5 +35,15 @@ export type TenderData = {
   apply_id: number;
   created_at: string;
   updated_at: string;
+  organization: Organization;
   // "deleted_at": null
+};
+
+type Organization = {
+  // created_at: "2024-01-01T18:36:29.000000Z";
+  // deleted_at: null;
+  id: number;
+  name: string;
+  number: number;
+  // updated_at: "2024-01-01T18:36:29.000000Z";
 };
