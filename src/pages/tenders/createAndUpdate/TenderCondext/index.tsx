@@ -52,6 +52,8 @@ export function TenderContextProfider({
     else formStatus = "complete";
   }
 
+  console.log(formStatus);
+
   return (
     <TenderContext.Provider
       value={{

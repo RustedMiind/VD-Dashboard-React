@@ -30,16 +30,19 @@ function ManagersForm() {
     [options, setOptions] = useState<OptionsType>({});
   useEffect(getOptions, [typeof tenderContext.tender]);
   console.log("options :", options);
-  function updateOptions(partial: Partial<OptionsType>) {
-    setOptions({ ...options, ...partial });
-  }
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (tenderContext.tenderId)
+    if (typeof tenderContext.tender === "object")
       axios
         .post<{ data: unknown }>(
-          Api(`employee/tender/task`),
-          stateToPostDto(form, tenderContext.tenderId?.toString() || "")
+          Api(
+            `employee/tender/task${
+              tenderContext.tender.tender_tasks?.id
+                ? "/" + tenderContext.tender.tender_tasks.id
+                : ""
+            }`
+          ),
+          stateToPostDto(form, tenderContext.tender?.id.toString() || "")
         )
         .then((res) => {
           console.log(res);
@@ -47,6 +50,17 @@ function ManagersForm() {
         })
         .catch(console.log);
   }
+  useEffect(() => {
+    if (
+      typeof tenderContext.tender === "object" &&
+      tenderContext.tender.tender_tasks
+    ) {
+      dispatch({
+        type: "EXTRACT_DTO",
+        payload: tenderContext.tender.tender_tasks,
+      });
+    }
+  }, [tenderContext.tenderId, typeof tenderContext.tender]);
   // useEffect();
   return (
     <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
@@ -196,7 +210,7 @@ function ManagersForm() {
       <GridItem>
         <FormGroup row>
           <Typography alignSelf={"center"} mr={2} fontWeight={600}>
-            الملفات المطلوب
+            الملفات المطلوبة
           </Typography>
           {options.technicalFiles?.map((method) => (
             <FormControlLabel

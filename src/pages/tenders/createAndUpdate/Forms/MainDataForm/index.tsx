@@ -28,13 +28,6 @@ import { Api } from "../../../../../constants";
 import { TenderData } from "../../../../../types";
 import getFormOptions from "../../getFormOptions";
 
-const obj = [
-  {
-    id: "1",
-    name: "none",
-  },
-];
-
 export default function MainDataForm() {
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
