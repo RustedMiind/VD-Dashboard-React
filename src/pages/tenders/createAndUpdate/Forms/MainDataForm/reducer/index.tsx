@@ -1,3 +1,4 @@
+import { isStringAllNumbers } from "../../../../../../methods";
 import { ReducerAction } from "../../../../../../types";
 
 export function reducer(
@@ -6,13 +7,22 @@ export function reducer(
 ): TenderDataState {
   switch (action.type) {
     case "SET_BRANCH_ID":
-      return { ...state, branchId: action.payload };
+      return {
+        ...state,
+        managementId: "",
+        departmentId: "",
+        branchId: action.payload,
+      };
     case "SET_MANAGEMENT_ID":
       return { ...state, managementId: action.payload };
     case "SET_REFERENCE_NUMBER":
-      return { ...state, referenceNumber: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, referenceNumber: action.payload }
+        : state;
     case "SET_NUMBER":
-      return { ...state, number: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, number: action.payload }
+        : state;
     case "SET_NAME":
       return { ...state, name: action.payload };
     case "SET_APPLY_DATE":
@@ -22,7 +32,9 @@ export function reducer(
     case "SET_END_DATE":
       return { ...state, endDate: action.payload };
     case "SET_PRICE":
-      return { ...state, price: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, price: action.payload }
+        : state;
     case "SET_TYPE_ID":
       return { ...state, typeId: action.payload };
     case "SET_DEPARTMENT_ID":
@@ -30,11 +42,26 @@ export function reducer(
     case "SET_ACTIVITY":
       return { ...state, activity: action.payload };
     case "SET_CONTRACT_DURATION":
-      return { ...state, contractDuration: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, contractDuration: action.payload }
+        : state;
     case "SET_APPLY_TYPE_ID":
       return { ...state, applyTypeId: action.payload };
-    case "SET_REQUIRED_WARRANTY":
-      return { ...state, requiredWarranty: action.payload };
+    case "TOGGLE_WARRANTY_ID":
+      const warrantyId = action.payload;
+      if (state.requiredWarranty.includes(warrantyId)) {
+        return {
+          ...state,
+          requiredWarranty: state.requiredWarranty.filter(
+            (wr) => warrantyId !== wr
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          requiredWarranty: [...state.requiredWarranty, action.payload],
+        };
+      }
     case "SET_OBJECT":
       return { ...state, ...action.payload };
     case "SET_RESET":
@@ -43,6 +70,44 @@ export function reducer(
       return state;
   }
 }
+
+export function stateToPostDto(state: TenderDataState): PostDto {
+  return {
+    branch_id: state.branchId,
+    code_reference: state.referenceNumber,
+    department_id: state.departmentId,
+    end_date: state.endDate,
+    strat_date: state.applyDate,
+    management_id: state.managementId,
+    name: state.name,
+    organization_id: state.governmentalOrganizationId,
+    price: state.price,
+    type_id: state.typeId,
+    warranty_id: state.requiredWarranty,
+    activity: state.activity,
+    code_tender: state.number,
+    period: state.contractDuration,
+    apply_id: state.applyTypeId,
+  };
+}
+
+type PostDto = {
+  department_id: string;
+  type_id: string;
+  branch_id: string;
+  management_id: string;
+  code_reference: string;
+  code_tender: string;
+  activity: string;
+  period: string;
+  name: string;
+  strat_date: string;
+  end_date: string;
+  organization_id: string;
+  price: string;
+  warranty_id: string[];
+  apply_id: string;
+};
 
 type TenderDataState = {
   branchId: string;
@@ -97,8 +162,8 @@ interface SetActivity extends ReducerAction<string, "SET_ACTIVITY"> {}
 interface SetContractDuration
   extends ReducerAction<string, "SET_CONTRACT_DURATION"> {}
 interface SetApplyTypeId extends ReducerAction<string, "SET_APPLY_TYPE_ID"> {}
-interface SetRequiredWarranty
-  extends ReducerAction<string[], "SET_REQUIRED_WARRANTY"> {}
+interface ToggleWarrantyId
+  extends ReducerAction<string, "TOGGLE_WARRANTY_ID"> {}
 interface SetPartial
   extends ReducerAction<Partial<TenderDataState>, "SET_OBJECT"> {}
 interface SetReset
@@ -119,6 +184,6 @@ type ActionTypes =
   | SetActivity
   | SetContractDuration
   | SetApplyTypeId
-  | SetRequiredWarranty
+  | ToggleWarrantyId
   | SetPartial
   | SetReset;

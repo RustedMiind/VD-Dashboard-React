@@ -18,37 +18,52 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { TenderContext } from "../../TenderCondext";
-import { initialTenderDataState, reducer } from "./reducer";
+import { initialTenderDataState, reducer, stateToPostDto } from "./reducer";
 import generateReducerAction from "../../../../../methods/conversions/generateReducerAction";
 import dayjs from "dayjs";
+import axios from "axios";
+import { Api } from "../../../../../constants";
+import { TenderData } from "../../../../../types";
+import getFormOptions from "../../getFormOptions";
+
 const obj = [
-  { name: "جده", id: 1 },
-  { name: "جده", id: 2 },
-  { name: "جده", id: 3 },
-  { name: "جده", id: 4 },
+  {
+    id: "1",
+    name: "none",
+  },
 ];
-const applyMethod = [
-  { name: "فني ومالي", id: 1 },
-  { name: "فني", id: 2 },
-  { name: "مالي", id: 3 },
-  { name: "اخرى", id: 4 },
-];
+
 export default function MainDataForm() {
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const [options, setOptions] = useState<OptionsType>({});
 
+  useEffect(getOptions, [form.branchId, form.managementId]);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("loading");
+    axios
+      .post<{ data: TenderData }>(
+        Api(
+          `employee/tender/data${
+            tenderContext.tenderId ? "/" + tenderContext.tenderId : ""
+          }`
+        ),
+        stateToPostDto(form)
+      )
+      .then((res) => {
+        console.log(res);
+        tenderContext.setTenderId &&
+          tenderContext.setTenderId(res.data.data.id);
+      })
+      .catch(console.log);
+  }
   return (
-    <Grid
-      container
-      spacing={2}
-      component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        tenderContext.setTenderId && tenderContext.setTenderId(1);
-      }}
-    >
+    <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
       <GridItem>
         <AddLabelToEl label="نوع الفرع" required>
           <TextField
@@ -59,9 +74,9 @@ export default function MainDataForm() {
               dispatch(generateReducerAction("SET_BRANCH_ID", e.target.value));
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
+            {options.branches?.map((branch) => (
+              <MenuItem key={branch.value} value={branch.value}>
+                {branch.name}
               </MenuItem>
             ))}
           </TextField>
@@ -79,9 +94,9 @@ export default function MainDataForm() {
               );
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
+            {options.managementes?.map((management) => (
+              <MenuItem key={management.value} value={management.value}>
+                {management.name}
               </MenuItem>
             ))}
           </TextField>
@@ -163,9 +178,9 @@ export default function MainDataForm() {
                 )
               );
             }}
-            options={obj.map((item) => ({
+            options={options.organization?.map((item) => ({
               label: item.name,
-              value: item.id,
+              value: item.value,
             }))}
           />
         </AddLabelToEl>
@@ -207,8 +222,8 @@ export default function MainDataForm() {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
+            {options.tenderTypes?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>
             ))}
@@ -227,8 +242,8 @@ export default function MainDataForm() {
               );
             }}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
+            {options.departments?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>
             ))}
@@ -266,7 +281,6 @@ export default function MainDataForm() {
           />
         </AddLabelToEl>
       </GridItem>
-      {/* All below not statefull */}
       <Grid item xs={12}>
         <FormControl
           sx={{
@@ -284,10 +298,16 @@ export default function MainDataForm() {
             name="row-radio-buttons-group"
             aria-labelledby="demo-row-radio-buttons-group-label"
             sx={{ ml: 2 }}
+            value={form.applyTypeId}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_APPLY_TYPE_ID", e.target.value)
+              );
+            }}
           >
-            {applyMethod.map((method) => (
+            {options.applyMethods?.map((method) => (
               <FormControlLabel
-                value={method.id}
+                value={method.value}
                 control={<Radio />}
                 label={method.name}
               />
@@ -300,11 +320,19 @@ export default function MainDataForm() {
         <Box display={"flex"} flexDirection={"row"}>
           <Typography alignSelf={"center"}>الضمان المطلوب</Typography>
           <FormGroup row sx={{ ml: 2 }}>
-            {applyMethod.map((method) => (
+            {options.warranties?.map((method) => (
               <FormControlLabel
+                key={method.value}
+                checked={form.requiredWarranty.includes(method.value)}
                 sx={{ ml: 2 }}
                 control={<Checkbox />}
                 label={method.name}
+                value={method.value}
+                onChange={(e) => {
+                  dispatch(
+                    generateReducerAction("TOGGLE_WARRANTY_ID", method.value)
+                  );
+                }}
               />
             ))}
           </FormGroup>
@@ -317,4 +345,70 @@ export default function MainDataForm() {
       </Grid>
     </Grid>
   );
+  function getOptions() {
+    getFormOptions({
+      branch_id: form.branchId,
+      management_id: form.managementId,
+    })
+      .then((data) => {
+        setOptions({
+          allEmployees: toOptionArr(data.employees_branch),
+          branches: toOptionArr(data.banches),
+          managementEmployee: toOptionArr(data.employees_management),
+          managementes: toOptionArr(data.managements),
+          departments: toOptionArr(data.departments),
+          applyMethods: toOptionArr(data.apply),
+          warranties: toOptionArr(data.warranty),
+          organization: toOptionArr(data.organization),
+          tenderTypes: toOptionArr(data.type),
+        });
+      })
+      .catch((err) => {});
+  }
 }
+
+function toOptionArr(
+  arr: { id: number; name: string }[] | undefined
+): OptionType[] | undefined {
+  return arr?.map((e) => ({
+    name: e.name,
+    value: e.id.toString(),
+  }));
+}
+
+type FormStatus = "none" | "loading" | "error";
+
+type OptionsType = {
+  branches?: OptionType[];
+  departments?: OptionType[];
+  managementes?: OptionType[];
+  managementEmployee?: OptionType[];
+  allEmployees?: OptionType[];
+  applyMethods?: OptionType[];
+  warranties?: OptionType[];
+  organization?: OptionType[];
+  tenderTypes?: OptionType[];
+};
+
+type OptionType = { name: string; value: string };
+
+type TenderTypeType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TenderWarrantyType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TenderApplyMethodType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
