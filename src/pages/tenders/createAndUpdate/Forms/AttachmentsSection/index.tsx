@@ -48,7 +48,7 @@ function AttachmentsSection() {
   function DeleteFile(id: number) {
     return function () {
       axios
-        .delete(Api(`employee/tender/amount/${id}`))
+        .delete(Api(`employee/tender/file/${id}`))
         .then((res) => {
           getTenderData && getTenderData();
         })
@@ -99,7 +99,7 @@ function AttachmentsSection() {
                   <TableRow>
                     <TableCell>{file.id}</TableCell>
                     <TableCell>{file.name}</TableCell>
-                    <TableCell>{file.description}</TableCell>
+                    <TableCell>{file.discription}</TableCell>
                     <TableCell>
                       <Stack spacing={1} width="fit-content">
                         {file.media?.map((media) => (

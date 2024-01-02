@@ -18,14 +18,14 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
       updateAmountData({
         amount: tenderAmount.amount,
         aria: tenderAmount.aria,
-        discription: "",
+        discription: tenderAmount?.discription,
         name: tenderAmount.name,
         priod: tenderAmount.priod,
       });
     } else {
       setAmountData(intialAmountData);
     }
-  }, [tenderAmount?.id, !!tenderAmount]);
+  }, [tenderAmount?.id, !!tenderAmount, open]);
   const intialAmountData = {
     name: "",
     amount: "",
@@ -83,7 +83,7 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
           <GridCloseIcon fontSize="inherit" />
         </IconButton>
         <DialogTitle textAlign={"center"} fontWeight={600}>
-          اضافة بند
+          {tenderAmount ? "تعديل البند" : "اضافة البند"}
         </DialogTitle>
         <DialogContent>
           <Grid container>

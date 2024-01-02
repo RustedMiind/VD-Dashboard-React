@@ -21,13 +21,13 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
   useEffect(() => {
     if (fileToEdit) {
       setForm({
-        description: fileToEdit.description || "",
+        description: fileToEdit.discription || "",
         name: fileToEdit.name,
       });
     } else {
       setForm({ description: "", name: "" });
     }
-  }, [fileToEdit?.id, !!fileToEdit]);
+  }, [fileToEdit?.id, !!fileToEdit, open]);
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     axios
@@ -35,7 +35,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
         Api(`employee/tender/file${fileToEdit ? "/" + fileToEdit.id : ""}`),
         objectToFormData({
           "tender id": tenderId,
-          description: form.description,
+          discription: form.description,
           name: form.name,
           image: form.file,
         })

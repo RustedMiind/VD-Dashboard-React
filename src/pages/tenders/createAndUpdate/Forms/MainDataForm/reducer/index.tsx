@@ -20,9 +20,7 @@ export function reducer(
         ? { ...state, referenceNumber: action.payload }
         : state;
     case "SET_NUMBER":
-      return isStringAllNumbers(action.payload)
-        ? { ...state, number: action.payload }
-        : state;
+      return { ...state, number: action.payload };
     case "SET_NAME":
       return { ...state, name: action.payload };
     case "SET_APPLY_DATE":
