@@ -22,12 +22,15 @@ import { TenderContext } from "../../TenderCondext";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { TenderAmount } from "../../../../../types/Tenders/TenderAmount";
+import { useSnackbar } from "notistack";
 
 function AmountsSection() {
   const tenderContext = useContext(TenderContext);
   const [amountToEdit, setAmountToEdit] = useState<TenderAmount | undefined>(
     undefined
   );
+  const snackbar = useSnackbar();
+
   const { tender } = useContext(TenderContext);
   const [open, setOpen] = useState<boolean>(false);
   function handleOpenDialog() {
@@ -50,9 +53,11 @@ function AmountsSection() {
         .then((res) => {
           console.log(res);
           tenderContext.getTenderData && tenderContext.getTenderData();
+          snackbar.enqueueSnackbar("تم حذف البند بنجاح");
         })
         .catch((err) => {
           console.log(err);
+          snackbar.enqueueSnackbar("تعذر في حذف البند ");
         });
     };
   }
@@ -62,9 +67,11 @@ function AmountsSection() {
       .then((res) => {
         console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
+        snackbar.enqueueSnackbar("تم حفظ المهام بنجاح");
       })
       .catch((err) => {
         console.log(err);
+        snackbar.enqueueSnackbar("تعذر المهام بنجاح");
       });
   }
   return (

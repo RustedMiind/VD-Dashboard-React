@@ -1,4 +1,9 @@
-import { DialogActions, IconButton, Typography } from "@mui/material";
+import {
+  DialogActions,
+  DialogContentText,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
 import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
@@ -11,14 +16,19 @@ import { Api } from "../../../../../../constants";
 import { objectToFormData } from "../../../../../../methods";
 import { TenderContext } from "../../../TenderCondext";
 import { TenderFile } from "../../../../../../types/Tenders/TenderFile";
+import { useSnackbar } from "notistack";
+import { joinObjectValues } from "../../../../../../methods/joinObjectValues";
 
 export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
   const [form, setForm] = useState<FormType>({ description: "", name: "" });
   const { getTenderData, tenderId } = useContext(TenderContext);
+  const [error, setError] = useState<undefined | React.ReactNode>(undefined);
+  const snackbar = useSnackbar();
   function updateForm(partial: Partial<FormType>) {
     setForm({ ...form, ...partial });
   }
   useEffect(() => {
+    console.log(fileToEdit);
     if (fileToEdit) {
       setForm({
         description: fileToEdit.discription || "",
@@ -44,9 +54,22 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
         getTenderData && getTenderData();
         onClose();
         console.log(result);
+        snackbar.enqueueSnackbar(
+          fileToEdit ? "تم تعديل بيانات المرفق" : "تم حفظ بيانات المرفق"
+        );
+        setError(undefined);
       })
       .catch((err) => {
         console.log(err);
+        snackbar.enqueueSnackbar(
+          fileToEdit
+            ? "تعذر في تعديل بيانات المرفق"
+            : "تعذر في حفظ بيانات المرفق",
+          {
+            variant: "error",
+          }
+        );
+        setError(joinObjectValues(err.response?.data?.data));
       });
   }
 
@@ -75,9 +98,10 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
           <GridCloseIcon fontSize="inherit" />
         </IconButton>
         <DialogTitle textAlign={"center"} fontWeight={600}>
-          {fileToEdit ? "تعديل المرفق" : "اضافة مرفق"}
+          {typeof fileToEdit === "object" ? "تعديل المرفق" : "اضافة مرفق"}
         </DialogTitle>
         <DialogContent>
+          <DialogContentText color={"error.main"}>{error}</DialogContentText>
           <Grid container>
             <Grid p={1} item md={6}>
               <Typography>
@@ -95,7 +119,9 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
               />
             </Grid>
             <Grid p={1} item md={6}>
-              <Typography>وصف المرفق</Typography>
+              <Typography>
+                وصف المرفق <RequiredSymbol />
+              </Typography>
               <TextField
                 placeholder="وصف المرفق"
                 fullWidth
@@ -108,7 +134,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
             </Grid>
             {!fileToEdit && (
               <Grid p={1} item md={12}>
-                <Typography>ارفاق ملف</Typography>
+                <Typography>ارفاق ملف </Typography>
 
                 <UploadFileInput
                   size="sm"
