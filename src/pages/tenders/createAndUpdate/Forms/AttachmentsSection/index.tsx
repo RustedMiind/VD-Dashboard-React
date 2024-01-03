@@ -23,6 +23,7 @@ import { TenderContext } from "../../TenderCondext";
 import { TenderFile } from "../../../../../types/Tenders/TenderFile";
 import axios from "axios";
 import { Api } from "../../../../../constants";
+import { useSnackbar } from "notistack";
 
 function AttachmentsSection() {
   const tenderContext = useContext(TenderContext);
@@ -31,6 +32,8 @@ function AttachmentsSection() {
   const [fileToEdit, setFileToEdit] = useState<TenderFile | undefined>(
     undefined
   );
+  const snackbar = useSnackbar();
+
   function handleOpenDialog() {
     setOpen(true);
   }
@@ -51,9 +54,11 @@ function AttachmentsSection() {
         .delete(Api(`employee/tender/file/${id}`))
         .then((res) => {
           getTenderData && getTenderData();
+          snackbar.enqueueSnackbar("تم حذف المرفق بنجاح");
         })
         .catch((err) => {
           console.log(err);
+          snackbar.enqueueSnackbar("تعذر في حذف لبمرفق ");
         });
     };
   }
@@ -63,9 +68,11 @@ function AttachmentsSection() {
       .then((res) => {
         console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
+        snackbar.enqueueSnackbar("تم حفظ المرفقات بنجاح");
       })
       .catch((err) => {
         console.log(err);
+        snackbar.enqueueSnackbar("تعذر المرفقات بنجاح");
       });
   }
   return (
