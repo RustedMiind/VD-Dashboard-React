@@ -57,7 +57,7 @@ function TableBody() {
               <StatusChip color={"primary"} disabled label={"غير مدفوع"} />
             </TableCell>
             <TableCell>{tender.tenderdata?.period} يوم</TableCell>
-            <TableCell>{tender.tenderdata?.department_id}</TableCell>
+            <TableCell>{tender.tenderdata?.department?.name}</TableCell>
             <TableCell>-</TableCell>
             <TableCell>-</TableCell>
             <TableCell>-</TableCell>
