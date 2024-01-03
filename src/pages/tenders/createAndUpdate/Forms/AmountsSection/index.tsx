@@ -23,6 +23,7 @@ import axios from "axios";
 import { Api } from "../../../../../constants";
 import { TenderAmount } from "../../../../../types/Tenders/TenderAmount";
 import { useSnackbar } from "notistack";
+import { FormStatus } from "../../../../../types/FormStatus";
 
 function AmountsSection() {
   const tenderContext = useContext(TenderContext);
@@ -33,6 +34,11 @@ function AmountsSection() {
 
   const { tender } = useContext(TenderContext);
   const [open, setOpen] = useState<boolean>(false);
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const inputProps = {
+    loading: formStatus === "loading",
+    disabled: formStatus === "loading" || formStatus === "disabled",
+  };
   function handleOpenDialog() {
     setOpen(true);
   }
@@ -48,6 +54,7 @@ function AmountsSection() {
   }
   function DeleteAmount(id: number) {
     return function () {
+      setFormStatus("disabled");
       axios
         .delete(Api(`employee/tender/amount/${id}`))
         .then((res) => {
@@ -58,10 +65,14 @@ function AmountsSection() {
         .catch((err) => {
           console.log(err);
           snackbar.enqueueSnackbar("تعذر في حذف البند ");
+        })
+        .finally(() => {
+          setFormStatus("none");
         });
     };
   }
   function saveAmount() {
+    setFormStatus("loading");
     axios
       .get(Api(`employee/tender/amount/save/${tenderContext.tenderId}`))
       .then((res) => {
@@ -72,6 +83,9 @@ function AmountsSection() {
       .catch((err) => {
         console.log(err);
         snackbar.enqueueSnackbar("تعذر المهام بنجاح");
+      })
+      .finally(() => {
+        setFormStatus("none");
       });
   }
   return (
@@ -82,6 +96,7 @@ function AmountsSection() {
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
           onClick={openAddDialog}
+          {...inputProps}
         >
           اضافة بند
         </Button>
@@ -113,6 +128,7 @@ function AmountsSection() {
                         <IconButton
                           size="small"
                           onClick={openEditDialog(amount)}
+                          {...inputProps}
                         >
                           <EditNoteIcon />
                         </IconButton>
@@ -120,6 +136,7 @@ function AmountsSection() {
                           size="small"
                           onClick={DeleteAmount(amount.id)}
                           color="error"
+                          {...inputProps}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -130,7 +147,12 @@ function AmountsSection() {
             }
           </Table>
           <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
-            <Button type="submit" variant="contained" onClick={saveAmount}>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={saveAmount}
+              {...inputProps}
+            >
               حفظ
             </Button>
           </Box>

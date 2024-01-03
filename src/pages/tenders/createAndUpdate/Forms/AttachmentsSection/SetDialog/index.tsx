@@ -2,6 +2,7 @@ import {
   DialogActions,
   DialogContentText,
   IconButton,
+  LinearProgress,
   Typography,
 } from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
@@ -18,12 +19,19 @@ import { TenderContext } from "../../../TenderCondext";
 import { TenderFile } from "../../../../../../types/Tenders/TenderFile";
 import { useSnackbar } from "notistack";
 import { joinObjectValues } from "../../../../../../methods/joinObjectValues";
+import { FormStatus } from "../../../../../../types/FormStatus";
 
 export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
   const [form, setForm] = useState<FormType>({ description: "", name: "" });
   const { getTenderData, tenderId } = useContext(TenderContext);
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const snackbar = useSnackbar();
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const inputProps = {
+    loading: formStatus === "loading",
+    disabled: formStatus === "loading" || formStatus === "disabled",
+  };
+  const handleClose = formStatus === "loading" ? () => {} : onClose;
   function updateForm(partial: Partial<FormType>) {
     setForm({ ...form, ...partial });
   }
@@ -40,6 +48,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
   }, [fileToEdit?.id, !!fileToEdit, open]);
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
+    setFormStatus("loading");
     axios
       .post(
         Api(`employee/tender/file${fileToEdit ? "/" + fileToEdit.id : ""}`),
@@ -70,6 +79,9 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
           }
         );
         setError(joinObjectValues(err.response?.data?.data));
+      })
+      .finally(() => {
+        setFormStatus("none");
       });
   }
 
@@ -78,7 +90,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
       <Dialog
         fullWidth
         open={open}
-        onClose={onClose}
+        onClose={handleClose}
         component="form"
         onSubmit={handleSubmit}
       >
@@ -92,8 +104,9 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
             border: "solid 1px ",
             borderRadius: "8px",
           }}
+          {...inputProps}
           color="primary"
-          onClick={onClose}
+          onClick={handleClose}
         >
           <GridCloseIcon fontSize="inherit" />
         </IconButton>
@@ -116,6 +129,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
                 onChange={(e) => {
                   updateForm({ name: e.target.value });
                 }}
+                {...inputProps}
               />
             </Grid>
             <Grid p={1} item md={6}>
@@ -130,6 +144,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
                 onChange={(e) => {
                   updateForm({ description: e.target.value });
                 }}
+                {...inputProps}
               />
             </Grid>
             {!fileToEdit && (
@@ -147,13 +162,10 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
               </Grid>
             )}
           </Grid>
+          {formStatus === "loading" && form.file && <LinearProgress />}
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-          <LoadingButton
-            // loading={sendState === "loading"}
-            variant="contained"
-            type="submit"
-          >
+          <LoadingButton {...inputProps} variant="contained" type="submit">
             اضافة
           </LoadingButton>
         </DialogActions>

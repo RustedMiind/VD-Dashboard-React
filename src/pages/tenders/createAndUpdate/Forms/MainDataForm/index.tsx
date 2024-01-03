@@ -31,14 +31,20 @@ import { useSnackbar } from "notistack";
 import { joinObjectValues } from "../../../../../methods/joinObjectValues";
 import { LaravelValidationError } from "../../../../../types/LaravelValidationError";
 import { AxiosErrorType } from "../../../../../types/Axios";
+import { FormStatus } from "../../../../../types/FormStatus";
+import { LoadingButton } from "@mui/lab";
 
 export default function MainDataForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
-  const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const [options, setOptions] = useState<OptionsType>({});
   const snackbar = useSnackbar();
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const inputProps = {
+    loading: formStatus === "loading",
+    disabled: formStatus === "loading" || formStatus === "disabled",
+  };
   useEffect(getOptions, [form.branchId, form.managementId]);
   useEffect(() => {
     if (
@@ -54,6 +60,7 @@ export default function MainDataForm() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setFormStatus("loading");
     let path =
       typeof tenderContext.tender === "object" &&
       tenderContext.tender.tenderdata
@@ -85,6 +92,9 @@ export default function MainDataForm() {
         );
         setError(joinObjectValues(err.response?.data?.data));
         console.log(err);
+      })
+      .finally(() => {
+        setFormStatus("none");
       });
   }
   return (
@@ -101,6 +111,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_BRANCH_ID", e.target.value));
             }}
+            {...inputProps}
           >
             {options.branches?.map((branch) => (
               <MenuItem key={branch.value} value={branch.value}>
@@ -121,6 +132,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_MANAGEMENT_ID", e.target.value)
               );
             }}
+            {...inputProps}
           >
             {options.managementes?.map((management) => (
               <MenuItem key={management.value} value={management.value}>
@@ -143,6 +155,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_REFERENCE_NUMBER", e.target.value)
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -160,6 +173,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_NUMBER", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -173,6 +187,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_NAME", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -187,6 +202,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_APPLY_DATE", date?.format() || "")
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -210,6 +226,7 @@ export default function MainDataForm() {
               label: item.name,
               value: item.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -224,6 +241,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_END_DATE", date?.format() || "")
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -237,6 +255,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_PRICE", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -249,6 +268,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
+            {...inputProps}
           >
             {options.tenderTypes?.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -269,6 +289,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_DEPARTMENT_ID", e.target.value)
               );
             }}
+            {...inputProps}
           >
             {options.departments?.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -288,6 +309,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_ACTIVITY", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -306,6 +328,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_CONTRACT_DURATION", e.target.value)
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -317,6 +340,7 @@ export default function MainDataForm() {
             mt: 2,
             alignItems: "center",
           }}
+          {...inputProps}
         >
           <FormLabel id="demo-row-radio-buttons-group-label">
             طريقة التقديم
@@ -347,7 +371,7 @@ export default function MainDataForm() {
       <Grid item xs={12}>
         <Box display={"flex"} flexDirection={"row"}>
           <Typography alignSelf={"center"}>الضمان المطلوب</Typography>
-          <FormGroup row sx={{ ml: 2 }}>
+          <FormGroup row sx={{ ml: 2 }} {...inputProps}>
             {options.warranties?.map((method) => (
               <FormControlLabel
                 key={method.value}
@@ -366,9 +390,14 @@ export default function MainDataForm() {
           </FormGroup>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "end" }}>
-          <Button type="submit" variant="contained" sx={{ width: 0.05 }}>
+          <LoadingButton
+            {...inputProps}
+            type="submit"
+            variant="contained"
+            sx={{ width: 0.05 }}
+          >
             حفظ
-          </Button>
+          </LoadingButton>
         </Box>
       </Grid>
     </Grid>
@@ -403,8 +432,6 @@ function toOptionArr(
     value: e.id.toString(),
   }));
 }
-
-type FormStatus = "none" | "loading" | "error";
 
 type OptionsType = {
   branches?: OptionType[];

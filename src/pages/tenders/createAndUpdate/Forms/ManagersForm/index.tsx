@@ -27,6 +27,8 @@ import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../../types/Axios";
 import { LaravelValidationError } from "../../../../../types/LaravelValidationError";
 import { joinObjectValues } from "../../../../../methods/joinObjectValues";
+import { FormStatus } from "../../../../../types/FormStatus";
+import { LoadingButton } from "@mui/lab";
 
 function ManagersForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
@@ -36,9 +38,15 @@ function ManagersForm() {
     [options, setOptions] = useState<OptionsType>({});
   useEffect(getOptions, [typeof tenderContext.tender]);
   console.log("options :", options);
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const inputProps = {
+    loading: formStatus === "loading",
+    disabled: formStatus === "loading" || formStatus === "disabled",
+  };
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (typeof tenderContext.tender === "object") {
+      setFormStatus("loading");
       const path = tenderContext.tender.tender_tasks?.id
         ? "/" + tenderContext.tender.tender_tasks.id
         : "";
@@ -64,6 +72,9 @@ function ManagersForm() {
           );
           setError(joinObjectValues(err.response?.data?.data));
           console.log(err);
+        })
+        .finally(() => {
+          setFormStatus("none");
         });
     }
   }
@@ -100,6 +111,7 @@ function ManagersForm() {
               label: i.name,
               value: i.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -117,6 +129,7 @@ function ManagersForm() {
                 )
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -135,6 +148,7 @@ function ManagersForm() {
               label: i.name,
               value: i.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>{" "}
@@ -149,6 +163,7 @@ function ManagersForm() {
                 generateReducerAction("SET_PURCHASE_DATE", date?.format() || "")
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -169,6 +184,7 @@ function ManagersForm() {
               label: i.name,
               value: i.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -186,6 +202,7 @@ function ManagersForm() {
                 )
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -207,6 +224,7 @@ function ManagersForm() {
               label: i.name,
               value: i.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -224,11 +242,12 @@ function ManagersForm() {
                 )
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
       <GridItem>
-        <FormGroup row>
+        <FormGroup row {...inputProps}>
           <Typography alignSelf={"center"} mr={2} fontWeight={600}>
             الملفات المطلوبة
           </Typography>
@@ -259,6 +278,7 @@ function ManagersForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_NOTES", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -279,6 +299,7 @@ function ManagersForm() {
               label: i.name,
               value: i.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -296,6 +317,7 @@ function ManagersForm() {
                 )
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -316,6 +338,7 @@ function ManagersForm() {
               label: i.name,
               value: i.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -330,14 +353,15 @@ function ManagersForm() {
                 generateReducerAction("SET_APPLY_DATE", date?.format() || "")
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
       <Grid item xs={12}>
         <Box sx={{ display: "flex", justifyContent: "end" }}>
-          <Button type="submit" variant="contained" sx={{ width: 0.05 }}>
+          <LoadingButton type="submit" variant="contained" {...inputProps}>
             حفظ
-          </Button>
+          </LoadingButton>
         </Box>
       </Grid>
     </Grid>

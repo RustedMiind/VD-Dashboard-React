@@ -19,11 +19,17 @@ import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
 import { joinObjectValues } from "../../../../../../methods/joinObjectValues";
+import { FormStatus } from "../../../../../../types/FormStatus";
 
 export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
   const tenderContext = useContext(TenderContext);
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const snackbar = useSnackbar();
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const inputProps = {
+    loading: formStatus === "loading",
+    disabled: formStatus === "loading" || formStatus === "disabled",
+  };
 
   useEffect(() => {
     setError(undefined);
@@ -56,6 +62,7 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
+    setFormStatus("loading");
     axios
       .post(
         Api(
@@ -83,6 +90,9 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
         );
         setError(joinObjectValues(err.response?.data?.data));
         console.log(err);
+      })
+      .finally(() => {
+        setFormStatus("none");
       });
   }
   return (
@@ -127,10 +137,14 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
                 size="small"
                 fullWidth
                 placeholder="اسم البند "
+                {...inputProps}
               />
             </Grid>
             <Grid p={1} item md={6}>
-              <Typography>العدد</Typography>
+              <Typography>
+                العدد
+                <RequiredSymbol />
+              </Typography>
               <TextField
                 value={amountData.amount}
                 onChange={(e) => {
@@ -140,6 +154,7 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
                 placeholder="العدد"
                 fullWidth
                 size="small"
+                {...inputProps}
               />
             </Grid>
             <Grid p={1} item md={6}>
@@ -153,10 +168,14 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
                 fullWidth
                 size="small"
                 placeholder="المساحة"
+                {...inputProps}
               />
             </Grid>
             <Grid p={1} item md={6}>
-              <Typography> وصف البند</Typography>
+              <Typography>
+                وصف البند
+                <RequiredSymbol />
+              </Typography>
               <TextField
                 value={amountData.discription}
                 onChange={(e) => {
@@ -165,10 +184,14 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
                 fullWidth
                 size="small"
                 placeholder="وصف البند"
+                {...inputProps}
               />
             </Grid>
             <Grid p={1} item md={6}>
-              <Typography> المدة</Typography>
+              <Typography>
+                المدة
+                <RequiredSymbol />
+              </Typography>
               <TextField
                 value={amountData.priod}
                 onChange={(e) => {
@@ -178,16 +201,13 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
                 fullWidth
                 size="small"
                 placeholder="المدة"
+                {...inputProps}
               />
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-          <LoadingButton
-            // loading={sendState === "loading"}
-            variant="contained"
-            type="submit"
-          >
+          <LoadingButton {...inputProps} variant="contained" type="submit">
             {tenderAmount ? "تعديل" : "اضافة"}
           </LoadingButton>
         </DialogActions>
