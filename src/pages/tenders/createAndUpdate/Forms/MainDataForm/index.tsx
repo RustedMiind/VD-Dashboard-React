@@ -34,7 +34,6 @@ import { AxiosErrorType } from "../../../../../types/Axios";
 
 export default function MainDataForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
-  console.log(error);
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
@@ -70,14 +69,20 @@ export default function MainDataForm() {
         snackbar.enqueueSnackbar(
           path ? "تم تعديل بيانات المنافسة بنجاح" : "تم حفظ بيانات المنافسة"
         );
+        setError(undefined);
         console.log(res);
         tenderContext.setTenderId &&
           tenderContext.setTenderId(res.data.data.id);
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
-        snackbar.enqueueSnackbar("تعذر في حفظ بيانات المنافسة", {
-          variant: "error",
-        });
+        snackbar.enqueueSnackbar(
+          path
+            ? "تعذر في تعديل بيانات المنافسة"
+            : "تعذر في حفظ بيانات المنافسة",
+          {
+            variant: "error",
+          }
+        );
         setError(joinObjectValues(err.response?.data?.data));
         console.log(err);
       });

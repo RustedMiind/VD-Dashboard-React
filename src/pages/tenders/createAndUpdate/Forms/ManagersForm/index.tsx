@@ -23,8 +23,14 @@ import generateReducerAction from "../../../../../methods/conversions/generateRe
 import dayjs from "dayjs";
 import getFormOptions from "../../getFormOptions";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
+import { useSnackbar } from "notistack";
+import { AxiosErrorType } from "../../../../../types/Axios";
+import { LaravelValidationError } from "../../../../../types/LaravelValidationError";
+import { joinObjectValues } from "../../../../../methods/joinObjectValues";
 
 function ManagersForm() {
+  const [error, setError] = useState<undefined | React.ReactNode>(undefined);
+  const snackbar = useSnackbar();
   const tenderContext = useContext(TenderContext),
     [form, dispatch] = useReducer(reducer, initialTenderManagersState),
     [options, setOptions] = useState<OptionsType>({});
@@ -32,23 +38,34 @@ function ManagersForm() {
   console.log("options :", options);
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (typeof tenderContext.tender === "object")
+    if (typeof tenderContext.tender === "object") {
+      const path = tenderContext.tender.tender_tasks?.id
+        ? "/" + tenderContext.tender.tender_tasks.id
+        : "";
       axios
         .post<{ data: unknown }>(
-          Api(
-            `employee/tender/task${
-              tenderContext.tender.tender_tasks?.id
-                ? "/" + tenderContext.tender.tender_tasks.id
-                : ""
-            }`
-          ),
+          Api(`employee/tender/task${path}`),
           stateToPostDto(form, tenderContext.tender?.id.toString() || "")
         )
         .then((res) => {
           console.log(res);
           tenderContext.getTenderData && tenderContext.getTenderData();
+          setError(undefined);
+          snackbar.enqueueSnackbar(
+            path ? "تم تعديل مهام المنافسة بنجاح" : "تم حفظ معام المنافسة"
+          );
         })
-        .catch(console.log);
+        .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+          snackbar.enqueueSnackbar(
+            path ? "تعذر في تعديل مهام المنافسة" : "تعذر في حفظ مهام المنافسة",
+            {
+              variant: "error",
+            }
+          );
+          setError(joinObjectValues(err.response?.data?.data));
+          console.log(err);
+        });
+    }
   }
   useEffect(() => {
     if (
@@ -64,6 +81,9 @@ function ManagersForm() {
   // useEffect();
   return (
     <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
+      <Grid item xs={12}>
+        <Typography color={"error.main"}>{error}</Typography>
+      </Grid>
       {/* Managers Section */}
       <SectionTitle>مهام المنافسة (المسؤولين عن المنافسة)</SectionTitle>
       <GridItem>
