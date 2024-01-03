@@ -119,7 +119,9 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
               />
             </Grid>
             <Grid p={1} item md={6}>
-              <Typography>وصف المرفق</Typography>
+              <Typography>
+                وصف المرفق <RequiredSymbol />
+              </Typography>
               <TextField
                 placeholder="وصف المرفق"
                 fullWidth
@@ -132,7 +134,7 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
             </Grid>
             {!fileToEdit && (
               <Grid p={1} item md={12}>
-                <Typography>ارفاق ملف</Typography>
+                <Typography>ارفاق ملف </Typography>
 
                 <UploadFileInput
                   size="sm"
