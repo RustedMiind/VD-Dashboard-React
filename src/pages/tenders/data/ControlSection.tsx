@@ -6,9 +6,32 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useContext } from "react";
 import { TableContext } from "./TableContext";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { Api } from "../../../constants";
+import { useSnackbar } from "notistack";
+import { AxiosErrorType } from "../../../types/Axios";
+import { LaravelValidationError } from "../../../types/LaravelValidationError";
 
 function ControlSection(props: PropsType) {
-  const { selectedTenderId } = useContext(TableContext);
+  const { selectedTenderId, setTenderTableData } = useContext(TableContext);
+  const snackbar = useSnackbar();
+  function handleDelete() {
+    axios
+      .delete(Api("employee/tender"), { data: { tenderIds: selectedTenderId } })
+      .then((res) => {
+        snackbar.enqueueSnackbar("تم حذف المنافسات المختارة بنجاح");
+        setTenderTableData && setTenderTableData();
+      })
+      .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+        snackbar.enqueueSnackbar(
+          <>
+            تعذر في حذف المنافسات المختارة
+            {err.response?.data?.msg}
+          </>,
+          { variant: "error" }
+        );
+      });
+  }
 
   return (
     <Stack direction={"row"} justifyContent={"space-between"}>
@@ -26,8 +49,8 @@ function ControlSection(props: PropsType) {
           فلتر
         </Button>
         <Button
-          // disabled={selectedTenderId?.length == 0}
-          disabled
+          disabled={selectedTenderId?.length === 0}
+          onClick={handleDelete}
           color="error"
           variant="outlined"
           startIcon={<DeleteIcon />}

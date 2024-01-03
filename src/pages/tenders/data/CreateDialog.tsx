@@ -24,18 +24,18 @@ function CreateDialog(props: PropsType) {
           <Grid container sx={{ py: 2 }} justifyContent="space-between">
             <Grid item>
               <FormControlLabel
-                checked={true}
-                value="option1"
-                control={<Radio />}
-                label="منافسة"
-              />
-            </Grid>
-            <Grid item>
-              <FormControlLabel
                 disabled
                 value="option2"
                 control={<Radio />}
                 label="تأهيل سابق"
+              />
+            </Grid>
+            <Grid item>
+              <FormControlLabel
+                checked={true}
+                value="option1"
+                control={<Radio />}
+                label="منافسة"
               />
             </Grid>
             <Grid item>

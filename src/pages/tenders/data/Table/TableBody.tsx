@@ -46,8 +46,17 @@ function TableBody() {
               />
             </TableCell>
             <TableCell>{tender.tenderdata?.code_reference}</TableCell>
-            <TableCell>{tender.tenderdata?.code_tender}</TableCell>
-            <TableCell>{tender.tenderdata?.organization?.name}</TableCell>
+            <TableCell>
+              {" "}
+              <LimitTypography maxWidth={180}>
+                {tender.tenderdata?.code_tender}
+              </LimitTypography>
+            </TableCell>
+            <TableCell>
+              <LimitTypography>
+                {tender.tenderdata?.organization?.name}
+              </LimitTypography>
+            </TableCell>
             <TableCell>
               <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
             </TableCell>
