@@ -13,7 +13,7 @@ function App() {
           transitionDuration={{ appear: 500, exit: 500, enter: 300 }}
           anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
           variant="success"
-          autoHideDuration={4000}
+          autoHideDuration={10000}
         >
           <RoutesComponent />
         </SnackbarProvider>
