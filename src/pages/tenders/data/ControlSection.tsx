@@ -8,7 +8,7 @@ import { TableContext } from "./TableContext";
 import { NavLink } from "react-router-dom";
 
 function ControlSection(props: PropsType) {
-  const { tenderId } = useContext(TableContext);
+  const { selectedTenderId } = useContext(TableContext);
 
   return (
     <Stack direction={"row"} justifyContent={"space-between"}>
@@ -26,7 +26,8 @@ function ControlSection(props: PropsType) {
           فلتر
         </Button>
         <Button
-          disabled={tenderId?.length == 0}
+          // disabled={selectedTenderId?.length == 0}
+          disabled
           color="error"
           variant="outlined"
           startIcon={<DeleteIcon />}
@@ -34,11 +35,11 @@ function ControlSection(props: PropsType) {
           حذف
         </Button>
         <Button
-          disabled={tenderId?.length !== 1}
+          disabled={selectedTenderId?.length !== 1}
           variant="outlined"
           startIcon={<EditIcon />}
           component={NavLink}
-          to={`edit/${tenderId}`}
+          to={`edit/${selectedTenderId}`}
         >
           تعديل
         </Button>

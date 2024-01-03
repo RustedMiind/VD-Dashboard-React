@@ -15,15 +15,18 @@ import StatusChip from "../../../../components/StatusChip";
 const arr = generateUndefinedArray(30);
 
 function TableBody() {
-  const { tenderTableData, setTenderId, tenderId } = useContext(TableContext);
+  const { tenderTableData, setSelectedTenderId, selectedTenderId } =
+    useContext(TableContext);
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
     if (isSelect) {
-      setTenderId && tenderId && setTenderId([...tenderId, value]);
+      setSelectedTenderId &&
+        selectedTenderId &&
+        setSelectedTenderId([...selectedTenderId, value]);
     } else {
-      setTenderId &&
-        setTenderId((prevData) => {
+      setSelectedTenderId &&
+        setSelectedTenderId((prevData) => {
           return prevData.filter((id) => {
             return id !== value;
           });
@@ -37,7 +40,7 @@ function TableBody() {
           <TableRow key={tender.id}>
             <TableCell>
               <Checkbox
-                checked={tenderId?.includes(tender.id)}
+                checked={selectedTenderId?.includes(tender.id)}
                 value={tender.id}
                 onChange={CheckboxHandler}
               />

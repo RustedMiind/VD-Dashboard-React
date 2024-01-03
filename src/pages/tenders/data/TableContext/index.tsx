@@ -12,8 +12,8 @@ export function TenderTableContextProvider({
 }) {
   const [tenderTableData, setTenderTableData] =
     useState<TenderStateType>("none");
-  const [tenderId, setTenderId] = useState<number[]>([]);
-  console.log(tenderId);
+  const [selectedTenderId, setSelectedTenderId] = useState<number[]>([]);
+  console.log(selectedTenderId);
 
   let [limit, setLimit] = useState<string>("25");
   function getTender(params?: unknown) {
@@ -42,8 +42,8 @@ export function TenderTableContextProvider({
       value={{
         tenderTableData,
         setTenderTableData: getTender,
-        tenderId,
-        setTenderId,
+        selectedTenderId,
+        setSelectedTenderId,
         limit,
         setLimit: setLimitAndUpdate,
       }}
@@ -56,8 +56,8 @@ export function TenderTableContextProvider({
 type ContextType = {
   tenderTableData?: TenderStateType;
   setTenderTableData?: ((param?: unknown) => void) | null;
-  tenderId?: number[];
-  setTenderId?: React.Dispatch<React.SetStateAction<number[]>>;
+  selectedTenderId?: number[];
+  setSelectedTenderId?: React.Dispatch<React.SetStateAction<number[]>>;
   limit?: string | null;
   setLimit?: ((rows: string) => void) | null;
 };

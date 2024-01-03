@@ -8,7 +8,8 @@ import { useContext } from "react";
 import { TableContext } from "../TableContext";
 
 function TableHead() {
-  const { tenderTableData, setTenderId, tenderId } = useContext(TableContext);
+  const { tenderTableData, setSelectedTenderId, selectedTenderId } =
+    useContext(TableContext);
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -19,15 +20,15 @@ function TableHead() {
             return tender.id;
           })
         : [];
-    if (checked) setTenderId && setTenderId(values || []);
-    else setTenderId && setTenderId([]);
+    if (checked) setSelectedTenderId && setSelectedTenderId(values || []);
+    else setSelectedTenderId && setSelectedTenderId([]);
   };
   return (
     <MuiTableHead>
       <TableRow>
         <TableCell>
           <Checkbox
-            checked={tenderId?.length === tenderTableData?.length}
+            checked={selectedTenderId?.length === tenderTableData?.length}
             onChange={selectAllHandler}
           />
         </TableCell>

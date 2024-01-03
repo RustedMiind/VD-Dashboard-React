@@ -8,7 +8,6 @@ import { useContext, useState } from "react";
 import CreateDialog from "./CreateDialog";
 
 function TendersData() {
-  const { tenderTableData } = useContext(TableContext);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   function handleOpenCreateDialog() {
     setOpenCreateDialog(true);
