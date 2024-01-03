@@ -1,4 +1,9 @@
-import { DialogActions, IconButton, Typography } from "@mui/material";
+import {
+  DialogActions,
+  DialogContentText,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
@@ -10,10 +15,18 @@ import { TenderContext } from "../../../TenderCondext";
 import { Api } from "../../../../../../constants";
 import axios from "axios";
 import { isStringAllNumbers } from "../../../../../../methods";
+import { useSnackbar } from "notistack";
+import { AxiosErrorType } from "../../../../../../types/Axios";
+import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
+import { joinObjectValues } from "../../../../../../methods/joinObjectValues";
 
 export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
   const tenderContext = useContext(TenderContext);
+  const [error, setError] = useState<undefined | React.ReactNode>(undefined);
+  const snackbar = useSnackbar();
+
   useEffect(() => {
+    setError(undefined);
     if (tenderAmount) {
       updateAmountData({
         amount: tenderAmount.amount,
@@ -51,11 +64,24 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
         { ...amountData, tender_id: `${tenderContext?.tenderId}` }
       )
       .then((res) => {
+        snackbar.enqueueSnackbar(
+          tenderAmount ? "تم تعديل بيانات البند" : "تم حفظ بيانات البند"
+        );
+        setError(undefined);
         console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
         setOpen(false);
       })
-      .catch((err) => {
+      .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+        snackbar.enqueueSnackbar(
+          tenderAmount
+            ? "تعذر في تعديل بيانات المنافسة"
+            : "تعذر في حفظ بيانات المنافسة",
+          {
+            variant: "error",
+          }
+        );
+        setError(joinObjectValues(err.response?.data?.data));
         console.log(err);
       });
   }
@@ -86,6 +112,7 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
           {tenderAmount ? "تعديل البند" : "اضافة البند"}
         </DialogTitle>
         <DialogContent>
+          <DialogContentText color={"error.main"}>{error}</DialogContentText>
           <Grid container>
             <Grid p={1} item md={6}>
               <Typography>

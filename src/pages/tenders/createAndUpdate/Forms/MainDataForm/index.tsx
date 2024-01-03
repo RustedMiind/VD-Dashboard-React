@@ -27,13 +27,18 @@ import axios from "axios";
 import { Api } from "../../../../../constants";
 import { TenderData } from "../../../../../types";
 import getFormOptions from "../../getFormOptions";
+import { useSnackbar } from "notistack";
+import { joinObjectValues } from "../../../../../methods/joinObjectValues";
+import { LaravelValidationError } from "../../../../../types/LaravelValidationError";
+import { AxiosErrorType } from "../../../../../types/Axios";
 
 export default function MainDataForm() {
+  const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const [options, setOptions] = useState<OptionsType>({});
-
+  const snackbar = useSnackbar();
   useEffect(getOptions, [form.branchId, form.managementId]);
   useEffect(() => {
     if (
@@ -61,14 +66,32 @@ export default function MainDataForm() {
         stateToPostDto(form)
       )
       .then((res) => {
+        snackbar.enqueueSnackbar(
+          path ? "تم تعديل بيانات المنافسة بنجاح" : "تم حفظ بيانات المنافسة"
+        );
+        setError(undefined);
         console.log(res);
         tenderContext.setTenderId &&
           tenderContext.setTenderId(res.data.data.id);
       })
-      .catch(console.log);
+      .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+        snackbar.enqueueSnackbar(
+          path
+            ? "تعذر في تعديل بيانات المنافسة"
+            : "تعذر في حفظ بيانات المنافسة",
+          {
+            variant: "error",
+          }
+        );
+        setError(joinObjectValues(err.response?.data?.data));
+        console.log(err);
+      });
   }
   return (
     <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
+      <Grid item xs={12}>
+        <Typography color={"error.main"}>{error}</Typography>
+      </Grid>
       <GridItem>
         <AddLabelToEl label="نوع الفرع" required>
           <TextField
