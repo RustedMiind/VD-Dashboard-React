@@ -26,7 +26,7 @@ function ControlSection(props: PropsType) {
           فلتر
         </Button>
         <Button
-          disabled
+          disabled={tenderId?.length == 0}
           color="error"
           variant="outlined"
           startIcon={<DeleteIcon />}

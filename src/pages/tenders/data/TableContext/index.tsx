@@ -13,9 +13,9 @@ export function TenderTableContextProvider({
   const [tenderTableData, setTenderTableData] =
     useState<TenderStateType>("none");
   const [tenderId, setTenderId] = useState<number[]>([]);
+  console.log(tenderId);
 
   let [limit, setLimit] = useState<string>("25");
-
   function getTender(params?: unknown) {
     setTenderTableData("loading");
     axios

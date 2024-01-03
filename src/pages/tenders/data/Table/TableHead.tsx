@@ -4,13 +4,32 @@ import {
   TableRow,
   Checkbox,
 } from "@mui/material";
+import { useContext } from "react";
+import { TableContext } from "../TableContext";
 
 function TableHead() {
+  const { tenderTableData, setTenderId, tenderId } = useContext(TableContext);
+  const selectAllHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    let values: number[] | undefined =
+      typeof tenderTableData === "object"
+        ? tenderTableData?.map((tender) => {
+            return tender.id;
+          })
+        : [];
+    if (checked) setTenderId && setTenderId(values || []);
+    else setTenderId && setTenderId([]);
+  };
   return (
     <MuiTableHead>
       <TableRow>
         <TableCell>
-          <Checkbox disabled />
+          <Checkbox
+            checked={tenderId?.length === tenderTableData?.length}
+            onChange={selectAllHandler}
+          />
         </TableCell>
         <TableCell>الرقم المرجعي</TableCell>
         <TableCell>رقم المنافسة</TableCell>
