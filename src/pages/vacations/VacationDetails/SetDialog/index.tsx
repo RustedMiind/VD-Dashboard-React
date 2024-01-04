@@ -26,15 +26,16 @@ import { getDateDiffNegativeAllowed } from "../../../../methods";
 import { EmployeeType, Vacation } from "../../../../types";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import { ToasterType } from "../../../../types/other/ToasterStateType";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
+import { useSnackbar } from "notistack";
 
 const PopupVacations = (props: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
   const [formStatus, setFormStatus] = useState<"loading" | "none" | "error">(
     "none"
   );
+  const { enqueueSnackbar } = useSnackbar();
   console.log(vacationForm);
   const { yearId } = useParams();
   const numberOfDays =
@@ -74,18 +75,16 @@ const PopupVacations = (props: PropsType) => {
             console.log(res);
             props.onClose();
             props.setTableDate();
-            props.openToaster({
-              severity: "success",
-              message: "تم تعديل الاجازة بنجاح",
-            });
+            enqueueSnackbar("تم تعديل الاجازة بنجاح");
           })
           .catch(
             (err: AxiosErrorType<LaravelValidationError<{ err?: string }>>) => {
               setFormStatus("error");
-              props.openToaster({
-                severity: "error",
-                message: err.response?.data?.msg || "تعذر في تعديل الاجازة",
-              });
+
+              enqueueSnackbar(
+                err.response?.data?.msg || "تعذر في تعديل الاجازة",
+                { variant: "error" }
+              );
               console.log(err);
             }
           );
@@ -101,18 +100,15 @@ const PopupVacations = (props: PropsType) => {
             console.log(res);
             props.onClose();
             props.setTableDate();
-            props.openToaster({
-              severity: "success",
-              message: "تم حفظ الاجازة بنجاح",
-            });
+            enqueueSnackbar("تم حفظ الاجازة بنجاح");
           })
           .catch(
             (err: AxiosErrorType<LaravelValidationError<{ err?: string }>>) => {
               setFormStatus("error");
-              props.openToaster({
-                severity: "error",
-                message: err.response?.data?.msg || "تعذر في اضافة الاجازة",
-              });
+              enqueueSnackbar(
+                err.response?.data?.msg || "تعذر في اضافة الاجازة",
+                { variant: "error" }
+              );
               console.log(err);
             }
           );
@@ -334,7 +330,6 @@ type PropsType = {
   title: string;
   employeesInBranch?: EmployeeType[] | undefined;
   setTableDate: () => void;
-  openToaster: (partial: Partial<ToasterType>) => void;
 };
 
 export default PopupVacations;

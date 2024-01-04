@@ -23,7 +23,6 @@ import {
   ContractPayment,
   ContractTask,
 } from "../../../../../../types";
-import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 
 // Icons
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -38,6 +37,7 @@ import {
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
+import { useSnackbar } from "notistack";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="medium" fullWidth variant="outlined" />;
@@ -54,6 +54,7 @@ function SetDialog(props: PropsType) {
   const [errorState, setErrorState] = useState<
     ChangeTypeValues<Partial<AddAttachmentFormType>, string>
   >({});
+  const { enqueueSnackbar } = useSnackbar();
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -91,10 +92,7 @@ function SetDialog(props: PropsType) {
           setSendState("success");
           props.handleClose();
           dispatch({ type: "SET_RESET", payload: undefined });
-          props.updateAndOpenToaster({
-            message: "تم الحفظ بنجاح",
-            severity: "success",
-          });
+          enqueueSnackbar("تم الحفظ بنجاح");
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
         .catch(
@@ -108,10 +106,7 @@ function SetDialog(props: PropsType) {
           ) => {
             console.log(err);
             setSendState("error");
-            props.updateAndOpenToaster({
-              message: "تعذر في الحفظ",
-              severity: "error",
-            });
+            enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
             if (err.response?.status === 422) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
@@ -233,8 +228,6 @@ function SetDialog(props: PropsType) {
 }
 
 type PropsType = {
-  toaster: ToasterType;
-  updateAndOpenToaster: (p: Partial<ToasterType>) => void;
   open: boolean;
   handleClose: () => void;
 } & (

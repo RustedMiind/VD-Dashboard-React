@@ -19,13 +19,13 @@ import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
 import { ChangeTypeValues, ContractTask } from "../../../../../../types";
-import { ToasterType } from "../../../../../../types/other/ToasterStateType";
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
 import { AddPaymentFormType } from "../../PaymentsSection/SetDialog/reducer";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
+import { useSnackbar } from "notistack";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -47,6 +47,7 @@ function SetDialog(props: PropsType) {
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");
+  const { enqueueSnackbar } = useSnackbar();
   const [errorState, setErrorState] = useState<
     ChangeTypeValues<Partial<AddTaskFormType>, string>
   >({});
@@ -73,10 +74,7 @@ function SetDialog(props: PropsType) {
           setSendState("success");
           props.handleClose();
           dispatch({ type: "SET_RESET", payload: undefined });
-          props.updateAndOpenToaster({
-            message: "تم الحفظ بنجاح",
-            severity: "success",
-          });
+          enqueueSnackbar("تم حفظ المهمة بنجاح");
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
         .catch(
@@ -93,15 +91,9 @@ function SetDialog(props: PropsType) {
                 period: ArrayToMultiline(err.response.data?.data?.period),
               });
             } else if (err.response?.status === 406) {
-              props.updateAndOpenToaster({
-                message: err.response?.data?.msg,
-                severity: "error",
-              });
+              enqueueSnackbar(err.response?.data?.msg, { variant: "error" });
             } else {
-              props.updateAndOpenToaster({
-                message: "تعذر في الحفظ",
-                severity: "error",
-              });
+              enqueueSnackbar("تعذر في الحذف", { variant: "error" });
             }
           }
         );
@@ -221,8 +213,6 @@ function SetDialog(props: PropsType) {
 }
 
 type PropsType = {
-  toaster: ToasterType;
-  updateAndOpenToaster: (p: Partial<ToasterType>) => void;
   open: boolean;
   handleClose: () => void;
 } & (

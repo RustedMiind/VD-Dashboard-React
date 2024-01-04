@@ -30,6 +30,7 @@ import { Client } from "../../../types/Clients";
 import { AccountCircle } from "@mui/icons-material";
 import SelectWithFilter from "../../../components/SelectWithFilter";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { useSnackbar } from "notistack";
 
 const paddingSize = 1;
 export default function FormAdd() {
@@ -51,9 +52,7 @@ export default function FormAdd() {
   const params = useParams();
   const IS_EDIT_MODE = !!params.id;
   //toster
-  const [toaster, setToaster] = useState<{
-    type: "error" | "success" | "null";
-  }>({ type: "error" });
+  const snackbar = useSnackbar();
   const submitDisabled =
     !IS_EDIT_MODE &&
     ((isUniqueIdNumber !== "unique" && isUniqueRegisterNumber !== "unique") ||
@@ -123,11 +122,12 @@ export default function FormAdd() {
     axios
       .post(Api("employee/client/store"), objectToFormData(formData))
       .then((res) => {
-        setToaster({ type: "success" });
         navigate("/react/clients");
       })
       .catch((err) => {
-        setToaster({ type: "error" });
+        snackbar.enqueueSnackbar("تعذر في حفظ بيانات العميل", {
+          variant: "error",
+        });
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: { [key: string]: string } = {};
         for (let i in err.response?.data?.data) {
@@ -164,11 +164,13 @@ export default function FormAdd() {
     axios
       .post(Api(`employee/client/update/${clientEdit?.id}`), toSend)
       .then((res) => {
-        setToaster({ type: "success" });
+        snackbar.enqueueSnackbar("تم تعديل بيانات العميل بنجاح");
         navigate("/react/clients");
       })
       .catch((err) => {
-        setToaster({ type: "error" });
+        snackbar.enqueueSnackbar("تعذر في حفظ بيانات العميل", {
+          variant: "error",
+        });
         let errorObj: { key: string; value: string }[] = [];
         let tempObj: { [key: string]: string } = {};
         for (let i in err.response?.data?.data) {

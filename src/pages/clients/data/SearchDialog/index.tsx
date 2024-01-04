@@ -23,26 +23,14 @@ import { useNavigate } from "react-router-dom";
 import { Branch, Broker } from "../../../../types";
 import { Snackbar } from "@mui/material";
 import { Client } from "../../../../types/Clients";
+import { useSnackbar } from "notistack";
 
 function PopUp({ open, onClose, getClients }: PropsType) {
   const [searchClient, dispatch] = useReducer(reducer, individualInitial);
   const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
-  const [toaster, setToaster] = useState<ToasterType>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  function updateToaster(partial: Partial<ToasterType>) {
-    setToaster({ ...toaster, ...partial });
-  }
-  function updateAndOpenToaster(partial: Partial<ToasterType>) {
-    updateToaster({ ...partial, open: true });
-  }
-  function handleCloseToaster() {
-    updateToaster({ open: false });
-  }
+  const snackbar = useSnackbar();
   useEffect(() => {
     axios
       .get<{ branches: Branch[]; brokers: Broker[] }>(
@@ -91,16 +79,14 @@ function PopUp({ open, onClose, getClients }: PropsType) {
           //   navigate(`${data.data.name}/edit`);
           // }
           else {
-            updateAndOpenToaster({
-              severity: "error",
-              message: "لا يوجد عميل بهذه البيانات",
+            snackbar.enqueueSnackbar("لا يوجد عميل بهذه البيانات", {
+              variant: "error",
             });
           }
         })
         .catch((err) => {
-          updateAndOpenToaster({
-            severity: "error",
-            message: "تعذر في حفظ العقد ",
+          snackbar.enqueueSnackbar("تعذر في حفظ العقد", {
+            variant: "error",
           });
         });
     }
@@ -278,20 +264,6 @@ function PopUp({ open, onClose, getClients }: PropsType) {
           </Grid>
         </Grid>
       </Box>
-      <Snackbar
-        open={toaster.open}
-        autoHideDuration={6000}
-        onClose={handleCloseToaster}
-        // action={action}
-      >
-        <Alert
-          onClose={handleCloseToaster}
-          severity={toaster.severity}
-          sx={{ width: "100%" }}
-        >
-          {toaster.message}
-        </Alert>
-      </Snackbar>
     </Dialog>
   );
 }
@@ -302,10 +274,4 @@ type PropsType = {
   open: boolean;
   onClose: () => void;
   getClients: (params?: unknown) => void;
-};
-
-export type ToasterType = {
-  open: boolean;
-  message: string;
-  severity: "error" | "info" | "success" | "warning";
 };
