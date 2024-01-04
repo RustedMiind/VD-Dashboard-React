@@ -87,9 +87,7 @@ export default function FormAdd() {
       setclientEdit(data.data);
 
       dispatch({ type: "SET_DTO", payload: data.data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
   // useEffect get branches , broker and clientRespose
   useEffect(() => {
@@ -106,7 +104,6 @@ export default function FormAdd() {
       .catch((err) => {
         setBranches(undefined);
         setBrokers([]);
-        console.log("err", err);
       });
   }, []);
   const handleClickOpen = () => {
@@ -137,7 +134,6 @@ export default function FormAdd() {
         errorObj.forEach((item) => {
           tempObj[item.key] = item.value;
         });
-        console.log(err.response?.data?.msg);
 
         setErrors(tempObj);
         errorObj.forEach((error) => {
@@ -150,10 +146,8 @@ export default function FormAdd() {
   //Edit handle
   function EditHandle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("card image", formData.card_image);
     let { card_image, ...withoutImage } = formData;
 
-    console.log("without image", withoutImage);
     const toSend = formData.card_image
       ? objectToFormData(formData)
       : objectToFormData(withoutImage);
@@ -180,7 +174,6 @@ export default function FormAdd() {
         errorObj.forEach((item) => {
           tempObj[item.key] = item.value;
         });
-        console.log(err.response?.data?.msg);
 
         setErrors(tempObj);
         errorObj.forEach((error) => {
@@ -416,7 +409,6 @@ export default function FormAdd() {
               select
               value={formData?.broker_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 dispatch({
                   type: "BROKER_ID",
                   payload: e.target.value,

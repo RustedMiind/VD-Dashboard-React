@@ -33,7 +33,6 @@ export function objectToArrayWithArName(obj: RequestDetails): KeyWithArabic[] {
   const keysWithArabic: KeyWithArabic[] = [];
   for (let key in obj) {
     const value = obj[key as keyof RequestDetails];
-    console.log(key);
     const found = keyToArabic.find((f) => f.key === key);
     if (found) {
       if (
@@ -45,6 +44,5 @@ export function objectToArrayWithArName(obj: RequestDetails): KeyWithArabic[] {
       } else keysWithArabic.push({ ...found, value: value });
     }
   }
-  console.log(keysWithArabic);
   return keysWithArabic;
 }

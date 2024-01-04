@@ -12,7 +12,6 @@ const RequestTypesToggles = ({
   dispatch,
   orderTypeId,
 }: PropsType) => {
-  console.log(orderTypeId);
   const setCurrent = (value: number) => {
     return () => {
       if (selected === value) setSelected(undefined);

@@ -28,7 +28,6 @@ function TableHeader(props: PropsType) {
       .then(() => {
         props.getContractsData();
       })
-      .catch(console.log);
   }
 
   return (

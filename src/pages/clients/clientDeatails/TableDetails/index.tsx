@@ -53,7 +53,6 @@ function TableDetails({
 
   const navigate = useNavigate();
 
-  console.log(ClientData, "clientData");
   return (
     <Stack>
       <TableHeader
