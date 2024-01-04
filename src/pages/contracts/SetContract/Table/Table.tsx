@@ -43,8 +43,6 @@ function ContractsTable(props: PropsType) {
     };
   }
 
-  console.log(toView);
-
   return (
     <Stack>
       <TableContainer>
@@ -52,9 +50,12 @@ function ContractsTable(props: PropsType) {
           <TableHeader value={props.value} />
 
           {props.value === 0 ? (
-            <ContractsDataTable CheckboxHandler={CheckboxHandler}/>
+            <ContractsDataTable CheckboxHandler={CheckboxHandler} />
           ) : (
-            <ManageContractsTable secondTabValue={props.secondTabValue} CheckboxHandler={CheckboxHandler}   />
+            <ManageContractsTable
+              secondTabValue={props.secondTabValue}
+              CheckboxHandler={CheckboxHandler}
+            />
           )}
         </Table>
       </TableContainer>
@@ -90,7 +91,7 @@ function ContractsTable(props: PropsType) {
 
 type PropsType = {
   value?: number;
-  secondTabValue?: 0|1;
+  secondTabValue?: 0 | 1;
 };
 
 export default ContractsTable;

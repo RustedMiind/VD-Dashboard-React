@@ -37,7 +37,6 @@ function ManagersForm() {
     [form, dispatch] = useReducer(reducer, initialTenderManagersState),
     [options, setOptions] = useState<OptionsType>({});
   useEffect(getOptions, [typeof tenderContext.tender]);
-  console.log("options :", options);
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const inputProps = {
     loading: formStatus === "loading",
@@ -56,7 +55,6 @@ function ManagersForm() {
           stateToPostDto(form, tenderContext.tender?.id.toString() || "")
         )
         .then((res) => {
-          console.log(res);
           tenderContext.getTenderData && tenderContext.getTenderData();
           setError(undefined);
           snackbar.enqueueSnackbar(
@@ -71,7 +69,6 @@ function ManagersForm() {
             }
           );
           setError(joinObjectValues(err.response?.data?.data));
-          console.log(err);
         })
         .finally(() => {
           setFormStatus("none");

@@ -41,7 +41,6 @@ const ContractData = (props: PropsType) => {
 
   useEffect(() => {
     if (!props.edit) {
-      console.log("NOT NOT NOT In Edit Mode ");
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
     } else if (contractDetails.contract) {
       dispatch({
@@ -345,7 +344,6 @@ const ContractData = (props: PropsType) => {
               select
               value={contractData?.employee_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 dispatch({
                   type: "EMPLOYEE_ID",
                   payload: parseInt(e.target.value),

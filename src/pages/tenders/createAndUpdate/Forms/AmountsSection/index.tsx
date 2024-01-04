@@ -58,12 +58,10 @@ function AmountsSection() {
       axios
         .delete(Api(`employee/tender/amount/${id}`))
         .then((res) => {
-          console.log(res);
           tenderContext.getTenderData && tenderContext.getTenderData();
           snackbar.enqueueSnackbar("تم حذف البند بنجاح");
         })
         .catch((err) => {
-          console.log(err);
           snackbar.enqueueSnackbar("تعذر في حذف البند ");
         })
         .finally(() => {
@@ -76,12 +74,10 @@ function AmountsSection() {
     axios
       .get(Api(`employee/tender/amount/save/${tenderContext.tenderId}`))
       .then((res) => {
-        console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
         snackbar.enqueueSnackbar("تم حفظ المهام بنجاح");
       })
       .catch((err) => {
-        console.log(err);
         snackbar.enqueueSnackbar("تعذر المهام بنجاح");
       })
       .finally(() => {

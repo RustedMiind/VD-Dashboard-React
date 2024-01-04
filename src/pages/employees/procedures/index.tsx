@@ -150,18 +150,15 @@ function EmploeesRequestsProcedures() {
         model: dto.model,
       };
     });
-    console.log(data);
     setSendState("sending");
     axios
       .post(Api("employee/general-requests/steps/create"), {
         data,
       })
       .then((res) => {
-        console.log(res);
         enqueueSnackbar("تم حفظ الاجراءات بنجاح");
       })
       .catch((err) => {
-        console.log(err);
         enqueueSnackbar(
           err?.response?.data?.msg || "تعذر في حفظ اجراءات الطلبات"
         );
@@ -175,7 +172,7 @@ function EmploeesRequestsProcedures() {
     setLevels([]);
     setendpointStatus("loading");
 
-    getDepartments().then(getEmoloyees).then(getLevels).catch(console.log);
+    getDepartments().then(getEmoloyees).then(getLevels).catch();
   }
   function getDepartments() {
     return new Promise<void>((ressolve, reject) => {
@@ -183,16 +180,10 @@ function EmploeesRequestsProcedures() {
         axios
           .get<{ employee: [] }>(Api("employee/getDepartmentWithEmployee"))
           .then((res) => {
-            console.log(res);
-            console.log(
-              "Departments : ",
-              HandleDepartmentWithEmployees(res.data.employee)
-            );
             setDepartments(HandleDepartmentWithEmployees(res.data.employee));
             ressolve();
           })
           .catch((err) => {
-            console.log(err);
             setendpointStatus("error");
             reject(err);
           });
@@ -205,13 +196,10 @@ function EmploeesRequestsProcedures() {
         axios
           .post<{ data: Partial<EmployeeType>[] }>(Api("employee/employees"))
           .then((res) => {
-            console.log(res);
-            console.log("employees : ", res);
             setEmployees(res.data.data);
             ressolve();
           })
           .catch((err) => {
-            console.log(err);
             setendpointStatus("error");
             reject(err);
           });
@@ -234,12 +222,10 @@ function EmploeesRequestsProcedures() {
               employee_id: step.employee_id === null ? -1 : step.employee_id,
             }))
           );
-          console.log("Steps : ", data);
           setendpointStatus("none");
           ressolve();
         })
         .catch((err) => {
-          console.log(err);
           setendpointStatus("error");
           ressolve(err);
         });

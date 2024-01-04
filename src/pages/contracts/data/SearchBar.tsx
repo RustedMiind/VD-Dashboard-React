@@ -34,8 +34,6 @@ function SearchBar() {
         setContractSearch(res?.data.client);
       })
       .catch((err) => {
-        console.log(err);
-
         setContractSearch(null);
       });
   }, []);

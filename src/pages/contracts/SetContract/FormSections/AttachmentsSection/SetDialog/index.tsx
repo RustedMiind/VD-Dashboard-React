@@ -86,7 +86,6 @@ function SetDialog(props: PropsType) {
               >;
             }>
           ) => {
-            console.log(err);
             setSendState("error");
             enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
             if (err.response?.status === 422) {

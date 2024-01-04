@@ -30,7 +30,6 @@ export default function BtnCus() {
         deletedClientsIds?.setSelectedIds([]);
       })
       .catch((err) => {
-        console.log(err);
         enqueueSnackbar("تعذر في حذف العقد ", { variant: "error" });
       });
   }

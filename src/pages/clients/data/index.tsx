@@ -32,9 +32,7 @@ function ClientData() {
       .then(() => {
         getRequests();
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }
 
   let anyClientHasContracts = false;
@@ -69,7 +67,6 @@ function ClientData() {
   }
   // Get Clients
   useEffect(getRequests, [limit]);
-  console.log(selectedItems);
   return (
     <Stack>
       <IndexContextProvider>

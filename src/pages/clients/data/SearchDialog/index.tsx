@@ -39,7 +39,6 @@ function PopUp({ open, onClose, getClients }: PropsType) {
       .catch((err) => {
         setBranches(undefined);
         setBrokers(undefined);
-        console.log("err", err);
       });
   }, []);
   const getClient = () => {
@@ -189,8 +188,6 @@ function PopUp({ open, onClose, getClients }: PropsType) {
                 size="small"
                 value={searchClient?.phone}
                 onChange={(e) => {
-                  console.log(e.target.value);
-
                   dispatch({
                     type: "PHONE_NUMBER",
                     payload: e.target.value,

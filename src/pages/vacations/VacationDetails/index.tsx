@@ -44,7 +44,6 @@ const VacationsTable = () => {
     axios
       .post(Api(`employee/vacation-day/${yearId}`), {})
       .then((res) => {
-        console.log(res);
         setSendState("success");
         enqueueSnackbar("تم اعتماد محدد اجازات السنويه بنجاح");
       })
@@ -172,7 +171,6 @@ const VacationsTable = () => {
           setemployeesInBranch(data.employees);
         })
         .catch((err) => {
-          console.log(err);
         });
   }
   function setTableData() {
@@ -186,7 +184,6 @@ const VacationsTable = () => {
         setVacations(res.data.vacations);
       })
       .catch((err) => {
-        console.log("Error Fetching Vacations");
         setVacations("error");
       });
   }

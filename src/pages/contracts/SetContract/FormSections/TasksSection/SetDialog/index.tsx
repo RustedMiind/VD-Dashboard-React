@@ -71,7 +71,6 @@ function SetDialog(props: PropsType) {
         })
         .catch(
           (err: AxiosErrorType<LaravelValidationError<AddTaskFormType>>) => {
-            console.log(err);
             setSendState("error");
             if (err.response?.status === 422) {
               setErrorState({

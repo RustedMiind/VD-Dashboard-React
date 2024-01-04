@@ -66,7 +66,6 @@ function SetDialog(props: PropsType) {
         })
         .catch(
           (err: AxiosErrorType<LaravelValidationError<AddPaymentFormType>>) => {
-            console.log(err);
             setSendState("error");
 
             if (err.response?.status === 422) {

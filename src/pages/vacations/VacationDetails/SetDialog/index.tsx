@@ -36,7 +36,6 @@ const PopupVacations = (props: PropsType) => {
     "none"
   );
   const { enqueueSnackbar } = useSnackbar();
-  console.log(vacationForm);
   const { yearId } = useParams();
   const numberOfDays =
     Math.round(
@@ -72,7 +71,6 @@ const PopupVacations = (props: PropsType) => {
           )
           .then((res) => {
             setFormStatus("none");
-            console.log(res);
             props.onClose();
             props.setTableDate();
             enqueueSnackbar("تم تعديل الاجازة بنجاح");
@@ -85,7 +83,6 @@ const PopupVacations = (props: PropsType) => {
                 err.response?.data?.msg || "تعذر في تعديل الاجازة",
                 { variant: "error" }
               );
-              console.log(err);
             }
           );
       } else {
@@ -97,7 +94,6 @@ const PopupVacations = (props: PropsType) => {
           )
           .then((res) => {
             setFormStatus("none");
-            console.log(res);
             props.onClose();
             props.setTableDate();
             enqueueSnackbar("تم حفظ الاجازة بنجاح");
@@ -109,7 +105,6 @@ const PopupVacations = (props: PropsType) => {
                 err.response?.data?.msg || "تعذر في اضافة الاجازة",
                 { variant: "error" }
               );
-              console.log(err);
             }
           );
       }
@@ -136,7 +131,6 @@ const PopupVacations = (props: PropsType) => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(vacationForm);
     setVacation();
   };
 

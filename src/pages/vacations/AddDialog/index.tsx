@@ -25,7 +25,6 @@ export default function AddDialog(props: PropsType) {
     axios
       .post<addSelect>(Api("employee/vacation"), selectVacation)
       .then((res) => {
-        console.log(res);
         props.onClose();
         props.setData();
       })

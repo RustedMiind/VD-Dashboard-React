@@ -35,7 +35,6 @@ const ClientProcess = () => {
     levels: [InitLevel],
   });
   const { enqueueSnackbar } = useSnackbar();
-  console.log(process.levels);
 
   const getFormData = () => {
     return new Promise<void>((resolve, reject) => {
@@ -49,7 +48,6 @@ const ClientProcess = () => {
             resolve();
           })
           .catch((err) => {
-            console.log(err);
             setEndPointStatus("error");
             reject(err);
           });
@@ -63,12 +61,10 @@ const ClientProcess = () => {
         .get(Api(`employee/client/order/steps/${typeOrderId}`))
         .then((res) => {
           setEndPointStatus("none");
-          console.log(res.data.data);
           setLevels(res.data.data);
           resolve();
         })
         .catch((err) => {
-          console.log(err);
           setEndPointStatus("error");
           reject(err);
         });
@@ -97,16 +93,13 @@ const ClientProcess = () => {
         };
       }
     );
-    console.log(data);
     setSendState("sending");
     axios
       .post(Api(`employee/client/order/steps/store/${typeOrderId}`), data)
       .then((res) => {
-        console.log("Done", res);
         enqueueSnackbar("تم حفظ الاجراءات بنجاح");
       })
       .catch((err) => {
-        console.log("Error", err);
         enqueueSnackbar("تعذر في حفظ الاراءات", { variant: "error" });
       })
       .finally(() => {
@@ -116,7 +109,7 @@ const ClientProcess = () => {
 
   const loadLevels = () => {
     setEndPointStatus("loading");
-    getFormData().then(getLevels).catch(console.log);
+    getFormData().then(getLevels).catch();
   };
 
   const updateLevel = (index: number) => {

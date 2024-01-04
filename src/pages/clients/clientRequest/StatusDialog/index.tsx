@@ -29,7 +29,6 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
           Api(`employee/client/order/statusOrder?client_id=${id}`)
         )
         .then(({ data }) => {
-          console.log(data);
           setDetails(data.data[0].order_step_form || []);
           setDate(formatDate(data.data[0].created_date) || "");
         });

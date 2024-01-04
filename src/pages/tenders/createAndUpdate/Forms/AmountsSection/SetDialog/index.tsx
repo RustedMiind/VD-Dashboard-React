@@ -75,7 +75,6 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
           tenderAmount ? "تم تعديل بيانات البند" : "تم حفظ بيانات البند"
         );
         setError(undefined);
-        console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
         setOpen(false);
       })
@@ -89,7 +88,6 @@ export default function SetDialog({ open, setOpen, tenderAmount }: TypeProps) {
           }
         );
         setError(joinObjectValues(err.response?.data?.data));
-        console.log(err);
       })
       .finally(() => {
         setFormStatus("none");

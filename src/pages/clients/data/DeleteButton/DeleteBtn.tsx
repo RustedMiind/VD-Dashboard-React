@@ -21,12 +21,11 @@ function DeleteBtn(props: PropsType) {
           props.requests;
         props.setRequests(filtered);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }
   return (
     <Button
+      // eslint-disable-next-line eqeqeq
       disabled={deleteClients?.index?.id.length == 0}
       variant="outlined"
       startIcon={<DeleteIcon />}

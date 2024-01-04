@@ -2,16 +2,12 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Typography,
   Grid,
-  TextField,
 } from "@mui/material";
-import { EmployeeRequest } from "../../../../types";
 import { useEffect, useState } from "react";
 import { RequestDetails } from "../../../../types/RequestDetails";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { objectToArrayWithArName } from "../../../../methods/objToArrWithAr";
 import DataInputLike from "../../../../components/DataInputLike";
 import { formatDate } from "../../../../methods";
 import VacationDetails from "./VacationDetails";
@@ -31,7 +27,6 @@ function DetailsDialog(props: PropsType) {
           Api(`employee/general-requests/requests/${props.requestId}`)
         )
         .then(({ data }) => {
-          console.log("Details Log :", data);
           setDetails(data.request);
         });
     }
