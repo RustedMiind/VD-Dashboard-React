@@ -30,6 +30,9 @@ export interface Requestable {
   remaining_lastCustody?: string;
   description?: string;
   media?: Media[];
+  exchange_date?: string;
+  amount?: number;
+  responsible_employee_id?: number;
 }
 
 interface detail {

@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { RequestDetails } from "../../../../types/RequestDetails";
 import axios from "axios";
@@ -15,6 +10,7 @@ import WorkNeeds from "./WorkNeeds";
 import MissionDetails from "./MissionDetails";
 import CarFixDetails from "./CarFixDetails";
 import CustodyDetails from "./CustodyDetails";
+import AdvanceDetails from "./AdvanceDetails";
 
 function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
@@ -57,6 +53,8 @@ function DetailsDialog(props: PropsType) {
                     return <VacationDetails details={details} />;
                   case 2:
                     return <MissionDetails details={details} />;
+                  case 3:
+                    return <AdvanceDetails details={details} />;
                   case 4:
                     return <CustodyDetails details={details} />;
                   case 5:

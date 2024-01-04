@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import DataInputLike from "../../../../components/DataInputLike";
 import { RequestDetails } from "../../../../types/RequestDetails";
 
@@ -8,6 +9,7 @@ function WorkNeeds({ details }: PropsType) {
   ) {
     return (
       <>
+        <Grid item xs={6} />
         <DataInputLike
           title="الكمية"
           value={details.requestable.details[0]?.quantity}
