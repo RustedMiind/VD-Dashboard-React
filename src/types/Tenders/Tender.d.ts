@@ -1,16 +1,22 @@
-import { DB_Boolean } from "../";
+import { DB_Boolean, Department } from "../";
+import { DbOptionType } from "../other/DbOptionType";
+import { TenderAmounts } from "./TenderAmount";
+import { TenderFile } from "./TenderFile";
+import { TenderTask } from "./TenderTask";
+
+export type TenderFormOptions = {};
 
 export type Tender = {
   id: number;
-  step_num: 2;
+  step_num: number;
   is_done: DB_Boolean;
   created_at: string;
   updated_at: string;
   // deleted_at: null;
   tenderdata?: TenderData;
-  tender_tasks?: [];
-  tender_files?: [];
-  tender_amounts?: [];
+  tender_tasks?: TenderTask;
+  tender_files?: TenderFile[];
+  tender_amounts?: TenderAmounts[];
 };
 
 export type TenderData = {
@@ -26,10 +32,22 @@ export type TenderData = {
   organization_id: number;
   price: number;
   type_id: number;
-  // "activity": null,
+  department?: Department;
+  activity?: string;
   period: number;
   apply_id: number;
   created_at: string;
   updated_at: string;
+  organization: Organization;
+  tender_warranties: (DbOptionType & { warranty_id: number })[];
   // "deleted_at": null
+};
+
+type Organization = {
+  // created_at: "2024-01-01T18:36:29.000000Z";
+  // deleted_at: null;
+  id: number;
+  name: string;
+  number: number;
+  // updated_at: "2024-01-01T18:36:29.000000Z";
 };

@@ -1,4 +1,5 @@
-import { ReducerAction } from "../../../../../../types";
+import { isStringAllNumbers } from "../../../../../../methods";
+import { ReducerAction, TenderData } from "../../../../../../types";
 
 export function reducer(
   state: TenderDataState,
@@ -6,11 +7,18 @@ export function reducer(
 ): TenderDataState {
   switch (action.type) {
     case "SET_BRANCH_ID":
-      return { ...state, branchId: action.payload };
+      return {
+        ...state,
+        managementId: "",
+        departmentId: "",
+        branchId: action.payload,
+      };
     case "SET_MANAGEMENT_ID":
       return { ...state, managementId: action.payload };
     case "SET_REFERENCE_NUMBER":
-      return { ...state, referenceNumber: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, referenceNumber: action.payload }
+        : state;
     case "SET_NUMBER":
       return { ...state, number: action.payload };
     case "SET_NAME":
@@ -22,7 +30,9 @@ export function reducer(
     case "SET_END_DATE":
       return { ...state, endDate: action.payload };
     case "SET_PRICE":
-      return { ...state, price: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, price: action.payload }
+        : state;
     case "SET_TYPE_ID":
       return { ...state, typeId: action.payload };
     case "SET_DEPARTMENT_ID":
@@ -30,19 +40,96 @@ export function reducer(
     case "SET_ACTIVITY":
       return { ...state, activity: action.payload };
     case "SET_CONTRACT_DURATION":
-      return { ...state, contractDuration: action.payload };
+      return isStringAllNumbers(action.payload)
+        ? { ...state, contractDuration: action.payload }
+        : state;
     case "SET_APPLY_TYPE_ID":
       return { ...state, applyTypeId: action.payload };
-    case "SET_REQUIRED_WARRANTY":
-      return { ...state, requiredWarranty: action.payload };
+    case "TOGGLE_WARRANTY_ID":
+      const warrantyId = action.payload;
+      if (state.requiredWarranty.includes(warrantyId)) {
+        return {
+          ...state,
+          requiredWarranty: state.requiredWarranty.filter(
+            (wr) => warrantyId !== wr
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          requiredWarranty: [...state.requiredWarranty, action.payload],
+        };
+      }
     case "SET_OBJECT":
       return { ...state, ...action.payload };
     case "SET_RESET":
       return { ...initialTenderDataState, ...action.payload };
+    case "EXTRACT_DTO":
+      return dtoToState(action.payload);
     default:
       return state;
   }
 }
+
+export function dtoToState(dto: TenderData): TenderDataState {
+  return {
+    branchId: `${dto.department?.management?.branch_id || ""}`,
+    managementId: `${dto.department?.management?.id || ""}`,
+    referenceNumber: dto.code_reference.toString(),
+    number: dto.code_tender.toString(),
+    name: dto.name,
+    applyDate: dto.strat_date,
+    governmentalOrganizationId: dto.organization_id.toString(),
+    endDate: dto.end_date,
+    price: dto.price.toString(),
+    typeId: dto.type_id.toString(),
+    departmentId: dto.department_id.toString(),
+    activity: dto.activity || "",
+    contractDuration: dto.period.toString(),
+    applyTypeId: dto.apply_id.toString(),
+    requiredWarranty: dto.tender_warranties.map((x) =>
+      x.warranty_id.toString()
+    ),
+  };
+}
+
+export function stateToPostDto(state: TenderDataState): PostDto {
+  return {
+    branch_id: state.branchId,
+    code_reference: state.referenceNumber,
+    department_id: state.departmentId,
+    end_date: state.endDate,
+    strat_date: state.applyDate,
+    management_id: state.managementId,
+    name: state.name,
+    organization_id: state.governmentalOrganizationId,
+    price: state.price,
+    type_id: state.typeId,
+    warranty_id: state.requiredWarranty,
+    activity: state.activity,
+    code_tender: state.number,
+    period: state.contractDuration,
+    apply_id: state.applyTypeId,
+  };
+}
+
+type PostDto = {
+  department_id: string;
+  type_id: string;
+  branch_id: string;
+  management_id: string;
+  code_reference: string;
+  code_tender: string;
+  activity: string;
+  period: string;
+  name: string;
+  strat_date: string;
+  end_date: string;
+  organization_id: string;
+  price: string;
+  warranty_id: string[];
+  apply_id: string;
+};
 
 type TenderDataState = {
   branchId: string;
@@ -97,12 +184,13 @@ interface SetActivity extends ReducerAction<string, "SET_ACTIVITY"> {}
 interface SetContractDuration
   extends ReducerAction<string, "SET_CONTRACT_DURATION"> {}
 interface SetApplyTypeId extends ReducerAction<string, "SET_APPLY_TYPE_ID"> {}
-interface SetRequiredWarranty
-  extends ReducerAction<string[], "SET_REQUIRED_WARRANTY"> {}
+interface ToggleWarrantyId
+  extends ReducerAction<string, "TOGGLE_WARRANTY_ID"> {}
 interface SetPartial
   extends ReducerAction<Partial<TenderDataState>, "SET_OBJECT"> {}
 interface SetReset
   extends ReducerAction<Partial<TenderDataState>, "SET_RESET"> {}
+interface ExtractDto extends ReducerAction<TenderData, "EXTRACT_DTO"> {}
 
 type ActionTypes =
   | SetBranchId
@@ -119,6 +207,7 @@ type ActionTypes =
   | SetActivity
   | SetContractDuration
   | SetApplyTypeId
-  | SetRequiredWarranty
+  | ToggleWarrantyId
   | SetPartial
-  | SetReset;
+  | SetReset
+  | ExtractDto;

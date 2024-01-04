@@ -1,5 +1,8 @@
 import { Box, Button, Grid, GridProps, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useContext, useState } from "react";
+import { TableContext } from "./TableContext";
+import dayjs from "dayjs";
 
 function GridItem({ children }: GridProps) {
   return (
@@ -10,26 +13,76 @@ function GridItem({ children }: GridProps) {
 }
 
 function TendersFilters() {
+  const { setTenderTableData } = useContext(TableContext);
+  const [dataToSearch, setDataToSearch] = useState<TypeDataToSearch>({
+    organization_name: "",
+    organization_number: "",
+    name: "",
+    strat_date: "",
+    end_date: "",
+  });
+  function updateDataToSearch(partial: Partial<TypeDataToSearch>) {
+    setDataToSearch({
+      ...dataToSearch,
+      ...partial,
+    });
+  }
+  function searchTender(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setTenderTableData && setTenderTableData(dataToSearch);
+  }
   return (
-    <Box component="form" pb={7}>
+    <Box onSubmit={searchTender} component="form" pb={7}>
       <Grid container spacing={2}>
         <GridItem>
-          <TextField fullWidth label="اسم جهة المنافسة" size="small" />
+          <TextField
+            value={dataToSearch.organization_name}
+            onChange={(e) => {
+              updateDataToSearch({ organization_name: e.target.value });
+            }}
+            fullWidth
+            label="اسم جهة المنافسة"
+            size="small"
+          />
         </GridItem>
         <GridItem>
-          <TextField fullWidth label="رقم الجهة" size="small" />
+          <TextField
+            value={dataToSearch.organization_number}
+            onChange={(e) => {
+              updateDataToSearch({ organization_number: e.target.value });
+            }}
+            fullWidth
+            label="رقم الجهة"
+            size="small"
+          />
         </GridItem>
         <GridItem>
-          <TextField fullWidth label="اسم المنافسة" size="small" />
+          <TextField
+            value={dataToSearch.name}
+            onChange={(e) => {
+              updateDataToSearch({ name: e.target.value });
+            }}
+            fullWidth
+            label="اسم المنافسة"
+            size="small"
+          />
         </GridItem>
         <GridItem>
           <DatePicker
+            value={dayjs(dataToSearch.strat_date)}
+            onChange={(date) => {
+              updateDataToSearch({ strat_date: date?.format() });
+            }}
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             label={"تاريخ التقديم"}
           />
         </GridItem>
         <GridItem>
           <DatePicker
+            value={dayjs(dataToSearch.end_date)}
+            onChange={(date) => {
+              updateDataToSearch({ end_date: date?.format() });
+            }}
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             label={"تاريخ الانتهاء"}
           />
@@ -45,3 +98,11 @@ function TendersFilters() {
 }
 
 export default TendersFilters;
+
+type TypeDataToSearch = {
+  name?: string;
+  organization_name?: string;
+  organization_number?: string;
+  strat_date?: string;
+  end_date?: string;
+};

@@ -234,11 +234,13 @@ export default function FormAdd() {
             {formData.type === "individual" ? (
               <Typography component="label">
                 اسم العميل
+                {"  "}
                 <RequiredSymbol />
               </Typography>
             ) : (
               <Typography component="label">
                 اسم الشركه
+                {"  "}
                 <RequiredSymbol />
               </Typography>
             )}
@@ -387,11 +389,7 @@ export default function FormAdd() {
         </Grid>
         <Grid item p={paddingSize} md={6}>
           <Stack>
-            <Typography component="label">
-              البريد الالكتروني
-              {"  "}
-              <RequiredSymbol />
-            </Typography>
+            <Typography component="label">البريد الالكتروني</Typography>
             <TextField
               id="outlined-email-input"
               type="email"
@@ -544,9 +542,7 @@ export default function FormAdd() {
         </Grid>
         {formData.type === "individual" && (
           <Grid item p={paddingSize} md={6}>
-            <Typography component="label">
-              ارفاق الملف <RequiredSymbol />{" "}
-            </Typography>
+            <Typography component="label">ارفاق الملف</Typography>
             {clientEdit ? (
               <FilePreview
                 height={40}

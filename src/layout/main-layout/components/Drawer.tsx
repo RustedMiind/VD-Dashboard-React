@@ -52,6 +52,11 @@ const routesCollections: RoutesCollectionType[] = [
         name: "بيانات الموظفين",
         path: "employees",
       },
+      {
+        name: "اعدادات المنافسات",
+        path: "/tenders",
+        react: true,
+      },
     ],
   },
   {

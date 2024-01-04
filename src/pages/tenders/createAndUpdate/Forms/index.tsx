@@ -2,9 +2,14 @@ import Typography from "@mui/material/Typography";
 import MainDataForm from "./MainDataForm";
 import { SeparatedAccordion } from "../../../../components/SeparatedAccordion";
 import ManagersForm from "./ManagersForm";
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useContext, useState } from "react";
 import { TenderContext } from "../TenderCondext";
+import AmountsSection from "./AmountsSection";
+import AttachmentsSection from "./AttachmentsSection";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import BottomSection from "../BottomSection";
 function FormsSection() {
   const tenderContext = useContext(TenderContext);
 
@@ -47,12 +52,21 @@ function FormsSection() {
       >
         <ManagersForm />
       </SeparatedAccordion>
-      <Typography variant="body1" color="initial">
-        Form 3
-      </Typography>
-      <Typography variant="body1" color="initial">
-        Form 4
-      </Typography>
+      <SeparatedAccordion
+        expanded={isCurrentExpanded(3)}
+        onChange={expand(3)}
+        title="جدول الكميات"
+      >
+        <AmountsSection />
+      </SeparatedAccordion>
+      <SeparatedAccordion
+        expanded={isCurrentExpanded(4)}
+        onChange={expand(4)}
+        title="مرفقات المنافسة"
+      >
+        <AttachmentsSection />
+      </SeparatedAccordion>
+      <BottomSection />
     </Stack>
   );
 }

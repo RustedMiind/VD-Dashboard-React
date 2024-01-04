@@ -1,3 +1,5 @@
+import { Management } from "./Contracts";
+
 export interface Department {
   id: number;
   name: string;
@@ -10,4 +12,5 @@ export interface Department {
   created_at: string;
   updated_at: string;
   deleted_at: null;
+  management?: Management;
 }

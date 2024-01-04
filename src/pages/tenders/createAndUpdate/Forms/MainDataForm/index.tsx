@@ -18,37 +18,90 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { TenderContext } from "../../TenderCondext";
-import { initialTenderDataState, reducer } from "./reducer";
+import { initialTenderDataState, reducer, stateToPostDto } from "./reducer";
 import generateReducerAction from "../../../../../methods/conversions/generateReducerAction";
 import dayjs from "dayjs";
-const obj = [
-  { name: "جده", id: 1 },
-  { name: "جده", id: 2 },
-  { name: "جده", id: 3 },
-  { name: "جده", id: 4 },
-];
-const applyMethod = [
-  { name: "فني ومالي", id: 1 },
-  { name: "فني", id: 2 },
-  { name: "مالي", id: 3 },
-  { name: "اخرى", id: 4 },
-];
+import axios from "axios";
+import { Api } from "../../../../../constants";
+import { TenderData } from "../../../../../types";
+import getFormOptions from "../../getFormOptions";
+import { useSnackbar } from "notistack";
+import { joinObjectValues } from "../../../../../methods/joinObjectValues";
+import { LaravelValidationError } from "../../../../../types/LaravelValidationError";
+import { AxiosErrorType } from "../../../../../types/Axios";
+import { FormStatus } from "../../../../../types/FormStatus";
+import { LoadingButton } from "@mui/lab";
+
 export default function MainDataForm() {
+  const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
+  const [options, setOptions] = useState<OptionsType>({});
+  const snackbar = useSnackbar();
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const inputProps = {
+    loading: formStatus === "loading",
+    disabled: formStatus === "loading" || formStatus === "disabled",
+  };
+  useEffect(getOptions, [form.branchId, form.managementId]);
+  useEffect(() => {
+    if (
+      typeof tenderContext.tender === "object" &&
+      tenderContext.tender.tenderdata
+    ) {
+      dispatch({
+        type: "EXTRACT_DTO",
+        payload: tenderContext.tender.tenderdata,
+      });
+    }
+  }, [tenderContext.tenderId, typeof tenderContext.tender]);
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("loading");
+    let path =
+      typeof tenderContext.tender === "object" &&
+      tenderContext.tender.tenderdata
+        ? "/" + tenderContext.tender.tenderdata.id
+        : "";
+    setFormStatus("loading");
+    axios
+      .post<{ data: TenderData }>(
+        Api(`employee/tender/data${path}`),
+        stateToPostDto(form)
+      )
+      .then((res) => {
+        snackbar.enqueueSnackbar(
+          path ? "تم تعديل بيانات المنافسة بنجاح" : "تم حفظ بيانات المنافسة"
+        );
+        setError(undefined);
+        console.log(res);
+        tenderContext.setTenderId &&
+          tenderContext.setTenderId(res.data.data.id);
+      })
+      .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+        snackbar.enqueueSnackbar(
+          path
+            ? "تعذر في تعديل بيانات المنافسة"
+            : "تعذر في حفظ بيانات المنافسة",
+          {
+            variant: "error",
+          }
+        );
+        setError(joinObjectValues(err.response?.data?.data));
+        console.log(err);
+      })
+      .finally(() => {
+        setFormStatus("none");
+      });
+  }
   return (
-    <Grid
-      container
-      spacing={2}
-      component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        tenderContext.setTenderId && tenderContext.setTenderId(1);
-      }}
-    >
+    <Grid container spacing={2} component="form" onSubmit={handleSubmit}>
+      <Grid item xs={12}>
+        <Typography color={"error.main"}>{error}</Typography>
+      </Grid>
       <GridItem>
         <AddLabelToEl label="نوع الفرع" required>
           <TextField
@@ -58,10 +111,11 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_BRANCH_ID", e.target.value));
             }}
+            {...inputProps}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
+            {options.branches?.map((branch) => (
+              <MenuItem key={branch.value} value={branch.value}>
+                {branch.name}
               </MenuItem>
             ))}
           </TextField>
@@ -78,10 +132,11 @@ export default function MainDataForm() {
                 generateReducerAction("SET_MANAGEMENT_ID", e.target.value)
               );
             }}
+            {...inputProps}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
+            {options.managementes?.map((management) => (
+              <MenuItem key={management.value} value={management.value}>
+                {management.name}
               </MenuItem>
             ))}
           </TextField>
@@ -100,6 +155,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_REFERENCE_NUMBER", e.target.value)
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -117,6 +173,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_NUMBER", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -130,6 +187,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_NAME", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -144,11 +202,12 @@ export default function MainDataForm() {
                 generateReducerAction("SET_APPLY_DATE", date?.format() || "")
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
       <GridItem>
-        <AddLabelToEl label="الجهة الحكومية">
+        <AddLabelToEl label="الجهة الحكومية" required>
           <SelectWithFilter
             id="outlined-select-currency"
             size="small"
@@ -163,10 +222,11 @@ export default function MainDataForm() {
                 )
               );
             }}
-            options={obj.map((item) => ({
+            options={options.organization?.map((item) => ({
               label: item.name,
-              value: item.id,
+              value: item.value,
             }))}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -181,6 +241,7 @@ export default function MainDataForm() {
                 generateReducerAction("SET_END_DATE", date?.format() || "")
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -194,6 +255,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_PRICE", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -206,9 +268,10 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
+            {...inputProps}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
+            {options.tenderTypes?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>
             ))}
@@ -226,9 +289,10 @@ export default function MainDataForm() {
                 generateReducerAction("SET_DEPARTMENT_ID", e.target.value)
               );
             }}
+            {...inputProps}
           >
-            {obj.map((option) => (
-              <MenuItem key={option.id} value={option.name}>
+            {options.departments?.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>
             ))}
@@ -245,6 +309,7 @@ export default function MainDataForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_ACTIVITY", e.target.value));
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
@@ -263,10 +328,10 @@ export default function MainDataForm() {
                 generateReducerAction("SET_CONTRACT_DURATION", e.target.value)
               );
             }}
+            {...inputProps}
           />
         </AddLabelToEl>
       </GridItem>
-      {/* All below not statefull */}
       <Grid item xs={12}>
         <FormControl
           sx={{
@@ -275,6 +340,7 @@ export default function MainDataForm() {
             mt: 2,
             alignItems: "center",
           }}
+          {...inputProps}
         >
           <FormLabel id="demo-row-radio-buttons-group-label">
             طريقة التقديم
@@ -284,10 +350,16 @@ export default function MainDataForm() {
             name="row-radio-buttons-group"
             aria-labelledby="demo-row-radio-buttons-group-label"
             sx={{ ml: 2 }}
+            value={form.applyTypeId}
+            onChange={(e) => {
+              dispatch(
+                generateReducerAction("SET_APPLY_TYPE_ID", e.target.value)
+              );
+            }}
           >
-            {applyMethod.map((method) => (
+            {options.applyMethods?.map((method) => (
               <FormControlLabel
-                value={method.id}
+                value={method.value}
                 control={<Radio />}
                 label={method.name}
               />
@@ -299,22 +371,99 @@ export default function MainDataForm() {
       <Grid item xs={12}>
         <Box display={"flex"} flexDirection={"row"}>
           <Typography alignSelf={"center"}>الضمان المطلوب</Typography>
-          <FormGroup row sx={{ ml: 2 }}>
-            {applyMethod.map((method) => (
+          <FormGroup row sx={{ ml: 2 }} {...inputProps}>
+            {options.warranties?.map((method) => (
               <FormControlLabel
+                key={method.value}
+                checked={form.requiredWarranty.includes(method.value)}
                 sx={{ ml: 2 }}
                 control={<Checkbox />}
                 label={method.name}
+                value={method.value}
+                onChange={(e) => {
+                  dispatch(
+                    generateReducerAction("TOGGLE_WARRANTY_ID", method.value)
+                  );
+                }}
               />
             ))}
           </FormGroup>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "end" }}>
-          <Button type="submit" variant="contained" sx={{ width: 0.05 }}>
+          <LoadingButton
+            {...inputProps}
+            type="submit"
+            variant="contained"
+            sx={{ width: 0.05 }}
+          >
             حفظ
-          </Button>
+          </LoadingButton>
         </Box>
       </Grid>
     </Grid>
   );
+  function getOptions() {
+    getFormOptions({
+      branch_id: form.branchId,
+      management_id: form.managementId,
+    })
+      .then((data) => {
+        setOptions({
+          allEmployees: toOptionArr(data.employees_branch),
+          branches: toOptionArr(data.banches),
+          managementEmployee: toOptionArr(data.employees_management),
+          managementes: toOptionArr(data.managements),
+          departments: toOptionArr(data.departments),
+          applyMethods: toOptionArr(data.apply),
+          warranties: toOptionArr(data.warranty),
+          organization: toOptionArr(data.organization),
+          tenderTypes: toOptionArr(data.type),
+        });
+      })
+      .catch((err) => {});
+  }
 }
+
+function toOptionArr(
+  arr: { id: number; name: string }[] | undefined
+): OptionType[] | undefined {
+  return arr?.map((e) => ({
+    name: e.name,
+    value: e.id.toString(),
+  }));
+}
+
+type OptionsType = {
+  branches?: OptionType[];
+  departments?: OptionType[];
+  managementes?: OptionType[];
+  managementEmployee?: OptionType[];
+  allEmployees?: OptionType[];
+  applyMethods?: OptionType[];
+  warranties?: OptionType[];
+  organization?: OptionType[];
+  tenderTypes?: OptionType[];
+};
+
+type OptionType = { name: string; value: string };
+
+type TenderTypeType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TenderWarrantyType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type TenderApplyMethodType = {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+};
