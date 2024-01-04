@@ -29,7 +29,7 @@ export default function AddDialog(props: PropsType) {
         props.setData();
       })
       .catch((err) => {
-        if (err.response.data.msg != "Validation errors") {
+        if (err.response.data.msg !== "Validation errors") {
           props.setMassage(err.response.data.msg);
           props.openErrorDialog();
         }

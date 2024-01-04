@@ -31,13 +31,6 @@ function GenerateStatusChip(props: PropsType): JSX.Element {
         </Typography>
       );
       break;
-
-      chip = (
-        <Typography color="info" variant="h5">
-          "منتهي"
-        </Typography>
-      );
-      break;
     default:
       break;
   }

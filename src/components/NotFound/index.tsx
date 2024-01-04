@@ -14,7 +14,7 @@ export default function NotFound(props: PropsType) {
           }}
         >
           <Stack>
-            <img src={img1} />
+            <img src={img1} alt="" />
             <Typography
               sx={{
                 fontSize: "28px",

@@ -1,16 +1,6 @@
-import {
-  Grid,
-  Typography,
-  Button,
-  TextField,
-  Box,
-  Stack,
-  Chip,
-} from "@mui/material";
+import { Typography, Button, TextField, Box, Stack, Chip } from "@mui/material";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import DeleteIcon from "@mui/icons-material/Delete";
-import StatusChip from "../../../../components/StatusChip";
-import { useState } from "react";
 import { isStringAllNumbers } from "../../../../methods";
 import axios from "axios";
 import { Api } from "../../../../constants";
@@ -27,7 +17,7 @@ function TableHeader(props: PropsType) {
       })
       .then(() => {
         props.getContractsData();
-      })
+      });
   }
 
   return (

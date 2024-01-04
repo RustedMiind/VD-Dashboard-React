@@ -17,7 +17,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import BadgeIcon from "@mui/icons-material/Badge";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { AdminUrl } from "../../../constants/AdminUrl";
 

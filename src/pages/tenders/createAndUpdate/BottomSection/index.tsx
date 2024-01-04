@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { TenderContext } from "../TenderCondext";
 import ProgressBar from "./ProgressBar";
-import { Button, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { Api } from "../../../../constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { FormStatus } from "../../../../types/FormStatus";
 import { LoadingButton } from "@mui/lab";
 
 function BottomSection() {
-  const { tender, getTenderData, tenderId } = useContext(TenderContext);
+  const { tender, tenderId } = useContext(TenderContext);
   let progress = 0;
   let tenderDone = false;
   let showProgress = true;

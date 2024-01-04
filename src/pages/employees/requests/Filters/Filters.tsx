@@ -1,9 +1,8 @@
-import { Grid, Paper, TextField, Menu, MenuItem } from "@mui/material";
+import { Grid, Paper, TextField, MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import SelectCustom from "../../../../components/MuiCustom";
-import { useEffect, useReducer, useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import reducer, { ActionTypes, FiltersInit } from "./reducer";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { ActionTypes } from "./reducer";
 import { FilterType, OrderByType } from "./FilterType";
 import { DateFormatString } from "../../../../constants/DateFormat";
 import { RequestStatusType } from "../../procedures/types";

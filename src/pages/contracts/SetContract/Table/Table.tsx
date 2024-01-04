@@ -15,8 +15,7 @@ import ContractsDataTable from "./ContractsDataTable";
 
 function ContractsTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
-  const { contracts, limit, setLimit } = useContext(ContractsContext);
-  const toView = typeof contracts === "object" ? contracts?.data : undefined;
+  const { limit, setLimit } = useContext(ContractsContext);
 
   function CheckboxHandler(id: number) {
     return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {

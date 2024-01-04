@@ -2,7 +2,6 @@ import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import * as React from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import img1 from "../../../../assets/images/branch-empty.png";
-import { NavLink } from "react-router-dom";
 
 export default function TenderNotFound(props: PropsType) {
   return (

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -444,24 +443,3 @@ type OptionsType = {
 };
 
 type OptionType = { name: string; value: string };
-
-type TenderTypeType = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type TenderWarrantyType = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type TenderApplyMethodType = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-};

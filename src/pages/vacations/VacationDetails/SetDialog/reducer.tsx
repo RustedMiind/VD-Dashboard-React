@@ -1,6 +1,4 @@
-import { getDateDiffNegativeAllowed } from "../../../../methods";
 import { ReducerAction, Vacation } from "../../../../types";
-import { VacationsDetailsType } from "../../branchDetails";
 import { VacationFormType } from "./VacationFormType";
 
 const reducer = (

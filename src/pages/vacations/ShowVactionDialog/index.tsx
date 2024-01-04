@@ -2,14 +2,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Button,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
 import { VacationsDetailsType } from "../branchDetails";
-import { DialogState } from "../branchDetails/FilterDetails";
 
 export default function ShowVactionDialog(props: TypeProps) {
   const vacationDataObject = props.vacationsData?.filter((item) => {

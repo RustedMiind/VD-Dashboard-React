@@ -1,10 +1,7 @@
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import DataInputLike from "../../../../components/DataInputLike";
-import { formatDate } from "../../../../methods";
 import { RequestDetails } from "../../../../types/RequestDetails";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import ImageIcon from "@mui/icons-material/Image";
 import FilePreview from "../../../../components/FilePreview";
 
 function CustodyDetails({ details }: PropsType) {
