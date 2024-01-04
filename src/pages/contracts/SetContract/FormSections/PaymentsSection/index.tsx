@@ -9,8 +9,6 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { ContractPayment } from "../../../../../types";
@@ -20,9 +18,7 @@ import axios from "axios";
 import SetDialog from "./SetDialog";
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditNoteIcon from "@mui/icons-material/EditNote";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSnackbar } from "notistack";
 

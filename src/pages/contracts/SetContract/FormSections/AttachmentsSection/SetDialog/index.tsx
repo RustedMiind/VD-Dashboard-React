@@ -1,31 +1,19 @@
 import Button from "@mui/material/Button";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Alert,
-  Grid,
-  ListItemIcon,
-  MenuItem,
-  Snackbar,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import {
-  ChangeTypeValues,
-  ContractPayment,
-  ContractTask,
-} from "../../../../../../types";
+import { ChangeTypeValues } from "../../../../../../types";
 
 // Icons
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import UploadFileInput from "../../../../../../components/UploadFileInput";
 import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
 import { ArrayToMultiline, objectToFormData } from "../../../../../../methods";
@@ -38,12 +26,6 @@ import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { useSnackbar } from "notistack";
-
-function FormTextField(props: TextfieldPropsType) {
-  return <TextField {...props} size="medium" fullWidth variant="outlined" />;
-}
-
-type TextfieldPropsType = TextFieldProps;
 
 function SetDialog(props: PropsType) {
   const ContractDetails = useContext(ContractDetailsContext);

@@ -9,8 +9,6 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { ContractDetailsContext } from "../../ContractDetailsContext";

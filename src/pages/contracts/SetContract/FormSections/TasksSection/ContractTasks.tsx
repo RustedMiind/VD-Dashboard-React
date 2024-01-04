@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Stack,
-  Typography,
   TableContainer,
   Table,
   TableHead,
@@ -10,16 +9,9 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import SetDialog from "./SetDialog";
 import { useContext, useState } from "react";

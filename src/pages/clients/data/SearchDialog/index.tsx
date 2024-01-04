@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   Dialog,
@@ -17,17 +16,14 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
-import { FormData, individualInitial, reducer } from "../../addClient/reducer";
+import { individualInitial, reducer } from "../../addClient/reducer";
 import { Api } from "../../../../constants";
-import { useNavigate } from "react-router-dom";
 import { Branch, Broker } from "../../../../types";
-import { Snackbar } from "@mui/material";
 import { Client } from "../../../../types/Clients";
 import { useSnackbar } from "notistack";
 
 function PopUp({ open, onClose, getClients }: PropsType) {
   const [searchClient, dispatch] = useReducer(reducer, individualInitial);
-  const navigate = useNavigate();
   const [branches, setBranches] = useState<Branch[] | undefined>(undefined);
   const [brokers, setBrokers] = useState<Broker[] | undefined>(undefined);
   const snackbar = useSnackbar();

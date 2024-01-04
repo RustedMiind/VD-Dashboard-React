@@ -1,11 +1,11 @@
-import { Alert, Button, Snackbar } from "@mui/material";
+import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Stack } from "@mui/system";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { Contract } from "../../../../types";
 import { ContractsContext } from "../../Context/ContractsContext";

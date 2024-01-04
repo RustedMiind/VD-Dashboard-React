@@ -8,7 +8,6 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  MenuItem,
   InputAdornment,
   CircularProgress,
 } from "@mui/material";
@@ -19,7 +18,7 @@ import { FormData, individualInitial, reducer } from "./reducer";
 import { useState, useEffect, useReducer } from "react";
 import PopUpError from "../data/PopUpError/PopUpError";
 import { Branch, Broker } from "../../../types";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Api, Domain } from "../../../constants";
 import { objectToFormData } from "../../../methods";
@@ -27,7 +26,6 @@ import BtnFile from "./BtnFile";
 import RequiredSymbol from "../../../components/RequiredSymbol";
 import FilePreview from "../../../components/FilePreview";
 import { Client } from "../../../types/Clients";
-import { AccountCircle } from "@mui/icons-material";
 import SelectWithFilter from "../../../components/SelectWithFilter";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useSnackbar } from "notistack";
@@ -88,7 +86,6 @@ export default function FormAdd() {
 
       setclientEdit(data.data);
 
-      let { card_image, ...FormWithoutImage } = data.data;
       dispatch({ type: "SET_DTO", payload: data.data });
     } catch (error) {
       console.log(error);

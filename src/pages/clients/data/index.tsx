@@ -1,13 +1,12 @@
 import { Stack, Typography, Box, Paper, Button } from "@mui/material";
 import SearchBar from "./SearchBar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../constants";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { NavLink } from "react-router-dom";
 import ClientRequestsTable from "./Table";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteBtn from "./DeleteButton/DeleteBtn";
 import SearchDialog from "./SearchDialog";
 import { IndexContextProvider } from "../Context/Store";
 import LoadingTable from "../../../components/LoadingTable";

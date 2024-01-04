@@ -4,14 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Alert,
-  Grid,
-  MenuItem,
-  Snackbar,
-  Typography,
-  TypographyProps,
-} from "@mui/material";
+import { Grid, MenuItem, Typography } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { AddTaskFormInit, AddTaskFormType, reducer } from "./reducer";
 import axios from "axios";
@@ -23,7 +16,6 @@ import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import { LaravelValidationError } from "../../../../../../types/LaravelValidationError";
-import { AddPaymentFormType } from "../../PaymentsSection/SetDialog/reducer";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { useSnackbar } from "notistack";
 
