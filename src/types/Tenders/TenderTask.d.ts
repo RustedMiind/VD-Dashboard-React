@@ -19,5 +19,5 @@ export interface TenderTask {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-  tender_warranties?: (DbOptionType & { warranty_id: number })[];
+  task_tender_warranties?: (DbOptionType & { warranty_id: number })[];
 }

@@ -64,7 +64,7 @@ export function createDtoToState(dto: TenderTask): TenderManagersState {
     technicalAlternative: dto.employee_id_trace.toString(), // Add appropriate property from PostDto if available
     technicalAlternativeEndDate: dto.end_dete_trace,
     requiredFiles:
-      dto.tender_warranties?.map((x) => x.warranty_id.toString()) || [],
+      dto.task_tender_warranties?.map((x) => x.warranty_id.toString()) || [],
     notes: dto.note,
     financialManager: dto.eng_employee_id_file_finacial.toString(),
     financialEndDate: dto.dete_file_finacial,
