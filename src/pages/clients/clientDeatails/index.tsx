@@ -13,7 +13,7 @@ import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlin
 
 function ClientDetails() {
   const { id } = useParams();
-  const [limit, setLimit] = useState<string>("5");
+  const [limit, setLimit] = useState<string>("25");
 
   const [clientData, setClientData] = useState<
     ClientDetailsType | "loading" | "error"

@@ -13,6 +13,7 @@ import TabsAndAdd from "./TabsAndAdd";
 import LevelsPlaceholder from "../../../components/PlaceHolder/LevelsPlaceholder";
 import { EmployeeType } from "../../../types";
 import { conversions } from "../../../methods/conversions";
+import { useSnackbar } from "notistack";
 
 const InitLevel: Step = {
   action: 0,
@@ -35,6 +36,7 @@ function EmploeesRequestsProcedures() {
   const [departments, setDepartments] = useState<
     DepartmentWithEmployeesType[] | null
   >();
+  const { enqueueSnackbar } = useSnackbar();
   const [employees, setEmployees] = useState<Partial<EmployeeType>[] | null>(
     null
   );
@@ -104,30 +106,8 @@ function EmploeesRequestsProcedures() {
           </LoadingButton>
         </Stack>
       </Paper>
-      <Snackbar
-        open={sendState === "success" || sendState === "error"}
-        autoHideDuration={6000}
-        onClose={snackbarClose}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <Alert
-          {...((sendState === "success" && {
-            children: "تم الحفظ بنجاح",
-            severity: "success",
-          }) ||
-            (sendState === "error" && {
-              children: "تعذر في الحفظ تأكد من صحة المدخلات",
-              severity: "error",
-            }))}
-          sx={{ width: 1 }}
-        ></Alert>
-      </Snackbar>
     </Stack>
   );
-
-  function snackbarClose() {
-    setSendState("none");
-  }
 
   function setLevels(payload: Step[]) {
     setProcedure({ ...procedure, levels: payload });
@@ -178,11 +158,16 @@ function EmploeesRequestsProcedures() {
       })
       .then((res) => {
         console.log(res);
-        setSendState("success");
+        enqueueSnackbar("تم حفظ الاجراءات بنجاح");
       })
       .catch((err) => {
         console.log(err);
-        setSendState("error");
+        enqueueSnackbar(
+          err?.response?.data?.msg || "تعذر في حفظ اجراءات الطلبات"
+        );
+      })
+      .finally(() => {
+        setSendState("none");
       });
   }
 
@@ -266,7 +251,7 @@ export interface ProcedureType {
   levels: Step[];
 }
 
-type SendStateType = "none" | "sending" | "success" | "error";
+type SendStateType = "none" | "sending";
 type EnpoindStateType = "none" | "loading" | "error";
 
 export interface LevelType {

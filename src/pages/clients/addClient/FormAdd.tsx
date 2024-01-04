@@ -122,6 +122,7 @@ export default function FormAdd() {
     axios
       .post(Api("employee/client/store"), objectToFormData(formData))
       .then((res) => {
+        snackbar.enqueueSnackbar("تم حفظ بيانات العميل : " + formData.name);
         navigate("/react/clients");
       })
       .catch((err) => {

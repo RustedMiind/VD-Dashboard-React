@@ -22,7 +22,7 @@ function ClientData() {
     "loading"
   );
   const [search, setSearch] = useState("");
-  const [limit, setLimit] = useState<string>("5");
+  const [limit, setLimit] = useState<string>("25");
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const handleClickOpen = () => {
     setOpen(true);
