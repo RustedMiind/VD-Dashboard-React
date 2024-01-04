@@ -1,5 +1,5 @@
 import { isStringAllNumbers } from "../../../../../../methods";
-import { ReducerAction } from "../../../../../../types";
+import { ReducerAction, TenderData } from "../../../../../../types";
 
 export function reducer(
   state: TenderDataState,
@@ -20,9 +20,7 @@ export function reducer(
         ? { ...state, referenceNumber: action.payload }
         : state;
     case "SET_NUMBER":
-      return isStringAllNumbers(action.payload)
-        ? { ...state, number: action.payload }
-        : state;
+      return { ...state, number: action.payload };
     case "SET_NAME":
       return { ...state, name: action.payload };
     case "SET_APPLY_DATE":
@@ -66,9 +64,33 @@ export function reducer(
       return { ...state, ...action.payload };
     case "SET_RESET":
       return { ...initialTenderDataState, ...action.payload };
+    case "EXTRACT_DTO":
+      return dtoToState(action.payload);
     default:
       return state;
   }
+}
+
+export function dtoToState(dto: TenderData): TenderDataState {
+  return {
+    branchId: `${dto.department?.management?.branch_id || ""}`,
+    managementId: `${dto.department?.management?.id || ""}`,
+    referenceNumber: dto.code_reference.toString(),
+    number: dto.code_tender.toString(),
+    name: dto.name,
+    applyDate: dto.strat_date,
+    governmentalOrganizationId: dto.organization_id.toString(),
+    endDate: dto.end_date,
+    price: dto.price.toString(),
+    typeId: dto.type_id.toString(),
+    departmentId: dto.department_id.toString(),
+    activity: dto.activity || "",
+    contractDuration: dto.period.toString(),
+    applyTypeId: dto.apply_id.toString(),
+    requiredWarranty: dto.tender_warranties.map((x) =>
+      x.warranty_id.toString()
+    ),
+  };
 }
 
 export function stateToPostDto(state: TenderDataState): PostDto {
@@ -168,6 +190,7 @@ interface SetPartial
   extends ReducerAction<Partial<TenderDataState>, "SET_OBJECT"> {}
 interface SetReset
   extends ReducerAction<Partial<TenderDataState>, "SET_RESET"> {}
+interface ExtractDto extends ReducerAction<TenderData, "EXTRACT_DTO"> {}
 
 type ActionTypes =
   | SetBranchId
@@ -186,4 +209,5 @@ type ActionTypes =
   | SetApplyTypeId
   | ToggleWarrantyId
   | SetPartial
-  | SetReset;
+  | SetReset
+  | ExtractDto;

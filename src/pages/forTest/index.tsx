@@ -1,10 +1,12 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import UploadFileInput from "../../components/UploadFileInput";
 import { useState } from "react";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
+import { useSnackbar } from "notistack";
 
 function ForTest() {
   const [file, setFile] = useState<File | undefined>(undefined);
+  const snackbar = useSnackbar();
 
   return (
     <Stack>
@@ -18,6 +20,28 @@ function ForTest() {
             { id: 4, label: "Orange" },
           ]}
         />
+        <Stack direction={"row"} spacing={1}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              snackbar.enqueueSnackbar("Hello There mr ali", {
+                variant: "success",
+              });
+            }}
+          >
+            Open Snackbar
+          </Button>
+
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => {
+              snackbar.closeSnackbar();
+            }}
+          >
+            Close Snackbar
+          </Button>
+        </Stack>
       </Paper>
     </Stack>
   );

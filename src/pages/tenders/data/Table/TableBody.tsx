@@ -15,15 +15,18 @@ import StatusChip from "../../../../components/StatusChip";
 const arr = generateUndefinedArray(30);
 
 function TableBody() {
-  const { tenderTableData, setTenderId, tenderId } = useContext(TableContext);
+  const { tenderTableData, setSelectedTenderId, selectedTenderId } =
+    useContext(TableContext);
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
     if (isSelect) {
-      setTenderId && tenderId && setTenderId([...tenderId, value]);
+      setSelectedTenderId &&
+        selectedTenderId &&
+        setSelectedTenderId([...selectedTenderId, value]);
     } else {
-      setTenderId &&
-        setTenderId((prevData) => {
+      setSelectedTenderId &&
+        setSelectedTenderId((prevData) => {
           return prevData.filter((id) => {
             return id !== value;
           });
@@ -37,14 +40,23 @@ function TableBody() {
           <TableRow key={tender.id}>
             <TableCell>
               <Checkbox
-                checked={tenderId?.includes(tender.id)}
+                checked={selectedTenderId?.includes(tender.id)}
                 value={tender.id}
                 onChange={CheckboxHandler}
               />
             </TableCell>
             <TableCell>{tender.tenderdata?.code_reference}</TableCell>
-            <TableCell>{tender.tenderdata?.code_tender}</TableCell>
-            <TableCell>{tender.tenderdata?.organization?.name}</TableCell>
+            <TableCell>
+              {" "}
+              <LimitTypography maxWidth={180}>
+                {tender.tenderdata?.code_tender}
+              </LimitTypography>
+            </TableCell>
+            <TableCell>
+              <LimitTypography>
+                {tender.tenderdata?.organization?.name}
+              </LimitTypography>
+            </TableCell>
             <TableCell>
               <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
             </TableCell>
@@ -54,7 +66,7 @@ function TableBody() {
               <StatusChip color={"primary"} disabled label={"غير مدفوع"} />
             </TableCell>
             <TableCell>{tender.tenderdata?.period} يوم</TableCell>
-            <TableCell>{tender.tenderdata?.department_id}</TableCell>
+            <TableCell>{tender.tenderdata?.department?.name}</TableCell>
             <TableCell>-</TableCell>
             <TableCell>-</TableCell>
             <TableCell>-</TableCell>

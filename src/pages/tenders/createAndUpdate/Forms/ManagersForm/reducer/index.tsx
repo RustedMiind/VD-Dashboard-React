@@ -1,4 +1,5 @@
 import { ReducerAction } from "../../../../../../types";
+import { TenderTask } from "../../../../../../types/Tenders/TenderTask";
 
 export function reducer(
   state: TenderManagersState,
@@ -45,9 +46,31 @@ export function reducer(
       return { ...state, applyManager: action.payload };
     case "SET_APPLY_DATE":
       return { ...state, applyDate: action.payload };
+    case "EXTRACT_DTO":
+      return createDtoToState(action.payload);
     default:
       return state;
   }
+}
+
+export function createDtoToState(dto: TenderTask): TenderManagersState {
+  return {
+    managerId: dto.eng_employee_id.toString(),
+    approvalEndDate: dto.end_dete_accept,
+    purchaseManagerId: dto.eng_employee_id_buy_tender.toString(),
+    purchaseDate: dto.dete_buy_tender,
+    technicalManager: dto.eng_employee_id_technical.toString(),
+    technecalEndDate: dto.end_dete_technical,
+    technicalAlternative: dto.employee_id_trace.toString(), // Add appropriate property from PostDto if available
+    technicalAlternativeEndDate: dto.end_dete_trace,
+    requiredFiles:
+      dto.task_tender_warranties?.map((x) => x.warranty_id.toString()) || [],
+    notes: dto.note,
+    financialManager: dto.eng_employee_id_file_finacial.toString(),
+    financialEndDate: dto.dete_file_finacial,
+    applyManager: dto.eng_employee_id_apply_tender.toString(),
+    applyDate: dto.dete_apply_tender,
+  };
 }
 
 export function stateToPostDto(
@@ -60,7 +83,7 @@ export function stateToPostDto(
     end_dete_accept: state.approvalEndDate,
     dete_buy_tender: state.purchaseDate,
     dete_file_finacial: state.financialEndDate,
-    employee_id_trace: state.technicalAlternativeEndDate,
+    employee_id_trace: state.technicalAlternative,
     end_dete_technical: state.technecalEndDate,
     end_dete_trace: state.technicalAlternativeEndDate,
     eng_employee_id: state.managerId,
@@ -148,6 +171,7 @@ interface SetFinancialEndDate
   extends ReducerAction<string, "SET_FINANCIAL_END_DATE"> {}
 interface SetApplyManager extends ReducerAction<string, "SET_APPLY_MANAGER"> {}
 interface SetApplyDate extends ReducerAction<string, "SET_APPLY_DATE"> {}
+interface ExtractDto extends ReducerAction<TenderTask, "EXTRACT_DTO"> {}
 
 type ActionTypes =
   | SetManagerId
@@ -163,4 +187,5 @@ type ActionTypes =
   | SetFinancialManager
   | SetFinancialEndDate
   | SetApplyManager
-  | SetApplyDate;
+  | SetApplyDate
+  | ExtractDto;

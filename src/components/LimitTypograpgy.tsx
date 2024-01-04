@@ -11,16 +11,20 @@ function LimitTypography({
       arrow
       placement={"top"}
       {...ToolTipProps}
-      title={TypographyProps.children}
+      title={
+        <Typography variant="body1">{TypographyProps.children}</Typography>
+      }
     >
       <Typography
         {...TypographyProps}
+        variant="body2"
         sx={{
           width: "fit-content",
-          maxWidth: maxWidth || 175,
+          maxWidth: maxWidth || 120,
           whiteSpace: "nowrap",
           textOverflow: "ellipsis",
           overflow: "hidden",
+
           ...TypographyProps.sx,
         }}
       />

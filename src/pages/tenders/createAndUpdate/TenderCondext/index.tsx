@@ -23,7 +23,7 @@ export function TenderContextProfider({
 
   function getTenderData() {
     if (idToUse) {
-      setTender("loading");
+      typeof tender !== "object" && setTender("loading");
       axios
         .get<{ data?: Tender }>(Api("employee/tender/" + idToUse))
         .then((res) => {
@@ -51,6 +51,8 @@ export function TenderContextProfider({
     if (isCompleted) formStatus = "update";
     else formStatus = "complete";
   }
+
+  console.log(formStatus);
 
   return (
     <TenderContext.Provider
