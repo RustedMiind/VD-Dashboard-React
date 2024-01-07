@@ -9,7 +9,14 @@ function WorkNeeds({ details }: PropsType) {
   ) {
     return (
       <>
-        <Grid item xs={6} />
+        <DataInputLike
+          title="الشخص المكلف"
+          cols={6}
+          value={
+            details.steps_of_approval &&
+            details.steps_of_approval[0]?.employee?.name
+          }
+        />
         <DataInputLike
           title="الكمية"
           value={details.requestable.details[0]?.quantity}

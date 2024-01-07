@@ -16,6 +16,18 @@ function CarFixDetails({ details }: PropsType) {
     return (
       <>
         <DataInputLike
+          title="رقم اللوحة"
+          value={details.requestable?.number_car}
+        />
+        <DataInputLike
+          title="الشخص المكلف"
+          cols={12}
+          value={
+            details.steps_of_approval &&
+            details.steps_of_approval[0]?.employee?.name
+          }
+        />
+        <DataInputLike
           cols={12}
           title="نوع السيارة"
           value={details.requestable?.car_type}

@@ -11,9 +11,12 @@ import MissionDetails from "./MissionDetails";
 import CarFixDetails from "./CarFixDetails";
 import CustodyDetails from "./CustodyDetails";
 import AdvanceDetails from "./AdvanceDetails";
+import { useSnackbar } from "notistack";
 
 function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (props.open && props.requestId > 0) {
@@ -24,12 +27,22 @@ function DetailsDialog(props: PropsType) {
         )
         .then(({ data }) => {
           setDetails(data.request);
+        })
+        .catch(() => {
+          enqueueSnackbar("عذرا, لم اتمكن من تحميل بيانات الطلب", {
+            variant: "error",
+          });
         });
     }
-  }, [props.open]);
+  }, [props.requestId]);
 
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={props.open && !!details}
+      onClose={props.onClose}
+      maxWidth="sm"
+      fullWidth
+    >
       <DialogTitle>نوع الطلب</DialogTitle>
       <DialogContent>
         <Grid container>

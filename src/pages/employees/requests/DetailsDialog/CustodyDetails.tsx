@@ -15,11 +15,19 @@ function CustodyDetails({ details }: PropsType) {
   return (
     <>
       <DataInputLike
+        title="الشخص المكلف"
+        cols={6}
+        value={
+          details.steps_of_approval &&
+          details.steps_of_approval[0]?.employee?.name
+        }
+      />
+      <DataInputLike
         title="العهدة السابقة"
         value={details.requestable?.last_custody}
       />
       <DataInputLike
-        cols={12}
+        cols={6}
         title="متبقي العهدة السابقة"
         value={details.requestable?.remaining_lastCustody}
       />

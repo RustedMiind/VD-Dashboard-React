@@ -95,7 +95,7 @@ function StatusDialog(props: PropsType) {
     </Dialog>
   );
 
-  function generateChip(value: number): JSX.Element {
+  function generateChip(value?: number): JSX.Element {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
 
