@@ -3,6 +3,7 @@ import { CountType } from "../../../types/Count";
 import { Badge, Chip, Stack } from "@mui/material";
 import { OrderType } from "../clientsProcess/types/OrderType";
 import { ActionTypes } from "./Filter/reducer";
+import NonRoundedChip from "../../../components/NonRoundedChip";
 
 const RequestTypesToggles = ({
   selected,
@@ -39,7 +40,7 @@ const RequestTypesToggles = ({
         const count = findCount(index + 1)?.count || 0;
         return (
           <Badge key={chip.name} badgeContent={count} max={19} color="error">
-            <Chip
+            <NonRoundedChip
               color="primary"
               onClick={setCurrent(chip.id)}
               variant={orderTypeId === chip.id ? "filled" : "outlined"}

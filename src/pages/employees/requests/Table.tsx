@@ -14,6 +14,7 @@ import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
 import { requestTypes } from "./RequestTypes";
 import { useState } from "react";
+import NonRoundedChip from "../../../components/NonRoundedChip";
 
 /*
 -1 pending
@@ -123,7 +124,7 @@ function EmployeesRequestsTable(props: PropsType) {
       case -1:
         if (HAS_ACCESS) {
           chip = (
-            <Chip
+            <NonRoundedChip
               color="primary"
               onClick={props.openModel(request)}
               variant={"filled"}
@@ -132,7 +133,7 @@ function EmployeesRequestsTable(props: PropsType) {
           );
         } else {
           chip = (
-            <Chip
+            <NonRoundedChip
               color="primary"
               onClick={props.openStatus(request)}
               variant={variant}
@@ -143,7 +144,7 @@ function EmployeesRequestsTable(props: PropsType) {
         break;
       case 0:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="error"
             onClick={props.openStatus(request)}
             variant={variant}
@@ -153,7 +154,7 @@ function EmployeesRequestsTable(props: PropsType) {
         break;
       case 1:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="success"
             onClick={props.openStatus(request)}
             variant={variant}
@@ -163,7 +164,7 @@ function EmployeesRequestsTable(props: PropsType) {
         break;
       case 2:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="success"
             onClick={props.openStatus(request)}
             variant={variant}

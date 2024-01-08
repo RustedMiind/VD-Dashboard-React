@@ -5,6 +5,7 @@ import { isStringAllNumbers } from "../../../../methods";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { useNavigate } from "react-router-dom";
+import NonRoundedChip from "../../../../components/NonRoundedChip";
 
 function TableHeader(props: PropsType) {
   const deleteDisabled = props.selectedItems.length === 0;
@@ -31,10 +32,10 @@ function TableHeader(props: PropsType) {
           حالة العقود
         </Typography>
         <Stack spacing={1} direction={"row"}>
-          <Chip color="primary" label={props.contractsCounts.end} />
-          <Chip color="warning" label={props.contractsCounts.late} />
-          <Chip color="error" label={props.contractsCounts.stopped} />
-          <Chip color="success" label={props.contractsCounts.work} />
+          <NonRoundedChip color="primary" label={props.contractsCounts.end} />
+          <NonRoundedChip color="warning" label={props.contractsCounts.late} />
+          <NonRoundedChip color="error" label={props.contractsCounts.stopped} />
+          <NonRoundedChip color="success" label={props.contractsCounts.work} />
         </Stack>
       </Stack>
       <Stack

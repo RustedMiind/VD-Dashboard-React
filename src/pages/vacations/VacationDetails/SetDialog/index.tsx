@@ -29,6 +29,7 @@ import { LoadingButton } from "@mui/lab";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import { useSnackbar } from "notistack";
+import NonRoundedChip from "../../../../components/NonRoundedChip";
 
 const PopupVacations = (props: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
@@ -280,7 +281,7 @@ const PopupVacations = (props: PropsType) => {
                   }
                 );
                 return selectedNames.map((chip) => (
-                  <Chip
+                  <NonRoundedChip
                     key={chip?.id}
                     size="small"
                     label={chip?.name}
