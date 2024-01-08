@@ -3,8 +3,8 @@ import ControlSection from "./ControlSection";
 import TendersTable from "./Table";
 import TendersFilters from "./Filters";
 import Counters from "./Counters";
-import { TableContext, TenderTableContextProvider } from "./TableContext";
-import { useContext, useState } from "react";
+import { TenderTableContextProvider } from "./TableContext";
+import { useState } from "react";
 import CreateDialog from "./CreateDialog";
 
 function TendersData() {

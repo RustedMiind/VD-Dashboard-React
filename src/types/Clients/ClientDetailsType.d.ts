@@ -1,10 +1,4 @@
 import { Contract } from "../Contracts";
-import { Branch } from "../Branch";
-import { EmployeeType } from "../Employee";
-import { ContractAttachment } from "./ContractAttachment";
-import { ContractPayment } from "./ContractPayment";
-import { ContractTask } from "./ContractTask";
-import { ContractType } from "./ContractType";
 import { Client } from "./Client";
 
 export interface ClientDetailsType {

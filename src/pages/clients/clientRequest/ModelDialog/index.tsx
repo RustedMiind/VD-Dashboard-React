@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -9,16 +8,16 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Snackbar,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { Api } from "../../../../constants";
 import { ModelFormInitialState, reducer } from "./reducer";
 import { ModelStatusType } from "./ModelTypes";
+import { useSnackbar } from "notistack";
 
 const ModelDialog = ({
   open,
@@ -28,16 +27,7 @@ const ModelDialog = ({
   setRequests,
 }: PropsType) => {
   const [formData, dispatch] = useReducer(reducer, ModelFormInitialState);
-  const [status, setStatus] = useState<{
-    type: "success" | "error";
-    message: string;
-    show: boolean;
-  }>({
-    type: "success",
-    message: "تم الارسال بنجاح",
-    show: false,
-  });
-  console.log();
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     if (open && requestId) {
       dispatch({ type: "SET_CLIENT_ID", payload: requestId });
@@ -46,34 +36,21 @@ const ModelDialog = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(formData);
     if (formData.client_id) {
       axios
         .post(Api(`employee/client/order/addStep/${stepId}`), formData)
         .then((res) => {
           setRequests();
-          console.log(res);
-          setStatus({
-            type: "success",
-            message: "تم اتخاذ الاجراء بنجاح",
-            show: true,
-          });
+          enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
         })
         .catch((err) => {
-          console.log(err);
-          setStatus({
-            type: "error",
-            message: err.response.data.message || "",
-            show: true,
+          enqueueSnackbar(err.response.data.message || "", {
+            variant: "error",
           });
         });
     } else {
-      setStatus({
-        type: "error",
-        message: "يجب تعبئة جميع الحقول",
-        show: true,
-      });
+      enqueueSnackbar("يجب تعبئة جميع الحقول", { variant: "error" });
     }
   };
 
@@ -147,19 +124,6 @@ const ModelDialog = ({
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={status.show}
-        autoHideDuration={6000}
-        onClose={() => {
-          setStatus({ ...status, show: false });
-        }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <Alert severity={status.type} sx={{ width: 1 }}>
-          {status.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

@@ -1,32 +1,19 @@
 import Button from "@mui/material/Button";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Alert,
-  Grid,
-  ListItemIcon,
-  MenuItem,
-  Snackbar,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import {
-  ChangeTypeValues,
-  ContractPayment,
-  ContractTask,
-} from "../../../../../../types";
-import { ToasterType } from "../../../../../../types/other/ToasterStateType";
+import { ChangeTypeValues } from "../../../../../../types";
 
 // Icons
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import UploadFileInput from "../../../../../../components/UploadFileInput";
 import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
 import { ArrayToMultiline, objectToFormData } from "../../../../../../methods";
@@ -38,12 +25,7 @@ import {
 import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
-
-function FormTextField(props: TextfieldPropsType) {
-  return <TextField {...props} size="medium" fullWidth variant="outlined" />;
-}
-
-type TextfieldPropsType = TextFieldProps;
+import { useSnackbar } from "notistack";
 
 function SetDialog(props: PropsType) {
   const ContractDetails = useContext(ContractDetailsContext);
@@ -54,6 +36,7 @@ function SetDialog(props: PropsType) {
   const [errorState, setErrorState] = useState<
     ChangeTypeValues<Partial<AddAttachmentFormType>, string>
   >({});
+  const { enqueueSnackbar } = useSnackbar();
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -91,10 +74,7 @@ function SetDialog(props: PropsType) {
           setSendState("success");
           props.handleClose();
           dispatch({ type: "SET_RESET", payload: undefined });
-          props.updateAndOpenToaster({
-            message: "تم الحفظ بنجاح",
-            severity: "success",
-          });
+          enqueueSnackbar("تم الحفظ بنجاح");
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
         .catch(
@@ -106,12 +86,8 @@ function SetDialog(props: PropsType) {
               >;
             }>
           ) => {
-            console.log(err);
             setSendState("error");
-            props.updateAndOpenToaster({
-              message: "تعذر في الحفظ",
-              severity: "error",
-            });
+            enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
             if (err.response?.status === 422) {
               setErrorState({
                 name: ArrayToMultiline(err.response.data?.data?.name),
@@ -233,8 +209,6 @@ function SetDialog(props: PropsType) {
 }
 
 type PropsType = {
-  toaster: ToasterType;
-  updateAndOpenToaster: (p: Partial<ToasterType>) => void;
   open: boolean;
   handleClose: () => void;
 } & (

@@ -1,11 +1,9 @@
 import { useEffect, useState, useReducer, useContext } from "react";
 import {
-  Alert,
   Box,
   Button,
   Grid,
   MenuItem,
-  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -26,6 +24,7 @@ import { Contract } from "../../../../../types";
 import dayjs from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
 import FilePreview from "../../../../../components/FilePreview";
+import { useSnackbar } from "notistack";
 
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack p={1}>{props.children}</Stack>;
@@ -37,25 +36,11 @@ const ContractData = (props: PropsType) => {
   const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
-  const [toaster, setToaster] = useState<ToasterType>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
   const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
-  function updateToaster(partial: Partial<ToasterType>) {
-    setToaster({ ...toaster, ...partial });
-  }
-  function updateAndOpenToaster(partial: Partial<ToasterType>) {
-    updateToaster({ ...partial, open: true });
-  }
-  function handleCloseToaster() {
-    updateToaster({ open: false });
-  }
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (!props.edit) {
-      console.log("NOT NOT NOT In Edit Mode ");
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
     } else if (contractDetails.contract) {
       dispatch({
@@ -96,19 +81,11 @@ const ContractData = (props: PropsType) => {
           objectToFormData(contractData)
         )
         .then((res) => {
-          updateAndOpenToaster({
-            severity: "success",
-            message: "تم حفظ العقد بنجاح",
-          });
-          setTimeout(() => {
-            navigate(`../${res.data.data.id}/edit`);
-          }, 2000);
+          enqueueSnackbar("تم حفظ العقد بنجاح");
+          navigate(`../${res.data.data.id}/edit`);
         })
         .catch((err) => {
-          updateAndOpenToaster({
-            severity: "error",
-            message: "تعذر في حفظ العقد ",
-          });
+          enqueueSnackbar("تعذر في حفظ العقد ", { variant: "error" });
 
           const current: ErrorObject | undefined = err?.response?.data?.data;
 
@@ -121,18 +98,12 @@ const ContractData = (props: PropsType) => {
           objectToFormData(contractData)
         )
         .then((response) => {
-          updateAndOpenToaster({
-            severity: "success",
-            message: "تم تعديل العقد بنجاح",
-          });
+          enqueueSnackbar("تم تعديل العقد بنجاح");
         })
         .catch((error) => {
           const current: ErrorObject | undefined = error?.response?.data?.data;
           setErrors(current);
-          updateAndOpenToaster({
-            severity: "error",
-            message: "تعذر في تعديل العقد ",
-          });
+          enqueueSnackbar("تعذر في تعديل العقد ");
         });
     }
   };
@@ -373,7 +344,6 @@ const ContractData = (props: PropsType) => {
               select
               value={contractData?.employee_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 dispatch({
                   type: "EMPLOYEE_ID",
                   payload: parseInt(e.target.value),
@@ -399,27 +369,8 @@ const ContractData = (props: PropsType) => {
           </GridChildren>
         </Grid>
       </Grid>
-      <Snackbar
-        open={toaster.open}
-        autoHideDuration={6000}
-        onClose={handleCloseToaster}
-      >
-        <Alert
-          onClose={handleCloseToaster}
-          severity={toaster.severity}
-          sx={{ width: "100%" }}
-        >
-          {toaster.message}
-        </Alert>
-      </Snackbar>
     </Box>
   );
-};
-
-export type ToasterType = {
-  open: boolean;
-  message: string;
-  severity: "error" | "info" | "success" | "warning";
 };
 export default ContractData;
 type PropsType = {

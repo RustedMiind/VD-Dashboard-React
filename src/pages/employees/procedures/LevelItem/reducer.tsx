@@ -4,7 +4,6 @@ import { Step } from "../types";
 
 function dispatch(state: Step) {
   return function (action: ActionTypes): Step {
-    console.log(state);
     switch (action.type) {
       case "SET_DEPARTMENT":
         if (state.employee_id !== -1) return state;

@@ -2,20 +2,17 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Button,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
 import { VacationsDetailsType } from "../branchDetails";
-import { DialogState } from "../branchDetails/FilterDetails";
 
 export default function ShowVactionDialog(props: TypeProps) {
   const vacationDataObject = props.vacationsData?.filter((item) => {
     return item.id === props.itemId;
   });
-  console.log(vacationDataObject && vacationDataObject[0]?.id);
 
   return (
     <>
@@ -65,9 +62,7 @@ export default function ShowVactionDialog(props: TypeProps) {
                     }
                     size="small"
                     fullWidth
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                    }}
+                    onChange={(e) => {}}
                   />
                 </Grid>
                 <Grid item md={6} my={2}>
@@ -80,9 +75,7 @@ export default function ShowVactionDialog(props: TypeProps) {
                     size="small"
                     fullWidth
                     sx={{ ml: 2 }}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                    }}
+                    onChange={(e) => {}}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -95,9 +88,7 @@ export default function ShowVactionDialog(props: TypeProps) {
                     disabled
                     size="small"
                     fullWidth
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                    }}
+                    onChange={(e) => {}}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -111,9 +102,7 @@ export default function ShowVactionDialog(props: TypeProps) {
                     size="small"
                     fullWidth
                     sx={{ ml: 2 }}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                    }}
+                    onChange={(e) => {}}
                   />
                 </Grid>
               </Grid>

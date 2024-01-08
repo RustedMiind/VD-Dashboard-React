@@ -13,7 +13,6 @@ export function TenderTableContextProvider({
   const [tenderTableData, setTenderTableData] =
     useState<TenderStateType>("none");
   const [selectedTenderId, setSelectedTenderId] = useState<number[]>([]);
-  console.log(selectedTenderId);
 
   let [limit, setLimit] = useState<string>("25");
   function getTender(params?: unknown) {
@@ -21,7 +20,6 @@ export function TenderTableContextProvider({
     axios
       .get<{ data: Tender[] }>(Api("employee/tender"), { params })
       .then((res) => {
-        console.log("res", res.data.data);
         if (res.data.data.length) {
           setTenderTableData(res.data.data);
         } else {

@@ -173,14 +173,12 @@ function ModelDialog(props: PropsType) {
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    console.log(formData);
     axios
       .post(
         Api(`employee/general-requests/approve_steps/${props.request?.id}`),
         formData
       )
       .then((res) => {
-        console.log("Dialog Response: ", res);
         setStatus({
           ...status,
           show: true,

@@ -1,3 +1,5 @@
+import { LastAdvance } from "./RequestDetails";
+
 export interface Requestable {
   id: number;
   type: string;
@@ -30,6 +32,11 @@ export interface Requestable {
   remaining_lastCustody?: string;
   description?: string;
   media?: Media[];
+  exchange_date?: string;
+  amount?: number;
+  responsible_employee_id?: number;
+  lastAdvance?: LastAdvance;
+  number_car?: string;
 }
 
 interface detail {

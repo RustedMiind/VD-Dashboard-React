@@ -1,14 +1,11 @@
-import Typography from "@mui/material/Typography";
 import MainDataForm from "./MainDataForm";
 import { SeparatedAccordion } from "../../../../components/SeparatedAccordion";
 import ManagersForm from "./ManagersForm";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useContext, useState } from "react";
 import { TenderContext } from "../TenderCondext";
 import AmountsSection from "./AmountsSection";
 import AttachmentsSection from "./AttachmentsSection";
-import axios from "axios";
-import { Api } from "../../../../constants";
 import BottomSection from "../BottomSection";
 function FormsSection() {
   const tenderContext = useContext(TenderContext);

@@ -74,7 +74,6 @@ function TableComponent({
                     value={level.employee_id || null}
                     disabled={formDisabled || level.department_id !== -1}
                     onChange={(e) => {
-                      console.log(departments);
                       dispatch({
                         type: "SET_EMPLOYEE",
                         payload: e.target.value as number,
