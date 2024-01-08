@@ -9,11 +9,8 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useContext, useState } from "react";
-import { ToasterType } from "../../../../../types/other/ToasterStateType";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { Api } from "../../../../../constants";
 import axios from "axios";
@@ -26,10 +23,12 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import PrintIcon from "@mui/icons-material/Print";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import { useSnackbar } from "notistack";
 
 function AttachmentSection() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<"add" | "update">("add");
+  const { enqueueSnackbar } = useSnackbar();
   const [attachmentToEdit, setAttachmentToEdit] = useState<
     ContractAttachment | undefined
   >(undefined);
@@ -53,21 +52,6 @@ function AttachmentSection() {
     };
   }
 
-  const [toaster, setToaster] = useState<ToasterType>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  function updateToaster(partial: Partial<ToasterType>) {
-    setToaster({ ...toaster, ...partial });
-  }
-  function updateAndOpenToaster(partial: Partial<ToasterType>) {
-    updateToaster({ ...partial, open: true });
-  }
-  function handleCloseToaster() {
-    updateToaster({ open: false });
-  }
-
   function handleDelete(leverId?: string | number) {
     return () => {
       if (leverId)
@@ -76,16 +60,10 @@ function AttachmentSection() {
           .then(() => {
             if (ContractDetails.refreshContract)
               ContractDetails.refreshContract();
-            updateAndOpenToaster({
-              severity: "success",
-              message: "تم الحذف بنجاح",
-            });
+            enqueueSnackbar("تم الحذف بنجاح");
           })
           .catch(() => {
-            updateAndOpenToaster({
-              severity: "error",
-              message: "تعذر في الحذف",
-            });
+            enqueueSnackbar("تعذر في الحذف", { variant: "error" });
           });
     };
   }
@@ -95,17 +73,10 @@ function AttachmentSection() {
   return (
     <>
       {dialogMode === "add" ? (
-        <SetDialog
-          toaster={toaster}
-          updateAndOpenToaster={updateAndOpenToaster}
-          open={dialogOpen}
-          handleClose={handleCloseDialog}
-        />
+        <SetDialog open={dialogOpen} handleClose={handleCloseDialog} />
       ) : (
         attachmentToEdit && (
           <SetDialog
-            toaster={toaster}
-            updateAndOpenToaster={updateAndOpenToaster}
             open={dialogOpen}
             handleClose={handleCloseDialog}
             edit
@@ -113,20 +84,6 @@ function AttachmentSection() {
           />
         )
       )}
-      <Snackbar
-        open={toaster.open}
-        autoHideDuration={6000}
-        onClose={handleCloseToaster}
-        // action={action}
-      >
-        <Alert
-          onClose={handleCloseToaster}
-          severity={toaster.severity}
-          sx={{ width: "100%" }}
-        >
-          {toaster.message}
-        </Alert>
-      </Snackbar>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Button
           variant="contained"

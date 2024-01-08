@@ -60,7 +60,6 @@ function BranchDetails() {
         }
       )
       .then((data) => {
-        console.log(data.data.date);
         setVacationsData(data.data.date);
       })
       .catch((err) => {

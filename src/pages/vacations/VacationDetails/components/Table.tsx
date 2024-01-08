@@ -16,7 +16,6 @@ import { Vacation } from "../../../../types";
 import { formatDate, getDateDiff } from "../../../../methods";
 import { convertMsToDays } from "../../../../methods/conversions/msToDays";
 import { NotPrintableTableCell } from "../../../clients/data/Table";
-import { useEffect, useRef } from "react";
 
 const TableData = (props: PropsType) => {
   return (

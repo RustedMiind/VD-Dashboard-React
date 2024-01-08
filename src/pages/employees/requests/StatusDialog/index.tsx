@@ -1,7 +1,5 @@
 import {
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   Paper,
@@ -16,6 +14,7 @@ import {
 } from "@mui/material";
 import { EmployeeRequest } from "../../../../types";
 import { formatDate } from "../../../../methods";
+import NonRoundedChip from "../../../../components/NonRoundedChip";
 
 function StatusDialog(props: PropsType) {
   return (
@@ -97,23 +96,33 @@ function StatusDialog(props: PropsType) {
     </Dialog>
   );
 
-  function generateChip(value: number): JSX.Element {
+  function generateChip(value?: number): JSX.Element {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
 
     switch (value) {
       case -1:
-        chip = <Chip color="primary" variant={variant} label="تحت الاجراء" />;
+        chip = (
+          <NonRoundedChip
+            color="primary"
+            variant={variant}
+            label="تحت الاجراء"
+          />
+        );
 
         break;
       case 0:
-        chip = <Chip color="error" variant={variant} label="مرفوض" />;
+        chip = <NonRoundedChip color="error" variant={variant} label="مرفوض" />;
         break;
       case 1:
-        chip = <Chip color="success" variant={variant} label="مقبول" />;
+        chip = (
+          <NonRoundedChip color="success" variant={variant} label="مقبول" />
+        );
         break;
       case 2:
-        chip = <Chip color="success" variant={variant} label="معتمد" />;
+        chip = (
+          <NonRoundedChip color="success" variant={variant} label="معتمد" />
+        );
         break;
       default:
         break;

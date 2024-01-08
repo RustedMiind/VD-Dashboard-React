@@ -1,4 +1,4 @@
-import { Alert, Snackbar, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import TabsAndAdd from "./TabsAndAdd";
 import { useEffect, useState } from "react";
 import { Paper } from "@mui/material";
@@ -10,6 +10,7 @@ import LevelItem from "./levelItems/LevelItem";
 import { FormData } from "./types/FormData";
 import { OrderType } from "./types/OrderType";
 import LevelsPlaceholder from "../../../components/PlaceHolder/LevelsPlaceholder";
+import { useSnackbar } from "notistack";
 
 const InitLevel: StepType = {
   branch_id: 0,
@@ -33,11 +34,7 @@ const ClientProcess = () => {
   const [process, setProcess] = useState<ProcedureType>({
     levels: [InitLevel],
   });
-  console.log(process.levels);
-
-  const snackbarClose = () => {
-    setSendState("none");
-  };
+  const { enqueueSnackbar } = useSnackbar();
 
   const getFormData = () => {
     return new Promise<void>((resolve, reject) => {
@@ -51,7 +48,6 @@ const ClientProcess = () => {
             resolve();
           })
           .catch((err) => {
-            console.log(err);
             setEndPointStatus("error");
             reject(err);
           });
@@ -65,12 +61,10 @@ const ClientProcess = () => {
         .get(Api(`employee/client/order/steps/${typeOrderId}`))
         .then((res) => {
           setEndPointStatus("none");
-          console.log(res.data.data);
           setLevels(res.data.data);
           resolve();
         })
         .catch((err) => {
-          console.log(err);
           setEndPointStatus("error");
           reject(err);
         });
@@ -99,23 +93,23 @@ const ClientProcess = () => {
         };
       }
     );
-    console.log(data);
     setSendState("sending");
     axios
       .post(Api(`employee/client/order/steps/store/${typeOrderId}`), data)
       .then((res) => {
-        console.log("Done", res);
-        setSendState("success");
+        enqueueSnackbar("تم حفظ الاجراءات بنجاح");
       })
       .catch((err) => {
-        console.log("Error", err);
-        setSendState("error");
+        enqueueSnackbar("تعذر في حفظ الاراءات", { variant: "error" });
+      })
+      .finally(() => {
+        setSendState("none");
       });
   };
 
   const loadLevels = () => {
     setEndPointStatus("loading");
-    getFormData().then(getLevels).catch(console.log);
+    getFormData().then(getLevels).catch();
   };
 
   const updateLevel = (index: number) => {
@@ -218,31 +212,12 @@ const ClientProcess = () => {
           </LoadingButton>
         </Stack>
       </Paper>
-
-      <Snackbar
-        open={sendState === "success" || sendState === "error"}
-        autoHideDuration={6000}
-        onClose={snackbarClose}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <Alert
-          {...((sendState === "success" && {
-            children: "تم الحفظ بنجاح",
-            severity: "success",
-          }) ||
-            (sendState === "error" && {
-              children: "تعذر في الحفظ تأكد من صحة المدخلات",
-              severity: "error",
-            }))}
-          sx={{ width: 1 }}
-        ></Alert>
-      </Snackbar>
     </Stack>
   );
 };
 
 type EndPointStateType = "none" | "loading" | "error";
-type SendStateType = "none" | "sending" | "success" | "error";
+type SendStateType = "none" | "sending";
 
 export interface ProcedureType {
   levels: StepType[];

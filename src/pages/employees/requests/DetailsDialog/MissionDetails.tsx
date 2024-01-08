@@ -1,5 +1,5 @@
 import DataInputLike from "../../../../components/DataInputLike";
-import { formatDate, getDateDiff, msToHoursMinutes } from "../../../../methods";
+import { getDateDiff, msToHoursMinutes } from "../../../../methods";
 import { RequestDetails } from "../../../../types/RequestDetails";
 
 function MissionDetails({ details }: PropsType) {

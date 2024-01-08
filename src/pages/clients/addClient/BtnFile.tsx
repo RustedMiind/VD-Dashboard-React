@@ -1,4 +1,3 @@
-import { Stack, Typography } from "@mui/material";
 import UploadFileInput from "../../../components/UploadFileInput";
 
 function BtnFile(props: BtnFileProps) {

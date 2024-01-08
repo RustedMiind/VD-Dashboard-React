@@ -6,13 +6,10 @@ import {
   Checkbox,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { generateUndefinedArray } from "../../../../methods";
 import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import LimitTypography from "../../../../components/LimitTypograpgy";
 import StatusChip from "../../../../components/StatusChip";
-
-const arr = generateUndefinedArray(30);
 
 function TableBody() {
   const { tenderTableData, setSelectedTenderId, selectedTenderId } =

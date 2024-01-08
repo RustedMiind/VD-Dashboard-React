@@ -1,4 +1,5 @@
 import { EmployeeType } from "./Employee";
+import { StepOfApproval } from "./EmployeeRequest";
 import { Requestable } from "./Requestable";
 
 export interface RequestDetails {
@@ -27,7 +28,14 @@ export interface RequestDetails {
   date?: string;
   salary_first?: number;
   requestable?: Requestable;
+  exchange_date?: string;
+  steps_of_approval?: StepOfApproval[];
 }
+
+export type LastAdvance = {
+  amount: number;
+  balance: number;
+};
 
 export type KeyToArabic = { name: string; key: string };
 

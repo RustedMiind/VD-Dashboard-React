@@ -3,7 +3,6 @@ import {
   Table,
   TableRow,
   TableBody,
-  Chip,
   Checkbox,
   Stack,
   Button,
@@ -13,7 +12,7 @@ import {
   IconButton,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import TableHeader from "./TableHeader/TableHeader";
 import { TableContext } from "../Context/Store";
 import PrintIcon from "@mui/icons-material/Print";

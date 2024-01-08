@@ -17,6 +17,7 @@ import { PanelData, StepStatusData } from "./types";
 import { useState } from "react";
 import { formatDate } from "../../../methods";
 import { ActionTypes } from "./Filter/reducer";
+import NonRoundedChip from "../../../components/NonRoundedChip";
 
 const ClientTableComponent = ({
   requests,
@@ -60,7 +61,7 @@ const ClientTableComponent = ({
         break;
       case 100:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="success"
             onClick={openStatus(request)}
             variant={variant}
@@ -70,7 +71,7 @@ const ClientTableComponent = ({
         break;
       case 33:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="success"
             onClick={openStatus(request)}
             variant={variant}
@@ -80,7 +81,7 @@ const ClientTableComponent = ({
         break;
       case 99:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="error"
             onClick={openStatus(request)}
             variant={variant}

@@ -1,9 +1,7 @@
-import { Box, Tab, Tabs, Button, Paper, Stack } from "@mui/material";
+import { Box, Tab, Tabs, Button } from "@mui/material";
 // Icons
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { requestsIds } from "./RequestsIds";
-import LevelItem from "./LevelItem/LevelItem";
-import { LoadingButton } from "@mui/lab";
 
 function TabsAndAdd(props: PropsType) {
   return (
@@ -41,57 +39,6 @@ function TabsAndAdd(props: PropsType) {
           />
         ))}
       </Tabs>
-
-      {/* <Paper sx={{ p: 2 }}>
-        {endpointStatus === "loading" && (
-          <Stack>
-            <LevelsPlaceholder />
-          </Stack>
-        )}
-        {endpointStatus === "error" && (
-          <Stack>
-            <Typography variant="h5" py={4} color="error" textAlign="center">
-              حدث خطأ في تحميل المراحل, برجاء المحاولة مرة اخري
-            </Typography>
-          </Stack>
-        )}
-        {departments && (
-          <Stack>
-            {endpointStatus === "none" &&
-              proceduce.levels.map((level, index, arr) => {
-                const IS_LAST_ITEM = index === arr.length - 1;
-                const MORE_THAN_ONE = arr.length > 1;
-                return (
-                  <LevelItem
-                    key={level.id}
-                    level={level}
-                    updateLevel={updateLevel(index)}
-                    name={`المرحلة ${index + 1}`}
-                    onDelete={
-                      IS_LAST_ITEM && MORE_THAN_ONE
-                        ? () => {
-                            removeLevel(index);
-                          }
-                        : undefined
-                    }
-                    departments={departments}
-                  />
-                );
-              })}
-          </Stack>
-        )}
-        <Stack mt={2} direction={"row-reverse"}>
-          <LoadingButton
-            sx={{ px: 4 }}
-            variant="contained"
-            onClick={submitData}
-            loading={sendState === "sending"}
-            disabled={endpointStatus !== "none"}
-          >
-            ارسال التعديلات
-          </LoadingButton>
-        </Stack>
-      </Paper> */}
     </Box>
   );
 }

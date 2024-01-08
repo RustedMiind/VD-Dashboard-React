@@ -1,8 +1,9 @@
 import { Chip, ChipProps } from "@mui/material";
+import NonRoundedChip from "../NonRoundedChip";
 
 function StatusChip(props: ChipProps) {
   return (
-    <Chip
+    <NonRoundedChip
       variant="outlined"
       sx={{ bgcolor: `${props.color}.lightest` }}
       {...props}

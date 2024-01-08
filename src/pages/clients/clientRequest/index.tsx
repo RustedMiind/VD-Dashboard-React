@@ -43,7 +43,6 @@ const ClientRequests = () => {
 
   const getRequests = () => {
     setRequests("loading");
-    console.log(filters);
     axios
       .get<{ data: PanelData[]; count: CountType[] }>(
         Api("employee/client/order"),
@@ -67,7 +66,6 @@ const ClientRequests = () => {
       })
       .catch((err) => {
         setRequests("error");
-        console.log(err);
       });
   };
 
@@ -80,7 +78,6 @@ const ClientRequests = () => {
           resSolve();
         })
         .catch((err) => {
-          console.log(err);
           reject(err);
         });
     });

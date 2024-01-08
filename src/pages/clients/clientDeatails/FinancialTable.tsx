@@ -14,8 +14,6 @@ function createData(title: string, value: number, theme: string) {
 }
 
 export default function BasicTable({ clientData }: PropsType) {
-  // clientData && console.log(clientData.payment.amount);
-
   const rows = [
     createData(
       "المدفوع",

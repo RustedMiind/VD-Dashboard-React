@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
-import React, { FormEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { GridCloseIcon } from "@mui/x-data-grid";
@@ -36,7 +36,6 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
     setForm({ ...form, ...partial });
   }
   useEffect(() => {
-    console.log(fileToEdit);
     if (fileToEdit) {
       setForm({
         description: fileToEdit.discription || "",
@@ -62,14 +61,12 @@ export default function SetDialog({ open, onClose, fileToEdit }: TypeProps) {
       .then((result) => {
         getTenderData && getTenderData();
         onClose();
-        console.log(result);
         snackbar.enqueueSnackbar(
           fileToEdit ? "تم تعديل بيانات المرفق" : "تم حفظ بيانات المرفق"
         );
         setError(undefined);
       })
       .catch((err) => {
-        console.log(err);
         snackbar.enqueueSnackbar(
           fileToEdit
             ? "تعذر في تعديل بيانات المرفق"

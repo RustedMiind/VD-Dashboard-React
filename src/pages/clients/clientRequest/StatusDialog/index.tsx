@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Api } from "../../../../constants";
+import NonRoundedChip from "../../../../components/NonRoundedChip";
 
 const StatusDialog = ({ open, onClose, id }: PropsType) => {
   const [details, setDetails] = useState<Partial<StepStatus>[]>();
@@ -29,7 +30,6 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
           Api(`employee/client/order/statusOrder?client_id=${id}`)
         )
         .then(({ data }) => {
-          console.log(data);
           setDetails(data.data[0].order_step_form || []);
           setDate(formatDate(data.data[0].created_date) || "");
         });
@@ -41,16 +41,26 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
 
     switch (value) {
       case 0:
-        chip = <Chip color="primary" variant={variant} label="تحت الاجراء" />;
+        chip = (
+          <NonRoundedChip
+            color="primary"
+            variant={variant}
+            label="تحت الاجراء"
+          />
+        );
         break;
       case 99:
-        chip = <Chip color="error" variant={variant} label="مرفوض" />;
+        chip = <NonRoundedChip color="error" variant={variant} label="مرفوض" />;
         break;
       case 100:
-        chip = <Chip color="success" variant={variant} label="مقبول" />;
+        chip = (
+          <NonRoundedChip color="success" variant={variant} label="مقبول" />
+        );
         break;
       case 33:
-        chip = <Chip color="success" variant={variant} label="معتمد" />;
+        chip = (
+          <NonRoundedChip color="success" variant={variant} label="معتمد" />
+        );
         break;
       default:
         break;

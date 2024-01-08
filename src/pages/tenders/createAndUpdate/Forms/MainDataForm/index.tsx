@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -77,7 +76,6 @@ export default function MainDataForm() {
           path ? "تم تعديل بيانات المنافسة بنجاح" : "تم حفظ بيانات المنافسة"
         );
         setError(undefined);
-        console.log(res);
         tenderContext.setTenderId &&
           tenderContext.setTenderId(res.data.data.id);
       })
@@ -91,7 +89,6 @@ export default function MainDataForm() {
           }
         );
         setError(joinObjectValues(err.response?.data?.data));
-        console.log(err);
       })
       .finally(() => {
         setFormStatus("none");
@@ -446,24 +443,3 @@ type OptionsType = {
 };
 
 type OptionType = { name: string; value: string };
-
-type TenderTypeType = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type TenderWarrantyType = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type TenderApplyMethodType = {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-};

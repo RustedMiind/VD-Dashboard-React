@@ -1,4 +1,4 @@
-import { Box, MenuItem, TextField, TextFieldProps } from "@mui/material";
+import { MenuItem, TextField, TextFieldProps } from "@mui/material";
 import { useState } from "react";
 
 function SelectWithFilter({

@@ -56,7 +56,7 @@ function resetAuth() {
 }
 
 // Mount the application in mode Development or Production
-MountApp("production");
+MountApp("development");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
@@ -75,12 +75,10 @@ function MountApp(type: "production" | "development") {
 function RunProd() {
   const db_token = getCookie("db_token");
   if (db_token) {
-    console.log(db_token);
     axios.defaults.headers.common.Authorization = `Bearer ${db_token}`;
     axios
       .post(Api("employee/user"))
       .then((res) => {
-        console.log(res);
         root.render(
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <BrowserRouter>
@@ -92,7 +90,6 @@ function RunProd() {
         );
       })
       .catch((err) => {
-        console.log(err);
         resetAuth();
       });
   } else {
@@ -109,7 +106,6 @@ function RunDev() {
       device_type: "android",
     })
     .then(({ data }) => {
-      console.log("User Data: ", data.data.user);
       console.log("User Token", data.data.token);
       axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
       setCookie("db_token", data.data.token, 7);
@@ -122,8 +118,7 @@ function RunDev() {
           </BrowserRouter>
         </LocalizationProvider>
       );
-    })
-    .catch(console.log);
+    });
 }
 
 // If you want to start measuring performance in your app, pass a function

@@ -50,13 +50,13 @@ export const theme = createTheme({
         },
       },
     },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-        },
-      },
-    },
+    // MuiChip: {
+    //   styleOverrides: {
+    //     root: {
+    //       borderRadius: 8,
+    //     },
+    //   },
+    // },
     MuiButton: {
       defaultProps: {
         disableElevation: true,

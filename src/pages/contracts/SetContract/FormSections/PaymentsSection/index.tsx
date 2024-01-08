@@ -9,22 +9,18 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { ContractPayment } from "../../../../../types";
-import { ToasterType } from "../../../../../types/other/ToasterStateType";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { Api } from "../../../../../constants";
 import axios from "axios";
 import SetDialog from "./SetDialog";
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditNoteIcon from "@mui/icons-material/EditNote";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
+import { useSnackbar } from "notistack";
 
 function Payments() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,7 +28,7 @@ function Payments() {
   const [paymentToEdit, setPaymentToEdit] = useState<
     ContractPayment | undefined
   >(undefined);
-
+  const { enqueueSnackbar } = useSnackbar();
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
@@ -52,21 +48,6 @@ function Payments() {
     };
   }
 
-  const [toaster, setToaster] = useState<ToasterType>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  function updateToaster(partial: Partial<ToasterType>) {
-    setToaster({ ...toaster, ...partial });
-  }
-  function updateAndOpenToaster(partial: Partial<ToasterType>) {
-    updateToaster({ ...partial, open: true });
-  }
-  function handleCloseToaster() {
-    updateToaster({ open: false });
-  }
-
   function handleDelete(paymentId?: string | number) {
     return () => {
       if (paymentId)
@@ -75,16 +56,10 @@ function Payments() {
           .then(() => {
             if (ContractDetails.refreshContract)
               ContractDetails.refreshContract();
-            updateAndOpenToaster({
-              severity: "success",
-              message: "تم الحذف بنجاح",
-            });
+            enqueueSnackbar("تم الحذف بنجاح");
           })
           .catch(() => {
-            updateAndOpenToaster({
-              severity: "error",
-              message: "تعذر في الحذف",
-            });
+            enqueueSnackbar("تعذر في الحذف", { variant: "error" });
           });
     };
   }
@@ -94,17 +69,10 @@ function Payments() {
   return (
     <>
       {dialogMode === "add" ? (
-        <SetDialog
-          toaster={toaster}
-          updateAndOpenToaster={updateAndOpenToaster}
-          open={dialogOpen}
-          handleClose={handleCloseDialog}
-        />
+        <SetDialog open={dialogOpen} handleClose={handleCloseDialog} />
       ) : (
         paymentToEdit && (
           <SetDialog
-            toaster={toaster}
-            updateAndOpenToaster={updateAndOpenToaster}
             open={dialogOpen}
             handleClose={handleCloseDialog}
             edit
@@ -112,20 +80,6 @@ function Payments() {
           />
         )
       )}
-      <Snackbar
-        open={toaster.open}
-        autoHideDuration={6000}
-        onClose={handleCloseToaster}
-        // action={action}
-      >
-        <Alert
-          onClose={handleCloseToaster}
-          severity={toaster.severity}
-          sx={{ width: "100%" }}
-        >
-          {toaster.message}
-        </Alert>
-      </Snackbar>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Button
           variant="contained"

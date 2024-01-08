@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Stack,
-  Typography,
   TableContainer,
   Table,
   TableHead,
@@ -10,16 +9,9 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { NavLink } from "react-router-dom";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import SetDialog from "./SetDialog";
 import { useContext, useState } from "react";
@@ -27,7 +19,7 @@ import { ContractDetailsContext } from "../../ContractDetailsContext";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { ContractTask } from "../../../../../types";
-import { ToasterType } from "../../../../../types/other/ToasterStateType";
+import { useSnackbar } from "notistack";
 
 function ContractTasks() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -35,6 +27,7 @@ function ContractTasks() {
   const [taskToEdit, setTaskToEdit] = useState<ContractTask | undefined>(
     undefined
   );
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
@@ -54,20 +47,6 @@ function ContractTasks() {
       setTaskToEdit(taskData);
     };
   }
-  const [toaster, setToaster] = useState<ToasterType>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  function updateToaster(partial: Partial<ToasterType>) {
-    setToaster({ ...toaster, ...partial });
-  }
-  function updateAndOpenToaster(partial: Partial<ToasterType>) {
-    updateToaster({ ...partial, open: true });
-  }
-  function handleCloseToaster() {
-    updateToaster({ open: false });
-  }
 
   const ContractDetails = useContext(ContractDetailsContext);
 
@@ -79,16 +58,10 @@ function ContractTasks() {
           .then(() => {
             if (ContractDetails.refreshContract)
               ContractDetails.refreshContract();
-            updateAndOpenToaster({
-              severity: "success",
-              message: "تم الحذف بنجاح",
-            });
+            enqueueSnackbar("تم الجذف بنجاح");
           })
           .catch(() => {
-            updateAndOpenToaster({
-              severity: "error",
-              message: "تعذر في الحذف",
-            });
+            enqueueSnackbar("تعذر في الحذف", { variant: "error" });
           });
     };
   }
@@ -96,17 +69,10 @@ function ContractTasks() {
   return (
     <>
       {dialogMode === "add" ? (
-        <SetDialog
-          toaster={toaster}
-          updateAndOpenToaster={updateAndOpenToaster}
-          open={dialogOpen}
-          handleClose={handleCloseDialog}
-        />
+        <SetDialog open={dialogOpen} handleClose={handleCloseDialog} />
       ) : (
         taskToEdit && (
           <SetDialog
-            toaster={toaster}
-            updateAndOpenToaster={updateAndOpenToaster}
             open={dialogOpen}
             handleClose={handleCloseDialog}
             edit
@@ -114,20 +80,6 @@ function ContractTasks() {
           />
         )
       )}
-      <Snackbar
-        open={toaster.open}
-        autoHideDuration={6000}
-        onClose={handleCloseToaster}
-        // action={action}
-      >
-        <Alert
-          onClose={handleCloseToaster}
-          severity={toaster.severity}
-          sx={{ width: "100%" }}
-        >
-          {toaster.message}
-        </Alert>
-      </Snackbar>
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Button
           variant="contained"

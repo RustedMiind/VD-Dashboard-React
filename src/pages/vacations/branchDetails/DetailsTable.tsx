@@ -10,7 +10,6 @@ import {
   TableRow,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditNoteIcon from "@mui/icons-material/EditNote";
 import { VacationsDetailsType } from ".";
 import StatusChip from "../../../components/StatusChip";
 import { useState } from "react";
@@ -20,12 +19,8 @@ import { DialogState } from "./FilterDetails";
 import EditIcon from "@mui/icons-material/Edit";
 
 function DetailsTable(props: PropsType) {
-  const [open, setOpen] = useState<boolean>(false);
   const [itemId, setItemId] = useState<number>();
 
-  function openDialog() {
-    setOpen(!open);
-  }
   return (
     <Paper>
       <Stack p={2}>
@@ -99,7 +94,7 @@ function DetailsTable(props: PropsType) {
       </Stack>
       <ShowVactionDialog
         closeDialog={props.closeDialog}
-        open={props.dialogState == "details"}
+        open={props.dialogState === "details"}
         itemId={itemId}
         vacationsData={props.vacationsData}
       />

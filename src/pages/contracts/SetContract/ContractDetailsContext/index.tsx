@@ -40,11 +40,9 @@ function ContractDetailsContextProvider({ children }: PropsType) {
       axios
         .get<{ data: Contract }>(Api(`employee/contract/${id}`))
         .then((res) => {
-          console.log("Contract Details", res);
           setContractDetails(res.data.data);
         })
         .catch((err) => {
-          console.log("Contract Details Error", err);
           setContractDetails(undefined);
         });
     getUse();
@@ -63,13 +61,11 @@ function ContractDetailsContextProvider({ children }: PropsType) {
           },
         })
         .then((res) => {
-          console.log("Contract Use", res);
           setContractUse(res.data);
           ressolve(res.data);
           setDisableInputs(false);
         })
         .catch((err) => {
-          console.log("Contract Use Error", err);
           setContractUse(undefined);
           reject(err);
           setDisableInputs(true);

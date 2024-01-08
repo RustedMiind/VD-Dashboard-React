@@ -53,18 +53,18 @@ interface NextStep {
 }
 */
 
-interface StepOfApproval {
+export interface StepOfApproval {
   id: number;
   employee_id: number;
-  employee: EmployeeType;
+  employee?: EmployeeType;
   employeeName?: string;
   department_id: number;
   departmentName?: string;
-  department: DepartmentEmployee;
+  department?: DepartmentEmployee;
   action: number;
   duration: number;
   model: number;
-  model_details: ModelDetails;
+  model_details?: ModelDetails;
   type: number;
   deleted_at?: string;
   created_at?: string;

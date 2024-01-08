@@ -65,7 +65,6 @@ function AttachmentsSection() {
           snackbar.enqueueSnackbar("تم حذف المرفق بنجاح");
         })
         .catch((err) => {
-          console.log(err);
           snackbar.enqueueSnackbar("تعذر في حذف لبمرفق ");
         })
         .finally(() => {
@@ -78,12 +77,10 @@ function AttachmentsSection() {
     axios
       .get(Api(`employee/tender/file/save/${tenderContext.tenderId}`))
       .then((res) => {
-        console.log(res);
         tenderContext.getTenderData && tenderContext.getTenderData();
         snackbar.enqueueSnackbar("تم حفظ المرفقات بنجاح");
       })
       .catch((err) => {
-        console.log(err);
         snackbar.enqueueSnackbar("تعذر المرفقات بنجاح");
       })
       .finally(() => {

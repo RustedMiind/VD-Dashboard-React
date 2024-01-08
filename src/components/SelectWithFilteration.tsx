@@ -16,7 +16,6 @@ export const SelectWithFilteration = (props: PropsType) => {
     <Autocomplete
       options={filteredOptions}
       getOptionLabel={(option) => option.label}
-      onChange={(event, value) => console.log(value)} // Handle selected value
       renderInput={(params) => (
         <TextField
           {...params}
