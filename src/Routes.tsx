@@ -16,6 +16,7 @@ import VacationDetails from "./pages/vacations/branchDetails";
 import VacationsSettings from "./pages/vacations/VacationsSettings";
 import TendersData from "./pages/tenders/data";
 import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
+import TenderDetails from "./pages/tenders/details";
 
 function RoutesComponent() {
   return (
@@ -49,6 +50,7 @@ function RoutesComponent() {
           <Route path="" element={<TendersData />} />
           <Route path="create" element={<CreateAndUpdateTender />} />
           <Route path="edit/:id" element={<CreateAndUpdateTender />} />
+          <Route path=":id" element={<TenderDetails />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
