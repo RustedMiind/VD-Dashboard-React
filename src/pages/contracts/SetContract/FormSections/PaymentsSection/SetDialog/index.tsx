@@ -4,26 +4,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Alert,
-  Grid,
-  ListItemIcon,
-  MenuItem,
-  Snackbar,
-  Typography,
-} from "@mui/material";
+import { Grid, ListItemIcon, MenuItem, Typography } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { AddPaymentFormType, AddTaskFormInit, reducer } from "./reducer";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import {
-  ChangeTypeValues,
-  ContractPayment,
-  ContractTask,
-} from "../../../../../../types";
-import { ToasterType } from "../../../../../../types/other/ToasterStateType";
+import { ChangeTypeValues, ContractPayment } from "../../../../../../types";
 
 // Icons
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -32,6 +20,7 @@ import { LaravelValidationError } from "../../../../../../types/LaravelValidatio
 import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
+import { useSnackbar } from "notistack";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -48,7 +37,7 @@ function SetDialog(props: PropsType) {
     "loading" | "error" | "success" | "none"
   >("none");
   const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
-
+  const { enqueueSnackbar } = useSnackbar();
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     if (ContractDetails.contract?.id) {
@@ -72,15 +61,11 @@ function SetDialog(props: PropsType) {
           setSendState("success");
           props.handleClose();
           dispatch({ type: "SET_RESET", payload: undefined });
-          props.updateAndOpenToaster({
-            message: "تم الحفظ بنجاح",
-            severity: "success",
-          });
+          enqueueSnackbar("تم الحفظ بنجاح");
           ContractDetails.refreshContract && ContractDetails.refreshContract();
         })
         .catch(
           (err: AxiosErrorType<LaravelValidationError<AddPaymentFormType>>) => {
-            console.log(err);
             setSendState("error");
 
             if (err.response?.status === 422) {
@@ -91,15 +76,9 @@ function SetDialog(props: PropsType) {
                 status: ArrayToMultiline(err.response.data?.data?.status),
               });
             } else if (err.response?.status === 406) {
-              props.updateAndOpenToaster({
-                message: err.response?.data?.msg,
-                severity: "error",
-              });
+              enqueueSnackbar(err.response?.data?.msg, { variant: "error" });
             } else {
-              props.updateAndOpenToaster({
-                message: "تعذر في الحفظ",
-                severity: "error",
-              });
+              enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
             }
           }
         );
@@ -222,8 +201,6 @@ function SetDialog(props: PropsType) {
 }
 
 type PropsType = {
-  toaster: ToasterType;
-  updateAndOpenToaster: (p: Partial<ToasterType>) => void;
   open: boolean;
   handleClose: () => void;
 } & (

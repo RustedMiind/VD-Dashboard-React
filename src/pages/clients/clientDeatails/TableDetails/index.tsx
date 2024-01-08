@@ -31,14 +31,6 @@ function TableDetails({
 }: PropsType) {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
-  function checkAllHandler(checked: boolean) {
-    const allChecked: number[] =
-      checked && ClientData?.data
-        ? ClientData?.data?.map((contract) => contract.id)
-        : [];
-    setSelectedItems(allChecked);
-  }
-
   function checkOneHandler(id: number) {
     return (e: unknown, checked: boolean) => {
       if (checked) {
@@ -53,7 +45,6 @@ function TableDetails({
 
   const navigate = useNavigate();
 
-  console.log(ClientData, "clientData");
   return (
     <Stack>
       <TableHeader

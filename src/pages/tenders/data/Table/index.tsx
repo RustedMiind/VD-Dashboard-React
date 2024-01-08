@@ -10,13 +10,12 @@ import {
 } from "@mui/material";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
 import { Typography } from "@mui/material";
 import TenderNotFound from "./TendersNotFound";
-import CreateDialog from "../CreateDialog";
 
 function TendersTable(props: PropsType) {
   const { tenderTableData, limit, setLimit } = useContext(TableContext);

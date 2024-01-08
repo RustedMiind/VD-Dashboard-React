@@ -13,12 +13,10 @@ import {
   Card,
   CardActionArea,
   Tooltip,
-  Alert,
   IconButton,
 } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { NavLink } from "react-router-dom";
-import BranchCardPlaceholder from "./BranchCardPlaceholder";
 import BranchLoadingPlaceholder from "./BranchLoadingPlaceholder";
 
 function VacationsSettings() {

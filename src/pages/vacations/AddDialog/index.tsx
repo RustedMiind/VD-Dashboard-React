@@ -25,12 +25,11 @@ export default function AddDialog(props: PropsType) {
     axios
       .post<addSelect>(Api("employee/vacation"), selectVacation)
       .then((res) => {
-        console.log(res);
         props.onClose();
         props.setData();
       })
       .catch((err) => {
-        if (err.response.data.msg != "Validation errors") {
+        if (err.response.data.msg !== "Validation errors") {
           props.setMassage(err.response.data.msg);
           props.openErrorDialog();
         }

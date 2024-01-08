@@ -1,12 +1,4 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Grid,
-  MenuItem,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Grid, MenuItem, Stack, TextField } from "@mui/material";
 import { Contract } from "../../../types";
 import { TypeDataToSearch } from "./PageContent";
 import { useContext, useEffect, useState } from "react";
@@ -34,8 +26,6 @@ function SearchBar() {
         setContractSearch(res?.data.client);
       })
       .catch((err) => {
-        console.log(err);
-
         setContractSearch(null);
       });
   }, []);

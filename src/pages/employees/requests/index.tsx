@@ -173,7 +173,6 @@ function EmplyeesRequests() {
 
   function resetTable() {
     setRequests("loading");
-    console.log(filters);
     axios
       .get<{
         requests: LaravelPagination<EmployeeRequest[]>;
@@ -198,11 +197,9 @@ function EmplyeesRequests() {
         setCounts(data.count);
         setCurrentPage(data.requests.current_page);
         setTotalPages(data.requests.last_page);
-        console.log(data);
       })
       .catch((err) => {
         setRequests("error");
-        console.log(err);
       });
   }
 }

@@ -13,13 +13,12 @@ import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlin
 
 function ClientDetails() {
   const { id } = useParams();
-  const [limit, setLimit] = useState<string>("5");
+  const [limit, setLimit] = useState<string>("25");
 
   const [clientData, setClientData] = useState<
     ClientDetailsType | "loading" | "error"
   >("loading");
   const [toSearch, setToSearch] = useState<string>("");
-  console.log(toSearch, "codeContract");
 
   useEffect(getContractsData, [limit]);
   function getContractsData() {
@@ -36,7 +35,6 @@ function ClientDetails() {
       })
       .catch((err) => {
         setClientData("error");
-        console.log(err);
       });
   }
 

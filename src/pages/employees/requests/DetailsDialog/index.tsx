@@ -1,17 +1,8 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Typography,
-  Grid,
-  TextField,
-} from "@mui/material";
-import { EmployeeRequest } from "../../../../types";
+import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { RequestDetails } from "../../../../types/RequestDetails";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { objectToArrayWithArName } from "../../../../methods/objToArrWithAr";
 import DataInputLike from "../../../../components/DataInputLike";
 import { formatDate } from "../../../../methods";
 import VacationDetails from "./VacationDetails";
@@ -19,9 +10,13 @@ import WorkNeeds from "./WorkNeeds";
 import MissionDetails from "./MissionDetails";
 import CarFixDetails from "./CarFixDetails";
 import CustodyDetails from "./CustodyDetails";
+import AdvanceDetails from "./AdvanceDetails";
+import { useSnackbar } from "notistack";
 
 function DetailsDialog(props: PropsType) {
   const [details, setDetails] = useState<RequestDetails | undefined>(undefined);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (props.open && props.requestId > 0) {
@@ -31,14 +26,23 @@ function DetailsDialog(props: PropsType) {
           Api(`employee/general-requests/requests/${props.requestId}`)
         )
         .then(({ data }) => {
-          console.log("Details Log :", data);
           setDetails(data.request);
+        })
+        .catch(() => {
+          enqueueSnackbar("عذرا, لم اتمكن من تحميل بيانات الطلب", {
+            variant: "error",
+          });
         });
     }
-  }, [props.open]);
+  }, [props.requestId]);
 
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={props.open && !!details}
+      onClose={props.onClose}
+      maxWidth="sm"
+      fullWidth
+    >
       <DialogTitle>نوع الطلب</DialogTitle>
       <DialogContent>
         <Grid container>
@@ -62,6 +66,8 @@ function DetailsDialog(props: PropsType) {
                     return <VacationDetails details={details} />;
                   case 2:
                     return <MissionDetails details={details} />;
+                  case 3:
+                    return <AdvanceDetails details={details} />;
                   case 4:
                     return <CustodyDetails details={details} />;
                   case 5:

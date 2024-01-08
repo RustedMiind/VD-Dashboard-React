@@ -1,5 +1,5 @@
+import { Grid } from "@mui/material";
 import DataInputLike from "../../../../components/DataInputLike";
-import { formatDate } from "../../../../methods";
 import { RequestDetails } from "../../../../types/RequestDetails";
 
 function WorkNeeds({ details }: PropsType) {
@@ -9,6 +9,14 @@ function WorkNeeds({ details }: PropsType) {
   ) {
     return (
       <>
+        <DataInputLike
+          title="الشخص المكلف"
+          cols={6}
+          value={
+            details.steps_of_approval &&
+            details.steps_of_approval[0]?.employee?.name
+          }
+        />
         <DataInputLike
           title="الكمية"
           value={details.requestable.details[0]?.quantity}

@@ -15,8 +15,7 @@ import ContractsDataTable from "./ContractsDataTable";
 
 function ContractsTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
-  const { contracts, limit, setLimit } = useContext(ContractsContext);
-  const toView = typeof contracts === "object" ? contracts?.data : undefined;
+  const { limit, setLimit } = useContext(ContractsContext);
 
   function CheckboxHandler(id: number) {
     return function (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
@@ -43,8 +42,6 @@ function ContractsTable(props: PropsType) {
     };
   }
 
-  console.log(toView);
-
   return (
     <Stack>
       <TableContainer>
@@ -52,9 +49,12 @@ function ContractsTable(props: PropsType) {
           <TableHeader value={props.value} />
 
           {props.value === 0 ? (
-            <ContractsDataTable CheckboxHandler={CheckboxHandler}/>
+            <ContractsDataTable CheckboxHandler={CheckboxHandler} />
           ) : (
-            <ManageContractsTable secondTabValue={props.secondTabValue} CheckboxHandler={CheckboxHandler}   />
+            <ManageContractsTable
+              secondTabValue={props.secondTabValue}
+              CheckboxHandler={CheckboxHandler}
+            />
           )}
         </Table>
       </TableContainer>
@@ -90,7 +90,7 @@ function ContractsTable(props: PropsType) {
 
 type PropsType = {
   value?: number;
-  secondTabValue?: 0|1;
+  secondTabValue?: 0 | 1;
 };
 
 export default ContractsTable;

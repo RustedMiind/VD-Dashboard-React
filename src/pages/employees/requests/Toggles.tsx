@@ -1,6 +1,7 @@
 import { Stack, Chip, Badge } from "@mui/material";
 import { requestTypes } from "./RequestTypes";
 import { CountType } from "../../../types/Count";
+import NonRoundedChip from "../../../components/NonRoundedChip";
 
 function RequestTypesToggles({ selected, setSelected, counts }: PropsType) {
   function setCurrent(value: number) {
@@ -29,7 +30,7 @@ function RequestTypesToggles({ selected, setSelected, counts }: PropsType) {
         const count = findCount(index + 1)?.count || 0;
         return (
           <Badge key={chip.name} badgeContent={count} color="error">
-            <Chip
+            <NonRoundedChip
               color="primary"
               onClick={setCurrent(chip.value)}
               variant={current ? "filled" : "outlined"}

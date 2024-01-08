@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Button,
-  Paper,
-  Snackbar,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Paper, Stack, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TableData from "./components/Table";
 import PrintIcon from "@mui/icons-material/Print";
@@ -18,8 +11,8 @@ import { EmployeeType, Vacation } from "../../../types";
 import LoadingTable from "../../../components/LoadingTable";
 import { BreadCrumbContext } from "../../../layout/main-layout/BreadCrumbContext";
 import { LoadingButton } from "@mui/lab";
-import { ToasterType } from "../../../types/other/ToasterStateType";
 import ReactToPrint from "react-to-print";
+import { useSnackbar } from "notistack";
 
 const VacationsTable = () => {
   const { yearId, branchId } = useParams();
@@ -27,6 +20,7 @@ const VacationsTable = () => {
   const [vacationSetDialog, setVacationSetDialog] = useState<
     "add" | "update" | null
   >(null);
+  const { enqueueSnackbar } = useSnackbar();
   const [vacationToEdit, setVacationToEdit] = useState<undefined | Vacation>(
     undefined
   );
@@ -45,38 +39,17 @@ const VacationsTable = () => {
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");
-  const [toaster, setToaster] = useState<ToasterType>({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  function updateToaster(partial: Partial<ToasterType>) {
-    setToaster({ ...toaster, ...partial });
-  }
-  function updateAndOpenToaster(partial: Partial<ToasterType>) {
-    updateToaster({ ...partial, open: true });
-  }
-  function handleCloseToaster() {
-    updateToaster({ open: false });
-  }
   function Delete() {
     setSendState("loading");
     axios
       .post(Api(`employee/vacation-day/${yearId}`), {})
       .then((res) => {
-        console.log(res);
         setSendState("success");
-        updateAndOpenToaster({
-          severity: "success",
-          message: "تم اعتماد محدد اجازات السنويه بنجاح",
-        });
+        enqueueSnackbar("تم اعتماد محدد اجازات السنويه بنجاح");
       })
       .catch((err) => {
         setSendState("error");
-        updateAndOpenToaster({
-          severity: "error",
-          message: "تعذر في اعتماد محدد اجازات السنويه",
-        });
+        enqueueSnackbar("تعذر في اعتماد محدد اجازات السنويه");
       });
   }
 
@@ -164,7 +137,6 @@ const VacationsTable = () => {
         </LoadingButton>
       </Stack>
       <SetDialog
-        openToaster={updateAndOpenToaster}
         setTableDate={setTableData}
         open={!!vacationSetDialog}
         InitialVacationData={vacationToEdit}
@@ -172,20 +144,6 @@ const VacationsTable = () => {
         title="اضافة اجازة"
         employeesInBranch={employeesInBranch}
       />
-      <Snackbar
-        open={toaster.open}
-        autoHideDuration={6000}
-        onClose={handleCloseToaster}
-        // action={action}
-      >
-        <Alert
-          onClose={handleCloseToaster}
-          severity={toaster.severity}
-          sx={{ width: "100%" }}
-        >
-          {toaster.message}
-        </Alert>
-      </Snackbar>
     </Stack>
   );
 
@@ -213,7 +171,6 @@ const VacationsTable = () => {
           setemployeesInBranch(data.employees);
         })
         .catch((err) => {
-          console.log(err);
         });
   }
   function setTableData() {
@@ -227,7 +184,6 @@ const VacationsTable = () => {
         setVacations(res.data.vacations);
       })
       .catch((err) => {
-        console.log("Error Fetching Vacations");
         setVacations("error");
       });
   }

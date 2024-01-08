@@ -7,7 +7,15 @@ function VacationDetails({ details }: PropsType) {
     <>
       <DataInputLike
         title="المدة المتوقعة"
-        value={details.requestable?.duration}
+        value={details.requestable?.duration + " يوم"}
+      />
+      <DataInputLike
+        title="الشخص المكلف"
+        cols={12}
+        value={
+          details.steps_of_approval &&
+          details.steps_of_approval[0]?.employee?.name
+        }
       />
       <DataInputLike
         title="تاريخ العودة"
@@ -16,7 +24,7 @@ function VacationDetails({ details }: PropsType) {
       {/* Static */}
       <DataInputLike
         title="رصيد الاجازات بعد العودة"
-        value={details.requestable?.vacation_credit}
+        value={details.requestable?.vacation_credit + " يوم"}
       />
       <DataInputLike
         title="العنوان اثناء الاجازة"

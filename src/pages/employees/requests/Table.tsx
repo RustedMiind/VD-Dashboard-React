@@ -8,17 +8,13 @@ import {
   Chip,
   Typography,
   Box,
-  Pagination,
-  Stack,
   Button,
-  TextField,
-  Menu,
-  MenuItem,
 } from "@mui/material";
 import { EmployeeRequest } from "../../../types";
 import { formatDate } from "../../../methods";
 import { requestTypes } from "./RequestTypes";
 import { useState } from "react";
+import NonRoundedChip from "../../../components/NonRoundedChip";
 
 /*
 -1 pending
@@ -27,15 +23,8 @@ import { useState } from "react";
 */
 
 function EmployeesRequestsTable(props: PropsType) {
-  const ROWS_PER_PAGE = 8;
-  const [page, setPage] = useState(1);
-  const [rowsCount, setRowsCount] = useState(10);
-  const PAGES = Math.ceil(props.requests.length / ROWS_PER_PAGE) || 1;
+  const [rowsCount] = useState(10);
 
-  // const toView = props.requests.slice(
-  //   (page - 1) * ROWS_PER_PAGE,
-  //   page * ROWS_PER_PAGE
-  // );
   const toView = props.requests.slice(0, rowsCount);
 
   return (
@@ -123,24 +112,6 @@ function EmployeesRequestsTable(props: PropsType) {
           </Typography>
         )}
       </TableContainer>
-      {/* <Stack p={2} direction="row" alignItems="center" spacing={1}>
-        <Typography> عدد العرض في الصفحة</Typography>
-        <TextField
-          size="small"
-          value={rowsCount}
-          select
-          onChange={(e) => {
-            setRowsCount(parseInt(e.target.value) || 10);
-          }}
-        >
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={25}>25</MenuItem>
-          <MenuItem value={500}>500</MenuItem>
-          <MenuItem value={2500}>2500</MenuItem>
-          <MenuItem value={10000}>10000</MenuItem>
-        </TextField>
-      </Stack> */}
     </>
   );
 
@@ -153,7 +124,7 @@ function EmployeesRequestsTable(props: PropsType) {
       case -1:
         if (HAS_ACCESS) {
           chip = (
-            <Chip
+            <NonRoundedChip
               color="primary"
               onClick={props.openModel(request)}
               variant={"filled"}
@@ -162,7 +133,7 @@ function EmployeesRequestsTable(props: PropsType) {
           );
         } else {
           chip = (
-            <Chip
+            <NonRoundedChip
               color="primary"
               onClick={props.openStatus(request)}
               variant={variant}
@@ -173,7 +144,7 @@ function EmployeesRequestsTable(props: PropsType) {
         break;
       case 0:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="error"
             onClick={props.openStatus(request)}
             variant={variant}
@@ -183,7 +154,7 @@ function EmployeesRequestsTable(props: PropsType) {
         break;
       case 1:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="success"
             onClick={props.openStatus(request)}
             variant={variant}
@@ -193,7 +164,7 @@ function EmployeesRequestsTable(props: PropsType) {
         break;
       case 2:
         chip = (
-          <Chip
+          <NonRoundedChip
             color="success"
             onClick={props.openStatus(request)}
             variant={variant}

@@ -1,6 +1,5 @@
 import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material";
 import { NotPrintableTableCell } from "../Table";
-import { Client } from "../../../../types/Clients";
 function TableHeader(props: PropsType) {
   return (
     <TableHead>
