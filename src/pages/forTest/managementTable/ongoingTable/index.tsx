@@ -1,12 +1,13 @@
 import {
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
 } from "@mui/material";
-
-export default function CurrantTable() {
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+export default function OngoingTable() {
   return (
     <Table>
       <TableHead>
@@ -25,7 +26,11 @@ export default function CurrantTable() {
         <TableCell>-</TableCell>
         <TableCell>-</TableCell>
         <TableCell>-</TableCell>
-        <TableCell>-</TableCell>
+        <TableCell>
+          <IconButton aria-label="delete" size="small">
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </TableCell>
       </TableBody>
     </Table>
   );

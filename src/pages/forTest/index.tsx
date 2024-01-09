@@ -1,12 +1,12 @@
 import { Button, Grid, GridProps, Stack, TextField } from "@mui/material";
-import ManagementTable from "./managementTable";
-import CurrantTable from "./managementTable/currantTable";
+import CurrantTable from "./managementTable/ongoingTable";
 import IncomingTable from "./managementTable/incomingTable";
+import PaperButtonLikeTitle from "../../components/PaperButtonLikeTitle";
 
 function ForTest() {
   function GridItem({ children }: GridProps) {
     return (
-      <Grid item xs={12}  lg={5}>
+      <Grid item xs={12} lg={5}>
         {children}
       </Grid>
     );
@@ -32,14 +32,14 @@ function ForTest() {
           </Button>
         </Grid>
         <Grid item lg={6} xs={12}>
-          <ManagementTable title="المنافسات الواردة">
+          <PaperButtonLikeTitle title="المنافسات الواردة">
             <CurrantTable />
-          </ManagementTable>
+          </PaperButtonLikeTitle>
         </Grid>
         <Grid item lg={6} xs={12}>
-          <ManagementTable title="المنافسات الجارية">
+          <PaperButtonLikeTitle title="المنافسات الجارية">
             <IncomingTable />
-          </ManagementTable>
+          </PaperButtonLikeTitle>
         </Grid>
       </Grid>
     </Stack>
