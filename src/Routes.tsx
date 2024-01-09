@@ -49,6 +49,7 @@ function RoutesComponent() {
           <Route path="" element={<TendersData />} />
           <Route path="create" element={<CreateAndUpdateTender />} />
           <Route path="edit/:id" element={<CreateAndUpdateTender />} />
+          <Route path="management" element={<CreateAndUpdateTender />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />

@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import StatusChip from "../../../../components/StatusChip";
+import StatusChip from "../../../../../components/StatusChip";
 
 export default function IncomingTable() {
   return (
@@ -23,7 +23,9 @@ export default function IncomingTable() {
       <TableBody>
         <TableCell>-</TableCell>
         <TableCell>-</TableCell>
-        <TableCell><StatusChip label="جاري" color="success"/></TableCell>
+        <TableCell>
+          <StatusChip label="جاري" color="success" />
+        </TableCell>
         <TableCell>
           <IconButton size="small">
             <VisibilityOutlinedIcon />
