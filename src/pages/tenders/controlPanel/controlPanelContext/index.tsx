@@ -13,8 +13,6 @@ export default function ControlPanelContextProvider({
   const [tenderControlData, setTenderControlData] =
     useState<TenderStateType>("none");
   function getTender(params?: unknown) {
-    console.log(params);
-
     setTenderControlData("loading");
     axios
       .get<tenderControlType>(Api("employee/tender/form/eng_employee"), {

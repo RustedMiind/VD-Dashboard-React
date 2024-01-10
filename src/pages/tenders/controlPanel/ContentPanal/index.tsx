@@ -5,11 +5,12 @@ import { useContext, useState } from "react";
 import OngoingTable from "../ongoingTable";
 import IncomingTable from "../incomingTable";
 import LoadingTable from "../../../../components/LoadingTable";
+import TenderNotFound from "../../data/Table/TendersNotFound";
+import NotFound from "../../../../components/NotFound";
 
 function ContentPanal() {
   const { setTenderControlData, tenderControlData } =
     useContext(ControlPanelContext);
-
   const [dataToSearch, setDataToSearch] = useState<TypeDataToSearch>({
     code_reference: "",
     organization_name: "",
@@ -67,21 +68,34 @@ function ContentPanal() {
           </Button>
         </Grid>
         {tenderControlData === "loading" && <LoadingTable rows={5} cols={6} />}
-        {tenderControlData === "empty" && <>لا يوجد منافسات</>}
-        {typeof tenderControlData === "object" && (
-          <>
+        {typeof tenderControlData === "object" &&
+          tenderControlData.incoming.length === 0 && (
+            <Grid item lg={6} xs={12}>
+              <NotFound title="لا يوجد منافسات واردة" />
+            </Grid>
+          )}
+        {typeof tenderControlData === "object" &&
+          tenderControlData.ongoing.length === 0 && (
+            <Grid item lg={6} xs={12}>
+              <NotFound title="لا يوجد منافسات جارية" />
+            </Grid>
+          )}
+        {typeof tenderControlData === "object" &&
+          tenderControlData.incoming.length > 0 && (
             <Grid item lg={6} xs={12}>
               <PaperButtonLikeTitle title="المنافسات الواردة">
                 <IncomingTable />
               </PaperButtonLikeTitle>
             </Grid>
+          )}
+        {typeof tenderControlData === "object" &&
+          tenderControlData.ongoing.length > 0 && (
             <Grid item lg={6} xs={12}>
               <PaperButtonLikeTitle title="المنافسات الجارية">
                 <OngoingTable />
               </PaperButtonLikeTitle>
             </Grid>
-          </>
-        )}
+          )}
       </Grid>
     </Stack>
   );

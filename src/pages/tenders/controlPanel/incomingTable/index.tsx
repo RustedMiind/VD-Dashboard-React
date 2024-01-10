@@ -11,7 +11,6 @@ import { ControlPanelContext } from "../controlPanelContext";
 import { useContext } from "react";
 export default function IncomingTable() {
   const { tenderControlData } = useContext(ControlPanelContext);
-
   return (
     <Table>
       <TableHead>
