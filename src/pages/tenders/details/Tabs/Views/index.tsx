@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import { TabEnum } from "../TabEnum";
 import { useContext } from "react";
 import { TabContext } from "..";
