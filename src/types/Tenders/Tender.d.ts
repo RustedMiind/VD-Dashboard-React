@@ -9,14 +9,19 @@ export type TenderFormOptions = {};
 export type Tender = {
   id: number;
   step_num: number;
-  is_done: DB_Boolean;
-  created_at: string;
-  updated_at: string;
-  // deleted_at: null;
+  is_done: number;
+  eng_employee_status: number;
+  buy_status: number;
+  technical_status: number;
+  file_finacial_status: number;
+  apply_status: number;
   tenderdata?: TenderData;
   tender_tasks?: TenderTask;
   tender_files?: TenderFile[];
   tender_amounts?: TenderAmounts[];
+  // created_at: "2024-01-03T16:33:09.000000Z";
+  // updated_at: "2024-01-03T18:12:24.000000Z";
+  // deleted_at: null;
 };
 
 export type TenderData = {

@@ -17,6 +17,7 @@ import VacationsSettings from "./pages/vacations/VacationsSettings";
 import TendersData from "./pages/tenders/data";
 import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
 import TenderDetails from "./pages/tenders/details";
+import ControlPanal from "./pages/tenders/controlPanel";
 
 function RoutesComponent() {
   return (
@@ -51,6 +52,7 @@ function RoutesComponent() {
           <Route path="create" element={<CreateAndUpdateTender />} />
           <Route path="edit/:id" element={<CreateAndUpdateTender />} />
           <Route path=":id" element={<TenderDetails />} />
+          <Route path="controlpanel" element={<ControlPanal />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
