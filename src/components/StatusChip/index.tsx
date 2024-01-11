@@ -1,4 +1,4 @@
-import { Chip, ChipProps } from "@mui/material";
+import {  ChipProps } from "@mui/material";
 import NonRoundedChip from "../NonRoundedChip";
 
 function StatusChip(props: ChipProps) {
