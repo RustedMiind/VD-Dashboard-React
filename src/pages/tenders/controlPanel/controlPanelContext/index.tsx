@@ -10,25 +10,35 @@ export default function ControlPanelContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [tenderControlData, setTenderControlData] =
-    useState<TenderStateType>("none");
+  const [tenderControlData, setTenderControlData] = useState<TenderStateType>({
+    incoming: "none",
+    ongoing: "none",
+  });
   function getTender(params?: unknown) {
-    setTenderControlData("loading");
+    setTenderControlData({
+      incoming: "loading",
+      ongoing: "loading",
+    });
     axios
-      .get<tenderControlType>(Api("employee/tender/form/eng_employee"), {
+      .get<Partial<TenderStateType>>(Api("employee/tender/form/eng_employee"), {
         params,
       })
       .then((res) => {
-        if (res.data) {
-          setTenderControlData(res.data);
-          console.log(res.data);
-          console.log(res.data);
-        } else {
-          setTenderControlData("empty");
-        }
+        let stateToUpdate: TenderStateType = {
+          ongoing: "empty",
+          incoming: "empty",
+        };
+        if (res.data.incoming?.length)
+          stateToUpdate.incoming = res.data.incoming;
+
+        if (res.data.ongoing?.length) stateToUpdate.ongoing = res.data.ongoing;
+        setTenderControlData(stateToUpdate);
       })
       .catch((error) => {
-        setTenderControlData("error");
+        setTenderControlData({
+          incoming: "error",
+          ongoing: "error",
+        });
       });
   }
   useEffect(() => {
@@ -46,18 +56,11 @@ export default function ControlPanelContextProvider({
   );
 }
 
-type tenderControlType = {
-  incoming: Tender[];
-  ongoing: Tender[];
+type TenderStateType = {
+  incoming: Tender[] | "none" | "error" | "loading" | "empty";
+  ongoing: Tender[] | "none" | "error" | "loading" | "empty";
 };
 type ContextType = {
   tenderControlData?: TenderStateType;
   setTenderControlData?: ((param?: unknown) => void) | null;
 };
-
-type TenderStateType =
-  | "none"
-  | "error"
-  | "loading"
-  | tenderControlType
-  | "empty";

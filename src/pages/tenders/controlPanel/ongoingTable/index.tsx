@@ -10,23 +10,26 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import StatusChip from "../../../../components/StatusChip";
 import { useContext } from "react";
 import { ControlPanelContext } from "../controlPanelContext";
+import LoadingTable from "../../../../components/LoadingTable";
+import NotFound from "../../../../components/NotFound";
 
 export default function OngoingTable() {
   const { tenderControlData } = useContext(ControlPanelContext);
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell sx={{ width: "150px" }}>الرقم المرجعي للمنافسة</TableCell>
-          <TableCell>اسم المنافسة</TableCell>
-          <TableCell>حالة الترسية</TableCell>
-          <TableCell>عرض</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {typeof tenderControlData === "object" &&
-          tenderControlData.ongoing.length > 0 &&
-          tenderControlData.ongoing.map((tender) => (
+  if (Array.isArray(tenderControlData?.ongoing))
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ width: "150px" }}>
+              الرقم المرجعي للمنافسة
+            </TableCell>
+            <TableCell>اسم المنافسة</TableCell>
+            <TableCell>حالة الترسية</TableCell>
+            <TableCell>عرض</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tenderControlData?.ongoing.map((tender) => (
             <TableRow key={tender.id}>
               <TableCell>{tender.tenderdata?.code_reference}</TableCell>
               <TableCell>{tender.tenderdata?.name}</TableCell>
@@ -40,7 +43,12 @@ export default function OngoingTable() {
               </TableCell>
             </TableRow>
           ))}
-      </TableBody>
-    </Table>
-  );
+        </TableBody>
+      </Table>
+    );
+  else if (tenderControlData?.ongoing === "loading")
+    return <LoadingTable rows={5} cols={6} />;
+  else if (tenderControlData?.ongoing === "empty")
+    return <NotFound title="لا يوجد منافسات الجارية" />;
+  else return <></>;
 }

@@ -9,24 +9,25 @@ import {
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ControlPanelContext } from "../controlPanelContext";
 import { useContext } from "react";
+import LoadingTable from "../../../../components/LoadingTable";
+import NotFound from "../../../../components/NotFound";
 export default function IncomingTable() {
   const { tenderControlData } = useContext(ControlPanelContext);
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>الرقم المرجعي للمنافسة</TableCell>
-          <TableCell>تاريخ الورود</TableCell>
-          <TableCell>اسم المنافسة</TableCell>
-          <TableCell>مدة العقد</TableCell>
-          <TableCell> تاريخ الانتهاء </TableCell>
-          <TableCell>عرض</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {typeof tenderControlData === "object" &&
-          tenderControlData.incoming.length > 0 &&
-          tenderControlData.incoming.map((tender) => (
+  if (Array.isArray(tenderControlData?.incoming))
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>الرقم المرجعي للمنافسة</TableCell>
+            <TableCell>تاريخ الورود</TableCell>
+            <TableCell>اسم المنافسة</TableCell>
+            <TableCell>مدة العقد</TableCell>
+            <TableCell> تاريخ الانتهاء </TableCell>
+            <TableCell>عرض</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tenderControlData?.incoming.map((tender) => (
             <TableRow key={tender.id}>
               <TableCell>{tender.tenderdata?.code_reference}</TableCell>
               <TableCell sx={{ width: "100px" }}>
@@ -42,7 +43,12 @@ export default function IncomingTable() {
               </TableCell>
             </TableRow>
           ))}
-      </TableBody>
-    </Table>
-  );
+        </TableBody>
+      </Table>
+    );
+  else if (tenderControlData?.incoming === "loading")
+    return <LoadingTable rows={5} cols={6} />;
+  else if (tenderControlData?.incoming === "empty")
+    return <NotFound title="لا يوجد منافسات واردة" />;
+  else return <></>;
 }

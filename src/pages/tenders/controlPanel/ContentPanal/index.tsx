@@ -4,9 +4,16 @@ import { ControlPanelContext } from "../controlPanelContext";
 import { useContext, useState } from "react";
 import OngoingTable from "../ongoingTable";
 import IncomingTable from "../incomingTable";
-import LoadingTable from "../../../../components/LoadingTable";
-import TenderNotFound from "../../data/Table/TendersNotFound";
-import NotFound from "../../../../components/NotFound";
+
+const PAPER_HEIGHT = 500;
+
+function GridItem({ children }: GridProps) {
+  return (
+    <Grid item xs={12} lg={5}>
+      {children}
+    </Grid>
+  );
+}
 
 function ContentPanal() {
   const { setTenderControlData, tenderControlData } =
@@ -15,13 +22,7 @@ function ContentPanal() {
     code_reference: "",
     organization_name: "",
   });
-  function GridItem({ children }: GridProps) {
-    return (
-      <Grid item xs={12} lg={5}>
-        {children}
-      </Grid>
-    );
-  }
+
   function updateDataToSearch(partial: Partial<TypeDataToSearch>) {
     setDataToSearch({
       ...dataToSearch,
@@ -30,9 +31,6 @@ function ContentPanal() {
   }
   function searchTender(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(dataToSearch);
-    console.log(setTenderControlData);
-
     setTenderControlData && setTenderControlData(dataToSearch);
   }
 
@@ -67,35 +65,24 @@ function ContentPanal() {
             بحث
           </Button>
         </Grid>
-        {tenderControlData === "loading" && <LoadingTable rows={5} cols={6} />}
-        {typeof tenderControlData === "object" &&
-          tenderControlData.incoming.length === 0 && (
-            <Grid item lg={6} xs={12}>
-              <NotFound title="لا يوجد منافسات واردة" />
-            </Grid>
-          )}
-        {typeof tenderControlData === "object" &&
-          tenderControlData.ongoing.length === 0 && (
-            <Grid item lg={6} xs={12}>
-              <NotFound title="لا يوجد منافسات جارية" />
-            </Grid>
-          )}
-        {typeof tenderControlData === "object" &&
-          tenderControlData.incoming.length > 0 && (
-            <Grid item lg={6} xs={12}>
-              <PaperButtonLikeTitle title="المنافسات الواردة">
-                <IncomingTable />
-              </PaperButtonLikeTitle>
-            </Grid>
-          )}
-        {typeof tenderControlData === "object" &&
-          tenderControlData.ongoing.length > 0 && (
-            <Grid item lg={6} xs={12}>
-              <PaperButtonLikeTitle title="المنافسات الجارية">
-                <OngoingTable />
-              </PaperButtonLikeTitle>
-            </Grid>
-          )}
+      </Grid>
+      <Grid container spacing={2} mt={2}>
+        <Grid item xl={6} xs={12}>
+          <PaperButtonLikeTitle
+            fixedHeight={PAPER_HEIGHT}
+            title="المنافسات الواردة"
+          >
+            <IncomingTable />
+          </PaperButtonLikeTitle>
+        </Grid>
+        <Grid item xl={6} xs={12}>
+          <PaperButtonLikeTitle
+            fixedHeight={PAPER_HEIGHT}
+            title="المنافسات الجارية"
+          >
+            <OngoingTable />
+          </PaperButtonLikeTitle>
+        </Grid>
       </Grid>
     </Stack>
   );
