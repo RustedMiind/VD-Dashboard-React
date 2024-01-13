@@ -20,7 +20,7 @@ export default function ControlPanelContextProvider({
       ongoing: "loading",
     });
     axios
-      .get<Partial<TenderStateType>>(Api("employee/tender/form/eng_employee"), {
+      .get<Partial<TenderStateType>>(Api("employee/tender/form"), {
         params,
       })
       .then((res) => {
