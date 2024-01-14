@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
 import GradientBg from "../../../../../components/GradientBg";
 import { Box, Stack, Typography } from "@mui/material";
+import { TenderDataContext } from "../..";
+import { getDateDiff } from "../../../../../methods";
 
 export default function NumberOfDays() {
+  const { tender } = useContext(TenderDataContext);
+  let daysLeft = 0;
+  if (typeof tender === "object") {
+    daysLeft = Math.floor(
+      getDateDiff(new Date(), new Date(tender.tenderdata?.end_date || "")) /
+        (1000 * 60 * 60 * 24)
+    );
+  }
+
   return (
     <GradientBg>
       <Stack sx={{ alignItems: "center", justifyContent: "center" }}>
@@ -26,7 +37,7 @@ export default function NumberOfDays() {
         >
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h5" color={"secondary.main"}>
-              150
+              {daysLeft}
             </Typography>
             <Typography variant="body2">يوم</Typography>
           </Box>
