@@ -2,10 +2,10 @@ import { useContext } from "react";
 import GradientBg from "../../../../../components/GradientBg";
 import { Chip, Grid, GridProps, Stack, Typography } from "@mui/material";
 import { TenderDataContext } from "../..";
+import { formatDate } from "../../../../../methods";
 export default function OngoingWork() {
   const { tender } = useContext(TenderDataContext);
   function GridItem({ children }: GridProps) {
-    const { tender } = useContext(TenderDataContext);
     return (
       <Grid item md={3} justifyContent={"center"}>
         <Stack>{children}</Stack>
