@@ -8,10 +8,10 @@ export default function Cards() {
   return (
     <Stack>
       <Grid container mb={4} spacing={2}>
-        <Grid item md={5}>
+        <Grid item md={4}>
           <OngoingWork />
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={4}>
           <Items />
         </Grid>
         <Grid item md={4}>

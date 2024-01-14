@@ -14,8 +14,9 @@ export default function NumberOfDays() {
             width: "100px",
             height: "100px",
             background: "background",
-            borderRadius: 5,
-            border: "#FFB643 1px solid",
+            borderRadius: 600,
+            border: "transparent 1px solid",
+            borderColor: "secondary.main",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -24,7 +25,7 @@ export default function NumberOfDays() {
           }}
         >
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="h5" color={"#FFB643"}>
+            <Typography variant="h5" color={"secondary.main"}>
               150
             </Typography>
             <Typography variant="body2">يوم</Typography>
