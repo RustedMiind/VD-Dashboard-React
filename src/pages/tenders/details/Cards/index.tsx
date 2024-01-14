@@ -8,13 +8,13 @@ export default function Cards() {
   return (
     <Stack>
       <Grid container mb={4} spacing={2}>
-        <Grid item md={4}>
+        <Grid item lg={4.25}>
           <OngoingWork />
         </Grid>
-        <Grid item md={4}>
+        <Grid item lg={3.5}>
           <Items />
         </Grid>
-        <Grid item md={4}>
+        <Grid item lg={4.25}>
           <NumberOfDays />
         </Grid>
       </Grid>
