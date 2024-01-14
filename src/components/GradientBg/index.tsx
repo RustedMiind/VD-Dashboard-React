@@ -7,7 +7,10 @@ export default function GradientBg({ children, reverseBg }: PropsType) {
         background: reverseBg
           ? "linear-gradient(255.62deg, rgba(243, 245, 247, 0.3) 0%, rgba(0, 70, 147, 0.2) 99.49%)"
           : "linear-gradient(75.62deg, rgba(243, 245, 247, 0.3) 0%, rgba(0, 70, 147, 0.2) 99.49%)",
-        height: 400,
+
+        borderRadius: 2,
+        p: 2,
+        height: 1,
       }}
     >
       {children}

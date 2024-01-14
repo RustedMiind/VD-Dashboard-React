@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { Api } from "../../../constants";
 import { isStringAllNumbers } from "../../../methods";
 import axios from "axios";
+import Cards from "./Cards";
 
 export const TenderDataContext = createContext<TenderDataContextType>({
   tender: FetchStatusEnum.NONE,
@@ -36,7 +37,7 @@ function TenderDetails() {
   return (
     <TenderDataContext.Provider value={{ tender }}>
       <Stack>
-        {/* Cards */}
+        <Cards />
         <TabsContainer />
       </Stack>
     </TenderDataContext.Provider>

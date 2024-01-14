@@ -1,4 +1,5 @@
 import { DbOptionType } from "../other/DbOptionType";
+import { TenderEng } from "./TenderEng";
 
 export interface TenderTask {
   id: number;
@@ -20,4 +21,5 @@ export interface TenderTask {
   updated_at: string;
   deleted_at: string | null;
   task_tender_warranties?: (DbOptionType & { warranty_id: number })[];
+  eng_employee_apply_tender:TenderEng;
 }
