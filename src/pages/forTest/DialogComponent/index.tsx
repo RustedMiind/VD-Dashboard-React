@@ -24,15 +24,8 @@ export default function DialogComponent({ title }: PropsType) {
   );
 
   return (
-    <Dialog
-      maxWidth="md"
-      open={true}
-      component="form"
-      // onClose={props.handleClose}
-      // onSubmit={handleSubmit}
-    >
+    <Dialog maxWidth="md" open={true} component="form">
       <IconButton
-        aria-label="delete"
         size="small"
         sx={{
           position: "absolute",
@@ -42,7 +35,6 @@ export default function DialogComponent({ title }: PropsType) {
           borderRadius: "8px",
         }}
         color="primary"
-        // onClick={() => setOpen(!open)}
       >
         <CloseIcon fontSize="inherit" />
       </IconButton>
