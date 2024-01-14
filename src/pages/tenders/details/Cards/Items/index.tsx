@@ -16,25 +16,18 @@ export default function Items() {
         <Grid container rowGap={2} alignItems={"center"}>
           <Label label="البنود" />
           <Label xs={8} label="الحاله" />
-
           <Label label="الفني" />
-
           <Content>
             <StatusChip label={"لم يبدأ"} sx={{ background: "background" }} />
           </Content>
-
-          <Grid item md={6}>
-            <Typography variant="body2">المالي</Typography>
-          </Grid>
-          <Grid item md={6}>
+          <Label label="المالي" />
+          <Content>
             <StatusChip label={"لم يبدأ"} sx={{ background: "background" }} />
-          </Grid>
-          <Grid item md={6}>
-            <Typography variant="body2">التقديم</Typography>
-          </Grid>
-          <Grid item md={6}>
+          </Content>
+          <Label label="التقديم" />
+          <Content>
             <StatusChip label={"لم يبدأ"} sx={{ background: "background" }} />
-          </Grid>
+          </Content>
         </Grid>
       </Stack>
     </GradientBg>
