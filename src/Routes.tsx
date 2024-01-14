@@ -9,7 +9,7 @@ import ClientRequests from "./pages/clients/clientRequest";
 import ClientProcess from "./pages/clients/clientsProcess";
 import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
-import ForTest from "./pages/forTest";
+import ForTest from "./pages/tenders/controlPanel";
 import VacationsTable from "./pages/vacations/VacationDetails";
 import ClientDetails from "./pages/clients/clientDeatails";
 import VacationDetails from "./pages/vacations/branchDetails";
@@ -51,6 +51,7 @@ function RoutesComponent() {
           <Route path="create" element={<CreateAndUpdateTender />} />
           <Route path="edit/:id" element={<CreateAndUpdateTender />} />
           <Route path=":id" element={<TenderDetails />} />
+          <Route path="controlpanel" element={<TenderDetails />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />
