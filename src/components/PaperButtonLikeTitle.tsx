@@ -11,6 +11,7 @@ import {
 export default function PaperButtonLikeTitle({
   title,
   count,
+  fixedHeight,
   ...paperProps
 }: PropsType) {
   return (
@@ -38,11 +39,24 @@ export default function PaperButtonLikeTitle({
           />
         )}
       </Stack>
-      <Paper {...paperProps} />
+      <Paper
+        {...paperProps}
+        sx={{
+          ...(fixedHeight
+            ? {
+                maxHeight: fixedHeight,
+                overflowY: "scroll",
+                height: fixedHeight,
+              }
+            : undefined),
+          ...paperProps.sx,
+        }}
+      />
     </Stack>
   );
 }
 type PropsType = {
   title: string;
   count?: number;
+  fixedHeight?: string | number;
 } & PaperProps;

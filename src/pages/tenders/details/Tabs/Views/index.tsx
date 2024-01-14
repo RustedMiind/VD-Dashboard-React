@@ -1,14 +1,14 @@
-import { Stack } from "@mui/material";
 import { TabEnum } from "../TabEnum";
 import { useContext } from "react";
 import { TabContext } from "..";
+import DetailsView from "./DetailsView";
 
 function TabViews(): JSX.Element {
   const { tab } = useContext(TabContext);
 
   switch (tab) {
     case TabEnum.DETAILS:
-      return <>Hello Details</>;
+      return <DetailsView />;
     case TabEnum.DATES:
       return <>Hello Dates</>;
     case TabEnum.PROGRESS_LOG:
