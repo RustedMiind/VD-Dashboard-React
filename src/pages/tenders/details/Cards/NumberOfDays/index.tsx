@@ -2,16 +2,20 @@ import React, { useContext, useMemo } from "react";
 import GradientBg from "../../../../../components/GradientBg";
 import { Box, Stack, Typography } from "@mui/material";
 import { TenderDataContext } from "../..";
-import { getDateDiff } from "../../../../../methods";
+import { getDateDiffNegativeAllowed } from "../../../../../methods";
 
 export default function NumberOfDays() {
   const { tender } = useContext(TenderDataContext);
   let daysLeft = 0;
   if (typeof tender === "object") {
     daysLeft = Math.floor(
-      getDateDiff(new Date(), new Date(tender.tenderdata?.end_date || "")) /
+      getDateDiffNegativeAllowed(
+        new Date(tender.tenderdata?.end_date || ""),
+        new Date()
+      ) /
         (1000 * 60 * 60 * 24)
     );
+    if (daysLeft < 0) daysLeft = 0;
   }
 
   return (
