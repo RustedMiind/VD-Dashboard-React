@@ -1,8 +1,9 @@
 import { Button, Paper, Stack } from "@mui/material";
-import UploadFileInput from "../../components/UploadFileInput";
-import { useState } from "react";
-import { SelectWithFilteration } from "../../components/SelectWithFilteration";
 import { useSnackbar } from "notistack";
+import { useState } from "react";
+import UploadFileInput from "../../components/UploadFileInput";
+import { SelectWithFilteration } from "../../components/SelectWithFilteration";
+import DialogComponent from "./DialogComponent";
 
 function ForTest() {
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -43,6 +44,7 @@ function ForTest() {
           </Button>
         </Stack>
       </Paper>
+      <DialogComponent title={"شراء المنافسة"} />
     </Stack>
   );
 }

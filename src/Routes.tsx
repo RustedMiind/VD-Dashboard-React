@@ -9,13 +9,15 @@ import ClientRequests from "./pages/clients/clientRequest";
 import ClientProcess from "./pages/clients/clientsProcess";
 import NotReactRoute from "./NotReactRoute";
 import CreateContracts from "./pages/contracts/SetContract";
-import ForTest from "./pages/forTest";
 import VacationsTable from "./pages/vacations/VacationDetails";
 import ClientDetails from "./pages/clients/clientDeatails";
 import VacationDetails from "./pages/vacations/branchDetails";
 import VacationsSettings from "./pages/vacations/VacationsSettings";
 import TendersData from "./pages/tenders/data";
 import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
+import TenderDetails from "./pages/tenders/details";
+import ControlPanal from "./pages/tenders/controlPanel";
+import ForTest from "./pages/forTest";
 
 function RoutesComponent() {
   return (
@@ -49,6 +51,8 @@ function RoutesComponent() {
           <Route path="" element={<TendersData />} />
           <Route path="create" element={<CreateAndUpdateTender />} />
           <Route path="edit/:id" element={<CreateAndUpdateTender />} />
+          <Route path=":id" element={<TenderDetails />} />
+          <Route path="controlpanel" element={<ControlPanal />} />
         </Route>
         <Route path="contracts">
           <Route path="" element={<Contracts />} />

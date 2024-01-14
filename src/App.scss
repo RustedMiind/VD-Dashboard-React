@@ -5,3 +5,8 @@
 :root {
   --main: #004693;
 }
+
+*::selection {
+  background: #f19902b7;
+  color: black;
+}

@@ -2,6 +2,10 @@ html {
   direction: rtl;
 }
 
+body {
+  overflow-y: scroll;
+}
+
 * {
   margin: 0;
   padding: 0;
