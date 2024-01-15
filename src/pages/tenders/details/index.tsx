@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Backdrop, CircularProgress, Stack } from "@mui/material";
 import TabsContainer from "./Tabs";
 import { createContext, useEffect, useState } from "react";
 import { Tender } from "../../../types";
@@ -41,6 +41,12 @@ function TenderDetails() {
         <Cards />
         <TabsContainer />
       </Stack>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={tender === FetchStatusEnum.LOADING}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </TenderDataContext.Provider>
   );
 }
