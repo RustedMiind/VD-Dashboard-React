@@ -34,7 +34,7 @@ function RowComponent(props: PropsType) {
       <TableCell>
         {props.accualEndDate ? formatDate(props.accualEndDate) : "-"}
       </TableCell>
-      <TableCell>open</TableCell>
+      <TableCell>{props.iconComponent}</TableCell>
     </TableRow>
   );
 }
@@ -46,7 +46,7 @@ type PropsType = {
   status?: TenderItemStatus;
   managerName?: string;
   accualEndDate?: string;
-  open: () => void;
+  iconComponent: React.ReactNode;
 };
 
 export default RowComponent;

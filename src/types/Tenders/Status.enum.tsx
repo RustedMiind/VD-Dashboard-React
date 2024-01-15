@@ -10,7 +10,7 @@ export enum TenderApprovalStatus {
   REJECTED = 0,
 }
 
-export enum CurrentTenderStep {
+export enum TenderStep {
   ACCEPTION = "1",
   PURCHASE = "2",
   TECHNICAL = "3",

@@ -1,5 +1,6 @@
 import {
   Button,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -12,20 +13,48 @@ import RowComponent from "./RowComponent";
 import { useContext, useState } from "react";
 import { TenderDataContext } from "../../..";
 import BuyDialog from "./TakeActionDialogs/BuyDialog";
+import { TenderStep } from "../../../../../../types/Tenders/Status.enum";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
 function ItemsView() {
   const { tender } = useContext(TenderDataContext);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  if (typeof tender === "object")
+  const [dialogOpen, setDialogOpen] = useState<undefined | TenderStep>(
+    undefined
+  );
+  const closeDialog = () => {
+    setDialogOpen(undefined);
+  };
+
+  if (typeof tender === "object") {
+    const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
+      if (tender.user_type === dialogType) {
+        return (
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={() => {
+              setDialogOpen(dialogType);
+            }}
+          >
+            <SettingsIcon />
+          </IconButton>
+        );
+      } else {
+        return (
+          <IconButton size="small" color="primary" disabled onClick={() => {}}>
+            <ClearIcon />
+          </IconButton>
+        );
+      }
+    };
     return (
       <>
         <BuyDialog
-          open={dialogOpen}
-          onClose={() => {
-            setDialogOpen(false);
-          }}
+          open={dialogOpen === TenderStep.PURCHASE}
+          onClose={closeDialog}
         />
         <TableContainer>
           <Table>
@@ -40,7 +69,7 @@ function ItemsView() {
                   عرض الملف
                   <Button
                     onClick={() => {
-                      setDialogOpen(!dialogOpen);
+                      setDialogOpen(TenderStep.PURCHASE);
                     }}
                   >
                     شراء
@@ -55,7 +84,7 @@ function ItemsView() {
                   managerName: tender.tender_tasks?.eng_employee?.name,
                   endDate: tender.tender_tasks?.end_dete_accept,
                   accualEndDate: tender.eng_employee_date,
-                  open() {},
+                  iconComponent: dialogComponent(TenderStep.ACCEPTION),
                   status: tender.eng_employee_status,
                 }}
               />
@@ -66,7 +95,7 @@ function ItemsView() {
                     tender.tender_tasks?.eng_employee_buy_tender?.name,
                   endDate: tender.tender_tasks?.dete_buy_tender,
                   accualEndDate: tender.file_finacial_date,
-                  open() {},
+                  iconComponent: dialogComponent(TenderStep.PURCHASE),
                   status: tender.buy_status,
                 }}
               />
@@ -77,7 +106,7 @@ function ItemsView() {
                     tender.tender_tasks?.eng_employee_technical?.name,
                   endDate: tender.tender_tasks?.end_dete_technical,
                   accualEndDate: tender.technical_date,
-                  open() {},
+                  iconComponent: dialogComponent(TenderStep.TECHNICAL),
                   status: tender.technical_status,
                 }}
               />
@@ -88,7 +117,7 @@ function ItemsView() {
                     tender.tender_tasks?.eng_employee_file_finacial?.name,
                   endDate: tender.tender_tasks?.dete_file_finacial,
                   accualEndDate: tender.file_finacial_date,
-                  open() {},
+                  iconComponent: dialogComponent(TenderStep.FINANCIAL),
                   status: tender.file_finacial_status,
                 }}
               />
@@ -99,7 +128,7 @@ function ItemsView() {
                     tender.tender_tasks?.eng_employee_file_finacial?.name,
                   endDate: tender.tender_tasks?.end_dete_trace,
                   accualEndDate: tender.trace_date,
-                  open() {},
+                  iconComponent: dialogComponent(TenderStep.FILE),
                   status: tender.file_finacial_status,
                 }}
               />
@@ -110,7 +139,7 @@ function ItemsView() {
                     tender.tender_tasks?.eng_employee_apply_tender?.name,
                   endDate: tender.tender_tasks?.dete_apply_tender,
                   accualEndDate: tender.apply_date,
-                  open() {},
+                  iconComponent: dialogComponent(TenderStep.APPLY),
                   status: tender.apply_status,
                 }}
               />
@@ -119,7 +148,7 @@ function ItemsView() {
         </TableContainer>
       </>
     );
-  else return <></>;
+  } else return <></>;
 }
 
 export default ItemsView;

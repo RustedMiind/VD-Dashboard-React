@@ -37,8 +37,14 @@ function DetailsView(): JSX.Element {
 
     return (
       <Grid container rowSpacing={4} columnSpacing={2}>
-        <InfoItem label="نوع الفرع" value=" ########## " />
-        <InfoItem label="الادارة" value={" ########## "} />
+        <InfoItem
+          label="نوع الفرع"
+          value={tender.tenderdata?.department?.management?.branch?.name}
+        />
+        <InfoItem
+          label="الادارة"
+          value={tender.tenderdata?.department?.management?.name}
+        />
         <InfoItem
           label="الرقم المرجعي للمنافسة"
           value={tender.tenderdata?.code_reference}
@@ -58,7 +64,7 @@ function DetailsView(): JSX.Element {
           value={tender.tenderdata?.end_date}
         />
         <InfoItem label="القيمة المالية" value={tender.tenderdata?.price} />
-        <InfoItem label="نوع المنافسة" value={tender.tenderdata?.type_id} />
+        <InfoItem label="نوع المنافسة" value={"منافسة"} />
         <InfoItem
           label="القسم التابع له المنافسة"
           value={tender.tenderdata?.department?.name}

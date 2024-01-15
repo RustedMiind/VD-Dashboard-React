@@ -7,7 +7,7 @@ import { ContractType } from "./ContractType";
 
 export interface Contract {
   Contract_status: string;
-  last_status:string;
+  last_status: string;
   id: number;
   code: string;
   period: string;
@@ -41,6 +41,7 @@ export interface Contract {
 type Management = {
   active: number;
   branch_id: number;
+  branch?: Branch;
   childrens: Childrens[];
   created_at: string;
   deleted_at: null;
