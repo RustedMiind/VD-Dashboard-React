@@ -56,6 +56,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/tenders",
         react: true,
       },
+      {
+        name: "منافساتي",
+        path: "/tenders/controlpanel",
+        react: true,
+      },
     ],
   },
   {

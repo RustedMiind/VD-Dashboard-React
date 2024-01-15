@@ -4,11 +4,9 @@ import {
   DialogContent,
   Grid,
   GridProps,
-  IconButton,
   MenuItem,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { TextField } from "@mui/material";
 import UploadFileInput from "../../../components/UploadFileInput";
@@ -25,20 +23,7 @@ export default function SecendDialog({ title }: PropsType) {
 
   return (
     <Dialog maxWidth="md" open={true} component="form">
-      <IconButton
-        size="small"
-        sx={{
-          position: "absolute",
-          right: 15,
-          mt: 2,
-          border: "solid 1px ",
-          borderRadius: "8px",
-        }}
-        color="primary"
-      >
-        <CloseIcon fontSize="inherit" />
-      </IconButton>
-      <DialogContent sx={{ mt: 10 }}>
+      <DialogContent>
         <Grid container spacing={2}>
           <Grid display={"flex"} alignItems={"center"} mb={5} item xs={6}>
             <Typography variant="h6" sx={{ fontWeight: "600" }}>

@@ -17,24 +17,35 @@ import { DatePicker } from "@mui/x-date-pickers";
 import UploadFileInput from "../../../../../../../components/UploadFileInput";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { FetchStatus } from "../../../../../../../types/FetchStatus";
+import { FetchStatusEnum } from "../../../../../../../types/FetchStatusEnum";
+import axios from "axios";
+import { Api } from "../../../../../../../constants";
+import { objectToFormData } from "../../../../../../../methods";
+import { useSnackbar } from "notistack";
+import { useParams } from "react-router-dom";
+import { TenderItemStatus } from "../../../../../../../types/Tenders/Status.enum";
+import { Department } from "../../../../../../../types";
+import { TenderDataContext } from "../../../..";
+import { DtoType } from "./DtoType";
 
-const options = [
+export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
-    value: "USD",
-    label: "$",
+    value: TenderItemStatus.ENDED,
+    label: "منتهي",
   },
   {
-    value: "EUR",
-    label: "€",
+    value: TenderItemStatus.EXCLUDED,
+    label: "مستعبد فني",
   },
   {
-    value: "BTC",
-    label: "฿",
+    value: TenderItemStatus.ONGOING,
+    label: "جاري",
   },
   {
-    value: "JPY",
-    label: "¥",
+    value: TenderItemStatus.SENT,
+    label: "مقدمة",
   },
 ];
 
@@ -45,22 +56,74 @@ const GridItem = (props: GridProps & { label: string }) => (
   </Grid>
 );
 
-export default function BuyDialog(dialogProps: DialogProps) {
-  const { register, handleSubmit } = useForm();
+export default function BuyDialog(props: DialogProps) {
+  const { register, handleSubmit, reset } = useForm<DtoType>({
+    defaultValues: {
+      status: "-1",
+      iban: "",
+      reciept_number: "",
+      department_id: "",
+    },
+  });
 
+  const [formStatus, setFormStatus] = useState<FetchStatus>(
+    FetchStatusEnum.NONE
+  );
+  const { id } = useParams();
+  const { tender, refresh } = useContext(TenderDataContext);
+  const { enqueueSnackbar } = useSnackbar();
   const [endDate, setEndDate] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);
+  const [departments, setDepartments] = useState<Department[] | undefined>(
+    undefined
+  );
 
-  const handleFormSubmit = (data: unknown) => {
+  const handleFormSubmit = handleSubmit((data) => {
     console.log("form data", data);
-  };
+    if (typeof tender === "object") {
+      setFormStatus(FetchStatusEnum.LOADING);
+      axios
+        .post(
+          Api("employee/tender/form/status/" + id),
+          objectToFormData({
+            ...data,
+            user_type: tender.user_type,
+            image: file,
+            end_date: endDate,
+          })
+        )
+        .then(() => {
+          enqueueSnackbar("تم اتخاذ الاجراء");
+          refresh();
+        })
+        .catch(() => {
+          enqueueSnackbar("تعذر في اتخاذ الاجراء", { variant: "error" });
+        })
+        .finally(() => {
+          setFormStatus(FetchStatusEnum.NONE);
+        });
+    }
+  });
+
+  useEffect(() => {
+    reset();
+  }, [props.open]);
+
+  useEffect(() => {
+    axios
+      .get<{ departments: Department[] }>(Api("employee/all-departments"))
+      .then((res) => {
+        setDepartments(res.data.departments);
+      })
+      .catch(console.log);
+  }, []);
 
   return (
     <Dialog
-      {...dialogProps}
+      {...props}
       maxWidth="md"
       component="form"
-      onSubmit={handleSubmit(handleFormSubmit)}
+      onSubmit={handleFormSubmit}
     >
       <DialogContent>
         <Grid container spacing={2}>
@@ -72,7 +135,7 @@ export default function BuyDialog(dialogProps: DialogProps) {
           <Grid display={"flex"} alignItems={"center"} mb={5} item md={6}>
             <Typography sx={{ mr: 2 }}>الحاله </Typography>
             <TextField {...register("status")} fullWidth size="small" select>
-              {options.map((option) => (
+              {statusOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -80,7 +143,7 @@ export default function BuyDialog(dialogProps: DialogProps) {
             </TextField>
           </Grid>
           <GridItem label="قيمة المنافسة">
-            <TextField {...register("price")} fullWidth size="small" />
+            <TextField fullWidth size="small" />
           </GridItem>
           <GridItem label="تاريخ الانتهاء">
             <DatePicker
@@ -96,7 +159,7 @@ export default function BuyDialog(dialogProps: DialogProps) {
             <TextField fullWidth size="small" />
           </GridItem>
           <GridItem label="رقم السداد">
-            <TextField {...register("payment_number")} fullWidth size="small" />
+            <TextField {...register("reciept_number")} fullWidth size="small" />
           </GridItem>
           <GridItem label="مركز التكلفة">
             <TextField
@@ -105,9 +168,9 @@ export default function BuyDialog(dialogProps: DialogProps) {
               size="small"
               select
             >
-              {options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              {departments?.map((department) => (
+                <MenuItem key={department.id} value={department.id}>
+                  {department.name}
                 </MenuItem>
               ))}
             </TextField>
@@ -123,14 +186,14 @@ export default function BuyDialog(dialogProps: DialogProps) {
         </Grid>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <LoadingButton variant="contained" type="submit">
+        <LoadingButton
+          loading={formStatus === FetchStatusEnum.LOADING}
+          variant="contained"
+          type="submit"
+        >
           حفظ
         </LoadingButton>
       </DialogActions>
     </Dialog>
   );
 }
-
-type PropsType = {
-  title: string;
-};
