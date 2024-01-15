@@ -12,6 +12,7 @@ import Cards from "./Cards";
 
 export const TenderDataContext = createContext<TenderDataContextType>({
   tender: FetchStatusEnum.NONE,
+  refresh() {},
 });
 
 function TenderDetails() {
@@ -20,8 +21,7 @@ function TenderDetails() {
   const [tender, setTender] = useState<FetchStatus<Tender>>(
     FetchStatusEnum.NONE
   );
-
-  useEffect(() => {
+  function loadTender() {
     if (id) {
       setTender(FetchStatusEnum.LOADING);
       getTender(id)
@@ -32,10 +32,11 @@ function TenderDetails() {
           setTender(FetchStatusEnum.ERROR);
         });
     } else setTender(FetchStatusEnum.ERROR);
-  }, [id]);
+  }
+  useEffect(loadTender, [id]);
 
   return (
-    <TenderDataContext.Provider value={{ tender }}>
+    <TenderDataContext.Provider value={{ tender, refresh: loadTender }}>
       <Stack>
         <Cards />
         <TabsContainer />
@@ -61,6 +62,7 @@ function getTender(id: string): Promise<Tender> {
 
 type TenderDataContextType = {
   tender: FetchStatus<Tender>;
+  refresh: () => void;
 };
 
 export default TenderDetails;

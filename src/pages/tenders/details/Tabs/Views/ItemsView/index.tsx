@@ -13,9 +13,14 @@ import RowComponent from "./RowComponent";
 import { useContext, useState } from "react";
 import { TenderDataContext } from "../../..";
 import BuyDialog from "./TakeActionDialogs/BuyDialog";
-import { TenderStep } from "../../../../../../types/Tenders/Status.enum";
+import {
+  TenderApprovalStatus,
+  TenderStep,
+} from "../../../../../../types/Tenders/Status.enum";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
+import OthersDialog from "./TakeActionDialogs/OthersDialog";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
@@ -31,15 +36,30 @@ function ItemsView() {
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
       if (tender.user_type === dialogType) {
+        let disabled = false;
+        if (
+          (dialogType === TenderStep.ACCEPTION &&
+            tender.eng_employee_status === -1) ||
+          (dialogType === TenderStep.PURCHASE && tender.buy_status === -1) ||
+          (dialogType === TenderStep.APPLY && tender.apply_status === -1) ||
+          (dialogType === TenderStep.FILE && tender.trace_status === -1) ||
+          (dialogType === TenderStep.FINANCIAL &&
+            tender.file_finacial_status === -1) ||
+          (dialogType === TenderStep.TECHNICAL &&
+            tender.technical_status === -1)
+        ) {
+          disabled = false;
+        }
         return (
           <IconButton
             size="small"
             color="primary"
+            disabled={disabled}
             onClick={() => {
               setDialogOpen(dialogType);
             }}
           >
-            <SettingsIcon />
+            {disabled ? <DoneIcon /> : <SettingsIcon />}
           </IconButton>
         );
       } else {
@@ -52,8 +72,38 @@ function ItemsView() {
     };
     return (
       <>
-        <BuyDialog
+        {/* <BuyDialog
           open={dialogOpen === TenderStep.PURCHASE}
+          onClose={closeDialog}
+        /> */}
+        <OthersDialog
+          close={closeDialog}
+          title="شراء المنافسة"
+          open={dialogOpen === TenderStep.PURCHASE}
+          onClose={closeDialog}
+        />
+        <OthersDialog
+          close={closeDialog}
+          title="العرض الفني"
+          open={dialogOpen === TenderStep.TECHNICAL}
+          onClose={closeDialog}
+        />
+        <OthersDialog
+          close={closeDialog}
+          title="العرض المالي"
+          open={dialogOpen === TenderStep.FINANCIAL}
+          onClose={closeDialog}
+        />
+        <OthersDialog
+          close={closeDialog}
+          title="الملف المدمج"
+          open={dialogOpen === TenderStep.FILE}
+          onClose={closeDialog}
+        />
+        <OthersDialog
+          close={closeDialog}
+          title="تقديم المنافسة"
+          open={dialogOpen === TenderStep.APPLY}
           onClose={closeDialog}
         />
         <TableContainer>

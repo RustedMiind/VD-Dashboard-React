@@ -28,8 +28,9 @@ import { useParams } from "react-router-dom";
 import { TenderItemStatus } from "../../../../../../../types/Tenders/Status.enum";
 import { Department } from "../../../../../../../types";
 import { TenderDataContext } from "../../../..";
+import { DtoType } from "./DtoType";
 
-const statusOptions: { value: TenderItemStatus; label: string }[] = [
+export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
     value: TenderItemStatus.ENDED,
     label: "منتهي",
@@ -56,7 +57,7 @@ const GridItem = (props: GridProps & { label: string }) => (
 );
 
 export default function BuyDialog(props: DialogProps) {
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset } = useForm<DtoType>({
     defaultValues: {
       status: "-1",
       iban: "",
@@ -69,7 +70,7 @@ export default function BuyDialog(props: DialogProps) {
     FetchStatusEnum.NONE
   );
   const { id } = useParams();
-  const { tender } = useContext(TenderDataContext);
+  const { tender, refresh } = useContext(TenderDataContext);
   const { enqueueSnackbar } = useSnackbar();
   const [endDate, setEndDate] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -93,6 +94,7 @@ export default function BuyDialog(props: DialogProps) {
         )
         .then(() => {
           enqueueSnackbar("تم اتخاذ الاجراء");
+          refresh();
         })
         .catch(() => {
           enqueueSnackbar("تعذر في اتخاذ الاجراء", { variant: "error" });
