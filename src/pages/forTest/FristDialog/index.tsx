@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
 import { TextField } from "@mui/material";
 import UploadFileInput from "../../../components/UploadFileInput";
 import { LoadingButton } from "@mui/lab";
@@ -45,8 +44,15 @@ export default function FristDialog({ title }: PropsType) {
               {title}
             </Typography>
           </Grid>
-          <Grid display={"flex"} alignItems={"center"} mb={5} item md={6}>
-            <Typography sx={{ mr: 2 }}>الحاله </Typography>
+          <Grid
+            gap={2}
+            display={"flex"}
+            alignItems={"center"}
+            mb={5}
+            item
+            md={6}
+          >
+            <Typography>الحاله</Typography>
             <TextField fullWidth size="small" select value={""}>
               <MenuItem> تحت الاجراء</MenuItem>
             </TextField>
