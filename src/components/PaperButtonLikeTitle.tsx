@@ -35,7 +35,7 @@ export default function PaperButtonLikeTitle({
             color="default"
             sx={{ bgcolor: "background.paper" }}
             size="small"
-            label={123}
+            label={count}
           />
         )}
       </Stack>
