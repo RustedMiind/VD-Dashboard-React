@@ -36,7 +36,7 @@ function ItemsView() {
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
       if (tender.user_type === dialogType) {
-        let disabled = false;
+        let disabled = true;
         if (
           (dialogType === TenderStep.ACCEPTION &&
             tender.eng_employee_status === -1) ||
