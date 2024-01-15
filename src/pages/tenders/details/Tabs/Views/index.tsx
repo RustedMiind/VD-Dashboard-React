@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { TabContext } from "..";
 import DetailsView from "./DetailsView";
 import ItemsView from "./ItemsView";
+import AttachmentTables from "./AttachmentTables";
 
 function TabViews(): JSX.Element {
   const { tab } = useContext(TabContext);
@@ -17,7 +18,7 @@ function TabViews(): JSX.Element {
     case TabEnum.ITEMS:
       return <ItemsView />;
     case TabEnum.ATTACHMENTS:
-      return <>Hello Attachments</>;
+      return <AttachmentTables />;
     case TabEnum.FINANCIAL:
       return <>Hello Financial</>;
     case TabEnum.REPORTS:
