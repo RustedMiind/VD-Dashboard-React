@@ -9,7 +9,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import RowComponent from "./RowComponent";
+import StatusRowComponent from "./StatusRowComponent";
 import { useContext, useState } from "react";
 import { TenderDataContext } from "../../..";
 import BuyDialog from "./TakeActionDialogs/BuyDialog";
@@ -21,6 +21,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import OthersDialog from "./TakeActionDialogs/OthersDialog";
+import ApprovalRowComponent from "./ApprovalRowComponent";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
@@ -35,21 +36,20 @@ function ItemsView() {
 
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
+      let disabled = true;
+      if (
+        (dialogType === TenderStep.ACCEPTION &&
+          tender.eng_employee_status === -1) ||
+        (dialogType === TenderStep.PURCHASE && tender.buy_status === -1) ||
+        (dialogType === TenderStep.APPLY && tender.apply_status === -1) ||
+        (dialogType === TenderStep.FILE && tender.trace_status === -1) ||
+        (dialogType === TenderStep.FINANCIAL &&
+          tender.file_finacial_status === -1) ||
+        (dialogType === TenderStep.TECHNICAL && tender.technical_status === -1)
+      ) {
+        disabled = false;
+      }
       if (tender.user_type === dialogType) {
-        let disabled = true;
-        if (
-          (dialogType === TenderStep.ACCEPTION &&
-            tender.eng_employee_status === -1) ||
-          (dialogType === TenderStep.PURCHASE && tender.buy_status === -1) ||
-          (dialogType === TenderStep.APPLY && tender.apply_status === -1) ||
-          (dialogType === TenderStep.FILE && tender.trace_status === -1) ||
-          (dialogType === TenderStep.FINANCIAL &&
-            tender.file_finacial_status === -1) ||
-          (dialogType === TenderStep.TECHNICAL &&
-            tender.technical_status === -1)
-        ) {
-          disabled = false;
-        }
         return (
           <IconButton
             size="small"
@@ -64,8 +64,8 @@ function ItemsView() {
         );
       } else {
         return (
-          <IconButton size="small" color="primary" disabled onClick={() => {}}>
-            <ClearIcon />
+          <IconButton size="small" color="primary" disabled>
+            {disabled ? <DoneIcon /> : <ClearIcon />}
           </IconButton>
         );
       }
@@ -76,6 +76,12 @@ function ItemsView() {
           open={dialogOpen === TenderStep.PURCHASE}
           onClose={closeDialog}
         /> */}
+        <OthersDialog
+          close={closeDialog}
+          title="شراء المنافسة"
+          open={dialogOpen === TenderStep.ACCEPTION}
+          onClose={closeDialog}
+        />
         <OthersDialog
           close={closeDialog}
           title="شراء المنافسة"
@@ -128,7 +134,7 @@ function ItemsView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <RowComponent
+              <ApprovalRowComponent
                 {...{
                   name: "الموافقة",
                   managerName: tender.tender_tasks?.eng_employee?.name,
@@ -138,7 +144,7 @@ function ItemsView() {
                   status: tender.eng_employee_status,
                 }}
               />
-              <RowComponent
+              <StatusRowComponent
                 {...{
                   name: "شراء المنافسة",
                   managerName:
@@ -149,7 +155,7 @@ function ItemsView() {
                   status: tender.buy_status,
                 }}
               />
-              <RowComponent
+              <StatusRowComponent
                 {...{
                   name: "العرض الفني",
                   managerName:
@@ -160,7 +166,7 @@ function ItemsView() {
                   status: tender.technical_status,
                 }}
               />
-              <RowComponent
+              <StatusRowComponent
                 {...{
                   name: "العرض المالي",
                   managerName:
@@ -171,7 +177,7 @@ function ItemsView() {
                   status: tender.file_finacial_status,
                 }}
               />
-              <RowComponent
+              <StatusRowComponent
                 {...{
                   name: "الملف المدمج",
                   managerName:
@@ -182,7 +188,7 @@ function ItemsView() {
                   status: tender.file_finacial_status,
                 }}
               />
-              <RowComponent
+              <StatusRowComponent
                 {...{
                   name: "تقديم المنافسة",
                   managerName:

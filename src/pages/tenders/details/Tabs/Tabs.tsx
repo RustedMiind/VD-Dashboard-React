@@ -25,12 +25,12 @@ function Tabs() {
       <Chip {...createChipProps("معلومات المنافسة", TabEnum.DETAILS)} />
       <Chip {...createChipProps("البنود", TabEnum.ITEMS)} />
       <Chip {...createChipProps("المرفقات", TabEnum.ATTACHMENTS)} />
-      <Chip {...createChipProps("المواعيد", TabEnum.DATES)} />
+      <Chip {...createChipProps("المواعيد")} />
       <Chip {...createChipProps("التقارير")} />
       <Chip {...createChipProps("المالية")} />
-      <Chip {...createChipProps("سجل الحركة", TabEnum.PROGRESS_LOG)} />
+      <Chip {...createChipProps("سجل الحركة")} />
       <Chip {...createChipProps("الطلبات")} />
-      <Chip {...createChipProps("مساحة العمل", TabEnum.WORK_SPACE)} />
+      <Chip {...createChipProps("مساحة العمل")} />
     </Stack>
   );
 }

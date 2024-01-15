@@ -1,11 +1,13 @@
 export enum TenderItemStatus {
-  SENT = -1,
+  PENDING = -1,
   ENDED = 0,
   ONGOING = 1,
   EXCLUDED = 2,
+  SENT = 3,
 }
 
 export enum TenderApprovalStatus {
+  NONE = -1,
   ACCEPTED = 1,
   REJECTED = 0,
 }

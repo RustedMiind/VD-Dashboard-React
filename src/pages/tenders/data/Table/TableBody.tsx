@@ -4,12 +4,14 @@ import {
   TableCell,
   TableRow,
   Checkbox,
+  Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import LimitTypography from "../../../../components/LimitTypograpgy";
 import StatusChip from "../../../../components/StatusChip";
+import { NavLink } from "react-router-dom";
 
 function TableBody() {
   const { tenderTableData, setSelectedTenderId, selectedTenderId } =
@@ -42,9 +44,18 @@ function TableBody() {
                 onChange={CheckboxHandler}
               />
             </TableCell>
-            <TableCell>{tender.tenderdata?.code_reference}</TableCell>
             <TableCell>
-              {" "}
+              <Typography
+                component={NavLink}
+                to={`${tender.id}`}
+                variant="body2"
+                color={"primary.main"}
+                fontWeight={700}
+              >
+                {tender.tenderdata?.code_reference}
+              </Typography>
+            </TableCell>
+            <TableCell>
               <LimitTypography maxWidth={180}>
                 {tender.tenderdata?.code_tender}
               </LimitTypography>
