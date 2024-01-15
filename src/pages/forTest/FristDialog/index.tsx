@@ -15,7 +15,7 @@ import UploadFileInput from "../../../components/UploadFileInput";
 import { LoadingButton } from "@mui/lab";
 import { DatePicker } from "@mui/x-date-pickers";
 
-export default function DialogComponent({ title }: PropsType) {
+export default function FristDialog({ title }: PropsType) {
   const GridItem = (props: GridProps & { label: string }) => (
     <Grid item md={6} {...props}>
       <Typography variant="body1">{props.label}</Typography>

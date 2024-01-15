@@ -3,7 +3,8 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
-import DialogComponent from "./DialogComponent";
+import FristDialog from "./FristDialog";
+import SecendDialog from "./SecendDialog";
 
 function ForTest() {
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -44,7 +45,7 @@ function ForTest() {
           </Button>
         </Stack>
       </Paper>
-      <DialogComponent title={"شراء المنافسة"} />
+      <SecendDialog title={"العرض المالي"} />
     </Stack>
   );
 }
