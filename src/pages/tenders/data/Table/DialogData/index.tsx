@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { TypeDisplayData, generateTenderItemStatus } from "../TableBody";
+import { formatDate } from "../../../../../methods";
 
 export default function DialogData({ open, setOpen, displayData }: PropsType) {
   function handleClose() {
@@ -38,7 +39,7 @@ export default function DialogData({ open, setOpen, displayData }: PropsType) {
                 <TableRow>
                   <TableCell>{displayData.eng}</TableCell>
                   <TableCell>{displayData.startDate}</TableCell>
-                  <TableCell>{displayData.endDate}</TableCell>
+                  <TableCell>{formatDate(displayData.endDate || "")}</TableCell>
                   <TableCell>{displayData.status}</TableCell>
                   <TableCell>{displayData.note}</TableCell>
                 </TableRow>

@@ -14,7 +14,7 @@ export type Tender = {
   eng_employee_status: TenderApprovalStatus;
   eng_employee_date?: string;
   eng_employee_note?: string;
-  buy_status: TenderItemStatus;
+  buy_status: TenderPay;
   buy_date?: string;
   buy_note?: string;
   technical_status: TenderItemStatus;

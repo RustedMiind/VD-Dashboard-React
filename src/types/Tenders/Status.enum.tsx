@@ -20,3 +20,7 @@ export enum TenderStep {
   FILE = "5",
   APPLY = "6",
 }
+export enum TenderPay {
+  PAYED = 1,
+  NOTPAYED = -1,
+}
