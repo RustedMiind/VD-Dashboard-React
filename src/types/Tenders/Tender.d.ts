@@ -59,7 +59,11 @@ export type TenderData = {
   created_at: string;
   updated_at: string;
   organization: Organization;
-  tender_warranties: (DbOptionType & { warranty_id: number })[];
+  tender_warranties: (DbOptionType & {
+    warranty_id: number;
+    warranties?: DbOptionType;
+  })[];
+  apply?: DbOptionType;
   // "deleted_at": null
 };
 

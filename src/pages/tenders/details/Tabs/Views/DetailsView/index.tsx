@@ -27,6 +27,10 @@ function DetailsView(): JSX.Element {
   const { tender } = useContext(TenderDataContext);
 
   if (typeof tender === "object") {
+    const warranties = tender?.tenderdata?.tender_warranties
+      ?.filter((i) => !!i.warranties)
+      .map((i) => i.warranties?.name)
+      .join(" ,");
     const tenderDurationInDays =
       getDateDiff(
         new Date(tender.tenderdata?.strat_date || ""),
@@ -71,8 +75,11 @@ function DetailsView(): JSX.Element {
         />
         <InfoItem label="نشاط المنافسة" value={tender.tenderdata?.activity} />
         <InfoItem label="مدة العقد" value={durationToShow} />
-        <InfoItem label="طريقة التقديم" value={" ########## "} />
-        <InfoItem label="الضمان المطلوب" value={" ########## "} />
+        <InfoItem
+          label="طريقة التقديم"
+          value={tender.tenderdata?.apply?.name}
+        />
+        <InfoItem label="الضمان المطلوب" value={warranties} />
       </Grid>
     );
   } else return <></>;
