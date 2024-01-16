@@ -141,8 +141,8 @@ function TableBody() {
               case TenderStep.FILE:
                 dataObject = {
                   endDate: "-----",
-                  eng: tender?.tender_tasks?.eng_employee?.name,
-                  status: generateTenderItemStatus(tender?.eng_employee_status),
+                  eng: tender?.tender_tasks?.employee_trace.name,
+                  status: generateTenderItemStatus(tender?.trace_status),
                   note: tender?.eng_employee_note,
                   startDate: "---",
                 };
