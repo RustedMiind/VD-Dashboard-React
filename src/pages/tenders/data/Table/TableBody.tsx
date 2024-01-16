@@ -24,22 +24,25 @@ import { Api } from "../../../../constants";
 import { Tender } from "../../../../types";
 import { useSnackbar } from "notistack";
 export function generateTenderItemStatus(
-  status?: TenderItemStatus
+  status?: TenderItemStatus,
+  chipProps?: ChipProps
 ): JSX.Element {
   let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
       case TenderItemStatus.SENT:
-        chip = <StatusChip label="مقدمة" color="warning" />;
+        chip = <StatusChip label="مقدمة" color="warning" {...chipProps} />;
         break;
       case TenderItemStatus.ONGOING:
-        chip = <StatusChip label="جاري" color="success" />;
+        chip = <StatusChip label="جاري" color="success" {...chipProps} />;
         break;
       case TenderItemStatus.EXCLUDED:
-        chip = <StatusChip label="مستعبد  فني" color="primary" />;
+        chip = (
+          <StatusChip label="مستعبد  فني" color="primary" {...chipProps} />
+        );
         break;
       case TenderItemStatus.ENDED:
-        chip = <StatusChip label="منتهي" color="error" />;
+        chip = <StatusChip label="منتهي" color="error" {...chipProps} />;
         break;
     }
 
@@ -66,7 +69,6 @@ function TableBody() {
   const { tenderTableData, setSelectedTenderId, selectedTenderId } =
     useContext(TableContext);
   const [open, setOpen] = useState<boolean>(false);
-  const [tenderName, setTenderName] = useState<Tender | undefined>(undefined);
   const [displayData, setDisplayData] = useState<TypeDisplayData>({});
   const { enqueueSnackbar } = useSnackbar();
 
@@ -92,7 +94,6 @@ function TableBody() {
         .get<{ data: Tender }>(Api(`employee/tender/${id}`))
         .then((res) => {
           if (res.data.data) {
-            setTenderName(res.data.data);
             setOpen(!open);
             const tender = res.data.data;
             let dataObject: TypeDisplayData = {};
@@ -109,14 +110,51 @@ function TableBody() {
                 };
                 break;
               case TenderStep.PURCHASE:
+                dataObject = {
+                  endDate: "---",
+                  eng: tender?.tender_tasks?.eng_employee_buy_tender.name,
+                  status: generateTenderItemStatus(tender?.buy_status),
+                  note: tender?.eng_employee_note,
+                  startDate: "---",
+                };
                 break;
               case TenderStep.TECHNICAL:
+                dataObject = {
+                  endDate: tender?.tender_tasks?.end_dete_technical,
+                  eng: tender?.tender_tasks?.eng_employee_technical.name,
+                  status: generateTenderItemStatus(tender?.technical_status),
+                  note: tender?.technical_note,
+                  startDate: "---",
+                };
                 break;
               case TenderStep.FINANCIAL:
+                dataObject = {
+                  endDate: "----",
+                  eng: tender?.tender_tasks?.eng_employee_file_finacial?.name,
+                  status: generateTenderItemStatus(
+                    tender?.file_finacial_status
+                  ),
+                  note: tender?.file_finacial_note,
+                  startDate: "---",
+                };
                 break;
               case TenderStep.FILE:
+                dataObject = {
+                  endDate: "-----",
+                  eng: tender?.tender_tasks?.eng_employee?.name,
+                  status: generateTenderItemStatus(tender?.eng_employee_status),
+                  note: tender?.eng_employee_note,
+                  startDate: "---",
+                };
                 break;
               case TenderStep.APPLY:
+                dataObject = {
+                  endDate: "----",
+                  eng: tender?.tender_tasks?.eng_employee?.name,
+                  status: generateTenderItemStatus(tender?.apply_status),
+                  note: tender?.apply_note,
+                  startDate: "---",
+                };
                 break;
             }
             setDisplayData(dataObject);
@@ -166,7 +204,11 @@ function TableBody() {
             </TableCell>
             <TableCell>{tender.tenderdata?.strat_date}</TableCell>
             <TableCell>{tender.tenderdata?.end_date}</TableCell>
-            <TableCell>{generateTenderItemStatus(tender.buy_status)}</TableCell>
+            <TableCell>
+              {generateTenderItemStatus(tender.eng_employee_status, {
+                onClick: showDialog(tender?.id, TenderStep.PURCHASE),
+              })}
+            </TableCell>
             <TableCell>{tender.tenderdata?.period} يوم</TableCell>
             <TableCell>{tender.tenderdata?.department?.name}</TableCell>
             <TableCell>
@@ -175,16 +217,24 @@ function TableBody() {
               })}
             </TableCell>
             <TableCell>
-              {generateTenderItemStatus(tender.trace_status)}
-            </TableCell>
-            <TableCell onClick={() => {}}>
-              {generateTenderItemStatus(tender.technical_status)}
-            </TableCell>
-            <TableCell>
-              {generateTenderItemStatus(tender.file_finacial_status)}
+              {generateTenderItemStatus(tender.trace_status, {
+                onClick: showDialog(tender?.id, TenderStep.FILE),
+              })}
             </TableCell>
             <TableCell>
-              {generateTenderItemStatus(tender.apply_status)}
+              {generateTenderItemStatus(tender.technical_status, {
+                onClick: showDialog(tender?.id, TenderStep.TECHNICAL),
+              })}
+            </TableCell>
+            <TableCell>
+              {generateTenderItemStatus(tender.file_finacial_status, {
+                onClick: showDialog(tender?.id, TenderStep.FINANCIAL),
+              })}
+            </TableCell>
+            <TableCell>
+              {generateTenderItemStatus(tender.apply_status, {
+                onClick: showDialog(tender?.id, TenderStep.APPLY),
+              })}
             </TableCell>
             <TableCell>
               <IconButton color="primary">
