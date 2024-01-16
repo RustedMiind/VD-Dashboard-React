@@ -22,6 +22,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import OthersDialog from "./TakeActionDialogs/OthersDialog";
 import ApprovalRowComponent from "./ApprovalRowComponent";
+import TenderApproveDialog from "./TakeActionDialogs/TenderApproveDialog";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
@@ -72,22 +73,21 @@ function ItemsView() {
     };
     return (
       <>
-        {/* <BuyDialog
+        <BuyDialog
+          open={dialogOpen === TenderStep.PURCHASE}
+          onClose={closeDialog}
+        />
+        <TenderApproveDialog
+          open={dialogOpen === TenderStep.ACCEPTION}
+          close={closeDialog}
+          onClose={closeDialog}
+        />
+        {/* <OthersDialog
+          close={closeDialog}
+          title="شراء المنافسة"
           open={dialogOpen === TenderStep.PURCHASE}
           onClose={closeDialog}
         /> */}
-        <OthersDialog
-          close={closeDialog}
-          title="شراء المنافسة"
-          open={dialogOpen === TenderStep.ACCEPTION}
-          onClose={closeDialog}
-        />
-        <OthersDialog
-          close={closeDialog}
-          title="شراء المنافسة"
-          open={dialogOpen === TenderStep.PURCHASE}
-          onClose={closeDialog}
-        />
         <OthersDialog
           close={closeDialog}
           title="العرض الفني"
