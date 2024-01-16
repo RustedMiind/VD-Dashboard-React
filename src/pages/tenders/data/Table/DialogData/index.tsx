@@ -39,9 +39,7 @@ export default function DialogData({ open, setOpen, displayData }: PropsType) {
                   <TableCell>{displayData.eng}</TableCell>
                   <TableCell>{displayData.startDate}</TableCell>
                   <TableCell>{displayData.endDate}</TableCell>
-                  <TableCell>
-                    {generateTenderItemStatus(displayData.status)}
-                  </TableCell>
+                  <TableCell>{displayData.status}</TableCell>
                   <TableCell>{displayData.note}</TableCell>
                 </TableRow>
               </TableBody>

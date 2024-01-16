@@ -5,9 +5,10 @@ import {
   TableRow,
   Checkbox,
   Typography,
+  ChipProps,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TableContext } from "../TableContext";
 import LimitTypography from "../../../../components/LimitTypograpgy";
 import StatusChip from "../../../../components/StatusChip";
@@ -15,11 +16,13 @@ import { NavLink } from "react-router-dom";
 import {
   TenderApprovalStatus,
   TenderItemStatus,
+  TenderStep,
 } from "../../../../types/Tenders/Status.enum";
 import DialogData from "./DialogData";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { Tender } from "../../../../types";
+import { useSnackbar } from "notistack";
 export function generateTenderItemStatus(
   status?: TenderItemStatus
 ): JSX.Element {
@@ -43,16 +46,17 @@ export function generateTenderItemStatus(
   return chip;
 }
 export function generateTenderApprovalStatusChip(
-  status?: TenderApprovalStatus
+  status?: TenderApprovalStatus,
+  chipProps?: ChipProps
 ): JSX.Element {
   let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
       case TenderApprovalStatus.ACCEPTED:
-        chip = <StatusChip label="مقبول" color="primary" />;
+        chip = <StatusChip label="مقبول" color="primary" {...chipProps} />;
         break;
       case TenderApprovalStatus.REJECTED:
-        chip = <StatusChip label="مرفوض" color="error" />;
+        chip = <StatusChip label="مرفوض" color="error" {...chipProps} />;
         break;
     }
 
@@ -64,6 +68,7 @@ function TableBody() {
   const [open, setOpen] = useState<boolean>(false);
   const [tenderName, setTenderName] = useState<Tender | undefined>(undefined);
   const [displayData, setDisplayData] = useState<TypeDisplayData>({});
+  const { enqueueSnackbar } = useSnackbar();
 
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
@@ -81,31 +86,46 @@ function TableBody() {
         });
     }
   }
-
-  function getTender(
-    id: number,
-    status: number,
-    startDate?: string,
-    endDate?: string,
-    eng?: string,
-    note?: string
-  ) {
-    axios
-      .get<{ data: Tender }>(Api(`employee/tender/${id}`))
-      .then((res) => {
-        if (res.data.data) {
-          setTenderName(res.data.data);
-          setDisplayData({
-            status,
-            startDate,
-            endDate,
-            eng,
-            note,
-          });
-          setOpen(!open);
-        }
-      })
-      .catch(() => {});
+  function showDialog(id: number, type: TenderStep) {
+    return function () {
+      axios
+        .get<{ data: Tender }>(Api(`employee/tender/${id}`))
+        .then((res) => {
+          if (res.data.data) {
+            setTenderName(res.data.data);
+            setOpen(!open);
+            const tender = res.data.data;
+            let dataObject: TypeDisplayData = {};
+            switch (type) {
+              case TenderStep.ACCEPTION:
+                dataObject = {
+                  endDate: tender?.tender_tasks?.end_dete_accept,
+                  eng: tender?.tender_tasks?.eng_employee?.name,
+                  status: generateTenderApprovalStatusChip(
+                    tender?.eng_employee_status
+                  ),
+                  note: tender?.eng_employee_note,
+                  startDate: "---",
+                };
+                break;
+              case TenderStep.PURCHASE:
+                break;
+              case TenderStep.TECHNICAL:
+                break;
+              case TenderStep.FINANCIAL:
+                break;
+              case TenderStep.FILE:
+                break;
+              case TenderStep.APPLY:
+                break;
+            }
+            setDisplayData(dataObject);
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar("فشل في تحميل بيانات الاجراء", { variant: "error" });
+        });
+    };
   }
 
   return (
@@ -149,8 +169,10 @@ function TableBody() {
             <TableCell>{generateTenderItemStatus(tender.buy_status)}</TableCell>
             <TableCell>{tender.tenderdata?.period} يوم</TableCell>
             <TableCell>{tender.tenderdata?.department?.name}</TableCell>
-            <TableCell onClick={getTender(id, type)}>
-              {generateTenderApprovalStatusChip(tender.eng_employee_status)}
+            <TableCell>
+              {generateTenderApprovalStatusChip(tender.eng_employee_status, {
+                onClick: showDialog(tender?.id, TenderStep.ACCEPTION),
+              })}
             </TableCell>
             <TableCell>
               {generateTenderItemStatus(tender.trace_status)}
@@ -177,12 +199,11 @@ function TableBody() {
 }
 
 export type TypeDisplayData = {
-  status?: number;
+  status?: React.ReactNode;
   startDate?: string;
   endDate?: string;
   eng?: string;
   note?: string;
-  id?: number;
 };
 
 export default TableBody;
