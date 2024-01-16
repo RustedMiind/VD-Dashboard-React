@@ -55,8 +55,8 @@ function Notifications() {
         sx={{ maxHeight: 500 }}
       >
         {notifications?.map((notification) => (
-          <>
-            <MenuItem
+          <MenuItem>
+            <Stack
               sx={{
                 py: 1,
                 flexDirection: "row",
@@ -65,7 +65,7 @@ function Notifications() {
                 width: 400,
               }}
             >
-              <Stack>
+              <Stack flexGrow={1}>
                 <Typography fontWeight={700}>{notification.from}</Typography>
                 <Typography variant="body2">{notification.message}</Typography>
               </Stack>
@@ -78,9 +78,8 @@ function Notifications() {
                   {notification.created}
                 </Typography>
               </Stack>
-            </MenuItem>
-            <Divider light />
-          </>
+            </Stack>
+          </MenuItem>
         ))}
         <Button
           component={"a"}
