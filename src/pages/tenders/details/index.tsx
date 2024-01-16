@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Backdrop, CircularProgress, Stack } from "@mui/material";
 import TabsContainer from "./Tabs";
 import { createContext, useEffect, useState } from "react";
 import { Tender } from "../../../types";
@@ -12,6 +12,7 @@ import Cards from "./Cards";
 
 export const TenderDataContext = createContext<TenderDataContextType>({
   tender: FetchStatusEnum.NONE,
+  refresh() {},
 });
 
 function TenderDetails() {
@@ -20,8 +21,7 @@ function TenderDetails() {
   const [tender, setTender] = useState<FetchStatus<Tender>>(
     FetchStatusEnum.NONE
   );
-
-  useEffect(() => {
+  function loadTender() {
     if (id) {
       setTender(FetchStatusEnum.LOADING);
       getTender(id)
@@ -32,14 +32,21 @@ function TenderDetails() {
           setTender(FetchStatusEnum.ERROR);
         });
     } else setTender(FetchStatusEnum.ERROR);
-  }, [id]);
+  }
+  useEffect(loadTender, [id]);
 
   return (
-    <TenderDataContext.Provider value={{ tender }}>
+    <TenderDataContext.Provider value={{ tender, refresh: loadTender }}>
       <Stack>
         <Cards />
         <TabsContainer />
       </Stack>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={tender === FetchStatusEnum.LOADING}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </TenderDataContext.Provider>
   );
 }
@@ -61,6 +68,7 @@ function getTender(id: string): Promise<Tender> {
 
 type TenderDataContextType = {
   tender: FetchStatus<Tender>;
+  refresh: () => void;
 };
 
 export default TenderDetails;

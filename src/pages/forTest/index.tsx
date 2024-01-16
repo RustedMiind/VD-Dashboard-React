@@ -3,7 +3,9 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
-import DialogComponent from "./DialogComponent";
+import AlertDaialog from "./AlertDialog";
+import ThirdDailog from "./ThirdDialog";
+import TenderAgree from "./TenderAgree";
 
 function ForTest() {
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -44,7 +46,7 @@ function ForTest() {
           </Button>
         </Stack>
       </Paper>
-      <DialogComponent title={"شراء المنافسة"} />
+      <TenderAgree />
     </Stack>
   );
 }

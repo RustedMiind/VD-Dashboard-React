@@ -4,18 +4,16 @@ import {
   DialogContent,
   Grid,
   GridProps,
-  IconButton,
   MenuItem,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { TextField } from "@mui/material";
 import UploadFileInput from "../../../components/UploadFileInput";
 import { LoadingButton } from "@mui/lab";
 import { DatePicker } from "@mui/x-date-pickers";
 
-export default function DialogComponent({ title }: PropsType) {
+export default function SecendDialog({ title }: PropsType) {
   const GridItem = (props: GridProps & { label: string }) => (
     <Grid item md={6} {...props}>
       <Typography variant="body1">{props.label}</Typography>
@@ -25,20 +23,7 @@ export default function DialogComponent({ title }: PropsType) {
 
   return (
     <Dialog maxWidth="md" open={true} component="form">
-      <IconButton
-        size="small"
-        sx={{
-          position: "absolute",
-          right: 15,
-          mt: 2,
-          border: "solid 1px ",
-          borderRadius: "8px",
-        }}
-        color="primary"
-      >
-        <CloseIcon fontSize="inherit" />
-      </IconButton>
-      <DialogContent sx={{ mt: 10 }}>
+      <DialogContent>
         <Grid container spacing={2}>
           <Grid display={"flex"} alignItems={"center"} mb={5} item xs={6}>
             <Typography variant="h6" sx={{ fontWeight: "600" }}>
@@ -51,7 +36,7 @@ export default function DialogComponent({ title }: PropsType) {
               <MenuItem> تحت الاجراء</MenuItem>
             </TextField>
           </Grid>
-          <GridItem label="قيمة المنافسة">
+          <GridItem label="اسم البند">
             <TextField fullWidth size="small" value={""} />
           </GridItem>
           <GridItem label="تاريخ الانتهاء">
@@ -60,20 +45,9 @@ export default function DialogComponent({ title }: PropsType) {
               sx={{ w: 1 }}
             />
           </GridItem>
-          <GridItem label="الحساب البنكي">
-            <TextField fullWidth size="small" value={""} />
-          </GridItem>
-          <GridItem label="رقم السداد">
-            <TextField fullWidth size="small" value={""} />
-          </GridItem>
-          <GridItem label="مركز التكلفة">
-            <TextField fullWidth size="small" select value={""}>
-              <MenuItem>مركز التكلفة</MenuItem>
-            </TextField>
-          </GridItem>
-          <GridItem label="ارفاق ملف">
+          <GridItem label="ارفق عرض التقديم">
             <UploadFileInput
-              size="sm"
+              size="md"
               // value={""}
               subTitle=""
               setValue={() => {}}
