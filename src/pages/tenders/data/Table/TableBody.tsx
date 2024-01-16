@@ -16,6 +16,7 @@ import { NavLink } from "react-router-dom";
 import {
   TenderApprovalStatus,
   TenderItemStatus,
+  TenderPay,
   TenderStep,
 } from "../../../../types/Tenders/Status.enum";
 import DialogData from "./DialogData";
@@ -43,6 +44,30 @@ export function generateTenderItemStatus(
         break;
       case TenderItemStatus.ENDED:
         chip = <StatusChip label="منتهي" color="error" {...chipProps} />;
+        break;
+    }
+
+  return chip;
+}
+export function generateTenderPayedStatus(
+  status?: TenderPay,
+  chipProps?: ChipProps
+): JSX.Element {
+  let chip = <>---</>;
+  if (typeof status === "number" || typeof status === "string")
+    switch (status) {
+      case TenderPay.PAYED:
+        chip = <StatusChip label="مدفوع" color="success" {...chipProps} />;
+        break;
+      case TenderPay.NOTPAYED:
+        chip = (
+          <StatusChip
+            label="غير مدفوع"
+            color="primary"
+            disabled
+            {...chipProps}
+          />
+        );
         break;
     }
 
@@ -111,10 +136,10 @@ function TableBody() {
                 break;
               case TenderStep.PURCHASE:
                 dataObject = {
-                  endDate: "---",
+                  endDate: tender?.tender_tasks?.dete_buy_tender,
                   eng: tender?.tender_tasks?.eng_employee_buy_tender.name,
-                  status: generateTenderItemStatus(tender?.buy_status),
-                  note: tender?.eng_employee_note,
+                  status: generateTenderPayedStatus(tender?.buy_status),
+                  note: tender?.buy_note,
                   startDate: "---",
                 };
                 break;
@@ -129,7 +154,7 @@ function TableBody() {
                 break;
               case TenderStep.FINANCIAL:
                 dataObject = {
-                  endDate: "----",
+                  endDate: tender?.tender_tasks?.dete_file_finacial,
                   eng: tender?.tender_tasks?.eng_employee_file_finacial?.name,
                   status: generateTenderItemStatus(
                     tender?.file_finacial_status
@@ -140,7 +165,7 @@ function TableBody() {
                 break;
               case TenderStep.FILE:
                 dataObject = {
-                  endDate: "-----",
+                  endDate: tender?.tender_tasks?.end_dete_trace,
                   eng: tender?.tender_tasks?.employee_trace.name,
                   status: generateTenderItemStatus(tender?.trace_status),
                   note: tender?.eng_employee_note,
@@ -149,7 +174,7 @@ function TableBody() {
                 break;
               case TenderStep.APPLY:
                 dataObject = {
-                  endDate: "----",
+                  endDate: tender?.tender_tasks?.dete_apply_tender,
                   eng: tender?.tender_tasks?.eng_employee?.name,
                   status: generateTenderItemStatus(tender?.apply_status),
                   note: tender?.apply_note,
@@ -205,7 +230,7 @@ function TableBody() {
             <TableCell>{tender.tenderdata?.strat_date}</TableCell>
             <TableCell>{tender.tenderdata?.end_date}</TableCell>
             <TableCell>
-              {generateTenderItemStatus(tender.eng_employee_status, {
+              {generateTenderPayedStatus(tender.buy_status, {
                 onClick: showDialog(tender?.id, TenderStep.PURCHASE),
               })}
             </TableCell>
