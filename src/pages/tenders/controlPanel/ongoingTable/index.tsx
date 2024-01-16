@@ -63,7 +63,7 @@ export default function OngoingTable() {
       </Table>
     );
   else if (tenderControlData?.ongoing === "loading")
-    return <LoadingTable rows={5} cols={6} />;
+    return <LoadingTable rows={5} cols={4} />;
   else if (tenderControlData?.ongoing === "empty")
     return <NotFound title="لا يوجد منافسات الجارية" />;
   else return <></>;

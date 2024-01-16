@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TableContext } from "../TableContext";
 import LimitTypography from "../../../../components/LimitTypograpgy";
 import StatusChip from "../../../../components/StatusChip";
@@ -16,7 +16,13 @@ import {
   TenderApprovalStatus,
   TenderItemStatus,
 } from "../../../../types/Tenders/Status.enum";
-function generateTenderItemStatus(status?: TenderItemStatus): JSX.Element {
+import DialogData from "./DialogData";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { Tender } from "../../../../types";
+export function generateTenderItemStatus(
+  status?: TenderItemStatus
+): JSX.Element {
   let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
@@ -36,7 +42,7 @@ function generateTenderItemStatus(status?: TenderItemStatus): JSX.Element {
 
   return chip;
 }
-function generateTenderApprovalStatusChip(
+export function generateTenderApprovalStatusChip(
   status?: TenderApprovalStatus
 ): JSX.Element {
   let chip = <>---</>;
@@ -55,6 +61,10 @@ function generateTenderApprovalStatusChip(
 function TableBody() {
   const { tenderTableData, setSelectedTenderId, selectedTenderId } =
     useContext(TableContext);
+  const [open, setOpen] = useState<boolean>(false);
+  const [tenderName, setTenderName] = useState<Tender | undefined>(undefined);
+  const [displayData, setDisplayData] = useState<TypeDisplayData>({});
+
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
@@ -71,6 +81,33 @@ function TableBody() {
         });
     }
   }
+
+  function getTender(
+    id: number,
+    status: number,
+    startDate?: string,
+    endDate?: string,
+    eng?: string,
+    note?: string
+  ) {
+    axios
+      .get<{ data: Tender }>(Api(`employee/tender/${id}`))
+      .then((res) => {
+        if (res.data.data) {
+          setTenderName(res.data.data);
+          setDisplayData({
+            status,
+            startDate,
+            endDate,
+            eng,
+            note,
+          });
+          setOpen(!open);
+        }
+      })
+      .catch(() => {});
+  }
+
   return (
     <MuiTableBody>
       {Array.isArray(tenderTableData) &&
@@ -107,18 +144,18 @@ function TableBody() {
             <TableCell>
               <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
             </TableCell>
-            <TableCell>{tender.tenderdata?.end_date}</TableCell>
             <TableCell>{tender.tenderdata?.strat_date}</TableCell>
+            <TableCell>{tender.tenderdata?.end_date}</TableCell>
             <TableCell>{generateTenderItemStatus(tender.buy_status)}</TableCell>
             <TableCell>{tender.tenderdata?.period} يوم</TableCell>
             <TableCell>{tender.tenderdata?.department?.name}</TableCell>
-            <TableCell>
+            <TableCell onClick={getTender(id, type)}>
               {generateTenderApprovalStatusChip(tender.eng_employee_status)}
             </TableCell>
             <TableCell>
               {generateTenderItemStatus(tender.trace_status)}
             </TableCell>
-            <TableCell>
+            <TableCell onClick={() => {}}>
               {generateTenderItemStatus(tender.technical_status)}
             </TableCell>
             <TableCell>
@@ -134,8 +171,18 @@ function TableBody() {
             </TableCell>
           </TableRow>
         ))}
+      <DialogData open={open} setOpen={setOpen} displayData={displayData} />
     </MuiTableBody>
   );
 }
+
+export type TypeDisplayData = {
+  status?: number;
+  startDate?: string;
+  endDate?: string;
+  eng?: string;
+  note?: string;
+  id?: number;
+};
 
 export default TableBody;

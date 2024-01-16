@@ -63,7 +63,7 @@ export default function IncomingTable() {
       </Table>
     );
   else if (tenderControlData?.incoming === "loading")
-    return <LoadingTable rows={5} cols={6} />;
+    return <LoadingTable rows={5} cols={4} />;
   else if (tenderControlData?.incoming === "empty")
     return <NotFound title="لا يوجد منافسات واردة" />;
   else return <></>;
