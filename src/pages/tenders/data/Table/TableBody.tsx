@@ -4,18 +4,20 @@ import {
   TableCell,
   TableRow,
   Checkbox,
+  Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import LimitTypography from "../../../../components/LimitTypograpgy";
 import StatusChip from "../../../../components/StatusChip";
+import { NavLink } from "react-router-dom";
 import {
   TenderApprovalStatus,
   TenderItemStatus,
 } from "../../../../types/Tenders/Status.enum";
 function generateTenderItemStatus(status?: TenderItemStatus): JSX.Element {
-  let chip = <></>;
+  let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
       case TenderItemStatus.SENT:
@@ -37,11 +39,11 @@ function generateTenderItemStatus(status?: TenderItemStatus): JSX.Element {
 function generateTenderApprovalStatusChip(
   status?: TenderApprovalStatus
 ): JSX.Element {
-  let chip = <></>;
+  let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
       case TenderApprovalStatus.ACCEPTED:
-        chip = <StatusChip label="موافق" color="success" />;
+        chip = <StatusChip label="مقبول" color="primary" />;
         break;
       case TenderApprovalStatus.REJECTED:
         chip = <StatusChip label="مرفوض" color="error" />;
@@ -81,9 +83,18 @@ function TableBody() {
                 onChange={CheckboxHandler}
               />
             </TableCell>
-            <TableCell>{tender.tenderdata?.code_reference}</TableCell>
             <TableCell>
-              {" "}
+              <Typography
+                component={NavLink}
+                to={`${tender.id}`}
+                variant="body2"
+                color={"primary.main"}
+                fontWeight={700}
+              >
+                {tender.tenderdata?.code_reference}
+              </Typography>
+            </TableCell>
+            <TableCell>
               <LimitTypography maxWidth={180}>
                 {tender.tenderdata?.code_tender}
               </LimitTypography>
@@ -98,15 +109,15 @@ function TableBody() {
             </TableCell>
             <TableCell>{tender.tenderdata?.end_date}</TableCell>
             <TableCell>{tender.tenderdata?.strat_date}</TableCell>
-            <TableCell>
-              <StatusChip color={"primary"} disabled label={"غير مدفوع"} />
-            </TableCell>
+            <TableCell>{generateTenderItemStatus(tender.buy_status)}</TableCell>
             <TableCell>{tender.tenderdata?.period} يوم</TableCell>
             <TableCell>{tender.tenderdata?.department?.name}</TableCell>
             <TableCell>
               {generateTenderApprovalStatusChip(tender.eng_employee_status)}
             </TableCell>
-            <TableCell>-</TableCell>
+            <TableCell>
+              {generateTenderItemStatus(tender.trace_status)}
+            </TableCell>
             <TableCell>
               {generateTenderItemStatus(tender.technical_status)}
             </TableCell>

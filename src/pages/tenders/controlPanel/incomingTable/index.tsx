@@ -5,12 +5,14 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ControlPanelContext } from "../controlPanelContext";
 import { useContext } from "react";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
+import { NavLink } from "react-router-dom";
 export default function IncomingTable() {
   const { tenderControlData } = useContext(ControlPanelContext);
   if (Array.isArray(tenderControlData?.incoming))
@@ -29,7 +31,17 @@ export default function IncomingTable() {
         <TableBody>
           {tenderControlData?.incoming.map((tender) => (
             <TableRow key={tender.id}>
-              <TableCell>{tender.tenderdata?.code_reference}</TableCell>
+              <TableCell>
+                <Typography
+                  component={NavLink}
+                  to={`../${tender.id}`}
+                  variant="body2"
+                  color={"primary.main"}
+                  fontWeight={700}
+                >
+                  {tender.tenderdata?.code_reference}
+                </Typography>
+              </TableCell>
               <TableCell sx={{ width: "100px" }}>
                 {tender.tenderdata?.strat_date}
               </TableCell>
@@ -37,7 +49,11 @@ export default function IncomingTable() {
               <TableCell>{tender.tenderdata?.period}</TableCell>
               <TableCell>{tender.tenderdata?.end_date}</TableCell>
               <TableCell>
-                <IconButton size="small">
+                <IconButton
+                  size="small"
+                  component={NavLink}
+                  to={`../${tender.id}`}
+                >
                   <VisibilityOutlinedIcon />
                 </IconButton>
               </TableCell>

@@ -5,6 +5,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import StatusChip from "../../../../components/StatusChip";
@@ -12,6 +13,7 @@ import { useContext } from "react";
 import { ControlPanelContext } from "../controlPanelContext";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
+import { NavLink } from "react-router-dom";
 
 export default function OngoingTable() {
   const { tenderControlData } = useContext(ControlPanelContext);
@@ -31,13 +33,27 @@ export default function OngoingTable() {
         <TableBody>
           {tenderControlData?.ongoing.map((tender) => (
             <TableRow key={tender.id}>
-              <TableCell>{tender.tenderdata?.code_reference}</TableCell>
+              <TableCell>
+                <Typography
+                  component={NavLink}
+                  to={`../${tender.id}`}
+                  variant="body2"
+                  color={"primary.main"}
+                  fontWeight={700}
+                >
+                  {tender.tenderdata?.code_reference}
+                </Typography>
+              </TableCell>
               <TableCell>{tender.tenderdata?.name}</TableCell>
               <TableCell>
                 <StatusChip label="جاري" color="success" />
               </TableCell>
               <TableCell>
-                <IconButton size="small">
+                <IconButton
+                  size="small"
+                  component={NavLink}
+                  to={`../${tender.id}`}
+                >
                   <VisibilityOutlinedIcon />
                 </IconButton>
               </TableCell>

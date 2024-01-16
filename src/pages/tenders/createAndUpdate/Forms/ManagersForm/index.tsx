@@ -60,7 +60,10 @@ function ManagersForm() {
         })
         .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
           snackbar.enqueueSnackbar(
-            path ? "تعذر في تعديل مهام المنافسة" : "تعذر في حفظ مهام المنافسة",
+            err.response?.data?.msg ||
+              (path
+                ? "تعذر في تعديل مهام المنافسة"
+                : "تعذر في حفظ مهام المنافسة"),
             {
               variant: "error",
             }

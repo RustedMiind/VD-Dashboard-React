@@ -69,6 +69,7 @@ function ContentPanal() {
       <Grid container spacing={2} mt={2}>
         <Grid item xl={6} xs={12}>
           <PaperButtonLikeTitle
+            count={tenderControlData?.incoming?.length}
             fixedHeight={PAPER_HEIGHT}
             title="المنافسات الواردة"
           >
@@ -77,6 +78,7 @@ function ContentPanal() {
         </Grid>
         <Grid item xl={6} xs={12}>
           <PaperButtonLikeTitle
+            count={tenderControlData?.ongoing?.length}
             fixedHeight={PAPER_HEIGHT}
             title="المنافسات الجارية"
           >
