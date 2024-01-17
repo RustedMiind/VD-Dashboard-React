@@ -35,7 +35,7 @@ function FormsSection() {
   return (
     <Stack spacing={2}>
       <SeparatedAccordion
-        expanded={true}
+        expanded={isCurrentExpanded(1)}
         onChange={expand(1)}
         title="بيانات المنافسة"
       >
