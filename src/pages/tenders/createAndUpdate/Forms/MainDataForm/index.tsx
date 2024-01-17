@@ -63,7 +63,7 @@ export default function MainDataForm() {
     let path =
       typeof tenderContext.tender === "object" &&
       tenderContext.tender.tenderdata
-        ? "/" + tenderContext.tender.tenderdata.id
+        ? "/" + tenderContext.tender.tenderdata.tender_id
         : "";
     setFormStatus("loading");
     axios
@@ -77,7 +77,7 @@ export default function MainDataForm() {
         );
         setError(undefined);
         tenderContext.setTenderId &&
-          tenderContext.setTenderId(res.data.data.id);
+          tenderContext.setTenderId(res.data.data.tender_id);
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
         snackbar.enqueueSnackbar(

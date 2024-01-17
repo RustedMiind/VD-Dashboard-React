@@ -366,11 +366,11 @@ function ManagersForm() {
   function getOptions() {
     if (
       typeof tenderContext.tender === "object" &&
-      tenderContext.tender.tenderdata?.department?.management?.branch_id
+      tenderContext.tender.tenderdata?.management?.branch_id
     ) {
       getFormOptions({
-        branch_id: `${tenderContext.tender.tenderdata?.department?.management?.branch_id}`,
-        management_id: `${tenderContext.tender.tenderdata?.department?.management?.id}`,
+        branch_id: `${tenderContext.tender.tenderdata.management?.branch_id}`,
+        management_id: `${tenderContext.tender.tenderdata?.management_id}`,
       })
         .then((data) => {
           setOptions({
