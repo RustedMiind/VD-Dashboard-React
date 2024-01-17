@@ -72,9 +72,10 @@ export function reducer(
 }
 
 export function dtoToState(dto: TenderData): TenderDataState {
+  console.log(dto, "dto");
   return {
-    branchId: `${dto.department?.management?.branch_id || ""}`,
-    managementId: `${dto.department?.management?.id || ""}`,
+    branchId: `${dto.management?.branch_id || ""}`,
+    managementId: `${dto.management_id || ""}`,
     referenceNumber: dto.code_reference.toString(),
     number: dto.code_tender.toString(),
     name: dto.name,
@@ -83,7 +84,7 @@ export function dtoToState(dto: TenderData): TenderDataState {
     endDate: dto.end_date,
     price: dto.price.toString(),
     typeId: dto.type_id.toString(),
-    departmentId: dto.department_id.toString(),
+    departmentId: dto.department_id?.toString() || "",
     activity: dto.activity || "",
     contractDuration: dto.period.toString(),
     applyTypeId: dto.apply_id.toString(),
