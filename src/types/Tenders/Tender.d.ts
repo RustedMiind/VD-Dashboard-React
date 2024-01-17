@@ -1,4 +1,4 @@
-import { DB_Boolean, Department } from "../";
+import { DB_Boolean, Department, Management } from "../";
 import { DbOptionType } from "../other/DbOptionType";
 import { TenderItemStatus } from "./Status.enum";
 import { TenderAmounts } from "./TenderAmount";
@@ -43,7 +43,7 @@ export type TenderData = {
   id: number;
   tender_id: number;
   tender_type_id: number;
-  department_id: number;
+  department_id?: number;
   code_reference: number;
   code_tender: number;
   name: string;
@@ -64,6 +64,8 @@ export type TenderData = {
     warranties?: DbOptionType;
   })[];
   apply?: DbOptionType;
+  management_id?: number;
+  management?: Management;
   // "deleted_at": null
 };
 
