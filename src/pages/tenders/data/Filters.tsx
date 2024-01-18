@@ -1,12 +1,25 @@
-import { Box, Button, Grid, GridProps, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  GridProps,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useContext, useState } from "react";
 import { TableContext } from "./TableContext";
 import dayjs from "dayjs";
 
+enum TenderStatus {
+  DONE = "done",
+  DRAFT = "draft",
+}
+
 function GridItem({ children }: GridProps) {
   return (
-    <Grid item xs={12} sm={6} lg={4} xl={2}>
+    <Grid item xs={12} sm={6} lg={3} xl={12 / 7}>
       {children}
     </Grid>
   );
@@ -14,22 +27,27 @@ function GridItem({ children }: GridProps) {
 
 function TendersFilters() {
   const { setTenderTableData } = useContext(TableContext);
+  const [searchChanged, setSearchChanged] = useState(false);
   const [dataToSearch, setDataToSearch] = useState<TypeDataToSearch>({
-    organization_name: "",
-    organization_number: "",
-    name: "",
-    strat_date: "",
+    status: TenderStatus.DONE,
     end_date: "",
+    strat_date: "",
   });
   function updateDataToSearch(partial: Partial<TypeDataToSearch>) {
+    searchChanged || setSearchChanged(true);
     setDataToSearch({
       ...dataToSearch,
       ...partial,
     });
   }
   function searchTender(e: React.FormEvent<HTMLFormElement>) {
+    setSearchChanged(false);
     e.preventDefault();
-    setTenderTableData && setTenderTableData(dataToSearch);
+    setTenderTableData &&
+      setTenderTableData({
+        ...dataToSearch,
+        draft: dataToSearch.status === TenderStatus.DRAFT,
+      });
   }
   return (
     <Box onSubmit={searchTender} component="form" pb={7}>
@@ -87,8 +105,34 @@ function TendersFilters() {
             label={"تاريخ الانتهاء"}
           />
         </GridItem>
+
         <GridItem>
-          <Button variant="contained" type="submit" fullWidth>
+          <ToggleButtonGroup
+            size="small"
+            color="primary"
+            exclusive
+            fullWidth
+            value={dataToSearch.status}
+            onChange={(e, status: TenderStatus) => {
+              updateDataToSearch({ status });
+            }}
+          >
+            <ToggleButton color="primary" value={TenderStatus.DONE}>
+              المكتملة
+            </ToggleButton>
+            <ToggleButton color="error" value={TenderStatus.DRAFT}>
+              المسودة
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </GridItem>
+        <GridItem>
+          <Button
+            variant="contained"
+            disableElevation={false}
+            type="submit"
+            fullWidth
+            disabled={!searchChanged}
+          >
             بحث
           </Button>
         </GridItem>
@@ -105,4 +149,5 @@ type TypeDataToSearch = {
   organization_number?: string;
   strat_date?: string;
   end_date?: string;
+  status?: TenderStatus;
 };
