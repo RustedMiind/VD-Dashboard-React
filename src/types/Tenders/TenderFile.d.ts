@@ -10,5 +10,5 @@ export interface TenderFile {
   updated_at: string;
   deleted_at: string | null; // Assuming deleted_at is a string or null
   pictures: string[]; // Assuming pictures is an array of string paths
-  media: Media[];
+  media?: Media[];
 }

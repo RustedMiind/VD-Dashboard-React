@@ -55,21 +55,21 @@ export function reducer(
 
 export function createDtoToState(dto: TenderTask): TenderManagersState {
   return {
-    managerId: dto.eng_employee_id.toString(),
-    approvalEndDate: dto.end_dete_accept,
-    purchaseManagerId: dto.eng_employee_id_buy_tender.toString(),
-    purchaseDate: dto.dete_buy_tender,
-    technicalManager: dto.eng_employee_id_technical.toString(),
-    technecalEndDate: dto.end_dete_technical,
-    technicalAlternative: dto.employee_id_trace.toString(), // Add appropriate property from PostDto if available
-    technicalAlternativeEndDate: dto.end_dete_trace,
+    managerId: dto.eng_employee_id?.toString() || "",
+    approvalEndDate: dto.end_dete_accept || "",
+    purchaseManagerId: dto.eng_employee_id_buy_tender?.toString() || "",
+    purchaseDate: dto.dete_buy_tender || "",
+    technicalManager: dto.eng_employee_id_technical?.toString() || "",
+    technecalEndDate: dto.end_dete_technical || "",
+    technicalAlternative: dto.employee_id_trace?.toString() || "", // Add appropriate property from PostDto if available
+    technicalAlternativeEndDate: dto.end_dete_trace || "",
     requiredFiles:
       dto.task_tender_warranties?.map((x) => x.warranty_id.toString()) || [],
-    notes: dto.note,
-    financialManager: dto.eng_employee_id_file_finacial.toString(),
-    financialEndDate: dto.dete_file_finacial,
-    applyManager: dto.eng_employee_id_apply_tender.toString(),
-    applyDate: dto.dete_apply_tender,
+    notes: dto.note || "",
+    financialManager: dto.eng_employee_id_file_finacial?.toString() || "",
+    financialEndDate: dto.dete_file_finacial || "",
+    applyManager: dto.eng_employee_id_apply_tender?.toString() || "",
+    applyDate: dto.dete_apply_tender || "",
   };
 }
 

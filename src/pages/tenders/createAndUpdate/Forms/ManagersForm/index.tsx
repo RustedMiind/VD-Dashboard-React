@@ -104,7 +104,7 @@ function ManagersForm() {
             onChange={(e) => {
               dispatch(generateReducerAction("SET_MANAGER_ID", e.target.value));
             }}
-            options={options.departmentEmployee?.map((i) => ({
+            options={options.allEmployees?.map((i) => ({
               label: i.name,
               value: i.value,
             }))}
