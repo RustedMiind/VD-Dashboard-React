@@ -47,6 +47,10 @@ export const statusOptions: { value: TenderItemStatus; label: string }[] = [
     value: TenderItemStatus.SENT,
     label: "مقدمة",
   },
+  {
+    value: TenderItemStatus.FINANCIAL_EXCLUDE,
+    label: "مستعبد مالي",
+  },
 ];
 
 const GridItem = (props: GridProps & { label: string }) => (

@@ -46,7 +46,7 @@ function TendersFilters() {
     setTenderTableData &&
       setTenderTableData({
         ...dataToSearch,
-        draft: dataToSearch.status === TenderStatus.DRAFT,
+        draft: +(dataToSearch.status === TenderStatus.DRAFT),
       });
   }
   return (
