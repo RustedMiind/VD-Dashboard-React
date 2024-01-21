@@ -6,6 +6,9 @@ function generateStatusChip(status?: TenderItemStatus): JSX.Element {
   let chip = <></>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
+      case TenderItemStatus.PENDING:
+        chip = <StatusChip label="لم تبدأ" disabled color="default" />;
+        break;
       case TenderItemStatus.SENT:
         chip = <StatusChip label="مقدمة" color="warning" />;
         break;

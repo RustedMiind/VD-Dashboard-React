@@ -43,12 +43,9 @@ function DetailsView(): JSX.Element {
       <Grid container rowSpacing={4} columnSpacing={2}>
         <InfoItem
           label="نوع الفرع"
-          value={tender.tenderdata?.department?.management?.branch?.name}
+          value={tender.tenderdata?.management?.branch?.name}
         />
-        <InfoItem
-          label="الادارة"
-          value={tender.tenderdata?.department?.management?.name}
-        />
+        <InfoItem label="الادارة" value={tender.tenderdata?.management?.name} />
         <InfoItem
           label="الرقم المرجعي للمنافسة"
           value={tender.tenderdata?.code_reference}

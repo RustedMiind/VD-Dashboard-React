@@ -1,26 +1,26 @@
-import { TenderApprovalStatus } from "../../../../../../types/Tenders/Status.enum";
+import {
+  TenderItemStatus,
+  TenderPay,
+} from "../../../../../../types/Tenders/Status.enum";
 import StatusChip from "../../../../../../components/StatusChip";
 import RowComponent from "./RowComponent";
 
-function generateStatusChip(status?: TenderApprovalStatus): JSX.Element {
-  let chip = <></>;
+function generateStatusChip(status?: TenderPay): JSX.Element {
+  let chip = <StatusChip label="لا اجراء" color="primary" disabled />;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
-      case TenderApprovalStatus.NONE:
+      case TenderPay.NOTPAYED:
         chip = <StatusChip label="لم تبدأ" disabled color="default" />;
         break;
-      case TenderApprovalStatus.ACCEPTED:
-        chip = <StatusChip label="مقبولة" color="success" />;
-        break;
-      case TenderApprovalStatus.REJECTED:
-        chip = <StatusChip label="مرفوضة" color="error" />;
+      case TenderPay.PAYED:
+        chip = <StatusChip label="مقدمة" color="warning" />;
         break;
     }
 
   return chip;
 }
 
-function ApprovalRowComponent(props: PropsType) {
+function PayRowComponent(props: PropsType) {
   return (
     <RowComponent
       iconComponent={props.iconComponent}
@@ -36,10 +36,10 @@ function ApprovalRowComponent(props: PropsType) {
 type PropsType = {
   name: string;
   endDate?: string;
-  status?: TenderApprovalStatus;
+  status?: TenderPay;
   managerName?: string;
   accualEndDate?: string;
   iconComponent: React.ReactNode;
 };
 
-export default ApprovalRowComponent;
+export default PayRowComponent;

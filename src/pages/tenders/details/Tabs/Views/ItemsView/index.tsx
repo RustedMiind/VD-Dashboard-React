@@ -23,6 +23,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import OthersDialog from "./TakeActionDialogs/OthersDialog";
 import ApprovalRowComponent from "./ApprovalRowComponent";
 import TenderApproveDialog from "./TakeActionDialogs/TenderApproveDialog";
+import PayRowComponent from "./PayRowComponent";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
@@ -74,6 +75,7 @@ function ItemsView() {
     return (
       <>
         <BuyDialog
+          close={closeDialog}
           open={dialogOpen === TenderStep.PURCHASE}
           onClose={closeDialog}
         />
@@ -93,24 +95,28 @@ function ItemsView() {
           title="العرض الفني"
           open={dialogOpen === TenderStep.TECHNICAL}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.end_dete_technical}
         />
         <OthersDialog
           close={closeDialog}
           title="العرض المالي"
           open={dialogOpen === TenderStep.FINANCIAL}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.dete_file_finacial}
         />
         <OthersDialog
           close={closeDialog}
           title="الملف المدمج"
           open={dialogOpen === TenderStep.FILE}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.end_dete_trace}
         />
         <OthersDialog
           close={closeDialog}
           title="تقديم المنافسة"
           open={dialogOpen === TenderStep.APPLY}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.dete_apply_tender}
         />
         <TableContainer>
           <Table>
@@ -144,13 +150,13 @@ function ItemsView() {
                   status: tender.eng_employee_status,
                 }}
               />
-              <StatusRowComponent
+              <PayRowComponent
                 {...{
                   name: "شراء المنافسة",
                   managerName:
                     tender.tender_tasks?.eng_employee_buy_tender?.name,
                   endDate: tender.tender_tasks?.dete_buy_tender,
-                  accualEndDate: tender.file_finacial_date,
+                  accualEndDate: tender.buy_date,
                   iconComponent: dialogComponent(TenderStep.PURCHASE),
                   status: tender.buy_status,
                 }}
