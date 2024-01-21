@@ -86,21 +86,20 @@ export function dtoToState(dto: TenderData): TenderDataState {
   return {
     branchId: `${dto.management?.branch_id || ""}`,
     managementId: `${dto.management_id || ""}`,
-    referenceNumber: dto.code_reference.toString(),
-    number: dto.code_tender.toString(),
-    name: dto.name,
-    applyDate: dto.strat_date,
-    governmentalOrganizationId: dto.organization_id.toString(),
-    endDate: dto.end_date,
-    price: dto.price.toString(),
-    typeId: dto.type_id.toString(),
+    referenceNumber: dto.code_reference?.toString() || "",
+    number: dto.code_tender?.toString() || "",
+    name: dto.name || "",
+    applyDate: dto.strat_date || "",
+    governmentalOrganizationId: dto.organization_id?.toString() || "",
+    endDate: dto.end_date || "",
+    price: dto.price?.toString() || "",
+    typeId: dto.type_id?.toString() || "",
     departmentId: dto.department_id?.toString() || "",
     activity: dto.activity || "",
     contractDuration: dto.period.toString(),
     applyType: dto?.tender_applies?.map((x) => x.apply_id.toString()),
-    requiredWarranty: dto?.tender_warranties?.map((x) =>
-      x.warranty_id.toString()
-    ),
+    requiredWarranty:
+      dto?.tender_warranties?.map((x) => x.warranty_id.toString()) || [],
   };
 }
 

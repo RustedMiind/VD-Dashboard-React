@@ -44,14 +44,14 @@ export type TenderData = {
   tender_id: number;
   tender_type_id: number;
   department_id?: number;
-  code_reference: number;
-  code_tender: number;
-  name: string;
-  strat_date: string;
-  end_date: string;
-  organization_id: number;
-  price: number;
-  type_id: number;
+  code_reference?: number;
+  code_tender?: number;
+  name?: string;
+  strat_date?: string;
+  end_date?: string;
+  organization_id?: number;
+  price?: number;
+  type_id?: number;
   department?: Department;
   activity?: string;
   period: number;
@@ -61,8 +61,8 @@ export type TenderData = {
   })[];
   created_at: string;
   updated_at: string;
-  organization: Organization;
-  tender_warranties: (DbOptionType & {
+  organization?: Organization;
+  tender_warranties?: (DbOptionType & {
     warranty_id: number;
     warranties?: DbOptionType;
   })[];

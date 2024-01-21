@@ -137,7 +137,7 @@ function TableBody() {
               case TenderStep.PURCHASE:
                 dataObject = {
                   endDate: tender?.tender_tasks?.dete_buy_tender,
-                  eng: tender?.tender_tasks?.eng_employee_buy_tender.name,
+                  eng: tender?.tender_tasks?.eng_employee_buy_tender?.name,
                   status: generateTenderPayedStatus(tender?.buy_status),
                   note: tender?.buy_note,
                   startDate: "---",
@@ -146,7 +146,7 @@ function TableBody() {
               case TenderStep.TECHNICAL:
                 dataObject = {
                   endDate: tender?.tender_tasks?.end_dete_technical,
-                  eng: tender?.tender_tasks?.eng_employee_technical.name,
+                  eng: tender?.tender_tasks?.eng_employee_technical?.name,
                   status: generateTenderItemStatus(tender?.technical_status),
                   note: tender?.technical_note,
                   startDate: "---",
@@ -166,7 +166,7 @@ function TableBody() {
               case TenderStep.FILE:
                 dataObject = {
                   endDate: tender?.tender_tasks?.end_dete_trace,
-                  eng: tender?.tender_tasks?.employee_trace.name,
+                  eng: tender?.tender_tasks?.employee_trace?.name,
                   status: generateTenderItemStatus(tender?.trace_status),
                   note: tender?.eng_employee_note,
                   startDate: "---",

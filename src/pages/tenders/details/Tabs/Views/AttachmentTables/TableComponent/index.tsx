@@ -50,56 +50,52 @@ export default function TableComponent({ title, noData }: PropsType) {
               </TableHead>
               <TableBody>
                 {!noData &&
-                  tender.tender_files?.map((tender) => (
-                    <TableRow>
-                      <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                        <IconButton
-                          component={`a`}
-                          href={`${
-                            tender.media[0] && tender.media[0]?.original_url
-                          }`}
-                          target="_blank"
-                          download
-                          color="primary"
-                          size="small"
-                        >
-                          <SourceOutlinedIcon
-                            sx={{ fontSize: "20px", mr: 1 }}
-                          />
-                        </IconButton>
-                        <LimitTypography>
-                          {tender.media[0] && tender.media[0]?.name}
-                        </LimitTypography>
-                      </TableCell>
-                      <TableCell>
-                        {tender.media[0] && tender.media[0]?.mime_type}
-                      </TableCell>
-                      <TableCell>
-                        {tender.media[0] &&
-                          convertBytetoMB(tender.media[0]?.size)}
-                      </TableCell>
-                      <TableCell>-</TableCell>
-                      <TableCell>
-                        {formatDate(
-                          tender.media[0] && tender.media[0]?.created_at
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          component={`a`}
-                          href={`${
-                            tender.media[0] && tender.media[0]?.original_url
-                          }`}
-                          target="_blank"
-                          download
-                          color="primary"
-                          size="small"
-                        >
-                          <CloudDownloadOutlinedIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  tender.tender_files?.map((tender) => {
+                    if (tender.media && tender.media[0])
+                      return (
+                        <TableRow>
+                          <TableCell
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
+                            <IconButton
+                              component={`a`}
+                              href={`${tender.media[0]?.original_url}`}
+                              target="_blank"
+                              download
+                              color="primary"
+                              size="small"
+                            >
+                              <SourceOutlinedIcon
+                                sx={{ fontSize: "20px", mr: 1 }}
+                              />
+                            </IconButton>
+                            <LimitTypography>
+                              {tender.media[0]?.name}
+                            </LimitTypography>
+                          </TableCell>
+                          <TableCell>{tender.media[0]?.mime_type}</TableCell>
+                          <TableCell>
+                            {convertBytetoMB(tender.media[0]?.size)}
+                          </TableCell>
+                          <TableCell>-</TableCell>
+                          <TableCell>
+                            {formatDate(tender.media[0]?.created_at)}
+                          </TableCell>
+                          <TableCell>
+                            <IconButton
+                              component={`a`}
+                              href={`${tender.media[0]?.original_url}`}
+                              target="_blank"
+                              download
+                              color="primary"
+                              size="small"
+                            >
+                              <CloudDownloadOutlinedIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                  })}
               </TableBody>
             </Table>
           </TableContainer>

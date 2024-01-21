@@ -26,7 +26,7 @@ export default function OngoingWork() {
                 sx={{ bgcolor: "primary.main", color: "white" }}
               />
               <Typography variant="body2" sx={{ textAlign: "center", mt: 1 }}>
-                {tender.tender_tasks?.eng_employee.name}
+                {tender.tender_tasks?.eng_employee?.name}
               </Typography>
             </GridItem>
             <GridItem>
