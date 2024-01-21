@@ -34,7 +34,6 @@ function ItemsView() {
   const closeDialog = () => {
     setDialogOpen(undefined);
   };
-
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
       let disabled = true;
@@ -50,7 +49,8 @@ function ItemsView() {
       ) {
         disabled = false;
       }
-      if (tender.user_type === dialogType) {
+
+      if (tender.user_type?.includes(parseInt(dialogType))) {
         return (
           <IconButton
             size="small"

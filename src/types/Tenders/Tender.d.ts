@@ -29,11 +29,11 @@ export type Tender = {
   trace_status: TenderItemStatus;
   trace_date?: string;
   trace_note?: string;
-  user_type?: CurrentTenderStep;
   tenderdata?: TenderData;
   tender_tasks?: TenderTask;
   tender_files?: TenderFile[];
   tender_amounts?: TenderAmounts[];
+  user_type: number[];
   // created_at: "2024-01-03T16:33:09.000000Z";
   // updated_at: "2024-01-03T18:12:24.000000Z";
   // deleted_at: null;
