@@ -121,16 +121,7 @@ function ItemsView() {
                 <Th>المهندس المسؤول</Th>
                 <Th>تاريخ الانتهاء</Th>
                 <Th>تاريخ الانتهاء الفعلي</Th>
-                <Th>
-                  عرض الملف
-                  <Button
-                    onClick={() => {
-                      setDialogOpen(TenderStep.PURCHASE);
-                    }}
-                  >
-                    شراء
-                  </Button>
-                </Th>
+                <Th>عرض الملف</Th>
               </TableRow>
             </TableHead>
             <TableBody>

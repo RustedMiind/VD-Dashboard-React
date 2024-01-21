@@ -23,13 +23,9 @@ function ControlSection(props: PropsType) {
         setTenderTableData && setTenderTableData();
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
-        snackbar.enqueueSnackbar(
-          <>
-            تعذر في حذف المنافسات المختارة
-            {err.response?.data?.msg}
-          </>,
-          { variant: "error" }
-        );
+        snackbar.enqueueSnackbar(<>{err.response?.data?.msg}</>, {
+          variant: "error",
+        });
       });
   }
 
