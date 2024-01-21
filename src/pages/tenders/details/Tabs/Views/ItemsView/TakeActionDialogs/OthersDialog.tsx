@@ -26,7 +26,7 @@ import { useSnackbar } from "notistack";
 import { TenderDataContext } from "../../../..";
 import { useParams } from "react-router-dom";
 import { objectToFormData } from "../../../../../../../methods";
-import { TenderItemStatus } from "../../../../../../../types/Tenders/Status.enum";
+import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -40,6 +40,7 @@ export default function OthersDialog({
   onSubmit,
   close,
   endDate,
+  userType,
   ...dialogProps
 }: PropsType) {
   const { register, handleSubmit } = useForm<DtoType>({
@@ -78,7 +79,7 @@ export default function OthersDialog({
           objectToFormData({
             ...dto,
             image: file,
-            user_type: tender.user_type,
+            user_type: userType,
           })
         )
         .then((res) => {
@@ -164,4 +165,5 @@ type PropsType = {
   title: string;
   close: () => void;
   endDate?: string;
+  userType: TenderStep;
 } & DialogProps;

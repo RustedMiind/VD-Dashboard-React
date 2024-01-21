@@ -28,6 +28,7 @@ import { useParams } from "react-router-dom";
 import {
   TenderItemStatus,
   TenderPay,
+  TenderStep,
 } from "../../../../../../../types/Tenders/Status.enum";
 import { Department } from "../../../../../../../types";
 import { TenderDataContext } from "../../../..";
@@ -149,7 +150,7 @@ export default function BuyDialog({ close, ...props }: PropsType) {
           Api("employee/tender/form/status/" + id),
           objectToFormData({
             ...data,
-            user_type: tender.user_type,
+            user_type: props.userType,
             image: file,
             end_date: endDate,
           })
@@ -274,4 +275,5 @@ export default function BuyDialog({ close, ...props }: PropsType) {
 
 type PropsType = {
   close: () => void;
+  userType: TenderStep;
 } & DialogProps;

@@ -78,9 +78,11 @@ function ItemsView() {
           close={closeDialog}
           open={dialogOpen === TenderStep.PURCHASE}
           onClose={closeDialog}
+          userType={TenderStep.PURCHASE}
         />
         <TenderApproveDialog
           open={dialogOpen === TenderStep.ACCEPTION}
+          userType={TenderStep.ACCEPTION}
           close={closeDialog}
           onClose={closeDialog}
         />
@@ -92,6 +94,7 @@ function ItemsView() {
         /> */}
         <OthersDialog
           close={closeDialog}
+          userType={TenderStep.TECHNICAL}
           title="العرض الفني"
           open={dialogOpen === TenderStep.TECHNICAL}
           onClose={closeDialog}
@@ -99,6 +102,7 @@ function ItemsView() {
         />
         <OthersDialog
           close={closeDialog}
+          userType={TenderStep.FINANCIAL}
           title="العرض المالي"
           open={dialogOpen === TenderStep.FINANCIAL}
           onClose={closeDialog}
@@ -108,6 +112,7 @@ function ItemsView() {
           close={closeDialog}
           title="الملف المدمج"
           open={dialogOpen === TenderStep.FILE}
+          userType={TenderStep.FILE}
           onClose={closeDialog}
           endDate={tender?.tender_tasks?.end_dete_trace}
         />
@@ -115,6 +120,7 @@ function ItemsView() {
           close={closeDialog}
           title="تقديم المنافسة"
           open={dialogOpen === TenderStep.APPLY}
+          userType={TenderStep.APPLY}
           onClose={closeDialog}
           endDate={tender?.tender_tasks?.dete_apply_tender}
         />
