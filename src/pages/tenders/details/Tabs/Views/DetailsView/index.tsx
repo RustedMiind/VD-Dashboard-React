@@ -37,7 +37,7 @@ function DetailsView(): JSX.Element {
         new Date(tender.tenderdata?.end_date || "")
       ) /
       (1000 * 60 * 60 * 24);
-    const durationToShow = `${tenderDurationInDays} يوم`;
+    const durationToShow = `${tender.tenderdata?.period} يوم`;
 
     return (
       <Grid container rowSpacing={4} columnSpacing={2}>
