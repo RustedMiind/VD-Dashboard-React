@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
@@ -190,7 +190,7 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="تاريخ التقديم المطلوب">
-          <DatePicker
+          <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.applyDate)}
@@ -229,7 +229,7 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="تاريخ انتهاء المنافسة" required>
-          <DatePicker
+          <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.endDate)}

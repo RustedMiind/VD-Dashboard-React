@@ -72,7 +72,6 @@ export function reducer(
 }
 
 export function dtoToState(dto: TenderData): TenderDataState {
-  console.log(dto, "dto");
   return {
     branchId: `${dto.management?.branch_id || ""}`,
     managementId: `${dto.management_id || ""}`,
