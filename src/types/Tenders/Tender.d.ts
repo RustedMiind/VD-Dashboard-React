@@ -55,7 +55,10 @@ export type TenderData = {
   department?: Department;
   activity?: string;
   period: number;
-  apply_id: number;
+  tender_applies: (DbOptionType & {
+    apply_id: number;
+    apply?: DbOptionType;
+  })[];
   created_at: string;
   updated_at: string;
   organization: Organization;

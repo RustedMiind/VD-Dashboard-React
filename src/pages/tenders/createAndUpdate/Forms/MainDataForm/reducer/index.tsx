@@ -44,7 +44,18 @@ export function reducer(
         ? { ...state, contractDuration: action.payload }
         : state;
     case "SET_APPLY_TYPE_ID":
-      return { ...state, applyTypeId: action.payload };
+      const apply_id = action.payload;
+      if (state.applyType.includes(apply_id)) {
+        return {
+          ...state,
+          applyType: state.applyType.filter((app) => apply_id !== app),
+        };
+      } else {
+        return {
+          ...state,
+          applyType: [...state.applyType, action.payload],
+        };
+      }
     case "TOGGLE_WARRANTY_ID":
       const warrantyId = action.payload;
       if (state.requiredWarranty.includes(warrantyId)) {
@@ -86,8 +97,8 @@ export function dtoToState(dto: TenderData): TenderDataState {
     departmentId: dto.department_id?.toString() || "",
     activity: dto.activity || "",
     contractDuration: dto.period.toString(),
-    applyTypeId: dto.apply_id.toString(),
-    requiredWarranty: dto.tender_warranties.map((x) =>
+    applyType: dto?.tender_applies?.map((x) => x.apply_id.toString()),
+    requiredWarranty: dto?.tender_warranties?.map((x) =>
       x.warranty_id.toString()
     ),
   };
@@ -109,7 +120,7 @@ export function stateToPostDto(state: TenderDataState): PostDto {
     activity: state.activity,
     code_tender: state.number,
     period: state.contractDuration,
-    apply_id: state.applyTypeId,
+    apply_id: state.applyType,
   };
 }
 
@@ -128,7 +139,7 @@ type PostDto = {
   organization_id: string;
   price: string;
   warranty_id: string[];
-  apply_id: string;
+  apply_id: string[];
 };
 
 type TenderDataState = {
@@ -145,7 +156,7 @@ type TenderDataState = {
   departmentId: string;
   activity: string;
   contractDuration: string;
-  applyTypeId: string;
+  applyType: string[];
   requiredWarranty: string[];
 };
 
@@ -163,7 +174,7 @@ export const initialTenderDataState: TenderDataState = {
   departmentId: "",
   activity: "",
   contractDuration: "",
-  applyTypeId: "",
+  applyType: [],
   requiredWarranty: [],
 };
 
