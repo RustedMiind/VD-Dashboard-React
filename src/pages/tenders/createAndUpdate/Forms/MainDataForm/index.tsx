@@ -29,7 +29,11 @@ import { LaravelValidationError } from "../../../../../types/LaravelValidationEr
 import { AxiosErrorType } from "../../../../../types/Axios";
 import { FormStatus } from "../../../../../types/FormStatus";
 import { LoadingButton } from "@mui/lab";
-
+const type_id = [
+  { name: "منافسة عامه", value: 1 },
+  { name: "منافسة محدده", value: 2 },
+  { name: "عامة", value: 3 },
+];
 export default function MainDataForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
@@ -258,15 +262,16 @@ export default function MainDataForm() {
           <TextField
             select
             size="small"
-            value={form.typeId}
+            value={2}
             onChange={(e) => {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
             {...inputProps}
+            disabled
           >
             {options.tenderTypes?.map((option) => (
               <MenuItem key={option.value} value={option.value}>
-                {option.name}
+                منافسة عامة
               </MenuItem>
             ))}
           </TextField>

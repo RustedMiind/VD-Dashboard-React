@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import DoubleChips from "../../../components/DoubleStatusChips";
 import { useContext } from "react";
 import { TableContext } from "./TableContext";
-import { TenderItemStatus } from "../../../types/Tenders/Status.enum";
+import { TenderEntityStatus } from "../../../types/Tenders/Status.enum";
 
 function Counters() {
   const { counts } = useContext(TableContext);
@@ -13,37 +13,42 @@ function Counters() {
         <>
           <DoubleChips
             label="جاري"
-            value={counts[TenderItemStatus.ONGOING]}
+            value={counts[TenderEntityStatus.ONGOING]}
             color="success"
           />
           <DoubleChips
             label="مقدمة"
-            value={counts[TenderItemStatus.SENT]}
+            value={counts[TenderEntityStatus.SENT]}
             color="warning"
           />
           <DoubleChips
+            label="غير مقدم"
+            value={counts[TenderEntityStatus.NOT_SENT]}
+            color="secondary"
+          />
+          <DoubleChips
             label="منتهي"
-            value={counts[TenderItemStatus.ENDED]}
+            value={counts[TenderEntityStatus.ENDED]}
             color="error"
           />
           <DoubleChips
             label="تم الترسية"
-            value={counts[TenderItemStatus.AWARDED]}
+            value={counts[TenderEntityStatus.AWARDED]}
             color="primary"
           />
           <DoubleChips
             label="فحص فني"
-            value={counts[TenderItemStatus.TECHNICAL_REVIEW]}
+            value={counts[TenderEntityStatus.TECHNICAL_REVIEW]}
             color="primary"
           />
           <DoubleChips
             label="مستعبد فني"
-            value={counts[TenderItemStatus.EXCLUDED]}
+            value={counts[TenderEntityStatus.EXCLUDED]}
             color="primary"
           />
           <DoubleChips
             label="مستعبد مالي"
-            value={counts[TenderItemStatus.FINANCIAL_EXCLUDE]}
+            value={counts[TenderEntityStatus.FINANCIAL_EXCLUDE]}
             color="primary"
           />
         </>
