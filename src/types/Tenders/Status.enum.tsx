@@ -4,6 +4,7 @@ export enum TenderItemStatus {
   ONGOING = 1,
   EXCLUDED = 2,
   SENT = 3,
+  AWARDED = 4,
 }
 
 export enum TenderApprovalStatus {

@@ -31,21 +31,25 @@ import { TenderDataContext } from "../../../..";
 import { DtoType } from "./DtoType";
 
 export const statusOptions: { value: TenderItemStatus; label: string }[] = [
-  {
-    value: TenderItemStatus.ENDED,
-    label: "منتهي",
-  },
-  {
-    value: TenderItemStatus.EXCLUDED,
-    label: "مستعبد فني",
-  },
+  // {
+  //   value: TenderItemStatus.ENDED,
+  //   label: "منتهي",
+  // },
+  // {
+  //   value: TenderItemStatus.EXCLUDED,
+  //   label: "مستعبد فني",
+  // },
   {
     value: TenderItemStatus.ONGOING,
     label: "جاري",
   },
   {
     value: TenderItemStatus.SENT,
-    label: "مقدمة",
+    label: "مقدم",
+  },
+  {
+    value: TenderItemStatus.AWARDED,
+    label: "جاري الترسية",
   },
 ];
 
