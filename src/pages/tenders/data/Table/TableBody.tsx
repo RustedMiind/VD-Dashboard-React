@@ -31,16 +31,8 @@ export function generateTenderItemStatus(
   let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
-      case TenderItemStatus.SENT:
-        chip = <StatusChip label="مقدمة" color="warning" {...chipProps} />;
-        break;
       case TenderItemStatus.ONGOING:
         chip = <StatusChip label="جاري" color="success" {...chipProps} />;
-        break;
-      case TenderItemStatus.EXCLUDED:
-        chip = (
-          <StatusChip label="مستعبد  فني" color="primary" {...chipProps} />
-        );
         break;
       case TenderItemStatus.ENDED:
         chip = <StatusChip label="منتهي" color="error" {...chipProps} />;

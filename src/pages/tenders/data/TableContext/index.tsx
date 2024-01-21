@@ -3,7 +3,7 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 import { Tender } from "../../../../types";
 import { Map } from "typescript";
-import { TenderItemStatus } from "../../../../types/Tenders/Status.enum";
+import { TenderEntityStatus } from "../../../../types/Tenders/Status.enum";
 
 export const TableContext = createContext<ContextType>({});
 
@@ -71,7 +71,7 @@ type ContextType = {
 };
 
 type Counts = {
-  [key in TenderItemStatus]?: string | number;
+  [key in TenderEntityStatus]?: string | number;
 };
 
 type TenderStateType = "none" | "error" | "loading" | Tender[] | "empty";

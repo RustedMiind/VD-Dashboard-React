@@ -2,13 +2,17 @@ export enum TenderItemStatus {
   PENDING = -1,
   ENDED = 0,
   ONGOING = 1,
-  EXCLUDED = 2,
-  SENT = 3,
-  FINANCIAL_EXCLUDE = 4,
+}
+export enum TenderEntityStatus {
+  ONGOING = 1,
+  SENT = 2,
+  NOT_SENT = 3,
+  ENDED = 4,
   AWARDED = 5,
   TECHNICAL_REVIEW = 6,
+  EXCLUDED = 7,
+  FINANCIAL_EXCLUDE = 8,
 }
-
 export enum TenderApprovalStatus {
   NONE = TenderItemStatus.PENDING,
   ACCEPTED = TenderItemStatus.ONGOING,
