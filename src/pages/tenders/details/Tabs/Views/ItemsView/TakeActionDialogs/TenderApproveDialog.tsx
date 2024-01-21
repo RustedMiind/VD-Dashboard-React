@@ -20,7 +20,6 @@ import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { FetchStatus } from "../../../../../../../types/FetchStatus";
 import { FetchStatusEnum } from "../../../../../../../types/FetchStatusEnum";
-import { DtoType } from "./DtoType";
 import { Api } from "../../../../../../../constants";
 import axios from "axios";
 

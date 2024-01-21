@@ -35,7 +35,6 @@ function ItemsView() {
   const closeDialog = () => {
     setDialogOpen(undefined);
   };
-
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
       let disabled = true;
@@ -51,7 +50,8 @@ function ItemsView() {
       ) {
         disabled = false;
       }
-      if (tender.user_type === dialogType) {
+
+      if (tender.user_type?.includes(parseInt(dialogType))) {
         return (
           <IconButton
             size="small"
@@ -127,16 +127,7 @@ function ItemsView() {
                 <Th>المهندس المسؤول</Th>
                 <Th>تاريخ الانتهاء</Th>
                 <Th>تاريخ الانتهاء الفعلي</Th>
-                <Th>
-                  عرض الملف
-                  <Button
-                    onClick={() => {
-                      setDialogOpen(TenderStep.PURCHASE);
-                    }}
-                  >
-                    شراء
-                  </Button>
-                </Th>
+                <Th>عرض الملف</Th>
               </TableRow>
             </TableHead>
             <TableBody>

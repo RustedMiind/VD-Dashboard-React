@@ -4,16 +4,13 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  FormLabel,
   Grid,
   InputAdornment,
   MenuItem,
-  Radio,
-  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
@@ -190,7 +187,7 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="تاريخ التقديم المطلوب">
-          <DatePicker
+          <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.applyDate)}
@@ -229,7 +226,7 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="تاريخ انتهاء المنافسة" required>
-          <DatePicker
+          <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.endDate)}
@@ -330,39 +327,26 @@ export default function MainDataForm() {
         </AddLabelToEl>
       </GridItem>
       <Grid item xs={12}>
-        <FormControl
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            mt: 2,
-            alignItems: "center",
-          }}
-          {...inputProps}
-        >
-          <FormLabel id="demo-row-radio-buttons-group-label">
-            طريقة التقديم
-          </FormLabel>
-          <RadioGroup
-            row
-            name="row-radio-buttons-group"
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            sx={{ ml: 2 }}
-            value={form.applyTypeId}
-            onChange={(e) => {
-              dispatch(
-                generateReducerAction("SET_APPLY_TYPE_ID", e.target.value)
-              );
-            }}
-          >
+        <Box display={"flex"} flexDirection={"row"}>
+          <Typography alignSelf={"center"}> طريقة التقديم</Typography>
+          <FormGroup row sx={{ ml: 2 }} {...inputProps}>
             {options.applyMethods?.map((method) => (
               <FormControlLabel
-                value={method.value}
-                control={<Radio />}
+                key={method.value}
+                checked={form.applyType?.includes(method.value)}
+                sx={{ ml: 2 }}
+                control={<Checkbox />}
                 label={method.name}
+                value={method.value}
+                onChange={(e) => {
+                  dispatch(
+                    generateReducerAction("SET_APPLY_TYPE_ID", method.value)
+                  );
+                }}
               />
             ))}
-          </RadioGroup>
-        </FormControl>
+          </FormGroup>
+        </Box>
       </Grid>
 
       <Grid item xs={12}>
@@ -372,7 +356,7 @@ export default function MainDataForm() {
             {options.warranties?.map((method) => (
               <FormControlLabel
                 key={method.value}
-                checked={form.requiredWarranty.includes(method.value)}
+                checked={form.requiredWarranty?.includes(method.value)}
                 sx={{ ml: 2 }}
                 control={<Checkbox />}
                 label={method.name}
