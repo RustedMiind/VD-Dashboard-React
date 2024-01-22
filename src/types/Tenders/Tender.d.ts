@@ -1,6 +1,6 @@
 import { DB_Boolean, Department, Management } from "../";
 import { DbOptionType } from "../other/DbOptionType";
-import { TenderItemStatus } from "./Status.enum";
+import { TenderEntityStatus, TenderItemStatus } from "./Status.enum";
 import { TenderAmounts } from "./TenderAmount";
 import { TenderFile } from "./TenderFile";
 import { TenderTask } from "./TenderTask";
@@ -33,7 +33,9 @@ export type Tender = {
   tender_tasks?: TenderTask;
   tender_files?: TenderFile[];
   tender_amounts?: TenderAmounts[];
-  user_type: number[];
+  user_type?: number[];
+  directorate_status?: TenderEntityStatus;
+  eng?: DB_Boolean;
   // created_at: "2024-01-03T16:33:09.000000Z";
   // updated_at: "2024-01-03T18:12:24.000000Z";
   // deleted_at: null;

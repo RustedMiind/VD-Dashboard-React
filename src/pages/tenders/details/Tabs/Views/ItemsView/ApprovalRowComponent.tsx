@@ -6,9 +6,6 @@ function generateStatusChip(status?: TenderApprovalStatus): JSX.Element {
   let chip = <></>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
-      case TenderApprovalStatus.NONE:
-        chip = <StatusChip label="لم تبدأ" disabled color="default" />;
-        break;
       case TenderApprovalStatus.ACCEPTED:
         chip = <StatusChip label="مقبولة" color="success" />;
         break;

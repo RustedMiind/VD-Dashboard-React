@@ -3,7 +3,9 @@ import { Api } from "../../../../constants";
 import axios from "axios";
 import { Tender } from "../../../../types";
 
-export const ControlPanelContext = createContext<ContextType>({});
+export const ControlPanelContext = createContext<ContextType>({
+  isManager: false,
+});
 
 export default function ControlPanelContextProvider({
   children,
@@ -14,15 +16,19 @@ export default function ControlPanelContextProvider({
     incoming: "none",
     ongoing: "none",
   });
+  const [isManager, setIsManager] = useState(false);
   function getTender(params?: unknown) {
     setTenderControlData({
       incoming: "loading",
       ongoing: "loading",
     });
     axios
-      .get<Partial<TenderStateType>>(Api("employee/tender/form"), {
-        params,
-      })
+      .get<Partial<TenderStateType> & { is_manager: boolean }>(
+        Api("employee/tender/form"),
+        {
+          params,
+        }
+      )
       .then((res) => {
         let stateToUpdate: TenderStateType = {
           ongoing: "empty",
@@ -33,6 +39,7 @@ export default function ControlPanelContextProvider({
 
         if (res.data.ongoing?.length) stateToUpdate.ongoing = res.data.ongoing;
         setTenderControlData(stateToUpdate);
+        setIsManager(!!res.data.is_manager);
       })
       .catch((error) => {
         setTenderControlData({
@@ -49,6 +56,7 @@ export default function ControlPanelContextProvider({
       value={{
         tenderControlData,
         setTenderControlData: getTender,
+        isManager,
       }}
     >
       {children}
@@ -62,5 +70,6 @@ type TenderStateType = {
 };
 type ContextType = {
   tenderControlData?: TenderStateType;
+  isManager: boolean;
   setTenderControlData?: ((param?: unknown) => void) | null;
 };
