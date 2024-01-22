@@ -5,7 +5,7 @@ export enum TenderItemStatus {
 }
 export enum TenderEntityStatus {
   ONGOING = 1,
-  SENT = 2,
+  SENT = -1,
   NOT_SENT = 3,
   ENDED = 4,
   AWARDED = 5,
