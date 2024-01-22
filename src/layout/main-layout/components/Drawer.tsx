@@ -18,6 +18,7 @@ import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import { AdminUrl } from "../../../constants/AdminUrl";
 
 const routesCollections: RoutesCollectionType[] = [
@@ -51,6 +52,12 @@ const routesCollections: RoutesCollectionType[] = [
         name: "بيانات الموظفين",
         path: "employees",
       },
+    ],
+  },
+  {
+    name: "مشاريعي",
+    icon: AccountTreeIcon,
+    routes: [
       {
         name: "اعدادات المنافسات",
         path: "/tenders",
