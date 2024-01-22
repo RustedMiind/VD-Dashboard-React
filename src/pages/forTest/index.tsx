@@ -1,16 +1,14 @@
-import { Button, Paper, Stack } from "@mui/material";
+import { Button, Paper, Stack, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
-import AlertDaialog from "./AlertDialog";
-import ThirdDailog from "./ThirdDialog";
-import TenderAgree from "./TenderAgree";
+import { StringParam, useQueryParam } from "use-query-params";
 
 function ForTest() {
   const [file, setFile] = useState<File | undefined>(undefined);
   const snackbar = useSnackbar();
-
+  const [foo, setFoo] = useQueryParam("foo", StringParam);
   return (
     <Stack>
       <Paper component={Stack} elevation={4} p={2} spacing={5}>
@@ -22,6 +20,15 @@ function ForTest() {
             { id: 3, label: "Apple" }, // Example of a duplicate label with different ID
             { id: 4, label: "Orange" },
           ]}
+        />
+
+        <TextField
+          id=""
+          label=""
+          value={foo}
+          onChange={(e) => {
+            setFoo(e.target.value);
+          }}
         />
         <Stack direction={"row"} spacing={1}>
           <Button
@@ -46,7 +53,6 @@ function ForTest() {
           </Button>
         </Stack>
       </Paper>
-      <TenderAgree />
     </Stack>
   );
 }

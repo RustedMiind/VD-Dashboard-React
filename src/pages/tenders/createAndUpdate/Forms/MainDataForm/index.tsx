@@ -29,6 +29,7 @@ import { LaravelValidationError } from "../../../../../types/LaravelValidationEr
 import { AxiosErrorType } from "../../../../../types/Axios";
 import { FormStatus } from "../../../../../types/FormStatus";
 import { LoadingButton } from "@mui/lab";
+import { StringParam, useQueryParam } from "use-query-params";
 const type_id = [
   { name: "منافسة عامه", value: 1 },
   { name: "منافسة محدده", value: 2 },
@@ -38,13 +39,23 @@ export default function MainDataForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
-  const [options, setOptions] = useState<OptionsType>({});
+  const [options, setOptions] = useState<TenderFormOptionTypes>({});
   const snackbar = useSnackbar();
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const inputProps = {
     loading: formStatus === "loading",
     disabled: formStatus === "loading" || formStatus === "disabled",
   };
+  let path =
+    typeof tenderContext.tender === "object" && tenderContext.tender.tenderdata
+      ? "/" + tenderContext.tender.tenderdata.tender_id
+      : "";
+  const [typeParam] = useQueryParam("type", StringParam);
+  useEffect(() => {
+    if (!path && typeParam) {
+      dispatch({ type: "SET_TYPE_ID", payload: typeParam });
+    }
+  }, []);
   useEffect(getOptions, [form.branchId, form.managementId]);
   useEffect(() => {
     if (
@@ -61,11 +72,7 @@ export default function MainDataForm() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormStatus("loading");
-    let path =
-      typeof tenderContext.tender === "object" &&
-      tenderContext.tender.tenderdata
-        ? "/" + tenderContext.tender.tenderdata.tender_id
-        : "";
+
     setFormStatus("loading");
     axios
       .post<{ data: TenderData }>(
@@ -262,7 +269,7 @@ export default function MainDataForm() {
           <TextField
             select
             size="small"
-            value={2}
+            value={form.typeId}
             onChange={(e) => {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
@@ -271,7 +278,7 @@ export default function MainDataForm() {
           >
             {options.tenderTypes?.map((option) => (
               <MenuItem key={option.value} value={option.value}>
-                منافسة عامة
+                {option.name}
               </MenuItem>
             ))}
           </TextField>
@@ -410,7 +417,7 @@ export default function MainDataForm() {
   }
 }
 
-function toOptionArr(
+export function toOptionArr(
   arr: { id: number; name: string }[] | undefined
 ): OptionType[] | undefined {
   return arr?.map((e) => ({
@@ -419,7 +426,7 @@ function toOptionArr(
   }));
 }
 
-type OptionsType = {
+export type TenderFormOptionTypes = {
   branches?: OptionType[];
   departments?: OptionType[];
   managementes?: OptionType[];

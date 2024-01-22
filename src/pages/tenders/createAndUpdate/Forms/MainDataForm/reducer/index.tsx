@@ -114,7 +114,9 @@ export function stateToPostDto(state: TenderDataState): PostDto {
     name: state.name,
     organization_id: state.governmentalOrganizationId,
     price: state.price,
-    type_id: state.typeId,
+    type_id:
+      //state.typeId,
+      "1",
     warranty_id: state.requiredWarranty,
     activity: state.activity,
     code_tender: state.number,
