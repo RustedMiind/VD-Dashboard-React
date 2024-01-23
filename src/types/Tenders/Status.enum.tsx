@@ -4,9 +4,10 @@ export enum TenderItemStatus {
   ONGOING = 1,
 }
 export enum TenderEntityStatus {
+  // PENDING = -1,
   ONGOING = 1,
-  SENT = -1,
-  NOT_SENT = 3,
+  SENT = 2,
+  NOT_SENT = -1,
   ENDED = 4,
   AWARDED = 5,
   TECHNICAL_REVIEW = 6,

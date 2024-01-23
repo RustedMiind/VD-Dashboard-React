@@ -37,7 +37,7 @@ function ItemsView() {
   };
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
-      let disabled = true;
+      let disabled = false;
       if (
         (dialogType === TenderStep.ACCEPTION &&
           tender.eng_employee_status === -1) ||
@@ -180,17 +180,16 @@ function ItemsView() {
                   status: tender.file_finacial_status,
                 }}
               />
-              <StatusRowComponent
+              {/* <StatusRowComponent
                 {...{
                   name: "الملف المدمج",
-                  managerName:
-                    tender.tender_tasks?.eng_employee_file_finacial?.name,
+                  managerName: tender.tender_tasks?.employee_trace?.name,
                   endDate: tender.tender_tasks?.end_dete_trace,
                   accualEndDate: tender.trace_date,
                   iconComponent: dialogComponent(TenderStep.FILE),
                   status: tender.file_finacial_status,
                 }}
-              />
+              /> */}
               <StatusRowComponent
                 {...{
                   name: "تقديم المنافسة",

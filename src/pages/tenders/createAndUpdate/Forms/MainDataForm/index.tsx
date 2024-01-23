@@ -30,11 +30,16 @@ import { AxiosErrorType } from "../../../../../types/Axios";
 import { FormStatus } from "../../../../../types/FormStatus";
 import { LoadingButton } from "@mui/lab";
 import { StringParam, useQueryParam } from "use-query-params";
+import {
+  disableDateAfter,
+  disableDateBefore,
+} from "../../../../../methods/DayjsDatePicker";
 const type_id = [
   { name: "منافسة عامه", value: 1 },
   { name: "منافسة محدده", value: 2 },
   { name: "عامة", value: 3 },
 ];
+
 export default function MainDataForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
@@ -202,6 +207,7 @@ export default function MainDataForm() {
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.applyDate)}
+            shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
                 generateReducerAction("SET_APPLY_DATE", date?.format() || "")
@@ -240,6 +246,7 @@ export default function MainDataForm() {
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
+            shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
             value={dayjs(form.endDate)}
             onChange={(date) => {
               dispatch(

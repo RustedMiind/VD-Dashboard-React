@@ -36,8 +36,8 @@ export type Tender = {
   user_type?: number[];
   directorate_status?: TenderEntityStatus;
   eng?: DB_Boolean;
-  // created_at: "2024-01-03T16:33:09.000000Z";
-  // updated_at: "2024-01-03T18:12:24.000000Z";
+  created_at?: string;
+  updated_at?: string;
   // deleted_at: null;
 };
 
