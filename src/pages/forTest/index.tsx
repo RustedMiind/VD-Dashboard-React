@@ -4,56 +4,57 @@ import { useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
 import { StringParam, useQueryParam } from "use-query-params";
+import ChatSection from "./ChatSection";
 
 function ForTest() {
-  const [file, setFile] = useState<File | undefined>(undefined);
-  const snackbar = useSnackbar();
-  const [foo, setFoo] = useQueryParam("foo", StringParam);
   return (
-    <Stack>
-      <Paper component={Stack} elevation={4} p={2} spacing={5}>
-        <UploadFileInput value={file} setValue={setFile} />
-        <SelectWithFilteration
-          options={[
-            { id: 1, label: "Apple" },
-            { id: 2, label: "Banana" },
-            { id: 3, label: "Apple" }, // Example of a duplicate label with different ID
-            { id: 4, label: "Orange" },
-          ]}
-        />
+    <>
+      <ChatSection />
+    </>
+    // <Stack>
+    //   <Paper component={Stack} elevation={4} p={2} spacing={5}>
+    //     <UploadFileInput value={file} setValue={setFile} />
+    //     <SelectWithFilteration
+    //       options={[
+    //         { id: 1, label: "Apple" },
+    //         { id: 2, label: "Banana" },
+    //         { id: 3, label: "Apple" }, // Example of a duplicate label with different ID
+    //         { id: 4, label: "Orange" },
+    //       ]}
+    //     />
 
-        <TextField
-          id=""
-          label=""
-          value={foo}
-          onChange={(e) => {
-            setFoo(e.target.value);
-          }}
-        />
-        <Stack direction={"row"} spacing={1}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              snackbar.enqueueSnackbar("Hello There mr ali", {
-                variant: "success",
-              });
-            }}
-          >
-            Open Snackbar
-          </Button>
+    //     <TextField
+    //       id=""
+    //       label=""
+    //       value={foo}
+    //       onChange={(e) => {
+    //         setFoo(e.target.value);
+    //       }}
+    //     />
+    //     <Stack direction={"row"} spacing={1}>
+    //       <Button
+    //         variant="contained"
+    //         onClick={() => {
+    //           snackbar.enqueueSnackbar("Hello There mr ali", {
+    //             variant: "success",
+    //           });
+    //         }}
+    //       >
+    //         Open Snackbar
+    //       </Button>
 
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              snackbar.closeSnackbar();
-            }}
-          >
-            Close Snackbar
-          </Button>
-        </Stack>
-      </Paper>
-    </Stack>
+    //       <Button
+    //         variant="outlined"
+    //         color="error"
+    //         onClick={() => {
+    //           snackbar.closeSnackbar();
+    //         }}
+    //       >
+    //         Close Snackbar
+    //       </Button>
+    //     </Stack>
+    //   </Paper>
+    // </Stack>
   );
 }
 
