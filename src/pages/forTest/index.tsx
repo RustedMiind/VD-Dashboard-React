@@ -1,60 +1,60 @@
-import { Button, Paper, Stack, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
 import { StringParam, useQueryParam } from "use-query-params";
-import ChatSection from "./ChatSection";
+import { Paper, Stack, Typography, TextField, Button } from "@mui/material";
+import Pusher from "pusher-js";
+import { APP_CLUSTER, APP_KEY } from "../tenders/details/Chat/pusher.config";
 
 function ForTest() {
+  const [inputValue, setInputValue] = useState("");
+  const [channel, setChannel] = useState("");
+  const [eventData, setEventData] = useState<string[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (channel) {
+      const pusher = new Pusher(APP_KEY, { cluster: APP_CLUSTER });
+      const pusherChannel = pusher.subscribe("channel-" + channel);
+
+      pusherChannel.bind_global((res: unknown, hell: unknown) => {
+        const jsoned = JSON.stringify(res);
+        console.log(res, hell);
+        setEventData([...eventData, jsoned]);
+        enqueueSnackbar(jsoned);
+      });
+      return () => {
+        pusher.disconnect();
+      };
+    }
+  }, [channel]);
+
   return (
-    <>
-      <ChatSection />
-    </>
-    // <Stack>
-    //   <Paper component={Stack} elevation={4} p={2} spacing={5}>
-    //     <UploadFileInput value={file} setValue={setFile} />
-    //     <SelectWithFilteration
-    //       options={[
-    //         { id: 1, label: "Apple" },
-    //         { id: 2, label: "Banana" },
-    //         { id: 3, label: "Apple" }, // Example of a duplicate label with different ID
-    //         { id: 4, label: "Orange" },
-    //       ]}
-    //     />
-
-    //     <TextField
-    //       id=""
-    //       label=""
-    //       value={foo}
-    //       onChange={(e) => {
-    //         setFoo(e.target.value);
-    //       }}
-    //     />
-    //     <Stack direction={"row"} spacing={1}>
-    //       <Button
-    //         variant="contained"
-    //         onClick={() => {
-    //           snackbar.enqueueSnackbar("Hello There mr ali", {
-    //             variant: "success",
-    //           });
-    //         }}
-    //       >
-    //         Open Snackbar
-    //       </Button>
-
-    //       <Button
-    //         variant="outlined"
-    //         color="error"
-    //         onClick={() => {
-    //           snackbar.closeSnackbar();
-    //         }}
-    //       >
-    //         Close Snackbar
-    //       </Button>
-    //     </Stack>
-    //   </Paper>
-    // </Stack>
+    <Stack>
+      <Paper component={Stack} elevation={4} p={2} spacing={2}>
+        <TextField
+          label="Enter Channel Number"
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+        />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            setChannel(inputValue);
+          }}
+        >
+          Update Channel
+        </Button>
+        <Typography variant="body1">Current Channel: {channel}</Typography>
+        {eventData.map((data_item) => (
+          <Typography variant="body2">- {data_item}</Typography>
+        ))}
+      </Paper>
+    </Stack>
   );
 }
 
