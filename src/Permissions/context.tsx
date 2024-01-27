@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { Permission } from "../constants/Permission";
 
 export const PermissionsContext = createContext<PermissionsContextType>({
   hasPermission() {

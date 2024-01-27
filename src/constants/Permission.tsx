@@ -1,4 +1,4 @@
-enum Permission {
+export enum Permission {
   USERS_VIEW = "users.view",
   USERS_CREATE = "users.create",
   USERS_EDIT = "users.edit",
