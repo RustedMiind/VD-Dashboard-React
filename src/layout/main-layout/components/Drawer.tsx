@@ -20,14 +20,20 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import { AdminUrl } from "../../../constants/AdminUrl";
+import { Permission } from "../../../constants/Permission";
+import usePermissions from "../../../Permissions/hook";
 
 const routesCollections: RoutesCollectionType[] = [
   {
     name: "الادوار والمستخدمين",
     icon: SecurityIcon,
     routes: [
-      { name: "الادوار", path: "roles/index" },
-      { name: "المستخدمين", path: "users" },
+      {
+        name: "الادوار",
+        path: "roles/index",
+        isPrivate: Permission.ROLES_VIEW,
+      },
+      { name: "المستخدمين", path: "users", isPrivate: Permission.USERS_VIEW },
     ],
   },
   // {
@@ -39,18 +45,21 @@ const routesCollections: RoutesCollectionType[] = [
     name: "الهيكل التنظيمي",
     icon: AutoAwesomeMosaicIcon,
     routes: [
-      { name: "الفروع", path: "branches" },
+      { name: "الفروع", path: "branches", isPrivate: Permission.BRANCHES_VIEW },
       {
         name: "الادارة والاقسام",
         path: "managements",
+        isPrivate: Permission.MANAGEMENTS_VIEW,
       },
       {
         name: "التسلسل الوظيفي",
         path: "job_types",
+        isPrivate: Permission.JOB_GRADES_VIEW,
       },
       {
         name: "بيانات الموظفين",
         path: "employees",
+        isPrivate: Permission.EMPLOYEES_VIEW,
       },
     ],
   },
@@ -79,16 +88,19 @@ const routesCollections: RoutesCollectionType[] = [
       {
         name: "بيانات الوسطاء",
         path: "brokers",
+        isPrivate: Permission.BROKERS_VIEW,
       },
       {
         name: "طلبات العملاء",
         path: "/clients/requests",
         react: true,
+        isPrivate: Permission.CLIENT_REQUESTS_VIEW,
       },
       {
         name: "اجراءات العملاء",
         path: "/clients/procedures",
         react: true,
+        isPrivate: Permission.CLIENT_REQUESTS_ADDSTEP,
       },
     ],
   },
@@ -99,16 +111,21 @@ const routesCollections: RoutesCollectionType[] = [
       {
         name: "حضور الموظفين",
         path: "employee/reports",
+
+        isPrivate: Permission.ATTENDANCE_VIEW,
       },
       { name: "طلبات الموظفين", path: "/employees/requests", react: true },
       { name: "اجراءات الطلبات", path: "/employees/procedures", react: true },
       {
         name: "الشكاوي والدعم",
         path: "attendance/support",
+
+        isPrivate: Permission.ATTENDANCE_SUPPORT_VIEW,
       },
       {
         name: "محددات المشاريع",
         path: "attendance/projects-shifts",
+        isPrivate: Permission.DASHBOARD_SETTING_SHIFT_VIEW,
       },
     ],
   },
@@ -140,7 +157,7 @@ const routesCollections: RoutesCollectionType[] = [
 
 function DrawerComponent(props: PropsType) {
   const [currentCollection, setCurrentCollection] = useState<null | number>();
-
+  const { hasPermission } = usePermissions();
   return (
     <Drawer
       sx={{
@@ -162,61 +179,81 @@ function DrawerComponent(props: PropsType) {
       {/* <Toolbar /> */}
       <IconBox />
       <List>
-        {routesCollections.map((collection, index) => (
-          <Accordion
-            key={index}
-            sx={{
-              backgroundColor: "transparent",
-            }}
-            expanded={currentCollection === index}
-            onChange={(e, x) => {
-              if (x) {
-                setCurrentCollection(index);
-              } else {
-                setCurrentCollection(null);
-              }
-            }}
-            elevation={0}
-            disableGutters
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              component={Button}
-              sx={{ width: 1 }}
-              key={collection.name}
-            >
-              {collection.icon && <collection.icon />}
-              <Typography ml={collection.icon ? 0.5 : 0}>
-                {collection.name}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Stack
+        {routesCollections.map((collection, index) => {
+          let allowed = !collection.isPrivate;
+          if (!allowed && collection.isPrivate) {
+            allowed = hasPermission(collection.isPrivate);
+          }
+
+          return (
+            allowed && (
+              <Accordion
+                key={index}
                 sx={{
-                  button: {
-                    width: 1,
-                    justifyContent: "start",
-                  },
+                  backgroundColor: "transparent",
                 }}
+                expanded={currentCollection === index}
+                onChange={(e, x) => {
+                  if (x) {
+                    setCurrentCollection(index);
+                  } else {
+                    setCurrentCollection(null);
+                  }
+                }}
+                elevation={0}
+                disableGutters
               >
-                {collection.routes.map((route, i) => (
-                  <Button
-                    key={i}
-                    disabled={!route.path}
-                    sx={{ justifyContent: "start" }}
-                    {...(route.react
-                      ? { component: NavLink, to: `/react${route.path}` }
-                      : { component: "a", href: AdminUrl(route.path) })}
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  component={Button}
+                  sx={{ width: 1 }}
+                  key={collection.name}
+                >
+                  {collection.icon && <collection.icon />}
+                  <Typography ml={collection.icon ? 0.5 : 0}>
+                    {collection.name}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Stack
+                    sx={{
+                      button: {
+                        width: 1,
+                        justifyContent: "start",
+                      },
+                    }}
                   >
-                    {route.name}
-                  </Button>
-                ))}
-              </Stack>
-            </AccordionDetails>
-          </Accordion>
-        ))}
+                    {collection.routes.map((route, i) => {
+                      let allowed = !route.isPrivate;
+                      if (!allowed && route.isPrivate) {
+                        allowed = hasPermission(route.isPrivate);
+                      }
+                      return (
+                        allowed && (
+                          <Button
+                            key={i}
+                            disabled={!route.path}
+                            sx={{ justifyContent: "start" }}
+                            {...(route.react
+                              ? {
+                                  component: NavLink,
+                                  to: `/react${route.path}`,
+                                }
+                              : { component: "a", href: AdminUrl(route.path) })}
+                          >
+                            {route.name}
+                          </Button>
+                        )
+                      );
+                    })}
+                  </Stack>
+                </AccordionDetails>
+              </Accordion>
+            )
+          );
+        })}
       </List>
     </Drawer>
   );
@@ -232,8 +269,14 @@ type RoutesCollectionType = {
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
     muiName: string;
   };
+  isPrivate?: Permission;
 };
 
-type RouteType = { name: string; path: string; react?: boolean };
+type RouteType = {
+  name: string;
+  path: string;
+  react?: boolean;
+  isPrivate?: Permission;
+};
 
 export default DrawerComponent;
