@@ -74,7 +74,7 @@ const routesCollections: RoutesCollectionType[] = [
         react: true,
       },
       {
-        name: "منافساتي",
+        name: "مهامي",
         path: "/tenders/controlpanel",
         react: true,
       },
