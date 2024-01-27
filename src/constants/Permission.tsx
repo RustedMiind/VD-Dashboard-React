@@ -139,4 +139,9 @@ export enum Permission {
   CONTRACTS_EDIT = "contracts.edit",
   CONTRACTS_CREATE = "contracts.create",
   CONTRACTS_DELETE = "contracts.delete",
+  TENDERS_VIEW = "tenders.view",
+  TENDERS_CREATE = "tenders.create",
+  TENDERS_EDIT = "tenders.edit",
+  TENDERS_DELETE = "tenders.delete",
+  TENDERS_SHOW = "tenders.show",
 }

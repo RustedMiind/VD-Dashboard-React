@@ -66,6 +66,7 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "مشاريعي",
     icon: AccountTreeIcon,
+    isPrivate: Permission.TENDERS_VIEW,
     routes: [
       {
         name: "اعدادات المنافسات",
@@ -83,8 +84,18 @@ const routesCollections: RoutesCollectionType[] = [
     name: "العملاء",
     icon: GroupIcon,
     routes: [
-      { name: "بيانات العملاء", path: "/clients", react: true },
-      { name: "ادارة العقود", path: "/contracts", react: true },
+      {
+        name: "بيانات العملاء",
+        path: "/clients",
+        react: true,
+        isPrivate: Permission.CLIENTS_VIEW,
+      },
+      {
+        name: "ادارة العقود",
+        path: "/contracts",
+        react: true,
+        isPrivate: Permission.CONTRACTS_VIEW,
+      },
       {
         name: "بيانات الوسطاء",
         path: "brokers",
