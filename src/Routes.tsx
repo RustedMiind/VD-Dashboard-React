@@ -20,6 +20,7 @@ import ControlPanal from "./pages/tenders/controlPanel";
 import ForTest from "./pages/forTest";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
+import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 
 function RoutesComponent() {
   const { hasPermission } = usePermissions();
@@ -69,6 +70,11 @@ function RoutesComponent() {
             <Route path="controlpanel" element={<ControlPanal />} />
           </Route>
         }
+        <Route path="services">
+          <Route path="design">
+            <Route path="create" element={<CreateOrUpdateDesign />} />
+          </Route>
+        </Route>
         {hasPermission(Permission.CONTRACTS_VIEW) && (
           <Route path="contracts">
             <Route path="" element={<Contracts />} />
