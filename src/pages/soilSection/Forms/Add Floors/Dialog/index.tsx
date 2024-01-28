@@ -7,7 +7,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import GridItem from "../../../GridItem";
 import { TextField } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import { DialogActions } from "@mui/material";
@@ -15,13 +14,13 @@ import { LoadingButton } from "@mui/lab";
 import { DialogTitle } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-function DialogAddArea({ open, setOpen }: propsType) {
+function DialogAddFloor(props: TypeProps) {
   return (
     <Dialog
-      open={open}
+      open={props.open}
       fullWidth
       maxWidth={"md"}
-      onClose={() => setOpen(false)}
+      onClose={props.closeDialog}
       component="form"
     >
       <IconButton
@@ -34,7 +33,7 @@ function DialogAddArea({ open, setOpen }: propsType) {
           borderRadius: "8px",
         }}
         color="primary"
-        onClick={() => setOpen(false)}
+        onClick={props.closeDialog}
       >
         <GridCloseIcon fontSize="inherit" />
       </IconButton>
@@ -45,36 +44,40 @@ function DialogAddArea({ open, setOpen }: propsType) {
         pt={4}
         sx={{ bgcolor: "Background" }}
       >
-        إضافة مساحة
+        إضافة الأدوار
       </DialogTitle>
       <DialogContent sx={{ bgcolor: "Background" }}>
         <Paper sx={{ padding: 2, my: 2 }}>
           <Grid container spacing={2} component="form">
-            <GridItem>
-              <Typography component={"label"}>المساحة من</Typography>
-              <TextField type="text" size="small" placeholder={"المساحة من"} />
-            </GridItem>
-            <GridItem>
-              <Typography component={"label"}>المساحة إلى</Typography>
-              <TextField type="text" size="small" placeholder={"المساحة إلى"} />
-            </GridItem>
             <Grid item md={12}>
               <Stack>
-                <Typography component={"label"}>العدد المقابل </Typography>
+                <Typography fontSize={14} component={"label"}>
+                  عدد الأدوار{" "}
+                </Typography>
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"العدد المقابل "}
+                  placeholder={"عدد الأدوار "}
                 />
               </Stack>
             </Grid>
             <Grid item md={12}>
               <Stack>
-                <Typography component={"label"}>الحد الأدنى </Typography>
+                <Typography fontSize={14} component={"label"}>
+                  العمق{" "}
+                </Typography>
+                <TextField type="text" size="small" placeholder={"العمق "} />
+              </Stack>
+            </Grid>
+            <Grid item md={12}>
+              <Stack>
+                <Typography fontSize={14} component={"label"}>
+                  الحد الأدنى
+                </Typography>
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"الحد الأدنى "}
+                  placeholder={"الحد الأدنى"}
                 />
               </Stack>
             </Grid>
@@ -82,31 +85,35 @@ function DialogAddArea({ open, setOpen }: propsType) {
         </Paper>
         <Paper sx={{ padding: 2 }}>
           <Grid container spacing={2} component="form">
-            <GridItem>
-              <Typography component={"label"}>المساحة من</Typography>
-              <TextField type="text" size="small" placeholder={"المساحة من"} />
-            </GridItem>
-            <GridItem>
-              <Typography component={"label"}>المساحة إلى</Typography>
-              <TextField type="text" size="small" placeholder={"المساحة إلى"} />
-            </GridItem>
             <Grid item md={12}>
               <Stack>
-                <Typography component={"label"}>العدد المقابل </Typography>
+                <Typography fontSize={14} component={"label"}>
+                  عدد الأدوار{" "}
+                </Typography>
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"العدد المقابل "}
+                  placeholder={"عدد الأدوار "}
                 />
               </Stack>
             </Grid>
             <Grid item md={12}>
               <Stack>
-                <Typography component={"label"}>الحد الأدنى </Typography>
+                <Typography fontSize={14} component={"label"}>
+                  العمق{" "}
+                </Typography>
+                <TextField type="text" size="small" placeholder={"العمق "} />
+              </Stack>
+            </Grid>
+            <Grid item md={12}>
+              <Stack>
+                <Typography fontSize={14} component={"label"}>
+                  الحد الأدنى
+                </Typography>
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"الحد الأدنى "}
+                  placeholder={"الحد الأدنى"}
                 />
               </Stack>
             </Grid>
@@ -122,6 +129,7 @@ function DialogAddArea({ open, setOpen }: propsType) {
           </Grid>
         </Grid>
       </DialogContent>
+
       <DialogActions sx={{ display: "flex", justifyContent: "center", py: 3 }}>
         <LoadingButton variant="contained" type="submit" sx={{ width: 0.7 }}>
           حفظ
@@ -131,9 +139,9 @@ function DialogAddArea({ open, setOpen }: propsType) {
   );
 }
 
-export default DialogAddArea;
+export default DialogAddFloor;
 
-type propsType = {
+type TypeProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  closeDialog: () => void;
 };

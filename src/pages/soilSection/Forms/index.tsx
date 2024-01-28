@@ -7,6 +7,19 @@ import CoveredSites from "./Covered sites";
 import AreaSites from "./Area sites";
 import AddRoles from "./Add Floors";
 function FormsSection() {
+  const [dialogState, setDialogState] = useState<DialogState>("none");
+  const closeDialog = () => {
+    setDialogState("none");
+  };
+  const openCoveredDialog = () => {
+    setDialogState("covered");
+  };
+  const openAreaDialog = () => {
+    setDialogState("area");
+  };
+  const openFloorDialog = () => {
+    setDialogState("floor");
+  };
   const tenderContext = useContext(TenderContext);
 
   const [expanded, setExpanded] = useState<undefined | number>(undefined);
@@ -48,7 +61,11 @@ function FormsSection() {
         title="المواقع المغطاه"
         bgReverse
       >
-        <CoveredSites />
+        <CoveredSites
+          dialogState={dialogState}
+          closeDialog={closeDialog}
+          openCoveredDialog={openCoveredDialog}
+        />
       </SeparatedAccordion>
 
       <SeparatedAccordion
@@ -57,7 +74,11 @@ function FormsSection() {
         title="المساحة"
         bgReverse
       >
-        <AreaSites />
+        <AreaSites
+          dialogState={dialogState}
+          closeDialog={closeDialog}
+          openAreaDialog={openAreaDialog}
+        />
       </SeparatedAccordion>
       <SeparatedAccordion
         expanded={isCurrentExpanded(3)}
@@ -65,10 +86,15 @@ function FormsSection() {
         title="الادوار"
         bgReverse
       >
-        <AddRoles />
+        <AddRoles
+          dialogState={dialogState}
+          closeDialog={closeDialog}
+          openFloorDialog={openFloorDialog}
+        />
       </SeparatedAccordion>
     </Stack>
   );
 }
 
 export default FormsSection;
+export type DialogState = "none" | "covered" | "area" | "floor";

@@ -11,8 +11,6 @@ import {
   IconButton,
   Paper,
   Checkbox,
-  MenuItem,
-  TextField,
 } from "@mui/material";
 
 // Icons
@@ -20,9 +18,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EditIcon from "@mui/icons-material/Edit";
-import { useState } from "react";
-
-export default function AreaSites() {
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import StatusChip from "../../../../components/StatusChip";
+import { DialogState } from "..";
+import DialogAddLocation from "./Dialog";
+export default function CoveredSites(props: PropsType) {
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -30,10 +30,19 @@ export default function AreaSites() {
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
+          onClick={props.openCoveredDialog}
         >
-          اضافة مساحة
+          اضافة موقع
         </Button>
         <Box>
+          <Button
+            sx={{ mx: 2 }}
+            variant="outlined"
+            color="warning"
+            startIcon={<AddLocationIcon />}
+          >
+            الخريطة الكلية
+          </Button>
           <Button sx={{ mx: 2 }} variant="outlined" startIcon={<EditIcon />}>
             تعديل
           </Button>
@@ -50,9 +59,10 @@ export default function AreaSites() {
                 <TableCell>
                   <Checkbox />
                 </TableCell>
-                <TableCell>المساحة</TableCell>
-                <TableCell>العدد المقابل</TableCell>
-                <TableCell>الحد الادنى</TableCell>
+                <TableCell>اسم الموقع</TableCell>
+                <TableCell>المدينة</TableCell>
+                <TableCell>نظام البناء</TableCell>
+                <TableCell>الحالة</TableCell>
                 <TableCell>الاعدادات</TableCell>
               </TableRow>
             </TableHead>
@@ -63,10 +73,9 @@ export default function AreaSites() {
                 </TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
                 <TableCell>
-                  <TextField sx={{ width: 0.5 }} select label="Select">
-                    <MenuItem>1</MenuItem>
-                  </TextField>
+                  <StatusChip label="نشط" color="success" />
                 </TableCell>
                 <TableCell>
                   <IconButton size="small">
@@ -83,6 +92,15 @@ export default function AreaSites() {
           </Box>
         </TableContainer>
       </Stack>
+      <DialogAddLocation
+        closeDialog={props.closeDialog}
+        open={props.dialogState === "covered"}
+      />
     </Stack>
   );
 }
+type PropsType = {
+  openCoveredDialog: () => void;
+  dialogState: DialogState;
+  closeDialog: () => void;
+};

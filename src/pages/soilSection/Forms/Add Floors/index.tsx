@@ -11,6 +11,8 @@ import {
   IconButton,
   Paper,
   Checkbox,
+  MenuItem,
+  TextField,
 } from "@mui/material";
 
 // Icons
@@ -18,9 +20,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EditIcon from "@mui/icons-material/Edit";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
-import StatusChip from "../../../../components/StatusChip";
-export default function CoveredSites() {
+import { DialogState } from "..";
+import DialogAddFloor from "./Dialog";
+
+export default function AddFloors(props: PropsType) {
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -28,18 +31,11 @@ export default function CoveredSites() {
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
+          onClick={props.openFloorDialog}
         >
-          اضافة موقع
+          اضافة الادوار
         </Button>
         <Box>
-          <Button
-            sx={{ mx: 2 }}
-            variant="outlined"
-            color="warning"
-            startIcon={<AddLocationIcon />}
-          >
-            الخريطة الكلية
-          </Button>
           <Button sx={{ mx: 2 }} variant="outlined" startIcon={<EditIcon />}>
             تعديل
           </Button>
@@ -56,10 +52,9 @@ export default function CoveredSites() {
                 <TableCell>
                   <Checkbox />
                 </TableCell>
-                <TableCell>اسم الموقع</TableCell>
-                <TableCell>المدينة</TableCell>
-                <TableCell>نظام البناء</TableCell>
-                <TableCell>الحالة</TableCell>
+                <TableCell>عدد الادوار</TableCell>
+                <TableCell>العمق</TableCell>
+                <TableCell>الحد الادني</TableCell>
                 <TableCell>الاعدادات</TableCell>
               </TableRow>
             </TableHead>
@@ -69,10 +64,15 @@ export default function CoveredSites() {
                   <Checkbox />
                 </TableCell>
                 <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
                 <TableCell>
-                  <StatusChip label="نشط" color="success" />
+                  <TextField sx={{ width: 0.5 }} select label="Select">
+                    <MenuItem>1</MenuItem>
+                  </TextField>
+                </TableCell>
+                <TableCell>
+                  <TextField sx={{ width: 0.5 }} select label="Select">
+                    <MenuItem>1</MenuItem>
+                  </TextField>
                 </TableCell>
                 <TableCell>
                   <IconButton size="small">
@@ -89,6 +89,15 @@ export default function CoveredSites() {
           </Box>
         </TableContainer>
       </Stack>
+      <DialogAddFloor
+        closeDialog={props.closeDialog}
+        open={props.dialogState === "floor"}
+      />
     </Stack>
   );
 }
+type PropsType = {
+  openFloorDialog: () => void;
+  dialogState: DialogState;
+  closeDialog: () => void;
+};

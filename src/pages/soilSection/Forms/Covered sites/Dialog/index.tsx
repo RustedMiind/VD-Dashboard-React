@@ -16,14 +16,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import { MenuItem } from "@mui/material";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
-export default function DialogAddLocation({
-  open,
-  setOpen,
-  closeDialog,
-}: PropsType) {
+export default function DialogAddLocation(props: TypeProps) {
   return (
     <>
-      <Dialog maxWidth={"sm"} fullWidth open={open} onClose={closeDialog}>
+      <Dialog
+        maxWidth={"sm"}
+        fullWidth
+        open={props.open}
+        onClose={props.closeDialog}
+      >
         <DialogTitle sx={{ fontWeight: "600", textAlign: "center" }}>
           اضافة موقع
         </DialogTitle>
@@ -90,7 +91,7 @@ export default function DialogAddLocation({
           </Button>
         </DialogActions>
         <IconButton
-          onClick={closeDialog}
+          onClick={props.closeDialog}
           sx={{
             position: "absolute",
             right: 8,
@@ -103,8 +104,7 @@ export default function DialogAddLocation({
     </>
   );
 }
-type PropsType = {
+type TypeProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   closeDialog: () => void;
 };

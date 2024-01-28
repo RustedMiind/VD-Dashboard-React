@@ -20,8 +20,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EditIcon from "@mui/icons-material/Edit";
+import { DialogState } from "..";
+import DialogAddArea from "./Dialog";
 
-export default function AddFloors() {
+export default function AreaSites(props: PropsType) {
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -29,8 +31,9 @@ export default function AddFloors() {
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
           sx={{ mb: 1 }}
+          onClick={props.openAreaDialog}
         >
-          اضافة الادوار
+          اضافة مساحة
         </Button>
         <Box>
           <Button sx={{ mx: 2 }} variant="outlined" startIcon={<EditIcon />}>
@@ -49,9 +52,9 @@ export default function AddFloors() {
                 <TableCell>
                   <Checkbox />
                 </TableCell>
-                <TableCell>عدد الادوار</TableCell>
-                <TableCell>العمق</TableCell>
-                <TableCell>الحد الادني</TableCell>
+                <TableCell>المساحة</TableCell>
+                <TableCell>العدد المقابل</TableCell>
+                <TableCell>الحد الادنى</TableCell>
                 <TableCell>الاعدادات</TableCell>
               </TableRow>
             </TableHead>
@@ -61,11 +64,7 @@ export default function AddFloors() {
                   <Checkbox />
                 </TableCell>
                 <TableCell>-</TableCell>
-                <TableCell>
-                  <TextField sx={{ width: 0.5 }} select label="Select">
-                    <MenuItem>1</MenuItem>
-                  </TextField>
-                </TableCell>
+                <TableCell>-</TableCell>
                 <TableCell>
                   <TextField sx={{ width: 0.5 }} select label="Select">
                     <MenuItem>1</MenuItem>
@@ -86,6 +85,15 @@ export default function AddFloors() {
           </Box>
         </TableContainer>
       </Stack>
+      <DialogAddArea
+        closeDialog={props.closeDialog}
+        open={props.dialogState === "area"}
+      />
     </Stack>
   );
 }
+type PropsType = {
+  openAreaDialog: () => void;
+  dialogState: DialogState;
+  closeDialog: () => void;
+};
