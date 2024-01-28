@@ -19,8 +19,8 @@ import TenderDetails from "./pages/tenders/details";
 import ControlPanal from "./pages/tenders/controlPanel";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
+import ForTest from "./pages/forTest";
 // import ForTest from "./pages/forTest";
-import TestPopUp from "./pages/begadTest";
 
 function RoutesComponent() {
   const { hasPermission } = usePermissions();
@@ -28,7 +28,7 @@ function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
-        <Route path="test" element={<TestPopUp />} />
+        <Route path="test" element={<ForTest />} />
         <Route path="" element={<MainPage />} />
         {/* Employees Section */}
         {hasPermission(Permission.EMPLOYEES_VIEW) && (

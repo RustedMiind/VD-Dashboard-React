@@ -13,16 +13,19 @@ import {
   Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import RequiredSymbol from "../../../../components/RequiredSymbol";
 import { MenuItem } from "@mui/material";
-import MapArea from "./Map";
+import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
-export default function AddArea() {
+export default function DialogAddLocation({
+  open,
+  setOpen,
+  closeDialog,
+}: PropsType) {
   return (
     <>
-      <Dialog maxWidth={"sm"} fullWidth open={true}>
+      <Dialog maxWidth={"sm"} fullWidth open={open} onClose={closeDialog}>
         <DialogTitle sx={{ fontWeight: "600", textAlign: "center" }}>
-          اضافة محدد
+          اضافة موقع
         </DialogTitle>
         <DialogContent>
           <Grid container p={1} spacing={4}>
@@ -74,9 +77,6 @@ export default function AddArea() {
                 onChange={(e) => {}}
               />
             </Grid>
-            <Grid item md={12}>
-              <MapArea />
-            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions
@@ -90,7 +90,7 @@ export default function AddArea() {
           </Button>
         </DialogActions>
         <IconButton
-          onClick={() => {}}
+          onClick={closeDialog}
           sx={{
             position: "absolute",
             right: 8,
@@ -103,3 +103,8 @@ export default function AddArea() {
     </>
   );
 }
+type PropsType = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  closeDialog: () => void;
+};

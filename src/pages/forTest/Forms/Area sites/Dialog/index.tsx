@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import GridItem from "../GridItem";
+import GridItem from "../../../GridItem";
 import { TextField } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import { DialogActions } from "@mui/material";
@@ -15,7 +15,7 @@ import { LoadingButton } from "@mui/lab";
 import { DialogTitle } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-function AddSpace({ open, setOpen }: propsType) {
+function DialogAddArea({ open, setOpen }: propsType) {
   return (
     <Dialog
       open={open}
@@ -39,11 +39,16 @@ function AddSpace({ open, setOpen }: propsType) {
         <GridCloseIcon fontSize="inherit" />
       </IconButton>
 
-      <DialogTitle textAlign={"start"} fontWeight={500} pt={4} sx={{bgcolor:"Background"}}>
+      <DialogTitle
+        textAlign={"start"}
+        fontWeight={500}
+        pt={4}
+        sx={{ bgcolor: "Background" }}
+      >
         إضافة مساحة
       </DialogTitle>
-      <DialogContent sx={{bgcolor:"Background"}}>
-        <Paper sx={{padding: 2, my:2 }}>
+      <DialogContent sx={{ bgcolor: "Background" }}>
+        <Paper sx={{ padding: 2, my: 2 }}>
           <Grid container spacing={2} component="form">
             <GridItem>
               <Typography component={"label"}>المساحة من</Typography>
@@ -75,7 +80,7 @@ function AddSpace({ open, setOpen }: propsType) {
             </Grid>
           </Grid>
         </Paper>
-        <Paper sx={{padding: 2 }}>
+        <Paper sx={{ padding: 2 }}>
           <Grid container spacing={2} component="form">
             <GridItem>
               <Typography component={"label"}>المساحة من</Typography>
@@ -126,7 +131,7 @@ function AddSpace({ open, setOpen }: propsType) {
   );
 }
 
-export default AddSpace;
+export default DialogAddArea;
 
 type propsType = {
   open: boolean;

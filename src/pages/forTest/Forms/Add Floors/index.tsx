@@ -21,7 +21,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function AddRoles() {
+export default function AddFloors() {
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>

@@ -8,11 +8,10 @@ import Pusher from "pusher-js";
 import { APP_CLUSTER, APP_KEY } from "../tenders/details/Chat/pusher.config";
 import SoilRequest from "./soilRequest";
 import FormsSection from "./Forms";
-import AddArea from "./Dialogs/Add Area";
 function ForTest() {
   return (
     <>
-      <AddArea />
+      <FormsSection />
     </>
   );
 }
