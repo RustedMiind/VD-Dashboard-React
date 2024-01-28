@@ -20,6 +20,8 @@ import ControlPanal from "./pages/tenders/controlPanel";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
 import ForTest from "./pages/forTest";
+import FormsSection from "./pages/soilSection/Forms";
+import SoilSection from "./pages/soilSection";
 // import ForTest from "./pages/forTest";
 
 function RoutesComponent() {
@@ -28,6 +30,8 @@ function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
+        <Route path="requests" element={<FormsSection />} />
+        <Route path="allservices" element={<SoilSection />} />
         <Route path="test" element={<ForTest />} />
         <Route path="" element={<MainPage />} />
         {/* Employees Section */}
