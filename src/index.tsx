@@ -56,7 +56,7 @@ function resetAuth() {
 }
 
 // Mount the application in mode Development or Production
-MountApp("production");
+MountApp("development");
 
 function MountApp(type: "production" | "development") {
   switch (type) {
@@ -96,6 +96,15 @@ function RunProd() {
     resetAuth();
   }
 }
+root.render(
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <BrowserRouter>
+      <CacheProvider value={cacheRtl}>
+        <App />
+      </CacheProvider>
+    </BrowserRouter>
+  </LocalizationProvider>
+);
 function RunDev() {
   axios
     .post<{ data: { token: string; user: unknown } }>(Api("employee/login"), {
@@ -109,15 +118,6 @@ function RunDev() {
       console.log("User Token", data.data.token);
       axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
       setCookie("db_token", data.data.token, 7);
-      root.render(
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <BrowserRouter>
-            <CacheProvider value={cacheRtl}>
-              <App />
-            </CacheProvider>
-          </BrowserRouter>
-        </LocalizationProvider>
-      );
     });
 }
 
