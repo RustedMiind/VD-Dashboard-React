@@ -75,7 +75,7 @@ function ContentPanal() {
                 : undefined
             }
             fixedHeight={PAPER_HEIGHT}
-            title="المنافسات الواردة"
+            title="المهام الواردة"
           >
             <IncomingTable />
           </PaperButtonLikeTitle>
@@ -88,7 +88,7 @@ function ContentPanal() {
                 : undefined
             }
             fixedHeight={PAPER_HEIGHT}
-            title="المنافسات الجارية"
+            title="المعاملات الجارية"
           >
             <OngoingTable />
           </PaperButtonLikeTitle>
