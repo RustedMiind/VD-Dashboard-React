@@ -5,6 +5,7 @@ import {
   GridItemTextInputWithLabel,
   InputsGridContainer,
 } from "..";
+import AttachedFilesController from "./AttachedFilesController";
 import { FormSectionProps } from "./BaseProps";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
@@ -14,7 +15,7 @@ function MainFormSection({ registerFn }: PropsType) {
 
   return (
     <InputsGridContainer>
-      <GridItemTextInputWithLabel label="اسم التصميم بالعربي" />
+      <GridItemTextInputWithLabel {...registerFn("name_ar")} label="اسم التصميم بالعربي" />
       <GridItemTextInputWithLabel label="اسم التصميم بالانجليزي" />
       <GridItemTextInputWithLabel label="نبذة عن التصميم بالعربي" />
       <GridItemTextInputWithLabel label="نبذة عن التصميم بالانجليزي" />
@@ -64,10 +65,16 @@ function MainFormSection({ registerFn }: PropsType) {
       <GridItemTextInputWithLabel label="مطبخ" />
       <GridItemTextInputWithLabel label="غرفة معيشة" />
       <GridItemTextInputWithLabel label="غرفة العشاء" />
+      <GridItem lg={12}>
+        <Typography sx={{ py: 2 }} variant="h5">
+          محتويات ملف التصميم
+        </Typography>
+      </GridItem>
+      <AttachedFilesController />
     </InputsGridContainer>
   );
 }
 
-interface PropsType extends FormSectionProps {}
+interface PropsType extends FormSectionProps { }
 
 export default MainFormSection;
