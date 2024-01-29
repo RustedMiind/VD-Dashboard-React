@@ -81,7 +81,7 @@ function AttachmentsSection() {
         snackbar.enqueueSnackbar("تم حفظ المرفقات بنجاح");
       })
       .catch((err) => {
-        snackbar.enqueueSnackbar("تعذر المرفقات بنجاح");
+        snackbar.enqueueSnackbar("تعذر حفظ المرفقات", { variant: "error" });
       })
       .finally(() => {
         setFormStatus("none");

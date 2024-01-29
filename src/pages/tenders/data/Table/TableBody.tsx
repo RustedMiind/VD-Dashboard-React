@@ -15,6 +15,7 @@ import StatusChip from "../../../../components/StatusChip";
 import { NavLink } from "react-router-dom";
 import {
   TenderApprovalStatus,
+  TenderEntityStatus,
   TenderItemStatus,
   TenderPay,
   TenderStep,
@@ -31,19 +32,51 @@ export function generateTenderItemStatus(
   let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
-      case TenderItemStatus.SENT:
-        chip = <StatusChip label="مقدمة" color="warning" {...chipProps} />;
+      case TenderItemStatus.PENDING:
+        chip = <StatusChip label="مستلم" color="warning" {...chipProps} />;
         break;
       case TenderItemStatus.ONGOING:
         chip = <StatusChip label="جاري" color="success" {...chipProps} />;
         break;
-      case TenderItemStatus.EXCLUDED:
-        chip = (
-          <StatusChip label="مستعبد  فني" color="primary" {...chipProps} />
-        );
-        break;
       case TenderItemStatus.ENDED:
         chip = <StatusChip label="منتهي" color="error" {...chipProps} />;
+        break;
+    }
+
+  return chip;
+}
+export function generateTenderStatus(
+  status?: TenderEntityStatus,
+  chipProps?: ChipProps
+): JSX.Element {
+  let chip = <>---</>;
+  if (typeof status === "number" || typeof status === "string")
+    switch (status) {
+      case TenderEntityStatus.SENT:
+        chip = <StatusChip label="مقدمة" color="warning" {...chipProps} />;
+        break;
+      case TenderEntityStatus.ONGOING:
+        chip = <StatusChip label="جاري" color="success" {...chipProps} />;
+        break;
+      case TenderEntityStatus.NOT_SENT:
+        chip = <StatusChip label="غير مقدم" color="warning" {...chipProps} />;
+        break;
+      case TenderEntityStatus.ENDED:
+        chip = <StatusChip label="منتهي" color="error" {...chipProps} />;
+        break;
+      case TenderEntityStatus.AWARDED:
+        chip = <StatusChip label="تم الترسية" color="primary" {...chipProps} />;
+        break;
+      case TenderEntityStatus.TECHNICAL_REVIEW:
+        chip = <StatusChip label="فحص فني" color="primary" {...chipProps} />;
+        break;
+      case TenderEntityStatus.EXCLUDED:
+        chip = <StatusChip label="مستبعد فني" color="primary" {...chipProps} />;
+        break;
+      case TenderEntityStatus.FINANCIAL_EXCLUDE:
+        chip = (
+          <StatusChip label="مستبعد مالي" color="primary" {...chipProps} />
+        );
         break;
     }
 
@@ -80,6 +113,9 @@ export function generateTenderApprovalStatusChip(
   let chip = <>---</>;
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
+      case TenderApprovalStatus.NONE:
+        chip = <StatusChip label="مستلم" color="warning" {...chipProps} />;
+        break;
       case TenderApprovalStatus.ACCEPTED:
         chip = <StatusChip label="مقبول" color="primary" {...chipProps} />;
         break;
@@ -113,6 +149,7 @@ function TableBody() {
         });
     }
   }
+
   function showDialog(id: number, type: TenderStep) {
     return function () {
       axios
@@ -125,60 +162,60 @@ function TableBody() {
             switch (type) {
               case TenderStep.ACCEPTION:
                 dataObject = {
-                  endDate: tender?.tender_tasks?.end_dete_accept,
+                  endDate: tender?.eng_employee_date,
                   eng: tender?.tender_tasks?.eng_employee?.name,
                   status: generateTenderApprovalStatusChip(
                     tender?.eng_employee_status
                   ),
                   note: tender?.eng_employee_note,
-                  startDate: "---",
+                  startDate: tender?.created_at,
                 };
                 break;
               case TenderStep.PURCHASE:
                 dataObject = {
-                  endDate: tender?.tender_tasks?.dete_buy_tender,
-                  eng: tender?.tender_tasks?.eng_employee_buy_tender.name,
+                  endDate: tender?.buy_date,
+                  eng: tender?.tender_tasks?.eng_employee_buy_tender?.name,
                   status: generateTenderPayedStatus(tender?.buy_status),
                   note: tender?.buy_note,
-                  startDate: "---",
+                  startDate: tender?.eng_employee_date,
                 };
                 break;
               case TenderStep.TECHNICAL:
                 dataObject = {
-                  endDate: tender?.tender_tasks?.end_dete_technical,
-                  eng: tender?.tender_tasks?.eng_employee_technical.name,
+                  endDate: tender?.technical_date,
+                  eng: tender?.tender_tasks?.eng_employee_technical?.name,
                   status: generateTenderItemStatus(tender?.technical_status),
                   note: tender?.technical_note,
-                  startDate: "---",
+                  startDate: tender?.eng_employee_date,
                 };
                 break;
               case TenderStep.FINANCIAL:
                 dataObject = {
-                  endDate: tender?.tender_tasks?.dete_file_finacial,
+                  endDate: tender?.file_finacial_date,
                   eng: tender?.tender_tasks?.eng_employee_file_finacial?.name,
                   status: generateTenderItemStatus(
                     tender?.file_finacial_status
                   ),
                   note: tender?.file_finacial_note,
-                  startDate: "---",
+                  startDate: tender?.eng_employee_date,
                 };
                 break;
               case TenderStep.FILE:
                 dataObject = {
-                  endDate: tender?.tender_tasks?.end_dete_trace,
-                  eng: tender?.tender_tasks?.employee_trace.name,
+                  endDate: tender?.trace_date,
+                  eng: tender?.tender_tasks?.employee_trace?.name,
                   status: generateTenderItemStatus(tender?.trace_status),
                   note: tender?.eng_employee_note,
-                  startDate: "---",
+                  startDate: tender?.eng_employee_date,
                 };
                 break;
               case TenderStep.APPLY:
                 dataObject = {
-                  endDate: tender?.tender_tasks?.dete_apply_tender,
+                  endDate: tender?.apply_date,
                   eng: tender?.tender_tasks?.eng_employee?.name,
                   status: generateTenderItemStatus(tender?.apply_status),
                   note: tender?.apply_note,
-                  startDate: "---",
+                  startDate: tender?.eng_employee_date,
                 };
                 break;
             }
@@ -194,80 +231,87 @@ function TableBody() {
   return (
     <MuiTableBody>
       {Array.isArray(tenderTableData) &&
-        tenderTableData.map((tender) => (
-          <TableRow key={tender.id}>
-            <TableCell>
-              <Checkbox
-                checked={selectedTenderId?.includes(tender.id)}
-                value={tender.id}
-                onChange={CheckboxHandler}
-              />
-            </TableCell>
-            <TableCell>
-              <Typography
-                component={NavLink}
-                to={`${tender.id}`}
-                variant="body2"
-                color={"primary.main"}
-                fontWeight={700}
-              >
-                {tender.tenderdata?.code_reference}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <LimitTypography maxWidth={180}>
-                {tender.tenderdata?.code_tender}
-              </LimitTypography>
-            </TableCell>
-            <TableCell>
-              <LimitTypography>
-                {tender.tenderdata?.organization?.name}
-              </LimitTypography>
-            </TableCell>
-            <TableCell>
-              <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
-            </TableCell>
-            <TableCell>{tender.tenderdata?.strat_date}</TableCell>
-            <TableCell>{tender.tenderdata?.end_date}</TableCell>
-            <TableCell>
-              {generateTenderPayedStatus(tender.buy_status, {
-                onClick: showDialog(tender?.id, TenderStep.PURCHASE),
-              })}
-            </TableCell>
-            <TableCell>{tender.tenderdata?.period} يوم</TableCell>
-            <TableCell>{tender.tenderdata?.department?.name}</TableCell>
-            <TableCell>
-              {generateTenderApprovalStatusChip(tender.eng_employee_status, {
-                onClick: showDialog(tender?.id, TenderStep.ACCEPTION),
-              })}
-            </TableCell>
-            <TableCell>
-              {generateTenderItemStatus(tender.trace_status, {
-                onClick: showDialog(tender?.id, TenderStep.FILE),
-              })}
-            </TableCell>
-            <TableCell>
-              {generateTenderItemStatus(tender.technical_status, {
-                onClick: showDialog(tender?.id, TenderStep.TECHNICAL),
-              })}
-            </TableCell>
-            <TableCell>
-              {generateTenderItemStatus(tender.file_finacial_status, {
-                onClick: showDialog(tender?.id, TenderStep.FINANCIAL),
-              })}
-            </TableCell>
-            <TableCell>
-              {generateTenderItemStatus(tender.apply_status, {
-                onClick: showDialog(tender?.id, TenderStep.APPLY),
-              })}
-            </TableCell>
-            <TableCell>
-              <IconButton color="primary">
-                <SettingsIcon />
-              </IconButton>
-            </TableCell>
-          </TableRow>
-        ))}
+        tenderTableData.map((tender) => {
+          const isAcceptedTender =
+            tender?.eng_employee_status === TenderApprovalStatus.ACCEPTED;
+          return (
+            <TableRow key={tender.id}>
+              <TableCell>
+                <Checkbox
+                  checked={selectedTenderId?.includes(tender.id)}
+                  value={tender.id}
+                  onChange={CheckboxHandler}
+                />
+              </TableCell>
+              <TableCell>
+                <Typography
+                  component={NavLink}
+                  to={`${tender.id}`}
+                  variant="body2"
+                  color={"primary.main"}
+                  fontWeight={700}
+                >
+                  {tender.tenderdata?.code_reference}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <LimitTypography maxWidth={180}>
+                  {tender.tenderdata?.code_tender}
+                </LimitTypography>
+              </TableCell>
+              <TableCell>
+                <LimitTypography>
+                  {tender.tenderdata?.organization?.name}
+                </LimitTypography>
+              </TableCell>
+              <TableCell>
+                <LimitTypography>{tender.tenderdata?.name}</LimitTypography>
+              </TableCell>
+              <TableCell>{tender.tenderdata?.strat_date}</TableCell>
+              <TableCell>{tender.tenderdata?.end_date}</TableCell>
+              <TableCell>
+                {isAcceptedTender &&
+                  generateTenderPayedStatus(tender.buy_status, {
+                    onClick: showDialog(tender?.id, TenderStep.PURCHASE),
+                  })}
+              </TableCell>
+              <TableCell>{tender.tenderdata?.period} يوم</TableCell>
+              <TableCell>{tender.tenderdata?.department?.name}</TableCell>
+              <TableCell>
+                {generateTenderApprovalStatusChip(tender.eng_employee_status, {
+                  onClick: showDialog(tender?.id, TenderStep.ACCEPTION),
+                })}
+              </TableCell>
+              <TableCell>
+                {isAcceptedTender &&
+                  generateTenderStatus(tender.directorate_status)}
+              </TableCell>
+              <TableCell>
+                {isAcceptedTender &&
+                  generateTenderItemStatus(tender.technical_status, {
+                    onClick: showDialog(tender?.id, TenderStep.TECHNICAL),
+                  })}
+              </TableCell>
+              <TableCell>
+                {isAcceptedTender &&
+                  generateTenderItemStatus(tender.file_finacial_status, {
+                    onClick: showDialog(tender?.id, TenderStep.FINANCIAL),
+                  })}
+              </TableCell>
+              <TableCell>
+                {isAcceptedTender &&
+                  generateTenderItemStatus(tender.apply_status, {
+                    onClick: showDialog(tender?.id, TenderStep.APPLY),
+                  })}
+              </TableCell>
+              <TableCell>
+                <IconButton color="primary">
+                  <SettingsIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          );
+        })}
       <DialogData open={open} setOpen={setOpen} displayData={displayData} />
     </MuiTableBody>
   );

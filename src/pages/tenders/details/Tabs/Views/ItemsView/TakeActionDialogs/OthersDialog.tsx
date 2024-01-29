@@ -26,6 +26,7 @@ import { useSnackbar } from "notistack";
 import { TenderDataContext } from "../../../..";
 import { useParams } from "react-router-dom";
 import { objectToFormData } from "../../../../../../../methods";
+import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -38,6 +39,8 @@ export default function OthersDialog({
   title,
   onSubmit,
   close,
+  endDate,
+  userType,
   ...dialogProps
 }: PropsType) {
   const { register, handleSubmit } = useForm<DtoType>({
@@ -69,10 +72,15 @@ export default function OthersDialog({
     if (typeof tender === "object") {
       setFormStatus(FetchStatusEnum.LOADING);
       setCheckDialogOpen(false);
+      console.log("Abdo File", file);
       axios
         .post(
           Api("employee/tender/form/status/" + id),
-          objectToFormData({ ...dto, image: file, user_type: tender.user_type })
+          objectToFormData({
+            ...dto,
+            image: file,
+            user_type: userType,
+          })
         )
         .then((res) => {
           console.log(res);
@@ -122,13 +130,10 @@ export default function OthersDialog({
             </TextField>
           </Grid>
           <GridItem label="اسم البند">
-            <TextField fullWidth size="small" />
+            <TextField value={title} disabled fullWidth size="small" />
           </GridItem>
           <GridItem label="تاريخ الانتهاء">
-            <DatePicker
-              slotProps={{ textField: { size: "small", fullWidth: true } }}
-              sx={{ w: 1 }}
-            />
+            <TextField value={endDate} disabled fullWidth size="small" />
           </GridItem>
           <GridItem label="ارفق عرض التقديم">
             <UploadFileInput
@@ -159,4 +164,6 @@ export default function OthersDialog({
 type PropsType = {
   title: string;
   close: () => void;
+  endDate?: string;
+  userType: TenderStep;
 } & DialogProps;

@@ -29,7 +29,7 @@ export default function DialogData({ open, setOpen, displayData }: PropsType) {
               <TableHead>
                 <TableRow>
                   <TableCell>المهندس المسؤول </TableCell>
-                  <TableCell>تاريخ التقديم</TableCell>
+                  <TableCell>تاريخ الاستلام</TableCell>
                   <TableCell>تاريخ الانتهاء</TableCell>
                   <TableCell> الحالة</TableCell>
                   <TableCell>الملاحظات</TableCell>
@@ -38,7 +38,10 @@ export default function DialogData({ open, setOpen, displayData }: PropsType) {
               <TableBody>
                 <TableRow>
                   <TableCell>{displayData.eng}</TableCell>
-                  <TableCell>{displayData.startDate}</TableCell>
+                  <TableCell>
+                    {displayData.startDate &&
+                      formatDate(displayData.startDate || "")}
+                  </TableCell>
                   <TableCell>{formatDate(displayData.endDate || "")}</TableCell>
                   <TableCell>{displayData.status}</TableCell>
                   <TableCell>{displayData.note}</TableCell>

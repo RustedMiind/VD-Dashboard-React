@@ -2,14 +2,22 @@ export enum TenderItemStatus {
   PENDING = -1,
   ENDED = 0,
   ONGOING = 1,
-  EXCLUDED = 2,
-  SENT = 3,
 }
-
+export enum TenderEntityStatus {
+  // PENDING = -1,
+  ONGOING = 1,
+  SENT = 2,
+  NOT_SENT = -1,
+  ENDED = 4,
+  AWARDED = 5,
+  TECHNICAL_REVIEW = 6,
+  EXCLUDED = 7,
+  FINANCIAL_EXCLUDE = 8,
+}
 export enum TenderApprovalStatus {
-  NONE = -1,
-  ACCEPTED = 1,
-  REJECTED = 0,
+  NONE = TenderItemStatus.PENDING,
+  ACCEPTED = TenderItemStatus.ONGOING,
+  REJECTED = TenderItemStatus.ENDED,
 }
 
 export enum TenderStep {
@@ -21,6 +29,6 @@ export enum TenderStep {
   APPLY = "6",
 }
 export enum TenderPay {
-  PAYED = 1,
-  NOTPAYED = -1,
+  PAYED = TenderItemStatus.ONGOING,
+  NOTPAYED = TenderItemStatus.PENDING,
 }

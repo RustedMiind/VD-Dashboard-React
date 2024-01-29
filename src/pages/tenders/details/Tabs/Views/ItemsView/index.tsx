@@ -23,6 +23,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import OthersDialog from "./TakeActionDialogs/OthersDialog";
 import ApprovalRowComponent from "./ApprovalRowComponent";
 import TenderApproveDialog from "./TakeActionDialogs/TenderApproveDialog";
+import PayRowComponent from "./PayRowComponent";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
@@ -34,10 +35,9 @@ function ItemsView() {
   const closeDialog = () => {
     setDialogOpen(undefined);
   };
-
   if (typeof tender === "object") {
     const dialogComponent = (dialogType: TenderStep): React.ReactNode => {
-      let disabled = true;
+      let disabled = false;
       if (
         (dialogType === TenderStep.ACCEPTION &&
           tender.eng_employee_status === -1) ||
@@ -50,7 +50,8 @@ function ItemsView() {
       ) {
         disabled = false;
       }
-      if (tender.user_type === dialogType) {
+
+      if (tender.user_type?.includes(parseInt(dialogType))) {
         return (
           <IconButton
             size="small"
@@ -74,11 +75,14 @@ function ItemsView() {
     return (
       <>
         <BuyDialog
+          close={closeDialog}
           open={dialogOpen === TenderStep.PURCHASE}
           onClose={closeDialog}
+          userType={TenderStep.PURCHASE}
         />
         <TenderApproveDialog
           open={dialogOpen === TenderStep.ACCEPTION}
+          userType={TenderStep.ACCEPTION}
           close={closeDialog}
           onClose={closeDialog}
         />
@@ -90,27 +94,35 @@ function ItemsView() {
         /> */}
         <OthersDialog
           close={closeDialog}
+          userType={TenderStep.TECHNICAL}
           title="العرض الفني"
           open={dialogOpen === TenderStep.TECHNICAL}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.end_dete_technical}
         />
         <OthersDialog
           close={closeDialog}
+          userType={TenderStep.FINANCIAL}
           title="العرض المالي"
           open={dialogOpen === TenderStep.FINANCIAL}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.dete_file_finacial}
         />
         <OthersDialog
           close={closeDialog}
           title="الملف المدمج"
           open={dialogOpen === TenderStep.FILE}
+          userType={TenderStep.FILE}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.end_dete_trace}
         />
         <OthersDialog
           close={closeDialog}
           title="تقديم المنافسة"
           open={dialogOpen === TenderStep.APPLY}
+          userType={TenderStep.APPLY}
           onClose={closeDialog}
+          endDate={tender?.tender_tasks?.dete_apply_tender}
         />
         <TableContainer>
           <Table>
@@ -121,16 +133,7 @@ function ItemsView() {
                 <Th>المهندس المسؤول</Th>
                 <Th>تاريخ الانتهاء</Th>
                 <Th>تاريخ الانتهاء الفعلي</Th>
-                <Th>
-                  عرض الملف
-                  <Button
-                    onClick={() => {
-                      setDialogOpen(TenderStep.PURCHASE);
-                    }}
-                  >
-                    شراء
-                  </Button>
-                </Th>
+                <Th>عرض الملف</Th>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,13 +147,13 @@ function ItemsView() {
                   status: tender.eng_employee_status,
                 }}
               />
-              <StatusRowComponent
+              <PayRowComponent
                 {...{
                   name: "شراء المنافسة",
                   managerName:
                     tender.tender_tasks?.eng_employee_buy_tender?.name,
                   endDate: tender.tender_tasks?.dete_buy_tender,
-                  accualEndDate: tender.file_finacial_date,
+                  accualEndDate: tender.buy_date,
                   iconComponent: dialogComponent(TenderStep.PURCHASE),
                   status: tender.buy_status,
                 }}
@@ -177,17 +180,16 @@ function ItemsView() {
                   status: tender.file_finacial_status,
                 }}
               />
-              <StatusRowComponent
+              {/* <StatusRowComponent
                 {...{
                   name: "الملف المدمج",
-                  managerName:
-                    tender.tender_tasks?.eng_employee_file_finacial?.name,
+                  managerName: tender.tender_tasks?.employee_trace?.name,
                   endDate: tender.tender_tasks?.end_dete_trace,
                   accualEndDate: tender.trace_date,
                   iconComponent: dialogComponent(TenderStep.FILE),
                   status: tender.file_finacial_status,
                 }}
-              />
+              /> */}
               <StatusRowComponent
                 {...{
                   name: "تقديم المنافسة",

@@ -20,12 +20,12 @@ import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { FetchStatus } from "../../../../../../../types/FetchStatus";
 import { FetchStatusEnum } from "../../../../../../../types/FetchStatusEnum";
-import { DtoType } from "./DtoType";
 import { Api } from "../../../../../../../constants";
 import axios from "axios";
+import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
 
 export default function TenderApproveDialog(
-  props: DialogProps & { close: () => void }
+  props: DialogProps & { close: () => void; userType: TenderStep }
 ) {
   const [formStatus, setFormStatus] = useState<FetchStatus>(
     FetchStatusEnum.NONE
@@ -43,7 +43,7 @@ export default function TenderApproveDialog(
         .post(Api("employee/tender/form/status/" + id), {
           status: status,
           note,
-          user_type: tender.user_type,
+          user_type: props.userType,
         })
         .then((res) => {
           console.log(res);

@@ -25,27 +25,36 @@ import { Api } from "../../../../../../../constants";
 import { objectToFormData } from "../../../../../../../methods";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-import { TenderItemStatus } from "../../../../../../../types/Tenders/Status.enum";
+import {
+  TenderItemStatus,
+  TenderPay,
+  TenderStep,
+} from "../../../../../../../types/Tenders/Status.enum";
 import { Department } from "../../../../../../../types";
 import { TenderDataContext } from "../../../..";
 import { DtoType } from "./DtoType";
+import SubmitTypeDialog from "./SubmitTypeDialog";
 
 export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
     value: TenderItemStatus.ENDED,
     label: "منتهي",
   },
-  {
-    value: TenderItemStatus.EXCLUDED,
-    label: "مستعبد فني",
-  },
+
   {
     value: TenderItemStatus.ONGOING,
     label: "جاري",
   },
+];
+
+export const buyOptions: { value: TenderPay; label: string }[] = [
   {
-    value: TenderItemStatus.SENT,
-    label: "مقدمة",
+    value: TenderPay.PAYED,
+    label: "تأكيد الدفع",
+  },
+  {
+    value: TenderPay.NOTPAYED,
+    label: "رفض الدفع",
   },
 ];
 
@@ -56,7 +65,7 @@ const GridItem = (props: GridProps & { label: string }) => (
   </Grid>
 );
 
-export default function BuyDialog(props: DialogProps) {
+export default function BuyDialog({ close, ...props }: PropsType) {
   const { register, handleSubmit, reset } = useForm<DtoType>({
     defaultValues: {
       status: "-1",
@@ -78,6 +87,45 @@ export default function BuyDialog(props: DialogProps) {
     undefined
   );
 
+  const [checkDialogOpen, setCheckDialogOpen] = useState(false);
+  const submitWithoutStatus = handleSubmit((data) => {
+    let instance = { ...data };
+    delete instance.status;
+    sendData(instance);
+  });
+  const submitWithStatus = handleSubmit((data) => {
+    sendData(data);
+  });
+
+  function sendData(dto: DtoType) {
+    if (typeof tender === "object") {
+      setFormStatus(FetchStatusEnum.LOADING);
+      setCheckDialogOpen(false);
+      axios
+        .post(
+          Api("employee/tender/form/status/" + id),
+          objectToFormData({
+            ...dto,
+            image: file,
+            user_type: tender.user_type,
+          })
+        )
+        .then((res) => {
+          console.log(res);
+          close();
+          enqueueSnackbar("تم اتخاذ الاجراء");
+          refresh();
+        })
+        .catch((err) => {
+          console.log(err);
+          enqueueSnackbar("تعذر في اتخاذ الاجراء", { variant: "error" });
+        })
+        .finally(() => {
+          setFormStatus(FetchStatusEnum.NONE);
+        });
+    }
+  }
+
   const handleFormSubmit = handleSubmit((data) => {
     console.log("form data", data);
     if (typeof tender === "object") {
@@ -87,7 +135,7 @@ export default function BuyDialog(props: DialogProps) {
           Api("employee/tender/form/status/" + id),
           objectToFormData({
             ...data,
-            user_type: tender.user_type,
+            user_type: props.userType,
             image: file,
             end_date: endDate,
           })
@@ -118,6 +166,14 @@ export default function BuyDialog(props: DialogProps) {
       .catch(console.log);
   }, []);
 
+  let staticData = { value: "", endDate: "" };
+  if (typeof tender === "object") {
+    staticData = {
+      endDate: tender.tender_tasks?.dete_buy_tender || "",
+      value: `${tender.tenderdata?.price}` || "",
+    };
+  }
+
   return (
     <Dialog
       {...props}
@@ -125,6 +181,14 @@ export default function BuyDialog(props: DialogProps) {
       component="form"
       onSubmit={handleFormSubmit}
     >
+      <SubmitTypeDialog
+        open={checkDialogOpen}
+        onClose={() => {
+          setCheckDialogOpen(false);
+        }}
+        submitWithStatus={submitWithStatus}
+        submitWithoutStatus={submitWithoutStatus}
+      />
       <DialogContent>
         <Grid container spacing={2}>
           <Grid display={"flex"} alignItems={"center"} mb={5} item xs={6}>
@@ -135,7 +199,7 @@ export default function BuyDialog(props: DialogProps) {
           <Grid display={"flex"} alignItems={"center"} mb={5} item md={6}>
             <Typography sx={{ mr: 2 }}>الحاله </Typography>
             <TextField {...register("status")} fullWidth size="small" select>
-              {statusOptions.map((option) => (
+              {buyOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -143,20 +207,13 @@ export default function BuyDialog(props: DialogProps) {
             </TextField>
           </Grid>
           <GridItem label="قيمة المنافسة">
-            <TextField fullWidth size="small" />
+            <TextField value={staticData.value} fullWidth size="small" />
           </GridItem>
           <GridItem label="تاريخ الانتهاء">
-            <DatePicker
-              value={dayjs(endDate)}
-              onChange={(date) => {
-                setEndDate(date?.format() || "");
-              }}
-              slotProps={{ textField: { size: "small", fullWidth: true } }}
-              sx={{ w: 1 }}
-            />
+            <TextField fullWidth size="small" value={staticData.endDate} />
           </GridItem>
-          <GridItem {...register("iban")} label="الحساب البنكي">
-            <TextField fullWidth size="small" />
+          <GridItem label="الحساب البنكي">
+            <TextField {...register("iban")} fullWidth size="small" />
           </GridItem>
           <GridItem label="رقم السداد">
             <TextField {...register("reciept_number")} fullWidth size="small" />
@@ -189,7 +246,10 @@ export default function BuyDialog(props: DialogProps) {
         <LoadingButton
           loading={formStatus === FetchStatusEnum.LOADING}
           variant="contained"
-          type="submit"
+          type="button"
+          onClick={() => {
+            setCheckDialogOpen(true);
+          }}
         >
           حفظ
         </LoadingButton>
@@ -197,3 +257,8 @@ export default function BuyDialog(props: DialogProps) {
     </Dialog>
   );
 }
+
+type PropsType = {
+  close: () => void;
+  userType: TenderStep;
+} & DialogProps;

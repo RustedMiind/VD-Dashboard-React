@@ -4,16 +4,13 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  FormLabel,
   Grid,
   InputAdornment,
   MenuItem,
-  Radio,
-  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { GridItem } from "../../GridItem";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
@@ -32,18 +29,38 @@ import { LaravelValidationError } from "../../../../../types/LaravelValidationEr
 import { AxiosErrorType } from "../../../../../types/Axios";
 import { FormStatus } from "../../../../../types/FormStatus";
 import { LoadingButton } from "@mui/lab";
+import { StringParam, useQueryParam } from "use-query-params";
+import {
+  disableDateAfter,
+  disableDateBefore,
+} from "../../../../../methods/DayjsDatePicker";
+const type_id = [
+  { name: "منافسة عامه", value: 1 },
+  { name: "منافسة محدده", value: 2 },
+  { name: "عامة", value: 3 },
+];
 
 export default function MainDataForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
   const tenderContext = useContext(TenderContext);
   const [form, dispatch] = useReducer(reducer, initialTenderDataState);
-  const [options, setOptions] = useState<OptionsType>({});
+  const [options, setOptions] = useState<TenderFormOptionTypes>({});
   const snackbar = useSnackbar();
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const inputProps = {
     loading: formStatus === "loading",
     disabled: formStatus === "loading" || formStatus === "disabled",
   };
+  let path =
+    typeof tenderContext.tender === "object" && tenderContext.tender.tenderdata
+      ? "/" + tenderContext.tender.tenderdata.tender_id
+      : "";
+  const [typeParam] = useQueryParam("type", StringParam);
+  useEffect(() => {
+    if (!path && typeParam) {
+      dispatch({ type: "SET_TYPE_ID", payload: typeParam });
+    }
+  }, []);
   useEffect(getOptions, [form.branchId, form.managementId]);
   useEffect(() => {
     if (
@@ -60,11 +77,7 @@ export default function MainDataForm() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormStatus("loading");
-    let path =
-      typeof tenderContext.tender === "object" &&
-      tenderContext.tender.tenderdata
-        ? "/" + tenderContext.tender.tenderdata.tender_id
-        : "";
+
     setFormStatus("loading");
     axios
       .post<{ data: TenderData }>(
@@ -190,10 +203,11 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="تاريخ التقديم المطلوب">
-          <DatePicker
+          <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.applyDate)}
+            shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
                 generateReducerAction("SET_APPLY_DATE", date?.format() || "")
@@ -229,9 +243,10 @@ export default function MainDataForm() {
       </GridItem>
       <GridItem>
         <AddLabelToEl label="تاريخ انتهاء المنافسة" required>
-          <DatePicker
+          <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
+            shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
             value={dayjs(form.endDate)}
             onChange={(date) => {
               dispatch(
@@ -266,6 +281,7 @@ export default function MainDataForm() {
               dispatch(generateReducerAction("SET_TYPE_ID", e.target.value));
             }}
             {...inputProps}
+            disabled
           >
             {options.tenderTypes?.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -330,39 +346,26 @@ export default function MainDataForm() {
         </AddLabelToEl>
       </GridItem>
       <Grid item xs={12}>
-        <FormControl
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            mt: 2,
-            alignItems: "center",
-          }}
-          {...inputProps}
-        >
-          <FormLabel id="demo-row-radio-buttons-group-label">
-            طريقة التقديم
-          </FormLabel>
-          <RadioGroup
-            row
-            name="row-radio-buttons-group"
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            sx={{ ml: 2 }}
-            value={form.applyTypeId}
-            onChange={(e) => {
-              dispatch(
-                generateReducerAction("SET_APPLY_TYPE_ID", e.target.value)
-              );
-            }}
-          >
+        <Box display={"flex"} flexDirection={"row"}>
+          <Typography alignSelf={"center"}> طريقة التقديم</Typography>
+          <FormGroup row sx={{ ml: 2 }} {...inputProps}>
             {options.applyMethods?.map((method) => (
               <FormControlLabel
-                value={method.value}
-                control={<Radio />}
+                key={method.value}
+                checked={form.applyType?.includes(method.value)}
+                sx={{ ml: 2 }}
+                control={<Checkbox />}
                 label={method.name}
+                value={method.value}
+                onChange={(e) => {
+                  dispatch(
+                    generateReducerAction("SET_APPLY_TYPE_ID", method.value)
+                  );
+                }}
               />
             ))}
-          </RadioGroup>
-        </FormControl>
+          </FormGroup>
+        </Box>
       </Grid>
 
       <Grid item xs={12}>
@@ -372,7 +375,7 @@ export default function MainDataForm() {
             {options.warranties?.map((method) => (
               <FormControlLabel
                 key={method.value}
-                checked={form.requiredWarranty.includes(method.value)}
+                checked={form.requiredWarranty?.includes(method.value)}
                 sx={{ ml: 2 }}
                 control={<Checkbox />}
                 label={method.name}
@@ -421,7 +424,7 @@ export default function MainDataForm() {
   }
 }
 
-function toOptionArr(
+export function toOptionArr(
   arr: { id: number; name: string }[] | undefined
 ): OptionType[] | undefined {
   return arr?.map((e) => ({
@@ -430,7 +433,7 @@ function toOptionArr(
   }));
 }
 
-type OptionsType = {
+export type TenderFormOptionTypes = {
   branches?: OptionType[];
   departments?: OptionType[];
   managementes?: OptionType[];
