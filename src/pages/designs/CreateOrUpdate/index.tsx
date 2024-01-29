@@ -17,6 +17,10 @@ import AddLabelToEl from "../../../components/AddLabelToEl";
 import MainFormSection from "./FormSections/main";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
 import UploadImage from "../../../components/UploadImage";
+import React from "react";
+import { ImageListType } from "react-images-uploading";
+import UploadMultipleImages from "../../../components/UploadMultipleImages";
+import FormImagesSection from "./FormSections/images";
 
 export function InputGridItem({
   label,
@@ -24,7 +28,7 @@ export function InputGridItem({
   ...props
 }: GridProps & { label: string }) {
   return (
-    <GridItem>
+    <GridItem sx={{ px: 1 }}>
       <AddLabelToEl label={label}>{children}</AddLabelToEl>
     </GridItem>
   );
@@ -35,7 +39,7 @@ export function GridItem(props: GridProps) {
 }
 
 export function InputsGridContainer({ ...props }: GridProps) {
-  return <Grid container {...props} rowSpacing={2} columnSpacing={4}></Grid>;
+  return <Grid container {...props} rowSpacing={2} />;
 }
 
 export function TextInput({ ...props }: TextFieldProps) {
@@ -74,6 +78,8 @@ export function GridItemDateInputWithLabel({
 function CreateOrUpdateDesign() {
   const { register, handleSubmit, reset } = useForm<CreateFormType>();
 
+  const [images, setImages] = React.useState<ImageListType>([]);
+
   return (
     <Grid container spacing={2}>
       <Grid item lg={8}>
@@ -86,9 +92,7 @@ function CreateOrUpdateDesign() {
       </Grid>
       <Grid item lg={4}>
         {/* Form Files */}
-        <Box width={150} height={150}>
-          <UploadImage />
-        </Box>
+        <FormImagesSection />
       </Grid>
     </Grid>
   );
