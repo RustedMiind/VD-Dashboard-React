@@ -180,7 +180,7 @@ export default function CoveredSites(props: PropsType) {
         </TableContainer>
       </Stack>
       <DialogAddLocation
-        npmcloseDialog={props.closeDialog}
+        closeDialog={props.closeDialog}
         open={props.dialogState === "covered"}
       />
     </Stack>

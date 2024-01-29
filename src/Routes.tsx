@@ -21,7 +21,6 @@ import ForTest from "./pages/forTest";
 import DesignReports from "./pages/DesignReports";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
-import ForTest from "./pages/forTest";
 import FormsSection from "./pages/soilSection/Forms";
 import SoilSection from "./pages/soilSection";
 // import ForTest from "./pages/forTest";
