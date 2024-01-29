@@ -1,18 +1,23 @@
 import { Box, Button, Grid, GridProps, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react';
 import AddLabelToEl from '../../components/AddLabelToEl';
+import { useForm } from 'react-hook-form';
 
 
-const GridItem = (props: GridProps) => (<Grid style={{ padding: '0.5rem' }} item md={6} {...props} />);
+const GridItem = (props: GridProps) => (<Grid sx={{ padding: '0.5rem' }} item md={6} {...props} />);
 
 function AddDesign() {
-    const [visionInArabic, setVisionInArabic] = useState('');
-    const [visionInEnglish, setVisionInEnglish] = useState('');
-    const [arbicSummary, setArbicSummary] = useState('');
-    const [englishSummary, setEnglishSummary] = useState('');
-    const [arabicFeatures, setArabicFeatures] = useState('');
-    const [englishFeatures, setEnglishFeatures] = useState('');
-
+    const { register, reset, handleSubmit } = useForm({
+        defaultValues: {
+            visionInArabic: "",
+            visionInEnglish: "",
+            arbicSummary: "",
+            englishSummary: "",
+            arabicFeatures: "",
+            englishFeatures: "",
+        },
+    });
+    const handleFormSubmit = handleSubmit(formData => { console.log(formData) });
 
     return (
         <>
@@ -21,12 +26,13 @@ function AddDesign() {
             </Typography>
             <Box
                 className='AddDesignFormContainer'
-                style={{ width: '703px', height: '373px', padding: '1rem' }}
+                sx={{ width: '703px', height: '373px', padding: '1rem' }}
                 component="form"
+                onSubmit={handleFormSubmit}
                 noValidate
                 autoComplete="on">
                 <Grid
-                    style={{ display: 'flex', width: '100%', height: '100%', borderRadius: '14px', backgroundColor: '#f3f5f7', paddingTop: '2rem' }}
+                    sx={{ display: 'flex', width: '100%', height: '100%', borderRadius: '14px', bgcolor: 'primary.lightest', paddingTop: '2rem' }}
                     container rowSpacing={3}>
                     <GridItem>
                         <Stack>
@@ -36,10 +42,7 @@ function AddDesign() {
                                     type="text"
                                     required
                                     size="small"
-                                    value={visionInArabic}
-                                    onChange={(e) => {
-                                        setVisionInArabic(e.target.value)
-                                    }}
+                                    {...register("visionInArabic")}
                                     placeholder='الرؤيا بالعربي'
                                 />
                             </AddLabelToEl>
@@ -53,10 +56,7 @@ function AddDesign() {
                                     type="text"
                                     required
                                     size="small"
-                                    value={visionInEnglish}
-                                    onChange={(e) => {
-                                        setVisionInEnglish(e.target.value)
-                                    }}
+                                    {...register("visionInEnglish")}
                                     placeholder='الرؤيا بالأنجليزي'
                                 />
                             </AddLabelToEl>
@@ -70,10 +70,7 @@ function AddDesign() {
                                     type="text"
                                     required
                                     size="small"
-                                    value={arbicSummary}
-                                    onChange={(e) => {
-                                        setArbicSummary(e.target.value)
-                                    }}
+                                    {...register("arbicSummary")}
                                     placeholder='نبذة عن التصميم'
                                 />
                             </AddLabelToEl>
@@ -87,10 +84,7 @@ function AddDesign() {
                                     type="text"
                                     required
                                     size="small"
-                                    value={englishSummary}
-                                    onChange={(e) => {
-                                        setEnglishSummary(e.target.value)
-                                    }}
+                                    {...register("englishSummary")}
                                     placeholder='نبذة عن التصميم بالانجليزي'
                                 />
                             </AddLabelToEl>
@@ -104,10 +98,7 @@ function AddDesign() {
                                     type="text"
                                     required
                                     size="small"
-                                    value={arabicFeatures}
-                                    onChange={(e) => {
-                                        setArabicFeatures(e.target.value)
-                                    }}
+                                    {...register("arabicFeatures")}
                                     placeholder='المميزات'
                                 />
                             </AddLabelToEl>
@@ -121,10 +112,7 @@ function AddDesign() {
                                     type="text"
                                     required
                                     size="small"
-                                    value={englishFeatures}
-                                    onChange={(e) => {
-                                        setEnglishFeatures(e.target.value)
-                                    }}
+                                    {...register("englishFeatures")}
                                     placeholder='المميزات'
                                 />
                             </AddLabelToEl>
@@ -132,9 +120,9 @@ function AddDesign() {
                     </GridItem>
                 </Grid>
                 <Button
+                    type='submit'
                     variant="contained"
-                    sx={{ bgcolor: "text.primary" }}
-                    style={{ marginTop: '1rem', width: '100%' }}
+                    sx={{ bgcolor: "text.primary", marginTop: '1rem', width: '100%' }}
                     size="large">
                     حفظ
                 </Button>

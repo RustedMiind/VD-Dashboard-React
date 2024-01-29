@@ -46,8 +46,8 @@ function DesignReportsTable(props: PropsType) {
                 <Button
                     variant="contained"
                     startIcon={<PrintOutlinedIcon />}
-                    sx={{ bgcolor: "text.primary" }}
-                    style={{ float: 'left', marginBottom: '0.3rem' }}
+                    sx={{ bgcolor: "text.primary", marginBottom: '0.3rem' }}
+                    style={{ float: 'left' }}
                     size="large">
                     طباعة التقرير
                 </Button>

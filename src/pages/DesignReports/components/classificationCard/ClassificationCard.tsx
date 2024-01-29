@@ -9,12 +9,12 @@ function ClassificationCard(props: PropsType) {
 
     return (
         <ButtonBase
-            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', backgroundColor: title === currentTab ? '#004693' : 'aliceblue', borderRadius: '12px', border: '1px solid #004693', width: '353.31px', height: '87px', color: title !== currentTab ? '#004693' : '#fff', cursor: 'pointer' }}
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', bgcolor: title === currentTab ? 'primary.main' : 'primary.lightest', borderRadius: '12px', border: '1px solid priimary.main', width: '353.31px', height: '87px', color: title !== currentTab ? 'primary.main' : 'primary.contrastText', cursor: 'pointer' }}
             onClick={() => props.handleChangeTitle(title)}>
             <Typography variant="h6" fontWeight={700} fontSize={14}>
                 {title}
             </Typography>
-            <Typography style={{ color: title !== currentTab ? '#f19b02' : '#fff' }} fontWeight={700}>
+            <Typography sx={{ color: title !== currentTab ? 'secondary.main' : 'primary.contrastText' }} fontWeight={700}>
                 {count}
             </Typography>
 
