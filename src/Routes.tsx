@@ -19,10 +19,14 @@ import TenderDetails from "./pages/tenders/details";
 import ControlPanal from "./pages/tenders/controlPanel";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
+<<<<<<< HEAD
 import ForTest from "./pages/forTest";
 import FormsSection from "./pages/soilSection/Forms";
 import SoilSection from "./pages/soilSection";
 // import ForTest from "./pages/forTest";
+=======
+import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
+>>>>>>> 83afc6f2bd7c6d4cdb0cd878ec95ce5595cea0c1
 
 function RoutesComponent() {
   const { hasPermission } = usePermissions();
@@ -72,6 +76,11 @@ function RoutesComponent() {
             <Route path="controlpanel" element={<ControlPanal />} />
           </Route>
         }
+        <Route path="services">
+          <Route path="design">
+            <Route path="create" element={<CreateOrUpdateDesign />} />
+          </Route>
+        </Route>
         {hasPermission(Permission.CONTRACTS_VIEW) && (
           <Route path="contracts">
             <Route path="" element={<Contracts />} />
