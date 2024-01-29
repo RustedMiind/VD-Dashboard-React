@@ -10,7 +10,7 @@ export default function NumberOfDays() {
   if (typeof tender === "object") {
     daysLeft = Math.floor(
       getDateDiffNegativeAllowed(
-        new Date(tender.tenderdata?.end_date || ""),
+        new Date(tender.tenderdata?.strat_date || ""),
         new Date()
       ) /
         (1000 * 60 * 60 * 24)

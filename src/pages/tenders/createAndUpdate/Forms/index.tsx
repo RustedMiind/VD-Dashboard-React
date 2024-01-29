@@ -2,7 +2,7 @@ import MainDataForm from "./MainDataForm";
 import { SeparatedAccordion } from "../../../../components/SeparatedAccordion";
 import ManagersForm from "./ManagersForm";
 import { Stack } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TenderContext } from "../TenderCondext";
 import AmountsSection from "./AmountsSection";
 import AttachmentsSection from "./AttachmentsSection";
@@ -20,12 +20,21 @@ function FormsSection() {
     };
   }
 
+  useEffect(() => {
+    setExpanded(undefined);
+  }, [
+    typeof tenderContext.tender === "object" && tenderContext.tender.step_num,
+  ]);
+
   function isCurrentExpanded(current: number): boolean {
     if (
       tenderContext.formStatus === "complete" &&
       typeof tenderContext.tender === "object"
     ) {
-      return current === tenderContext.tender.step_num;
+      return (
+        (current === tenderContext.tender.step_num && !expanded) ||
+        (current <= tenderContext.tender.step_num && current === expanded)
+      );
     } else if (tenderContext.formStatus === "create") {
       return current === 1;
     }

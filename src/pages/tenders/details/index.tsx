@@ -1,4 +1,4 @@
-import { Backdrop, CircularProgress, Stack } from "@mui/material";
+import { Backdrop, CircularProgress, Grid, Stack } from "@mui/material";
 import TabsContainer from "./Tabs";
 import { createContext, useEffect, useState } from "react";
 import { Tender } from "../../../types";
@@ -9,6 +9,7 @@ import { Api } from "../../../constants";
 import { isStringAllNumbers } from "../../../methods";
 import axios from "axios";
 import Cards from "./Cards";
+import Chat from "./Chat";
 
 export const TenderDataContext = createContext<TenderDataContextType>({
   tender: FetchStatusEnum.NONE,
@@ -39,7 +40,14 @@ function TenderDetails() {
     <TenderDataContext.Provider value={{ tender, refresh: loadTender }}>
       <Stack>
         <Cards />
-        <TabsContainer />
+        <Grid container spacing={2}>
+          <Grid item md={9} sm={6}>
+            <TabsContainer />
+          </Grid>
+          <Grid item md={3} sm={8}>
+            <Chat />
+          </Grid>
+        </Grid>
       </Stack>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}

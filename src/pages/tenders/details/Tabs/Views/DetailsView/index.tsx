@@ -27,24 +27,29 @@ function DetailsView(): JSX.Element {
   const { tender } = useContext(TenderDataContext);
 
   if (typeof tender === "object") {
-    const tenderDurationInDays =
-      getDateDiff(
-        new Date(tender.tenderdata?.strat_date || ""),
-        new Date(tender.tenderdata?.end_date || "")
-      ) /
-      (1000 * 60 * 60 * 24);
-    const durationToShow = `${tenderDurationInDays} يوم`;
+    const warranties = tender?.tenderdata?.tender_warranties
+      ?.filter((i) => !!i.warranties)
+      .map((i) => i.warranties?.name)
+      .join(" ,");
+    const applyes = tender?.tenderdata?.tender_applies
+      ?.filter((i) => !!i.apply)
+      .map((i) => i.apply?.name)
+      .join(" ,");
+    // const tenderDurationInDays =
+    //   getDateDiff(
+    //     new Date(tender.tenderdata?.strat_date || ""),
+    //     new Date(tender.tenderdata?.end_date || "")
+    //   ) /
+    //   (1000 * 60 * 60 * 24);
+    const durationToShow = `${tender.tenderdata?.period} يوم`;
 
     return (
       <Grid container rowSpacing={4} columnSpacing={2}>
         <InfoItem
           label="نوع الفرع"
-          value={tender.tenderdata?.department?.management?.branch?.name}
+          value={tender.tenderdata?.management?.branch?.name}
         />
-        <InfoItem
-          label="الادارة"
-          value={tender.tenderdata?.department?.management?.name}
-        />
+        <InfoItem label="الادارة" value={tender.tenderdata?.management?.name} />
         <InfoItem
           label="الرقم المرجعي للمنافسة"
           value={tender.tenderdata?.code_reference}
@@ -71,8 +76,8 @@ function DetailsView(): JSX.Element {
         />
         <InfoItem label="نشاط المنافسة" value={tender.tenderdata?.activity} />
         <InfoItem label="مدة العقد" value={durationToShow} />
-        <InfoItem label="طريقة التقديم" value={" ########## "} />
-        <InfoItem label="الضمان المطلوب" value={" ########## "} />
+        <InfoItem label="طريقة التقديم" value={applyes} />
+        <InfoItem label="الضمان المطلوب" value={warranties} />
       </Grid>
     );
   } else return <></>;

@@ -69,18 +69,26 @@ function ContentPanal() {
       <Grid container spacing={2} mt={2}>
         <Grid item xl={6} xs={12}>
           <PaperButtonLikeTitle
-            count={tenderControlData?.incoming?.length}
+            count={
+              Array.isArray(tenderControlData?.incoming)
+                ? tenderControlData?.incoming.length
+                : undefined
+            }
             fixedHeight={PAPER_HEIGHT}
-            title="المنافسات الواردة"
+            title="المهام الواردة"
           >
             <IncomingTable />
           </PaperButtonLikeTitle>
         </Grid>
         <Grid item xl={6} xs={12}>
           <PaperButtonLikeTitle
-            count={tenderControlData?.ongoing?.length}
+            count={
+              Array.isArray(tenderControlData?.ongoing)
+                ? tenderControlData?.ongoing.length
+                : undefined
+            }
             fixedHeight={PAPER_HEIGHT}
-            title="المنافسات الجارية"
+            title="المعاملات الجارية"
           >
             <OngoingTable />
           </PaperButtonLikeTitle>

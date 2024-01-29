@@ -1,6 +1,6 @@
-import { DB_Boolean, Department } from "../";
+import { DB_Boolean, Department, Management } from "../";
 import { DbOptionType } from "../other/DbOptionType";
-import { TenderItemStatus } from "./Status.enum";
+import { TenderEntityStatus, TenderItemStatus } from "./Status.enum";
 import { TenderAmounts } from "./TenderAmount";
 import { TenderFile } from "./TenderFile";
 import { TenderTask } from "./TenderTask";
@@ -14,7 +14,7 @@ export type Tender = {
   eng_employee_status: TenderApprovalStatus;
   eng_employee_date?: string;
   eng_employee_note?: string;
-  buy_status: TenderItemStatus;
+  buy_status: TenderPay;
   buy_date?: string;
   buy_note?: string;
   technical_status: TenderItemStatus;
@@ -29,13 +29,15 @@ export type Tender = {
   trace_status: TenderItemStatus;
   trace_date?: string;
   trace_note?: string;
-  user_type?: CurrentTenderStep;
   tenderdata?: TenderData;
   tender_tasks?: TenderTask;
   tender_files?: TenderFile[];
   tender_amounts?: TenderAmounts[];
-  // created_at: "2024-01-03T16:33:09.000000Z";
-  // updated_at: "2024-01-03T18:12:24.000000Z";
+  user_type?: number[];
+  directorate_status?: TenderEntityStatus;
+  eng?: DB_Boolean;
+  created_at?: string;
+  updated_at?: string;
   // deleted_at: null;
 };
 
@@ -43,23 +45,32 @@ export type TenderData = {
   id: number;
   tender_id: number;
   tender_type_id: number;
-  department_id: number;
-  code_reference: number;
-  code_tender: number;
-  name: string;
-  strat_date: string;
-  end_date: string;
-  organization_id: number;
-  price: number;
-  type_id: number;
+  department_id?: number;
+  code_reference?: number;
+  code_tender?: number;
+  name?: string;
+  strat_date?: string;
+  end_date?: string;
+  organization_id?: number;
+  price?: number;
+  type_id?: number;
   department?: Department;
   activity?: string;
   period: number;
-  apply_id: number;
+  tender_applies: (DbOptionType & {
+    apply_id: number;
+    apply?: DbOptionType;
+  })[];
   created_at: string;
   updated_at: string;
-  organization: Organization;
-  tender_warranties: (DbOptionType & { warranty_id: number })[];
+  organization?: Organization;
+  tender_warranties?: (DbOptionType & {
+    warranty_id: number;
+    warranties?: DbOptionType;
+  })[];
+  apply?: DbOptionType;
+  management_id?: number;
+  management?: Management;
   // "deleted_at": null
 };
 

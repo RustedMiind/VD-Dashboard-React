@@ -21,10 +21,13 @@
     "axios": "^1.6.0",
     "dayjs": "^1.11.10",
     "notistack": "2.0.8",
+    "pusher-js": "^8.4.0-rc2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-form-hook": "^0.0.1",
     "react-hook-form": "^7.49.3",
+    "react-hook-form-mui": "^7.0.0-beta.0",
+    "react-images-uploading": "^3.1.7",
     "react-router-dom": "^6.18.0",
     "react-scripts": "5.0.1",
     "react-to-print": "^2.14.15",
@@ -32,6 +35,7 @@
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.1.1",
     "typescript": "^4.4.2",
+    "use-query-params": "^2.2.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {

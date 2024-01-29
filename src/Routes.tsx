@@ -18,54 +18,77 @@ import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
 import TenderDetails from "./pages/tenders/details";
 import ControlPanal from "./pages/tenders/controlPanel";
 import ForTest from "./pages/forTest";
+import usePermissions from "./Permissions/hook";
+import { Permission } from "./constants/Permission";
+import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 
 function RoutesComponent() {
+  const { hasPermission } = usePermissions();
+
   return (
     <Routes>
       <Route path="react/*">
-        <Route path="test" element={<ForTest />} />
+        {hasPermission(Permission.CLIENT_REQUESTS_STEP) && (
+          <Route path="test" element={<ForTest />} />
+        )}
         <Route path="" element={<MainPage />} />
-        <Route path="employees">
-          <Route path="requests" element={<EmplyeesRequests />} />
-          <Route path="procedures" element={<EmploeesRequestsProcedures />} />
-        </Route>
+        {/* Employees Section */}
+        {hasPermission(Permission.EMPLOYEES_VIEW) && (
+          <Route path="employees">
+            <Route path="requests" element={<EmplyeesRequests />} />
+            <Route path="procedures" element={<EmploeesRequestsProcedures />} />
+          </Route>
+        )}
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
-          <Route path="vacations">
-            <Route path="" element={<VacationsSettings />} />
-            <Route path=":branchId">
-              <Route path="" element={<VacationDetails />} />
-              <Route path=":yearId" element={<VacationsTable />} />
+          {
+            <Route path="vacations">
+              <Route path="" element={<VacationsSettings />} />
+              <Route path=":branchId">
+                <Route path="" element={<VacationDetails />} />
+                <Route path=":yearId" element={<VacationsTable />} />
+              </Route>
+            </Route>
+          }
+        </Route>
+        {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
+          <Route path="clients">
+            <Route path="" element={<ClientData />} />
+            <Route path="details/:id" element={<ClientDetails />} />
+            <Route path="add" element={<AddClient />} />
+            <Route path=":id/edit" element={<AddClient />} />
+            <Route path="requests" element={<ClientRequests />} />
+            <Route path="procedures" element={<ClientProcess />} />
+          </Route>
+        )}
+        {
+          <Route path="tenders">
+            <Route path="" element={<TendersData />} />
+            <Route path="create" element={<CreateAndUpdateTender />} />
+            <Route path="edit/:id" element={<CreateAndUpdateTender />} />
+            <Route path=":id" element={<TenderDetails />} />
+            <Route path="controlpanel" element={<ControlPanal />} />
+          </Route>
+        }
+        <Route path="services">
+          <Route path="design">
+            <Route path="create" element={<CreateOrUpdateDesign />} />
+          </Route>
+        </Route>
+        {hasPermission(Permission.CONTRACTS_VIEW) && (
+          <Route path="contracts">
+            <Route path="" element={<Contracts />} />
+            {/* <Route path="add" element={<ContractsNotFound />} /> */}
+            <Route
+              path="create/:type"
+              element={<CreateContracts type="create" />}
+            />
+            <Route path=":id">
+              <Route path="" element={<div>Contract Page</div>} />
+              <Route path="edit" element={<CreateContracts type="edit" />} />
             </Route>
           </Route>
-        </Route>
-        <Route path="clients">
-          <Route path="" element={<ClientData />} />
-          <Route path="details/:id" element={<ClientDetails />} />
-          <Route path="add" element={<AddClient />} />
-          <Route path=":id/edit" element={<AddClient />} />
-          <Route path="requests" element={<ClientRequests />} />
-          <Route path="procedures" element={<ClientProcess />} />
-        </Route>
-        <Route path="tenders">
-          <Route path="" element={<TendersData />} />
-          <Route path="create" element={<CreateAndUpdateTender />} />
-          <Route path="edit/:id" element={<CreateAndUpdateTender />} />
-          <Route path=":id" element={<TenderDetails />} />
-          <Route path="controlpanel" element={<ControlPanal />} />
-        </Route>
-        <Route path="contracts">
-          <Route path="" element={<Contracts />} />
-          {/* <Route path="add" element={<ContractsNotFound />} /> */}
-          <Route
-            path="create/:type"
-            element={<CreateContracts type="create" />}
-          />
-          <Route path=":id">
-            <Route path="" element={<div>Contract Page</div>} />
-            <Route path="edit" element={<CreateContracts type="edit" />} />
-          </Route>
-        </Route>
+        )}
         <Route path="*" element={<div>صفحة خاطئة</div>} />
       </Route>
       <Route path="*" element={<NotReactRoute />} />
