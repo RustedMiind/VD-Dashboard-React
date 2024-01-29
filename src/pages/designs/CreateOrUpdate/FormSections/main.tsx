@@ -1,3 +1,4 @@
+import { FormControlLabel, Switch } from "@mui/material";
 import {
   GridItem,
   GridItemDateInputWithLabel,
@@ -7,17 +8,38 @@ import {
 import AttachedFilesController from "./AttachedFilesController";
 import { FormSectionProps } from "./BaseProps";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 
 function MainFormSection({ registerFn }: PropsType) {
+  const [hasDescount, setHasDiscount] = useState(false);
+
   return (
     <InputsGridContainer>
       <GridItemTextInputWithLabel {...registerFn("name_ar")} label="اسم التصميم بالعربي" />
       <GridItemTextInputWithLabel label="اسم التصميم بالانجليزي" />
       <GridItemTextInputWithLabel label="نبذة عن التصميم بالعربي" />
       <GridItemTextInputWithLabel label="نبذة عن التصميم بالانجليزي" />
-      <GridItem lg={12}>يوجد خصم</GridItem>
-      <GridItemTextInputWithLabel type="number" label="السعر قبل الخصم" />
-      <GridItemTextInputWithLabel type="number" label="السعر بعد الخصم" />
+      <GridItem lg={12}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={hasDescount}
+              onChange={(e, checked) => setHasDiscount(checked)}
+            />
+          }
+          label="يوجد خصم"
+        />
+      </GridItem>
+
+      <GridItemTextInputWithLabel
+        type="number"
+        label={hasDescount ? "السعر قبل الخصم" : "السعر"}
+      />
+      {hasDescount ? (
+        <GridItemTextInputWithLabel type="number" label="السعر بعد الخصم" />
+      ) : (
+        <GridItem />
+      )}
       <GridItemDateInputWithLabel
         // {...registerFn("desc_date_from")}
         label="عرض الخصم من تاريخ"

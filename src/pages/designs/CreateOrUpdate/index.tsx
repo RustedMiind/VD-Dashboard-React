@@ -78,8 +78,9 @@ export function GridItemDateInputWithLabel({
 function CreateOrUpdateDesign() {
   const { register, handleSubmit, reset } = useForm<CreateFormType>();
 
-  const [images, setImages] = React.useState<ImageListType>([]);
+  const [mainImage, setMainImage] = React.useState<ImageListType>([]);
 
+  const [subImages, setSubImages] = React.useState<ImageListType>([]);
   return (
     <Grid container spacing={2}>
       <Grid item lg={8}>
@@ -92,7 +93,9 @@ function CreateOrUpdateDesign() {
       </Grid>
       <Grid item lg={4}>
         {/* Form Files */}
-        <FormImagesSection />
+        <FormImagesSection
+          {...{ mainImage, setMainImage, setSubImages, subImages }}
+        />
       </Grid>
     </Grid>
   );
