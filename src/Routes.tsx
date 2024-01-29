@@ -21,9 +21,10 @@ import ForTest from "./pages/forTest";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
+import NotFoundPage from "./pages/NotFound/Index";
 
 function RoutesComponent() {
-  const { hasPermission } = usePermissions();
+  const { hasPermission, hasAnyOfPermissions } = usePermissions();
 
   return (
     <Routes>
@@ -33,12 +34,11 @@ function RoutesComponent() {
         )}
         <Route path="" element={<MainPage />} />
         {/* Employees Section */}
-        {hasPermission(Permission.EMPLOYEES_VIEW) && (
-          <Route path="employees">
-            <Route path="requests" element={<EmplyeesRequests />} />
-            <Route path="procedures" element={<EmploeesRequestsProcedures />} />
-          </Route>
-        )}
+        <Route path="employees">
+          <Route path="requests" element={<EmplyeesRequests />} />
+          <Route path="procedures" element={<EmploeesRequestsProcedures />} />
+        </Route>
+
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           {
@@ -51,45 +51,85 @@ function RoutesComponent() {
             </Route>
           }
         </Route>
-        {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
-          <Route path="clients">
+        <Route path="clients">
+          {hasPermission(Permission.CLIENTS_VIEW) && (
             <Route path="" element={<ClientData />} />
+          )}
+          {hasPermission(Permission.CLIENTS_VIEW) && (
             <Route path="details/:id" element={<ClientDetails />} />
-            <Route path="add" element={<AddClient />} />
-            <Route path=":id/edit" element={<AddClient />} />
-            <Route path="requests" element={<ClientRequests />} />
+          )}
+
+          {hasPermission(Permission.CLIENTS_CREATE) && (
+            <>
+              <Route path="add" element={<AddClient />} />
+              <Route path=":id/edit" element={<AddClient />} />
+            </>
+          )}
+
+          {hasPermission(Permission.CLIENT_REQUESTS_STEP) && (
             <Route path="procedures" element={<ClientProcess />} />
+          )}
+          {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
+            <Route path="requests" element={<ClientRequests />} />
+          )}
+        </Route>
+        {hasAnyOfPermissions([
+          Permission.TENDERS_SHOW,
+          Permission.TENDERS_CREATE,
+          Permission.TENDERS_EDIT,
+          Permission.TASKS_SHOW,
+        ]) && (
+          <Route path="tenders">
+            {hasPermission(Permission.TENDERS_SHOW) && (
+              <Route path="" element={<TendersData />} />
+            )}
+
+            {hasPermission(Permission.TENDERS_CREATE) && (
+              <Route path="create" element={<CreateAndUpdateTender />} />
+            )}
+
+            {hasPermission(Permission.TENDERS_EDIT) && (
+              <Route path="edit/:id" element={<CreateAndUpdateTender />} />
+            )}
+
+            {hasAnyOfPermissions([
+              Permission.TASKS_SHOW,
+              Permission.TENDERS_SHOW,
+            ]) && <Route path="controlpanel" element={<ControlPanal />} />}
+
+            {hasPermission(Permission.TENDERS_SHOW) && (
+              <Route path=":id" element={<TenderDetails />} />
+            )}
           </Route>
         )}
-        {
-          <Route path="tenders">
-            <Route path="" element={<TendersData />} />
-            <Route path="create" element={<CreateAndUpdateTender />} />
-            <Route path="edit/:id" element={<CreateAndUpdateTender />} />
-            <Route path=":id" element={<TenderDetails />} />
-            <Route path="controlpanel" element={<ControlPanal />} />
-          </Route>
-        }
         <Route path="services">
           <Route path="design">
             <Route path="create" element={<CreateOrUpdateDesign />} />
           </Route>
         </Route>
-        {hasPermission(Permission.CONTRACTS_VIEW) && (
-          <Route path="contracts">
+
+        <Route path="contracts">
+          {hasPermission(Permission.CONTRACTS_VIEW) && (
             <Route path="" element={<Contracts />} />
-            {/* <Route path="add" element={<ContractsNotFound />} /> */}
+          )}
+          {/* <Route path="add" element={<ContractsNotFound />} /> */}
+          {hasPermission(Permission.CONTRACTS_CREATE) && (
             <Route
               path="create/:type"
               element={<CreateContracts type="create" />}
             />
-            <Route path=":id">
+          )}
+          <Route path=":id">
+            {hasPermission(Permission.CONTRACTS_VIEW) && (
               <Route path="" element={<div>Contract Page</div>} />
+            )}
+            {hasPermission(Permission.CONTRACTS_EDIT) && (
               <Route path="edit" element={<CreateContracts type="edit" />} />
-            </Route>
+            )}
           </Route>
-        )}
-        <Route path="*" element={<div>صفحة خاطئة</div>} />
+        </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="*" element={<NotReactRoute />} />
     </Routes>
