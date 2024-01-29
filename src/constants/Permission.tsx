@@ -144,4 +144,5 @@ export enum Permission {
   TENDERS_EDIT = "tenders.edit",
   TENDERS_DELETE = "tenders.delete",
   TENDERS_SHOW = "tenders.show",
+  TASKS_SHOW = "tasks.show",
 }

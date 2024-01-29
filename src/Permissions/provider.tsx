@@ -17,6 +17,22 @@ function PermissionsContextProvider({
   function hasPermission(permission: Permission): boolean {
     return permissions.includes(permission);
   }
+  function hasPermissions(toCheck: Permission[]): boolean {
+    let hasPermissionTo = toCheck.filter((toCheck) =>
+      permissions.includes(toCheck)
+    );
+    return hasPermissionTo.length === toCheck.length;
+  }
+  function hasAnyOfPermissions(toCheck: Permission[]): boolean {
+    let hasPermission = false;
+    for (let i = 0; i < toCheck.length; i++) {
+      if (permissions.includes(toCheck[i])) {
+        hasPermission = true;
+        break;
+      }
+    }
+    return hasPermission;
+  }
   const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     setStatus("loading");
@@ -33,7 +49,14 @@ function PermissionsContextProvider({
   }, []);
 
   return (
-    <PermissionsContext.Provider value={{ permissions, hasPermission }}>
+    <PermissionsContext.Provider
+      value={{
+        permissions,
+        hasPermission,
+        hasPermissions,
+        hasAnyOfPermissions,
+      }}
+    >
       {children}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
