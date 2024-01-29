@@ -11,22 +11,24 @@ import {
   IconButton,
   Paper,
   Checkbox,
-  MenuItem,
-  TextField,
 } from "@mui/material";
 
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import { DialogState } from "..";
 import DialogAddFloor from "./Dialog";
+import { useContext } from "react";
+import { SoilContext } from "../../SoilContext";
 
 export default function AddFloors(props: PropsType) {
+  const { soilData } = useContext(SoilContext);
+
   return (
     <Stack>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
         <Button
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
@@ -59,37 +61,22 @@ export default function AddFloors(props: PropsType) {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Checkbox />
-                </TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>
-                  <TextField
-                    sx={{ width: 0.5 }}
-                    select
-                    size="small"
-                    label="Select"
-                  >
-                    <MenuItem>1</MenuItem>
-                  </TextField>
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    sx={{ width: 0.5 }}
-                    select
-                    label="Select"
-                  >
-                    <MenuItem>1</MenuItem>
-                  </TextField>
-                </TableCell>
-                <TableCell>
-                  <IconButton size="small">
-                    <EditNoteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+              {typeof soilData === "object" &&
+                soilData?.soil_floor?.map((item) => (
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox />
+                    </TableCell>
+                    <TableCell>{item.number_floors}</TableCell>
+                    <TableCell> {item.depth}</TableCell>
+                    <TableCell> {item.minimum}</TableCell>
+                    <TableCell>
+                      <IconButton size="small" color="primary">
+                        <SettingsIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>

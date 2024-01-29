@@ -85,42 +85,6 @@ function DialogAddFloor(props: TypeProps) {
             </Grid>
           </Grid>
         </Paper>
-        <Paper sx={{ padding: 2 }}>
-          <Grid container spacing={2} component="form">
-            <Grid item md={12}>
-              <Stack>
-                <Typography fontSize={14} component={"label"}>
-                  عدد الأدوار{" "}
-                </Typography>
-                <TextField
-                  type="text"
-                  size="small"
-                  placeholder={"عدد الأدوار "}
-                />
-              </Stack>
-            </Grid>
-            <Grid item md={12}>
-              <Stack>
-                <Typography fontSize={14} component={"label"}>
-                  العمق{" "}
-                </Typography>
-                <TextField type="text" size="small" placeholder={"العمق "} />
-              </Stack>
-            </Grid>
-            <Grid item md={12}>
-              <Stack>
-                <Typography fontSize={14} component={"label"}>
-                  الحد الأدنى
-                </Typography>
-                <TextField
-                  type="text"
-                  size="small"
-                  placeholder={"الحد الأدنى"}
-                />
-              </Stack>
-            </Grid>
-          </Grid>
-        </Paper>
 
         <Grid container padding={2}>
           <Grid item md={12}>

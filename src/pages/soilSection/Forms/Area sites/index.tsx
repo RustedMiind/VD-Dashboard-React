@@ -18,15 +18,19 @@ import {
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import { DialogState } from "..";
 import DialogAddArea from "./Dialog";
+import { SoilContext } from "../../SoilContext";
+import { useContext } from "react";
 
 export default function AreaSites(props: PropsType) {
+  const { soilData } = useContext(SoilContext);
+
   return (
     <Stack>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
         <Button
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
@@ -59,28 +63,27 @@ export default function AreaSites(props: PropsType) {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Checkbox />
-                </TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    sx={{ width: 0.5 }}
-                    select
-                    label="Select"
-                  >
-                    <MenuItem>1</MenuItem>
-                  </TextField>
-                </TableCell>
-                <TableCell>
-                  <IconButton size="small">
-                    <EditNoteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+              {typeof soilData === "object" &&
+                soilData?.soil_area?.map((item) => (
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox />
+                    </TableCell>
+                    <TableCell>
+                      {item?.area_from && item?.area_from}
+                      {" - "}
+                      {item?.area_to && item?.area_to}
+                      {" م "}
+                    </TableCell>
+                    <TableCell>{item?.number && item?.number}</TableCell>
+                    <TableCell>{item?.minimum && item?.minimum}</TableCell>
+                    <TableCell>
+                      <IconButton size="small" color="primary">
+                        <SettingsIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>

@@ -35,15 +35,15 @@ function TableContent() {
           <TableCell>
             <Checkbox />
           </TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
+          <TableCell>-</TableCell>
           <TableCell>
             <IconButton color="primary">
               <SettingsIcon />

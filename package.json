@@ -27,13 +27,10 @@
     "react-dom": "^18.2.0",
     "react-form-hook": "^0.0.1",
     "react-hook-form": "^7.49.3",
-<<<<<<< HEAD
     "react-leaflet": "^4.2.1",
     "react-leaflet-draw": "^0.20.4",
-=======
     "react-hook-form-mui": "^7.0.0-beta.0",
     "react-images-uploading": "^3.1.7",
->>>>>>> 83afc6f2bd7c6d4cdb0cd878ec95ce5595cea0c1
     "react-router-dom": "^6.18.0",
     "react-scripts": "5.0.1",
     "react-to-print": "^2.14.15",

@@ -9,18 +9,22 @@ import {
   Typography,
   IconButton,
   FormControl,
-  InputLabel,
   Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MenuItem } from "@mui/material";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { useSnackbar } from "notistack";
+import { City } from "../../../../../types/Soil";
+import { SoilContext } from "../../../SoilContext";
 
 export default function DialogAddLocation(props: TypeProps) {
+  const { getSoil } = useContext(SoilContext);
+  const snackbar = useSnackbar();
+  const [city, setCity] = useState<City[]>([]);
   const intialLocationData = {
     location_name: "",
     city_id: "",
@@ -29,6 +33,17 @@ export default function DialogAddLocation(props: TypeProps) {
   };
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
+  useEffect(() => {
+    axios
+      .get<{ data: City[] }>(Api(`employee/soil/use`))
+      .then((res) => {
+        getSoil && getSoil();
+        setCity(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   function updateAmountData(partial: Partial<TypeLocationData>) {
     setAmountData({
       ...amountData,
@@ -38,19 +53,17 @@ export default function DialogAddLocation(props: TypeProps) {
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     axios
-      .post(Api(`employee/soil/location}`), { ...amountData })
+      .post(Api(`employee/soil/location`), { ...amountData })
       .then((res) => {
         console.log(res);
-        // snackbar.enqueueSnackbar("تم حفظ بيانات البند");
-        // snackbar.enqueueSnackbar(
-        //   tenderAmount ? "تم تعديل بيانات البند" : "تم حفظ بيانات البند"
-        // );
-        // setError(undefined);
-        // tenderContext.getTenderData && tenderContext.getTenderData();
-        // setOpen(false);
+        snackbar.enqueueSnackbar("تم حفظ الموقع");
+        props.closeDialog();
       })
       .catch((err) => {
         console.log(err);
+        snackbar.enqueueSnackbar(" تعذر في حفظ الموقع ", {
+          variant: "error",
+        });
       });
   }
   return (
@@ -65,7 +78,6 @@ export default function DialogAddLocation(props: TypeProps) {
       >
         <DialogTitle
           sx={{
-            bgcolor: "Background",
             fontWeight: 800,
             fontSize: "28px",
             textAlign: "center",
@@ -93,6 +105,7 @@ export default function DialogAddLocation(props: TypeProps) {
               <Typography>
                 المدينة <RequiredSymbol />
               </Typography>
+
               <FormControl fullWidth size="small">
                 <Select
                   onChange={(e) => {
@@ -100,10 +113,11 @@ export default function DialogAddLocation(props: TypeProps) {
                   }}
                   value={amountData.city_id}
                 >
-                  <MenuItem value={"0"}>None</MenuItem>
-                  <MenuItem value={"10"}>Ten</MenuItem>
-                  <MenuItem value={"20"}>Twenty</MenuItem>
-                  <MenuItem value={"30"}>Thirty</MenuItem>
+                  {city.map((city) => (
+                    <MenuItem key={city.id} value={city.id}>
+                      {city.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>

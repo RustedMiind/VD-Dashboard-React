@@ -16,16 +16,19 @@ import {
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StatusChip from "../../../../components/StatusChip";
 import { DialogState } from "..";
 import DialogAddLocation from "./Dialog";
+import { useContext } from "react";
+import { SoilContext } from "../../SoilContext";
 export default function CoveredSites(props: PropsType) {
+  const { soilData } = useContext(SoilContext);
   return (
     <Stack>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
         <Button
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
@@ -67,22 +70,31 @@ export default function CoveredSites(props: PropsType) {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Checkbox />
-                </TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>
-                  <StatusChip label="نشط" color="success" />
-                </TableCell>
-                <TableCell>
-                  <IconButton size="small">
-                    <EditNoteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+              {typeof soilData === "object" &&
+                soilData?.soil_location?.map((item) => (
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox />
+                    </TableCell>
+                    <TableCell>
+                      {item?.location_name && item?.location_name}
+                    </TableCell>
+                    <TableCell>
+                      {item?.city?.name && item?.city?.name}
+                    </TableCell>
+                    <TableCell>
+                      {item?.building_system && item?.building_system}
+                    </TableCell>
+                    <TableCell>
+                      <StatusChip label="نشط" color="success" />
+                    </TableCell>
+                    <TableCell>
+                      <IconButton size="small" color="primary">
+                        <SettingsIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>

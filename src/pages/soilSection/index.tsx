@@ -1,5 +1,12 @@
+import { SoilContextProvider } from "./SoilContext";
 import SoilRequest from "./soilRequest";
 
 export default function SoilSection() {
-  return <SoilRequest />;
+  console.log("abdo");
+
+  return (
+    <SoilContextProvider>
+      <SoilRequest />
+    </SoilContextProvider>
+  );
 }
