@@ -66,7 +66,12 @@ export default function AreaSites(props: PropsType) {
                 <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>
-                  <TextField sx={{ width: 0.5 }} select label="Select">
+                  <TextField
+                    size="small"
+                    sx={{ width: 0.5 }}
+                    select
+                    label="Select"
+                  >
                     <MenuItem>1</MenuItem>
                   </TextField>
                 </TableCell>

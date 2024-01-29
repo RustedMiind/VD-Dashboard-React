@@ -39,10 +39,12 @@ function DialogAddFloor(props: TypeProps) {
       </IconButton>
 
       <DialogTitle
-        textAlign={"start"}
-        fontWeight={500}
-        pt={4}
-        sx={{ bgcolor: "Background" }}
+        sx={{
+          bgcolor: "Background",
+          fontWeight: 800,
+          fontSize: "28px",
+          textAlign: "center",
+        }}
       >
         إضافة الأدوار
       </DialogTitle>

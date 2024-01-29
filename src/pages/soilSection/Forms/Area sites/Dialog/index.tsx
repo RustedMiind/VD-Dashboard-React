@@ -18,7 +18,7 @@ function GridItem({ children }: { children: React.ReactNode }) {
     <Grid item xs={12} md={6}>
       <Stack height={1} justifyContent={"end"}>
         {children}
-      </Stack>{" "}
+      </Stack>
     </Grid>
   );
 }
@@ -48,10 +48,12 @@ function DialogAddArea(props: TypeProps) {
       </IconButton>
 
       <DialogTitle
-        textAlign={"start"}
-        fontWeight={500}
-        pt={4}
-        sx={{ bgcolor: "Background" }}
+        sx={{
+          bgcolor: "Background",
+          fontWeight: 800,
+          fontSize: "28px",
+          textAlign: "center",
+        }}
       >
         إضافة مساحة
       </DialogTitle>

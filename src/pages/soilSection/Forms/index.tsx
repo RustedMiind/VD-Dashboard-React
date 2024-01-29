@@ -1,13 +1,14 @@
 import { Stack } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { TenderContext } from "../../tenders/createAndUpdate/TenderCondext";
+import { useState } from "react";
 import { SeparatedAccordion } from "../../../components/SeparatedAccordion";
-
 import CoveredSites from "./Covered sites";
 import AreaSites from "./Area sites";
 import AddRoles from "./Add Floors";
+
 function FormsSection() {
   const [dialogState, setDialogState] = useState<DialogState>("none");
+  const [expanded, setExpanded] = useState<undefined | number>(undefined);
+
   const closeDialog = () => {
     setDialogState("none");
   };
@@ -20,9 +21,6 @@ function FormsSection() {
   const openFloorDialog = () => {
     setDialogState("floor");
   };
-  const tenderContext = useContext(TenderContext);
-
-  const [expanded, setExpanded] = useState<undefined | number>(undefined);
 
   function expand(toExpand: number): () => void {
     return () => {
@@ -32,31 +30,10 @@ function FormsSection() {
     };
   }
 
-  useEffect(() => {
-    setExpanded(undefined);
-  }, [
-    typeof tenderContext.tender === "object" && tenderContext.tender.step_num,
-  ]);
-
-  function isCurrentExpanded(current: number): boolean {
-    if (
-      tenderContext.formStatus === "complete" &&
-      typeof tenderContext.tender === "object"
-    ) {
-      return (
-        (current === tenderContext.tender.step_num && !expanded) ||
-        (current <= tenderContext.tender.step_num && current === expanded)
-      );
-    } else if (tenderContext.formStatus === "create") {
-      return current === 1;
-    }
-    return current === expanded;
-  }
-
   return (
     <Stack spacing={2}>
       <SeparatedAccordion
-        expanded={isCurrentExpanded(1)}
+        expanded={expanded === 1}
         onChange={expand(1)}
         title="المواقع المغطاه"
         bgReverse
@@ -69,7 +46,7 @@ function FormsSection() {
       </SeparatedAccordion>
 
       <SeparatedAccordion
-        expanded={isCurrentExpanded(2)}
+        expanded={expanded === 2}
         onChange={expand(2)}
         title="المساحة"
         bgReverse
@@ -81,7 +58,7 @@ function FormsSection() {
         />
       </SeparatedAccordion>
       <SeparatedAccordion
-        expanded={isCurrentExpanded(3)}
+        expanded={expanded === 3}
         onChange={expand(3)}
         title="الادوار"
         bgReverse

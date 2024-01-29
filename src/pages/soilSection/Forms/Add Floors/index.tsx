@@ -65,12 +65,22 @@ export default function AddFloors(props: PropsType) {
                 </TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>
-                  <TextField sx={{ width: 0.5 }} select label="Select">
+                  <TextField
+                    sx={{ width: 0.5 }}
+                    select
+                    size="small"
+                    label="Select"
+                  >
                     <MenuItem>1</MenuItem>
                   </TextField>
                 </TableCell>
                 <TableCell>
-                  <TextField sx={{ width: 0.5 }} select label="Select">
+                  <TextField
+                    size="small"
+                    sx={{ width: 0.5 }}
+                    select
+                    label="Select"
+                  >
                     <MenuItem>1</MenuItem>
                   </TextField>
                 </TableCell>

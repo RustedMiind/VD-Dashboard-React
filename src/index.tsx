@@ -96,15 +96,7 @@ function RunProd() {
     resetAuth();
   }
 }
-root.render(
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <BrowserRouter>
-      <CacheProvider value={cacheRtl}>
-        <App />
-      </CacheProvider>
-    </BrowserRouter>
-  </LocalizationProvider>
-);
+
 function RunDev() {
   axios
     .post<{ data: { token: string; user: unknown } }>(Api("employee/login"), {
@@ -115,6 +107,15 @@ function RunDev() {
       device_type: "android",
     })
     .then(({ data }) => {
+      root.render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <BrowserRouter>
+            <CacheProvider value={cacheRtl}>
+              <App />
+            </CacheProvider>
+          </BrowserRouter>
+        </LocalizationProvider>
+      );
       console.log("User Token", data.data.token);
       axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
       setCookie("db_token", data.data.token, 7);
