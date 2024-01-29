@@ -27,6 +27,7 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "الادوار والمستخدمين",
     icon: SecurityIcon,
+    isPrivate: [Permission.ROLES_VIEW, Permission.USERS_VIEW],
     routes: [
       {
         name: "الادوار",
@@ -44,6 +45,11 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "الهيكل التنظيمي",
     icon: AutoAwesomeMosaicIcon,
+    isPrivate: [
+      Permission.MANAGEMENTS_VIEW,
+      Permission.JOB_GRADES_VIEW,
+      Permission.EMPLOYEES_VIEW,
+    ],
     routes: [
       { name: "الفروع", path: "branches", isPrivate: Permission.BRANCHES_VIEW },
       {
@@ -66,10 +72,14 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "مشاريعي",
     icon: AccountTreeIcon,
-    isPrivate: Permission.TENDERS_VIEW,
+    isPrivate: [
+      Permission.TENDERS_SHOW,
+      Permission.TASKS_SHOW,
+      Permission.TENDERS_VIEW,
+    ],
     routes: [
       {
-        name: "اعدادات المنافسات",
+        name: "المنافسات",
         path: "/tenders",
         react: true,
       },
@@ -83,6 +93,13 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "العملاء",
     icon: GroupIcon,
+    isPrivate: [
+      Permission.CLIENTS_VIEW,
+      Permission.CONTRACTS_VIEW,
+      Permission.BROKERS_VIEW,
+      Permission.CLIENT_REQUESTS_VIEW,
+      Permission.CLIENT_REQUESTS_ADDSTEP,
+    ],
     routes: [
       {
         name: "بيانات العملاء",
@@ -118,20 +135,33 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "الحضور والطلبات",
     icon: AssignmentIcon,
+    isPrivate: [
+      Permission.ATTENDANCE_VIEW,
+      Permission.TICKETS_VIEW,
+      Permission.DASHBOARD_SETTING_SHIFT_VIEW,
+    ],
     routes: [
       {
         name: "حضور الموظفين",
         path: "employee/reports",
-
         isPrivate: Permission.ATTENDANCE_VIEW,
       },
-      { name: "طلبات الموظفين", path: "/employees/requests", react: true },
-      { name: "اجراءات الطلبات", path: "/employees/procedures", react: true },
+      {
+        name: "طلبات الموظفين",
+        path: "/employees/requests",
+        react: true,
+        isPrivate: Permission.ATTENDANCE_REQUESTS_VIEW,
+      },
+      {
+        name: "اجراءات الطلبات",
+        path: "/employees/procedures",
+        react: true,
+        isPrivate: Permission.ATTENDANCE_REQUESTS_CREATE,
+      },
       {
         name: "الشكاوي والدعم",
         path: "attendance/support",
-
-        isPrivate: Permission.ATTENDANCE_SUPPORT_VIEW,
+        isPrivate: Permission.TICKETS_VIEW,
       },
       {
         name: "محددات المشاريع",
@@ -143,16 +173,23 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "الاعدادات",
     icon: AdminPanelSettingsIcon,
+    isPrivate: [Permission.DASHBOARD_SETTING_VIEW, Permission.PLATFORMS_VIEW],
     routes: [
       {
         name: "اعدادات لوحة التحكم",
         path: "settings/dashboard",
+        isPrivate: Permission.DASHBOARD_SETTING_VIEW,
       },
-      { name: "اعدادات الموقع والتطبيق", path: "settings/platforms" },
+      {
+        name: "اعدادات الموقع والتطبيق",
+        path: "settings/platforms",
+        isPrivate: Permission.PLATFORMS_VIEW,
+      },
       {
         name: "اعدادات الاجازات",
         path: "/datalib/vacations",
         react: true,
+        isPrivate: Permission.DASHBOARD_SETTING_VIEW,
       },
     ],
   },
@@ -168,7 +205,7 @@ const routesCollections: RoutesCollectionType[] = [
 
 function DrawerComponent(props: PropsType) {
   const [currentCollection, setCurrentCollection] = useState<null | number>();
-  const { hasPermission } = usePermissions();
+  const { hasPermission, hasAnyOfPermissions } = usePermissions();
   return (
     <Drawer
       sx={{
@@ -193,7 +230,7 @@ function DrawerComponent(props: PropsType) {
         {routesCollections.map((collection, index) => {
           let allowed = !collection.isPrivate;
           if (!allowed && collection.isPrivate) {
-            allowed = hasPermission(collection.isPrivate);
+            allowed = hasAnyOfPermissions(collection.isPrivate);
           }
 
           return (
@@ -280,7 +317,7 @@ type RoutesCollectionType = {
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
     muiName: string;
   };
-  isPrivate?: Permission;
+  isPrivate?: Permission[];
 };
 
 type RouteType = {
