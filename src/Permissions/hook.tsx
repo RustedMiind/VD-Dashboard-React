@@ -7,6 +7,8 @@ function usePermissions() {
   return {
     hasPermission: permissions.hasPermission,
     permissions: permissions.permissions,
+    hasPermissions: permissions.hasPermissions,
+    hasAnyOfPermissions: permissions.hasAnyOfPermissions,
   };
 }
 

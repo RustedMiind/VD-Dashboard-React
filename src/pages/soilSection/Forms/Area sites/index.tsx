@@ -23,10 +23,61 @@ import EditIcon from "@mui/icons-material/Edit";
 import { DialogState } from "..";
 import DialogAddArea from "./Dialog";
 import { SoilContext } from "../../SoilContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { AxiosErrorType } from "../../../../types/Axios";
+import { LaravelValidationError } from "../../../../types/LaravelValidationError";
+import { useSnackbar } from "notistack";
 
 export default function AreaSites(props: PropsType) {
-  const { soilData } = useContext(SoilContext);
+  const snackbar = useSnackbar();
+  const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
+  const { soilData, setSoilData } = useContext(SoilContext);
+  const selectAllHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    let values: number[] | undefined =
+      typeof soilData === "object"
+        ? soilData.soil_area?.map((item) => {
+            return item.id;
+          })
+        : [];
+    if (checked) setSelectedSoilId && setSelectedSoilId(values || []);
+    else setSelectedSoilId && setSelectedSoilId([]);
+  };
+  function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    let isSelect = e.target.checked;
+    let value = parseInt(e.target.value);
+    if (isSelect) {
+      setSelectedSoilId &&
+        selectedSoilId &&
+        setSelectedSoilId([...selectedSoilId, value]);
+    } else {
+      setSelectedSoilId &&
+        setSelectedSoilId((prevData) => {
+          return prevData.filter((id) => {
+            return id !== value;
+          });
+        });
+    }
+  }
+  function handleDelete() {
+    axios
+      .delete(Api("employee/"), {
+        data: { tenderIds: selectedSoilId },
+      })
+      .then((res) => {
+        snackbar.enqueueSnackbar("تم حذف  المختارة بنجاح");
+        setSoilData && setSoilData();
+      })
+      .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+        snackbar.enqueueSnackbar(<>{err.response?.data?.msg}</>, {
+          variant: "error",
+        });
+      });
+  }
 
   return (
     <Stack>
@@ -43,7 +94,13 @@ export default function AreaSites(props: PropsType) {
           <Button sx={{ mx: 2 }} variant="outlined" startIcon={<EditIcon />}>
             تعديل
           </Button>
-          <Button color="error" variant="outlined" startIcon={<DeleteIcon />}>
+          <Button
+            disabled={selectedSoilId?.length === 0}
+            onClick={handleDelete}
+            color="error"
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+          >
             حذف
           </Button>
         </Box>
@@ -54,7 +111,13 @@ export default function AreaSites(props: PropsType) {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Checkbox />
+                  <Checkbox
+                    checked={
+                      typeof soilData === "object" &&
+                      selectedSoilId?.length === soilData.soil_area?.length
+                    }
+                    onChange={selectAllHandler}
+                  />
                 </TableCell>
                 <TableCell>المساحة</TableCell>
                 <TableCell>العدد المقابل</TableCell>
@@ -67,7 +130,11 @@ export default function AreaSites(props: PropsType) {
                 soilData?.soil_area?.map((item) => (
                   <TableRow>
                     <TableCell>
-                      <Checkbox />
+                      <Checkbox
+                        value={item.id}
+                        checked={selectedSoilId?.includes(item.id)}
+                        onChange={CheckboxHandler}
+                      />
                     </TableCell>
                     <TableCell>
                       {item?.area_from && item?.area_from}

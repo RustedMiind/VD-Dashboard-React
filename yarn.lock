@@ -2461,12 +2461,21 @@
   dependencies:
     "@types/react" "*"
 
+<<<<<<< HEAD
 "@types/react-leaflet@^3.0.0":
   version "3.0.0"
   resolved "https://registry.npmjs.org/@types/react-leaflet/-/react-leaflet-3.0.0.tgz"
   integrity sha512-p8R9mVKbCDDqOdW+M6GyJJuFn6q+IgDFYavFiOIvaWHuOe5kIHZEtCy1pfM43JIA6JiB3D/aDoby7C51eO+XSg==
   dependencies:
     react-leaflet "*"
+=======
+"@types/react-filepond@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-filepond/-/react-filepond-7.1.0.tgz#d7462dc88124f4e308466c8ca578e6ed706b2b72"
+  integrity sha512-oBsC4qbOdofxPJlVQTkh3enRAItgE26ieq3Cygc7tLmE5D4Z8//20y2pIE2mHW9LDIRcBvLg3wQ+zXM3E1XtBw==
+  dependencies:
+    react-filepond "*"
+>>>>>>> efea12ec19d167e4f6308d5f4cb56c8043f330d6
 
 "@types/react-transition-group@^4.4.8":
   version "4.4.8"
@@ -5082,6 +5091,21 @@ filelist@^1.0.4:
   integrity sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==
   dependencies:
     minimatch "^5.0.1"
+
+filepond-plugin-image-exif-orientation@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-exif-orientation/-/filepond-plugin-image-exif-orientation-1.0.11.tgz#c46b522e8873e2ad5b9c7e2bbbe71176c9df58b2"
+  integrity sha512-hLBc12Fk6Zkj3L8mSAn+elugHOqT5rLUbgVXQQIQjMe0FsGjtpoxqeVR6jt4IWHGat2L9sFAgU2TGmd1mqosCg==
+
+filepond-plugin-image-preview@^4.6.12:
+  version "4.6.12"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.12.tgz#adcff8be50f001e21ca8221a53c6870b63ebe0fe"
+  integrity sha512-Y8ETX5QVV0mbPB0586UH8AUmG9tZg8PuN5bdEAIlZVJFTct5ebViJ7+Am94/VhTPjLqZjBf1zmDq5JU6XRsZKw==
+
+filepond@^4.30.6:
+  version "4.30.6"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.30.6.tgz#59ef22196f810be169c77f3f1fc1439931844a3a"
+  integrity sha512-gBsVKJgr5HFTkQSA/3R6utne4Qt6Pue0O3+k3IjjVBbaQxMgGMI0fXwoob9SdRRoULCs8BAhWjttM28hOAi/0w==
 
 filesize@^8.0.6:
   version "8.0.7"
@@ -8291,6 +8315,11 @@ react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
+
+react-filepond@*, react-filepond@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/react-filepond/-/react-filepond-7.1.2.tgz#8f04d06396a59b5980dda479c095ed23e6d1f68b"
+  integrity sha512-vrlx9o/n+jGikh6jLey+PpUGYtEZn8MdeB6JFeX/5/N/Mu75IHG+MFQbv8R27bNXvS41mDtV9Fo5DG+s6siVIA==
 
 react-form-hook@^0.0.1:
   version "0.0.1"

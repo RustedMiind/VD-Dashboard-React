@@ -22,10 +22,63 @@ import AddLocationIcon from "@mui/icons-material/AddLocation";
 import StatusChip from "../../../../components/StatusChip";
 import { DialogState } from "..";
 import DialogAddLocation from "./Dialog";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SoilContext } from "../../SoilContext";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { useSnackbar } from "notistack";
+import { AxiosErrorType } from "../../../../types/Axios";
+import { LaravelValidationError } from "../../../../types/LaravelValidationError";
+
 export default function CoveredSites(props: PropsType) {
-  const { soilData } = useContext(SoilContext);
+  const snackbar = useSnackbar();
+  const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
+
+  const { soilData, setSoilData } = useContext(SoilContext);
+  const selectAllHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    let values: number[] | undefined =
+      typeof soilData === "object"
+        ? soilData.soil_location?.map((item) => {
+            return item.id;
+          })
+        : [];
+    if (checked) setSelectedSoilId && setSelectedSoilId(values || []);
+    else setSelectedSoilId && setSelectedSoilId([]);
+  };
+  function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    let isSelect = e.target.checked;
+    let value = parseInt(e.target.value);
+    if (isSelect) {
+      setSelectedSoilId &&
+        selectedSoilId &&
+        setSelectedSoilId([...selectedSoilId, value]);
+    } else {
+      setSelectedSoilId &&
+        setSelectedSoilId((prevData) => {
+          return prevData.filter((id) => {
+            return id !== value;
+          });
+        });
+    }
+  }
+  function handleDelete() {
+    axios
+      .delete(Api("employee/"), {
+        data: { tenderIds: selectedSoilId },
+      })
+      .then((res) => {
+        snackbar.enqueueSnackbar("تم حذف  المختارة بنجاح");
+        setSoilData && setSoilData();
+      })
+      .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
+        snackbar.enqueueSnackbar(<>{err.response?.data?.msg}</>, {
+          variant: "error",
+        });
+      });
+  }
   return (
     <Stack>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
@@ -46,10 +99,22 @@ export default function CoveredSites(props: PropsType) {
           >
             الخريطة الكلية
           </Button>
-          <Button sx={{ mx: 2 }} variant="outlined" startIcon={<EditIcon />}>
+          <Button
+            onClick={props.openCoveredDialog}
+            disabled={selectedSoilId?.length !== 1}
+            sx={{ mx: 2 }}
+            variant="outlined"
+            startIcon={<EditIcon />}
+          >
             تعديل
           </Button>
-          <Button color="error" variant="outlined" startIcon={<DeleteIcon />}>
+          <Button
+            disabled={selectedSoilId?.length === 0}
+            onClick={handleDelete}
+            color="error"
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+          >
             حذف
           </Button>
         </Box>
@@ -60,7 +125,13 @@ export default function CoveredSites(props: PropsType) {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Checkbox />
+                  <Checkbox
+                    checked={
+                      typeof soilData === "object" &&
+                      selectedSoilId?.length === soilData.soil_location?.length
+                    }
+                    onChange={selectAllHandler}
+                  />
                 </TableCell>
                 <TableCell>اسم الموقع</TableCell>
                 <TableCell>المدينة</TableCell>
@@ -74,7 +145,11 @@ export default function CoveredSites(props: PropsType) {
                 soilData?.soil_location?.map((item) => (
                   <TableRow>
                     <TableCell>
-                      <Checkbox />
+                      <Checkbox
+                        value={item.id}
+                        checked={selectedSoilId?.includes(item.id)}
+                        onChange={CheckboxHandler}
+                      />
                     </TableCell>
                     <TableCell>
                       {item?.location_name && item?.location_name}
@@ -105,7 +180,7 @@ export default function CoveredSites(props: PropsType) {
         </TableContainer>
       </Stack>
       <DialogAddLocation
-        closeDialog={props.closeDialog}
+        npmcloseDialog={props.closeDialog}
         open={props.dialogState === "covered"}
       />
     </Stack>

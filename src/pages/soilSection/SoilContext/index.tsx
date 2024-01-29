@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../constants";
-import { Tender } from "../../../types";
 import { Soil } from "../../../types/Soil";
 
 export const SoilContext = createContext<ContextType>({});
@@ -12,6 +11,7 @@ export function SoilContextProvider({
   children: React.ReactNode;
 }) {
   const [soilData, setSoilData] = useState<TenderStateType>("none");
+  // const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
   function getSoil(params?: unknown) {
     setSoilData("loading");
     axios
@@ -35,8 +35,8 @@ export function SoilContextProvider({
         soilData,
         setSoilData: getSoil,
         getSoil,
-        // selectedTenderId,
-        // setSelectedTenderId,
+        // selectedSoilId,
+        // setSelectedSoilId,
         // limit,
         // setLimit: setLimitAndUpdate,
       }}
@@ -49,8 +49,8 @@ export function SoilContextProvider({
 type ContextType = {
   soilData?: TenderStateType;
   setSoilData?: ((param?: unknown) => void) | null;
-  selectedTenderId?: number[];
-  setSelectedTenderId?: React.Dispatch<React.SetStateAction<number[]>>;
+  selectedSoilId?: number[];
+  setSelectedSoilId?: React.Dispatch<React.SetStateAction<number[]>>;
   limit?: string | null;
   setLimit?: ((rows: string) => void) | null;
   getSoil?: () => void;
