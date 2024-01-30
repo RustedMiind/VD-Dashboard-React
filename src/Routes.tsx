@@ -78,29 +78,29 @@ function RoutesComponent() {
           Permission.TENDERS_EDIT,
           Permission.TASKS_SHOW,
         ]) && (
-            <Route path="tenders">
-              {hasPermission(Permission.TENDERS_SHOW) && (
-                <Route path="" element={<TendersData />} />
-              )}
+          <Route path="tenders">
+            {hasPermission(Permission.TENDERS_SHOW) && (
+              <Route path="" element={<TendersData />} />
+            )}
 
-              {hasPermission(Permission.TENDERS_CREATE) && (
-                <Route path="create" element={<CreateAndUpdateTender />} />
-              )}
+            {hasPermission(Permission.TENDERS_CREATE) && (
+              <Route path="create" element={<CreateAndUpdateTender />} />
+            )}
 
-              {hasPermission(Permission.TENDERS_EDIT) && (
-                <Route path="edit/:id" element={<CreateAndUpdateTender />} />
-              )}
+            {hasPermission(Permission.TENDERS_EDIT) && (
+              <Route path="edit/:id" element={<CreateAndUpdateTender />} />
+            )}
 
-              {hasAnyOfPermissions([
-                Permission.TASKS_SHOW,
-                Permission.TENDERS_SHOW,
-              ]) && <Route path="controlpanel" element={<ControlPanal />} />}
+            {hasAnyOfPermissions([
+              Permission.TASKS_SHOW,
+              Permission.TENDERS_SHOW,
+            ]) && <Route path="controlpanel" element={<ControlPanal />} />}
 
-              {hasPermission(Permission.TENDERS_SHOW) && (
-                <Route path=":id" element={<TenderDetails />} />
-              )}
-            </Route>
-          )}
+            {hasPermission(Permission.TENDERS_SHOW) && (
+              <Route path=":id" element={<TenderDetails />} />
+            )}
+          </Route>
+        )}
         <Route path="services">
           <Route path="design">
             <Route path="create" element={<CreateOrUpdateDesign />} />
