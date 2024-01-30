@@ -3,7 +3,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Button,
   Grid,
   TextField,
   Typography,
@@ -20,38 +19,41 @@ import { Api } from "../../../../../constants";
 import { useSnackbar } from "notistack";
 import { City, Location } from "../../../../../types/Soil";
 import { SoilContext } from "../../../SoilContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function DialogAddLocation(props: TypeProps) {
   const { getSoil, soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
-  const [objectToUpdate, setObjectToUpdate] = useState<Location[] | []>([]);
-  const [city, setCity] = useState<City[]>([]);
-  const intialLocationData = {
+  const intialLocationData: TypeLocationData = {
     location_name: "",
     city_id: "",
     building_system: "",
     status: "1",
   };
+  const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
 
   useEffect(() => {
     if (props.idToUpdate != null) {
-      const obj: Location[] | [] =
+      const obj: Location | undefined =
         typeof soilData === "object"
-          ? soilData.soil_location.filter(
-              (index) => index.id == props.idToUpdate
-            )
-          : [];
-      setObjectToUpdate(obj);
-    }
+          ? soilData.soil_location.find((index) => index.id == props.idToUpdate)
+          : undefined;
+      const objLocation: TypeLocationData = {
+        location_name: obj?.location_name || "",
+        city_id: obj?.city_id?.toString() || "",
+        building_system: obj?.building_system || "",
+        status: "1",
+      };
+      setAmountData(obj ? objLocation : intialLocationData);
+    } else setAmountData(intialLocationData);
   }, [props.idToUpdate]);
 
   useEffect(() => {
     axios
       .get<{ data: City[] }>(Api(`employee/soil/use`))
       .then((res) => {
-        getSoil && getSoil();
         setCity(res.data.data);
       })
       .catch((err) => {
@@ -110,11 +112,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 type="text"
                 size="small"
                 fullWidth
-                value={
-                  objectToUpdate.length
-                    ? objectToUpdate[0].location_name
-                    : amountData.location_name
-                }
+                value={amountData.location_name}
                 onChange={(e) => {
                   updateAmountData({ location_name: e.target.value });
                 }}
@@ -127,11 +125,7 @@ export default function DialogAddLocation(props: TypeProps) {
 
               <FormControl fullWidth size="small">
                 <Select
-                  value={
-                    objectToUpdate.length
-                      ? objectToUpdate[0].city_id
-                      : amountData.city_id
-                  }
+                  value={amountData.city_id}
                   onChange={(e) => {
                     updateAmountData({ city_id: e.target.value as string });
                   }}
@@ -149,11 +143,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 نظام البناء <RequiredSymbol />
               </Typography>
               <TextField
-                value={
-                  objectToUpdate.length
-                    ? objectToUpdate[0].building_system
-                    : amountData.building_system
-                }
+                value={amountData.building_system}
                 type="text"
                 size="small"
                 fullWidth
@@ -171,14 +161,11 @@ export default function DialogAddLocation(props: TypeProps) {
           </Grid>
         </DialogContent>
         <DialogActions
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
+          sx={{ display: "flex", justifyContent: "center", py: 3 }}
         >
-          <Button variant="contained" type="submit" sx={{ mb: 2 }}>
+          <LoadingButton variant="contained" type="submit" sx={{ width: 0.7 }}>
             حفظ
-          </Button>
+          </LoadingButton>
         </DialogActions>
         <IconButton
           onClick={props.closeDialog}

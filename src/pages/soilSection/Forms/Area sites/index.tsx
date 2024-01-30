@@ -11,8 +11,6 @@ import {
   IconButton,
   Paper,
   Checkbox,
-  MenuItem,
-  TextField,
 } from "@mui/material";
 
 // Icons
@@ -29,10 +27,14 @@ import { Api } from "../../../../constants";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import { useSnackbar } from "notistack";
+import LoadingTable from "../../../../components/LoadingTable";
+import NotFound from "../../../../components/NotFound";
 
 export default function AreaSites(props: PropsType) {
   const snackbar = useSnackbar();
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
+  const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
+
   const { soilData, setSoilData } = useContext(SoilContext);
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -50,6 +52,7 @@ export default function AreaSites(props: PropsType) {
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
+    setIdToUpdate(parseInt(e.target.value));
     if (isSelect) {
       setSelectedSoilId &&
         selectedSoilId &&
@@ -80,92 +83,104 @@ export default function AreaSites(props: PropsType) {
   }
 
   return (
-    <Stack>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-        <Button
-          variant="contained"
-          startIcon={<AddCircleOutlineIcon />}
-          sx={{ mb: 1 }}
-          onClick={props.openAreaDialog}
-        >
-          اضافة مساحة
-        </Button>
-        <Box>
-          <Button sx={{ mx: 2 }} variant="outlined" startIcon={<EditIcon />}>
-            تعديل
-          </Button>
-          <Button
-            disabled={selectedSoilId?.length === 0}
-            onClick={handleDelete}
-            color="error"
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-          >
-            حذف
-          </Button>
-        </Box>
-      </Box>
-      <Stack>
-        <TableContainer component={Paper}>
-          <Table sx={{ bgcolor: "Background" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Checkbox
-                    checked={
-                      typeof soilData === "object" &&
-                      selectedSoilId?.length != 0 &&
-                      selectedSoilId?.length === soilData.soil_area?.length
-                    }
-                    onChange={selectAllHandler}
-                  />
-                </TableCell>
-                <TableCell>المساحة</TableCell>
-                <TableCell>العدد المقابل</TableCell>
-                <TableCell>الحد الادنى</TableCell>
-                <TableCell>الاعدادات</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {typeof soilData === "object" &&
-                soilData?.soil_area?.map((item) => (
+    <>
+      {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
+      {soilData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
+      {typeof soilData === "object" && (
+        <Stack>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlineIcon />}
+              sx={{ mb: 1 }}
+              onClick={props.openAreaDialog}
+            >
+              اضافة مساحة
+            </Button>
+            <Box>
+              <Button
+                onClick={props.openAreaDialog}
+                sx={{ mx: 2 }}
+                variant="outlined"
+                startIcon={<EditIcon />}
+              >
+                تعديل
+              </Button>
+              <Button
+                disabled={selectedSoilId?.length === 0}
+                onClick={handleDelete}
+                color="error"
+                variant="outlined"
+                startIcon={<DeleteIcon />}
+              >
+                حذف
+              </Button>
+            </Box>
+          </Box>
+          <Stack>
+            <TableContainer component={Paper}>
+              <Table sx={{ bgcolor: "Background" }}>
+                <TableHead>
                   <TableRow>
                     <TableCell>
                       <Checkbox
-                        value={item.id}
-                        checked={selectedSoilId?.includes(item.id)}
-                        onChange={CheckboxHandler}
+                        checked={
+                          typeof soilData === "object" &&
+                          selectedSoilId?.length != 0 &&
+                          selectedSoilId?.length === soilData.soil_area?.length
+                        }
+                        onChange={selectAllHandler}
                       />
                     </TableCell>
-                    <TableCell>
-                      {item?.area_from && item?.area_from}
-                      {" - "}
-                      {item?.area_to && item?.area_to}
-                      {" م "}
-                    </TableCell>
-                    <TableCell>{item?.number && item?.number}</TableCell>
-                    <TableCell>{item?.minimum && item?.minimum}</TableCell>
-                    <TableCell>
-                      <IconButton size="small" color="primary">
-                        <SettingsIcon />
-                      </IconButton>
-                    </TableCell>
+                    <TableCell>المساحة</TableCell>
+                    <TableCell>العدد المقابل</TableCell>
+                    <TableCell>الحد الادنى</TableCell>
+                    <TableCell>الاعدادات</TableCell>
                   </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
-            <Button type="submit" variant="contained">
-              حفظ
-            </Button>
-          </Box>
-        </TableContainer>
-      </Stack>
-      <DialogAddArea
-        closeDialog={props.closeDialog}
-        open={props.dialogState === "area"}
-      />
-    </Stack>
+                </TableHead>
+                <TableBody>
+                  {typeof soilData === "object" &&
+                    soilData?.soil_area?.map((item) => (
+                      <TableRow>
+                        <TableCell>
+                          <Checkbox
+                            value={item.id}
+                            checked={selectedSoilId?.includes(item.id)}
+                            onChange={CheckboxHandler}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {item?.area_from && item?.area_from}
+                          {" - "}
+                          {item?.area_to && item?.area_to}
+                          {" م "}
+                        </TableCell>
+                        <TableCell>{item?.number && item?.number}</TableCell>
+                        <TableCell>{item?.minimum && item?.minimum}</TableCell>
+                        <TableCell>
+                          <IconButton size="small" color="primary">
+                            <SettingsIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+                <Button type="submit" variant="contained">
+                  حفظ
+                </Button>
+              </Box>
+            </TableContainer>
+          </Stack>
+          <DialogAddArea
+            closeDialog={props.closeDialog}
+            open={props.dialogState === "area"}
+            idToUpdate={idToUpdate}
+          />
+        </Stack>
+      )}
+    </>
   );
 }
 type PropsType = {

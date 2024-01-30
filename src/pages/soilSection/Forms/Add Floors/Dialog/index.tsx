@@ -13,8 +13,60 @@ import { DialogActions } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { DialogTitle } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { SoilContext } from "../../../SoilContext";
+import { Area, Floor } from "../../../../../types/Soil";
+import { useSnackbar } from "notistack";
+import { Api } from "../../../../../constants";
+import { isStringAllNumbers } from "../../../../../methods";
 
 function DialogAddFloor(props: TypeProps) {
+  const intialAreaData: TypeFloorData = {
+    number_floors: "",
+    depth: "",
+    minimum: "",
+  };
+  const { getSoil, soilData, setSoilData } = useContext(SoilContext);
+  const snackbar = useSnackbar();
+  const [amountData, setAmountData] = useState<TypeFloorData>(intialAreaData);
+
+  useEffect(() => {
+    if (props.idToUpdate != null) {
+      const obj: Floor | undefined =
+        typeof soilData === "object"
+          ? soilData.soil_floor.find((index) => index.id == props.idToUpdate)
+          : undefined;
+      const objLocation: TypeFloorData = {
+        number_floors: obj?.number_floors.toString() || "",
+        depth: obj?.depth?.toString() || "",
+        minimum: obj?.minimum.toString() || "",
+      };
+      setAmountData(obj ? objLocation : intialAreaData);
+    } else setAmountData(intialAreaData);
+  }, [props.idToUpdate]);
+
+  function updateAmountData(partial: Partial<TypeFloorData>) {
+    setAmountData({
+      ...amountData,
+      ...partial,
+    });
+  }
+  function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
+    e.preventDefault();
+    axios
+      .post(Api(`employee/soil/floor`), { ...amountData })
+      .then((res) => {
+        snackbar.enqueueSnackbar("تم حفظ الموقع");
+        setSoilData && setSoilData();
+        props.closeDialog();
+      })
+      .catch((err) => {
+        snackbar.enqueueSnackbar(" تعذر في حفظ الموقع ", {
+          variant: "error",
+        });
+      });
+  }
   return (
     <Dialog
       open={props.open}
@@ -22,6 +74,7 @@ function DialogAddFloor(props: TypeProps) {
       maxWidth={"md"}
       onClose={props.closeDialog}
       component="form"
+      onSubmit={handleSubmit}
     >
       <IconButton
         size="small"
@@ -59,7 +112,13 @@ function DialogAddFloor(props: TypeProps) {
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"عدد الأدوار "}
+                  value={amountData.number_floors}
+                  onChange={(e) => {
+                    if (isStringAllNumbers(e.target.value))
+                      updateAmountData({
+                        number_floors: e.target.value,
+                      });
+                  }}
                 />
               </Stack>
             </Grid>
@@ -68,7 +127,17 @@ function DialogAddFloor(props: TypeProps) {
                 <Typography fontSize={14} component={"label"}>
                   العمق{" "}
                 </Typography>
-                <TextField type="text" size="small" placeholder={"العمق "} />
+                <TextField
+                  type="text"
+                  size="small"
+                  value={amountData.depth}
+                  onChange={(e) => {
+                    if (isStringAllNumbers(e.target.value))
+                      updateAmountData({
+                        depth: e.target.value,
+                      });
+                  }}
+                />
               </Stack>
             </Grid>
             <Grid item md={12}>
@@ -79,7 +148,13 @@ function DialogAddFloor(props: TypeProps) {
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"الحد الأدنى"}
+                  value={amountData.minimum}
+                  onChange={(e) => {
+                    if (isStringAllNumbers(e.target.value))
+                      updateAmountData({
+                        minimum: e.target.value,
+                      });
+                  }}
                 />
               </Stack>
             </Grid>
@@ -110,4 +185,10 @@ export default DialogAddFloor;
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
+  idToUpdate: number | null;
+};
+type TypeFloorData = {
+  number_floors: string;
+  depth: string;
+  minimum: string;
 };

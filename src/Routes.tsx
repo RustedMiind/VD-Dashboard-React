@@ -33,7 +33,6 @@ function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
-        <Route path="requests" element={<FormsSection />} />
         <Route path="allservices" element={<SoilSection />} />
         <Route path="test" element={<ForTest />} />
         <Route path="" element={<MainPage />} />
@@ -110,6 +109,9 @@ function RoutesComponent() {
         <Route path="services">
           <Route path="design">
             <Route path="create" element={<CreateOrUpdateDesign />} />
+          </Route>
+          <Route path="soil">
+            <Route path="create" element={<FormsSection />} />
           </Route>
         </Route>
 

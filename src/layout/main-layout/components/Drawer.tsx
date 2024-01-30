@@ -130,6 +130,12 @@ const routesCollections: RoutesCollectionType[] = [
         react: true,
         isPrivate: Permission.CLIENT_REQUESTS_ADDSTEP,
       },
+
+      {
+        name: "خدمات التربة",
+        path: "/services/soil/create",
+        react: true,
+      },
     ],
   },
   {

@@ -1,13 +1,25 @@
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
 import { StringParam, useQueryParam } from "use-query-params";
-import { Paper, Stack, Typography, TextField, Button } from "@mui/material";
+import {
+  Paper,
+  Stack,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+} from "@mui/material";
 import Pusher from "pusher-js";
 import { APP_CLUSTER, APP_KEY } from "../tenders/details/Chat/pusher.config";
-
+import { MapContainer, TileLayer } from "react-leaflet";
+import type { Map } from "leaflet";
+import osm from "./Leaflet/osm";
 function ForTest() {
+  const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
+  const ZOOM_LEVEL = 9;
+  const mapRef = useRef<Map>(null);
   const [inputValue, setInputValue] = useState("");
   const [channel, setChannel] = useState("");
   const [eventData, setEventData] = useState<string[]>([]);
@@ -32,7 +44,17 @@ function ForTest() {
 
   return (
     <Stack>
-      <Paper component={Stack} elevation={4} p={2} spacing={2}>
+      <Grid container>
+        <Grid item md={6}>
+          <MapContainer center={center} zoom={ZOOM_LEVEL} ref={mapRef}>
+            <TileLayer
+              url={osm.maptiler.url}
+              attribution={osm.maptiler.attribution}
+            />
+          </MapContainer>
+        </Grid>
+      </Grid>
+      {/* <Paper component={Stack} elevation={4} p={2} spacing={2}>
         <TextField
           label="Enter Channel Number"
           value={inputValue}
@@ -53,7 +75,7 @@ function ForTest() {
         {eventData.map((data_item) => (
           <Typography variant="body2">- {data_item}</Typography>
         ))}
-      </Paper>
+      </Paper> */}
     </Stack>
   );
 }

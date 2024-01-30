@@ -29,12 +29,15 @@ import { Api } from "../../../../constants";
 import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
+import LoadingTable from "../../../../components/LoadingTable";
+import TenderNotFound from "../../../tenders/data/Table/TendersNotFound";
+import NotFound from "../../../../components/NotFound";
 
 export default function CoveredSites(props: PropsType) {
+  const { soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
   const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
-  const { soilData, setSoilData } = useContext(SoilContext);
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -81,112 +84,119 @@ export default function CoveredSites(props: PropsType) {
       });
   }
   return (
-    <Stack>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-        <Button
-          variant="contained"
-          startIcon={<AddCircleOutlineIcon />}
-          sx={{ mb: 1 }}
-          onClick={props.openCoveredDialog}
-        >
-          اضافة موقع
-        </Button>
-        <Box>
-          <Button
-            sx={{ mx: 2 }}
-            variant="outlined"
-            color="warning"
-            startIcon={<AddLocationIcon />}
-          >
-            الخريطة الكلية
-          </Button>
-          <Button
-            onClick={props.openCoveredDialog}
-            disabled={selectedSoilId?.length !== 1}
-            sx={{ mx: 2 }}
-            variant="outlined"
-            startIcon={<EditIcon />}
-          >
-            تعديل
-          </Button>
-          <Button
-            disabled={selectedSoilId?.length === 0}
-            onClick={handleDelete}
-            color="error"
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-          >
-            حذف
-          </Button>
-        </Box>
-      </Box>
-      <Stack>
-        <TableContainer component={Paper}>
-          <Table sx={{ bgcolor: "Background" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Checkbox
-                    checked={
-                      typeof soilData === "object" &&
-                      selectedSoilId?.length != 0 &&
-                      selectedSoilId?.length === soilData.soil_location?.length
-                    }
-                    onChange={selectAllHandler}
-                  />
-                </TableCell>
-                <TableCell>اسم الموقع</TableCell>
-                <TableCell>المدينة</TableCell>
-                <TableCell>نظام البناء</TableCell>
-                <TableCell>الحالة</TableCell>
-                <TableCell>الاعدادات</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {typeof soilData === "object" &&
-                soilData?.soil_location?.map((item) => (
+    <>
+      {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
+      {soilData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
+      {typeof soilData === "object" && (
+        <Stack>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutlineIcon />}
+              sx={{ mb: 1 }}
+              onClick={props.openCoveredDialog}
+            >
+              اضافة موقع
+            </Button>
+            <Box>
+              <Button
+                sx={{ mx: 2 }}
+                variant="outlined"
+                color="warning"
+                startIcon={<AddLocationIcon />}
+              >
+                الخريطة الكلية
+              </Button>
+              <Button
+                onClick={props.openCoveredDialog}
+                disabled={selectedSoilId?.length !== 1}
+                sx={{ mx: 2 }}
+                variant="outlined"
+                startIcon={<EditIcon />}
+              >
+                تعديل
+              </Button>
+              <Button
+                disabled={selectedSoilId?.length === 0}
+                onClick={handleDelete}
+                color="error"
+                variant="outlined"
+                startIcon={<DeleteIcon />}
+              >
+                حذف
+              </Button>
+            </Box>
+          </Box>
+          <Stack>
+            <TableContainer component={Paper}>
+              <Table sx={{ bgcolor: "Background" }}>
+                <TableHead>
                   <TableRow>
                     <TableCell>
                       <Checkbox
-                        value={item.id}
-                        checked={selectedSoilId?.includes(item.id)}
-                        onChange={CheckboxHandler}
+                        checked={
+                          typeof soilData === "object" &&
+                          selectedSoilId?.length != 0 &&
+                          selectedSoilId?.length ===
+                            soilData.soil_location?.length
+                        }
+                        onChange={selectAllHandler}
                       />
                     </TableCell>
-                    <TableCell>
-                      {item?.location_name && item?.location_name}
-                    </TableCell>
-                    <TableCell>
-                      {item?.city?.name && item?.city?.name}
-                    </TableCell>
-                    <TableCell>
-                      {item?.building_system && item?.building_system}
-                    </TableCell>
-                    <TableCell>
-                      <StatusChip label="نشط" color="success" />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton size="small" color="primary">
-                        <SettingsIcon />
-                      </IconButton>
-                    </TableCell>
+                    <TableCell>اسم الموقع</TableCell>
+                    <TableCell>المدينة</TableCell>
+                    <TableCell>نظام البناء</TableCell>
+                    <TableCell>الحالة</TableCell>
+                    <TableCell>الاعدادات</TableCell>
                   </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
-            <Button type="submit" variant="contained">
-              حفظ
-            </Button>
-          </Box>
-        </TableContainer>
-      </Stack>
-      <DialogAddLocation
-        closeDialog={props.closeDialog}
-        open={props.dialogState === "covered"}
-        idToUpdate={idToUpdate}
-      />
-    </Stack>
+                </TableHead>
+                <TableBody>
+                  {typeof soilData === "object" &&
+                    soilData?.soil_location?.map((item) => (
+                      <TableRow>
+                        <TableCell>
+                          <Checkbox
+                            value={item.id}
+                            checked={selectedSoilId?.includes(item.id)}
+                            onChange={CheckboxHandler}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {item?.location_name && item?.location_name}
+                        </TableCell>
+                        <TableCell>
+                          {item?.city?.name && item?.city?.name}
+                        </TableCell>
+                        <TableCell>
+                          {item?.building_system && item?.building_system}
+                        </TableCell>
+                        <TableCell>
+                          <StatusChip label="نشط" color="success" />
+                        </TableCell>
+                        <TableCell>
+                          <IconButton size="small" color="primary">
+                            <SettingsIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+                <Button type="submit" variant="contained">
+                  حفظ
+                </Button>
+              </Box>
+            </TableContainer>
+          </Stack>
+          <DialogAddLocation
+            closeDialog={props.closeDialog}
+            open={props.dialogState === "covered"}
+            idToUpdate={idToUpdate}
+          />
+        </Stack>
+      )}
+    </>
   );
 }
 type PropsType = {
