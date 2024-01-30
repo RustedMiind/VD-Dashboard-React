@@ -11,11 +11,13 @@ import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../components/AddLabelToEl";
 import MainFormSection from "./FormSections/main";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
-import React from "react";
+import React, { useState } from "react";
 import { ImageListType } from "react-images-uploading";
 import FormImagesSection from "./FormSections/images";
 import UtilitiesSection from "./FormSections/Utilities";
 import DesignFile from "./FormSections/DesignFile";
+import { FileBondState } from "../../../types/FileBondState";
+import { FilePondInitialFile } from "filepond";
 
 export function InputGridItem({
   label,
@@ -23,7 +25,7 @@ export function InputGridItem({
   ...props
 }: GridProps & { label: string }) {
   return (
-    <GridItem sx={{ px: 1 }}>
+    <GridItem sx={{ pr: 1 }}>
       <AddLabelToEl label={label}>{children}</AddLabelToEl>
     </GridItem>
   );
@@ -37,16 +39,28 @@ export function InputsGridContainer({ ...props }: GridProps) {
   return <Grid container {...props} rowSpacing={2} />;
 }
 
-export function TextInput({ ...props }: TextFieldProps) {
-  return <TextField size="small" fullWidth {...props} />;
+export function TextInput({
+  register,
+  ...props
+}: TextFieldProps & { register?: () => TextFieldProps }) {
+  return (
+    <TextField
+      size="small"
+      {...(register ? register() : {})}
+      fullWidth
+      {...props}
+    />
+  );
 }
 
 export function GridItemTextInputWithLabel({
+  label,
+  register,
   ...props
-}: TextFieldProps & { label: string }) {
+}: TextFieldProps & { label: string; register?: () => TextFieldProps }) {
   return (
-    <InputGridItem label={props.label}>
-      <TextInput fullWidth placeholder={props.label} {...props} />
+    <InputGridItem label={label}>
+      <TextInput fullWidth register={register} placeholder={label} {...props} />
     </InputGridItem>
   );
 }
@@ -70,32 +84,74 @@ export function GridItemDateInputWithLabel({
 }
 
 function CreateOrUpdateDesign() {
-  const { register, handleSubmit, reset } = useForm<CreateFormType>();
+  const { register, handleSubmit, resetField } = useForm<CreateFormType>();
 
-  const [mainImage, setMainImage] = React.useState<ImageListType>([]);
+  const [mainImage, setMainImage] = useState<ImageListType>([]);
 
-  const [subImages, setSubImages] = React.useState<ImageListType>([]);
+  const [subImages, setSubImages] = useState<ImageListType>([]);
+
+  const [booklet, setBooklet] = useState<FileBondState>([]);
+
+  const [engineeringChart, setEngineeringChart] = useState<FileBondState>([]);
+
+  const [idea, setIdea] = useState<FileBondState>([]);
 
   const formSubmit = handleSubmit((data) => {
     console.log(data);
   });
+
+  const [utilities, setUtilities] = useState<Utility[]>([utilityInitial]);
+  const setUtility = (updatedUtility: Utility, index: number) => {
+    setUtilities((utilities) => {
+      const updatedUtilities: Utility[] = [];
+      utilities.forEach((utility, i) => {
+        if (index === i) {
+          updatedUtilities.push(updatedUtility);
+        } else {
+          updatedUtilities.push(utility);
+        }
+        console.log(updatedUtilities);
+      });
+      console.log("updatedUtilities ", updatedUtilities);
+      return updatedUtilities;
+    });
+  };
+
+  const registerFn = (key: CreateFormKeys) => () => register(key);
 
   return (
     <Box component={"form"} onSubmit={formSubmit}>
       <Grid container spacing={2}>
         <Grid item lg={8}>
           <Stack spacing={4}>
-            <TextInput {...register("area")} />
-            {/* <MainFormSection registerFn={register} /> */}
-            <DesignFile registerFn={register} />
-            <UtilitiesSection registerFn={register} />
+            <MainFormSection resetField={resetField} registerFn={registerFn} />
+            <DesignFile registerFn={registerFn} />
+            <UtilitiesSection
+              {...{
+                setUtilities,
+                setUtility,
+                utilities,
+                registerFn,
+              }}
+            />
           </Stack>
           {/* Form Inputs */}
         </Grid>
         <Grid item lg={4}>
           {/* Form Files */}
           <FormImagesSection
-            {...{ mainImage, setMainImage, setSubImages, subImages }}
+            {...{
+              idea,
+              setIdea,
+              mainImage,
+              setMainImage,
+              setSubImages,
+              subImages,
+              booklet,
+              setBooklet,
+              engineeringChart,
+              setEngineeringChart,
+            }}
           />
         </Grid>
         <Button type="submit">Submit</Button>
@@ -128,11 +184,22 @@ export type CreateFormType = {
   status_design: string;
   status_web: boolean;
   status_mob: boolean;
-  "idea_eng-image": string;
+  kitchen: string;
+  "idea-eng-image": File;
   "main-image"?: File;
-  "sub-image"?: File;
+  "sub-image"?: File[];
+  "eng-image"?: File[];
   booklet?: File;
-  "eng-image"?: File;
 };
+
+// declare types
+export type Utility = {
+  files: (string | FilePondInitialFile | Blob)[];
+  option: string;
+};
+
+export const utilityInitial: Utility = { option: "", files: [] };
+
+export type CreateFormKeys = keyof CreateFormType;
 
 export default CreateOrUpdateDesign;

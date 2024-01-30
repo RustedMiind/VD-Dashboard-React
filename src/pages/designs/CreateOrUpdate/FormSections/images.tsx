@@ -7,6 +7,7 @@ import AddLabelToEl from "../../../../components/AddLabelToEl";
 import { FilePond } from "react-filepond";
 import { FilePondInitialFile } from "filepond";
 import CustomFilePond from "../../../../components/CustomFilepond";
+import { FileBondState } from "../../../../types/FileBondState";
 
 const AddTitleToEl = (props: { children?: React.ReactNode; title: string }) => (
   <AddLabelToEl
@@ -17,16 +18,6 @@ const AddTitleToEl = (props: { children?: React.ReactNode; title: string }) => (
 );
 
 function FormImagesSection(props: PropsType) {
-  const [files, setFiles] = useState<(string | FilePondInitialFile | Blob)[]>(
-    []
-  );
-  const [bookFiles, setBookFiles] = useState<
-    (string | FilePondInitialFile | Blob)[]
-  >([]);
-  const [ideaFiles, setIdeaFiles] = useState<
-    (string | FilePondInitialFile | Blob)[]
-  >([]);
-  console.log(files);
   return (
     <Stack spacing={2}>
       <AddTitleToEl title="ارفاق صورة رئيسية">
@@ -42,18 +33,20 @@ function FormImagesSection(props: PropsType) {
 
       <AddTitleToEl title="ارفاق الكتيب">
         <CustomFilePond
-          files={bookFiles}
+          files={props.booklet}
           onupdatefiles={(fileItems) => {
-            setBookFiles(fileItems.map((fileItem) => fileItem.file));
+            props.setBooklet(fileItems.map((fileItem) => fileItem.file));
           }}
         />
       </AddTitleToEl>
 
       <AddTitleToEl title="تفاصيل المخطط الهندسي">
         <CustomFilePond
-          files={files}
+          files={props.engineeringChart}
           onupdatefiles={(fileItems) => {
-            setFiles(fileItems.map((fileItem) => fileItem.file));
+            props.setEngineeringChart(
+              fileItems.map((fileItem) => fileItem.file)
+            );
           }}
           allowMultiple
         />
@@ -61,11 +54,10 @@ function FormImagesSection(props: PropsType) {
 
       <AddTitleToEl title="ارفاق فكرة مخطط هندسي">
         <CustomFilePond
-          files={ideaFiles}
+          files={props.idea}
           onupdatefiles={(fileItems) => {
-            setIdeaFiles(fileItems.map((fileItem) => fileItem.file));
+            props.setIdea(fileItems.map((fileItem) => fileItem.file));
           }}
-          allowMultiple
         />
       </AddTitleToEl>
     </Stack>
@@ -77,6 +69,12 @@ type PropsType = {
   setMainImage: (images: ImageListType) => void;
   subImages: ImageListType;
   setSubImages: (images: ImageListType) => void;
+  booklet: FileBondState;
+  setBooklet: React.Dispatch<React.SetStateAction<FileBondState>>;
+  engineeringChart: FileBondState;
+  setEngineeringChart: React.Dispatch<React.SetStateAction<FileBondState>>;
+  idea: FileBondState;
+  setIdea: React.Dispatch<React.SetStateAction<FileBondState>>;
 };
 
 export default FormImagesSection;

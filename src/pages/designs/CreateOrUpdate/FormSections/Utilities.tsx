@@ -14,54 +14,44 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CustomFilePond from "../../../../components/CustomFilepond";
 import { ImageListType } from "react-images-uploading";
 import { FilePondInitialFile } from "filepond";
-import { GridItem, GridItemTextInputWithLabel, InputsGridContainer } from "..";
+import {
+  GridItem,
+  GridItemTextInputWithLabel,
+  InputsGridContainer,
+  Utility,
+  utilityInitial,
+} from "..";
 import { generateUndefinedArray } from "../../../../methods";
 import { FormSectionProps } from "./BaseProps";
 import axios from "axios";
 
-// declare types
-type Utility = {
-  files: (string | FilePondInitialFile | Blob)[];
-  option: string;
-};
 type optionType = {
-  id: number,
-  name: string
-}
+  id: number;
+  name: string;
+};
 
-const utilityInitial: Utility = { option: "", files: [] };
-
-function UtilitiesSection({ registerFn }: PropsType) {
+function UtilitiesSection({
+  registerFn,
+  utilities,
+  setUtilities,
+  setUtility,
+}: PropsType) {
   // ?declare component state
-  const [utilities, setUtilities] = useState<Utility[]>([utilityInitial]);
-  const setUtility = (updatedUtility: Utility, index: number) => {
-    setUtilities((utilities) => {
-      const updatedUtilities: Utility[] = [];
-      utilities.forEach((utility, i) => {
-        if (index === i) {
-          updatedUtilities.push(updatedUtility);
-        } else {
-          updatedUtilities.push(utility);
-        }
-        console.log(updatedUtilities);
-      });
-      console.log("updatedUtilities ", updatedUtilities);
-      return updatedUtilities;
-    });
-  };
+
   const [options, setOptions] = useState<optionType[]>([]);
 
   useEffect(() => {
     // TODO::fetch options data
-    axios.get('https://visiondimensions.com/api/client/design/attachment-option', {
-      headers: {
-        Accept: 'application/json',
-        from: "website"
-      }
-    })
-      .then(res => {
+    axios
+      .get("https://visiondimensions.com/api/client/design/attachment-option", {
+        headers: {
+          from: "website",
+        },
+      })
+      .then((res) => {
         return res?.data?.attachments_type;
-      }).then(data => {
+      })
+      .then((data) => {
         let _arr: optionType[] = [];
         for (const key in data) {
           if (data.hasOwnProperty(key)) {
@@ -70,7 +60,8 @@ function UtilitiesSection({ registerFn }: PropsType) {
         }
         console.log("response data ", data, _arr);
         setOptions(_arr);
-      }).catch(err => {
+      })
+      .catch((err) => {
         console.log("error in fetch options data:", err);
       });
   }, []);
@@ -84,7 +75,12 @@ function UtilitiesSection({ registerFn }: PropsType) {
         <Stack pb={4} spacing={1} key={index}>
           <Grid container>
             <Grid item xs={3} paddingX={1}>
-              <TextField fullWidth select size="small" defaultValue={index !== arr.length - 1 ? +utility.option : 1}>
+              <TextField
+                fullWidth
+                select
+                size="small"
+                defaultValue={index !== arr.length - 1 ? +utility.option : 1}
+              >
                 {options.map((option, i) => (
                   <MenuItem value={option.id}> {option.name} </MenuItem>
                 ))}
@@ -126,7 +122,7 @@ function UtilitiesSection({ registerFn }: PropsType) {
         <GridItemTextInputWithLabel
           // inputRef={registerFn}
           // name="status_design"
-          {...registerFn("status_design")}
+          // {...registerFn("status_design")}
           label={"حالة التصميم"}
         />
         <GridItem />
@@ -147,6 +143,10 @@ function UtilitiesSection({ registerFn }: PropsType) {
   );
 }
 
-interface PropsType extends FormSectionProps { }
+interface PropsType extends FormSectionProps {
+  utilities: Utility[];
+  setUtilities: React.Dispatch<React.SetStateAction<Utility[]>>;
+  setUtility: (updatedUtility: Utility, index: number) => void;
+}
 
 export default UtilitiesSection;

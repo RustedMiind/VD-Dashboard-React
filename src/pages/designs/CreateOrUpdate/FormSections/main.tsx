@@ -1,44 +1,46 @@
 import { FormControlLabel, Switch } from "@mui/material";
 import {
+  CreateFormType,
   GridItem,
   GridItemDateInputWithLabel,
   GridItemTextInputWithLabel,
   InputsGridContainer,
 } from "..";
-import AttachedFilesController from "./DesignFile";
 import { FormSectionProps } from "./BaseProps";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { UseFormResetField } from "react-hook-form";
 
-function MainFormSection({ registerFn }: PropsType) {
+function MainFormSection({ registerFn, resetField }: PropsType) {
   const [hasDescount, setHasDiscount] = useState(false);
 
   return (
     <InputsGridContainer>
       <GridItemTextInputWithLabel
         label="اسم التصميم بالعربي"
-        // {...registerFn("name_ar")}
-        inputRef={registerFn}
-        name="name_an"
+        register={registerFn("name_ar")}
       />
       <GridItemTextInputWithLabel
         label="اسم التصميم بالانجليزي"
-        {...registerFn("name_en")}
+        register={registerFn("name_en")}
       />
       <GridItemTextInputWithLabel
         label="نبذة عن التصميم بالعربي"
-        {...registerFn("desc_ar")}
+        register={registerFn("desc_ar")}
       />
       <GridItemTextInputWithLabel
         label="نبذة عن التصميم بالانجليزي"
-        {...registerFn("desc_en")}
+        register={registerFn("desc_en")}
       />
       <GridItem lg={12}>
         <FormControlLabel
           control={
             <Switch
               checked={hasDescount}
-              onChange={(e, checked) => setHasDiscount(checked)}
+              onChange={(e, checked) => {
+                setHasDiscount(checked);
+                resetField("price_after");
+              }}
             />
           }
           label="يوجد خصم"
@@ -48,17 +50,14 @@ function MainFormSection({ registerFn }: PropsType) {
       <GridItemTextInputWithLabel
         type="number"
         label={hasDescount ? "السعر قبل الخصم" : "السعر"}
-        {...registerFn("price_before")}
+        register={registerFn("price_before")}
       />
-      {hasDescount ? (
-        <GridItemTextInputWithLabel
-          type="number"
-          label="السعر بعد الخصم"
-          {...registerFn("price_before")}
-        />
-      ) : (
-        <GridItem />
-      )}
+      <GridItemTextInputWithLabel
+        type="number"
+        label="السعر بعد الخصم"
+        register={registerFn("price_after")}
+        disabled={!hasDescount}
+      />
       <GridItemDateInputWithLabel
         // {...registerFn("desc_date_from")}
         label="عرض الخصم من تاريخ"
@@ -70,37 +69,37 @@ function MainFormSection({ registerFn }: PropsType) {
       <GridItemTextInputWithLabel
         type="number"
         label="المساحة"
-        {...registerFn("area")}
+        register={registerFn("area")}
       />
       <GridItemTextInputWithLabel
         type="number"
         label="عدد الطوابق"
-        {...registerFn("floors_num")}
+        register={registerFn("floors_num")}
       />
       <GridItemTextInputWithLabel
         type="number"
         label="غرف النوم"
-        {...registerFn("bed_rooms_num")}
+        register={registerFn("bed_rooms_num")}
       />
       <GridItemTextInputWithLabel
         type="number"
         label="عرض الارض"
-        {...registerFn("width_floor")}
+        register={registerFn("width_floor")}
       />
       <GridItemTextInputWithLabel
         type="number"
         label="طول الارض"
-        {...registerFn("height_floor")}
+        register={registerFn("height_floor")}
       />
       <GridItemTextInputWithLabel
         type="number"
         label="عرض الشارع الامامي"
-        {...registerFn("width_front_street")}
+        register={registerFn("width_front_street")}
       />
       <GridItemTextInputWithLabel
         type="number"
         label="عدد دورات المياه"
-        {...registerFn("bathroom_num")}
+        register={registerFn("bathroom_num")}
       />
       <GridItem lg={12}>
         <Typography sx={{ py: 2 }} variant="h5">
@@ -109,23 +108,31 @@ function MainFormSection({ registerFn }: PropsType) {
       </GridItem>
       <GridItemTextInputWithLabel
         label="اسم المخطط"
-        {...registerFn("engineering_name")}
+        register={registerFn("engineering_name")}
       />
-      <GridItemTextInputWithLabel label="غرفة نوم رئيسية" />
-      <GridItemTextInputWithLabel label="مطبخ" />
+      <GridItemTextInputWithLabel
+        label="غرفة نوم رئيسية"
+        register={registerFn("main_bedroom")}
+      />
+      <GridItemTextInputWithLabel
+        label="مطبخ"
+        register={registerFn("kitchen")}
+      />
       <GridItemTextInputWithLabel
         label="غرفة معيشة"
-        {...registerFn("living_room")}
+        register={registerFn("living_room")}
       />
       <GridItemTextInputWithLabel
         label="غرفة العشاء"
-        {...registerFn("dinner_room")}
+        register={registerFn("dinner_room")}
       />
       <GridItem lg={12}></GridItem>
     </InputsGridContainer>
   );
 }
 
-interface PropsType extends FormSectionProps {}
+interface PropsType extends FormSectionProps {
+  resetField: UseFormResetField<CreateFormType>;
+}
 
 export default MainFormSection;
