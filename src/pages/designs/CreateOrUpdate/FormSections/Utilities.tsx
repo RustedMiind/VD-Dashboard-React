@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CustomFilePond from "../../../../components/CustomFilepond";
 import { ImageListType } from "react-images-uploading";
@@ -17,19 +17,23 @@ import { FilePondInitialFile } from "filepond";
 import { GridItem, GridItemTextInputWithLabel, InputsGridContainer } from "..";
 import { generateUndefinedArray } from "../../../../methods";
 import { FormSectionProps } from "./BaseProps";
+import axios from "axios";
 
-const dumb = generateUndefinedArray(5);
-
+// declare types
 type Utility = {
   files: (string | FilePondInitialFile | Blob)[];
   option: string;
 };
+type optionType = {
+  id: number,
+  name: string
+}
 
 const utilityInitial: Utility = { option: "", files: [] };
 
 function UtilitiesSection({ registerFn }: PropsType) {
+  // ?declare component state
   const [utilities, setUtilities] = useState<Utility[]>([utilityInitial]);
-  console.log(utilities);
   const setUtility = (updatedUtility: Utility, index: number) => {
     setUtilities((utilities) => {
       const updatedUtilities: Utility[] = [];
@@ -45,6 +49,32 @@ function UtilitiesSection({ registerFn }: PropsType) {
       return updatedUtilities;
     });
   };
+  const [options, setOptions] = useState<optionType[]>([]);
+
+  useEffect(() => {
+    // TODO::fetch options data
+    axios.get('https://visiondimensions.com/api/client/design/attachment-option', {
+      headers: {
+        Accept: 'application/json',
+        from: "website"
+      }
+    })
+      .then(res => {
+        return res?.data?.attachments_type;
+      }).then(data => {
+        let _arr: optionType[] = [];
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            _arr.push({ id: data[key], name: key });
+          }
+        }
+        console.log("response data ", data, _arr);
+        setOptions(_arr);
+      }).catch(err => {
+        console.log("error in fetch options data:", err);
+      });
+  }, []);
+
   return (
     <Stack>
       <Typography variant="h5" gutterBottom>
@@ -54,9 +84,9 @@ function UtilitiesSection({ registerFn }: PropsType) {
         <Stack pb={4} spacing={1} key={index}>
           <Grid container>
             <Grid item xs={3} paddingX={1}>
-              <TextField fullWidth select size="small" value={0}>
-                {dumb.map((x, i) => (
-                  <MenuItem value={i}> option{i + 1} </MenuItem>
+              <TextField fullWidth select size="small" defaultValue={index !== arr.length - 1 ? +utility.option : 1}>
+                {options.map((option, i) => (
+                  <MenuItem value={option.id}> {option.name} </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -94,6 +124,8 @@ function UtilitiesSection({ registerFn }: PropsType) {
 
       <InputsGridContainer>
         <GridItemTextInputWithLabel
+          // inputRef={registerFn}
+          // name="status_design"
           {...registerFn("status_design")}
           label={"حالة التصميم"}
         />
@@ -115,6 +147,6 @@ function UtilitiesSection({ registerFn }: PropsType) {
   );
 }
 
-interface PropsType extends FormSectionProps {}
+interface PropsType extends FormSectionProps { }
 
 export default UtilitiesSection;

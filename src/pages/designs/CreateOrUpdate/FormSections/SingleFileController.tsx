@@ -2,14 +2,41 @@ import { Box, Button, Grid, GridProps, MenuItem, Select, Stack, TextField } from
 import { GridItemTextInputWithLabel } from "..";
 import AddLabelToEl from "../../../../components/AddLabelToEl";
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const options: { value: number, name: string }[] = [
-    { value: 1, name: "مرفق 1" },
-    { value: 2, name: "مرفق 2" },
-    { value: 3, name: "مرفق 3" }
-];
+type optionType = {
+    id: number,
+    name: string
+}
 
 function SingleAttachedFileController(props: PropsType) {
+    const [options, setOptions] = useState<optionType[]>([]);
+
+    useEffect(() => {
+        // TODO::fetch options data
+        axios.get('https://visiondimensions.com/api/client/design/attachment-option', {
+            headers: {
+                Accept: 'application/json',
+                from: "website"
+            }
+        })
+            .then(res => {
+                return res?.data?.attachments_type;
+            }).then(data => {
+                let _arr: optionType[] = [];
+                for (const key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        _arr.push({ id: data[key], name: key });
+                    }
+                }
+                console.log("response data ", data, _arr);
+                setOptions(_arr);
+            }).catch(err => {
+                console.log("error in fetch options data:", err);
+            });
+    }, []);
+
     return (
         <>
             <Grid container sx={{ boxSizing: 'border-box', display: 'flex', alignItems: 'center' }}>
@@ -29,7 +56,7 @@ function SingleAttachedFileController(props: PropsType) {
                     <AddLabelToEl label="المرفقات">
                         <Select size='small' value={props.option} sx={{ color: '#000' }}>
                             {options.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
+                                <MenuItem key={option.id} value={option.id}>
                                     {option.name}
                                 </MenuItem>
                             ))}

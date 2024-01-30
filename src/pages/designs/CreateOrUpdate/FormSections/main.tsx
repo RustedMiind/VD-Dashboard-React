@@ -17,7 +17,9 @@ function MainFormSection({ registerFn }: PropsType) {
     <InputsGridContainer>
       <GridItemTextInputWithLabel
         label="اسم التصميم بالعربي"
-        {...registerFn("name_ar")}
+        // {...registerFn("name_ar")}
+        inputRef={registerFn}
+        name="name_an"
       />
       <GridItemTextInputWithLabel
         label="اسم التصميم بالانجليزي"
