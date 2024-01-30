@@ -23,6 +23,9 @@ function FormImagesSection(props: PropsType) {
   const [bookFiles, setBookFiles] = useState<
     (string | FilePondInitialFile | Blob)[]
   >([]);
+  const [ideaFiles, setIdeaFiles] = useState<
+    (string | FilePondInitialFile | Blob)[]
+  >([]);
   console.log(files);
   return (
     <Stack spacing={2}>
@@ -56,9 +59,15 @@ function FormImagesSection(props: PropsType) {
         />
       </AddTitleToEl>
 
-      {/* <AddTitleToEl title="ارفاق فكرة مخطط هندسي">
-        <UploadImage images={images} setImages={setImages} />
-      </AddTitleToEl> */}
+      <AddTitleToEl title="ارفاق فكرة مخطط هندسي">
+        <CustomFilePond
+          files={ideaFiles}
+          onupdatefiles={(fileItems) => {
+            setIdeaFiles(fileItems.map((fileItem) => fileItem.file));
+          }}
+          allowMultiple
+        />
+      </AddTitleToEl>
     </Stack>
   );
 }
