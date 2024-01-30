@@ -33,14 +33,14 @@ type DesignForm = {
   area_from: string;
   area_to: string;
   number: string;
-  minimumDE: string;
+  minimum: string;
 };
 
 const designFileInitial: DesignForm = {
   area_from: "",
   area_to: "",
   number: "",
-  minimumDE: "",
+  minimum: "",
 };
 
 function DialogAddArea(props: TypeProps) {
@@ -113,7 +113,7 @@ function DialogAddArea(props: TypeProps) {
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     axios
-      .post(Api(`employee/soil/area`), designForms)
+      .post(Api(`employee/soil/area`), designForms[0])
       .then((res) => {
         snackbar.enqueueSnackbar("تم حفظ المساحة");
         setSoilData && setSoilData();
@@ -225,11 +225,11 @@ function DialogAddArea(props: TypeProps) {
                       type="number"
                       size="small"
                       placeholder={"الحد الأدنى "}
-                      value={designForm.minimumDE}
+                      value={designForm.minimum}
                       onChange={(e) => {
                         setDesignForm(
                           {
-                            minimumDE: e.target.value,
+                            minimum: e.target.value,
                           },
                           index
                         );
