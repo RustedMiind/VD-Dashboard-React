@@ -65,15 +65,15 @@ export default function AreaSites(props: PropsType) {
   }
   function handleDelete() {
     axios
-      .delete(Api("employee/"), {
-        data: { tenderIds: selectedSoilId },
+      .delete(Api("employee/soil/area"), {
+        data: { id: selectedSoilId },
       })
       .then((res) => {
         snackbar.enqueueSnackbar("تم حذف  المختارة بنجاح");
         setSoilData && setSoilData();
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
-        snackbar.enqueueSnackbar(<>{err.response?.data?.msg}</>, {
+        snackbar.enqueueSnackbar("تعذر في الحذف", {
           variant: "error",
         });
       });
@@ -114,6 +114,7 @@ export default function AreaSites(props: PropsType) {
                   <Checkbox
                     checked={
                       typeof soilData === "object" &&
+                      selectedSoilId?.length != 0 &&
                       selectedSoilId?.length === soilData.soil_area?.length
                     }
                     onChange={selectAllHandler}

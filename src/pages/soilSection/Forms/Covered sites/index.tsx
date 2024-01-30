@@ -32,8 +32,8 @@ import { LaravelValidationError } from "../../../../types/LaravelValidationError
 
 export default function CoveredSites(props: PropsType) {
   const snackbar = useSnackbar();
+  const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
-
   const { soilData, setSoilData } = useContext(SoilContext);
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -50,6 +50,7 @@ export default function CoveredSites(props: PropsType) {
   };
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
+    setIdToUpdate(parseInt(e.target.value));
     let value = parseInt(e.target.value);
     if (isSelect) {
       setSelectedSoilId &&
@@ -66,15 +67,15 @@ export default function CoveredSites(props: PropsType) {
   }
   function handleDelete() {
     axios
-      .delete(Api("employee/"), {
-        data: { tenderIds: selectedSoilId },
+      .delete(Api("employee/soil/location"), {
+        data: { id: selectedSoilId },
       })
       .then((res) => {
         snackbar.enqueueSnackbar("تم حذف  المختارة بنجاح");
         setSoilData && setSoilData();
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
-        snackbar.enqueueSnackbar(<>{err.response?.data?.msg}</>, {
+        snackbar.enqueueSnackbar("تعذر في الحذف", {
           variant: "error",
         });
       });
@@ -128,6 +129,7 @@ export default function CoveredSites(props: PropsType) {
                   <Checkbox
                     checked={
                       typeof soilData === "object" &&
+                      selectedSoilId?.length != 0 &&
                       selectedSoilId?.length === soilData.soil_location?.length
                     }
                     onChange={selectAllHandler}
@@ -182,6 +184,7 @@ export default function CoveredSites(props: PropsType) {
       <DialogAddLocation
         closeDialog={props.closeDialog}
         open={props.dialogState === "covered"}
+        idToUpdate={idToUpdate}
       />
     </Stack>
   );

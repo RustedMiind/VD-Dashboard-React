@@ -18,7 +18,6 @@ export function SoilContextProvider({
       .get<Soil>(Api("employee/soil"), { params })
       .then((res) => {
         setSoilData(res?.data);
-        console.log(res.data, "abdo");
       })
       .catch(() => {
         setSoilData("error");

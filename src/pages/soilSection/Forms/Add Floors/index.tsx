@@ -63,15 +63,15 @@ export default function AddFloors(props: PropsType) {
   }
   function handleDelete() {
     axios
-      .delete(Api("employee/"), {
-        data: { tenderIds: selectedSoilId },
+      .delete(Api("employee/soil/floor"), {
+        data: { id: selectedSoilId },
       })
       .then((res) => {
         snackbar.enqueueSnackbar("تم حذف  المختارة بنجاح");
         setSoilData && setSoilData();
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
-        snackbar.enqueueSnackbar(<>{err.response?.data?.msg}</>, {
+        snackbar.enqueueSnackbar("تعذر في الحذف", {
           variant: "error",
         });
       });
@@ -112,6 +112,7 @@ export default function AddFloors(props: PropsType) {
                   <Checkbox
                     checked={
                       typeof soilData === "object" &&
+                      selectedSoilId?.length != 0 &&
                       selectedSoilId?.length === soilData.soil_floor?.length
                     }
                     onChange={selectAllHandler}

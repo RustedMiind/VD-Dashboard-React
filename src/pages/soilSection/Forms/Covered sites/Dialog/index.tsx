@@ -18,12 +18,13 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { useSnackbar } from "notistack";
-import { City } from "../../../../../types/Soil";
+import { City, Location } from "../../../../../types/Soil";
 import { SoilContext } from "../../../SoilContext";
 
 export default function DialogAddLocation(props: TypeProps) {
-  const { getSoil } = useContext(SoilContext);
+  const { getSoil, soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
+  const [objectToUpdate, setObjectToUpdate] = useState<Location[] | []>([]);
   const [city, setCity] = useState<City[]>([]);
   const intialLocationData = {
     location_name: "",
@@ -33,6 +34,19 @@ export default function DialogAddLocation(props: TypeProps) {
   };
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
+
+  useEffect(() => {
+    if (props.idToUpdate != null) {
+      const obj: Location[] | [] =
+        typeof soilData === "object"
+          ? soilData.soil_location.filter(
+              (index) => index.id == props.idToUpdate
+            )
+          : [];
+      setObjectToUpdate(obj);
+    }
+  }, [props.idToUpdate]);
+
   useEffect(() => {
     axios
       .get<{ data: City[] }>(Api(`employee/soil/use`))
@@ -57,6 +71,7 @@ export default function DialogAddLocation(props: TypeProps) {
       .then((res) => {
         console.log(res);
         snackbar.enqueueSnackbar("تم حفظ الموقع");
+        setSoilData && setSoilData();
         props.closeDialog();
       })
       .catch((err) => {
@@ -95,7 +110,11 @@ export default function DialogAddLocation(props: TypeProps) {
                 type="text"
                 size="small"
                 fullWidth
-                value={amountData.location_name}
+                value={
+                  objectToUpdate.length
+                    ? objectToUpdate[0].location_name
+                    : amountData.location_name
+                }
                 onChange={(e) => {
                   updateAmountData({ location_name: e.target.value });
                 }}
@@ -108,10 +127,14 @@ export default function DialogAddLocation(props: TypeProps) {
 
               <FormControl fullWidth size="small">
                 <Select
+                  value={
+                    objectToUpdate.length
+                      ? objectToUpdate[0].city_id
+                      : amountData.city_id
+                  }
                   onChange={(e) => {
-                    updateAmountData({ city_id: e.target.value });
+                    updateAmountData({ city_id: e.target.value as string });
                   }}
-                  value={amountData.city_id}
                 >
                   {city.map((city) => (
                     <MenuItem key={city.id} value={city.id}>
@@ -126,7 +149,11 @@ export default function DialogAddLocation(props: TypeProps) {
                 نظام البناء <RequiredSymbol />
               </Typography>
               <TextField
-                value={amountData.building_system}
+                value={
+                  objectToUpdate.length
+                    ? objectToUpdate[0].building_system
+                    : amountData.building_system
+                }
                 type="text"
                 size="small"
                 fullWidth
@@ -170,6 +197,7 @@ export default function DialogAddLocation(props: TypeProps) {
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
+  idToUpdate: number | null;
 };
 
 type TypeLocationData = {

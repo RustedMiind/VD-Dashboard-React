@@ -28,8 +28,38 @@ function GridItem({ children }: { children: React.ReactNode }) {
     </Grid>
   );
 }
+type DesignForm = {
+  inputAreaFrom: string;
+  inputAreaTo: string;
+  inputNumber: string;
+  InputMin: string;
+};
 
+const designFileInitial: DesignForm = {
+  inputAreaFrom: "",
+  inputAreaTo: "",
+  inputNumber: "",
+  InputMin: "",
+};
 function DialogAddArea(props: TypeProps) {
+  const [designForms, setDesignForms] = useState<DesignForm[]>([
+    designFileInitial,
+  ]);
+  const setDesignForm = (updatedDesignForm: DesignForm, index: number) => {
+    setDesignForms((designFiles) => {
+      const updatedUtilities: DesignForm[] = [];
+      designFiles.forEach((designForms, i) => {
+        if (index === i) {
+          updatedUtilities.push(updatedDesignForm);
+        } else {
+          updatedUtilities.push(designForms);
+        }
+        console.log(updatedUtilities);
+      });
+      console.log("updatedUtilities ", updatedUtilities);
+      return updatedUtilities;
+    });
+  };
   const { soilData, setSoilData, getSoil } = useContext(SoilContext);
   const snackbar = useSnackbar();
   const intialLocationData = {
@@ -96,72 +126,83 @@ function DialogAddArea(props: TypeProps) {
       >
         إضافة مساحة
       </DialogTitle>
-      <DialogContent sx={{ bgcolor: "Background" }}>
-        <Paper sx={{ padding: 2, my: 2 }}>
-          <Grid container spacing={2} component="form">
-            <GridItem>
-              <Typography component={"label"}>المساحة من</Typography>
-              <TextField
-                type="text"
-                size="small"
-                placeholder={"المساحة من"}
-                value={amountData.area_from}
-                onChange={(e) => {
-                  updateAmountData({ area_from: e.target.value });
-                }}
-              />
-            </GridItem>
-            <GridItem>
-              <Typography component={"label"}>المساحة إلى</Typography>
-              <TextField
-                type="text"
-                size="small"
-                placeholder={"المساحة إلى"}
-                value={amountData.area_to}
-                onChange={(e) => {
-                  updateAmountData({ area_to: e.target.value });
-                }}
-              />
-            </GridItem>
-            <Grid item md={12}>
-              <Stack>
-                <Typography component={"label"}>العدد المقابل </Typography>
+      {designForms.map((designForm, index, arr) => (
+        <DialogContent sx={{ bgcolor: "Background", height: "800px" }}>
+          <Paper sx={{ padding: 2, my: 2 }}>
+            <Grid container spacing={2} component="form">
+              <GridItem>
+                <Typography component={"label"}>المساحة من</Typography>
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"العدد المقابل "}
-                  value={amountData.number}
+                  placeholder={"المساحة من"}
+                  value={amountData.area_from}
                   onChange={(e) => {
-                    updateAmountData({ number: e.target.value });
+                    updateAmountData({ area_from: e.target.value });
                   }}
                 />
-              </Stack>
-            </Grid>
-            <Grid item md={12}>
-              <Stack>
-                <Typography component={"label"}>الحد الأدنى </Typography>
+              </GridItem>
+              <GridItem>
+                <Typography component={"label"}>المساحة إلى</Typography>
                 <TextField
                   type="text"
                   size="small"
-                  placeholder={"الحد الأدنى "}
-                  value={amountData.minimum}
+                  placeholder={"المساحة إلى"}
+                  value={amountData.area_to}
                   onChange={(e) => {
-                    updateAmountData({ minimum: e.target.value });
+                    updateAmountData({ area_to: e.target.value });
                   }}
                 />
-              </Stack>
+              </GridItem>
+              <Grid item md={12}>
+                <Stack>
+                  <Typography component={"label"}>العدد المقابل </Typography>
+                  <TextField
+                    type="text"
+                    size="small"
+                    placeholder={"العدد المقابل "}
+                    value={amountData.number}
+                    onChange={(e) => {
+                      updateAmountData({ number: e.target.value });
+                    }}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item md={12}>
+                <Stack>
+                  <Typography component={"label"}>الحد الأدنى </Typography>
+                  <TextField
+                    type="text"
+                    size="small"
+                    placeholder={"الحد الأدنى "}
+                    value={amountData.minimum}
+                    onChange={(e) => {
+                      updateAmountData({ minimum: e.target.value });
+                    }}
+                  />
+                </Stack>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-        <Grid container padding={2}>
-          <Grid item md={12}>
-            <LoadingButton variant="contained" type="submit" fullWidth>
-              <AddCircleOutlineIcon />
-              إضافة مساحة أخرى
-            </LoadingButton>
-          </Grid>
-        </Grid>
-      </DialogContent>
+          </Paper>
+          {index === arr.length - 1 && (
+            <Grid container padding={2}>
+              <Grid item md={12}>
+                <LoadingButton
+                  onClick={() => {
+                    setDesignForms([...designForms, designFileInitial]);
+                  }}
+                  variant="contained"
+                  fullWidth
+                >
+                  <AddCircleOutlineIcon />
+                  إضافة مساحة أخرى
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          )}
+        </DialogContent>
+      ))}
+
       <DialogActions sx={{ display: "flex", justifyContent: "center", py: 3 }}>
         <LoadingButton variant="contained" type="submit" sx={{ width: 0.7 }}>
           حفظ

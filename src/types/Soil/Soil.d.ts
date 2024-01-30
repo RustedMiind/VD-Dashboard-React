@@ -19,7 +19,7 @@ export type City = {
   wikiDataId: string;
   type: null;
 };
-type Location = {
+export type Location = {
   building_system: String;
   city: City;
   city_id: number;
