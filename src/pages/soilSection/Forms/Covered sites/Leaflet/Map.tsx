@@ -10,6 +10,7 @@ import {
 import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
 import { Button, Stack } from "@mui/material";
+import { TypeLocationData } from "../Dialog";
 
 const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   const map = useMapEvents({
@@ -22,16 +23,19 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
 
   return null;
 };
-export function Map({ positionClick, setPositionClick, updateAmountData }: PropsType) {
+export function Map({
+  positionClick,
+  setPositionClick,
+  updateAmountData,
+}: PropsType) {
   const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],
   });
-  console.log(positionClick);
   const handleMapClick = (position: [number, number]) => {
     setPositionClick([...positionClick, position]);
-    updateAmountData({ map: positionClick.map(ele => ({ lat: ele[0], long: ele[1] })) })
+    updateAmountData({});
   };
   const handleResetClick = () => {
     setPositionClick([]);
@@ -76,10 +80,6 @@ export function Map({ positionClick, setPositionClick, updateAmountData }: Props
   );
 }
 
-interface Position {
-  lat: number;
-  lng: number;
-}
 interface MapClickHandlerProps {
   onMapClick: (position: [number, number]) => void;
 }
@@ -87,13 +87,5 @@ interface MapClickHandlerProps {
 type PropsType = {
   positionClick: [number, number][];
   setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
-  updateAmountData: (partial: Partial<TypeLocationData>) => void
-};
-
-type TypeLocationData = {
-  location_name: string;
-  city_id: string;
-  building_system: string;
-  status: string;
-  map: { lat: number, long: number }[] | null;
+  updateAmountData: (partial: Partial<TypeLocationData>) => void;
 };

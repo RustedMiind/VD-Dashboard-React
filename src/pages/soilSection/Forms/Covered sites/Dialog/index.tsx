@@ -24,17 +24,14 @@ import { Map } from "../Leaflet/Map";
 
 export default function DialogAddLocation(props: TypeProps) {
   const [positionClick, setPositionClick] = useState<[number, number][]>([]);
-  console.log(positionClick);
-  console.log(props.idToUpdate);
   const { soilData, setSoilData } = useContext(SoilContext);
-  console.log(props.createOrEdit);
   const snackbar = useSnackbar();
   const intialLocationData: TypeLocationData = {
     location_name: "",
     city_id: "",
     building_system: "",
     status: "1",
-    map: null
+    map: [],
   };
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
@@ -50,7 +47,7 @@ export default function DialogAddLocation(props: TypeProps) {
         city_id: obj?.city_id?.toString() || "",
         building_system: obj?.building_system || "",
         status: "1",
-        map: obj?.map || null
+        map: obj?.map || null,
       };
       setAmountData(obj ? objLocation : intialLocationData);
     } else setAmountData(intialLocationData);
@@ -68,13 +65,15 @@ export default function DialogAddLocation(props: TypeProps) {
   }, []);
   function updateAmountData(partial: Partial<TypeLocationData>) {
     //  {"lat": 40.7128, "long": -74.0060},
-    let _positions: { lat: number, long: number }[] = positionClick.map(ele => ({ lat: ele[0], long: ele[1] }));
+    let _positions: { lat: number; long: number }[] = positionClick.map(
+      (ele) => ({ lat: ele[0], long: ele[1] })
+    );
     setAmountData({
       ...amountData,
       ...partial,
-      map: _positions
+      map: _positions,
     });
-    console.log("AmountData :", amountData);
+    console.log(amountData);
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -225,10 +224,15 @@ type TypeProps = {
   createOrEdit: "create" | "edit" | "none";
 };
 
-type TypeLocationData = {
+export type TypeLocationData = {
   location_name: string;
   city_id: string;
   building_system: string;
   status: string;
-  map: { lat: number, long: number }[] | null;
+  map: Position[] | null;
+};
+
+type Position = {
+  lat: number;
+  long: number;
 };

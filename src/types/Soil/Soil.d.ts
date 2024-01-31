@@ -11,7 +11,7 @@ export type Location = {
   deleted_at: null;
   id: number;
   location_name: string;
-  map: {};
+  map: Position[];
   status: number;
   updated_at: string;
 };
@@ -49,4 +49,8 @@ export type City = {
   updated_at: string;
   wikiDataId: string;
   type: null;
+};
+type Position = {
+  lat: number;
+  long: number;
 };
