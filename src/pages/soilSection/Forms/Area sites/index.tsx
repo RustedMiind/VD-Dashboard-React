@@ -33,7 +33,7 @@ import NotFound from "../../../../components/NotFound";
 export default function AreaSites(props: PropsType) {
   const snackbar = useSnackbar();
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
-  const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
+  const [idToUpdate, setIdToUpdate] = useState<number | []>([]);
   const [createOrEdit, setCreateOrEdit] = useState<"create" | "edit" | "none">(
     "none"
   );
@@ -54,7 +54,11 @@ export default function AreaSites(props: PropsType) {
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
     let value = parseInt(e.target.value);
-    setIdToUpdate(parseInt(e.target.value));
+    if (e.target.checked) {
+      setIdToUpdate(parseInt(e.target.value));
+    } else {
+      setIdToUpdate([]);
+    }
     if (isSelect) {
       setSelectedSoilId &&
         selectedSoilId &&
@@ -69,6 +73,7 @@ export default function AreaSites(props: PropsType) {
     }
   }
   function handleDelete() {
+    setSelectedSoilId([]);
     axios
       .delete(Api("employee/soil/area"), {
         data: { id: selectedSoilId },
@@ -103,6 +108,7 @@ export default function AreaSites(props: PropsType) {
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
               onClick={handleCreate}
+              disabled={!!selectedSoilId?.length}
             >
               اضافة مساحة
             </Button>

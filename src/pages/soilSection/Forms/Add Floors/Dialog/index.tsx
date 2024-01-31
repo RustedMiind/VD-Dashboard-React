@@ -21,16 +21,14 @@ import { useSnackbar } from "notistack";
 import { Api } from "../../../../../constants";
 import { isStringAllNumbers } from "../../../../../methods";
 type DesignForm = {
-  area_from: string;
-  area_to: string;
-  number: string;
+  number_floors: string;
+  depth: string;
   minimum: string;
 };
 
 const designFileInitial: DesignForm = {
-  area_from: "",
-  area_to: "",
-  number: "",
+  number_floors: "",
+  depth: "",
   minimum: "",
 };
 
@@ -43,9 +41,8 @@ function DialogAddFloor(props: TypeProps) {
     depth: "",
     minimum: "",
   };
-  const { getSoil, soilData, setSoilData } = useContext(SoilContext);
+  const { soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
-  const [amountData, setAmountData] = useState<TypeFloorData>(intialAreaData);
   const setDesignForm = (
     updatedDesignForm: Partial<DesignForm>,
     index: number
@@ -68,7 +65,7 @@ function DialogAddFloor(props: TypeProps) {
     });
   };
   useEffect(() => {
-    if (props.idToUpdate != null) {
+    if (props.idToUpdate) {
       const obj: Floor | undefined =
         typeof soilData === "object"
           ? soilData.soil_floor.find((index) => index.id == props.idToUpdate)
@@ -78,30 +75,48 @@ function DialogAddFloor(props: TypeProps) {
         depth: obj?.depth?.toString() || "",
         minimum: obj?.minimum.toString() || "",
       };
-      setAmountData(obj ? objLocation : intialAreaData);
-    } else setAmountData(intialAreaData);
+      objLocation && setDesignForms([objLocation]);
+    } else {
+      setDesignForms([designFileInitial]);
+    }
   }, [props.idToUpdate]);
 
-  function updateAmountData(partial: Partial<TypeFloorData>) {
-    setAmountData({
-      ...amountData,
-      ...partial,
-    });
-  }
+  // function updateAmountData(partial: Partial<TypeFloorData>) {
+  //   setAmountData({
+  //     ...amountData,
+  //     ...partial,
+  //   });
+  // }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    axios
-      .post(Api(`employee/soil/floor`), { ...amountData })
-      .then((res) => {
-        snackbar.enqueueSnackbar("تم حفظ الموقع");
-        setSoilData && setSoilData();
-        props.closeDialog();
-      })
-      .catch((err) => {
-        snackbar.enqueueSnackbar(" تعذر في حفظ الموقع ", {
-          variant: "error",
+    if (props.createOrEdit === "create") {
+      axios
+        .post(Api(`employee/soil/floor`), designForms)
+        .then((res) => {
+          snackbar.enqueueSnackbar("تم حفظ الدور");
+          setSoilData && setSoilData();
+          props.closeDialog();
+        })
+        .catch((err) => {
+          snackbar.enqueueSnackbar(" تعذر في حفظ الدور ", {
+            variant: "error",
+          });
         });
-      });
+    }
+    if (props.createOrEdit === "edit") {
+      axios
+        .post(Api(`employee/soil/floor/${props.idToUpdate}`), designForms)
+        .then((res) => {
+          snackbar.enqueueSnackbar("تم تعديل الدور");
+          setSoilData && setSoilData();
+          props.closeDialog();
+        })
+        .catch((err) => {
+          snackbar.enqueueSnackbar(" تعذر في تعديل الدور ", {
+            variant: "error",
+          });
+        });
+    }
   }
   return (
     <Dialog
@@ -150,12 +165,15 @@ function DialogAddFloor(props: TypeProps) {
                     <TextField
                       type="text"
                       size="small"
-                      value={amountData.number_floors}
+                      value={designForm.number_floors}
+                      placeholder="عدد الأدوار"
                       onChange={(e) => {
-                        if (isStringAllNumbers(e.target.value))
-                          updateAmountData({
+                        setDesignForm(
+                          {
                             number_floors: e.target.value,
-                          });
+                          },
+                          index
+                        );
                       }}
                     />
                   </Stack>
@@ -166,14 +184,17 @@ function DialogAddFloor(props: TypeProps) {
                       العمق{" "}
                     </Typography>
                     <TextField
+                      placeholder="العمق"
                       type="text"
                       size="small"
-                      value={amountData.depth}
+                      value={designForm.depth}
                       onChange={(e) => {
-                        if (isStringAllNumbers(e.target.value))
-                          updateAmountData({
+                        setDesignForm(
+                          {
                             depth: e.target.value,
-                          });
+                          },
+                          index
+                        );
                       }}
                     />
                   </Stack>
@@ -184,14 +205,17 @@ function DialogAddFloor(props: TypeProps) {
                       الحد الأدنى
                     </Typography>
                     <TextField
+                      placeholder=" الحد الأدنى"
                       type="text"
                       size="small"
-                      value={amountData.minimum}
+                      value={designForm.minimum}
                       onChange={(e) => {
-                        if (isStringAllNumbers(e.target.value))
-                          updateAmountData({
+                        setDesignForm(
+                          {
                             minimum: e.target.value,
-                          });
+                          },
+                          index
+                        );
                       }}
                     />
                   </Stack>
@@ -203,6 +227,7 @@ function DialogAddFloor(props: TypeProps) {
                 <Grid item md={12}>
                   <LoadingButton
                     variant="contained"
+                    disabled={props.createOrEdit === "edit"}
                     onClick={() => {
                       setDesignForms([...designForms, designFileInitial]);
                     }}
@@ -232,7 +257,8 @@ export default DialogAddFloor;
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
-  idToUpdate: number | null;
+  idToUpdate: number | [];
+  createOrEdit: "create" | "edit" | "none";
 };
 type TypeFloorData = {
   number_floors: string;

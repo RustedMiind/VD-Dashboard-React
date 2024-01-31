@@ -58,7 +58,7 @@ function DialogAddArea(props: TypeProps) {
   };
 
   useEffect(() => {
-    if (props.idToUpdate != null) {
+    if (props.idToUpdate) {
       const obj: Area | undefined =
         typeof soilData === "object"
           ? soilData.soil_area.find((index) => index.id == props.idToUpdate)
@@ -70,6 +70,8 @@ function DialogAddArea(props: TypeProps) {
         minimum: obj?.minimum?.toString() || "",
       };
       objArea && setDesignForms([objArea]);
+    } else {
+      setDesignForms([intialAreaData]);
     }
   }, [props.idToUpdate]);
   const setDesignForm = (
@@ -100,21 +102,21 @@ function DialogAddArea(props: TypeProps) {
     number: "",
     minimum: "",
   };
-  const [amountData, setAmountData] =
-    useState<TypeAreaData>(intialLocationData);
+  // const [amountData, setAmountData] =
+  //   useState<TypeAreaData>(intialLocationData);
 
-  function updateAmountData(partial: Partial<TypeAreaData>) {
-    setAmountData({
-      ...amountData,
-      ...partial,
-    });
-  }
+  // function updateAmountData(partial: Partial<TypeAreaData>) {
+  //   setAmountData({
+  //     ...amountData,
+  //     ...partial,
+  //   });
+  // }
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     if (props.createOrEdit === "create") {
       axios
-        .post(Api(`employee/soil/area`), designForms[0])
+        .post(Api(`employee/soil/area`), designForms)
         .then((res) => {
           snackbar.enqueueSnackbar("تم حفظ المساحة");
           setSoilData && setSoilData();
@@ -128,7 +130,7 @@ function DialogAddArea(props: TypeProps) {
     }
     if (props.createOrEdit === "edit") {
       axios
-        .post(Api(`employee/soil/area/${props.idToUpdate}`), designForms[0])
+        .post(Api(`employee/soil/area/${props.idToUpdate}`), designForms)
         .then((res) => {
           snackbar.enqueueSnackbar("تم تعديل المساحة");
           setSoilData && setSoilData();
@@ -289,7 +291,7 @@ export default DialogAddArea;
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
-  idToUpdate: number | null;
+  idToUpdate: number | [];
   createOrEdit: "create" | "edit" | "none";
 };
 

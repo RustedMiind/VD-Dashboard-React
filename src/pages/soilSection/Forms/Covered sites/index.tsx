@@ -32,11 +32,12 @@ import { LaravelValidationError } from "../../../../types/LaravelValidationError
 import LoadingTable from "../../../../components/LoadingTable";
 import TenderNotFound from "../../../tenders/data/Table/TendersNotFound";
 import NotFound from "../../../../components/NotFound";
+import { set } from "react-hook-form";
 
 export default function CoveredSites(props: PropsType) {
   const { soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
-  const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
+  const [idToUpdate, setIdToUpdate] = useState<number | []>([]);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
   const [createOrEdit, setCreateOrEdit] = useState<"create" | "edit" | "none">(
     "none"
@@ -56,7 +57,10 @@ export default function CoveredSites(props: PropsType) {
   };
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
-    setIdToUpdate(parseInt(e.target.value));
+    if (e.target.checked) {
+      setIdToUpdate(parseInt(e.target.value));
+    } else setIdToUpdate([]);
+
     let value = parseInt(e.target.value);
     if (isSelect) {
       setSelectedSoilId &&
@@ -72,6 +76,7 @@ export default function CoveredSites(props: PropsType) {
     }
   }
   function handleDelete() {
+    setSelectedSoilId([]);
     axios
       .delete(Api("employee/soil/location"), {
         data: { id: selectedSoilId },
@@ -106,6 +111,7 @@ export default function CoveredSites(props: PropsType) {
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
               onClick={handleCreate}
+              disabled={!!selectedSoilId?.length}
             >
               اضافة موقع
             </Button>

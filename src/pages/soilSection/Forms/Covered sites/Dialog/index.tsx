@@ -36,7 +36,7 @@ export default function DialogAddLocation(props: TypeProps) {
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
   useEffect(() => {
-    if (props.idToUpdate != null) {
+    if (props.idToUpdate) {
       const obj: Location | undefined =
         typeof soilData === "object"
           ? soilData.soil_location.find((index) => index.id == props.idToUpdate)
@@ -205,7 +205,7 @@ export default function DialogAddLocation(props: TypeProps) {
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
-  idToUpdate: number | null;
+  idToUpdate: number | [];
   createOrEdit: "create" | "edit" | "none";
 };
 
