@@ -13,34 +13,40 @@ import {
 } from "@mui/material";
 import Pusher from "pusher-js";
 import { APP_CLUSTER, APP_KEY } from "../tenders/details/Chat/pusher.config";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import type { Map } from "leaflet";
 import osm from "./Leaflet/osm";
+import L from "leaflet";
+import Markers from "../../assets/images/images.png";
+const markIcon = new L.Icon({
+  iconUrl: require(`${Markers}`),
+  iconSize: [35, 45],
+});
 function ForTest() {
   const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
   const ZOOM_LEVEL = 9;
   const mapRef = useRef<Map>(null);
-  const [inputValue, setInputValue] = useState("");
-  const [channel, setChannel] = useState("");
-  const [eventData, setEventData] = useState<string[]>([]);
-  const { enqueueSnackbar } = useSnackbar();
+  // const [inputValue, setInputValue] = useState("");
+  // const [channel, setChannel] = useState("");
+  // const [eventData, setEventData] = useState<string[]>([]);
+  // const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    if (channel) {
-      const pusher = new Pusher(APP_KEY, { cluster: APP_CLUSTER });
-      const pusherChannel = pusher.subscribe("channel-" + channel);
+  // useEffect(() => {
+  //   if (channel) {
+  //     const pusher = new Pusher(APP_KEY, { cluster: APP_CLUSTER });
+  //     const pusherChannel = pusher.subscribe("channel-" + channel);
 
-      pusherChannel.bind_global((res: unknown, hell: unknown) => {
-        const jsoned = JSON.stringify(res);
-        console.log(res, hell);
-        setEventData([...eventData, jsoned]);
-        enqueueSnackbar(jsoned);
-      });
-      return () => {
-        pusher.disconnect();
-      };
-    }
-  }, [channel]);
+  //     pusherChannel.bind_global((res: unknown, hell: unknown) => {
+  //       const jsoned = JSON.stringify(res);
+  //       console.log(res, hell);
+  //       setEventData([...eventData, jsoned]);
+  //       enqueueSnackbar(jsoned);
+  //     });
+  //     return () => {
+  //       pusher.disconnect();
+  //     };
+  //   }
+  // }, [channel]);
 
   return (
     <Stack>
@@ -51,6 +57,11 @@ function ForTest() {
               url={osm.maptiler.url}
               attribution={osm.maptiler.attribution}
             />
+            <Marker position={[13.084622, 80.248357]} icon={markIcon}>
+              <Popup>
+                <b>frist</b>
+              </Popup>
+            </Marker>
           </MapContainer>
         </Grid>
       </Grid>
