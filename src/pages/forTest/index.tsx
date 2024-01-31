@@ -3,30 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import UploadFileInput from "../../components/UploadFileInput";
 import { SelectWithFilteration } from "../../components/SelectWithFilteration";
 import { StringParam, useQueryParam } from "use-query-params";
-import {
-  Paper,
-  Stack,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-} from "@mui/material";
-import Pusher from "pusher-js";
-import { APP_CLUSTER, APP_KEY } from "../tenders/details/Chat/pusher.config";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import type { Map } from "leaflet";
-import osm from "./Leaflet/osm";
-import L from "leaflet";
-import Markers from "../../assets/images/images.png";
-const markIcon = new L.Icon({
-  iconUrl: require(`${Markers}`),
-  iconSize: [35, 45],
-});
+import { Stack } from "@mui/material";
+import "./index.css";
+import { Map } from "./Leaflet/Map";
+
 function ForTest() {
   const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
   const ZOOM_LEVEL = 9;
-  const mapRef = useRef<Map>(null);
-  // const [inputValue, setInputValue] = useState("");
   // const [channel, setChannel] = useState("");
   // const [eventData, setEventData] = useState<string[]>([]);
   // const { enqueueSnackbar } = useSnackbar();
@@ -50,43 +33,7 @@ function ForTest() {
 
   return (
     <Stack>
-      <Grid container>
-        <Grid item md={6}>
-          <MapContainer center={center} zoom={ZOOM_LEVEL} ref={mapRef}>
-            <TileLayer
-              url={osm.maptiler.url}
-              attribution={osm.maptiler.attribution}
-            />
-            <Marker position={[13.084622, 80.248357]} icon={markIcon}>
-              <Popup>
-                <b>frist</b>
-              </Popup>
-            </Marker>
-          </MapContainer>
-        </Grid>
-      </Grid>
-      {/* <Paper component={Stack} elevation={4} p={2} spacing={2}>
-        <TextField
-          label="Enter Channel Number"
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-        />
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            setChannel(inputValue);
-          }}
-        >
-          Update Channel
-        </Button>
-        <Typography variant="body1">Current Channel: {channel}</Typography>
-        {eventData.map((data_item) => (
-          <Typography variant="body2">- {data_item}</Typography>
-        ))}
-      </Paper> */}
+      <Map />
     </Stack>
   );
 }

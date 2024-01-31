@@ -20,6 +20,7 @@ import { useSnackbar } from "notistack";
 import { City, Location } from "../../../../../types/Soil";
 import { SoilContext } from "../../../SoilContext";
 import { LoadingButton } from "@mui/lab";
+import { Map } from "../Leaflet/Map";
 
 export default function DialogAddLocation(props: TypeProps) {
   console.log(props.idToUpdate);
@@ -107,7 +108,7 @@ export default function DialogAddLocation(props: TypeProps) {
   return (
     <>
       <Dialog
-        maxWidth={"sm"}
+        maxWidth={"lg"}
         fullWidth
         open={props.open}
         onClose={props.closeDialog}
@@ -178,6 +179,9 @@ export default function DialogAddLocation(props: TypeProps) {
                 الموقع <RequiredSymbol />
               </Typography>
               <TextField type="text" size="small" fullWidth />
+            </Grid>
+            <Grid item md={12}>
+              <Map />
             </Grid>
           </Grid>
         </DialogContent>
