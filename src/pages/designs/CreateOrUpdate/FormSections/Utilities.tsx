@@ -12,18 +12,18 @@ import {
 import { useEffect, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CustomFilePond from "../../../../components/CustomFilepond";
-import { ImageListType } from "react-images-uploading";
-import { FilePondInitialFile } from "filepond";
 import {
+  CreateFormType,
   GridItem,
   GridItemTextInputWithLabel,
   InputsGridContainer,
   Utility,
   utilityInitial,
 } from "..";
-import { generateUndefinedArray } from "../../../../methods";
 import { FormSectionProps } from "./BaseProps";
 import axios from "axios";
+import { Api } from "../../../../constants";
+import { UseFormRegister } from "react-hook-form";
 
 type optionType = {
   id: number;
@@ -31,10 +31,11 @@ type optionType = {
 };
 
 function UtilitiesSection({
-  registerFn,
+  register,
   utilities,
   setUtilities,
   setUtility,
+  registerFn,
 }: PropsType) {
   // ?declare component state
 
@@ -43,13 +44,13 @@ function UtilitiesSection({
   useEffect(() => {
     // TODO::fetch options data
     axios
-      .get("https://visiondimensions.com/api/client/design/attachment-option", {
+      .get(Api("client/design/attachment-option"), {
         headers: {
           from: "website",
         },
       })
       .then((res) => {
-        return res?.data?.attachments_type;
+        return res?.data?.utilities_type;
       })
       .then((data) => {
         let _arr: optionType[] = [];
@@ -79,10 +80,15 @@ function UtilitiesSection({
                 fullWidth
                 select
                 size="small"
-                defaultValue={index !== arr.length - 1 ? +utility.option : 1}
+                onChange={(e) => {
+                  setUtility({ option: e.target.value }, index);
+                }}
+                value={utility.option}
               >
                 {options.map((option, i) => (
-                  <MenuItem value={option.id}> {option.name} </MenuItem>
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -108,7 +114,6 @@ function UtilitiesSection({
                 setUtility(
                   {
                     files: fileItems.map((fileItem) => fileItem.file),
-                    option: "",
                   },
                   index
                 );
@@ -120,21 +125,19 @@ function UtilitiesSection({
 
       <InputsGridContainer>
         <GridItemTextInputWithLabel
-          // inputRef={registerFn}
-          // name="status_design"
-          // {...registerFn("status_design")}
+          register={registerFn("status_design")}
           label={"حالة التصميم"}
         />
         <GridItem />
         <GridItem>
           <FormControlLabel
-            control={<Switch {...registerFn("status_mob")} />}
+            control={<Switch {...register("status_mob")} />}
             label="التطبيق"
           />
         </GridItem>
         <GridItem>
           <FormControlLabel
-            control={<Switch {...registerFn("status_web")} />}
+            control={<Switch {...register("status_web")} />}
             label="الموقع"
           />
         </GridItem>
@@ -144,9 +147,10 @@ function UtilitiesSection({
 }
 
 interface PropsType extends FormSectionProps {
+  register: UseFormRegister<CreateFormType>;
   utilities: Utility[];
   setUtilities: React.Dispatch<React.SetStateAction<Utility[]>>;
-  setUtility: (updatedUtility: Utility, index: number) => void;
+  setUtility: (updatedUtility: Partial<Utility>, index: number) => void;
 }
 
 export default UtilitiesSection;

@@ -23,6 +23,8 @@ import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
+import DesignStructurePage from "./pages/designs/DesignStructure";
+import DesignDataPage from "./pages/designs/DesignsData";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -103,7 +105,9 @@ function RoutesComponent() {
         )}
         <Route path="services">
           <Route path="design">
+            <Route path="" element={<DesignDataPage />} />
             <Route path="create" element={<CreateOrUpdateDesign />} />
+            <Route path="structure" element={<DesignStructurePage />} />
           </Route>
         </Route>
 

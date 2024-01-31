@@ -9,17 +9,11 @@ import {
 import { FormSectionProps } from "./BaseProps";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { UseFormResetField } from "react-hook-form";
+import { Control, Controller, UseFormResetField } from "react-hook-form";
 import dayjs from "dayjs";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
-function MainFormSection({
-  registerFn,
-  resetField,
-  discountEnd,
-  discountStart,
-  setDiscountEnd,
-  setDiscountStart,
-}: PropsType) {
+function MainFormSection({ registerFn, resetField, control }: PropsType) {
   const [hasDescount, setHasDiscount] = useState(false);
 
   return (
@@ -66,19 +60,39 @@ function MainFormSection({
         register={registerFn("price_after")}
         disabled={!hasDescount}
       />
-      <GridItemDateInputWithLabel
-        value={dayjs(discountStart)}
-        onChange={(newValue) => {
-          setDiscountStart(newValue?.format() || "");
+      <Controller
+        control={control}
+        name="desc_date_from"
+        rules={{ required: true }}
+        render={({ field }) => {
+          return (
+            <GridItemDateInputWithLabel
+              label="تاريخ الخصم من"
+              value={dayjs(field.value)}
+              inputRef={field.ref}
+              onChange={(date) => {
+                field.onChange(date?.format());
+              }}
+            />
+          );
         }}
-        label="عرض الخصم من تاريخ"
       />
-      <GridItemDateInputWithLabel
-        value={dayjs(discountEnd)}
-        onChange={(newValue) => {
-          setDiscountEnd(newValue?.format() || "");
+      <Controller
+        control={control}
+        name="desc_date_to"
+        rules={{ required: true }}
+        render={({ field }) => {
+          return (
+            <GridItemDateInputWithLabel
+              label="تاريخ الخصم الي"
+              value={dayjs(field.value)}
+              inputRef={field.ref}
+              onChange={(date) => {
+                field.onChange(date?.format());
+              }}
+            />
+          );
         }}
-        label="الي تاريخ"
       />
       <GridItemTextInputWithLabel
         type="number"
@@ -147,10 +161,7 @@ function MainFormSection({
 
 interface PropsType extends FormSectionProps {
   resetField: UseFormResetField<CreateFormType>;
-  discountStart: string | null;
-  setDiscountStart: React.Dispatch<React.SetStateAction<string | null>>;
-  discountEnd: string | null;
-  setDiscountEnd: React.Dispatch<React.SetStateAction<string | null>>;
+  control: Control<CreateFormType>;
 }
 
 export default MainFormSection;
