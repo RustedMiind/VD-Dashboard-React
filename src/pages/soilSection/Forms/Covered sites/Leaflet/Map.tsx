@@ -9,7 +9,7 @@ import {
 } from "react-leaflet";
 import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 
 const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   const map = useMapEvents({
@@ -27,13 +27,14 @@ export function Map() {
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],
-    // iconAnchor: [1, 1],
-    // popupAnchor: [-0, -76]
   });
   const [positionClick, setPositionClick] = useState<[number, number][]>([]);
   const handleMapClick = (position: [number, number]) => {
     setPositionClick([...positionClick, position]);
     console.log(positionClick);
+  };
+  const handleResetClick = () => {
+    setPositionClick([]);
   };
 
   function createPolylines() {
@@ -69,6 +70,7 @@ export function Map() {
         <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker>
         <MapClickHandler onMapClick={handleMapClick} />
         {createPolylines()}
+        <Button onClick={handleResetClick}>Reset</Button>
       </MapContainer>
     </Stack>
   );
