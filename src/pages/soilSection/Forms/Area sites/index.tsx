@@ -34,7 +34,9 @@ export default function AreaSites(props: PropsType) {
   const snackbar = useSnackbar();
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
   const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
-
+  const [createOrEdit, setCreateOrEdit] = useState<"create" | "edit" | "none">(
+    "none"
+  );
   const { soilData, setSoilData } = useContext(SoilContext);
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -81,7 +83,14 @@ export default function AreaSites(props: PropsType) {
         });
       });
   }
-
+  function handleCreate() {
+    props.openAreaDialog();
+    setCreateOrEdit("create");
+  }
+  function handleEdit() {
+    props.openAreaDialog();
+    setCreateOrEdit("edit");
+  }
   return (
     <>
       {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
@@ -93,13 +102,14 @@ export default function AreaSites(props: PropsType) {
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
-              onClick={props.openAreaDialog}
+              onClick={handleCreate}
             >
               اضافة مساحة
             </Button>
             <Box>
               <Button
-                onClick={props.openAreaDialog}
+                onClick={handleEdit}
+                disabled={selectedSoilId?.length !== 1}
                 sx={{ mx: 2 }}
                 variant="outlined"
                 startIcon={<EditIcon />}
@@ -177,6 +187,7 @@ export default function AreaSites(props: PropsType) {
             closeDialog={props.closeDialog}
             open={props.dialogState === "area"}
             idToUpdate={idToUpdate}
+            createOrEdit={createOrEdit}
           />
         </Stack>
       )}

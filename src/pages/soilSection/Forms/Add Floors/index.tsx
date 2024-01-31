@@ -34,6 +34,9 @@ export default function AddFloors(props: PropsType) {
   const { soilData, setSoilData } = useContext(SoilContext);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
   const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
+  const [createOrEdit, setCreateOrEdit] = useState<"create" | "edit" | "none">(
+    "none"
+  );
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -79,7 +82,14 @@ export default function AddFloors(props: PropsType) {
         });
       });
   }
-
+  function handleCreate() {
+    props.openFloorDialog();
+    setCreateOrEdit("create");
+  }
+  function handleEdit() {
+    props.openFloorDialog();
+    setCreateOrEdit("edit");
+  }
   return (
     <>
       {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
@@ -91,12 +101,13 @@ export default function AddFloors(props: PropsType) {
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
-              onClick={props.openFloorDialog}
+              onClick={handleCreate}
             >
               اضافة الادوار
             </Button>
             <Box>
               <Button
+                onClick={handleEdit}
                 sx={{ mx: 2 }}
                 variant="outlined"
                 startIcon={<EditIcon />}

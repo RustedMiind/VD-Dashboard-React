@@ -69,7 +69,7 @@ function DialogAddArea(props: TypeProps) {
         number: obj?.number?.toString() || "",
         minimum: obj?.minimum?.toString() || "",
       };
-      setAmountData(obj ? objArea : intialAreaData);
+      objArea && setDesignForms([objArea]);
     }
   }, [props.idToUpdate]);
   const setDesignForm = (
@@ -112,18 +112,34 @@ function DialogAddArea(props: TypeProps) {
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    axios
-      .post(Api(`employee/soil/area`), designForms[0])
-      .then((res) => {
-        snackbar.enqueueSnackbar("تم حفظ المساحة");
-        setSoilData && setSoilData();
-        props.closeDialog();
-      })
-      .catch((err) => {
-        snackbar.enqueueSnackbar(" تعذر في حفظ المساحة ", {
-          variant: "error",
+    if (props.createOrEdit === "create") {
+      axios
+        .post(Api(`employee/soil/area`), designForms[0])
+        .then((res) => {
+          snackbar.enqueueSnackbar("تم حفظ المساحة");
+          setSoilData && setSoilData();
+          props.closeDialog();
+        })
+        .catch((err) => {
+          snackbar.enqueueSnackbar(" تعذر في حفظ المساحة ", {
+            variant: "error",
+          });
         });
-      });
+    }
+    if (props.createOrEdit === "edit") {
+      axios
+        .post(Api(`employee/soil/area/${props.idToUpdate}`), designForms[0])
+        .then((res) => {
+          snackbar.enqueueSnackbar("تم تعديل المساحة");
+          setSoilData && setSoilData();
+          props.closeDialog();
+        })
+        .catch((err) => {
+          snackbar.enqueueSnackbar(" تعذر في تعديل المساحة ", {
+            variant: "error",
+          });
+        });
+    }
   }
 
   return (
@@ -246,6 +262,7 @@ function DialogAddArea(props: TypeProps) {
                     onClick={() => {
                       setDesignForms([...designForms, designFileInitial]);
                     }}
+                    disabled={props.createOrEdit === "edit"}
                     variant="contained"
                     fullWidth
                   >
@@ -273,6 +290,7 @@ type TypeProps = {
   open: boolean;
   closeDialog: () => void;
   idToUpdate: number | null;
+  createOrEdit: "create" | "edit" | "none";
 };
 
 type TypeAreaData = {
