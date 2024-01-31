@@ -38,6 +38,9 @@ export default function CoveredSites(props: PropsType) {
   const snackbar = useSnackbar();
   const [idToUpdate, setIdToUpdate] = useState<number | null>(null);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
+  const [createOrEdit, setCreateOrEdit] = useState<"create" | "edit" | "none">(
+    "none"
+  );
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -83,6 +86,14 @@ export default function CoveredSites(props: PropsType) {
         });
       });
   }
+  function handleCreate() {
+    props.openCoveredDialog();
+    setCreateOrEdit("create");
+  }
+  function handleEdit() {
+    props.openCoveredDialog();
+    setCreateOrEdit("edit");
+  }
   return (
     <>
       {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
@@ -94,7 +105,7 @@ export default function CoveredSites(props: PropsType) {
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
-              onClick={props.openCoveredDialog}
+              onClick={handleCreate}
             >
               اضافة موقع
             </Button>
@@ -108,7 +119,7 @@ export default function CoveredSites(props: PropsType) {
                 الخريطة الكلية
               </Button>
               <Button
-                onClick={props.openCoveredDialog}
+                onClick={handleEdit}
                 disabled={selectedSoilId?.length !== 1}
                 sx={{ mx: 2 }}
                 variant="outlined"
@@ -193,6 +204,7 @@ export default function CoveredSites(props: PropsType) {
             closeDialog={props.closeDialog}
             open={props.dialogState === "covered"}
             idToUpdate={idToUpdate}
+            createOrEdit={createOrEdit}
           />
         </Stack>
       )}

@@ -20,8 +20,24 @@ import { Area, Floor } from "../../../../../types/Soil";
 import { useSnackbar } from "notistack";
 import { Api } from "../../../../../constants";
 import { isStringAllNumbers } from "../../../../../methods";
+type DesignForm = {
+  area_from: string;
+  area_to: string;
+  number: string;
+  minimum: string;
+};
+
+const designFileInitial: DesignForm = {
+  area_from: "",
+  area_to: "",
+  number: "",
+  minimum: "",
+};
 
 function DialogAddFloor(props: TypeProps) {
+  const [designForms, setDesignForms] = useState<DesignForm[]>([
+    designFileInitial,
+  ]);
   const intialAreaData: TypeFloorData = {
     number_floors: "",
     depth: "",
@@ -30,7 +46,27 @@ function DialogAddFloor(props: TypeProps) {
   const { getSoil, soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
   const [amountData, setAmountData] = useState<TypeFloorData>(intialAreaData);
-
+  const setDesignForm = (
+    updatedDesignForm: Partial<DesignForm>,
+    index: number
+  ) => {
+    setDesignForms((designFiles) => {
+      const updatedUtilities: DesignForm[] = [];
+      designFiles.forEach((designForms, i) => {
+        if (index === i) {
+          updatedUtilities.push({
+            ...designForms,
+            ...updatedDesignForm,
+          });
+        } else {
+          updatedUtilities.push(designForms);
+        }
+        console.log(updatedUtilities);
+      });
+      console.log("updatedUtilities ", updatedUtilities);
+      return updatedUtilities;
+    });
+  };
   useEffect(() => {
     if (props.idToUpdate != null) {
       const obj: Floor | undefined =
@@ -102,73 +138,84 @@ function DialogAddFloor(props: TypeProps) {
         إضافة الأدوار
       </DialogTitle>
       <DialogContent sx={{ bgcolor: "Background" }}>
-        <Paper sx={{ padding: 2, my: 2 }}>
-          <Grid container spacing={2} component="form">
-            <Grid item md={12}>
-              <Stack>
-                <Typography fontSize={14} component={"label"}>
-                  عدد الأدوار{" "}
-                </Typography>
-                <TextField
-                  type="text"
-                  size="small"
-                  value={amountData.number_floors}
-                  onChange={(e) => {
-                    if (isStringAllNumbers(e.target.value))
-                      updateAmountData({
-                        number_floors: e.target.value,
-                      });
-                  }}
-                />
-              </Stack>
-            </Grid>
-            <Grid item md={12}>
-              <Stack>
-                <Typography fontSize={14} component={"label"}>
-                  العمق{" "}
-                </Typography>
-                <TextField
-                  type="text"
-                  size="small"
-                  value={amountData.depth}
-                  onChange={(e) => {
-                    if (isStringAllNumbers(e.target.value))
-                      updateAmountData({
-                        depth: e.target.value,
-                      });
-                  }}
-                />
-              </Stack>
-            </Grid>
-            <Grid item md={12}>
-              <Stack>
-                <Typography fontSize={14} component={"label"}>
-                  الحد الأدنى
-                </Typography>
-                <TextField
-                  type="text"
-                  size="small"
-                  value={amountData.minimum}
-                  onChange={(e) => {
-                    if (isStringAllNumbers(e.target.value))
-                      updateAmountData({
-                        minimum: e.target.value,
-                      });
-                  }}
-                />
-              </Stack>
-            </Grid>
-          </Grid>
-        </Paper>
-
-        <Grid container padding={2}>
-          <Grid item md={12}>
-            <LoadingButton variant="contained" type="submit" fullWidth>
-              <AddCircleOutlineIcon />
-              إضافة مساحة أخرى
-            </LoadingButton>
-          </Grid>
-        </Grid>
+        {designForms.map((designForm, index, arr) => (
+          <>
+            <Paper sx={{ padding: 2, my: 2 }}>
+              <Grid container spacing={2} component="form">
+                <Grid item md={12}>
+                  <Stack>
+                    <Typography fontSize={14} component={"label"}>
+                      عدد الأدوار{" "}
+                    </Typography>
+                    <TextField
+                      type="text"
+                      size="small"
+                      value={amountData.number_floors}
+                      onChange={(e) => {
+                        if (isStringAllNumbers(e.target.value))
+                          updateAmountData({
+                            number_floors: e.target.value,
+                          });
+                      }}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid item md={12}>
+                  <Stack>
+                    <Typography fontSize={14} component={"label"}>
+                      العمق{" "}
+                    </Typography>
+                    <TextField
+                      type="text"
+                      size="small"
+                      value={amountData.depth}
+                      onChange={(e) => {
+                        if (isStringAllNumbers(e.target.value))
+                          updateAmountData({
+                            depth: e.target.value,
+                          });
+                      }}
+                    />
+                  </Stack>
+                </Grid>
+                <Grid item md={12}>
+                  <Stack>
+                    <Typography fontSize={14} component={"label"}>
+                      الحد الأدنى
+                    </Typography>
+                    <TextField
+                      type="text"
+                      size="small"
+                      value={amountData.minimum}
+                      onChange={(e) => {
+                        if (isStringAllNumbers(e.target.value))
+                          updateAmountData({
+                            minimum: e.target.value,
+                          });
+                      }}
+                    />
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Paper>
+            {index === arr.length - 1 && (
+              <Grid container padding={2}>
+                <Grid item md={12}>
+                  <LoadingButton
+                    variant="contained"
+                    onClick={() => {
+                      setDesignForms([...designForms, designFileInitial]);
+                    }}
+                    fullWidth
+                  >
+                    <AddCircleOutlineIcon />
+                    إضافة مساحة أخرى
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+            )}
+          </>
+        ))}
       </DialogContent>
 
       <DialogActions sx={{ display: "flex", justifyContent: "center", py: 3 }}>

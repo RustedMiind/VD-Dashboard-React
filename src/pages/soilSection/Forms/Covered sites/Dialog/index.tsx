@@ -22,7 +22,9 @@ import { SoilContext } from "../../../SoilContext";
 import { LoadingButton } from "@mui/lab";
 
 export default function DialogAddLocation(props: TypeProps) {
-  const { getSoil, soilData, setSoilData } = useContext(SoilContext);
+  console.log(props.idToUpdate);
+  const { soilData, setSoilData } = useContext(SoilContext);
+  console.log(props.createOrEdit);
   const snackbar = useSnackbar();
   const intialLocationData: TypeLocationData = {
     location_name: "",
@@ -33,7 +35,6 @@ export default function DialogAddLocation(props: TypeProps) {
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
-
   useEffect(() => {
     if (props.idToUpdate != null) {
       const obj: Location | undefined =
@@ -68,20 +69,40 @@ export default function DialogAddLocation(props: TypeProps) {
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    axios
-      .post(Api(`employee/soil/location`), { ...amountData })
-      .then((res) => {
-        console.log(res);
-        snackbar.enqueueSnackbar("تم حفظ الموقع");
-        setSoilData && setSoilData();
-        props.closeDialog();
-      })
-      .catch((err) => {
-        console.log(err);
-        snackbar.enqueueSnackbar(" تعذر في حفظ الموقع ", {
-          variant: "error",
+    if (props.createOrEdit === "create") {
+      axios
+        .post(Api(`employee/soil/location`), { ...amountData })
+        .then((res) => {
+          console.log(res);
+          snackbar.enqueueSnackbar("تم حفظ الموقع");
+          setSoilData && setSoilData();
+          props.closeDialog();
+        })
+        .catch((err) => {
+          console.log(err);
+          snackbar.enqueueSnackbar(" تعذر في حفظ الموقع ", {
+            variant: "error",
+          });
         });
-      });
+    }
+    if (props.createOrEdit === "edit") {
+      axios
+        .post(Api(`employee/soil/location/${props.idToUpdate}`), {
+          ...amountData,
+        })
+        .then((res) => {
+          console.log(res);
+          snackbar.enqueueSnackbar("تم تعديل الموقع");
+          setSoilData && setSoilData();
+          props.closeDialog();
+        })
+        .catch((err) => {
+          console.log(err);
+          snackbar.enqueueSnackbar(" تعذر في تعديل الموقع ", {
+            variant: "error",
+          });
+        });
+    }
   }
   return (
     <>
@@ -185,6 +206,7 @@ type TypeProps = {
   open: boolean;
   closeDialog: () => void;
   idToUpdate: number | null;
+  createOrEdit: "create" | "edit" | "none";
 };
 
 type TypeLocationData = {
