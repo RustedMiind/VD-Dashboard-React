@@ -23,6 +23,8 @@ import { LoadingButton } from "@mui/lab";
 import { Map } from "../Leaflet/Map";
 
 export default function DialogAddLocation(props: TypeProps) {
+  const [positionClick, setPositionClick] = useState<[number, number][]>([]);
+  console.log(positionClick);
   console.log(props.idToUpdate);
   const { soilData, setSoilData } = useContext(SoilContext);
   console.log(props.createOrEdit);
@@ -181,7 +183,10 @@ export default function DialogAddLocation(props: TypeProps) {
               <TextField type="text" size="small" fullWidth />
             </Grid>
             <Grid item md={12}>
-              <Map />
+              <Map
+                positionClick={positionClick}
+                setPositionClick={setPositionClick}
+              />
             </Grid>
           </Grid>
         </DialogContent>

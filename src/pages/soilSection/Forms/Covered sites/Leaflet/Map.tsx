@@ -22,16 +22,15 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
 
   return null;
 };
-export function Map() {
+export function Map({ positionClick, setPositionClick }: PropsType) {
   const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],
   });
-  const [positionClick, setPositionClick] = useState<[number, number][]>([]);
+  console.log(positionClick);
   const handleMapClick = (position: [number, number]) => {
     setPositionClick([...positionClick, position]);
-    console.log(positionClick);
   };
   const handleResetClick = () => {
     setPositionClick([]);
@@ -83,3 +82,8 @@ interface Position {
 interface MapClickHandlerProps {
   onMapClick: (position: [number, number]) => void;
 }
+
+type PropsType = {
+  positionClick: [number, number][];
+  setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
+};
