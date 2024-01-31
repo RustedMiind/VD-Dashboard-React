@@ -10,8 +10,16 @@ import { FormSectionProps } from "./BaseProps";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { UseFormResetField } from "react-hook-form";
+import dayjs from "dayjs";
 
-function MainFormSection({ registerFn, resetField }: PropsType) {
+function MainFormSection({
+  registerFn,
+  resetField,
+  discountEnd,
+  discountStart,
+  setDiscountEnd,
+  setDiscountStart,
+}: PropsType) {
   const [hasDescount, setHasDiscount] = useState(false);
 
   return (
@@ -59,11 +67,17 @@ function MainFormSection({ registerFn, resetField }: PropsType) {
         disabled={!hasDescount}
       />
       <GridItemDateInputWithLabel
-        // {...registerFn("desc_date_from")}
+        value={dayjs(discountStart)}
+        onChange={(newValue) => {
+          setDiscountStart(newValue?.format() || "");
+        }}
         label="عرض الخصم من تاريخ"
       />
       <GridItemDateInputWithLabel
-        // {...registerFn("desc_date_from")}
+        value={dayjs(discountEnd)}
+        onChange={(newValue) => {
+          setDiscountEnd(newValue?.format() || "");
+        }}
         label="الي تاريخ"
       />
       <GridItemTextInputWithLabel
@@ -133,6 +147,10 @@ function MainFormSection({ registerFn, resetField }: PropsType) {
 
 interface PropsType extends FormSectionProps {
   resetField: UseFormResetField<CreateFormType>;
+  discountStart: string | null;
+  setDiscountStart: React.Dispatch<React.SetStateAction<string | null>>;
+  discountEnd: string | null;
+  setDiscountEnd: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export default MainFormSection;

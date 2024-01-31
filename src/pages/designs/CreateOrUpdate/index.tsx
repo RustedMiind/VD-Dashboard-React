@@ -18,6 +18,7 @@ import UtilitiesSection from "./FormSections/Utilities";
 import DesignFile from "./FormSections/DesignFile";
 import { FileBondState } from "../../../types/FileBondState";
 import { FilePondInitialFile } from "filepond";
+import { Dayjs } from "dayjs";
 
 export function InputGridItem({
   label,
@@ -68,7 +69,7 @@ export function GridItemTextInputWithLabel({
 export function GridItemDateInputWithLabel({
   label,
   ...props
-}: DatePickerProps<string> & { label: string }) {
+}: DatePickerProps<Dayjs> & { label: string }) {
   return (
     <InputGridItem label={label}>
       <DatePicker
@@ -96,6 +97,8 @@ function CreateOrUpdateDesign() {
 
   const [idea, setIdea] = useState<FileBondState>([]);
 
+  const [discountStart, setDiscountStart] = useState<string | null>("");
+  const [discountEnd, setDiscountEnd] = useState<string | null>("");
   const formSubmit = handleSubmit((data) => {
     console.log(data);
   });
@@ -124,7 +127,14 @@ function CreateOrUpdateDesign() {
       <Grid container spacing={2}>
         <Grid item lg={8}>
           <Stack spacing={4}>
-            <MainFormSection resetField={resetField} registerFn={registerFn} />
+            <MainFormSection
+              resetField={resetField}
+              registerFn={registerFn}
+              discountStart={discountStart}
+              setDiscountStart={setDiscountStart}
+              discountEnd={discountEnd}
+              setDiscountEnd={setDiscountEnd}
+            />
             <DesignFile registerFn={registerFn} />
             <UtilitiesSection
               {...{
