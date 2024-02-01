@@ -9,7 +9,7 @@ import {
 } from "react-leaflet";
 import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { TypeLocationData } from "../Dialog";
 let TargetPositions: [number, number][] = [];
 
@@ -30,7 +30,7 @@ export function Map({
   setPositionClick,
   updateAmountData,
 }: PropsType) {
-  const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
+  const [center, setCenter] = useState({ lat: 24.774265, lng: 46.738586 });
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],
@@ -59,8 +59,19 @@ export function Map({
   }
 
   return (
-    <Stack>
-      <MapContainer center={center} zoom={12} scrollWheelZoom={true}>
+    <Stack
+      sx={{
+        width: "100%",
+        height: "350px",
+        margin: "auto",
+      }}
+    >
+      <MapContainer
+        center={center}
+        zoom={15}
+        scrollWheelZoom={true}
+        style={{ width: "100%", height: "100%" }}
+      >
         {/* First TileLayer with background color */}
         <TileLayer
           className="tile"
@@ -76,10 +87,15 @@ export function Map({
         />
 
         <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker>
+
         <MapClickHandler onMapClick={handleMapClick} />
         {createPolylines()}
-        <Button onClick={handleResetClick}>Reset</Button>
       </MapContainer>
+      <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+        <Button variant="contained" onClick={handleResetClick}>
+          Reset
+        </Button>
+      </Box>
     </Stack>
   );
 }

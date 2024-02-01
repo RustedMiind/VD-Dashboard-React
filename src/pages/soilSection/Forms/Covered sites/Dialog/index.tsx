@@ -9,6 +9,7 @@ import {
   IconButton,
   FormControl,
   Select,
+  Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MenuItem } from "@mui/material";
@@ -36,6 +37,8 @@ export default function DialogAddLocation(props: TypeProps) {
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
+
+  const [map, setMap] = useState(false);
   useEffect(() => {
     if (props.idToUpdate) {
       const obj: Location | undefined =
@@ -115,7 +118,7 @@ export default function DialogAddLocation(props: TypeProps) {
   return (
     <>
       <Dialog
-        maxWidth={"lg"}
+        maxWidth={"md"}
         fullWidth
         open={props.open}
         onClose={props.closeDialog}
@@ -185,15 +188,33 @@ export default function DialogAddLocation(props: TypeProps) {
               <Typography sx={{ ml: 2 }}>
                 الموقع <RequiredSymbol />
               </Typography>
-              <TextField type="text" size="small" fullWidth />
-            </Grid>
-            <Grid item md={12}>
-              <Map
-                updateAmountData={updateAmountData}
-                positionClick={positionClick}
-                setPositionClick={setPositionClick}
+              <TextField
+                type="text"
+                size="small"
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <Button
+                      onClick={() => {
+                        setMap(!map);
+                      }}
+                    >
+                      تحديد{" "}
+                    </Button>
+                  ),
+                }}
+                placeholder=" الموقع"
               />
             </Grid>
+            {map && (
+              <Grid item md={12}>
+                <Map
+                  updateAmountData={updateAmountData}
+                  positionClick={positionClick}
+                  setPositionClick={setPositionClick}
+                />
+              </Grid>
+            )}
           </Grid>
         </DialogContent>
         <DialogActions
