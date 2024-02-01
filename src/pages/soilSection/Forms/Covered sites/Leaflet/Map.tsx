@@ -96,6 +96,7 @@ export function Map({
           Reset
         </Button>
       </Box>
+      {/* Search input and button within MapContainer */}
     </Stack>
   );
 }
