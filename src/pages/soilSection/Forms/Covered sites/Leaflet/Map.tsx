@@ -11,6 +11,8 @@ import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { TypeLocationData } from "../Dialog";
+import ReplayIcon from "@mui/icons-material/Replay";
+import { IconButton } from "@mui/material";
 let TargetPositions: [number, number][] = [];
 
 const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
@@ -70,7 +72,7 @@ export function Map({
         center={center}
         zoom={15}
         scrollWheelZoom={true}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%", position: "relative" }}
       >
         {/* First TileLayer with background color */}
         <TileLayer
@@ -90,12 +92,27 @@ export function Map({
 
         <MapClickHandler onMapClick={handleMapClick} />
         {createPolylines()}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+            mt: 2,
+            position: "absolute",
+            right: "10px",
+            top: "60px",
+            zIndex: "100000",
+            bgcolor: "primary.contrastText",
+          }}
+        >
+          <IconButton onClick={handleResetClick}>
+            <ReplayIcon />
+          </IconButton>
+          {/* <Button variant="text" sx={{ fontSize: "18px", fontWeight: 600 }}>
+            اعادة
+          </Button> */}
+        </Box>
       </MapContainer>
-      <Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
-        <Button variant="contained" onClick={handleResetClick}>
-          Reset
-        </Button>
-      </Box>
+
       {/* Search input and button within MapContainer */}
     </Stack>
   );

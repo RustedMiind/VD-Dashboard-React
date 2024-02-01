@@ -42,6 +42,8 @@ export default function CoveredSites(props: PropsType) {
   const [createOrEdit, setCreateOrEdit] = useState<"create" | "edit" | "none">(
     "none"
   );
+  const [displayMap, setDisplayMap] = useState(false);
+
   const selectAllHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -52,8 +54,9 @@ export default function CoveredSites(props: PropsType) {
             return item.id;
           })
         : [];
-    if (checked) setSelectedSoilId && setSelectedSoilId(values || []);
-    else setSelectedSoilId && setSelectedSoilId([]);
+    if (checked) {
+      setSelectedSoilId && setSelectedSoilId(values || []);
+    } else setSelectedSoilId && setSelectedSoilId([]);
   };
   function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
     let isSelect = e.target.checked;
@@ -92,10 +95,12 @@ export default function CoveredSites(props: PropsType) {
       });
   }
   function handleCreate() {
+    setDisplayMap(false);
     props.openCoveredDialog();
     setCreateOrEdit("create");
   }
   function handleEdit() {
+    setDisplayMap(true);
     props.openCoveredDialog();
     setCreateOrEdit("edit");
   }
@@ -211,6 +216,8 @@ export default function CoveredSites(props: PropsType) {
             open={props.dialogState === "covered"}
             idToUpdate={idToUpdate}
             createOrEdit={createOrEdit}
+            displayMap={displayMap}
+            setDisplayMap={setDisplayMap}
           />
         </Stack>
       )}

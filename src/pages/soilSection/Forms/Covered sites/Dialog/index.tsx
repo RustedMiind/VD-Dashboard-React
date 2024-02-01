@@ -41,15 +41,13 @@ export default function DialogAddLocation(props: TypeProps) {
     } catch {
       return [];
     }
-  };
+  }
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
 
-  const [map, setMap] = useState(false);
   useEffect(() => {
     if (props.idToUpdate) {
-      setMap(true);
       // Edit Phase
       const obj: Location | undefined =
         typeof soilData === "object"
@@ -66,28 +64,29 @@ export default function DialogAddLocation(props: TypeProps) {
       setAmountData(obj ? objLocation : intialLocationData);
       // _map = JSON.parse(objLocation?.map?.map || '');
       // let arr:string[] = objLocation?.map?.map.split()
-      let arr: [number, number][] | undefined = objLocation?.map?.map.toString().slice(1, -1).split("},").map(ele => {
-        ele = ele.slice(1);
-        let coordinates = ele.split(',');
-        let _position: [number, number] = [0, 0];
-        for (let k = 0; k < coordinates.length; k++) {
-          let coordinate = coordinates[k];
-          _position[k] = +coordinate.split(':')[1].slice(0, -1)
-          console.log("coordinate", coordinate)
-        }
-        return _position;
-      });
-      if (arr !== undefined)
-        setPositionClick([...arr]);
-      console.log("bbb", positionClick)
+      let arr: [number, number][] | undefined = objLocation?.map?.map
+        .toString()
+        .slice(1, -1)
+        .split("},")
+        .map((ele) => {
+          ele = ele.slice(1);
+          let coordinates = ele.split(",");
+          let _position: [number, number] = [0, 0];
+          for (let k = 0; k < coordinates.length; k++) {
+            let coordinate = coordinates[k];
+            _position[k] = +coordinate.split(":")[1].slice(0, -1);
+            console.log("coordinate", coordinate);
+          }
+          return _position;
+        });
+      if (arr !== undefined) setPositionClick([...arr]);
+      console.log("bbb", positionClick);
     } else {
-      
       setAmountData(intialLocationData);
     }
   }, [props.idToUpdate]);
 
   useEffect(() => {
-    setMap(false);
     axios
       .get<{ data: City[] }>(Api(`employee/soil/use`))
       .then((res) => {
@@ -220,6 +219,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 الموقع <RequiredSymbol />
               </Typography>
               <TextField
+                disabled
                 type="text"
                 size="small"
                 fullWidth
@@ -227,17 +227,17 @@ export default function DialogAddLocation(props: TypeProps) {
                   endAdornment: (
                     <Button
                       onClick={() => {
-                        setMap(!map);
+                        props.setDisplayMap(!props.displayMap);
                       }}
                     >
-                      تحديد{" "}
+                      تحديد
                     </Button>
                   ),
                 }}
                 placeholder=" الموقع"
               />
             </Grid>
-            {(map || (map && props.idToUpdate)) && (
+            {props.displayMap && (
               <Grid item md={12}>
                 <Map
                   updateAmountData={updateAmountData}
@@ -274,6 +274,8 @@ type TypeProps = {
   closeDialog: () => void;
   idToUpdate: number | [];
   createOrEdit: "create" | "edit" | "none";
+  displayMap: boolean;
+  setDisplayMap: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type TypeLocationData = {
