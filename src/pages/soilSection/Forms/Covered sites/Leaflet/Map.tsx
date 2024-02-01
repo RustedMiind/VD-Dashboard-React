@@ -22,7 +22,7 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
 
   return null;
 };
-export function Map({ positionClick, setPositionClick }: PropsType) {
+export function Map({ positionClick, setPositionClick, updateAmountData }: PropsType) {
   const [center, setCenter] = useState({ lat: 13.084622, lng: 80.248357 });
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
@@ -31,6 +31,7 @@ export function Map({ positionClick, setPositionClick }: PropsType) {
   console.log(positionClick);
   const handleMapClick = (position: [number, number]) => {
     setPositionClick([...positionClick, position]);
+    updateAmountData({ map: positionClick.map(ele => ({ lat: ele[0], long: ele[1] })) })
   };
   const handleResetClick = () => {
     setPositionClick([]);
@@ -86,4 +87,13 @@ interface MapClickHandlerProps {
 type PropsType = {
   positionClick: [number, number][];
   setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
+  updateAmountData: (partial: Partial<TypeLocationData>) => void
+};
+
+type TypeLocationData = {
+  location_name: string;
+  city_id: string;
+  building_system: string;
+  status: string;
+  map: { lat: number, long: number }[] | null;
 };

@@ -34,6 +34,7 @@ export default function DialogAddLocation(props: TypeProps) {
     city_id: "",
     building_system: "",
     status: "1",
+    map: null
   };
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
@@ -49,6 +50,7 @@ export default function DialogAddLocation(props: TypeProps) {
         city_id: obj?.city_id?.toString() || "",
         building_system: obj?.building_system || "",
         status: "1",
+        map: obj?.map || null
       };
       setAmountData(obj ? objLocation : intialLocationData);
     } else setAmountData(intialLocationData);
@@ -65,10 +67,14 @@ export default function DialogAddLocation(props: TypeProps) {
       });
   }, []);
   function updateAmountData(partial: Partial<TypeLocationData>) {
+    //  {"lat": 40.7128, "long": -74.0060},
+    let _positions: { lat: number, long: number }[] = positionClick.map(ele => ({ lat: ele[0], long: ele[1] }));
     setAmountData({
       ...amountData,
       ...partial,
+      map: _positions
     });
+    console.log("AmountData :", amountData);
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -184,6 +190,7 @@ export default function DialogAddLocation(props: TypeProps) {
             </Grid>
             <Grid item md={12}>
               <Map
+                updateAmountData={updateAmountData}
                 positionClick={positionClick}
                 setPositionClick={setPositionClick}
               />
@@ -223,5 +230,5 @@ type TypeLocationData = {
   city_id: string;
   building_system: string;
   status: string;
-  map?: null;
+  map: { lat: number, long: number }[] | null;
 };
