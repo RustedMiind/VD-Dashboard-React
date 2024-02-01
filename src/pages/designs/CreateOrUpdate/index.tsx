@@ -1,26 +1,21 @@
 import {
   Box,
+  Button,
   Grid,
   GridProps,
   Stack,
   TextField,
   TextFieldProps,
 } from "@mui/material";
-import {
-  FormContainer,
-  TextFieldElement,
-  DatePickerElement,
-  DatePickerElementProps,
-} from "react-hook-form-mui";
 import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../components/AddLabelToEl";
 import MainFormSection from "./FormSections/main";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
-import UploadImage from "../../../components/UploadImage";
 import React from "react";
 import { ImageListType } from "react-images-uploading";
-import UploadMultipleImages from "../../../components/UploadMultipleImages";
 import FormImagesSection from "./FormSections/images";
+import UtilitiesSection from "./FormSections/Utilities";
+import DesignFile from "./FormSections/DesignFile";
 
 export function InputGridItem({
   label,
@@ -47,12 +42,11 @@ export function TextInput({ ...props }: TextFieldProps) {
 }
 
 export function GridItemTextInputWithLabel({
-  label,
   ...props
 }: TextFieldProps & { label: string }) {
   return (
-    <InputGridItem label={label}>
-      <TextField size="small" fullWidth placeholder={label} {...props} />
+    <InputGridItem label={props.label}>
+      <TextInput fullWidth placeholder={props.label} {...props} />
     </InputGridItem>
   );
 }
@@ -78,23 +72,35 @@ export function GridItemDateInputWithLabel({
 function CreateOrUpdateDesign() {
   const { register, handleSubmit, reset } = useForm<CreateFormType>();
 
-  const [images, setImages] = React.useState<ImageListType>([]);
+  const [mainImage, setMainImage] = React.useState<ImageListType>([]);
+
+  const [subImages, setSubImages] = React.useState<ImageListType>([]);
+
+  const formSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
 
   return (
-    <Grid container spacing={2}>
-      <Grid item lg={8}>
-        <Stack spacing={2}>
-          <InputsGridContainer>
-            <MainFormSection registerFn={register} />
-          </InputsGridContainer>
-        </Stack>
-        {/* Form Inputs */}
+    <Box component={"form"} onSubmit={formSubmit}>
+      <Grid container spacing={2}>
+        <Grid item lg={8}>
+          <Stack spacing={4}>
+            <TextInput {...register("area")} />
+            {/* <MainFormSection registerFn={register} /> */}
+            <DesignFile registerFn={register} />
+            <UtilitiesSection registerFn={register} />
+          </Stack>
+          {/* Form Inputs */}
+        </Grid>
+        <Grid item lg={4}>
+          {/* Form Files */}
+          <FormImagesSection
+            {...{ mainImage, setMainImage, setSubImages, subImages }}
+          />
+        </Grid>
+        <Button type="submit">Submit</Button>
       </Grid>
-      <Grid item lg={4}>
-        {/* Form Files */}
-        <FormImagesSection />
-      </Grid>
-    </Grid>
+    </Box>
   );
 }
 
@@ -120,13 +126,13 @@ export type CreateFormType = {
   living_room: string;
   dinner_room: string;
   status_design: string;
-  status_web: string;
-  status_mob: string;
+  status_web: boolean;
+  status_mob: boolean;
   "idea_eng-image": string;
-  "main-image": File;
-  "sub-image": File;
-  booklet: File;
-  "eng-image": File;
+  "main-image"?: File;
+  "sub-image"?: File;
+  booklet?: File;
+  "eng-image"?: File;
 };
 
 export default CreateOrUpdateDesign;

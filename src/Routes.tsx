@@ -18,8 +18,12 @@ import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
 import TenderDetails from "./pages/tenders/details";
 import ControlPanal from "./pages/tenders/controlPanel";
 import ForTest from "./pages/forTest";
+import DesignReports from "./pages/DesignReports";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
+import FormsSection from "./pages/soilSection/Forms";
+import SoilSection from "./pages/soilSection";
+// import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
 
@@ -29,10 +33,10 @@ function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
-        {hasPermission(Permission.CLIENT_REQUESTS_STEP) && (
-          <Route path="test" element={<ForTest />} />
-        )}
+        <Route path="test" element={<ForTest />} />
+
         <Route path="" element={<MainPage />} />
+        <Route path="designReports" element={<DesignReports />} />
         {/* Employees Section */}
         <Route path="employees">
           <Route path="requests" element={<EmplyeesRequests />} />
@@ -106,6 +110,12 @@ function RoutesComponent() {
           <Route path="design">
             <Route path="create" element={<CreateOrUpdateDesign />} />
           </Route>
+          <Route path="soil">
+            <Route path="create" element={<FormsSection />} />
+          </Route>
+        </Route>
+        <Route path="soil">
+          <Route path="allservices" element={<SoilSection />} />
         </Route>
 
         <Route path="contracts">

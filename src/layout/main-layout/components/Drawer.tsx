@@ -88,6 +88,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/tenders/controlpanel",
         react: true,
       },
+      {
+        name: "التربة والخرسانة",
+        path: "/soil/allservices",
+        react: true,
+      },
     ],
   },
   {
@@ -190,6 +195,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/datalib/vacations",
         react: true,
         isPrivate: Permission.DASHBOARD_SETTING_VIEW,
+      },
+      {
+        name: "اعدادات التربة",
+        path: "/services/soil/create",
+        react: true,
       },
     ],
   },
