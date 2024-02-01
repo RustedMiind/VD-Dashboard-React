@@ -11,12 +11,14 @@ import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
 import { Button, Stack } from "@mui/material";
 import { TypeLocationData } from "../Dialog";
+let TargetPositions: [number, number][] = [];
 
 const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   const map = useMapEvents({
     click: (event: LeafletMouseEvent) => {
       const { lat, lng } = event.latlng;
       const position: [number, number] = [lat, lng];
+      TargetPositions.push(position);
       onMapClick(position);
     },
   });
@@ -34,16 +36,17 @@ export function Map({
     iconSize: [20, 20],
   });
   const handleMapClick = (position: [number, number]) => {
-    setPositionClick([...positionClick, position]);
-    updateAmountData({});
+    let _positions: { lat: number; long: number }[] = TargetPositions.map(
+      (ele) => ({ lat: ele[0], long: ele[1] })
+    );
+    updateAmountData({ map: _positions });
   };
   const handleResetClick = () => {
     setPositionClick([]);
+    TargetPositions = [];
   };
-
   function createPolylines() {
     const polylines = [];
-
     for (let i = 0; i < positionClick.length - 1; i++) {
       const startPoint = positionClick[i];
       const endPoint = positionClick[i + 1];

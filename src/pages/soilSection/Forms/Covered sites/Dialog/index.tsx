@@ -71,7 +71,7 @@ export default function DialogAddLocation(props: TypeProps) {
     setAmountData({
       ...amountData,
       ...partial,
-      map: _positions,
+      // map: _positions,
     });
     console.log(amountData);
   }
