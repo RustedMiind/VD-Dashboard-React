@@ -36,6 +36,7 @@ export function Map({
     iconSize: [20, 20],
   });
   const handleMapClick = (position: [number, number]) => {
+    setPositionClick([...positionClick, position]);
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
       (ele) => ({ lat: ele[0], long: ele[1] })
     );
