@@ -128,13 +128,11 @@ function CreateOrUpdateDesign() {
     console.log(data);
     const dto = {
       ...data,
-      "main-image": mainImage[0]?.file,
-      "sub-image": subImages
-        .map((f) => f.file)
-        .filter((f) => f instanceof File),
+      main_image: mainImage[0]?.file,
+      sub_image: subImages.map((f) => f.file).filter((f) => f instanceof File),
       booklet: booklet.filter((f) => f instanceof File).find(() => true),
-      "eng-image": engineeringChart.filter((f) => f instanceof File),
-      "idea-eng-image": idea.filter((f) => f instanceof File).find(() => true),
+      eng_image: engineeringChart.filter((f) => f instanceof File),
+      idea_eng_image: idea.filter((f) => f instanceof File).find(() => true),
       utilities: utilities.map((u) => ({
         file: u.files.find((f) => f instanceof File),
         type: u.option,
