@@ -3,60 +3,161 @@ import {
   Button,
   FormControlLabel,
   Grid,
+  IconButton,
   MenuItem,
   Stack,
   Switch,
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CustomFilePond from "../../../../components/CustomFilepond";
-import { ImageListType } from "react-images-uploading";
-import { FilePondInitialFile } from "filepond";
-import { GridItem, GridItemTextInputWithLabel, InputsGridContainer } from "..";
-import { generateUndefinedArray } from "../../../../methods";
+import {
+  CreateFormType,
+  GridItem,
+  GridItemTextInputWithLabel,
+  InputsGridContainer,
+  Utility,
+  utilityInitial,
+} from "..";
 import { FormSectionProps } from "./BaseProps";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { UseFormRegister } from "react-hook-form";
+import { Design } from "../../../../types";
+import { CustomMenuList } from "./images";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { ListItemText } from "@mui/material";
+import LimitTypography from "../../../../components/LimitTypograpgy";
+import { useSnackbar } from "notistack";
 
-const dumb = generateUndefinedArray(5);
-
-type Utility = {
-  files: (string | FilePondInitialFile | Blob)[];
-  option: string;
+type optionType = {
+  id: number;
+  name: string;
 };
 
-const utilityInitial: Utility = { option: "", files: [] };
+export const AttachmentMenuItem = (props: {
+  onDelete: () => void;
+  url?: string;
+  name?: string;
+  type?: string;
+}) => (
+  <MenuItem>
+    <IconButton size="small" component="a" target="_blank" href={props.url}>
+      <VisibilityIcon />
+    </IconButton>
+    <ListItemText>
+      <LimitTypography minWidth={200}>{props.name}</LimitTypography>
+    </ListItemText>
+    {props.type && (
+      <Typography variant="body2" color="gray">
+        {props.type}
+      </Typography>
+    )}
+    <IconButton size="small" onClick={props.onDelete} color="error">
+      <DeleteIcon />
+    </IconButton>
+  </MenuItem>
+);
 
-function UtilitiesSection({ registerFn }: PropsType) {
-  const [utilities, setUtilities] = useState<Utility[]>([utilityInitial]);
-  console.log(utilities);
-  const setUtility = (updatedUtility: Utility, index: number) => {
-    setUtilities((utilities) => {
-      const updatedUtilities: Utility[] = [];
-      utilities.forEach((utility, i) => {
-        if (index === i) {
-          updatedUtilities.push(updatedUtility);
-        } else {
-          updatedUtilities.push(utility);
+function UtilitiesSection({
+  register,
+  utilities,
+  setUtilities,
+  setUtility,
+  registerFn,
+  setDesignToEdit,
+  designToEdit,
+}: PropsType) {
+  // ?declare component state
+
+  const [options, setOptions] = useState<optionType[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    // TODO::fetch options data
+    axios
+      .get(Api("client/design/attachment-option"), {
+        headers: {
+          from: "website",
+        },
+      })
+      .then((res) => {
+        return res?.data?.utilities_type;
+      })
+      .then((data) => {
+        let _arr: optionType[] = [];
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            _arr.push({ id: data[key], name: key });
+          }
         }
-        console.log(updatedUtilities);
+        console.log("response data ", data, _arr);
+        setOptions(_arr);
+      })
+      .catch((err) => {
+        console.log("error in fetch options data:", err);
       });
-      console.log("updatedUtilities ", updatedUtilities);
-      return updatedUtilities;
-    });
-  };
+  }, []);
+
   return (
     <Stack>
       <Typography variant="h5" gutterBottom>
         المرافق
       </Typography>
+      <Grid container>
+        <Grid item xs={6}>
+          {designToEdit?.utilities && !!designToEdit?.utilities.length && (
+            <CustomMenuList>
+              {designToEdit.utilities.map((utility) => (
+                <AttachmentMenuItem
+                  url="hello"
+                  onDelete={() => {
+                    axios
+                      .get(Api(`client/design/delete-utility/${utility.id}`), {
+                        headers: { from: "website" },
+                      })
+                      .then((res) => {
+                        enqueueSnackbar("تم حذف المرفق بنجاح");
+                        setDesignToEdit({
+                          ...designToEdit,
+                          utilities: designToEdit?.utilities?.filter(
+                            (u) => u.id !== utility.id
+                          ),
+                        });
+                      })
+                      .catch(() => {
+                        enqueueSnackbar("تعذر في حذف المرفق", {
+                          variant: "error",
+                        });
+                      });
+                  }}
+                  type={options.find((o) => o.id === utility.type)?.name}
+                  name={utility.file_name}
+                />
+              ))}
+            </CustomMenuList>
+          )}
+        </Grid>
+      </Grid>
       {utilities.map((utility, index, arr) => (
         <Stack pb={4} spacing={1} key={index}>
           <Grid container>
             <Grid item xs={3} paddingX={1}>
-              <TextField fullWidth select size="small" value={0}>
-                {dumb.map((x, i) => (
-                  <MenuItem value={i}> option{i + 1} </MenuItem>
+              <TextField
+                fullWidth
+                select
+                size="small"
+                onChange={(e) => {
+                  setUtility({ option: e.target.value }, index);
+                }}
+                value={utility.option}
+              >
+                {options.map((option, i) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -82,7 +183,6 @@ function UtilitiesSection({ registerFn }: PropsType) {
                 setUtility(
                   {
                     files: fileItems.map((fileItem) => fileItem.file),
-                    option: "",
                   },
                   index
                 );
@@ -94,19 +194,19 @@ function UtilitiesSection({ registerFn }: PropsType) {
 
       <InputsGridContainer>
         <GridItemTextInputWithLabel
-          {...registerFn("status_design")}
+          register={registerFn("status_design")}
           label={"حالة التصميم"}
         />
         <GridItem />
         <GridItem>
           <FormControlLabel
-            control={<Switch {...registerFn("status_mob")} />}
+            control={<Switch {...register("status_mob")} />}
             label="التطبيق"
           />
         </GridItem>
         <GridItem>
           <FormControlLabel
-            control={<Switch {...registerFn("status_web")} />}
+            control={<Switch {...register("status_web")} />}
             label="الموقع"
           />
         </GridItem>
@@ -115,6 +215,13 @@ function UtilitiesSection({ registerFn }: PropsType) {
   );
 }
 
-interface PropsType extends FormSectionProps {}
+interface PropsType extends FormSectionProps {
+  register: UseFormRegister<CreateFormType>;
+  utilities: Utility[];
+  setUtilities: React.Dispatch<React.SetStateAction<Utility[]>>;
+  setUtility: (updatedUtility: Partial<Utility>, index: number) => void;
+  designToEdit?: Design;
+  setDesignToEdit: (design: Design) => void;
+}
 
 export default UtilitiesSection;

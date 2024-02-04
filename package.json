@@ -28,6 +28,7 @@
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
     "notistack": "2.0.8",
+    "object-to-formdata": "^4.5.1",
     "pusher-js": "^8.4.0-rc2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

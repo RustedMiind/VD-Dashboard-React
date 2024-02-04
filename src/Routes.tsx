@@ -26,6 +26,8 @@ import SoilSection from "./pages/soilSection";
 // import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
+import DesignStructurePage from "./pages/designs/DesignStructure";
+import DesignDataPage from "./pages/designs/DesignsData";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -108,7 +110,10 @@ function RoutesComponent() {
         )}
         <Route path="services">
           <Route path="design">
+            <Route path="" element={<DesignDataPage />} />
             <Route path="create" element={<CreateOrUpdateDesign />} />
+            <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
+            <Route path="structure" element={<DesignStructurePage />} />
           </Route>
           <Route path="soil">
             <Route path="create" element={<FormsSection />} />

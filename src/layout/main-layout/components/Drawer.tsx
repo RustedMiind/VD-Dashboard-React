@@ -19,6 +19,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import { AdminUrl } from "../../../constants/AdminUrl";
 import { Permission } from "../../../constants/Permission";
 import usePermissions from "../../../Permissions/hook";
@@ -172,6 +173,17 @@ const routesCollections: RoutesCollectionType[] = [
         name: "محددات المشاريع",
         path: "attendance/projects-shifts",
         isPrivate: Permission.DASHBOARD_SETTING_SHIFT_VIEW,
+      },
+    ],
+  },
+  {
+    name: "الخدمات",
+    icon: DesignServicesIcon,
+    routes: [
+      {
+        name: "خدمات التصاميم",
+        path: "/services/design",
+        react: true,
       },
     ],
   },

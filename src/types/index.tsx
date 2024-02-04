@@ -11,3 +11,4 @@ export * from "./Vacations";
 export * from "./ChangeTypeValues";
 export * from "./Tenders";
 export * from "./DB_Boolean";
+export * from "./Design";

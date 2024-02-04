@@ -1,65 +1,129 @@
 import {
   Box,
   Button,
-  FormControlLabel,
   Grid,
   MenuItem,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CustomFilePond from "../../../../components/CustomFilepond";
-import { ImageListType } from "react-images-uploading";
-import { FilePondInitialFile } from "filepond";
-import { GridItem, GridItemTextInputWithLabel, InputsGridContainer } from "..";
-import { generateUndefinedArray } from "../../../../methods";
+import { DesignFileType, designFileInitial } from "..";
 import { FormSectionProps } from "./BaseProps";
+import AddLabelToEl from "../../../../components/AddLabelToEl";
+import axios from "axios";
+import { Api } from "../../../../constants";
+import { CustomMenuList } from "./images";
+import { AttachmentMenuItem } from "./Utilities";
+import { Design } from "../../../../types";
+import { useSnackbar } from "notistack";
 
-const dumb = generateUndefinedArray(5);
-
-type DesignFile = {
-  files: (string | FilePondInitialFile | Blob)[];
-  option: string;
+type optionType = {
+  id: number;
   name: string;
 };
 
-const designFileInitial: DesignFile = { option: "", files: [], name: "" };
-
-function DesignFile({ registerFn }: PropsType) {
-  const [designFiles, setDesignFiles] = useState<DesignFile[]>([
-    designFileInitial,
-  ]);
-  console.log(designFiles);
-  const setDesignFile = (updatedDesignFile: DesignFile, index: number) => {
-    setDesignFiles((designFile) => {
-      const updatedUtilities: DesignFile[] = [];
-      designFile.forEach((designFile, i) => {
-        if (index === i) {
-          updatedUtilities.push(updatedDesignFile);
-        } else {
-          updatedUtilities.push(designFile);
+function DesignFile({
+  designFiles,
+  setDesignFile,
+  setDesignFiles,
+  designToEdit,
+  setDesignToEdit,
+}: PropsType) {
+  const [options, setOptions] = useState<optionType[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    // TODO::fetch options data
+    axios
+      .get(Api("client/design/attachment-option"), {
+        headers: {
+          from: "website",
+        },
+      })
+      .then((res) => {
+        return res?.data?.attachments_type;
+      })
+      .then((data) => {
+        let _arr: optionType[] = [];
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            _arr.push({ id: data[key], name: key });
+          }
         }
-        console.log(updatedUtilities);
+        console.log("response data ", data, _arr);
+        setOptions(_arr);
+      })
+      .catch((err) => {
+        console.log("error in fetch options data:", err);
       });
-      console.log("updatedUtilities ", updatedUtilities);
-      return updatedUtilities;
-    });
-  };
+  }, []);
+
   return (
     <Stack>
       <Typography variant="h5" gutterBottom>
         محتويات ملف التصميم
       </Typography>
+      <Grid container>
+        <Grid item xs={6}>
+          {designToEdit?.attachments && !!designToEdit?.attachments.length && (
+            <CustomMenuList>
+              {designToEdit.attachments.map((utility) => (
+                <AttachmentMenuItem
+                  url="hello"
+                  onDelete={() => {
+                    axios
+                      .get(
+                        Api(`client/design/delete-attachment/${utility.id}`),
+                        {
+                          headers: { from: "website" },
+                        }
+                      )
+                      .then((res) => {
+                        enqueueSnackbar("تم حذف المرفق بنجاح");
+                        setDesignToEdit({
+                          ...designToEdit,
+                          attachments: designToEdit?.attachments?.filter(
+                            (u) => u.id !== utility.id
+                          ),
+                        });
+                      })
+                      .catch(() => {
+                        enqueueSnackbar("تعذر في حذف المرفق", {
+                          variant: "error",
+                        });
+                      });
+                  }}
+                  type={options.find((o) => o.id === utility.type)?.name}
+                  name={utility.file_name}
+                />
+              ))}
+            </CustomMenuList>
+          )}
+        </Grid>
+      </Grid>
       {designFiles.map((designFile, index, arr) => (
         <Stack pb={4} spacing={1} key={index}>
-          <Grid container>
+          <Grid container sx={{ display: "flex", alignItems: "end" }}>
             <Grid item xs={3} paddingX={1}>
-              <TextField fullWidth select size="small" value={0}>
-                {dumb.map((x, i) => (
-                  <MenuItem value={i}> option{i + 1} </MenuItem>
+              <AddLabelToEl label="أسم الملف" required>
+                <TextField
+                  fullWidth
+                  size="small"
+                  defaultValue={index !== arr.length - 1 ? designFile.name : ""}
+                />
+              </AddLabelToEl>
+            </Grid>
+            <Grid item xs={3} paddingX={1} paddingTop={2}>
+              <TextField
+                fullWidth
+                select
+                size="small"
+                defaultValue={index !== arr.length - 1 ? +designFile.option : 1}
+              >
+                {options.map((option, i) => (
+                  <MenuItem value={option.id}> {option.name} </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -85,8 +149,6 @@ function DesignFile({ registerFn }: PropsType) {
                 setDesignFile(
                   {
                     files: fileItems.map((fileItem) => fileItem.file),
-                    option: "",
-                    name: "",
                   },
                   index
                 );
@@ -99,6 +161,15 @@ function DesignFile({ registerFn }: PropsType) {
   );
 }
 
-interface PropsType extends FormSectionProps {}
+interface PropsType extends FormSectionProps {
+  designFiles: DesignFileType[];
+  setDesignFiles: React.Dispatch<React.SetStateAction<DesignFileType[]>>;
+  setDesignFile: (
+    updatedDesignFile: Partial<DesignFileType>,
+    index: number
+  ) => void;
+  designToEdit?: Design;
+  setDesignToEdit: (design: Design) => void;
+}
 
 export default DesignFile;
