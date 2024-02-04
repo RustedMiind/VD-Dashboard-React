@@ -49,10 +49,10 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
           />
         );
         break;
-      case 18:
+      case 19:
         chip = <NonRoundedChip color="error" variant={variant} label="مرفوض" />;
         break;
-      case 19:
+      case 18:
         chip = (
           <NonRoundedChip color="success" variant={variant} label="مقبول" />
         );

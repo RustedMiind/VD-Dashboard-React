@@ -86,8 +86,8 @@ const ModelDialog = ({
                     });
                   }}
                 >
-                  <MenuItem value={18}>مرفوض</MenuItem>
-                  <MenuItem value={19}>مقبول</MenuItem>
+                  <MenuItem value={19}>مرفوض</MenuItem>
+                  <MenuItem value={18}>مقبول</MenuItem>
                   <MenuItem value={33}>معتمد</MenuItem>
                 </Select>
               </FormControl>
