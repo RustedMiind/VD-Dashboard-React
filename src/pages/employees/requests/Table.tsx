@@ -67,7 +67,9 @@ function EmployeesRequestsTable(props: PropsType) {
                         overflow: "hidden",
                       }}
                     >
-                      {request.employee?.name ? request.employee?.name : ""}
+                      {request.employee?.name
+                        ? request.employee?.name
+                        : "" || "-"}
                     </Box>
                   </TableCell>
                   <TableCell>{formatDate(request.created_at)}</TableCell>

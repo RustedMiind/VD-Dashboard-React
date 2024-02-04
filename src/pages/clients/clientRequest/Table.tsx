@@ -132,16 +132,18 @@ const ClientTableComponent = ({
                         overflow: "hidden",
                       }}
                     >
-                      {request.order.client.name}
+                      {request?.order?.client?.name
+                        ? request?.order?.client?.name
+                        : ""}
                     </Box>
                   </TableCell>
                   <TableCell>{formatDate(request.created_at)}</TableCell>
                   <TableCell>
-                    {request.order.client.type === "individual"
+                    {request?.order?.client?.type === "individual"
                       ? "فرد"
                       : "شركة"}
                   </TableCell>
-                  <TableCell>{request.order.client.branch?.name}</TableCell>
+                  <TableCell>{request?.order?.client?.branch?.name}</TableCell>
                   <TableCell>
                     <Button
                       size="small"
@@ -153,16 +155,16 @@ const ClientTableComponent = ({
                       }}
                       onClick={openDetails(request)}
                     >
-                      {request.order.order_type.name}
+                      {request?.order?.order_type?.name}
                     </Button>
                   </TableCell>
                   <TableCell>
                     {request?.department?.name ? request?.department?.name : ""}
                   </TableCell>
-                  <TableCell id={`${request.step_status_id}`}>
+                  <TableCell id={`${request?.step_status_id}`}>
                     {generateChip(request)}
                   </TableCell>
-                  <TableCell>{request.note || "----"}</TableCell>
+                  <TableCell>{request?.note || "----"}</TableCell>
                 </TableRow>
               );
             })}
