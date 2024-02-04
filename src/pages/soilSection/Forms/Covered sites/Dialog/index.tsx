@@ -25,6 +25,9 @@ import { Map } from "../Leaflet/Map";
 
 export default function DialogAddLocation(props: TypeProps) {
   const [positionClick, setPositionClick] = useState<[number, number][]>([]);
+  const [formStatus, setFormStatus] = useState<"loading" | "none" | "error">(
+    "none"
+  );
   const { soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
   const intialLocationData: TypeLocationData = {
@@ -109,36 +112,38 @@ export default function DialogAddLocation(props: TypeProps) {
     console.log(amountData);
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
+    setFormStatus("loading");
     e.preventDefault();
     if (props.createOrEdit === "create") {
       axios
         .post(Api(`employee/soil/location`), { ...amountData })
         .then((res) => {
-          console.log(res);
+          setFormStatus("none");
           snackbar.enqueueSnackbar("تم حفظ الموقع");
           setSoilData && setSoilData();
           props.closeDialog();
         })
         .catch((err) => {
-          console.log(err);
+          setFormStatus("error");
           snackbar.enqueueSnackbar(" تعذر في حفظ الموقع ", {
             variant: "error",
           });
         });
     }
     if (props.createOrEdit === "edit") {
+      setFormStatus("loading");
       axios
         .post(Api(`employee/soil/location/${props.idToUpdate}`), {
           ...amountData,
         })
         .then((res) => {
-          console.log(res);
+          setFormStatus("none");
           snackbar.enqueueSnackbar("تم تعديل الموقع");
           setSoilData && setSoilData();
           props.closeDialog();
         })
         .catch((err) => {
-          console.log(err);
+          setFormStatus("error");
           snackbar.enqueueSnackbar(" تعذر في تعديل الموقع ", {
             variant: "error",
           });
@@ -251,7 +256,12 @@ export default function DialogAddLocation(props: TypeProps) {
         <DialogActions
           sx={{ display: "flex", justifyContent: "center", py: 3 }}
         >
-          <LoadingButton variant="contained" type="submit" sx={{ width: 0.7 }}>
+          <LoadingButton
+            loading={formStatus === "loading"}
+            variant="contained"
+            type="submit"
+            sx={{ width: 0.2 }}
+          >
             حفظ
           </LoadingButton>
         </DialogActions>

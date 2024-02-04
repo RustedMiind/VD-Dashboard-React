@@ -19,7 +19,6 @@ import { useContext, useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import { SoilContext } from "../../../SoilContext";
 import { Area } from "../../../../../types/Soil";
-import { isStringAllNumbers } from "../../../../../methods";
 
 function GridItem({ children }: { children: React.ReactNode }) {
   return (
@@ -28,13 +27,6 @@ function GridItem({ children }: { children: React.ReactNode }) {
     </Grid>
   );
 }
-
-type DesignForm = {
-  area_from: string;
-  area_to: string;
-  number: string;
-  minimum: string;
-};
 
 const designFileInitial: DesignForm = {
   area_from: "",
@@ -74,6 +66,7 @@ function DialogAddArea(props: TypeProps) {
       setDesignForms([intialAreaData]);
     }
   }, [props.idToUpdate]);
+
   const setDesignForm = (
     updatedDesignForm: Partial<DesignForm>,
     index: number
@@ -95,22 +88,6 @@ function DialogAddArea(props: TypeProps) {
       return updatedUtilities;
     });
   };
-
-  const intialLocationData = {
-    area_from: "",
-    area_to: "",
-    number: "",
-    minimum: "",
-  };
-  // const [amountData, setAmountData] =
-  //   useState<TypeAreaData>(intialLocationData);
-
-  // function updateAmountData(partial: Partial<TypeAreaData>) {
-  //   setAmountData({
-  //     ...amountData,
-  //     ...partial,
-  //   });
-  // }
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -288,6 +265,7 @@ function DialogAddArea(props: TypeProps) {
 }
 
 export default DialogAddArea;
+
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
@@ -296,6 +274,13 @@ type TypeProps = {
 };
 
 type TypeAreaData = {
+  area_from: string;
+  area_to: string;
+  number: string;
+  minimum: string;
+};
+
+type DesignForm = {
   area_from: string;
   area_to: string;
   number: string;

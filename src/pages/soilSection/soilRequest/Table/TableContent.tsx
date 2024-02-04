@@ -9,8 +9,13 @@ import {
   Table,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { useContext } from "react";
+import { TableContext } from "../TableContext";
 
 function TableContent() {
+  const { soilRequest } = useContext(TableContext);
+  console.log(soilRequest);
+
   return (
     <>
       <MuiTableHead>
@@ -31,25 +36,28 @@ function TableContent() {
         </TableRow>
       </MuiTableHead>
       <MuiTableBody>
-        <TableRow>
-          <TableCell>
-            <Checkbox />
-          </TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>-</TableCell>
-          <TableCell>
-            <IconButton color="primary">
-              <SettingsIcon />
-            </IconButton>
-          </TableCell>
-        </TableRow>
+        {Array.isArray(soilRequest) &&
+          soilRequest?.map((req) => (
+            <TableRow>
+              <TableCell>
+                <Checkbox />
+              </TableCell>
+              <TableCell>{req.id}</TableCell>
+              <TableCell></TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>
+                <IconButton color="primary">
+                  <SettingsIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
       </MuiTableBody>
     </>
   );

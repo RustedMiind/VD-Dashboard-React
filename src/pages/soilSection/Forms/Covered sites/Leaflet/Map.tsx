@@ -9,7 +9,7 @@ import {
 } from "react-leaflet";
 import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { TypeLocationData } from "../Dialog";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { IconButton } from "@mui/material";
@@ -32,7 +32,7 @@ export function Map({
   setPositionClick,
   updateAmountData,
 }: PropsType) {
-  const [center, setCenter] = useState({ lat: 24.774265, lng: 46.738586 });
+  const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],

@@ -29,12 +29,11 @@ const ClientTableComponent = ({
   limit,
 }: PropsType) => {
   const [rowsCount, setRowsCount] = useState(limit);
-
   function generateChip(request: PanelData | StepStatusData): JSX.Element {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
-    switch (request.step_status_id) {
-      case 1:
+    switch (parseInt(request.step_status_id)) {
+      case 0:
         chip = (
           <Button
             size="small"
@@ -47,7 +46,7 @@ const ClientTableComponent = ({
           </Button>
         );
         break;
-      case 2:
+      case 1:
         chip = (
           <Button
             size="small"
@@ -59,7 +58,7 @@ const ClientTableComponent = ({
           </Button>
         );
         break;
-      case 100:
+      case 18:
         chip = (
           <NonRoundedChip
             color="success"
@@ -79,7 +78,7 @@ const ClientTableComponent = ({
           />
         );
         break;
-      case 99:
+      case 19:
         chip = (
           <NonRoundedChip
             color="error"
@@ -114,14 +113,14 @@ const ClientTableComponent = ({
           </TableHead>
           <TableBody>
             {requests.map((request) => {
-              const department =
-                request.order_step_form[0] &&
-                request.order_step_form[0].order_step &&
-                request.order_step_form[0].order_step[0] &&
-                request.order_step_form[0].order_step[0].department;
+              // const department =
+              //   request.order_step_form[0] &&
+              //   request.order_step_form[0].order_step &&
+              //   request.order_step_form[0].order_step[0] &&
+              //   request.order_step_form[0].order_step[0].department;
               return (
                 <TableRow key={request.id}>
-                  <TableCell>{request.id}</TableCell>
+                  <TableCell>{request.order_id}</TableCell>
                   <TableCell>
                     <Box
                       component="span"
@@ -133,14 +132,16 @@ const ClientTableComponent = ({
                         overflow: "hidden",
                       }}
                     >
-                      {request.name}
+                      {request.order.client.name}
                     </Box>
                   </TableCell>
-                  <TableCell>{formatDate(request.created_date)}</TableCell>
+                  <TableCell>{formatDate(request.created_at)}</TableCell>
                   <TableCell>
-                    {request.type === "individual" ? "فرد" : "شركة"}
+                    {request.order.client.type === "individual"
+                      ? "فرد"
+                      : "شركة"}
                   </TableCell>
-                  <TableCell>{request.branch_name}</TableCell>
+                  <TableCell>{request.order.client.branch?.name}</TableCell>
                   <TableCell>
                     <Button
                       size="small"
@@ -152,10 +153,12 @@ const ClientTableComponent = ({
                       }}
                       onClick={openDetails(request)}
                     >
-                      {request.order_type_name}
+                      {request.order.order_type.name}
                     </Button>
                   </TableCell>
-                  <TableCell>{department?.name || "----"}</TableCell>
+                  <TableCell>
+                    {request?.department?.name ? request?.department?.name : ""}
+                  </TableCell>
                   <TableCell id={`${request.step_status_id}`}>
                     {generateChip(request)}
                   </TableCell>
@@ -199,7 +202,7 @@ const ClientTableComponent = ({
 };
 
 type PropsType = {
-  requests: PanelData[] | StepStatusData[];
+  requests: PanelData[];
   openModel: (res: PanelData | StepStatusData) => () => void;
   openStatus: (res: PanelData | StepStatusData) => () => void;
   openDetails: (res: PanelData | StepStatusData) => () => void;

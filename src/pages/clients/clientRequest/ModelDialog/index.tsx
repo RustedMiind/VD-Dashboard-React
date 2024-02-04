@@ -38,7 +38,7 @@ const ModelDialog = ({
     e.preventDefault();
     if (formData.client_id) {
       axios
-        .post(Api(`employee/client/order/addStep/${stepId}`), formData)
+        .post(Api(`employee/client/order/add-step/${stepId}`), formData)
         .then((res) => {
           setRequests();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
@@ -86,8 +86,8 @@ const ModelDialog = ({
                     });
                   }}
                 >
-                  <MenuItem value={99}>مرفوض</MenuItem>
-                  <MenuItem value={100}>مقبول</MenuItem>
+                  <MenuItem value={18}>مرفوض</MenuItem>
+                  <MenuItem value={19}>مقبول</MenuItem>
                   <MenuItem value={33}>معتمد</MenuItem>
                 </Select>
               </FormControl>
@@ -106,7 +106,6 @@ const ModelDialog = ({
             <TextField
               id=""
               inputProps={{ style: { minHeight: 100 } }}
-              label="الملاحظة"
               multiline
               value={formData.note || ""}
               onChange={(e) => {
