@@ -107,6 +107,7 @@ function RoutesComponent() {
           <Route path="design">
             <Route path="" element={<DesignDataPage />} />
             <Route path="create" element={<CreateOrUpdateDesign />} />
+            <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
             <Route path="structure" element={<DesignStructurePage />} />
           </Route>
         </Route>

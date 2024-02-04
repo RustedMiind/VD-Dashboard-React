@@ -15,6 +15,10 @@ import { FormSectionProps } from "./BaseProps";
 import AddLabelToEl from "../../../../components/AddLabelToEl";
 import axios from "axios";
 import { Api } from "../../../../constants";
+import { CustomMenuList } from "./images";
+import { AttachmentMenuItem } from "./Utilities";
+import { Design } from "../../../../types";
+import { useSnackbar } from "notistack";
 
 type optionType = {
   id: number;
@@ -22,13 +26,14 @@ type optionType = {
 };
 
 function DesignFile({
-  registerFn,
   designFiles,
   setDesignFile,
   setDesignFiles,
+  designToEdit,
+  setDesignToEdit,
 }: PropsType) {
   const [options, setOptions] = useState<optionType[]>([]);
-
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     // TODO::fetch options data
     axios
@@ -60,6 +65,44 @@ function DesignFile({
       <Typography variant="h5" gutterBottom>
         محتويات ملف التصميم
       </Typography>
+      <Grid container>
+        <Grid item xs={6}>
+          {designToEdit?.attachments && !!designToEdit?.attachments.length && (
+            <CustomMenuList>
+              {designToEdit.attachments.map((utility) => (
+                <AttachmentMenuItem
+                  url="hello"
+                  onDelete={() => {
+                    axios
+                      .get(
+                        Api(`client/design/delete-attachment/${utility.id}`),
+                        {
+                          headers: { from: "website" },
+                        }
+                      )
+                      .then((res) => {
+                        enqueueSnackbar("تم حذف المرفق بنجاح");
+                        setDesignToEdit({
+                          ...designToEdit,
+                          attachments: designToEdit?.attachments?.filter(
+                            (u) => u.id !== utility.id
+                          ),
+                        });
+                      })
+                      .catch(() => {
+                        enqueueSnackbar("تعذر في حذف المرفق", {
+                          variant: "error",
+                        });
+                      });
+                  }}
+                  type={options.find((o) => o.id === utility.type)?.name}
+                  name={utility.file_name}
+                />
+              ))}
+            </CustomMenuList>
+          )}
+        </Grid>
+      </Grid>
       {designFiles.map((designFile, index, arr) => (
         <Stack pb={4} spacing={1} key={index}>
           <Grid container sx={{ display: "flex", alignItems: "end" }}>
@@ -125,6 +168,8 @@ interface PropsType extends FormSectionProps {
     updatedDesignFile: Partial<DesignFileType>,
     index: number
   ) => void;
+  designToEdit?: Design;
+  setDesignToEdit: (design: Design) => void;
 }
 
 export default DesignFile;

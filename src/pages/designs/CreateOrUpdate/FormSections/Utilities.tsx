@@ -3,6 +3,7 @@ import {
   Button,
   FormControlLabel,
   Grid,
+  IconButton,
   MenuItem,
   Stack,
   Switch,
@@ -24,11 +25,42 @@ import { FormSectionProps } from "./BaseProps";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { UseFormRegister } from "react-hook-form";
+import { Design } from "../../../../types";
+import { CustomMenuList } from "./images";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { ListItemText } from "@mui/material";
+import LimitTypography from "../../../../components/LimitTypograpgy";
+import { useSnackbar } from "notistack";
 
 type optionType = {
   id: number;
   name: string;
 };
+
+export const AttachmentMenuItem = (props: {
+  onDelete: () => void;
+  url?: string;
+  name?: string;
+  type?: string;
+}) => (
+  <MenuItem>
+    <IconButton size="small" component="a" target="_blank" href={props.url}>
+      <VisibilityIcon />
+    </IconButton>
+    <ListItemText>
+      <LimitTypography minWidth={200}>{props.name}</LimitTypography>
+    </ListItemText>
+    {props.type && (
+      <Typography variant="body2" color="gray">
+        {props.type}
+      </Typography>
+    )}
+    <IconButton size="small" onClick={props.onDelete} color="error">
+      <DeleteIcon />
+    </IconButton>
+  </MenuItem>
+);
 
 function UtilitiesSection({
   register,
@@ -36,11 +68,13 @@ function UtilitiesSection({
   setUtilities,
   setUtility,
   registerFn,
+  setDesignToEdit,
+  designToEdit,
 }: PropsType) {
   // ?declare component state
 
   const [options, setOptions] = useState<optionType[]>([]);
-
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     // TODO::fetch options data
     axios
@@ -72,6 +106,41 @@ function UtilitiesSection({
       <Typography variant="h5" gutterBottom>
         المرافق
       </Typography>
+      <Grid container>
+        <Grid item xs={6}>
+          {designToEdit?.utilities && !!designToEdit?.utilities.length && (
+            <CustomMenuList>
+              {designToEdit.utilities.map((utility) => (
+                <AttachmentMenuItem
+                  url="hello"
+                  onDelete={() => {
+                    axios
+                      .get(Api(`client/design/delete-utility/${utility.id}`), {
+                        headers: { from: "website" },
+                      })
+                      .then((res) => {
+                        enqueueSnackbar("تم حذف المرفق بنجاح");
+                        setDesignToEdit({
+                          ...designToEdit,
+                          utilities: designToEdit?.utilities?.filter(
+                            (u) => u.id !== utility.id
+                          ),
+                        });
+                      })
+                      .catch(() => {
+                        enqueueSnackbar("تعذر في حذف المرفق", {
+                          variant: "error",
+                        });
+                      });
+                  }}
+                  type={options.find((o) => o.id === utility.type)?.name}
+                  name={utility.file_name}
+                />
+              ))}
+            </CustomMenuList>
+          )}
+        </Grid>
+      </Grid>
       {utilities.map((utility, index, arr) => (
         <Stack pb={4} spacing={1} key={index}>
           <Grid container>
@@ -151,6 +220,8 @@ interface PropsType extends FormSectionProps {
   utilities: Utility[];
   setUtilities: React.Dispatch<React.SetStateAction<Utility[]>>;
   setUtility: (updatedUtility: Partial<Utility>, index: number) => void;
+  designToEdit?: Design;
+  setDesignToEdit: (design: Design) => void;
 }
 
 export default UtilitiesSection;
