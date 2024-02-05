@@ -24,7 +24,7 @@ import {
 import { FormSectionProps } from "./BaseProps";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { UseFormRegister } from "react-hook-form";
+import { Control, Controller, UseFormRegister } from "react-hook-form";
 import { Design } from "../../../../types";
 import { CustomMenuList } from "./images";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -70,6 +70,7 @@ function UtilitiesSection({
   registerFn,
   setDesignToEdit,
   designToEdit,
+  control,
 }: PropsType) {
   // ?declare component state
 
@@ -199,15 +200,33 @@ function UtilitiesSection({
         />
         <GridItem />
         <GridItem>
-          <FormControlLabel
-            control={<Switch {...register("status_mob")} />}
-            label="التطبيق"
+          <Controller
+            name="status_mob"
+            control={control}
+            render={({ field: { onChange, value } }) => {
+              console.log("toggle value ", value);
+              return (
+                <FormControlLabel
+                  control={<Switch checked={value} onChange={onChange} />}
+                  label="التطبيق"
+                />
+              );
+            }}
           />
         </GridItem>
         <GridItem>
-          <FormControlLabel
-            control={<Switch {...register("status_web")} />}
-            label="الموقع"
+          <Controller
+            name="status_mob"
+            control={control}
+            render={({ field: { onChange, value } }) => {
+              console.log("toggle value ", value);
+              return (
+                <FormControlLabel
+                  control={<Switch checked={value} onChange={onChange} />}
+                  label="الموقع"
+                />
+              );
+            }}
           />
         </GridItem>
       </InputsGridContainer>
@@ -222,6 +241,7 @@ interface PropsType extends FormSectionProps {
   setUtility: (updatedUtility: Partial<Utility>, index: number) => void;
   designToEdit?: Design;
   setDesignToEdit: (design: Design) => void;
+  control: Control<CreateFormType, unknown>;
 }
 
 export default UtilitiesSection;

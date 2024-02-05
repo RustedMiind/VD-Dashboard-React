@@ -8,7 +8,6 @@ import Views from "./Views";
 
 function DesignDataPage() {
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [currentTab, setCurrentTab] = useState(1);
   //handleSearch
   function handleSearch(): void {

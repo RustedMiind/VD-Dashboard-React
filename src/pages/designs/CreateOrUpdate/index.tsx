@@ -203,17 +203,24 @@ function CreateOrUpdateDesign() {
         .filter((u) => u.file instanceof File),
     };
     console.log(dto);
+    console.log(
+      Api(`client/design${design?.id ? "/" + design.id?.toString() : ""}`)
+    );
     axios
-      .post(Api("client/design"), serialize(dto), {
-        headers: {
-          from: "website",
-        },
-        onUploadProgress: (data) => {
-          //Set the progress value to show the progress bar
-          if (data.total)
-            setProgress(Math.round((100 * data.loaded) / data.total));
-        },
-      })
+      .post(
+        Api(`client/design${design?.id ? "/" + design.id?.toString() : ""}`),
+        serialize(dto),
+        {
+          headers: {
+            from: "website",
+          },
+          onUploadProgress: (data) => {
+            //Set the progress value to show the progress bar
+            if (data.total)
+              setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then(({ data }) => {
         enqueueSnackbar("تم الحفظ بنجاح");
       })
@@ -292,6 +299,7 @@ function CreateOrUpdateDesign() {
                 registerFn,
                 designToEdit: design,
                 setDesignToEdit: setDesign,
+                control,
               }}
             />
             <DesignFile
@@ -314,6 +322,7 @@ function CreateOrUpdateDesign() {
                     borderRadius: 10,
                   }}
                   color={"info"}
+                  variant="buffer"
                   value={progress}
                 />
               )}

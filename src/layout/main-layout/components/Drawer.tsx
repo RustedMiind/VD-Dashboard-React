@@ -185,6 +185,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/services/design",
         react: true,
       },
+      {
+        name: "هيكل تصميم المباني",
+        path: "/services/design/structure",
+        react: true,
+      },
     ],
   },
   {
