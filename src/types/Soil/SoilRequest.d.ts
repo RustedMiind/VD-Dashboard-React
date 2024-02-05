@@ -1,6 +1,8 @@
+import { Client } from "../Clients";
 import { Media } from "../Media";
 
 type SoilRequest = {
+  client: Client;
   client_id: number;
   collection: 7;
   deleted_at: null;
@@ -8,8 +10,8 @@ type SoilRequest = {
   license_id: number;
   order_type_id: number;
   soil_order: SoilOrder;
-  //   created_at: "2024-02-04T08:05:06.000000Z";
-  //   updated_at: "2024-02-04T08:05:06.000000Z";
+  created_at: string;
+  updated_at: string;
 };
 
 type SoilOrder = {
