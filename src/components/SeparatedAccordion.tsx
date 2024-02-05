@@ -13,6 +13,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 export function SeparatedAccordion({
   children,
   title,
+  bgReverse,
   ...accordionProps
 }: PropsType) {
   return (
@@ -27,7 +28,8 @@ export function SeparatedAccordion({
           // expandIcon={<ExpandMoreIcon />}
           sx={{
             p: 0,
-            bgcolor: "background.paper",
+            bgcolor: bgReverse ? "#004693" : "background.paper",
+            color: bgReverse ? "#fff" : "",
           }}
         >
           <Stack
@@ -43,9 +45,13 @@ export function SeparatedAccordion({
             </Typography>
             <IconButton color="primary" size="small">
               {!accordionProps?.expanded ? (
-                <AddCircleOutlineIcon sx={{ fontSize: 28 }} />
+                <AddCircleOutlineIcon
+                  sx={{ fontSize: 28, color: bgReverse ? "#fff" : "" }}
+                />
               ) : (
-                <RemoveCircleOutlineIcon sx={{ fontSize: 28 }} />
+                <RemoveCircleOutlineIcon
+                  sx={{ fontSize: 28, color: bgReverse ? "#fff" : "" }}
+                />
               )}
             </IconButton>
           </Stack>
@@ -60,4 +66,5 @@ export function SeparatedAccordion({
 
 type PropsType = {
   title: string;
+  bgReverse?: boolean;
 } & AccordionProps;

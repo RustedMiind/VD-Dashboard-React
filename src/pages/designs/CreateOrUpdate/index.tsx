@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../components/AddLabelToEl";
 import MainFormSection from "./FormSections/main";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ImageListType } from "react-images-uploading";
 import FormImagesSection from "./FormSections/images";
 import UtilitiesSection from "./FormSections/Utilities";
@@ -26,6 +26,8 @@ import { Api } from "../../../constants";
 import { serialize } from "object-to-formdata";
 import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
+import { useParams } from "react-router-dom";
+import { Design } from "../../../types";
 
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
@@ -109,7 +111,7 @@ export function GridItemDateInputWithLabel({
 }
 
 function CreateOrUpdateDesign() {
-  const { register, handleSubmit, resetField, control } =
+  const { register, handleSubmit, resetField, control, reset } =
     useForm<CreateFormType>();
   const { enqueueSnackbar } = useSnackbar();
   const [progress, setProgress] = useState<number | undefined>(undefined);
@@ -124,25 +126,81 @@ function CreateOrUpdateDesign() {
 
   const [idea, setIdea] = useState<FileBondState>([]);
 
+  const { designId } = useParams();
+
+  const mode: "edit" | "create" = useMemo(
+    () => (!!designId ? "edit" : "create"),
+    [designId]
+  );
+
+  const [design, setDesign] = useState<Design | undefined>(undefined);
+
+  useEffect(() => {
+    if (designId) getDesignData(designId);
+  }, [designId]);
+
+  async function getDesignData(id: string | number) {
+    try {
+      const { data } = await axios.get<{ design: Design }>(
+        Api(`client/design/${id}`),
+        { headers: { from: "website" } }
+      );
+      setDesign(data.design);
+      if (data.design.id) setDesignData(data.design);
+    } catch (error) {
+      setDesign(undefined);
+      enqueueSnackbar("فشل في تحميل بيانات التصميم", { variant: "error" });
+    }
+  }
+  function setDesignData(design: Design) {
+    reset({
+      name_ar: design.name_ar,
+      name_en: design.name_en,
+      desc_ar: design.desc_ar,
+      desc_en: design.desc_en,
+      price_before: design.price_before?.toString(),
+      price_after: design.price_after?.toString(),
+      desc_date_from: design.desc_date_from,
+      desc_date_to: design.desc_date_to,
+      area: design.area?.toString(),
+      floors_num: design.floors_num?.toString(),
+      bed_rooms_num: design.bed_rooms_num?.toString(),
+      width_floor: design.width_floor?.toString(),
+      height_floor: design.height_floor?.toString(),
+      width_front_street: design.width_front_street?.toString(),
+      bathroom_num: design.bathroom_num?.toString(),
+      engineering_name: design.engineering_name,
+      main_bedroom: design.main_bedroom?.toString(),
+      living_room: design.living_room?.toString(),
+      dinner_room: design.dinner_room?.toString(),
+      status_design: design.status_design,
+      status_web: !!design.status_web,
+      status_mob: !!design.status_mob,
+      kitchen: design.kitchen?.toString(),
+    });
+  }
+
   const formSubmit = handleSubmit((data) => {
     console.log(data);
     const dto = {
       ...data,
-      "main-image": mainImage[0]?.file,
-      "sub-image": subImages
-        .map((f) => f.file)
-        .filter((f) => f instanceof File),
+      main_image: mainImage[0]?.file,
+      sub_image: subImages.map((f) => f.file).filter((f) => f instanceof File),
       booklet: booklet.filter((f) => f instanceof File).find(() => true),
-      "eng-image": engineeringChart.filter((f) => f instanceof File),
-      "idea-eng-image": idea.filter((f) => f instanceof File).find(() => true),
-      utilities: utilities.map((u) => ({
-        file: u.files.find((f) => f instanceof File),
-        type: u.option,
-      })),
-      attachments: utilities.map((u) => ({
-        file: u.files.find((f) => f instanceof File),
-        type: u.option,
-      })),
+      eng_image: engineeringChart.filter((f) => f instanceof File),
+      idea_eng_image: idea.filter((f) => f instanceof File).find(() => true),
+      utilities: utilities
+        .map((u) => ({
+          file: u.files.find((f) => f instanceof File),
+          type: u.option,
+        }))
+        .filter((u) => u.file instanceof File),
+      attachments: utilities
+        .map((u) => ({
+          file: u.files.find((f) => f instanceof File),
+          type: u.option,
+        }))
+        .filter((u) => u.file instanceof File),
     };
     console.log(dto);
     axios
@@ -162,7 +220,12 @@ function CreateOrUpdateDesign() {
       .finally(() => {
         setProgress(undefined);
       })
-      .catch(console.log);
+      .catch((err) => {
+        enqueueSnackbar(
+          err.response.data.message || err.response.data.msg || "تعذر في الحفظ",
+          { variant: "error" }
+        );
+      });
   });
   const [designFiles, setDesignFiles] = useState<DesignFileType[]>([
     designFileInitial,
@@ -227,6 +290,8 @@ function CreateOrUpdateDesign() {
                 utilities,
                 register,
                 registerFn,
+                designToEdit: design,
+                setDesignToEdit: setDesign,
               }}
             />
             <DesignFile
@@ -235,6 +300,8 @@ function CreateOrUpdateDesign() {
                 registerFn,
                 setDesignFile,
                 setDesignFiles,
+                designToEdit: design,
+                setDesignToEdit: setDesign,
               }}
             />
           </Stack>
@@ -276,6 +343,8 @@ function CreateOrUpdateDesign() {
               setBooklet,
               engineeringChart,
               setEngineeringChart,
+              designToEdit: design,
+              setDesignToEdit: setDesign,
             }}
           />
         </Grid>
@@ -309,10 +378,6 @@ export type CreateFormType = {
   status_web: boolean;
   status_mob: boolean;
   kitchen: string;
-  "idea-eng-image": File;
-  "main-image"?: File;
-  "sub-image"?: File[];
-  "eng-image"?: File[];
   booklet?: File;
 };
 

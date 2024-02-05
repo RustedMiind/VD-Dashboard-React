@@ -1,5 +1,4 @@
-import { DB_Boolean } from "../DB_Boolean";
-import { Media } from "../Media";
+import { Attachment } from "./Attachment";
 
 type DesignType = {
   id: number;
@@ -29,15 +28,15 @@ type DesignType = {
   created_at: string;
   updated_at: string;
   kitchen: number;
-  name: number;
+  name: string;
   desc: string;
-  subImages: unknown[];
-  booklet: unknown[];
-  engImage: unknown[];
-  mainImage: unknown[];
-  engImageIdea: unknown[];
-  attachments: unknown[];
-  utilities: unknown[];
+  subImages: Media[];
+  booklet: Media[];
+  engImage: Media[];
+  mainImage: Media[];
+  engImageIdea: Media[];
+  attachments: Attachment[];
+  utilities: Attachment[];
   media: Media[];
 };
 
