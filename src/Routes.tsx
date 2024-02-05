@@ -21,6 +21,9 @@ import ForTest from "./pages/forTest";
 import DesignReports from "./pages/DesignReports";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
+import FormsSection from "./pages/soilSection/Forms";
+import SoilSection from "./pages/soilSection";
+// import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
@@ -32,6 +35,8 @@ function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
+        <Route path="test" element={<ForTest />} />
+
         <Route path="" element={<MainPage />} />
         <Route path="designReports" element={<DesignReports />} />
         {/* Employees Section */}
@@ -110,6 +115,12 @@ function RoutesComponent() {
             <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
             <Route path="structure" element={<DesignStructurePage />} />
           </Route>
+          <Route path="soil">
+            <Route path="create" element={<FormsSection />} />
+          </Route>
+        </Route>
+        <Route path="soil">
+          <Route path="allservices" element={<SoilSection />} />
         </Route>
 
         <Route path="contracts">

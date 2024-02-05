@@ -20,18 +20,18 @@ import { Api } from "../../../../constants";
 import NonRoundedChip from "../../../../components/NonRoundedChip";
 
 const StatusDialog = ({ open, onClose, id }: PropsType) => {
-  const [details, setDetails] = useState<Partial<StepStatus>[]>();
+  const [details, setDetails] = useState<Partial<PanelData>>();
   const [date, setDate] = useState("");
 
   useEffect(() => {
     if (open && id) {
       axios
-        .get<{ data: StepStatusData[] }>(
-          Api(`employee/client/order/statusOrder?client_id=${id}`)
+        .get<{ data: PanelData }>(
+          Api(`employee/client/order/statusOrder/${id}`)
         )
         .then(({ data }) => {
-          setDetails(data.data[0].order_step_form || []);
-          setDate(formatDate(data.data[0].created_date) || "");
+          setDetails(data.data || []);
+          // setDate(formatDate(data.data[0].created_date) || "");
         });
     }
   }, [open]);
@@ -49,10 +49,10 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
           />
         );
         break;
-      case 99:
+      case 19:
         chip = <NonRoundedChip color="error" variant={variant} label="مرفوض" />;
         break;
-      case 100:
+      case 18:
         chip = (
           <NonRoundedChip color="success" variant={variant} label="مقبول" />
         );
@@ -86,22 +86,19 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {details?.map((step) => {
-                  const note = step?.note;
-
-                  // const orderStep = step?.order_step && step?.order_step[0];
-                  return (
+                {typeof details === "object" &&
+                  details.order_step_form?.map((step) => (
                     <TableRow key={step.id}>
                       <TableCell>
                         {step?.employee?.name || "لا يوجد موظف"}
                       </TableCell>
-                      <TableCell>{date}</TableCell>
-                      <TableCell>{formatDate(step?.end_date)}</TableCell>
                       <TableCell>
-                        {step?.order_step?.map((item) => {
-                          return item?.department?.name;
-                        })}
+                        {formatDate(step.employee.created_at)}
                       </TableCell>
+                      <TableCell>
+                        {formatDate(step?.employee.updated_at)}
+                      </TableCell>
+                      <TableCell>{step?.department.name}</TableCell>
                       <TableCell>{generateChip(step?.status)}</TableCell>
                       <TableCell>
                         <Box
@@ -112,12 +109,11 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
                             overflow: "hidden",
                           }}
                         >
-                          {note || "..."}
+                          {step.note}
                         </Box>
                       </TableCell>
                     </TableRow>
-                  );
-                })}
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>

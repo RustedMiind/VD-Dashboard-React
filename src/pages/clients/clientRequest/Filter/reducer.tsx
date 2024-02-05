@@ -64,7 +64,7 @@ export const FiltersInit: Filter = {
   dateTo: "",
   status: 0,
   department_id: 0,
-  typeOrder: 1,
+  typeOrder: 0,
   search: "",
   sortBy: "desc",
   typeClient: "",

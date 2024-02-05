@@ -44,25 +44,23 @@ const ClientRequests = () => {
   const getRequests = () => {
     setRequests("loading");
     axios
-      .get<{ data: PanelData[]; count: CountType[] }>(
-        Api("employee/client/order"),
-        {
-          params: {
-            limit: filters.limit || null,
-            typeClient: filters.typeClient || null,
-            search: search || null,
-            dateFrom: filters.dateFrom || null,
-            dateTo: filters.dateTo || null,
-            department_id: filters.department_id || null,
-            typeOrder: filters.typeOrder || null,
-            sortBy: filters.sortBy || null,
-            status: filters.status || null,
-          },
-        }
-      )
+      .get<{ data: PanelData[] }>(Api("employee/client/order"), {
+        params: {
+          limit: filters.limit || null,
+          typeClient: filters.typeClient || null,
+          search: search || null,
+          dateFrom: filters.dateFrom || null,
+          dateTo: filters.dateTo || null,
+          department_id: filters.department_id || null,
+          typeOrder: filters.typeOrder || null,
+          sortBy: filters.sortBy || null,
+          status: filters.status || null,
+        },
+      })
       .then(({ data }) => {
+        console.log(data.data);
         setRequests(data.data);
-        setCounts(data.count);
+        // setCounts(data.count);
       })
       .catch((err) => {
         setRequests("error");
@@ -109,9 +107,20 @@ const ClientRequests = () => {
   useEffect(() => {
     getRequests();
     getFormData();
-  }, [selectedType, currentTab, filters.limit]);
+  }, [
+    selectedType,
+    currentTab,
+    filters.limit,
+    filters.dateFrom,
+    filters.dateTo,
+    filters.department_id,
+    filters.sortBy,
+    filters.typeClient,
+    filters.status,
+    filters.typeOrder,
+  ]);
   const IS_REQUESTS_EXISTS = typeof requests === "object";
-  let filtered: PanelData[] | StepStatusData[] | undefined = IS_REQUESTS_EXISTS
+  let filtered: PanelData[] | undefined = IS_REQUESTS_EXISTS
     ? requests
     : undefined;
 
@@ -121,7 +130,7 @@ const ClientRequests = () => {
         open={dialogOpen === "model"}
         onClose={handleCloseDialog}
         requestId={dialogRequest?.id}
-        stepId={dialogRequest?.step_id}
+        stepId={dialogRequest?.id}
         setRequests={getRequests}
       />
       <DetailsDialog
@@ -167,7 +176,7 @@ const ClientRequests = () => {
             counts={counts}
             orderType={orderType}
             dispatch={dispatch}
-            orderTypeId={filters.typeOrder || 1}
+            orderTypeId={filters.typeOrder || 0}
           />
           <Tabs
             aria-label="basic tabs example"
