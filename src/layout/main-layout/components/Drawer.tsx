@@ -91,7 +91,7 @@ const routesCollections: RoutesCollectionType[] = [
       },
       {
         name: "التربة والخرسانة",
-        path: "/soil/allservices",
+        path: "/services/soil",
         react: true,
       },
     ],

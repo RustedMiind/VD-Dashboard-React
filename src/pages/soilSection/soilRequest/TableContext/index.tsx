@@ -1,8 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../../constants";
-import { Tender } from "../../../../types";
-import { Map } from "typescript";
 import { TenderEntityStatus } from "../../../../types/Tenders/Status.enum";
 import { SoilRequest } from "../../../../types/Soil/SoilRequest";
 
@@ -15,14 +13,15 @@ export function SoilRequestTableContextProvider({
 }) {
   const [soilRequest, setSoilRequest] = useState<SoilStateType>("none");
   const [selectSoilId, setselectSoilId] = useState<number[]>([]);
-
   let [limit, setLimit] = useState<string>("25");
   let [counts, setCounts] = useState<Counts | undefined>(undefined);
   function getSoilData(params?: unknown) {
     setSoilRequest("loading");
     axios
       .get<{ data: SoilStateType }>(Api("employee/soil/index"), {
-        params: { ...(typeof params === "object" ? params : {}) },
+        params: {
+          ...(typeof params === "object" ? params : {}),
+        },
       })
       .then((res) => {
         setSoilRequest(res.data.data);

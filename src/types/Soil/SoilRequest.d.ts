@@ -1,6 +1,9 @@
+import { Client } from "../Clients";
 import { Media } from "../Media";
+import { Floor } from "./Soil";
 
 type SoilRequest = {
+  client: Client;
   client_id: number;
   collection: 7;
   deleted_at: null;
@@ -8,8 +11,8 @@ type SoilRequest = {
   license_id: number;
   order_type_id: number;
   soil_order: SoilOrder;
-  //   created_at: "2024-02-04T08:05:06.000000Z";
-  //   updated_at: "2024-02-04T08:05:06.000000Z";
+  created_at: string;
+  updated_at: string;
 };
 
 type SoilOrder = {
@@ -32,6 +35,7 @@ type SoilOrder = {
   type_order: type_order;
   //   created_at: "2024-02-04T08:05:06.000000Z";
   //   updated_at: "2024-02-04T13:05:26.000000Z";
+  soil_floor: Floor;
 };
 
 type License = {
