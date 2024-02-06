@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import {
   Grid,
   GridProps,
@@ -13,6 +13,7 @@ import { SoilContext } from "../../../../SoilContext";
 import { SoilDataContext } from "../../..";
 import { formatDate } from "../../../../../../methods";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
+import DialogShowLocation from "./Dialog";
 
 function GridItem(props: GridProps) {
   return <Grid item lg={6} xs={12} {...props} />;
@@ -34,6 +35,7 @@ function InfoItem(props: { label: string; value?: React.ReactNode }) {
 }
 
 function DetailsView(): JSX.Element {
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { soilData } = useContext(SoilDataContext);
   function apperData() {}
   return (
@@ -41,7 +43,7 @@ function DetailsView(): JSX.Element {
       {typeof soilData === "object" ? (
         <>
           <Typography variant={"h5"} sx={{ mb: 4, fontWeight: 600 }}>
-            نوع الطلب
+            معلومات الطلب
           </Typography>
           <Grid container rowSpacing={4} columnSpacing={2}>
             <InfoItem label="رقم الطلب" value={soilData?.id} />
@@ -86,16 +88,26 @@ function DetailsView(): JSX.Element {
                 size="small"
                 InputProps={{
                   endAdornment: (
-                    <Button onClick={(apperData) => {}}>عرض</Button>
+                    <Button
+                      onClick={() => {
+                        setOpenDialog(true);
+                      }}
+                    >
+                      عرض
+                    </Button>
                   ),
                 }}
                 placeholder="عرض الموقع"
               />
             </Grid>
           </Grid>
-          <Box sx={{ display: "flex", justifyContent: "end", my: 4 }}>
+          <Box sx={{ display: "flex", justifyContent: "end", my: 2 }}>
             <Button variant="contained">الطباعة</Button>
           </Box>
+          <DialogShowLocation
+            openDialog={openDialog}
+            setOpenDialog={setOpenDialog}
+          />
         </>
       ) : (
         <></>
