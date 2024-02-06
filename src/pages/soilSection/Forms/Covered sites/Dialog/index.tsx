@@ -78,12 +78,10 @@ export default function DialogAddLocation(props: TypeProps) {
           for (let k = 0; k < coordinates.length; k++) {
             let coordinate = coordinates[k];
             _position[k] = +coordinate.split(":")[1].slice(0, -1);
-            console.log("coordinate", coordinate);
           }
           return _position;
         });
       if (arr !== undefined) setPositionClick([...arr]);
-      console.log("bbb", positionClick);
     } else {
       setAmountData(intialLocationData);
     }

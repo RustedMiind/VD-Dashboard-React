@@ -10,7 +10,6 @@ import {
 import { Icon, LeafletMouseEvent } from "leaflet";
 import { useState } from "react";
 import { Box, Stack } from "@mui/material";
-import { TypeLocationData } from "../Dialog";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { IconButton } from "@mui/material";
 let TargetPositions: [number, number][] = [];
@@ -27,11 +26,7 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
 
   return null;
 };
-export function Map({
-  positionClick,
-  setPositionClick,
-  updateAmountData,
-}: PropsType) {
+export function Map({ positionClick, setPositionClick }: PropsType) {
   const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
 
   const customIcon = new Icon({
@@ -43,7 +38,6 @@ export function Map({
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
       (ele) => ({ lat: ele[0], long: ele[1] })
     );
-    updateAmountData({ map: _positions });
   };
   const handleResetClick = () => {
     setPositionClick([]);
@@ -65,7 +59,7 @@ export function Map({
     <Stack
       sx={{
         width: "100%",
-        height: "350px",
+        height: "340px",
         margin: "auto",
       }}
     >
@@ -91,7 +85,7 @@ export function Map({
 
         <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker>
 
-        <MapClickHandler onMapClick={handleMapClick} />
+        <MapClickHandler onMapClick={() => {}} />
         {createPolylines()}
         <Box
           sx={{
@@ -105,9 +99,6 @@ export function Map({
             bgcolor: "primary.contrastText",
           }}
         >
-          <IconButton onClick={handleResetClick}>
-            <ReplayIcon />
-          </IconButton>
           {/* <Button variant="text" sx={{ fontSize: "18px", fontWeight: 600 }}>
             اعادة
           </Button> */}
@@ -126,5 +117,4 @@ interface MapClickHandlerProps {
 type PropsType = {
   positionClick: [number, number][];
   setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
-  updateAmountData: (partial: Partial<TypeLocationData>) => void;
 };
