@@ -28,6 +28,7 @@ import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
 import DesignDataPage from "./pages/designs/DesignsData";
+import SoilDetails from "./pages/soilSection/details";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -117,10 +118,9 @@ function RoutesComponent() {
           </Route>
           <Route path="soil">
             <Route path="create" element={<FormsSection />} />
+            <Route path="" element={<SoilSection />} />
+            <Route path="show/:id" element={<SoilDetails />} />
           </Route>
-        </Route>
-        <Route path="soil">
-          <Route path="allservices" element={<SoilSection />} />
         </Route>
 
         <Route path="contracts">

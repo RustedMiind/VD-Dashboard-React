@@ -7,11 +7,13 @@ import {
   TableHead as MuiTableHead,
   Paper,
   Table,
+  Typography,
 } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import { formatDate } from "../../../../methods";
+import { NavLink } from "react-router-dom";
 
 function TableContent() {
   const { soilRequest, limit, setLimit } = useContext(TableContext);
@@ -43,7 +45,17 @@ function TableContent() {
               <TableCell>
                 <Checkbox />
               </TableCell>
-              <TableCell>{req?.id ? req?.id : ""}</TableCell>
+              <TableCell>
+                <Typography
+                  component={NavLink}
+                  to={`show/${req.id}`}
+                  variant="body2"
+                  color={"primary.main"}
+                  fontWeight={700}
+                >
+                  {req?.id ? req?.id : ""}
+                </Typography>
+              </TableCell>
               <TableCell>
                 {req?.client?.name ? req?.client?.name : ""}
               </TableCell>
