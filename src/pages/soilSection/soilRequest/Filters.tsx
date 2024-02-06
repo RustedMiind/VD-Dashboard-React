@@ -1,21 +1,8 @@
-import {
-  Box,
-  Button,
-  Grid,
-  GridProps,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Box, Button, Grid, GridProps, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useContext, useState } from "react";
 import dayjs from "dayjs";
-
-enum TenderStatus {
-  DONE = "done",
-  DRAFT = "draft",
-}
-
+import { TableContext } from "./TableContext";
 function GridItem({ children }: GridProps) {
   return (
     <Grid item xs={12} sm={6} lg={3} xl={3}>
@@ -31,28 +18,32 @@ function GridItem2({ children }: GridProps) {
   );
 }
 function SoilFilters() {
-  const [searchChanged, setSearchChanged] = useState(false);
+  const { setSoilRequest } = useContext(TableContext);
   const [dataToSearch, setDataToSearch] = useState<TypeDataToSearch>({
-    status: TenderStatus.DONE,
-    end_date: "",
-    strat_date: "",
+    name_client: "",
+    name_license: "",
+    code: "",
+    dateOrder: "",
   });
   function updateDataToSearch(partial: Partial<TypeDataToSearch>) {
-    searchChanged || setSearchChanged(true);
     setDataToSearch({
       ...dataToSearch,
       ...partial,
     });
   }
+  function searchToRequest(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSoilRequest && setSoilRequest(dataToSearch);
+  }
 
   return (
-    <Box onSubmit={() => {}} component="form" pb={7}>
+    <Box onSubmit={searchToRequest} component="form" pb={7}>
       <Grid container spacing={2}>
         <GridItem>
           <TextField
-            value={dataToSearch.organization_name}
+            value={dataToSearch.name_client}
             onChange={(e) => {
-              updateDataToSearch({ organization_name: e.target.value });
+              updateDataToSearch({ name_client: e.target.value });
             }}
             fullWidth
             label="اسم العميل"
@@ -61,9 +52,9 @@ function SoilFilters() {
         </GridItem>
         <GridItem>
           <TextField
-            value={dataToSearch.organization_number}
+            value={dataToSearch.code}
             onChange={(e) => {
-              updateDataToSearch({ organization_number: e.target.value });
+              updateDataToSearch({ code: e.target.value });
             }}
             fullWidth
             label="رقم الخدمة"
@@ -72,9 +63,9 @@ function SoilFilters() {
         </GridItem>
         <GridItem2>
           <TextField
-            value={dataToSearch.name}
+            value={dataToSearch.name_license}
             onChange={(e) => {
-              updateDataToSearch({ name: e.target.value });
+              updateDataToSearch({ name_license: e.target.value });
             }}
             fullWidth
             label="اسم الخدمة"
@@ -83,16 +74,16 @@ function SoilFilters() {
         </GridItem2>
         <GridItem2>
           <DatePicker
-            value={dayjs(dataToSearch.strat_date)}
+            value={dayjs(dataToSearch.dateOrder)}
             onChange={(date) => {
-              updateDataToSearch({ strat_date: date?.format() });
+              updateDataToSearch({ dateOrder: date?.format() });
             }}
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             label={"تاريخ الطلب"}
           />
         </GridItem2>
         <GridItem2>
-          <Button variant="contained" fullWidth>
+          <Button type="submit" variant="contained" fullWidth>
             بحث
           </Button>
         </GridItem2>
@@ -104,10 +95,8 @@ function SoilFilters() {
 export default SoilFilters;
 
 type TypeDataToSearch = {
-  name?: string;
-  organization_name?: string;
-  organization_number?: string;
-  strat_date?: string;
-  end_date?: string;
-  status?: TenderStatus;
+  name_client?: string;
+  name_license?: string;
+  code?: string;
+  dateOrder?: string;
 };

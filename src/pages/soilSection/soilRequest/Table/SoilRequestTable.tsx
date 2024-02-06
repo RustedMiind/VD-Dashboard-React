@@ -13,8 +13,13 @@ import { Typography } from "@mui/material";
 import TableContent from "./TableContent";
 import { useContext } from "react";
 import { TableContext } from "../TableContext";
+import LoadingTable from "../../../../components/LoadingTable";
+import NotFound from "../../../../components/NotFound";
+import { NavLink } from "react-router-dom";
 
 function SoilRequestTable() {
+  const { soilRequest, limit, setLimit } = useContext(TableContext);
+
   return (
     <Stack>
       <>
@@ -24,6 +29,8 @@ function SoilRequestTable() {
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
+              component={NavLink}
+              to={"../../services/soil/create"}
             >
               اعدادات الطلبات
             </Button>
@@ -31,13 +38,20 @@ function SoilRequestTable() {
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
+              disabled
             >
               اضافة الطلب
             </Button>
           </Box>
-          <Table>
-            <TableContent />
-          </Table>
+          {soilRequest === "loading" && <LoadingTable rows={5} cols={9} />}
+          {soilRequest === "error" && (
+            <NotFound title="حدث خطأ حاول مرة أخرى" />
+          )}
+          {Array.isArray(soilRequest) && (
+            <Table>
+              <TableContent />
+            </Table>
+          )}
         </Paper>
         <Box
           position={"relative"}
@@ -47,7 +61,14 @@ function SoilRequestTable() {
         >
           <Stack p={2} direction="row" alignItems="center" spacing={1}>
             <Typography> عدد العرض في الصفحة</Typography>
-            <TextField size="small" select>
+            <TextField
+              onChange={(e) => {
+                setLimit && setLimit(e.target.value);
+              }}
+              size="small"
+              select
+              value={limit}
+            >
               <MenuItem value={"5"}>5</MenuItem>
               <MenuItem value={"25"}>25</MenuItem>
               <MenuItem value={"100"}>100</MenuItem>
@@ -59,7 +80,17 @@ function SoilRequestTable() {
             </TextField>
           </Stack>
           <Stack p={2}>
-            <Button sx={{ textDecoration: "underline" }}>عرض الكل</Button>
+            <Button
+              sx={{
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setLimit && setLimit("-1");
+              }}
+            >
+              عرض الكل
+            </Button>
           </Stack>
         </Box>
       </>
