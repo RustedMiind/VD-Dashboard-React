@@ -33,7 +33,7 @@ export function Map({
   updateAmountData,
 }: PropsType) {
   const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
-
+  console.log(positionClick);
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],

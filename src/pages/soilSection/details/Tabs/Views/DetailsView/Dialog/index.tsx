@@ -25,7 +25,25 @@ export default function DialogShowLocation(props: TypeProps) {
   const [positionClick, setPositionClick] = useState<[number, number][]>([]);
   const { soilData } = useContext(SoilDataContext);
 
-  const snackbar = useSnackbar();
+  useEffect(() => {
+    let str =
+      typeof soilData === "object" &&
+      soilData.soil_order.soil_location_map?.map.slice(2, -2);
+    let arr = str.toString().split("},{");
+    let positions: [number, number][] = [];
+    for (let i = 0; i < arr.length; i++) {
+      let cordin = arr[i].split(",");
+      let temp: [number, number] = [
+        +cordin[0].split(":")[1],
+        +cordin[1].split(":")[1],
+      ];
+
+      positions.push(temp);
+    }
+    setPositionClick(positions);
+    console.log(positionClick);
+  }, []);
+
   function closeDialog() {
     props.setOpenDialog(false);
   }

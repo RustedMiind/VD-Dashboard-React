@@ -101,7 +101,7 @@ function DetailsView(): JSX.Element {
               />
             </Grid>
           </Grid>
-          <Box sx={{ display: "flex", justifyContent: "end", my: 4 }}>
+          <Box sx={{ display: "flex", justifyContent: "end", my: 2 }}>
             <Button variant="contained">الطباعة</Button>
           </Box>
           <DialogShowLocation

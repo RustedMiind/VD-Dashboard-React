@@ -27,22 +27,13 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   return null;
 };
 export function Map({ positionClick, setPositionClick }: PropsType) {
-  const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
+  const [center, setCenter] = useState(positionClick[0]);
 
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],
   });
-  const handleMapClick = (position: [number, number]) => {
-    setPositionClick([...positionClick, position]);
-    let _positions: { lat: number; long: number }[] = TargetPositions.map(
-      (ele) => ({ lat: ele[0], long: ele[1] })
-    );
-  };
-  const handleResetClick = () => {
-    setPositionClick([]);
-    TargetPositions = [];
-  };
+
   function createPolylines() {
     const polylines = [];
     for (let i = 0; i < positionClick.length - 1; i++) {
@@ -65,7 +56,7 @@ export function Map({ positionClick, setPositionClick }: PropsType) {
     >
       <MapContainer
         center={center}
-        zoom={15}
+        zoom={16}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
       >

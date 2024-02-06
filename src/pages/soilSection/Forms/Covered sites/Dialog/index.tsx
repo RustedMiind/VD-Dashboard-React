@@ -37,14 +37,7 @@ export default function DialogAddLocation(props: TypeProps) {
     status: "1",
     map: [],
   };
-  function safeJsonParse<T>(str: string) {
-    try {
-      const jsonValue: T = JSON.parse(str);
-      return jsonValue;
-    } catch {
-      return [];
-    }
-  }
+
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
@@ -107,7 +100,6 @@ export default function DialogAddLocation(props: TypeProps) {
       ...partial,
       // map: _positions,
     });
-    console.log(amountData);
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     setFormStatus("loading");
