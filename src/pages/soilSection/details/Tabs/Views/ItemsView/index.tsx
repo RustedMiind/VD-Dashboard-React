@@ -43,7 +43,12 @@ function ItemsView() {
                 </TableCell>
                 <TableCell>{formatDate(item?.updated_at)}</TableCell>
                 <TableCell>
-                  <IconButton component={"a"} target="_blank" href="aaaa">
+                  <IconButton
+                    disabled
+                    component={"a"}
+                    target="_blank"
+                    href="aaaa"
+                  >
                     <ArticleOutlinedIcon />
                   </IconButton>
                 </TableCell>
