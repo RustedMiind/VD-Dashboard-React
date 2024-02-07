@@ -69,16 +69,34 @@ export default function DialogShowLocation(props: TypeProps) {
           <DialogContent>
             <Grid container p={1} spacing={4}>
               <Grid item md={6}>
-                <Typography sx={{ ml: 2 }}>
+                <Typography>
                   اسم الموقع <RequiredSymbol />
                 </Typography>
-                <TextField type="text" size="small" fullWidth />
+                <TextField
+                  value={
+                    soilData?.soil_order?.soil_location_map.soil_location
+                      .location_name
+                  }
+                  disabled
+                  type="text"
+                  size="small"
+                  fullWidth
+                />
               </Grid>
               <Grid item md={6}>
                 <Typography>
                   المدينة <RequiredSymbol />
                 </Typography>
-                <TextField type="text" size="small" fullWidth />
+                <TextField
+                  disabled
+                  value={
+                    soilData?.soil_order?.soil_location_map.soil_location.city
+                      .name
+                  }
+                  type="text"
+                  size="small"
+                  fullWidth
+                />
               </Grid>
 
               <Grid item md={12}>
@@ -94,7 +112,7 @@ export default function DialogShowLocation(props: TypeProps) {
         <DialogActions
           sx={{ display: "flex", justifyContent: "center", py: 3 }}
         >
-          <Button variant="contained" sx={{ width: 0.2 }}>
+          <Button onClick={closeDialog} variant="contained" sx={{ width: 0.2 }}>
             الغاء
           </Button>
         </DialogActions>

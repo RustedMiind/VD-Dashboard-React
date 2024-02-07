@@ -1,6 +1,6 @@
 import { Client } from "../Clients";
 import { Media } from "../Media";
-import { Floor, Position } from "./Soil";
+import { City, Floor, Position } from "./Soil";
 
 type SoilRequest = {
   client: Client;
@@ -62,4 +62,16 @@ type Map = {
   map: Position[];
   minimum_price: 800;
   price: 1000;
+  soil_location: SoilLocation;
+};
+type SoilLocation = {
+  building_system: string;
+  location_name: string;
+  city_id: number;
+  id: number;
+  status: number;
+  city: City;
+  deleted_at: null;
+  created_at: "2024-02-04T13:50:07.000000Z";
+  updated_at: "2024-02-04T22:15:35.000000Z";
 };

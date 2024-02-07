@@ -10,33 +10,27 @@ import { isStringAllNumbers } from "../../../methods";
 import axios from "axios";
 import Cards from "./Cards";
 import { SoilRequest } from "../../../types/Soil/SoilRequest";
+import { Step } from "../../../types/Soil/Step";
 // import Chat from "./Chat";
 
-export const SoilDataContext = createContext<SoilDataContextType>({
-  soilData: FetchStatusEnum.NONE,
-});
+export const SoilDataContext = createContext<SoilDataContextType>({});
 
 function SoilDetails() {
   const { id } = useParams();
-  const [soilData, setSoilData] = useState<FetchStatus<SoilRequest>>(
-    FetchStatusEnum.NONE
-  );
-  function loadTender() {
-    if (id) {
-      setSoilData(FetchStatusEnum.LOADING);
-      getSoilData(id)
-        .then((res) => {
-          setSoilData(res);
-        })
-        .catch(() => {
-          setSoilData(FetchStatusEnum.ERROR);
-        });
-    } else setSoilData(FetchStatusEnum.ERROR);
-  }
-  useEffect(loadTender, [id]);
+  const [soilData, setSoilData] = useState<SoilRequest | undefined>(undefined);
+  const [items, setItems] = useState<Step[] | undefined>(undefined);
+  useEffect(() => {
+    axios
+      .get<{ data: SoilRequest; step: Step[] }>(Api("employee/soil/" + id))
+      .then((res) => {
+        setSoilData(res.data.data);
+        setItems(res.data.step);
+      })
+      .catch((err) => {});
+  }, [id]);
 
   return (
-    <SoilDataContext.Provider value={{ soilData }}>
+    <SoilDataContext.Provider value={{ soilData, items }}>
       <Stack>
         <Cards />
         <Grid container spacing={2}>
@@ -48,33 +42,13 @@ function SoilDetails() {
           </Grid> */}
         </Grid>
       </Stack>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={soilData === FetchStatusEnum.LOADING}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </SoilDataContext.Provider>
   );
 }
 
-function getSoilData(id: string): Promise<SoilRequest> {
-  return new Promise((ressolve, reject) => {
-    if (isStringAllNumbers(id)) {
-      axios
-        .get<{ data: SoilRequest }>(Api("employee/soil/" + id))
-        .then((res) => {
-          ressolve(res.data.data);
-        })
-        .catch(reject);
-    } else {
-      reject({ msg: "برجاء ادخال مدخلات صحيحة للبحث عن المنافسة" });
-    }
-  });
-}
-
 type SoilDataContextType = {
-  soilData: FetchStatus<SoilRequest>;
+  soilData?: SoilRequest;
+  items?: Step[];
 };
 
 export default SoilDetails;
