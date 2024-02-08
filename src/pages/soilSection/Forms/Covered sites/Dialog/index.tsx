@@ -37,14 +37,7 @@ export default function DialogAddLocation(props: TypeProps) {
     status: "1",
     map: [],
   };
-  function safeJsonParse<T>(str: string) {
-    try {
-      const jsonValue: T = JSON.parse(str);
-      return jsonValue;
-    } catch {
-      return [];
-    }
-  }
+
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
@@ -78,12 +71,10 @@ export default function DialogAddLocation(props: TypeProps) {
           for (let k = 0; k < coordinates.length; k++) {
             let coordinate = coordinates[k];
             _position[k] = +coordinate.split(":")[1].slice(0, -1);
-            console.log("coordinate", coordinate);
           }
           return _position;
         });
       if (arr !== undefined) setPositionClick([...arr]);
-      console.log("bbb", positionClick);
     } else {
       setAmountData(intialLocationData);
     }
@@ -109,7 +100,6 @@ export default function DialogAddLocation(props: TypeProps) {
       ...partial,
       // map: _positions,
     });
-    console.log(amountData);
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     setFormStatus("loading");
