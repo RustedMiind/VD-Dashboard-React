@@ -1,4 +1,15 @@
-import { Box, Grid, Paper, Typography, Stack, IconButton } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Paper,
+  Typography,
+  Stack,
+  IconButton,
+  MenuList,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import Person2Icon from "@mui/icons-material/Person2";
 import StatusChip from "../../../../components/StatusChip";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
@@ -6,6 +17,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Message } from "../../../../types/Message/Message";
 import LimitTypography from "../../../../components/LimitTypograpgy";
 
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 function MessageComponent({ message }: PropsType) {
   return (
     <Stack component={Paper} direction="row">
@@ -32,7 +44,22 @@ function MessageComponent({ message }: PropsType) {
           <StatusChip label={"علني"} color="success" size="small" />
         </Stack>
         <Grid item md={12}>
-          <Typography ml={3}>{message.message}</Typography>
+          {message.file_name ? (
+            <MenuList>
+              <MenuItem component="a" target="_blank" href={message.message}>
+                <ListItemIcon>
+                  <AttachFileIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <LimitTypography maxWidth={120}>
+                    {message.file_name}
+                  </LimitTypography>
+                </ListItemText>
+              </MenuItem>
+            </MenuList>
+          ) : (
+            <Typography ml={3}>{message.message}</Typography>
+          )}
         </Grid>
       </Stack>
       <Stack
