@@ -79,12 +79,17 @@ function ItemsView() {
           open={dialogOpen === TenderStep.PURCHASE}
           onClose={closeDialog}
           userType={TenderStep.PURCHASE}
+          status={tender?.buy_status}
+          uploadedFile={tender.pictures?.buy_tender}
+          buyTender={tender?.buy_tender}
         />
         <TenderApproveDialog
           open={dialogOpen === TenderStep.ACCEPTION}
           userType={TenderStep.ACCEPTION}
           close={closeDialog}
           onClose={closeDialog}
+          status={tender?.buy_status}
+          uploadedFile={tender.pictures?.buy_tender}
         />
         {/* <OthersDialog
           close={closeDialog}
@@ -99,6 +104,18 @@ function ItemsView() {
           open={dialogOpen === TenderStep.TECHNICAL}
           onClose={closeDialog}
           endDate={tender?.tender_tasks?.end_dete_technical}
+          status={tender?.technical_status}
+          uploadedFile={tender.pictures?.technical_tender}
+        />
+        <OthersDialog
+          close={closeDialog}
+          userType={TenderStep.FILE}
+          title="الملف المدمج"
+          open={dialogOpen === TenderStep.FILE}
+          onClose={closeDialog}
+          endDate={tender?.tender_tasks?.end_dete_trace}
+          status={tender?.trace_status}
+          uploadedFile={tender.pictures?.employee_trace}
         />
         <OthersDialog
           close={closeDialog}
@@ -107,6 +124,8 @@ function ItemsView() {
           open={dialogOpen === TenderStep.FINANCIAL}
           onClose={closeDialog}
           endDate={tender?.tender_tasks?.dete_file_finacial}
+          status={tender?.file_finacial_status}
+          uploadedFile={tender.pictures?.file_finacial_tender}
         />
         <OthersDialog
           close={closeDialog}
@@ -115,6 +134,8 @@ function ItemsView() {
           userType={TenderStep.FILE}
           onClose={closeDialog}
           endDate={tender?.tender_tasks?.end_dete_trace}
+          status={tender?.trace_status}
+          uploadedFile={tender.pictures?.employee_trace}
         />
         <OthersDialog
           close={closeDialog}
@@ -123,6 +144,8 @@ function ItemsView() {
           userType={TenderStep.APPLY}
           onClose={closeDialog}
           endDate={tender?.tender_tasks?.dete_apply_tender}
+          status={tender?.apply_status}
+          uploadedFile={tender.pictures?.apply_tender}
         />
         <TableContainer>
           <Table>
@@ -180,16 +203,16 @@ function ItemsView() {
                   status: tender.file_finacial_status,
                 }}
               />
-              {/* <StatusRowComponent
+              <StatusRowComponent
                 {...{
                   name: "الملف المدمج",
                   managerName: tender.tender_tasks?.employee_trace?.name,
                   endDate: tender.tender_tasks?.end_dete_trace,
                   accualEndDate: tender.trace_date,
                   iconComponent: dialogComponent(TenderStep.FILE),
-                  status: tender.file_finacial_status,
+                  status: tender.trace_status,
                 }}
-              /> */}
+              />
               <StatusRowComponent
                 {...{
                   name: "تقديم المنافسة",

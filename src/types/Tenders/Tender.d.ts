@@ -15,6 +15,7 @@ export type Tender = {
   eng_employee_date?: string;
   eng_employee_note?: string;
   buy_status: TenderPay;
+  buy_tender?: TenderPayment;
   buy_date?: string;
   buy_note?: string;
   technical_status: TenderItemStatus;
@@ -38,7 +39,20 @@ export type Tender = {
   eng?: DB_Boolean;
   created_at?: string;
   updated_at?: string;
+  pictures?: Images;
   // deleted_at: null;
+};
+
+export type TenderPayment = {
+  id: number;
+  department_id?: number;
+  tender_id: number;
+  employee_id?: number;
+  bank_account?: string;
+  payment_number?: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
 };
 
 export type TenderData = {
@@ -81,4 +95,13 @@ type Organization = {
   name: string;
   number: number;
   // updated_at: "2024-01-01T18:36:29.000000Z";
+};
+
+type Images = {
+  eng_employee?: Media;
+  file_finacial_tender?: Media;
+  technical_tender?: Media;
+  employee_trace?: Media;
+  buy_tender?: Media;
+  apply_tender?: Media;
 };
