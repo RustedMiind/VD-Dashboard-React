@@ -9,6 +9,8 @@ function TabViews(): JSX.Element {
   const { tab } = useContext(TabContext);
 
   switch (tab) {
+    case TabEnum.DETAILS:
+      return <DetailsView />;
     case TabEnum.DATES:
       return <>Hello Dates</>;
     case TabEnum.PROGRESS_LOG:
@@ -20,7 +22,7 @@ function TabViews(): JSX.Element {
     case TabEnum.WORK_SPACE:
       return <>Hello WORK SPACE</>;
     default:
-      return <DetailsView />;
+      return <></>;
   }
 }
 

@@ -42,8 +42,12 @@ function RoutesComponent() {
         <Route path="designReports" element={<DesignReports />} />
         {/* Employees Section */}
         <Route path="employees">
-          <Route path="requests" element={<EmplyeesRequests />} />
-          <Route path="procedures" element={<EmploeesRequestsProcedures />} />
+          {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
+            <Route path="procedures" element={<EmploeesRequestsProcedures />} />
+          )}
+          {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
+            <Route path="requests" element={<EmplyeesRequests />} />
+          )}
         </Route>
 
         <Route path="datalib">

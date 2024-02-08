@@ -9,11 +9,8 @@ import {
 } from "@mui/material";
 import UploadImage from "../../../../components/UploadImage";
 import UploadMultipleImages from "../../../../components/UploadMultipleImages";
-import { useState } from "react";
 import { ImageListType } from "react-images-uploading";
 import AddLabelToEl from "../../../../components/AddLabelToEl";
-import { FilePond } from "react-filepond";
-import { FilePondInitialFile } from "filepond";
 import CustomFilePond from "../../../../components/CustomFilepond";
 import { FileBondState } from "../../../../types/FileBondState";
 import { Design } from "../../../../types";
@@ -35,6 +32,7 @@ export const ImageMenuItem = (props: {
   onDelete: () => void;
   url?: string;
   name?: string;
+  disableDelete?: boolean;
 }) => (
   <MenuItem>
     <IconButton size="small" component="a" target="_blank" href={props.url}>
@@ -43,9 +41,11 @@ export const ImageMenuItem = (props: {
     <ListItemText>
       <LimitTypography maxWidth={200}>{props.name}</LimitTypography>
     </ListItemText>
-    <IconButton size="small" onClick={props.onDelete} color="error">
-      <DeleteIcon />
-    </IconButton>
+    {!props.disableDelete && (
+      <IconButton size="small" onClick={props.onDelete} color="error">
+        <DeleteIcon />
+      </IconButton>
+    )}
   </MenuItem>
 );
 
@@ -68,6 +68,7 @@ function FormImagesSection(props: PropsType) {
               onDelete={() => {}}
               name={designToEdit.mainImage[0].file_name}
               url={designToEdit.mainImage[0].original_url}
+              disableDelete
             />
           </CustomMenuList>
         )}

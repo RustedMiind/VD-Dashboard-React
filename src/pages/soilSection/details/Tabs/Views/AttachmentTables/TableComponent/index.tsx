@@ -21,14 +21,14 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Api } from "../../../../../../../constants";
 export default function TableComponent({ title, noData }: PropsType) {
-  const { soilData } = useContext(SoilDataContext);
+  const { soilData, items } = useContext(SoilDataContext);
   const { id } = useParams();
   function convertBytetoMB(byte: number): string {
     const mb = `${(byte / 1024 ** 2).toFixed(2)}MB`;
     return mb;
   }
 
-  if (typeof soilData === "object") {
+  if (Array.isArray(items)) {
     return (
       <Stack component={Paper} bgcolor={"Background"} p={2}>
         <Typography variant="h6" sx={{ fontWeight: "800" }} gutterBottom>
@@ -47,38 +47,54 @@ export default function TableComponent({ title, noData }: PropsType) {
                   <TableCell>تحميل</TableCell>
                 </TableRow>
               </TableHead>
+
               <TableBody>
-                <TableRow>
-                  <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton
-                      component={`a`}
-                      href={``}
-                      target="_blank"
-                      download
-                      color="primary"
-                      size="small"
-                    >
-                      <SourceOutlinedIcon sx={{ fontSize: "20px", mr: 1 }} />
-                    </IconButton>
-                    <LimitTypography>-</LimitTypography>
-                  </TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>- </TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>
-                    <IconButton
-                      component={`a`}
-                      href={``}
-                      target="_blank"
-                      download
-                      color="primary"
-                      size="small"
-                    >
-                      <CloudDownloadOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                {!noData &&
+                  items.map((item) =>
+                    item?.order_steps_form?.order?.soil_order?.media.map(
+                      (file) => (
+                        <TableRow>
+                          <TableCell
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
+                            <IconButton
+                              component={`a`}
+                              href={``}
+                              target="_blank"
+                              download
+                              color="primary"
+                              size="small"
+                            >
+                              <SourceOutlinedIcon
+                                sx={{ fontSize: "20px", mr: 1 }}
+                              />
+                            </IconButton>
+                            <LimitTypography>{file?.name}</LimitTypography>
+                          </TableCell>
+                          <TableCell>{file?.mime_type}</TableCell>
+                          <TableCell>{convertBytetoMB(file?.size)}</TableCell>
+                          <TableCell>
+                            <LimitTypography>
+                              {item?.order_steps_form?.order?.client?.name}
+                            </LimitTypography>
+                          </TableCell>
+                          <TableCell>{formatDate(file?.created_at)}</TableCell>
+                          <TableCell>
+                            <IconButton
+                              component={`a`}
+                              href={`${file?.original_url}`}
+                              target="_blank"
+                              download
+                              color="primary"
+                              size="small"
+                            >
+                              <CloudDownloadOutlinedIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )
+                  )}
               </TableBody>
             </Table>
           </TableContainer>
