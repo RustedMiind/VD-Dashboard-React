@@ -33,11 +33,10 @@ export function Map({
   updateAmountData,
 }: PropsType) {
   const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
-  console.log(positionClick);
-  const customIcon = new Icon({
-    iconUrl: "/icons8-select-24.png",
-    iconSize: [20, 20],
-  });
+  // const customIcon = new Icon({
+  //   iconUrl: "/icons8-select-24.png",
+  //   iconSize: [20, 20],
+  // });
   const handleMapClick = (position: [number, number]) => {
     setPositionClick([...positionClick, position]);
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
@@ -60,7 +59,7 @@ export function Map({
 
     return polylines;
   }
-
+  // console.log(first)
   return (
     <Stack
       sx={{
@@ -70,7 +69,7 @@ export function Map({
       }}
     >
       <MapContainer
-        center={center}
+        center={positionClick.length ? positionClick[0] : center}
         zoom={15}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
@@ -89,7 +88,7 @@ export function Map({
           pathOptions={{ fillColor: "yellow", fillOpacity: 0.4 }}
         />
 
-        <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker>
+        {/* <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker> */}
 
         <MapClickHandler onMapClick={handleMapClick} />
         {createPolylines()}

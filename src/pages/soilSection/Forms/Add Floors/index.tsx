@@ -55,8 +55,6 @@ export default function AddFloors(props: PropsType) {
     let value = parseInt(e.target.value);
     if (e.target.checked) {
       setIdToUpdate(parseInt(e.target.value));
-    } else {
-      setIdToUpdate([]);
     }
     if (isSelect) {
       setSelectedSoilId &&
@@ -88,6 +86,7 @@ export default function AddFloors(props: PropsType) {
       });
   }
   function handleCreate() {
+    setIdToUpdate([]);
     props.openFloorDialog();
     setCreateOrEdit("create");
   }

@@ -30,7 +30,6 @@ import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import LoadingTable from "../../../../components/LoadingTable";
-import TenderNotFound from "../../../tenders/data/Table/TendersNotFound";
 import NotFound from "../../../../components/NotFound";
 import { set } from "react-hook-form";
 
@@ -62,7 +61,7 @@ export default function CoveredSites(props: PropsType) {
     let isSelect = e.target.checked;
     if (e.target.checked) {
       setIdToUpdate(parseInt(e.target.value));
-    } else setIdToUpdate([]);
+    }
 
     let value = parseInt(e.target.value);
     if (isSelect) {
@@ -95,6 +94,7 @@ export default function CoveredSites(props: PropsType) {
       });
   }
   function handleCreate() {
+    setIdToUpdate([]);
     setDisplayMap(false);
     props.openCoveredDialog();
     setCreateOrEdit("create");
@@ -122,6 +122,7 @@ export default function CoveredSites(props: PropsType) {
             </Button>
             <Box>
               <Button
+                disabled
                 sx={{ mx: 2 }}
                 variant="outlined"
                 color="warning"
