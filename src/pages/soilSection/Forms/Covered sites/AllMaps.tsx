@@ -53,6 +53,7 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
           {typeof soilData === "object" &&
             soilData?.soil_location?.map((item) => (
               <Box
+                key={item.id}
                 component={Paper}
                 bgcolor={"Background"}
                 padding={2}

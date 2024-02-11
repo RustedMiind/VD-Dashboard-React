@@ -5,7 +5,6 @@ import { SoilDataContext } from "../..";
 import { formatDate } from "../../../../../methods";
 export default function OngoingWork() {
   const { soilData, items } = useContext(SoilDataContext);
-  console.log(items);
   function GridItem({ children }: GridProps) {
     return (
       <Grid item md={3} justifyContent={"center"}>

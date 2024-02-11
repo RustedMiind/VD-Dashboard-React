@@ -82,7 +82,7 @@ function TableContent() {
       <MuiTableBody>
         {Array.isArray(soilRequest) &&
           soilRequest?.map((req) => (
-            <TableRow>
+            <TableRow key={req.id}>
               <TableCell>
                 <Checkbox
                   value={req.id}

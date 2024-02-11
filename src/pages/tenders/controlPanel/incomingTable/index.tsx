@@ -92,7 +92,7 @@ export default function IncomingTable() {
                 <IconButton
                   size="small"
                   component={NavLink}
-                  to={handleNavigation(task?.taskable_type, task?.id)}
+                  to={handleNavigation(task?.taskable_type, task?.taskable_id)}
                 >
                   <VisibilityOutlinedIcon />
                 </IconButton>
