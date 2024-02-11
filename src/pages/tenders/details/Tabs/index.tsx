@@ -6,11 +6,11 @@ import TabViews from "./Views";
 import { useQueryParam } from "use-query-params";
 
 function TabsContainer() {
-  const [tab, setTab] = useQueryParam<TabEnum>("tab");
+  const [tab, setTab] = useState<TabEnum>(TabEnum.DETAILS);
 
-  useEffect(() => {
-    if (!tab) setTab(TabEnum.DETAILS);
-  }, [tab]);
+  // useEffect(() => {
+  //   if (!tab) setTab(TabEnum.DETAILS);
+  // }, [tab]);
 
   return (
     <TabContext.Provider value={{ tab, setTab }}>
