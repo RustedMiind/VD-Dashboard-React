@@ -10,6 +10,7 @@ import { Api } from "../../../../constants";
 import { useSnackbar } from "notistack";
 import { TenderDataContext } from "..";
 import { Message } from "../../../../types/Message/Message";
+import AttachmentMessage from "./AttachmentMessage";
 
 Pusher.log = (msg) => {
   console.log(msg);
