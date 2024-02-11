@@ -36,6 +36,14 @@ const RequestTypesToggles = ({
         mb: 1,
       }}
     >
+      <Badge max={19} color="error">
+        <NonRoundedChip
+          color="primary"
+          onClick={setCurrent(0)}
+          variant={orderTypeId === 0 ? "filled" : "outlined"}
+          label={"الكل"}
+        />
+      </Badge>
       {orderType?.map((chip, index) => {
         const count = findCount(index + 1)?.count || 0;
         return (

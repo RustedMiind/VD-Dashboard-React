@@ -1,3 +1,4 @@
+import { Department } from "../../../../types";
 import { OrderStep } from "../../../../types/ClientRequests";
 import { PanelData } from "./panelData";
 
@@ -24,6 +25,7 @@ export interface StepStatus {
   order_step: OrderStep[];
   order_step_id: number;
   status: number;
+  department: Department;
   employee: {
     address: string;
     city_id: number;

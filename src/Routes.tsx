@@ -18,10 +18,17 @@ import CreateAndUpdateTender from "./pages/tenders/createAndUpdate";
 import TenderDetails from "./pages/tenders/details";
 import ControlPanal from "./pages/tenders/controlPanel";
 import ForTest from "./pages/forTest";
+import DesignReports from "./pages/DesignReports";
 import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
+import FormsSection from "./pages/soilSection/Forms";
+import SoilSection from "./pages/soilSection";
+// import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
+import DesignStructurePage from "./pages/designs/DesignStructure";
+import DesignDataPage from "./pages/designs/DesignsData";
+import SoilDetails from "./pages/soilSection/details";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -29,14 +36,18 @@ function RoutesComponent() {
   return (
     <Routes>
       <Route path="react/*">
-        {hasPermission(Permission.CLIENT_REQUESTS_STEP) && (
-          <Route path="test" element={<ForTest />} />
-        )}
+        <Route path="test" element={<ForTest />} />
+
         <Route path="" element={<MainPage />} />
+        <Route path="designReports" element={<DesignReports />} />
         {/* Employees Section */}
         <Route path="employees">
-          <Route path="requests" element={<EmplyeesRequests />} />
-          <Route path="procedures" element={<EmploeesRequestsProcedures />} />
+          {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
+            <Route path="procedures" element={<EmploeesRequestsProcedures />} />
+          )}
+          {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
+            <Route path="requests" element={<EmplyeesRequests />} />
+          )}
         </Route>
 
         <Route path="datalib">
@@ -104,7 +115,15 @@ function RoutesComponent() {
         )}
         <Route path="services">
           <Route path="design">
+            <Route path="" element={<DesignDataPage />} />
             <Route path="create" element={<CreateOrUpdateDesign />} />
+            <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
+            <Route path="structure" element={<DesignStructurePage />} />
+          </Route>
+          <Route path="soil">
+            <Route path="create" element={<FormsSection />} />
+            <Route path="" element={<SoilSection />} />
+            <Route path="show/:id" element={<SoilDetails />} />
           </Route>
         </Route>
 

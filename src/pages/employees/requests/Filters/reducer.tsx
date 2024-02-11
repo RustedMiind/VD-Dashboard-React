@@ -13,7 +13,7 @@ function reducer(state: FilterType, action: ActionTypes): FilterType {
     case "SET_STATUS":
       return { ...state, status: action.payload };
     case "SET_DEPARTMENT":
-      return { ...state, department_id: action.payload };
+      return { ...state, department_id: action.payload?.toString() };
     default:
       return state;
   }
@@ -40,6 +40,7 @@ export const FiltersInit: FilterType = {
   edate: "",
   sdate: "",
   order: "desc",
+  department_id: "",
 };
 
 export type ActionTypes =

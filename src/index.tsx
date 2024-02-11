@@ -96,6 +96,7 @@ function RunProd() {
     resetAuth();
   }
 }
+
 function RunDev() {
   axios
     .post<{ data: { token: string; user: unknown } }>(Api("employee/login"), {
@@ -106,9 +107,6 @@ function RunDev() {
       device_type: "android",
     })
     .then(({ data }) => {
-      console.log("User Token", data.data.token);
-      axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
-      setCookie("db_token", data.data.token, 7);
       root.render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <BrowserRouter>
@@ -118,6 +116,9 @@ function RunDev() {
           </BrowserRouter>
         </LocalizationProvider>
       );
+      console.log("User Token", data.data.token);
+      axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
+      setCookie("db_token", data.data.token, 7);
     });
 }
 

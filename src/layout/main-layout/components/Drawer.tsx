@@ -19,6 +19,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import { AdminUrl } from "../../../constants/AdminUrl";
 import { Permission } from "../../../constants/Permission";
 import usePermissions from "../../../Permissions/hook";
@@ -86,6 +87,11 @@ const routesCollections: RoutesCollectionType[] = [
       {
         name: "مهامي",
         path: "/tenders/controlpanel",
+        react: true,
+      },
+      {
+        name: "التربة والخرسانة",
+        path: "/services/soil",
         react: true,
       },
     ],
@@ -171,6 +177,22 @@ const routesCollections: RoutesCollectionType[] = [
     ],
   },
   {
+    name: "الخدمات",
+    icon: DesignServicesIcon,
+    routes: [
+      {
+        name: "خدمات التصاميم",
+        path: "/services/design",
+        react: true,
+      },
+      {
+        name: "هيكل تصميم المباني",
+        path: "/services/design/structure",
+        react: true,
+      },
+    ],
+  },
+  {
     name: "الاعدادات",
     icon: AdminPanelSettingsIcon,
     isPrivate: [Permission.DASHBOARD_SETTING_VIEW, Permission.PLATFORMS_VIEW],
@@ -190,6 +212,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/datalib/vacations",
         react: true,
         isPrivate: Permission.DASHBOARD_SETTING_VIEW,
+      },
+      {
+        name: "اعدادات التربة",
+        path: "/services/soil/create",
+        react: true,
       },
     ],
   },

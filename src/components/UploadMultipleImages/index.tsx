@@ -67,7 +67,7 @@ function UploadMultipleImages({ images, setImages, boxSide = 125 }: PropsType) {
 
 type PropsType = {
   images: ImageListType;
-  setImages: React.Dispatch<React.SetStateAction<ImageListType>>;
+  setImages: (images: ImageListType) => void;
   boxSide?: number;
 };
 
