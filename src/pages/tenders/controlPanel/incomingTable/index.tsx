@@ -14,8 +14,28 @@ import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
 import { NavLink } from "react-router-dom";
 import { formatDate } from "../../../../methods";
+import { TaskType } from "../../../../types/Tasks/Type.enum";
 export default function IncomingTable() {
   const { tasksControlData } = useContext(ControlPanelContext);
+  // function handleType(type: TaskType) {
+  //   switch (type) {
+  //     case TaskType.SOIL:
+  //       "فحص تربة";
+  //       break;
+  //     case TaskType.CLIENT_REQUEST:
+  //       "طلبات الموظفين";
+  //       break;
+  //     case TaskType.EMPLOYEE_REQUEST:
+  //       "طلبات العملاء";
+  //       break;
+  //     case TaskType.TENDER:
+  //       "العقود";
+  //       break;
+  //     default:
+  //       "";
+  //       break;
+  //   }
+  // }
   if (Array.isArray(tasksControlData?.incoming))
     return (
       <Table>
@@ -44,11 +64,7 @@ export default function IncomingTable() {
               <TableCell sx={{ width: "100px" }}>
                 {formatDate(task?.created_at)}
               </TableCell>
-              <TableCell>
-                {task?.taskable_type.includes("OrderStepForm")
-                  ? "فحص تربة"
-                  : ""}
-              </TableCell>
+              <TableCell>{}</TableCell>
               <TableCell>
                 <IconButton
                   size="small"

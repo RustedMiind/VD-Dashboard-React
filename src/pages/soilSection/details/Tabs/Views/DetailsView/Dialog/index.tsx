@@ -7,18 +7,12 @@ import {
   TextField,
   Typography,
   IconButton,
-  FormControl,
-  Select,
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { MenuItem } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { useSnackbar } from "notistack";
-import { LoadingButton } from "@mui/lab";
 import RequiredSymbol from "../../../../../../../components/RequiredSymbol";
-import { Map } from "../Leaflet/Map";
+import { ShowMap } from "../../../../../../../components/Leaflet/Map";
 import { SoilDataContext } from "../../../..";
 
 export default function DialogShowLocation(props: TypeProps) {
@@ -100,7 +94,7 @@ export default function DialogShowLocation(props: TypeProps) {
               </Grid>
 
               <Grid item md={12}>
-                <Map
+                <ShowMap
                   positionClick={positionClick}
                   setPositionClick={setPositionClick}
                 />

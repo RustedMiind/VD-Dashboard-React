@@ -2,11 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { Api } from "../../../../constants";
 import axios from "axios";
 import { Tender } from "../../../../types";
-import {
-  InComing,
-  Ingoing,
-  OnComingAndOngoing,
-} from "../../../../types/Tasks/OnComingAndOngoing";
+import { EmployeeTask } from "../../../../types/Tasks";
 
 export const ControlPanelContext = createContext<ContextType>({
   isManager: false,
@@ -28,12 +24,13 @@ export default function ControlPanelContextProvider({
       ongoing: "loading",
     });
     axios
-      .get<Partial<OnComingAndOngoing> & { is_manager: boolean }>(
-        Api("employee/tender/form"),
-        {
-          params,
-        }
-      )
+      .get<{
+        is_manager: boolean;
+        incoming: EmployeeTask[];
+        ongoing: EmployeeTask[];
+      }>(Api("employee/tender/form"), {
+        params,
+      })
       .then((res) => {
         let stateToUpdate: TenderStateType = {
           ongoing: "empty",
@@ -70,8 +67,8 @@ export default function ControlPanelContextProvider({
 }
 
 type TenderStateType = {
-  incoming: InComing[] | "none" | "error" | "loading" | "empty";
-  ongoing: Ingoing[] | "none" | "error" | "loading" | "empty";
+  incoming: EmployeeTask[] | "none" | "error" | "loading" | "empty";
+  ongoing: EmployeeTask[] | "none" | "error" | "loading" | "empty";
 };
 type ContextType = {
   tasksControlData?: TenderStateType;

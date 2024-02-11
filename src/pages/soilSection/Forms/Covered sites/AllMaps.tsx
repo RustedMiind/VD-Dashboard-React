@@ -1,16 +1,39 @@
 import { Box, Grid, GridProps, Paper, Stack, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import StatusChip from "../../../../components/StatusChip";
 import { SoilContext } from "../../SoilContext";
 import { Button } from "@mui/material";
 import { Map } from "./Leaflet/Map";
+import { ShowMap } from "../../../../components/Leaflet/Map";
+import { json } from "stream/consumers";
 const GridItem = (props: GridProps) => (
   <Grid sx={{ padding: "0.5rem" }} item md={6} {...props} />
 );
 const marginTyp = 2;
 export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
   const { soilData, setSoilData } = useContext(SoilContext);
+  const [positionClick, setPositionClick] = useState<[number, number][]>([]);
+  const [open, setOpen] = useState<boolean>(false);
 
+  function handlePostion(position: string) {
+    let str = position.slice(2, -2);
+    let arr = str?.toString().split("},{");
+
+    let positions: [number, number][] = [];
+    for (let i = 0; i < arr?.length; i++) {
+      let cordin = arr[i].split(",");
+      let temp: [number, number] = [
+        +cordin[0].split(":")[1],
+        +cordin[1].split(":")[1],
+      ];
+
+      positions.push(temp);
+    }
+    setPositionClick(positions);
+  }
+  useEffect(() => {
+    setOpen(!open);
+  }, [JSON.stringify(positionClick)]);
   return (
     <Stack>
       <Button
@@ -36,6 +59,18 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
                 display={"flex"}
                 flexDirection={"row"}
                 marginBottom={2}
+                sx={{
+                  background: "Background",
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "row",
+                  mb: 2,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  handlePostion(item?.map?.map.toString());
+                  setOpen(true);
+                }}
               >
                 <Grid item xs={5}>
                   <Typography variant="h6" sx={{ fontWeight: 800 }}>
@@ -78,8 +113,12 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
               </Box>
             ))}
         </Grid>
-        <Grid item xs={8}>
-          {/* <Map all /> */}
+        <Grid item xs={8} sx={{ mt: 2 }}>
+          <ShowMap
+            key={+open}
+            positionClick={positionClick}
+            setPositionClick={setPositionClick}
+          />
         </Grid>
       </Grid>
     </Stack>
