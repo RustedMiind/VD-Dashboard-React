@@ -30,12 +30,12 @@ import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import LoadingTable from "../../../../components/LoadingTable";
-import TenderNotFound from "../../../tenders/data/Table/TendersNotFound";
 import NotFound from "../../../../components/NotFound";
-import { set } from "react-hook-form";
+import AllMaps from "./AllMaps";
 
 export default function CoveredSites(props: PropsType) {
   const { soilData, setSoilData } = useContext(SoilContext);
+  const [openAllMaps, setOpenAllMaps] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const [idToUpdate, setIdToUpdate] = useState<number | []>([]);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
@@ -62,7 +62,7 @@ export default function CoveredSites(props: PropsType) {
     let isSelect = e.target.checked;
     if (e.target.checked) {
       setIdToUpdate(parseInt(e.target.value));
-    } else setIdToUpdate([]);
+    }
 
     let value = parseInt(e.target.value);
     if (isSelect) {
@@ -95,6 +95,7 @@ export default function CoveredSites(props: PropsType) {
       });
   }
   function handleCreate() {
+    setIdToUpdate([]);
     setDisplayMap(false);
     props.openCoveredDialog();
     setCreateOrEdit("create");
@@ -108,7 +109,7 @@ export default function CoveredSites(props: PropsType) {
     <>
       {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
       {soilData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
-      {typeof soilData === "object" && (
+      {typeof soilData === "object" && !openAllMaps && (
         <Stack>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Button
@@ -126,6 +127,9 @@ export default function CoveredSites(props: PropsType) {
                 variant="outlined"
                 color="warning"
                 startIcon={<AddLocationIcon />}
+                onClick={() => {
+                  setOpenAllMaps(!openAllMaps);
+                }}
               >
                 الخريطة الكلية
               </Button>
@@ -220,6 +224,9 @@ export default function CoveredSites(props: PropsType) {
             setDisplayMap={setDisplayMap}
           />
         </Stack>
+      )}
+      {openAllMaps && (
+        <AllMaps setOpenAllMaps={setOpenAllMaps} openAllMaps={openAllMaps} />
       )}
     </>
   );

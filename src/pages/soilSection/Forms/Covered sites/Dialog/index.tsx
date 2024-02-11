@@ -35,6 +35,7 @@ export default function DialogAddLocation(props: TypeProps) {
     city_id: "",
     building_system: "",
     status: "1",
+    price: "",
     map: [],
   };
 
@@ -53,6 +54,7 @@ export default function DialogAddLocation(props: TypeProps) {
         location_name: obj?.location_name || "",
         city_id: obj?.city_id?.toString() || "",
         building_system: obj?.building_system || "",
+        price: obj?.price || "",
         status: "1",
         map: obj?.map || null,
       };
@@ -166,6 +168,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 اسم الموقع <RequiredSymbol />
               </Typography>
               <TextField
+                placeholder="اسم الموقع"
                 type="text"
                 size="small"
                 fullWidth
@@ -200,6 +203,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 نظام البناء <RequiredSymbol />
               </Typography>
               <TextField
+                placeholder="نظام البناء"
                 value={amountData.building_system}
                 type="text"
                 size="small"
@@ -209,6 +213,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 }}
               />
             </Grid>
+
             <Grid item md={6}>
               <Typography sx={{ ml: 2 }}>
                 الموقع <RequiredSymbol />
@@ -230,6 +235,24 @@ export default function DialogAddLocation(props: TypeProps) {
                   ),
                 }}
                 placeholder=" الموقع"
+              />
+            </Grid>
+            <Grid item md={6}>
+              <Typography sx={{ ml: 2 }}>
+                السعر <RequiredSymbol />
+              </Typography>
+              <TextField
+                InputProps={{
+                  endAdornment: <Typography>ر.س</Typography>,
+                }}
+                placeholder=" السعر المتر في هذه المنطقة"
+                value={amountData.price}
+                type="text"
+                size="small"
+                fullWidth
+                onChange={(e) => {
+                  updateAmountData({ price: e.target.value });
+                }}
               />
             </Grid>
             {props.displayMap && (
@@ -283,6 +306,7 @@ export type TypeLocationData = {
   city_id: string;
   building_system: string;
   status: string;
+  price: string;
   map: Position[] | null;
 };
 

@@ -7,18 +7,12 @@ import {
   TextField,
   Typography,
   IconButton,
-  FormControl,
-  Select,
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { MenuItem } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { useSnackbar } from "notistack";
-import { LoadingButton } from "@mui/lab";
 import RequiredSymbol from "../../../../../../../components/RequiredSymbol";
-import { Map } from "../Leaflet/Map";
+import { ShowMap } from "../../../../../../../components/Leaflet/Map";
 import { SoilDataContext } from "../../../..";
 
 export default function DialogShowLocation(props: TypeProps) {
@@ -28,10 +22,10 @@ export default function DialogShowLocation(props: TypeProps) {
   useEffect(() => {
     let str =
       typeof soilData === "object" &&
-      soilData.soil_order.soil_location_map?.map.slice(2, -2);
-    let arr = str.toString().split("},{");
+      soilData?.soil_order?.soil_location_map?.map.slice(2, -2);
+    let arr = str?.toString().split("},{");
     let positions: [number, number][] = [];
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr?.length; i++) {
       let cordin = arr[i].split(",");
       let temp: [number, number] = [
         +cordin[0].split(":")[1],
@@ -69,20 +63,38 @@ export default function DialogShowLocation(props: TypeProps) {
           <DialogContent>
             <Grid container p={1} spacing={4}>
               <Grid item md={6}>
-                <Typography sx={{ ml: 2 }}>
+                <Typography>
                   اسم الموقع <RequiredSymbol />
                 </Typography>
-                <TextField type="text" size="small" fullWidth />
+                <TextField
+                  value={
+                    soilData?.soil_order?.soil_location_map?.soil_location
+                      ?.location_name
+                  }
+                  disabled
+                  type="text"
+                  size="small"
+                  fullWidth
+                />
               </Grid>
               <Grid item md={6}>
                 <Typography>
                   المدينة <RequiredSymbol />
                 </Typography>
-                <TextField type="text" size="small" fullWidth />
+                <TextField
+                  disabled
+                  value={
+                    soilData?.soil_order?.soil_location_map?.soil_location?.city
+                      ?.name
+                  }
+                  type="text"
+                  size="small"
+                  fullWidth
+                />
               </Grid>
 
               <Grid item md={12}>
-                <Map
+                <ShowMap
                   positionClick={positionClick}
                   setPositionClick={setPositionClick}
                 />
@@ -94,7 +106,7 @@ export default function DialogShowLocation(props: TypeProps) {
         <DialogActions
           sx={{ display: "flex", justifyContent: "center", py: 3 }}
         >
-          <Button variant="contained" sx={{ width: 0.2 }}>
+          <Button onClick={closeDialog} variant="contained" sx={{ width: 0.2 }}>
             الغاء
           </Button>
         </DialogActions>

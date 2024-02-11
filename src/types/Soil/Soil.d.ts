@@ -5,6 +5,7 @@ export type Soil = {
 };
 export type Location = {
   building_system: string;
+  price: string;
   city?: City;
   city_id?: number;
   created_at: string;
