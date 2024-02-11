@@ -31,6 +31,8 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
     }
     setPositionClick(positions);
   }
+  console.log("typeof positionClick ", typeof positionClick);
+
   useEffect(() => {
     setOpen(!open);
   }, [JSON.stringify(positionClick)]);

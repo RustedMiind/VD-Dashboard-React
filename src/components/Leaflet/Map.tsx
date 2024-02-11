@@ -27,12 +27,24 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   return null;
 };
 export function ShowMap({ positionClick }: PropsType) {
-  const [center, setCenter] = useState(positionClick[0]);
   console.log(positionClick);
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],
   });
+
+  let centerLat = 0,
+    centerLong = 0;
+
+  if (!!positionClick.length) {
+    positionClick.forEach(([lat, lng]) => {
+      centerLat += lat;
+      centerLong += lng;
+      console.log("lat lng types :", typeof lat, typeof lng);
+    });
+    centerLat /= positionClick.length;
+    centerLong /= positionClick.length;
+  }
 
   function createPolylines() {
     const polylines = [];
@@ -55,8 +67,8 @@ export function ShowMap({ positionClick }: PropsType) {
       }}
     >
       <MapContainer
-        center={center}
-        zoom={16}
+        center={[centerLat, centerLong]}
+        zoom={11}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
       >
