@@ -13,46 +13,47 @@ import { useContext } from "react";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
 import { NavLink } from "react-router-dom";
+import { formatDate } from "../../../../methods";
 export default function IncomingTable() {
-  const { tenderControlData } = useContext(ControlPanelContext);
-  if (Array.isArray(tenderControlData?.incoming))
+  const { tasksControlData } = useContext(ControlPanelContext);
+  if (Array.isArray(tasksControlData?.incoming))
     return (
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>الرقم المرجعي للمنافسة</TableCell>
             <TableCell>تاريخ الورود</TableCell>
-            <TableCell>اسم المنافسة</TableCell>
-            <TableCell>مدة العقد</TableCell>
-            <TableCell> تاريخ الانتهاء </TableCell>
+            <TableCell>نوع الطلب</TableCell>
             <TableCell>عرض</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {tenderControlData?.incoming.map((tender) => (
-            <TableRow key={tender.id}>
+          {tasksControlData?.incoming.map((task) => (
+            <TableRow key={task.id}>
               <TableCell>
                 <Typography
                   component={NavLink}
-                  to={`../${tender.id}`}
+                  to={`../${task.id}`}
                   variant="body2"
                   color={"primary.main"}
                   fontWeight={700}
                 >
-                  {tender.tenderdata?.code_reference}
+                  {task?.id}
                 </Typography>
               </TableCell>
               <TableCell sx={{ width: "100px" }}>
-                {tender.tenderdata?.strat_date}
+                {formatDate(task?.created_at)}
               </TableCell>
-              <TableCell>{tender.tenderdata?.name}</TableCell>
-              <TableCell>{tender.tenderdata?.period}</TableCell>
-              <TableCell>{tender.tenderdata?.end_date}</TableCell>
+              <TableCell>
+                {task?.taskable_type.includes("OrderStepForm")
+                  ? "فحص تربة"
+                  : ""}
+              </TableCell>
               <TableCell>
                 <IconButton
                   size="small"
                   component={NavLink}
-                  to={`../${tender.id}`}
+                  to={`../${task.id}`}
                 >
                   <VisibilityOutlinedIcon />
                 </IconButton>
@@ -62,9 +63,9 @@ export default function IncomingTable() {
         </TableBody>
       </Table>
     );
-  else if (tenderControlData?.incoming === "loading")
+  else if (tasksControlData?.incoming === "loading")
     return <LoadingTable rows={5} cols={4} />;
-  else if (tenderControlData?.incoming === "empty")
+  else if (tasksControlData?.incoming === "empty")
     return <NotFound title="لا يوجد مهام واردة" />;
   else return <></>;
 }

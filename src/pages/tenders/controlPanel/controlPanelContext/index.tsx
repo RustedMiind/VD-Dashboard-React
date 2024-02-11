@@ -2,6 +2,11 @@ import { createContext, useEffect, useState } from "react";
 import { Api } from "../../../../constants";
 import axios from "axios";
 import { Tender } from "../../../../types";
+import {
+  InComing,
+  Ingoing,
+  OnComingAndOngoing,
+} from "../../../../types/Tasks/OnComingAndOngoing";
 
 export const ControlPanelContext = createContext<ContextType>({
   isManager: false,
@@ -12,18 +17,18 @@ export default function ControlPanelContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [tenderControlData, setTenderControlData] = useState<TenderStateType>({
+  const [tasksControlData, setTasksControlData] = useState<TenderStateType>({
     incoming: "none",
     ongoing: "none",
   });
   const [isManager, setIsManager] = useState(false);
-  function getTender(params?: unknown) {
-    setTenderControlData({
+  function getTasks(params?: unknown) {
+    setTasksControlData({
       incoming: "loading",
       ongoing: "loading",
     });
     axios
-      .get<Partial<TenderStateType> & { is_manager: boolean }>(
+      .get<Partial<OnComingAndOngoing> & { is_manager: boolean }>(
         Api("employee/tender/form"),
         {
           params,
@@ -38,24 +43,24 @@ export default function ControlPanelContextProvider({
           stateToUpdate.incoming = res.data.incoming;
 
         if (res.data.ongoing?.length) stateToUpdate.ongoing = res.data.ongoing;
-        setTenderControlData(stateToUpdate);
+        setTasksControlData(stateToUpdate);
         setIsManager(!!res.data.is_manager);
       })
       .catch((error) => {
-        setTenderControlData({
+        setTasksControlData({
           incoming: "error",
           ongoing: "error",
         });
       });
   }
   useEffect(() => {
-    getTender();
+    getTasks();
   }, []);
   return (
     <ControlPanelContext.Provider
       value={{
-        tenderControlData,
-        setTenderControlData: getTender,
+        tasksControlData,
+        setTasksControlData: getTasks,
         isManager,
       }}
     >
@@ -65,11 +70,11 @@ export default function ControlPanelContextProvider({
 }
 
 type TenderStateType = {
-  incoming: Tender[] | "none" | "error" | "loading" | "empty";
-  ongoing: Tender[] | "none" | "error" | "loading" | "empty";
+  incoming: InComing[] | "none" | "error" | "loading" | "empty";
+  ongoing: Ingoing[] | "none" | "error" | "loading" | "empty";
 };
 type ContextType = {
-  tenderControlData?: TenderStateType;
+  tasksControlData?: TenderStateType;
   isManager: boolean;
-  setTenderControlData?: ((param?: unknown) => void) | null;
+  setTasksControlData?: ((param?: unknown) => void) | null;
 };

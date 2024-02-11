@@ -31,10 +31,11 @@ import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
-import { set } from "react-hook-form";
+import AllMaps from "./AllMaps";
 
 export default function CoveredSites(props: PropsType) {
   const { soilData, setSoilData } = useContext(SoilContext);
+  const [openAllMaps, setOpenAllMaps] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const [idToUpdate, setIdToUpdate] = useState<number | []>([]);
   const [selectedSoilId, setSelectedSoilId] = useState<number[]>([]);
@@ -108,7 +109,7 @@ export default function CoveredSites(props: PropsType) {
     <>
       {soilData === "loading" && <LoadingTable rows={5} cols={9} />}
       {soilData === "error" && <NotFound title="حدث خطأ حاول مرة أخرى" />}
-      {typeof soilData === "object" && (
+      {typeof soilData === "object" && !openAllMaps && (
         <Stack>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Button
@@ -122,11 +123,13 @@ export default function CoveredSites(props: PropsType) {
             </Button>
             <Box>
               <Button
-                disabled
                 sx={{ mx: 2 }}
                 variant="outlined"
                 color="warning"
                 startIcon={<AddLocationIcon />}
+                onClick={() => {
+                  setOpenAllMaps(!openAllMaps);
+                }}
               >
                 الخريطة الكلية
               </Button>
@@ -221,6 +224,9 @@ export default function CoveredSites(props: PropsType) {
             setDisplayMap={setDisplayMap}
           />
         </Stack>
+      )}
+      {openAllMaps && (
+        <AllMaps setOpenAllMaps={setOpenAllMaps} openAllMaps={openAllMaps} />
       )}
     </>
   );

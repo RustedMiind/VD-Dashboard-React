@@ -28,48 +28,51 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   return null;
 };
 export function Map({
+  all,
   positionClick,
   setPositionClick,
   updateAmountData,
 }: PropsType) {
   const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
-  // const customIcon = new Icon({
-  //   iconUrl: "/icons8-select-24.png",
-  //   iconSize: [20, 20],
-  // });
+
   const handleMapClick = (position: [number, number]) => {
-    setPositionClick([...positionClick, position]);
+    setPositionClick &&
+      positionClick &&
+      setPositionClick([...positionClick, position]);
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
       (ele) => ({ lat: ele[0], long: ele[1] })
     );
-    updateAmountData({ map: _positions });
+    updateAmountData && updateAmountData({ map: _positions });
   };
   const handleResetClick = () => {
-    setPositionClick([]);
+    setPositionClick && setPositionClick([]);
     TargetPositions = [];
   };
   function createPolylines() {
     const polylines = [];
-    for (let i = 0; i < positionClick.length - 1; i++) {
-      const startPoint = positionClick[i];
-      const endPoint = positionClick[i + 1];
-      const polyline = <Polyline key={i} positions={[startPoint, endPoint]} />;
-      polylines.push(polyline);
+    if (positionClick) {
+      for (let i = 0; i < positionClick.length - 1; i++) {
+        const startPoint = positionClick[i];
+        const endPoint = positionClick[i + 1];
+        const polyline = (
+          <Polyline key={i} positions={[startPoint, endPoint]} />
+        );
+        polylines.push(polyline);
+      }
     }
 
     return polylines;
   }
-  // console.log(first)
   return (
     <Stack
       sx={{
         width: "100%",
-        height: "350px",
+        height: all ? "500px" : "350px",
         margin: "auto",
       }}
     >
       <MapContainer
-        center={positionClick.length ? positionClick[0] : center}
+        center={positionClick?.length ? positionClick[0] : center}
         zoom={15}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
@@ -81,14 +84,12 @@ export function Map({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
-        {/* Second TileLayer without background color */}
-        <Polygon
-          positions={positionClick}
-          pathOptions={{ fillColor: "yellow", fillOpacity: 0.4 }}
-        />
-
-        {/* <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker> */}
+        {positionClick && (
+          <Polygon
+            positions={positionClick}
+            pathOptions={{ fillColor: "yellow", fillOpacity: 0.4 }}
+          />
+        )}
 
         <MapClickHandler onMapClick={handleMapClick} />
         {createPolylines()}
@@ -107,13 +108,8 @@ export function Map({
           <IconButton onClick={handleResetClick}>
             <ReplayIcon />
           </IconButton>
-          {/* <Button variant="text" sx={{ fontSize: "18px", fontWeight: 600 }}>
-            اعادة
-          </Button> */}
         </Box>
       </MapContainer>
-
-      {/* Search input and button within MapContainer */}
     </Stack>
   );
 }
@@ -123,7 +119,8 @@ interface MapClickHandlerProps {
 }
 
 type PropsType = {
-  positionClick: [number, number][];
-  setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
-  updateAmountData: (partial: Partial<TypeLocationData>) => void;
+  positionClick?: [number, number][];
+  setPositionClick?: React.Dispatch<React.SetStateAction<[number, number][]>>;
+  updateAmountData?: (partial: Partial<TypeLocationData>) => void;
+  all?: boolean;
 };
