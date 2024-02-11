@@ -36,16 +36,14 @@ export function Map({
   const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
 
   const handleMapClick = (position: [number, number]) => {
-    setPositionClick &&
-      positionClick &&
-      setPositionClick([...positionClick, position]);
+    setPositionClick([...positionClick, position]);
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
       (ele) => ({ lat: ele[0], long: ele[1] })
     );
-    updateAmountData && updateAmountData({ map: _positions });
+    updateAmountData({ map: _positions });
   };
   const handleResetClick = () => {
-    setPositionClick && setPositionClick([]);
+    setPositionClick([]);
     TargetPositions = [];
   };
   function createPolylines() {
@@ -84,12 +82,10 @@ export function Map({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {positionClick && (
-          <Polygon
-            positions={positionClick}
-            pathOptions={{ fillColor: "yellow", fillOpacity: 0.4 }}
-          />
-        )}
+        <Polygon
+          positions={positionClick}
+          pathOptions={{ fillColor: "yellow", fillOpacity: 0.4 }}
+        />
 
         <MapClickHandler onMapClick={handleMapClick} />
         {createPolylines()}
@@ -119,8 +115,8 @@ interface MapClickHandlerProps {
 }
 
 type PropsType = {
-  positionClick?: [number, number][];
-  setPositionClick?: React.Dispatch<React.SetStateAction<[number, number][]>>;
-  updateAmountData?: (partial: Partial<TypeLocationData>) => void;
+  positionClick: [number, number][];
+  setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
+  updateAmountData: (partial: Partial<TypeLocationData>) => void;
   all?: boolean;
 };

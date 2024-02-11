@@ -65,7 +65,6 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
                       المدينة
                     </Typography>
                     <Typography variant="body1">
-                      {" "}
                       {item?.city?.name && item?.city?.name}
                     </Typography>
                   </Box>
@@ -80,7 +79,7 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
             ))}
         </Grid>
         <Grid item xs={8}>
-          <Map all />
+          {/* <Map all /> */}
         </Grid>
       </Grid>
     </Stack>
