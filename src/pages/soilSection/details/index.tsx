@@ -17,11 +17,14 @@ export const SoilDataContext = createContext<SoilDataContextType>({});
 
 function SoilDetails() {
   const { id } = useParams();
+  const url = window.location.href.toString().includes("-1")
+    ? "employee/soil/-1/"
+    : "employee/soil/";
   const [soilData, setSoilData] = useState<SoilRequest | undefined>(undefined);
   const [items, setItems] = useState<Step[] | undefined>(undefined);
   useEffect(() => {
     axios
-      .get<{ data: SoilRequest; step: Step[] }>(Api("employee/soil/" + id))
+      .get<{ data: SoilRequest; step: Step[] }>(Api(`${url}` + id))
       .then((res) => {
         setSoilData(res.data.data);
         setItems(res.data.step);

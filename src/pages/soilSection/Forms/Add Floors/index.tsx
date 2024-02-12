@@ -155,7 +155,7 @@ export default function AddFloors(props: PropsType) {
                 <TableBody>
                   {typeof soilData === "object" &&
                     soilData?.soil_floor?.map((item) => (
-                      <TableRow>
+                      <TableRow key={item.id}>
                         <TableCell>
                           <Checkbox
                             value={item.id}

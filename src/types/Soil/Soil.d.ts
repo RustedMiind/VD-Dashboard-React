@@ -12,7 +12,7 @@ export type Location = {
   deleted_at: null;
   id: number;
   location_name: string;
-  map: Position[];
+  map: Map;
   status: number;
   updated_at: string;
 };
@@ -50,6 +50,17 @@ export type City = {
   updated_at: string;
   wikiDataId: string;
   type: null;
+};
+type Map = {
+  area: number;
+  id: number;
+  map: string;
+  minimum_price: number;
+  price: number;
+  soil_location_id: number;
+  deleted_at: null;
+  created_at: string;
+  updated_at: string;
 };
 type Position = {
   lat: number;
