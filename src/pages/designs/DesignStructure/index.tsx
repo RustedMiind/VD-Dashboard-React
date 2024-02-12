@@ -3,6 +3,7 @@ import {
   Grid,
   GridProps,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,6 +16,9 @@ import { useEffect, useState } from "react";
 import { FormStatus } from "../../../types/FormStatus";
 import { TextFieldProps } from "@mui/material";
 import { useSnackbar } from "notistack";
+import CustomFilePond from "../../../components/CustomFilepond";
+import { FileBondState } from "../../../types/FileBondState";
+import { Media } from "../../../types";
 
 const GridItem = (props: GridProps) => (
   <Grid sx={{ padding: "0.5rem" }} item md={6} {...props} />
@@ -23,7 +27,9 @@ const GridItem = (props: GridProps) => (
 function DesignStructurePage() {
   const { register, reset, handleSubmit } = useForm<StructureDesign>();
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const [banner, setBanner] = useState<FileBondState>([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [bannerUploadedImages, setBannerUploadedImages] = useState<Media[]>([]);
   const handleFormSubmit = handleSubmit((formData) => {
     setFormStatus("loading");
     console.log(formData);
@@ -58,6 +64,7 @@ function DesignStructurePage() {
       })
       .then(({ data }) => {
         const dto = data.strucre_designs;
+        setBannerUploadedImages(data.strucre_designs.media);
         reset({
           about_us_ar: dto.about_us_ar,
           about_us_en: dto.about_us_en,
@@ -138,6 +145,31 @@ function DesignStructurePage() {
                   />
                 </AddLabelToEl>
               </GridItem>
+              <GridItem md={12}>
+                <AddLabelToEl label="صورة البانر" required>
+                  <Stack spacing={1}>
+                    {bannerUploadedImages.map((item) => (
+                      <Button
+                        component="a"
+                        href={item.original_url}
+                        target="_blank"
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                      >
+                        {item.file_name}
+                      </Button>
+                    ))}
+                  </Stack>
+                  <CustomFilePond
+                    acceptedFileTypes={["image/jpeg"]}
+                    files={banner}
+                    onupdatefiles={(fileItems) => {
+                      setBanner(fileItems.map((fileItem) => fileItem.file));
+                    }}
+                  />
+                </AddLabelToEl>
+              </GridItem>
               <LoadingButton
                 type="submit"
                 fullWidth
@@ -163,6 +195,7 @@ type StructureDesign = {
   about_us_en: string;
   features_ar: string;
   features_en: string;
+  media: Media[];
 };
 
 export default DesignStructurePage;

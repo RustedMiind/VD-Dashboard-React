@@ -42,8 +42,14 @@ function Chat() {
           setFetchs(fetchs + 1);
           setScrolls(scrolls + 1);
         })
-        .catch(() => {
-          enqueueSnackbar("تعذر في تحميل الرسائل", { variant: "error" });
+        .catch((err) => {
+          if (err?.response?.status === 403) {
+            enqueueSnackbar("ليس لديك الصلاحية لتحميل المحادثة", {
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar("تعذر في تحميل الرسائل", { variant: "error" });
+          }
         });
     }
   }
@@ -64,7 +70,7 @@ function Chat() {
       };
     }
   }, [fetchs]);
-  return typeof tender === "object" && !!tender.user_type?.length ? (
+  return typeof tender === "object" ? (
     <Stack component={Paper} p={1} spacing={1}>
       <Paper sx={{ bgcolor: "Background", p: 2 }}>
         <Typography variant="h6">مدونة المحادثة والمهام</Typography>

@@ -1,11 +1,12 @@
-import { Button, ButtonBase, Typography } from "@mui/material";
+import { Button, ButtonProps, Typography } from "@mui/material";
 
 function ClassificationCard({
   count,
   isCurrentTab,
   setThisTab,
   title,
-}: PropsType) {
+  ...buttonProps
+}: PropsType & ButtonProps) {
   return (
     <Button
       sx={{
@@ -19,6 +20,7 @@ function ClassificationCard({
       }}
       variant={isCurrentTab ? "contained" : "outlined"}
       onClick={setThisTab}
+      {...buttonProps}
     >
       <Typography variant="h6" fontWeight={700} fontSize={14}>
         {title}
@@ -37,7 +39,7 @@ function ClassificationCard({
 
 type PropsType = {
   title: string;
-  count: number;
+  count?: number;
   isCurrentTab: boolean;
   setThisTab: () => void;
 };
