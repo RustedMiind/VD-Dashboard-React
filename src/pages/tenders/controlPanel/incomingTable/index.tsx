@@ -21,16 +21,16 @@ export default function IncomingTable() {
     let typo: JSX.Element = <></>;
     switch (type) {
       case TaskType.SOIL:
-        typo = <Typography>فحص تربة</Typography>;
+        typo = <>فحص تربة</>;
         break;
       case TaskType.CLIENT_REQUEST:
-        typo = <Typography>طلبات الموظفين</Typography>;
+        typo = <>طلبات الموظفين</>;
         break;
       case TaskType.EMPLOYEE_REQUEST:
-        typo = <Typography>طلبات العملاء</Typography>;
+        typo = <>طلبات العملاء</>;
         break;
       case TaskType.TENDER:
-        typo = <Typography>العقود</Typography>;
+        typo = <>العقود</>;
         break;
       default:
         type = "";
@@ -42,7 +42,7 @@ export default function IncomingTable() {
     let url: string = "";
     switch (type) {
       case TaskType.SOIL:
-        url = `../../services/soil/show/${id}`;
+        url = `../../services/soil/show/-1/${id}`;
         break;
       // case TaskType.CLIENT_REQUEST:
       //   url = `../../services/soil/show/${id}`;
@@ -50,9 +50,9 @@ export default function IncomingTable() {
       // case TaskType.EMPLOYEE_REQUEST:
       //   url = `../../services/soil/show/${id}`;
       //   break;
-      // case TaskType.TENDER:
-      //   url = `../../services/soil/show/${id}`;
-      //   break;
+      case TaskType.TENDER:
+        url = `../../tenders/${id}`;
+        break;
       default:
         url = "";
         break;
@@ -76,7 +76,7 @@ export default function IncomingTable() {
               <TableCell>
                 <Typography
                   component={NavLink}
-                  to={`../${task.id}`}
+                  to={handleNavigation(task?.taskable_type, task?.taskable_id)}
                   variant="body2"
                   color={"primary.main"}
                   fontWeight={700}

@@ -20,11 +20,56 @@ import { Api } from "../../../../constants";
 import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
+import { formatDate } from "../../../../methods";
+import { TaskType } from "../../../../types/Tasks/Type.enum";
 
 export default function OngoingTable() {
   const { tasksControlData, setTasksControlData, isManager } =
     useContext(ControlPanelContext);
   const { enqueueSnackbar } = useSnackbar();
+  const handleType = (type: string | undefined): JSX.Element => {
+    let typo: JSX.Element = <></>;
+    switch (type) {
+      case TaskType.SOIL:
+        typo = <>فحص تربة</>;
+        break;
+      case TaskType.CLIENT_REQUEST:
+        typo = <>طلبات الموظفين</>;
+        break;
+      case TaskType.EMPLOYEE_REQUEST:
+        typo = <>طلبات العملاء</>;
+        break;
+      case TaskType.TENDER:
+        typo = <>العقود</>;
+        break;
+      default:
+        type = "";
+        break;
+    }
+    return typo;
+  };
+
+  const handleNavigation = (type?: string, id?: number): string => {
+    let url: string = "";
+    switch (type) {
+      case TaskType.SOIL:
+        url = `../../services/soil/show/-1/${id}`;
+        break;
+      // case TaskType.CLIENT_REQUEST:
+      //   url = `../../services/soil/show/${id}`;
+      //   break;
+      // case TaskType.EMPLOYEE_REQUEST:
+      //   url = `../../services/soil/show/${id}`;
+      //   break;
+      case TaskType.TENDER:
+        url = `../../tenders/${id}`;
+        break;
+      default:
+        url = "";
+        break;
+    }
+    return url;
+  };
   function changeTenderStatus(id: string | number) {
     return function (status: TenderEntityStatus) {
       axios
@@ -46,57 +91,57 @@ export default function OngoingTable() {
         });
     };
   }
-
   if (Array.isArray(tasksControlData?.ongoing))
     return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ width: "150px" }}>
-              الرقم المرجعي للمنافسة
-            </TableCell>
-            <TableCell>اسم المنافسة</TableCell>
+            <TableCell>الرقم المرجعي للمنافسة</TableCell>
+            <TableCell>تاريخ الورود</TableCell>
+            <TableCell>نوع الطلب</TableCell>
             <TableCell>حالة الترسية</TableCell>
             <TableCell>عرض</TableCell>
           </TableRow>
         </TableHead>
-        {/* <TableBody>
-          {tasksControlData?.ongoing.map((tender) => (
-            <TableRow key={tender.id}>
+        <TableBody>
+          {tasksControlData?.ongoing.map((task) => (
+            <TableRow key={task.id}>
               <TableCell>
                 <Typography
                   component={NavLink}
-                  to={`../${tender.id}`}
+                  to={handleNavigation(task?.taskable_type, task?.taskable_id)}
                   variant="body2"
                   color={"primary.main"}
                   fontWeight={700}
                 >
-                  {tender.tenderdata?.code_reference}
+                  {task?.id}
                 </Typography>
               </TableCell>
-              <TableCell>{tender.tenderdata?.name}</TableCell>
+              <TableCell> {formatDate(task?.created_at)}</TableCell>
+              <TableCell> {handleType(task?.taskable_type)}</TableCell>
+
               <TableCell>
-                <StatusOrDropdown
-                  current={tender.directorate_status}
+                {/* <StatusOrDropdown
+                  current={task.directorate_status}
                   setCurrent={
-                    isManager || !!tender.eng
-                      ? changeTenderStatus(tender.id)
+                    isManager || !!task.eng
+                      ? changeTenderStatus(task.id)
                       : undefined
                   }
-                />
+                /> */}
               </TableCell>
               <TableCell>
                 <IconButton
                   size="small"
                   component={NavLink}
-                  to={`../${tender.id}`}
+                  to={handleNavigation(task?.taskable_type, task?.taskable_id)}
                 >
                   <VisibilityOutlinedIcon />
                 </IconButton>
               </TableCell>
             </TableRow>
           ))}
-        </TableBody> */}
+        </TableBody>
       </Table>
     );
   else if (tasksControlData?.ongoing === "loading")
