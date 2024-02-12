@@ -1,0 +1,17 @@
+:root {
+  --main: #004693;
+}
+
+*::-moz-selection {
+  background: rgba(241, 153, 2, 0.7176470588);
+  color: black;
+}
+
+*::selection {
+  background: rgba(241, 153, 2, 0.7176470588);
+  color: black;
+}
+
+.filepond--credits {
+  display: none !important;
+}/*# sourceMappingURL=App.css.map */

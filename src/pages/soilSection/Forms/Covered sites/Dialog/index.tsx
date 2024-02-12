@@ -100,7 +100,6 @@ export default function DialogAddLocation(props: TypeProps) {
     setAmountData({
       ...amountData,
       ...partial,
-      // map: _positions,
     });
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {

@@ -14,7 +14,7 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
   const { soilData, setSoilData } = useContext(SoilContext);
   const [positionClick, setPositionClick] = useState<[number, number][]>([]);
   const [open, setOpen] = useState<boolean>(false);
-
+  const [selectedBoxId, setSelectedBoxId] = useState<number | null>(null);
   function handlePostion(position: string) {
     let str = position.slice(2, -2);
     let arr = str?.toString().split("},{");
@@ -31,8 +31,6 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
     }
     setPositionClick(positions);
   }
-  console.log("typeof positionClick ", typeof positionClick);
-
   useEffect(() => {
     setOpen(!open);
   }, [JSON.stringify(positionClick)]);
@@ -56,22 +54,18 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
             soilData?.soil_location?.map((item) => (
               <Box
                 key={item.id}
-                component={Paper}
-                bgcolor={"Background"}
-                padding={2}
-                display={"flex"}
-                flexDirection={"row"}
-                marginBottom={2}
                 sx={{
-                  background: "Background",
                   p: 2,
                   display: "flex",
                   flexDirection: "row",
+                  bgcolor: selectedBoxId === item.id ? "" : "white",
                   mb: 2,
                   cursor: "pointer",
+                  boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
                 }}
                 onClick={() => {
                   handlePostion(item?.map?.map.toString());
+                  setSelectedBoxId(item.id);
                   setOpen(true);
                 }}
               >
@@ -110,7 +104,7 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
                     <Typography variant="h6" sx={{ fontWeight: 800 }}>
                       الموقع
                     </Typography>
-                    <Typography variant="body1">--- </Typography>
+                    <Typography variant="body1">---</Typography>
                   </Box>
                 </Grid>
               </Box>

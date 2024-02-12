@@ -68,7 +68,7 @@ export function ShowMap({ positionClick }: PropsType) {
     >
       <MapContainer
         center={[centerLat, centerLong]}
-        zoom={11}
+        zoom={15}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
       >

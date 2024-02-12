@@ -1,0 +1,10 @@
+.MuiTable-root td,
+.MuiTable-root th {
+  border: none;
+}
+
+.MuiTableHead-root td,
+.MuiTableHead-root th {
+  font-weight: 700;
+  border-bottom: 2px solid var(--main);
+}/*# sourceMappingURL=Mui_Custom.css.map */
