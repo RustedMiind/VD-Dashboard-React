@@ -24,10 +24,10 @@ export default function IncomingTable() {
         typo = <>فحص تربة</>;
         break;
       case TaskType.CLIENT_REQUEST:
-        typo = <>طلبات الموظفين</>;
+        typo = <>طلبات العملاء</>;
         break;
       case TaskType.EMPLOYEE_REQUEST:
-        typo = <>طلبات العملاء</>;
+        typo = <>طلبات الموظفين</>;
         break;
       case TaskType.TENDER:
         typo = <>العقود</>;
@@ -44,12 +44,12 @@ export default function IncomingTable() {
       case TaskType.SOIL:
         url = `../../services/soil/show/-1/${id}`;
         break;
-      // case TaskType.CLIENT_REQUEST:
-      //   url = `../../services/soil/show/${id}`;
-      //   break;
-      // case TaskType.EMPLOYEE_REQUEST:
-      //   url = `../../services/soil/show/${id}`;
-      //   break;
+      case TaskType.CLIENT_REQUEST:
+        url = `../../clients/requests/`;
+        break;
+      case TaskType.EMPLOYEE_REQUEST:
+        url = `../../employees/requests`;
+        break;
       case TaskType.TENDER:
         url = `../../tenders/${id}`;
         break;
