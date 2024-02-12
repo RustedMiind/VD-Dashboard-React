@@ -77,22 +77,26 @@ const routesCollections: RoutesCollectionType[] = [
       Permission.TENDERS_SHOW,
       Permission.TASKS_SHOW,
       Permission.TENDERS_VIEW,
+      Permission.SOIL_SHOW,
     ],
     routes: [
       {
         name: "المنافسات",
         path: "/tenders",
         react: true,
+        isPrivate: Permission.TENDERS_SHOW,
       },
       {
         name: "مهامي",
         path: "/tenders/controlpanel",
         react: true,
+        isPrivate: Permission.TASKS_SHOW,
       },
       {
         name: "التربة والخرسانة",
         path: "/services/soil",
         react: true,
+        isPrivate: Permission.SOIL_SHOW,
       },
     ],
   },
@@ -145,6 +149,7 @@ const routesCollections: RoutesCollectionType[] = [
       Permission.ATTENDANCE_VIEW,
       Permission.TICKETS_VIEW,
       Permission.DASHBOARD_SETTING_SHIFT_VIEW,
+      Permission.ATTENDANCE_REQUESTS_VIEW,
     ],
     routes: [
       {
@@ -179,23 +184,30 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "الخدمات",
     icon: DesignServicesIcon,
+    isPrivate: [Permission.DESIGN_SHOW, Permission.DESIGN_CREATE],
     routes: [
       {
         name: "خدمات التصاميم",
         path: "/services/design",
         react: true,
+        isPrivate: Permission.DESIGN_SHOW,
       },
       {
         name: "هيكل تصميم المباني",
         path: "/services/design/structure",
         react: true,
+        isPrivate: Permission.DESIGN_CREATE,
       },
     ],
   },
   {
     name: "الاعدادات",
     icon: AdminPanelSettingsIcon,
-    isPrivate: [Permission.DASHBOARD_SETTING_VIEW, Permission.PLATFORMS_VIEW],
+    isPrivate: [
+      Permission.DASHBOARD_SETTING_VIEW,
+      Permission.PLATFORMS_VIEW,
+      Permission.SOIL_CREATE,
+    ],
     routes: [
       {
         name: "اعدادات لوحة التحكم",
@@ -217,17 +229,10 @@ const routesCollections: RoutesCollectionType[] = [
         name: "اعدادات التربة",
         path: "/services/soil/create",
         react: true,
+        isPrivate: Permission.SOIL_CREATE,
       },
     ],
   },
-  // {
-  //   name: "الموظفين",
-  //   icon: BadgeIcon,
-  //   routes: [
-  //     { name: "حضور الموظفين", path: "" },
-  //     { name: "محددات المشاريع", path: "" },
-  //   ],
-  // },
 ];
 
 function DrawerComponent(props: PropsType) {
