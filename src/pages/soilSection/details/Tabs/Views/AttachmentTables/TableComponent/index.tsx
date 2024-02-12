@@ -53,7 +53,7 @@ export default function TableComponent({ title, noData }: PropsType) {
                   items.map((item) =>
                     item?.order_steps_form?.order?.soil_order?.media.map(
                       (file) => (
-                        <TableRow>
+                        <TableRow key={item?.id}>
                           <TableCell
                             sx={{ display: "flex", alignItems: "center" }}
                           >

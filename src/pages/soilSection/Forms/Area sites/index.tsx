@@ -156,7 +156,7 @@ export default function AreaSites(props: PropsType) {
                 <TableBody>
                   {typeof soilData === "object" &&
                     soilData?.soil_area?.map((item) => (
-                      <TableRow>
+                      <TableRow key={item.id}>
                         <TableCell>
                           <Checkbox
                             value={item.id}
