@@ -23,9 +23,15 @@ import { FetchStatusEnum } from "../../../../../../../types/FetchStatusEnum";
 import { Api } from "../../../../../../../constants";
 import axios from "axios";
 import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
+import { Media } from "../../../../../../../types";
 
 export default function TenderApproveDialog(
-  props: DialogProps & { close: () => void; userType: TenderStep }
+  props: DialogProps & {
+    close: () => void;
+    userType: TenderStep;
+    uploadedFile?: Media;
+    status?: number;
+  }
 ) {
   const [formStatus, setFormStatus] = useState<FetchStatus>(
     FetchStatusEnum.NONE

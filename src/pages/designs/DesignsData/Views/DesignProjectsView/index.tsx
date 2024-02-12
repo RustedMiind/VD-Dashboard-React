@@ -29,6 +29,7 @@ import { LaravelPagination } from "../../../../../types/LaravelPagination";
 import { NavLink } from "react-router-dom";
 import LoadingTable from "../../../../../components/LoadingTable";
 import { useSnackbar } from "notistack";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 function generateActiveChip(status?: DB_Boolean) {
   if (status) {
@@ -160,7 +161,7 @@ function DesignProjectsView() {
                           <DeleteIcon />
                         </IconButton>
                         <IconButton size="small">
-                          <SendOutlinedIcon />
+                          <KeyboardArrowLeftIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>

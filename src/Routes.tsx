@@ -39,7 +39,6 @@ function RoutesComponent() {
         <Route path="test" element={<ForTest />} />
 
         <Route path="" element={<MainPage />} />
-        <Route path="designReports" element={<DesignReports />} />
         {/* Employees Section */}
         <Route path="employees">
           {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
@@ -115,15 +114,34 @@ function RoutesComponent() {
         )}
         <Route path="services">
           <Route path="design">
-            <Route path="" element={<DesignDataPage />} />
-            <Route path="create" element={<CreateOrUpdateDesign />} />
-            <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
-            <Route path="structure" element={<DesignStructurePage />} />
+            {hasPermission(Permission.DESIGN_SHOW) && (
+              <Route path="" element={<DesignDataPage />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="create" element={<CreateOrUpdateDesign />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="structure" element={<DesignStructurePage />} />
+            )}
           </Route>
           <Route path="soil">
-            <Route path="create" element={<FormsSection />} />
-            <Route path="" element={<SoilSection />} />
-            <Route path="show/:id" element={<SoilDetails />} />
+            {hasPermission(Permission.SOIL_EDIT) && (
+              <Route path="create" element={<FormsSection />} />
+            )}
+
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="" element={<SoilSection />} />
+            )}
+
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="show/:id" element={<SoilDetails />} />
+            )}
           </Route>
         </Route>
 

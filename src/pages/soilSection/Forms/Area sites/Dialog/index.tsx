@@ -167,6 +167,9 @@ function DialogAddArea(props: TypeProps) {
                     size="small"
                     placeholder={"المساحة من"}
                     value={designForm.area_from}
+                    InputProps={{
+                      endAdornment: <Typography>م</Typography>,
+                    }}
                     onChange={(e) => {
                       setDesignForm(
                         {
@@ -183,6 +186,9 @@ function DialogAddArea(props: TypeProps) {
                     type="number"
                     size="small"
                     placeholder={"المساحة إلى"}
+                    InputProps={{
+                      endAdornment: <Typography>م</Typography>,
+                    }}
                     value={designForm.area_to}
                     onChange={(e) => {
                       setDesignForm(

@@ -145,4 +145,10 @@ export enum Permission {
   TENDERS_DELETE = "tenders.delete",
   TENDERS_SHOW = "tenders.show",
   TASKS_SHOW = "tasks.show",
+  SOIL_SHOW = "soil.show",
+  SOIL_CREATE = "soil.create",
+  SOIL_EDIT = "soil.edit",
+  DESIGN_SHOW = "design.show",
+  DESIGN_CREATE = "design.create",
+  DESIGN_EDIT = "design.edit",
 }

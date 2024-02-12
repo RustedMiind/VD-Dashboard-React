@@ -22,7 +22,7 @@ import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 
 export default function OngoingTable() {
-  const { tenderControlData, setTenderControlData, isManager } =
+  const { tasksControlData, setTasksControlData, isManager } =
     useContext(ControlPanelContext);
   const { enqueueSnackbar } = useSnackbar();
   function changeTenderStatus(id: string | number) {
@@ -32,9 +32,9 @@ export default function OngoingTable() {
           status,
         })
         .then(() => {
-          setTenderControlData && setTenderControlData();
+          setTasksControlData && setTasksControlData();
           enqueueSnackbar("تم حفظ حالة الترسية بنجاح");
-          console.log(setTenderControlData);
+          console.log(setTasksControlData);
         })
         .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
           enqueueSnackbar(
@@ -47,7 +47,7 @@ export default function OngoingTable() {
     };
   }
 
-  if (Array.isArray(tenderControlData?.ongoing))
+  if (Array.isArray(tasksControlData?.ongoing))
     return (
       <Table>
         <TableHead>
@@ -60,8 +60,8 @@ export default function OngoingTable() {
             <TableCell>عرض</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {tenderControlData?.ongoing.map((tender) => (
+        {/* <TableBody>
+          {tasksControlData?.ongoing.map((tender) => (
             <TableRow key={tender.id}>
               <TableCell>
                 <Typography
@@ -96,12 +96,12 @@ export default function OngoingTable() {
               </TableCell>
             </TableRow>
           ))}
-        </TableBody>
+        </TableBody> */}
       </Table>
     );
-  else if (tenderControlData?.ongoing === "loading")
+  else if (tasksControlData?.ongoing === "loading")
     return <LoadingTable rows={5} cols={4} />;
-  else if (tenderControlData?.ongoing === "empty")
+  else if (tasksControlData?.ongoing === "empty")
     return <NotFound title="لا يوجد معاملات الجارية" />;
   else return <></>;
 }
