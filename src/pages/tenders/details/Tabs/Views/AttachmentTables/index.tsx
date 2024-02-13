@@ -46,9 +46,7 @@ export default function AttachmentTables() {
           تحميل جميع المرافقات
         </Button>
       </Box>
-      <TableComponent title="المرفقات" />
-      <TableComponent title="المرفقات المالية" noData />
-      <TableComponent title="المرفقات الفنية" noData />
+      <TableComponent />
     </Stack>
   );
 }
