@@ -51,8 +51,7 @@ export default function VisitDialog() {
             <CustomFilePond
               acceptedFileTypes={["image/jpeg"]}
               files={banner}
-              onupdatefilenpm
-              runs={(fileItems) => {
+              onupdatefiles={(fileItems) => {
                 setBanner(fileItems.map((fileItem) => fileItem.file));
               }}
             />
