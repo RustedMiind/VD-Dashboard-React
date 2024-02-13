@@ -44,7 +44,8 @@ export default function Items() {
   if (Array.isArray(items)) {
     const visit = items.find((item) => item.type_id === 4),
       test = items.find((item) => item.type_id === 5),
-      report = items.find((item) => item.type_id === 6);
+      report = items.find((item) => item.type_id === 6),
+      approved = items.find((item) => item.type_id === 2);
 
     return (
       <GradientBg reverseBg>
@@ -61,6 +62,10 @@ export default function Items() {
 
             <Label label="التقرير" />
             <Content>{generateChip(report?.order_steps_form?.status)}</Content>
+            <Label label="نموذج اعتماد" />
+            <Content>
+              {generateChip(approved?.order_steps_form?.status)}
+            </Content>
           </Grid>
         </Stack>
       </GradientBg>
