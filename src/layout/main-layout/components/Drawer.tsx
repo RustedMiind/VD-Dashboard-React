@@ -85,7 +85,7 @@ const routesCollections: RoutesCollectionType[] = [
         name: "المنافسات",
         path: "/tenders",
         react: true,
-        isPrivate: Permission.TENDERS_SHOW,
+        isPrivate: Permission.TENDERS_VIEW,
       },
       {
         name: "مهامي",
