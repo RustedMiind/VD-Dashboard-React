@@ -9,9 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { useState } from "react";
 import { MenuItem } from "@mui/material";
-import UploadFileInput from "../../../components/UploadFileInput";
+import { FileBondState } from "../../../types/FileBondState";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { DateFormatString } from "../../../constants/DateFormat";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -19,7 +22,9 @@ const GridItem = (props: GridProps & { label: string }) => (
     {props.children}
   </Grid>
 );
-export default function TestDialog() {
+export default function FinanceDialog() {
+  const [datee, setdatee] = useState<string>("");
+  console.log(datee);
   return (
     <Dialog
       maxWidth="md"
@@ -27,13 +32,20 @@ export default function TestDialog() {
       onSubmit={function openCheckDialog() {}}
       open
     >
-      <DialogTitle>نموذج الاختبار</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 600, fontSize: 25, textAlign: "center" }}>
+        نموذج المالية
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <GridItem label="اسم الاختبار">
-            <TextField fullWidth size="small" />
+          <GridItem label="اسم النموذج">
+            <TextField fullWidth size="small" placeholder="اسم النموذج" />
           </GridItem>
           <GridItem label="حالة الطلب">
+            <TextField select fullWidth size="small">
+              <MenuItem>{"ddd"}</MenuItem>
+            </TextField>
+          </GridItem>
+          <GridItem label="حالة السداد">
             <TextField select fullWidth size="small">
               <MenuItem>{"ddd"}</MenuItem>
             </TextField>
@@ -43,14 +55,10 @@ export default function TestDialog() {
               slotProps={{ textField: { size: "small" } }}
               sx={{ width: 1 }}
               disableFuture
-            />
-          </GridItem>
-          <GridItem label="ارفاق صور للاختبار">
-            <UploadFileInput
-              size="sm"
-              value={undefined}
-              subTitle=""
-              setValue={(file) => <></>}
+              value={dayjs(datee)}
+              onChange={(value) => {
+                setdatee(value?.format(DateFormatString) || "");
+              }}
             />
           </GridItem>
         </Grid>

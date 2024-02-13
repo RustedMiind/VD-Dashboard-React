@@ -9,9 +9,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { useState } from "react";
 import { MenuItem } from "@mui/material";
-import UploadFileInput from "../../../components/UploadFileInput";
+import CustomFilePond from "../../../components/CustomFilepond";
+import { FileBondState } from "../../../types/FileBondState";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -19,7 +21,10 @@ const GridItem = (props: GridProps & { label: string }) => (
     {props.children}
   </Grid>
 );
-export default function TestDialog() {
+
+export default function ReportDialog() {
+  const [imgReq, setImgReq] = useState<FileBondState>([]);
+  console.log(imgReq[0]);
   return (
     <Dialog
       maxWidth="md"
@@ -27,11 +32,13 @@ export default function TestDialog() {
       onSubmit={function openCheckDialog() {}}
       open
     >
-      <DialogTitle>نموذج الاختبار</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 600, fontSize: 25, textAlign: "center" }}>
+        نموذج التقرير
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <GridItem label="اسم الاختبار">
-            <TextField fullWidth size="small" />
+          <GridItem label="اسم التقرير">
+            <TextField fullWidth size="small" placeholder="اسم التقرير" />
           </GridItem>
           <GridItem label="حالة الطلب">
             <TextField select fullWidth size="small">
@@ -45,12 +52,13 @@ export default function TestDialog() {
               disableFuture
             />
           </GridItem>
-          <GridItem label="ارفاق صور للاختبار">
-            <UploadFileInput
-              size="sm"
-              value={undefined}
-              subTitle=""
-              setValue={(file) => <></>}
+          <GridItem label=" ارفاق التقرير">
+            <CustomFilePond
+              acceptedFileTypes={["image/jpeg"]}
+              files={imgReq}
+              onupdatefiles={(fileItems) => {
+                setImgReq(fileItems.map((fileItem) => fileItem.file));
+              }}
             />
           </GridItem>
         </Grid>

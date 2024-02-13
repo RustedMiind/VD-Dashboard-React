@@ -13,6 +13,7 @@ import { useState } from "react";
 import { MenuItem } from "@mui/material";
 import CustomFilePond from "../../../components/CustomFilepond";
 import { FileBondState } from "../../../types/FileBondState";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -20,10 +21,12 @@ const GridItem = (props: GridProps & { label: string }) => (
     {props.children}
   </Grid>
 );
-export default function VisitDialog() {
-  const [banner, setBanner] = useState<FileBondState>([]);
-  const [test, setTest] = useState<FileBondState>([]);
 
+export default function VisitDialog() {
+  const [imgReq, setImgReq] = useState<FileBondState>([]);
+  const [modelVisit, setModelVisit] = useState<FileBondState>([]);
+  const [imgVisit, setImgVisit] = useState<FileBondState>([]);
+  console.log(imgReq[0]);
   return (
     <Dialog
       maxWidth="md"
@@ -45,32 +48,36 @@ export default function VisitDialog() {
             </TextField>
           </GridItem>
           <GridItem label="مدة الانتهاء المتوقعة">
-            <TextField fullWidth size="small" />
+            <DatePicker
+              slotProps={{ textField: { size: "small" } }}
+              sx={{ width: 1 }}
+              disableFuture
+            />
           </GridItem>
           <GridItem label=" ارفاق تاكيد الطلب">
             <CustomFilePond
               acceptedFileTypes={["image/jpeg"]}
-              files={banner}
+              files={imgReq}
               onupdatefiles={(fileItems) => {
-                setBanner(fileItems.map((fileItem) => fileItem.file));
+                setImgReq(fileItems.map((fileItem) => fileItem.file));
               }}
             />
           </GridItem>
           <GridItem label="ارفاق نموذج الزيارة">
             <CustomFilePond
               acceptedFileTypes={["image/jpeg"]}
-              files={test}
+              files={modelVisit}
               onupdatefiles={(fileItems) => {
-                setTest(fileItems.map((fileItem) => fileItem.file));
+                setModelVisit(fileItems.map((fileItem) => fileItem.file));
               }}
             />
           </GridItem>
-          <GridItem label="ارفاق نموذج الزيارة">
+          <GridItem label="ارفاق صورة الزيارة">
             <CustomFilePond
               acceptedFileTypes={["image/jpeg"]}
-              files={test}
+              files={imgVisit}
               onupdatefiles={(fileItems) => {
-                setTest(fileItems.map((fileItem) => fileItem.file));
+                setImgVisit(fileItems.map((fileItem) => fileItem.file));
               }}
             />
           </GridItem>
