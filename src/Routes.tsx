@@ -29,6 +29,7 @@ import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
 import DesignDataPage from "./pages/designs/DesignsData";
 import SoilDetails from "./pages/soilSection/details";
+import MissionsProjects from "./pages/missionsProjects";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -40,6 +41,8 @@ function RoutesComponent() {
 
         <Route path="" element={<MainPage />} />
         <Route path="designReports" element={<DesignReports />} />
+
+        <Route path="missionsProjects" element={<MissionsProjects />} />
         {/* Employees Section */}
         <Route path="employees">
           {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
