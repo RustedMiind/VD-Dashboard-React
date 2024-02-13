@@ -51,8 +51,7 @@ export default function Items() {
             <Label label="الزيارة" />
             {items.map(
               (item) =>
-                item?.form_id === 4 &&
-                item?.order_steps_form && (
+                item?.form_id === 4 && (
                   <Content>
                     {generateChip(item?.order_steps_form?.status)}
                   </Content>
@@ -61,8 +60,7 @@ export default function Items() {
             <Label label="الاختبار" />
             {items.map(
               (item) =>
-                item?.form_id === 5 &&
-                item?.order_steps_form && (
+                item?.form_id === 5 && (
                   <Content>
                     {generateChip(item?.order_steps_form?.status)}
                   </Content>
@@ -71,8 +69,7 @@ export default function Items() {
             <Label label="التقرير" />
             {items.map(
               (item) =>
-                item?.form_id === 6 &&
-                item?.order_steps_form && (
+                item?.form_id === 6 && (
                   <Content>
                     {generateChip(item?.order_steps_form?.status)}
                   </Content>

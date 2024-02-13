@@ -18,7 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Api } from "../../../../../constants";
 import { useSnackbar } from "notistack";
-import { City, Location } from "../../../../../types/Soil";
+import { City, Location, Position } from "../../../../../types/Soil";
 import { SoilContext } from "../../../SoilContext";
 import { LoadingButton } from "@mui/lab";
 import { Map } from "../Leaflet/Map";
@@ -35,9 +35,9 @@ export default function DialogAddLocation(props: TypeProps) {
     city_id: "",
     building_system: "",
     status: "1",
+    price: "",
     map: [],
   };
-
   const [city, setCity] = useState<City[]>([]);
   const [amountData, setAmountData] =
     useState<TypeLocationData>(intialLocationData);
@@ -49,32 +49,25 @@ export default function DialogAddLocation(props: TypeProps) {
         typeof soilData === "object"
           ? soilData.soil_location.find((index) => index.id == props.idToUpdate)
           : undefined;
-      const objLocation: TypeLocationData = {
+      let objLocation: TypeLocationData = {
         location_name: obj?.location_name || "",
         city_id: obj?.city_id?.toString() || "",
         building_system: obj?.building_system || "",
+        price: obj?.map?.price?.toString() || "",
         status: "1",
-        map: obj?.map || null,
+        map: null,
       };
-      setPositionClick([]);
+      try {
+        objLocation.map =
+          (JSON.parse(obj?.map?.map || "[]") as Position[]) || null;
+        console.log(objLocation);
+      } catch (err) {
+        console.log(err);
+      }
+      setPositionClick(
+        objLocation.map?.map((point) => [point.lat, point.long]) || []
+      );
       setAmountData(obj ? objLocation : intialLocationData);
-      // _map = JSON.parse(objLocation?.map?.map || '');
-      // let arr:string[] = objLocation?.map?.map.split()
-      let arr: [number, number][] | undefined = objLocation?.map?.map
-        .toString()
-        .slice(1, -1)
-        .split("},")
-        .map((ele) => {
-          ele = ele.slice(1);
-          let coordinates = ele.split(",");
-          let _position: [number, number] = [0, 0];
-          for (let k = 0; k < coordinates.length; k++) {
-            let coordinate = coordinates[k];
-            _position[k] = +coordinate.split(":")[1].slice(0, -1);
-          }
-          return _position;
-        });
-      if (arr !== undefined) setPositionClick([...arr]);
     } else {
       setAmountData(intialLocationData);
     }
@@ -90,6 +83,7 @@ export default function DialogAddLocation(props: TypeProps) {
         console.log(err);
       });
   }, []);
+
   function updateAmountData(partial: Partial<TypeLocationData>) {
     //  {"lat": 40.7128, "long": -74.0060},
     let _positions: { lat: number; long: number }[] = positionClick.map(
@@ -98,7 +92,6 @@ export default function DialogAddLocation(props: TypeProps) {
     setAmountData({
       ...amountData,
       ...partial,
-      // map: _positions,
     });
   }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
@@ -166,6 +159,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 اسم الموقع <RequiredSymbol />
               </Typography>
               <TextField
+                placeholder="اسم الموقع"
                 type="text"
                 size="small"
                 fullWidth
@@ -200,6 +194,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 نظام البناء <RequiredSymbol />
               </Typography>
               <TextField
+                placeholder="نظام البناء"
                 value={amountData.building_system}
                 type="text"
                 size="small"
@@ -209,6 +204,7 @@ export default function DialogAddLocation(props: TypeProps) {
                 }}
               />
             </Grid>
+
             <Grid item md={6}>
               <Typography sx={{ ml: 2 }}>
                 الموقع <RequiredSymbol />
@@ -230,6 +226,24 @@ export default function DialogAddLocation(props: TypeProps) {
                   ),
                 }}
                 placeholder=" الموقع"
+              />
+            </Grid>
+            <Grid item md={6}>
+              <Typography sx={{ ml: 2 }}>
+                السعر <RequiredSymbol />
+              </Typography>
+              <TextField
+                InputProps={{
+                  endAdornment: <Typography>ر.س</Typography>,
+                }}
+                placeholder=" السعر المتر في هذه المنطقة"
+                value={amountData?.price}
+                type="number"
+                size="small"
+                fullWidth
+                onChange={(e) => {
+                  updateAmountData({ price: e.target.value });
+                }}
               />
             </Grid>
             {props.displayMap && (
@@ -269,6 +283,7 @@ export default function DialogAddLocation(props: TypeProps) {
     </>
   );
 }
+
 type TypeProps = {
   open: boolean;
   closeDialog: () => void;
@@ -283,10 +298,6 @@ export type TypeLocationData = {
   city_id: string;
   building_system: string;
   status: string;
+  price: string;
   map: Position[] | null;
-};
-
-type Position = {
-  lat: number;
-  long: number;
 };

@@ -163,7 +163,7 @@ function DialogAddFloor(props: TypeProps) {
                       عدد الأدوار{" "}
                     </Typography>
                     <TextField
-                      type="text"
+                      type="number"
                       size="small"
                       value={designForm.number_floors}
                       placeholder="عدد الأدوار"
@@ -185,7 +185,7 @@ function DialogAddFloor(props: TypeProps) {
                     </Typography>
                     <TextField
                       placeholder="العمق"
-                      type="text"
+                      type="nu"
                       size="small"
                       value={designForm.depth}
                       onChange={(e) => {
@@ -206,7 +206,7 @@ function DialogAddFloor(props: TypeProps) {
                     </Typography>
                     <TextField
                       placeholder=" الحد الأدنى"
-                      type="text"
+                      type="number"
                       size="small"
                       value={designForm.minimum}
                       onChange={(e) => {

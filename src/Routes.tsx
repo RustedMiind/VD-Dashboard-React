@@ -29,6 +29,7 @@ import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
 import DesignDataPage from "./pages/designs/DesignsData";
 import SoilDetails from "./pages/soilSection/details";
+import EnvoysDataPage from "./pages/envoy/data";
 import MissionsProjects from "./pages/missionsProjects";
 
 function RoutesComponent() {
@@ -87,14 +88,19 @@ function RoutesComponent() {
             <Route path="requests" element={<ClientRequests />} />
           )}
         </Route>
+
+        <Route path="envoy">
+          <Route path="" element={<EnvoysDataPage />} />
+        </Route>
         {hasAnyOfPermissions([
           Permission.TENDERS_SHOW,
+          Permission.TENDERS_VIEW,
           Permission.TENDERS_CREATE,
           Permission.TENDERS_EDIT,
           Permission.TASKS_SHOW,
         ]) && (
           <Route path="tenders">
-            {hasPermission(Permission.TENDERS_SHOW) && (
+            {hasPermission(Permission.TENDERS_VIEW) && (
               <Route path="" element={<TendersData />} />
             )}
 
@@ -118,15 +124,34 @@ function RoutesComponent() {
         )}
         <Route path="services">
           <Route path="design">
-            <Route path="" element={<DesignDataPage />} />
-            <Route path="create" element={<CreateOrUpdateDesign />} />
-            <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
-            <Route path="structure" element={<DesignStructurePage />} />
+            {hasPermission(Permission.DESIGN_SHOW) && (
+              <Route path="" element={<DesignDataPage />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="create" element={<CreateOrUpdateDesign />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="structure" element={<DesignStructurePage />} />
+            )}
           </Route>
           <Route path="soil">
-            <Route path="create" element={<FormsSection />} />
-            <Route path="" element={<SoilSection />} />
-            <Route path="show/:id" element={<SoilDetails />} />
+            {hasPermission(Permission.SOIL_EDIT) && (
+              <Route path="create" element={<FormsSection />} />
+            )}
+
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="" element={<SoilSection />} />
+            )}
+
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="show/:id" element={<SoilDetails />} />
+            )}
           </Route>
         </Route>
 

@@ -56,8 +56,6 @@ export default function AreaSites(props: PropsType) {
     let value = parseInt(e.target.value);
     if (e.target.checked) {
       setIdToUpdate(parseInt(e.target.value));
-    } else {
-      setIdToUpdate([]);
     }
     if (isSelect) {
       setSelectedSoilId &&
@@ -89,6 +87,7 @@ export default function AreaSites(props: PropsType) {
       });
   }
   function handleCreate() {
+    setIdToUpdate([]);
     props.openAreaDialog();
     setCreateOrEdit("create");
   }
@@ -157,7 +156,7 @@ export default function AreaSites(props: PropsType) {
                 <TableBody>
                   {typeof soilData === "object" &&
                     soilData?.soil_area?.map((item) => (
-                      <TableRow>
+                      <TableRow key={item.id}>
                         <TableCell>
                           <Checkbox
                             value={item.id}

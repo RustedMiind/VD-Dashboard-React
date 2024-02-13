@@ -13,7 +13,7 @@ function generateStatusChip(status?: TenderPay): JSX.Element {
         chip = <StatusChip label="غير مدفوعة" disabled color="default" />;
         break;
       case TenderPay.PAYED:
-        chip = <StatusChip label="مقدمة" color="warning" />;
+        chip = <StatusChip label="مدفوعة" color="success" />;
         break;
     }
 

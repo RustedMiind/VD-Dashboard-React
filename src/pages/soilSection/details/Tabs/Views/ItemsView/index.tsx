@@ -32,7 +32,7 @@ function ItemsView() {
           </TableHead>
           {Array.isArray(items) &&
             items.map((item) => (
-              <TableBody>
+              <TableBody key={item.id}>
                 <TableCell>{item?.form?.name}</TableCell>
                 <TableCell>{formatDate(item?.updated_at)}</TableCell>
                 <TableCell>

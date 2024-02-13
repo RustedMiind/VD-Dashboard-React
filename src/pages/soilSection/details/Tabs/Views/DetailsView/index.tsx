@@ -81,24 +81,15 @@ function DetailsView(): JSX.Element {
                 عرض الموقع
                 <RequiredSymbol />
               </Typography>
-              {/* <Button variant="contained">عرض الموقع</Button> */}
-              <TextField
-                disabled
-                sx={{ mt: 1 }}
-                size="small"
-                InputProps={{
-                  endAdornment: (
-                    <Button
-                      onClick={() => {
-                        setOpenDialog(true);
-                      }}
-                    >
-                      عرض
-                    </Button>
-                  ),
+              <Button
+                sx={{ width: 0.3 }}
+                variant="contained"
+                onClick={() => {
+                  setOpenDialog(true);
                 }}
-                placeholder="عرض الموقع"
-              />
+              >
+                عرض
+              </Button>
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "end", my: 2 }}>

@@ -1,11 +1,16 @@
 import { Paper, Stack } from "@mui/material";
 import Tabs from "./Tabs";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { TabEnum } from "./TabEnum";
 import TabViews from "./Views";
+import { useQueryParam } from "use-query-params";
 
 function TabsContainer() {
   const [tab, setTab] = useState<TabEnum>(TabEnum.DETAILS);
+
+  // useEffect(() => {
+  //   if (!tab) setTab(TabEnum.DETAILS);
+  // }, [tab]);
 
   return (
     <TabContext.Provider value={{ tab, setTab }}>

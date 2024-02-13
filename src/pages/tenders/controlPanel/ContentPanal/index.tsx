@@ -16,7 +16,7 @@ function GridItem({ children }: GridProps) {
 }
 
 function ContentPanal() {
-  const { setTenderControlData, tenderControlData } =
+  const { tasksControlData, setTasksControlData } =
     useContext(ControlPanelContext);
   const [dataToSearch, setDataToSearch] = useState<TypeDataToSearch>({
     code_reference: "",
@@ -31,7 +31,7 @@ function ContentPanal() {
   }
   function searchTender(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setTenderControlData && setTenderControlData(dataToSearch);
+    setTasksControlData && setTasksControlData(dataToSearch);
   }
 
   return (
@@ -70,8 +70,8 @@ function ContentPanal() {
         <Grid item xl={6} xs={12}>
           <PaperButtonLikeTitle
             count={
-              Array.isArray(tenderControlData?.incoming)
-                ? tenderControlData?.incoming.length
+              Array.isArray(tasksControlData?.incoming)
+                ? tasksControlData?.incoming.length
                 : undefined
             }
             fixedHeight={PAPER_HEIGHT}
@@ -83,8 +83,8 @@ function ContentPanal() {
         <Grid item xl={6} xs={12}>
           <PaperButtonLikeTitle
             count={
-              Array.isArray(tenderControlData?.ongoing)
-                ? tenderControlData?.ongoing.length
+              Array.isArray(tasksControlData?.ongoing)
+                ? tasksControlData?.ongoing.length
                 : undefined
             }
             fixedHeight={PAPER_HEIGHT}
