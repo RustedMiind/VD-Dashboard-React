@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
 import CustomFilePond from "../../../../../components/CustomFilepond";
 import { objectToFormData } from "../../../../../methods";
+import { FormStatus } from "../../../../../types/FormStatus";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -37,6 +38,8 @@ export default function TestDialog({
   stepId,
   setRequests,
 }: PropsType) {
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+
   const { enqueueSnackbar } = useSnackbar();
   const objectTest: TypeTest = {
     form_name: "",
@@ -56,6 +59,7 @@ export default function TestDialog({
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (requestId) {
+      setFormStatus("loading");
       axios
         .post(
           Api(`employee/client/order/add-step/${stepId}`),
@@ -68,11 +72,13 @@ export default function TestDialog({
           setRequests();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
+          setFormStatus("none");
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
             variant: "error",
           });
+          setFormStatus("none");
         });
     } else {
       enqueueSnackbar("يجب تعبئة جميع الحقول", { variant: "error" });
@@ -141,7 +147,11 @@ export default function TestDialog({
         </Grid>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <LoadingButton variant="contained" type="submit" onClick={() => {}}>
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          loading={formStatus === "loading"}
+        >
           حفظ
         </LoadingButton>
       </DialogActions>

@@ -5,11 +5,18 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import { MenuItem } from "@mui/material";
+import axios from "axios";
+import { Api } from "../../../../../constants";
+import { useSnackbar } from "notistack";
+import { useState } from "react";
+import { FormStatus } from "../../../../../types/FormStatus";
 
 export default function AcceptDialog({
   open,
@@ -18,12 +25,46 @@ export default function AcceptDialog({
   stepId,
   setRequests,
 }: PropsType) {
+  const { enqueueSnackbar } = useSnackbar();
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const objectTest: TypeAccept = {
+    status: "",
+  };
+  const [amountData, setAmountData] = useState<TypeAccept>(objectTest);
+  function updateAmountData(partial: Partial<TypeAccept>) {
+    setAmountData({
+      ...amountData,
+      ...partial,
+    });
+  }
+  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setFormStatus("loading");
+    if (requestId) {
+      axios
+        .post(Api(`employee/client/order/add-step/${stepId}`), amountData)
+        .then((res) => {
+          setRequests();
+          enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
+          onClose();
+          setFormStatus("none");
+        })
+        .catch((err) => {
+          enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
+            variant: "error",
+          });
+          setFormStatus("none");
+        });
+    } else {
+      enqueueSnackbar("يجب تعبئة جميع الحقول", { variant: "error" });
+    }
+  };
   return (
     <Dialog
       maxWidth="sm"
       component="form"
       fullWidth
-      onSubmit={function openCheckDialog() {}}
+      onSubmit={handleSubmit}
       open={open}
       onClose={onClose}
       sx={{ p: 5 }}
@@ -36,9 +77,20 @@ export default function AcceptDialog({
           <Grid item md={6}>
             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
               <Typography sx={{ width: 0.5 }}>حالة الطلب</Typography>
-              <TextField select fullWidth size="small" sx={{ width: 1 }}>
-                <MenuItem>{"ddd"}</MenuItem>
-              </TextField>
+              <FormControl fullWidth size="small">
+                <Select
+                  value={amountData.status}
+                  onChange={(e) => {
+                    updateAmountData({
+                      status: e.target.value as string,
+                    });
+                  }}
+                >
+                  <MenuItem value={18}>مقبول</MenuItem>
+                  <MenuItem value={19}>مرفوض</MenuItem>
+                  <MenuItem value={33}>معتمد</MenuItem>
+                </Select>
+              </FormControl>
             </Box>
           </Grid>
           <Grid item md={12}>
@@ -54,7 +106,11 @@ export default function AcceptDialog({
         </Grid>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <LoadingButton variant="contained" type="button" onClick={() => {}}>
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          loading={formStatus === "loading"}
+        >
           ارسال
         </LoadingButton>
       </DialogActions>
@@ -67,4 +123,7 @@ type PropsType = {
   setRequests: () => void;
   requestId?: number;
   stepId?: number;
+};
+type TypeAccept = {
+  status: string;
 };

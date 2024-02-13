@@ -19,6 +19,7 @@ import axios from "axios";
 import { Api } from "../../../../../constants";
 import { useSnackbar } from "notistack";
 import { Select } from "@mui/material";
+import { FormStatus } from "../../../../../types/FormStatus";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -42,6 +43,7 @@ export default function FinanceDialog({
   };
   const { enqueueSnackbar } = useSnackbar();
   const [amountData, setAmountData] = useState<TypeFinance>(objectFinance);
+  const [formStatus, setFormStatus] = useState<FormStatus>("none");
 
   function updateAmountData(partial: Partial<TypeFinance>) {
     setAmountData({
@@ -51,6 +53,7 @@ export default function FinanceDialog({
   }
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setFormStatus("loading");
     if (requestId) {
       axios
         .post(Api(`employee/client/order/add-step/${stepId}`), amountData)
@@ -59,11 +62,13 @@ export default function FinanceDialog({
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
           setAmountData(objectFinance);
+          setFormStatus("none");
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
             variant: "error",
           });
+          setFormStatus("none");
         });
     } else {
       enqueueSnackbar("يجب تعبئة جميع الحقول", { variant: "error" });
@@ -140,7 +145,11 @@ export default function FinanceDialog({
         </Grid>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        <LoadingButton variant="contained" type="submit">
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          loading={formStatus === "loading"}
+        >
           حفظ
         </LoadingButton>
       </DialogActions>
