@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { StepData } from "../types";
 import axios from "axios";
-import { Api } from "../../../../constants";
 import { Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
 import DataInputLike from "./DataInputLike";
-import { formatDate } from "../../../../methods";
+import { formatDate } from "../../../../../methods";
+import { StepData } from "../../types";
+import { Api } from "../../../../../constants";
 
 const DetailsDialog = ({ open, requestId, onClose }: PropsType) => {
   const [details, setDetails] = useState<StepData>();

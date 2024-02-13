@@ -36,11 +36,7 @@ function DialogAddFloor(props: TypeProps) {
   const [designForms, setDesignForms] = useState<DesignForm[]>([
     designFileInitial,
   ]);
-  const intialAreaData: TypeFloorData = {
-    number_floors: "",
-    depth: "",
-    minimum: "",
-  };
+
   const { soilData, setSoilData } = useContext(SoilContext);
   const snackbar = useSnackbar();
   const setDesignForm = (

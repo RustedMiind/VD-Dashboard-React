@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { formatDate } from "../../../../methods";
-import { PanelData, StepStatusData, StepStatus } from "../types";
+
 import {
   Box,
   Chip,
@@ -16,8 +15,10 @@ import {
   TableRow,
 } from "@mui/material";
 import axios from "axios";
-import { Api } from "../../../../constants";
-import NonRoundedChip from "../../../../components/NonRoundedChip";
+import NonRoundedChip from "../../../../../components/NonRoundedChip";
+import { formatDate } from "../../../../../methods";
+import { PanelData, StepStatusData } from "../../types";
+import { Api } from "../../../../../constants";
 
 const StatusDialog = ({ open, onClose, id }: PropsType) => {
   const [details, setDetails] = useState<Partial<PanelData>>();
@@ -93,12 +94,12 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
                         {step?.employee?.name || "لا يوجد موظف"}
                       </TableCell>
                       <TableCell>
-                        {formatDate(step.employee.created_at)}
+                        {formatDate(step.employee?.created_at)}
                       </TableCell>
                       <TableCell>
-                        {formatDate(step?.employee.updated_at)}
+                        {formatDate(step?.employee?.updated_at)}
                       </TableCell>
-                      <TableCell>{step?.department.name}</TableCell>
+                      <TableCell>{step?.department?.name}</TableCell>
                       <TableCell>{generateChip(step?.status)}</TableCell>
                       <TableCell>
                         <Box
@@ -109,7 +110,7 @@ const StatusDialog = ({ open, onClose, id }: PropsType) => {
                             overflow: "hidden",
                           }}
                         >
-                          {step.note}
+                          {step?.note}
                         </Box>
                       </TableCell>
                     </TableRow>

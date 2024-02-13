@@ -11,18 +11,25 @@ import {
 } from "@mui/material";
 import { MenuItem } from "@mui/material";
 
-export default function RefuceDialog() {
+export default function AcceptDialog({
+  open,
+  onClose,
+  requestId,
+  stepId,
+  setRequests,
+}: PropsType) {
   return (
     <Dialog
       maxWidth="sm"
       component="form"
       fullWidth
       onSubmit={function openCheckDialog() {}}
-      open
+      open={open}
+      onClose={onClose}
       sx={{ p: 5 }}
     >
       <DialogTitle sx={{ fontWeight: 600, fontSize: 25, textAlign: "center" }}>
-        نموذج الرفض
+        نموذج الموافقة
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={3}>
@@ -54,3 +61,10 @@ export default function RefuceDialog() {
     </Dialog>
   );
 }
+type PropsType = {
+  open: boolean;
+  onClose: () => void;
+  setRequests: () => void;
+  requestId?: number;
+  stepId?: number;
+};
