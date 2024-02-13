@@ -13,6 +13,7 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 // Icons
 import SecurityIcon from "@mui/icons-material/Security";
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
@@ -97,6 +98,17 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/services/soil",
         react: true,
         isPrivate: Permission.SOIL_SHOW,
+      },
+    ],
+  },
+  {
+    name: "الكهرباء",
+    icon: ElectricBoltIcon,
+    routes: [
+      {
+        name: "المناديب",
+        path: "/envoy",
+        react: true,
       },
     ],
   },

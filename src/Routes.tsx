@@ -29,6 +29,7 @@ import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
 import DesignDataPage from "./pages/designs/DesignsData";
 import SoilDetails from "./pages/soilSection/details";
+import EnvoysDataPage from "./pages/envoy/data";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -82,6 +83,10 @@ function RoutesComponent() {
           {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
             <Route path="requests" element={<ClientRequests />} />
           )}
+        </Route>
+
+        <Route path="envoy">
+          <Route path="" element={<EnvoysDataPage />} />
         </Route>
         {hasAnyOfPermissions([
           Permission.TENDERS_SHOW,
