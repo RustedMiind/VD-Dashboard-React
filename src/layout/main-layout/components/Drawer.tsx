@@ -21,6 +21,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import BiotechIcon from "@mui/icons-material/Biotech";
 import { AdminUrl } from "../../../constants/AdminUrl";
 import { Permission } from "../../../constants/Permission";
 import usePermissions from "../../../Permissions/hook";
@@ -242,6 +243,17 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/services/soil/create",
         react: true,
         isPrivate: Permission.SOIL_CREATE,
+      },
+    ],
+  },
+  {
+    name: "تحت التطوير",
+    icon: BiotechIcon,
+    routes: [
+      {
+        name: "مهامي",
+        path: "/mytasks",
+        react: true,
       },
     ],
   },
