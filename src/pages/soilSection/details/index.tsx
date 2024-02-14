@@ -22,18 +22,23 @@ function SoilDetails() {
     : "employee/soil/";
   const [soilData, setSoilData] = useState<SoilRequest | undefined>(undefined);
   const [items, setItems] = useState<Step[] | undefined>(undefined);
+  const [tasks, setTasks] = useState<Step[] | undefined>(undefined);
+
   useEffect(() => {
     axios
-      .get<{ data: SoilRequest; step: Step[] }>(Api(`${url}` + id))
+      .get<{ data: SoilRequest; step: Step[]; tasks: Step[] }>(
+        Api(`${url}` + id)
+      )
       .then((res) => {
         setSoilData(res.data.data);
         setItems(res.data.step);
+        setTasks(res.data.tasks);
       })
       .catch((err) => {});
   }, [id]);
 
   return (
-    <SoilDataContext.Provider value={{ soilData, items }}>
+    <SoilDataContext.Provider value={{ soilData, items, tasks }}>
       <Stack>
         <Cards />
         <Grid container spacing={2}>
@@ -52,6 +57,6 @@ function SoilDetails() {
 type SoilDataContextType = {
   soilData?: SoilRequest;
   items?: Step[];
+  tasks?: Step[];
 };
-
 export default SoilDetails;
