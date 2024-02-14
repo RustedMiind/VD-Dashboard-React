@@ -1,4 +1,5 @@
 import {
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -11,9 +12,13 @@ import CommonTableHead from "../CommonTableHead";
 import { useContext } from "react";
 import { tasksContext } from "../../../context";
 import LoadingTable from "../../../../../../components/LoadingTable";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { formatDate } from "../../../../../../methods";
+import { createTaskType } from "../../../../../../types/Tasks/Type.enum";
+import { NavLink } from "react-router-dom";
 
 function OngoingTasks() {
-  const { status } = useContext(tasksContext);
+  const { status, ongoingTasks } = useContext(tasksContext);
 
   return (
     <Stack>
@@ -23,18 +28,26 @@ function OngoingTasks() {
           <Table stickyHeader sx={{ maxHeight: 600 }}>
             <CommonTableHead />
             <TableBody>
-              <TableRow>
-                <TableCell>رقم الوارد</TableCell>
-                <TableCell>نوع الخدمة</TableCell>
-                <TableCell>الرقم المرجعي</TableCell>
-                <TableCell>رقم العميل</TableCell>
-                <TableCell>اسم العميل</TableCell>
-                <TableCell>تاريخ الورود</TableCell>
-                <TableCell>تاريخ الانتهاء</TableCell>
-                <TableCell>الحالة السابقة</TableCell>
-                <TableCell>اسم المسؤول</TableCell>
-                <TableCell>عرض</TableCell>
-              </TableRow>
+              {ongoingTasks?.map((task) => {
+                const { name, route } = createTaskType(task.taskable_type);
+                return (
+                  <TableRow>
+                    <TableCell>{task.id}</TableCell>
+                    <TableCell>{name}</TableCell>
+                    <TableCell>{task.refrence_number}</TableCell>
+                    <TableCell>{formatDate(task.created_at)}</TableCell>
+                    <TableCell>-</TableCell>
+                    <TableCell>
+                      <IconButton
+                        component={NavLink}
+                        to={route(task.taskable_id)}
+                      >
+                        <RemoveRedEyeIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
