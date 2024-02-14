@@ -11,7 +11,7 @@ import { generateUndefinedArray } from "../../methods";
 
 function LoadingTable(props: PropsType) {
   function randomWidth() {
-    return Math.floor(Math.random() * 50) + 50;
+    return 80; //Math.floor(Math.random() * 50) + 50;
   }
   const rows = generateUndefinedArray(props.rows) || 5;
   const cols = generateUndefinedArray(props.cols) || 20;
