@@ -1,4 +1,4 @@
-import { ReducerAction } from "../../../../types";
+import { ReducerAction } from "../../../../../types";
 import { ModelStatusType, ModelType } from "./ModelTypes";
 
 export const ModelFormInitialState: ModelType = {

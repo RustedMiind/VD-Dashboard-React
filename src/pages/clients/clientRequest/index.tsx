@@ -9,11 +9,17 @@ import ClientTableComponent from "./Table";
 import SearchBar from "./SearchBar";
 import { CountType } from "../../../types/Count";
 import RequestTypesToggles from "./Toggles";
-import StatusDialog from "./StatusDialog";
-import DetailsDialog from "./DetailsDialog";
-import ModelDialog from "./ModelDialog";
+
 import { FormData } from "../clientsProcess/types/FormData";
 import { OrderType } from "../clientsProcess/types/OrderType";
+import ModelDialog from "./Dialogs/ModelDialog";
+import DetailsDialog from "./Dialogs/DetailsDialog";
+import StatusDialog from "./Dialogs/StatusDialog";
+import FinanceDialog from "./Dialogs/financeDialog";
+import ReportDialog from "./Dialogs/reportDialog";
+import TestDialog from "./Dialogs/testDialog";
+import VisitDialog from "./Dialogs/visitDialog";
+import AcceptDialog from "./Dialogs/acceptDialog";
 
 const ClientRequests = () => {
   const tableRef: React.RefObject<HTMLTableElement> =
@@ -32,7 +38,15 @@ const ClientRequests = () => {
     PanelData | StepStatusData | null
   >(null);
   const [dialogOpen, setDialogOpen] = useState<
-    undefined | "model" | "status" | "details"
+    | undefined
+    | "model"
+    | "status"
+    | "details"
+    | "accept"
+    | "finance"
+    | "report"
+    | "test"
+    | "visit"
   >(undefined);
   const [selectedType, setSelectedType] = useState<number | undefined>(
     undefined
@@ -58,7 +72,6 @@ const ClientRequests = () => {
         },
       })
       .then(({ data }) => {
-        console.log(data.data);
         setRequests(data.data);
         // setCounts(data.count);
       })
@@ -83,11 +96,10 @@ const ClientRequests = () => {
 
   const handleOpenModel = (request: PanelData | StepStatusData) => {
     return () => {
-      setDialogRequest(request);
       setDialogOpen("model");
+      setDialogRequest(request);
     };
   };
-
   const handleOpenStatus = (request: PanelData | StepStatusData) => {
     return () => {
       setDialogRequest(request);
@@ -98,6 +110,36 @@ const ClientRequests = () => {
     return () => {
       setDialogRequest(request);
       setDialogOpen("details");
+    };
+  };
+  const handleOpenFinance = (request: PanelData | StepStatusData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("finance");
+    };
+  };
+  const handleOpenVisit = (request: PanelData | StepStatusData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("visit");
+    };
+  };
+  const handleOpenReport = (request: PanelData | StepStatusData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("report");
+    };
+  };
+  const handleOpenTest = (request: PanelData | StepStatusData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("test");
+    };
+  };
+  const handleOpenAccept = (request: PanelData | StepStatusData) => {
+    return () => {
+      setDialogRequest(request);
+      setDialogOpen("accept");
     };
   };
   const handleCloseDialog = () => {
@@ -144,6 +186,43 @@ const ClientRequests = () => {
         setRequests={setRequests}
         id={dialogRequest?.id}
       />
+      <FinanceDialog
+        open={dialogOpen === "finance"}
+        onClose={handleCloseDialog}
+        requestId={dialogRequest?.id}
+        stepId={dialogRequest?.id}
+        setRequests={getRequests}
+      />
+      <AcceptDialog
+        open={dialogOpen === "accept"}
+        onClose={handleCloseDialog}
+        requestId={dialogRequest?.id}
+        stepId={dialogRequest?.id}
+        setRequests={getRequests}
+      />
+
+      <ReportDialog
+        open={dialogOpen === "report"}
+        onClose={handleCloseDialog}
+        requestId={dialogRequest?.id}
+        stepId={dialogRequest?.id}
+        setRequests={getRequests}
+      />
+      <TestDialog
+        open={dialogOpen === "test"}
+        onClose={handleCloseDialog}
+        requestId={dialogRequest?.id}
+        stepId={dialogRequest?.id}
+        setRequests={getRequests}
+      />
+      <VisitDialog
+        open={dialogOpen === "visit"}
+        onClose={handleCloseDialog}
+        requestId={dialogRequest?.id}
+        stepId={dialogRequest?.id}
+        setRequests={getRequests}
+      />
+
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
           طلبات العملاء
@@ -204,6 +283,11 @@ const ClientRequests = () => {
               requests={filtered}
               dispatch={dispatch}
               limit={filters.limit}
+              openFinance={handleOpenFinance}
+              openReport={handleOpenReport}
+              openAccept={handleOpenAccept}
+              openTest={handleOpenTest}
+              openVisit={handleOpenVisit}
             />
           )}
 

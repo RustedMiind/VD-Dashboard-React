@@ -79,7 +79,6 @@ export default function OthersDialog({
     if (typeof tender === "object") {
       setFormStatus(FetchStatusEnum.LOADING);
       setCheckDialogOpen(false);
-      console.log("Abdo File", file);
       axios
         .post(
           Api("employee/tender/form/status/" + id),
