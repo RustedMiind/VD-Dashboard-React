@@ -30,6 +30,7 @@ import DesignStructurePage from "./pages/designs/DesignStructure";
 import DesignDataPage from "./pages/designs/DesignsData";
 import SoilDetails from "./pages/soilSection/details";
 import EnvoysDataPage from "./pages/envoy/data";
+import MyTasks from "./pages/Tasks/MyTasks";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -84,6 +85,8 @@ function RoutesComponent() {
             <Route path="requests" element={<ClientRequests />} />
           )}
         </Route>
+
+        <Route path="mytasks" element={<MyTasks />} />
 
         <Route path="envoy">
           <Route path="" element={<EnvoysDataPage />} />

@@ -9,18 +9,18 @@ import {
 } from "@mui/material";
 import { generateUndefinedArray } from "../../methods";
 
-function LoadingTable(props: PropsType) {
+function LoadingTable({ rows = 5, cols = 12, height }: PropsType) {
   function randomWidth() {
-    return Math.floor(Math.random() * 50) + 50;
+    return 80; //Math.floor(Math.random() * 50) + 50;
   }
-  const rows = generateUndefinedArray(props.rows) || 5;
-  const cols = generateUndefinedArray(props.cols) || 20;
+  const rowsArr = generateUndefinedArray(rows);
+  const colsArr = generateUndefinedArray(cols);
   return (
-    <TableContainer sx={{ height: props.height || undefined }}>
+    <TableContainer sx={{ height: height || undefined }}>
       <Table aria-label="loadin table">
         <TableHead>
           <TableRow>
-            {cols.map((col) => (
+            {colsArr.map((col) => (
               <TableCell key={Math.random()}>
                 <Skeleton width={randomWidth()} />
               </TableCell>
@@ -28,9 +28,9 @@ function LoadingTable(props: PropsType) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rowsArr.map((row) => (
             <TableRow key={Math.random()}>
-              {cols.map((col) => (
+              {colsArr.map((col) => (
                 <TableCell key={Math.random()}>
                   <Skeleton width={randomWidth()} />
                 </TableCell>
@@ -44,8 +44,8 @@ function LoadingTable(props: PropsType) {
 }
 
 type PropsType = {
-  cols: number;
-  rows: number;
+  cols?: number;
+  rows?: number;
   height?: number;
 };
 
