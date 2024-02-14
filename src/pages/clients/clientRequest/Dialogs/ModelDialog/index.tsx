@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useReducer } from "react";
-import { Api } from "../../../../constants";
 import { ModelFormInitialState, reducer } from "./reducer";
 import { ModelStatusType } from "./ModelTypes";
 import { useSnackbar } from "notistack";
+import { Api } from "../../../../../constants";
 
 const ModelDialog = ({
   open,

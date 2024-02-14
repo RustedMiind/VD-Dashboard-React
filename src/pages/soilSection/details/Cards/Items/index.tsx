@@ -42,39 +42,30 @@ export default function Items() {
   const { items } = useContext(SoilDataContext);
 
   if (Array.isArray(items)) {
+    const visit = items.find((item) => item.type_id === 4),
+      test = items.find((item) => item.type_id === 5),
+      report = items.find((item) => item.type_id === 6),
+      approved = items.find((item) => item.type_id === 2);
+
     return (
       <GradientBg reverseBg>
         <Stack>
           <Grid container rowGap={2} alignItems={"center"}>
             <Label label="البنود" />
             <Label xs={7} label="الحاله" />
+
             <Label label="الزيارة" />
-            {items.map(
-              (item) =>
-                item?.form_id === 4 && (
-                  <Content>
-                    {generateChip(item?.order_steps_form?.status)}
-                  </Content>
-                )
-            )}
+            <Content>{generateChip(visit?.order_steps_form?.status)}</Content>
+
             <Label label="الاختبار" />
-            {items.map(
-              (item) =>
-                item?.form_id === 5 && (
-                  <Content>
-                    {generateChip(item?.order_steps_form?.status)}
-                  </Content>
-                )
-            )}
+            <Content>{generateChip(test?.order_steps_form?.status)}</Content>
+
             <Label label="التقرير" />
-            {items.map(
-              (item) =>
-                item?.form_id === 6 && (
-                  <Content>
-                    {generateChip(item?.order_steps_form?.status)}
-                  </Content>
-                )
-            )}
+            <Content>{generateChip(report?.order_steps_form?.status)}</Content>
+            <Label label="نموذج اعتماد" />
+            <Content>
+              {generateChip(approved?.order_steps_form?.status)}
+            </Content>
           </Grid>
         </Stack>
       </GradientBg>
