@@ -1,4 +1,5 @@
 import "./App.scss";
+import "leaflet/dist/leaflet.css";
 import { theme } from "./theme/MUI_Theme";
 import { SnackbarProvider } from "notistack";
 import { Grow, ThemeProvider } from "@mui/material";
