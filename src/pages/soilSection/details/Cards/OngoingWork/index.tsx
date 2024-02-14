@@ -27,13 +27,13 @@ export default function OngoingWork() {
               />
               {items.map(
                 (eng) =>
-                  eng.form_id === 4 && (
+                  eng?.form_id === 4 && (
                     <Typography
                       key={eng.id}
                       variant="body2"
                       sx={{ textAlign: "center", mt: 1 }}
                     >
-                      {eng.employees.name}
+                      {eng?.employees?.name}
                     </Typography>
                   )
               )}
@@ -51,7 +51,7 @@ export default function OngoingWork() {
                       variant="body2"
                       sx={{ textAlign: "center", mt: 1 }}
                     >
-                      {eng.employees.name}
+                      {eng?.employees?.name}
                     </Typography>
                   )
               )}
@@ -69,7 +69,7 @@ export default function OngoingWork() {
                       variant="body2"
                       sx={{ textAlign: "center", mt: 1 }}
                     >
-                      {eng.employees.name}
+                      {eng?.employees?.name}
                     </Typography>
                   )
               )}
