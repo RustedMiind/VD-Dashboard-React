@@ -88,7 +88,6 @@ export function UserContextProvider({
     console.log("passedToken: ", token, "calculatedToken: ", tokenToUse);
     if (tokenToUse) {
       setToken(tokenToUse, true);
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       axios
         .post<{ data: User }>(Api("employee/user"))
         .then(({ data }) => {

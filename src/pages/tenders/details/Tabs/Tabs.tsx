@@ -30,7 +30,7 @@ function Tabs() {
       <Chip {...createChipProps("المالية")} />
       <Chip {...createChipProps("سجل الحركة")} />
       <Chip {...createChipProps("الطلبات")} />
-      <Chip {...createChipProps("مساحة العمل")} />
+      <Chip {...createChipProps("مساحة العمل", TabEnum.WORK_SPACE)} />
     </Stack>
   );
 }

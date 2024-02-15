@@ -118,7 +118,7 @@ function MessageComponent({ message }: PropsType) {
       >
         <MenuItem
           onClick={handleDeleteMessage(message.id)}
-          // disabled={message.sender_id !== user?.employee_id}
+          disabled={message.sender_id !== user?.employee_id}
         >
           <ListItemIcon>
             <DeleteIcon color="error" />
