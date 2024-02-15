@@ -20,7 +20,7 @@ export type Step = {
   type_id: number;
   updated_at: string;
   is_current: boolean;
-  has_accses: boolean;
+  has_access?: boolean;
 };
 
 type Form = {

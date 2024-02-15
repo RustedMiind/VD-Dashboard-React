@@ -157,36 +157,37 @@ function ItemsView() {
               <TableCell>عرض الملف</TableCell>
             </TableRow>
           </TableHead>
-          {items?.map((item) => (
-            <TableBody key={item.id}>
-              <TableCell>{item?.form?.name}</TableCell>
-              <TableCell>{formatDate(item?.updated_at)}</TableCell>
-              <TableCell>
-                {generateChip(item?.order_steps_form?.status)}
-              </TableCell>
-              <TableCell>
-                <LimitTypography>{item?.employees?.name}</LimitTypography>
-              </TableCell>
-              <TableCell>{formatDate(item?.updated_at)}</TableCell>
-              <TableCell>
-                {typeof item.has_accses === "undefined" ? "false" : "true"}
-                {/* {item?.has_accses ? (
-                  <IconButton
-                    onClick={handleDialog(
-                      item?.form_id,
-                      item.order_steps_form.id
-                    )}
-                  >
-                    <ArticleOutlinedIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton>
-                    <CloseIcon />
-                  </IconButton>
-                )} */}
-              </TableCell>
-            </TableBody>
-          ))}
+          {items?.map((item) => {
+            return (
+              <TableBody key={item.id}>
+                <TableCell>{item?.form?.name}</TableCell>
+                <TableCell>{formatDate(item?.updated_at)}</TableCell>
+                <TableCell>
+                  {generateChip(item?.order_steps_form?.status)}
+                </TableCell>
+                <TableCell>
+                  <LimitTypography>{item?.employees?.name}</LimitTypography>
+                </TableCell>
+                <TableCell>{formatDate(item?.updated_at)}</TableCell>
+                <TableCell>
+                  {item?.has_access ? (
+                    <IconButton
+                      onClick={handleDialog(
+                        item?.form_id,
+                        item.order_steps_form.id
+                      )}
+                    >
+                      <ArticleOutlinedIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton>
+                      <CloseIcon />
+                    </IconButton>
+                  )}
+                </TableCell>
+              </TableBody>
+            );
+          })}
         </Table>
       </TableContainer>
     </>
