@@ -1,15 +1,6 @@
 import { useContext, useMemo, useState } from "react";
-import {
-  Grid,
-  GridProps,
-  TypographyProps,
-  Typography,
-  Box,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Grid, GridProps, Typography, Box, Button } from "@mui/material";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
-import { SoilContext } from "../../../../SoilContext";
 import { SoilDataContext } from "../../..";
 import { formatDate } from "../../../../../../methods";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
@@ -37,7 +28,6 @@ function InfoItem(props: { label: string; value?: React.ReactNode }) {
 function DetailsView(): JSX.Element {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { soilData } = useContext(SoilDataContext);
-  function apperData() {}
   return (
     <>
       {typeof soilData === "object" ? (
@@ -74,7 +64,7 @@ function DetailsView(): JSX.Element {
             />
             <InfoItem
               label="طريقة السداد"
-              // value={soilData?.soil_order?.number_bodies}
+              value={soilData?.soil_order?.payment}
             />
             <Grid item md={6}>
               <Typography>

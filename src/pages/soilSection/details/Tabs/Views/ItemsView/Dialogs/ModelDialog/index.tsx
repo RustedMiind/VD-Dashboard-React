@@ -13,13 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect, useReducer } from "react";
+import { useContext } from "react";
 import { useSnackbar } from "notistack";
 import { Api } from "../../../../../../../../constants";
+import { SoilDataContext } from "../../../../..";
 
 const ModelDialog = ({ open, onClose, id }: PropsType) => {
   const { enqueueSnackbar } = useSnackbar();
-
+  const { setItems } = useContext(SoilDataContext);
   const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (id) {
@@ -28,6 +29,7 @@ const ModelDialog = ({ open, onClose, id }: PropsType) => {
         .then((res) => {
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
+          setItems && setItems();
         })
         .catch((err) => {
           enqueueSnackbar(err.response.data.message || "", {

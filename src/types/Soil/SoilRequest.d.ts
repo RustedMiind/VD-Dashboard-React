@@ -17,7 +17,6 @@ type SoilRequest = {
 
 type SoilOrder = {
   client_id: number;
-  deleted_at: null;
   depth: number;
   id: number;
   license: License;
@@ -34,9 +33,12 @@ type SoilOrder = {
   total_price: number;
   type_order: type_order;
   soil_location_map: Map;
-  //   created_at: "2024-02-04T08:05:06.000000Z";
-  //   updated_at: "2024-02-04T13:05:26.000000Z";
+  payment: string;
   soil_floor: Floor;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null;
+  payment_status: null;
 };
 
 type License = {

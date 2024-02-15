@@ -35,7 +35,6 @@ export default function DialogShowLocation(props: TypeProps) {
       positions.push(temp);
     }
     setPositionClick(positions);
-    console.log(positionClick);
   }, []);
 
   function closeDialog() {

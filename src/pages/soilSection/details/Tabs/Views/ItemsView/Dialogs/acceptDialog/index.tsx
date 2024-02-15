@@ -14,11 +14,14 @@ import {
 import { MenuItem } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Api } from "../../../../../../../../constants";
 import { FormStatus } from "../../../../../../../../types/FormStatus";
+import { SoilDataContext } from "../../../../..";
 
 export default function AcceptDialog({ open, onClose, id }: PropsType) {
+  const { setItems } = useContext(SoilDataContext);
+
   const { enqueueSnackbar } = useSnackbar();
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const objectTest: TypeAccept = {
@@ -41,6 +44,7 @@ export default function AcceptDialog({ open, onClose, id }: PropsType) {
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           setFormStatus("none");
           onClose();
+          setItems && setItems();
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {

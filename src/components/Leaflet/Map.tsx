@@ -27,7 +27,6 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
   return null;
 };
 export function ShowMap({ positionClick }: PropsType) {
-  console.log(positionClick);
   const customIcon = new Icon({
     iconUrl: "/icons8-select-24.png",
     iconSize: [20, 20],

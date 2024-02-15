@@ -14,7 +14,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { MenuItem } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { FileBondState } from "../../../../../../../../types/FileBondState";
@@ -22,6 +22,8 @@ import { FormStatus } from "../../../../../../../../types/FormStatus";
 import { objectToFormData } from "../../../../../../../../methods";
 import { Api } from "../../../../../../../../constants";
 import CustomFilePond from "../../../../../../../../components/CustomFilepond";
+import { SoilDataContext } from "../../../../..";
+import { set } from "react-hook-form";
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
     <Typography variant="body1">{props.label}</Typography>
@@ -30,6 +32,7 @@ const GridItem = (props: GridProps & { label: string }) => (
 );
 export default function TestDialog({ open, onClose, id }: PropsType) {
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
+  const { setItems } = useContext(SoilDataContext);
 
   const { enqueueSnackbar } = useSnackbar();
   const objectTest: TypeTest = {
@@ -63,6 +66,7 @@ export default function TestDialog({ open, onClose, id }: PropsType) {
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           setFormStatus("none");
           onClose();
+          setItems && setItems();
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
