@@ -42,7 +42,10 @@ function IncomingTasks() {
                     <TableCell>{formatDate(task.created_at)}</TableCell>
                     <TableCell>-</TableCell>
                     <TableCell>
-                      <IconButton component={NavLink} to={route(task.id)}>
+                      <IconButton
+                        component={NavLink}
+                        to={route(task.taskable_id)}
+                      >
                         <RemoveRedEyeIcon />
                       </IconButton>
                     </TableCell>
