@@ -23,8 +23,10 @@ import AcceptDialog from "./Dialogs/acceptDialog";
 import ReportDialog from "./Dialogs/reportDialog";
 import TestDialog from "./Dialogs/testDialog";
 import VisitDialog from "./Dialogs/visitDialog";
+import { Step } from "../../../../../../types/Soil/Step";
 function ItemsView() {
-  const { items, tasks, soilData } = useContext(SoilDataContext);
+  const { items, soilData } = useContext(SoilDataContext);
+  console.log(items);
   const [selectId, setSeletId] = useState<number>();
   const [dialogOpen, setDialogOpen] = useState<
     | undefined
@@ -100,7 +102,7 @@ function ItemsView() {
   // const handleOpenDetails = () => {
   //   setDialogOpen("details");
   // };
-  const arr = items?.map((item) => {});
+
   return (
     <>
       <ModelDialog
@@ -155,40 +157,36 @@ function ItemsView() {
               <TableCell>عرض الملف</TableCell>
             </TableRow>
           </TableHead>
-          {Array.isArray(items) &&
-            items.map((item) =>
-              tasks?.map((task) => (
-                <TableBody key={task.id}>
-                  <TableCell>{task?.form?.name}</TableCell>
-                  <TableCell>{formatDate(task?.updated_at)}</TableCell>
-                  <TableCell>
-                    {generateChip(task?.order_steps_form?.status)}
-                  </TableCell>
-                  <TableCell>
-                    <LimitTypography>
-                      {task?.order_steps_form?.employee?.name}
-                    </LimitTypography>
-                  </TableCell>
-                  <TableCell>{formatDate(task?.updated_at)}</TableCell>
-                  <TableCell>
-                    {task.has_accses ? (
-                      <IconButton
-                        onClick={handleDialog(
-                          task?.form_id,
-                          task.order_steps_form.id
-                        )}
-                      >
-                        <ArticleOutlinedIcon />
-                      </IconButton>
-                    ) : (
-                      <IconButton>
-                        <CloseIcon />
-                      </IconButton>
+          {items?.map((item) => (
+            <TableBody key={item.id}>
+              <TableCell>{item?.form?.name}</TableCell>
+              <TableCell>{formatDate(item?.updated_at)}</TableCell>
+              <TableCell>
+                {generateChip(item?.order_steps_form?.status)}
+              </TableCell>
+              <TableCell>
+                <LimitTypography>{item?.employees?.name}</LimitTypography>
+              </TableCell>
+              <TableCell>{formatDate(item?.updated_at)}</TableCell>
+              <TableCell>
+                {typeof item.has_accses === "undefined" ? "false" : "true"}
+                {/* {item?.has_accses ? (
+                  <IconButton
+                    onClick={handleDialog(
+                      item?.form_id,
+                      item.order_steps_form.id
                     )}
-                  </TableCell>
-                </TableBody>
-              ))
-            )}
+                  >
+                    <ArticleOutlinedIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton>
+                    <CloseIcon />
+                  </IconButton>
+                )} */}
+              </TableCell>
+            </TableBody>
+          ))}
         </Table>
       </TableContainer>
     </>

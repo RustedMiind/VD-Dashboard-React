@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
@@ -19,6 +19,7 @@ import { useSnackbar } from "notistack";
 import { Select } from "@mui/material";
 import { Api } from "../../../../../../../../constants";
 import { FormStatus } from "../../../../../../../../types/FormStatus";
+import { SoilDataContext } from "../../../../..";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -37,7 +38,7 @@ export default function FinanceDialog({ open, onClose, id }: PropsType) {
   const { enqueueSnackbar } = useSnackbar();
   const [amountData, setAmountData] = useState<TypeFinance>(objectFinance);
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
-
+  const { setItems } = useContext(SoilDataContext);
   function updateAmountData(partial: Partial<TypeFinance>) {
     setAmountData({
       ...amountData,
@@ -55,6 +56,7 @@ export default function FinanceDialog({ open, onClose, id }: PropsType) {
           setAmountData(objectFinance);
           setFormStatus("none");
           onClose();
+          setItems && setItems();
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {

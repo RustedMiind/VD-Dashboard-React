@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import axios from "axios";
@@ -22,6 +22,7 @@ import { FileBondState } from "../../../../../../../../types/FileBondState";
 import CustomFilePond from "../../../../../../../../components/CustomFilepond";
 import { objectToFormData } from "../../../../../../../../methods";
 import { Api } from "../../../../../../../../constants";
+import { SoilDataContext } from "../../../../..";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -31,6 +32,8 @@ const GridItem = (props: GridProps & { label: string }) => (
 );
 
 export default function ReportDialog({ open, onClose, id }: PropsType) {
+  const { setItems } = useContext(SoilDataContext);
+
   const objectReport: TypeReport = {
     form_name: "",
     status: "",
@@ -64,6 +67,7 @@ export default function ReportDialog({ open, onClose, id }: PropsType) {
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           setFormStatus("none");
           onClose();
+          setItems && setItems();
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {

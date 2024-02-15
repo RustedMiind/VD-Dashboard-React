@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useSnackbar } from "notistack";
@@ -22,6 +22,7 @@ import { objectToFormData } from "../../../../../../../../methods";
 import { Api } from "../../../../../../../../constants";
 import { FileBondState } from "../../../../../../../../types/FileBondState";
 import { FormStatus } from "../../../../../../../../types/FormStatus";
+import { SoilDataContext } from "../../../../..";
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
     <Typography variant="body1">{props.label}</Typography>
@@ -30,6 +31,8 @@ const GridItem = (props: GridProps & { label: string }) => (
 );
 
 export default function VisitDialog({ open, onClose, id }: PropsType) {
+  const { setItems } = useContext(SoilDataContext);
+
   const { enqueueSnackbar } = useSnackbar();
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
 
@@ -67,6 +70,7 @@ export default function VisitDialog({ open, onClose, id }: PropsType) {
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           setFormStatus("none");
           onClose();
+          setItems && setItems();
         })
         .catch((err) => {
           enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
