@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { Tender } from "../../../types";
 import { FetchStatus } from "../../../types/FetchStatus";
 import { FetchStatusEnum } from "../../../types/FetchStatusEnum";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Api } from "../../../constants";
 import { isStringAllNumbers } from "../../../methods";
 import axios from "axios";
@@ -21,7 +21,8 @@ export const SoilDataContext = createContext<SoilDataContextType>({});
 
 function SoilDetails() {
   const { id } = useParams();
-  const url = window.location.href.toString().includes("-1")
+  const { pathname } = useLocation();
+  const url = pathname.includes("showtask")
     ? "employee/soil/-1/"
     : "employee/soil/";
   const [soilData, setSoilData] = useState<SoilRequest | undefined>(undefined);

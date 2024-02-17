@@ -48,11 +48,7 @@ const DetailsDialog = ({ open, requestId, onClose }: PropsType) => {
               cols={12}
               value={details?.order?.order_type?.name}
             />
-            <DataInputLike
-              title="القسم"
-              cols={12}
-              value={details?.department?.name}
-            />
+
             <DataInputLike
               title="الملاحظات"
               cols={12}
