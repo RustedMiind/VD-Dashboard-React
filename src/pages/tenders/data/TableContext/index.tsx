@@ -18,11 +18,21 @@ export function TenderTableContextProvider({
 
   let [limit, setLimit] = useState<string>("25");
   let [counts, setCounts] = useState<Counts | undefined>(undefined);
+  const [selectedType, setSelectedType] = useState<
+    TenderEntityStatus | undefined
+  >(undefined);
   function getTender(params?: unknown) {
     setTenderTableData("loading");
+    const generatedParams = {
+      draft: 0,
+      ...(typeof selectedType === "number"
+        ? { directorate_status: selectedType }
+        : {}),
+      ...(typeof params === "object" ? params : {}),
+    };
     axios
       .get<{ data: Tender[]; count?: Counts }>(Api("employee/tender"), {
-        params: { draft: 0, ...(typeof params === "object" ? params : {}) },
+        params: generatedParams,
       })
       .then((res) => {
         if (res.data.data.length) {
@@ -38,7 +48,7 @@ export function TenderTableContextProvider({
         setTenderTableData("error");
       });
   }
-  useEffect(getTender, []);
+  useEffect(getTender, [selectedType]);
   function setLimitAndUpdate(rows: string) {
     setLimit(rows);
     getTender({ limit: rows });
@@ -53,6 +63,7 @@ export function TenderTableContextProvider({
         limit,
         setLimit: setLimitAndUpdate,
         counts,
+        setSelectedType,
       }}
     >
       {children}
@@ -68,6 +79,7 @@ type ContextType = {
   limit?: string | null;
   setLimit?: ((rows: string) => void) | null;
   counts?: Counts;
+  setSelectedType?: (tenderEntityStatus: TenderEntityStatus) => void;
 };
 
 type Counts = {

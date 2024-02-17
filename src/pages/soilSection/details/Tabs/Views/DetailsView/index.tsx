@@ -8,18 +8,15 @@ import DialogShowLocation from "./Dialog";
 import { styled } from "@mui/material/styles";
 import PrintIcon from "@mui/icons-material/Print";
 import ReactToPrint from "react-to-print";
-
-function GridItem(props: GridProps) {
-  return <Grid item lg={6} xs={12} {...props} />;
-}
-export const NotPrintableTableCell = styled(Grid)({
+export const NotPrintableTableCell = styled(Box)({
   "@media print": {
     display: "none",
   },
 });
-export type IdListType = {
-  id: number[];
-};
+
+function GridItem(props: GridProps) {
+  return <Grid item lg={6} xs={12} {...props} />;
+}
 
 function InfoItem(props: { label: string; value?: React.ReactNode }) {
   return (
@@ -39,21 +36,20 @@ function InfoItem(props: { label: string; value?: React.ReactNode }) {
 function DetailsView(): JSX.Element {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { soilData } = useContext(SoilDataContext);
-  const reportPrint: React.RefObject<HTMLTableElement> =
-    useRef<HTMLTableElement>(null);
-  const handlePrint = () => {
-    if (reportPrint.current) {
-      window.print();
-    }
-  };
+
   return (
     <>
       {typeof soilData === "object" ? (
-        <>
-          <Typography variant={"h5"} sx={{ mb: 4, fontWeight: 600 }}>
-            معلومات الطلب
-          </Typography>
-          <Grid container rowSpacing={4} columnSpacing={2} ref={reportPrint}>
+        <Box>
+          <NotPrintableTableCell>
+            <Box>
+              <Typography variant={"h5"} sx={{ mb: 4, fontWeight: 600 }}>
+                معلومات الطلب
+              </Typography>
+            </Box>
+          </NotPrintableTableCell>
+
+          <Grid container rowSpacing={4} columnSpacing={2}>
             <InfoItem label="رقم الطلب" value={soilData?.id} />
             <InfoItem
               label="تاريخ الطلب"
@@ -85,40 +81,31 @@ function DetailsView(): JSX.Element {
               value={soilData?.soil_order?.payment}
             />
             <Grid item md={6}>
-              <Typography>
-                عرض الموقع
-                <RequiredSymbol />
-              </Typography>
-              <Button
-                sx={{ width: 0.3 }}
-                variant="contained"
-                onClick={() => {
-                  setOpenDialog(true);
-                }}
-              >
-                عرض
-              </Button>
+              <NotPrintableTableCell>
+                <Box>
+                  <Typography>
+                    عرض الموقع
+                    <RequiredSymbol />
+                  </Typography>
+                  <Button
+                    sx={{ width: 0.3 }}
+                    variant="contained"
+                    onClick={() => {
+                      setOpenDialog(true);
+                    }}
+                  >
+                    عرض
+                  </Button>
+                </Box>
+              </NotPrintableTableCell>
             </Grid>
           </Grid>
-          <Box sx={{ display: "flex", justifyContent: "end", my: 2 }}>
-            <ReactToPrint
-              trigger={() => (
-                <Button
-                  variant="contained"
-                  startIcon={<PrintIcon />}
-                  onClick={handlePrint}
-                >
-                  طباعه
-                </Button>
-              )}
-              content={() => reportPrint.current}
-            />
-          </Box>
+
           <DialogShowLocation
             openDialog={openDialog}
             setOpenDialog={setOpenDialog}
           />
-        </>
+        </Box>
       ) : (
         <></>
       )}
