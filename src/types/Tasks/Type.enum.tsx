@@ -21,7 +21,7 @@ export function createTaskType(type: TaskType): {
       return {
         name: "التربة",
         route(path) {
-          return `/react/services/soil/show/` + path;
+          return `/react/services/soil/showtask/` + path;
         },
       };
     case TaskType.CLIENT_REQUEST:

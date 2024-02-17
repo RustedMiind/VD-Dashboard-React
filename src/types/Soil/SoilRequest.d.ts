@@ -39,6 +39,8 @@ type SoilOrder = {
   updated_at: string;
   deleted_at: null;
   payment_status: null;
+  long: number;
+  lat: number;
 };
 
 type License = {

@@ -94,6 +94,8 @@ export default function DialogShowLocation(props: TypeProps) {
 
               <Grid item md={12}>
                 <ShowMap
+                  lat={soilData?.soil_order?.lat}
+                  long={soilData?.soil_order?.long}
                   positionClick={positionClick}
                   setPositionClick={setPositionClick}
                 />
