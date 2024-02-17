@@ -4,36 +4,73 @@ import { createContext, useEffect, useState } from "react";
 import { Tender } from "../../../types";
 import { FetchStatus } from "../../../types/FetchStatus";
 import { FetchStatusEnum } from "../../../types/FetchStatusEnum";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Api } from "../../../constants";
 import { isStringAllNumbers } from "../../../methods";
 import axios from "axios";
 import Cards from "./Cards";
 import { SoilRequest } from "../../../types/Soil/SoilRequest";
 import { Step } from "../../../types/Soil/Step";
+import {
+  FileTechnical,
+  IncomingFiles,
+} from "../../../types/Soil/FileFinancial";
 // import Chat from "./Chat";
 
 export const SoilDataContext = createContext<SoilDataContextType>({});
 
 function SoilDetails() {
   const { id } = useParams();
-  const url = window.location.href.toString().includes("-1")
+  const { pathname } = useLocation();
+  const url = pathname.includes("showtask")
     ? "employee/soil/-1/"
     : "employee/soil/";
   const [soilData, setSoilData] = useState<SoilRequest | undefined>(undefined);
   const [items, setItems] = useState<Step[] | undefined>(undefined);
-  useEffect(() => {
+  const [fileTechnical, setFileTechnical] = useState<
+    FileTechnical[] | undefined
+  >(undefined);
+  const [incomingFiles, setIncomingFiles] = useState<IncomingFiles | undefined>(
+    undefined
+  );
+  function getData() {
     axios
-      .get<{ data: SoilRequest; step: Step[] }>(Api(`${url}` + id))
+      .get<{
+        data: SoilRequest;
+        step: Step[];
+        tasks: Step[];
+        file_technical: FileTechnical[];
+        incoming_fills: IncomingFiles;
+      }>(Api(`${url}` + id))
       .then((res) => {
+        const arr = res.data.step
+          ?.map((item) => {
+            if (item.is_current) {
+              return res.data.tasks?.find((task) => task.id === item.id);
+            }
+            return item;
+          })
+          .filter((item) => !!item) as Step[] | undefined;
+
         setSoilData(res.data.data);
-        setItems(res.data.step);
+        setItems(arr);
+        setFileTechnical(res.data.file_technical);
+        setIncomingFiles(res.data.incoming_fills);
       })
       .catch((err) => {});
-  }, [id]);
+  }
+  useEffect(getData, [id]);
 
   return (
-    <SoilDataContext.Provider value={{ soilData, items }}>
+    <SoilDataContext.Provider
+      value={{
+        soilData,
+        items,
+        setItems: getData,
+        fileTechnical,
+        incomingFiles,
+      }}
+    >
       <Stack>
         <Cards />
         <Grid container spacing={2}>
@@ -52,6 +89,8 @@ function SoilDetails() {
 type SoilDataContextType = {
   soilData?: SoilRequest;
   items?: Step[];
+  setItems?: () => void;
+  fileTechnical?: FileTechnical[];
+  incomingFiles?: IncomingFiles;
 };
-
 export default SoilDetails;

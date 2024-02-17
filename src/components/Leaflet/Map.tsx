@@ -6,12 +6,12 @@ import {
   useMapEvents,
   Polyline,
   Polygon,
+  Popup,
 } from "react-leaflet";
 import { Icon, LeafletMouseEvent } from "leaflet";
-import { useState } from "react";
 import { Box, Stack } from "@mui/material";
-import ReplayIcon from "@mui/icons-material/Replay";
-import { IconButton } from "@mui/material";
+import img1 from "../../assets/images/pngwing.com.png";
+
 let TargetPositions: [number, number][] = [];
 
 const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
@@ -26,10 +26,9 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
 
   return null;
 };
-export function ShowMap({ positionClick }: PropsType) {
-  console.log(positionClick);
+export function ShowMap({ positionClick, lat, long }: PropsType) {
   const customIcon = new Icon({
-    iconUrl: "/icons8-select-24.png",
+    iconUrl: img1,
     iconSize: [20, 20],
   });
 
@@ -79,14 +78,12 @@ export function ShowMap({ positionClick }: PropsType) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
+        <Marker position={[lat, long]} icon={customIcon}></Marker>
         {/* Second TileLayer without background color */}
         <Polygon
           positions={positionClick}
           pathOptions={{ fillColor: "yellow", fillOpacity: 0.4 }}
         />
-
-        <Marker position={[13.084622, 80.248357]} icon={customIcon}></Marker>
 
         <MapClickHandler onMapClick={() => {}} />
         {createPolylines()}
@@ -101,14 +98,8 @@ export function ShowMap({ positionClick }: PropsType) {
             zIndex: "100000",
             bgcolor: "primary.contrastText",
           }}
-        >
-          {/* <Button variant="text" sx={{ fontSize: "18px", fontWeight: 600 }}>
-            اعادة
-          </Button> */}
-        </Box>
+        ></Box>
       </MapContainer>
-
-      {/* Search input and button within MapContainer */}
     </Stack>
   );
 }
@@ -120,4 +111,6 @@ interface MapClickHandlerProps {
 type PropsType = {
   positionClick: [number, number][];
   setPositionClick: React.Dispatch<React.SetStateAction<[number, number][]>>;
+  lat: number;
+  long: number;
 };

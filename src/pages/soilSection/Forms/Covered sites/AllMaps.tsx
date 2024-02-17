@@ -11,7 +11,7 @@ const GridItem = (props: GridProps) => (
 );
 const marginTyp = 2;
 export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
-  const { soilData, setSoilData } = useContext(SoilContext);
+  const { soilData } = useContext(SoilContext);
   const [positionClick, setPositionClick] = useState<[number, number][]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedBoxId, setSelectedBoxId] = useState<number | null>(null);
@@ -112,6 +112,8 @@ export default function AllMaps({ setOpenAllMaps, openAllMaps }: PropsType) {
         </Grid>
         <Grid item xs={8} sx={{ mt: 2 }}>
           <ShowMap
+            lat={10000}
+            long={100000}
             key={+open}
             positionClick={positionClick}
             setPositionClick={setPositionClick}

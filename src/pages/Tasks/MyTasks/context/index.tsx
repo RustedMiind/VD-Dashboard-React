@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { Api } from "../../../../constants";
+import { EmployeeTask } from "../../../../types/Tasks";
 
 export enum SearchType {
   SERVICE_TYPE = "service_type",
@@ -33,16 +34,37 @@ function TasksContextProvider({ children }: { children: React.ReactNode }) {
   const [searchType, setSearchType] = useState<SearchType>(
     SearchType.REFERENCE_NUMBER
   );
-  const [status, setStatus] = useState<StatusType>("none");
+  const [status, setStatus] = useState<TaskStatusType>("none");
 
   function applySearch() {
     setStatus("loading");
+
+    let params = {};
+    if (search)
+      switch (searchType) {
+        case SearchType.SERVICE_TYPE:
+          params = { taskable_type: search };
+          break;
+        case SearchType.REFERENCE_NUMBER:
+          params = { refrence_number: search };
+          break;
+        case SearchType.CLIENT_NAME:
+          params = { refrence_number: search };
+          break;
+        case SearchType.GOVERNMENT:
+          params = { refrence_number: search };
+          break;
+        default:
+          params = {};
+          break;
+      }
+
     axios
       .get<{
         incoming: IncomingTasks;
         is_manager: boolean;
         ongoing: OngoingTasks;
-      }>(Api("employee/tender/form"), { params: {} })
+      }>(Api("employee/tender/form"), { params })
       .then(({ data }) => {
         setStatus("none");
         setIncomingTasks(data.incoming);
@@ -75,7 +97,7 @@ function TasksContextProvider({ children }: { children: React.ReactNode }) {
 }
 
 type TasksContext = {
-  status: StatusType;
+  status: TaskStatusType;
   incomingTasks?: IncomingTasks;
   ongoingTasks?: OngoingTasks;
   search: string;
@@ -85,9 +107,9 @@ type TasksContext = {
   applySearch: () => void;
 };
 
-type StatusType = "loading" | "error" | "none";
+export type TaskStatusType = "loading" | "error" | "none";
 
-type IncomingTasks = [];
-type OngoingTasks = [];
+type IncomingTasks = EmployeeTask[];
+type OngoingTasks = EmployeeTask[];
 
 export default TasksContextProvider;

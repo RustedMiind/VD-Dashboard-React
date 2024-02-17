@@ -1,8 +1,9 @@
 import { Stack } from "@mui/material";
 import Tabs from "./Tabs";
-import TasksContextProvider from "./context";
+import TasksContextProvider, { tasksContext } from "./context";
 import Filters from "./Filters";
 import ProgressSection from "./Progress";
+import { useContext } from "react";
 
 function MyTasks() {
   return (
@@ -13,6 +14,8 @@ function MyTasks() {
 }
 
 function Component() {
+  const { incomingTasks, ongoingTasks } = useContext(tasksContext);
+
   return (
     <Stack spacing={3}>
       {/* Filters Component */}
@@ -20,7 +23,10 @@ function Component() {
       {/* Tabs */}
       <Tabs />
       {/* Progress Bar Component */}
-      <ProgressSection incoming={5} ongoing={15} />
+      <ProgressSection
+        incoming={incomingTasks?.length || 0}
+        ongoing={ongoingTasks?.length || 0}
+      />
     </Stack>
   );
 }

@@ -9,18 +9,9 @@ import { prefixer } from "stylis";
 import { BrowserRouter } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import axios from "axios";
-import { Api, Domain } from "./constants";
-import { deleteCookie, getCookie, setCookie } from "./methods/cookies";
-import { DevUserType } from "./DevUserType";
-import { DevUser } from "./DevUser";
 
-console.table({
-  Version: "1.3.0",
-  Comment: "Rebased the logic for contracts and clients",
-});
+console.info("v1.6.0");
 
-const devUser: DevUserType = DevUser;
 /* 
 Add File DevUser.tsx in /src
 
@@ -48,78 +39,19 @@ const cacheRtl = createCache({
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-function resetAuth() {
-  deleteCookie("db_token");
-  deleteCookie("vision_session");
-  deleteCookie("XSRF-TOKEN");
-  window.location.replace(Domain("admin/login"));
-}
 
-// Mount the application in mode Development or Production
-MountApp("development");
-
-function MountApp(type: "production" | "development") {
-  switch (type) {
-    case "development":
-      RunDev();
-      break;
-    case "production":
-      RunProd();
-      break;
-    default:
-      RunProd();
-      break;
-  }
-}
-
-function RunProd() {
-  const db_token = getCookie("db_token");
-  if (db_token) {
-    axios.defaults.headers.common.Authorization = `Bearer ${db_token}`;
-    axios
-      .post(Api("employee/user"))
-      .then((res) => {
-        root.render(
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <BrowserRouter>
-              <CacheProvider value={cacheRtl}>
-                <App />
-              </CacheProvider>
-            </BrowserRouter>
-          </LocalizationProvider>
-        );
-      })
-      .catch((err) => {
-        resetAuth();
-      });
-  } else {
-    resetAuth();
-  }
-}
-
-function RunDev() {
-  axios
-    .post<{ data: { token: string; user: unknown } }>(Api("employee/login"), {
-      email: devUser.email,
-      password: devUser.password,
-      imei: "5153153",
-      device_token: "scqwsvcqewcqw",
-      device_type: "android",
-    })
-    .then(({ data }) => {
-      root.render(
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <BrowserRouter>
-            <CacheProvider value={cacheRtl}>
-              <App />
-            </CacheProvider>
-          </BrowserRouter>
-        </LocalizationProvider>
-      );
-      console.log("User Token", data.data.token);
-      axios.defaults.headers.common.Authorization = `Bearer ${data.data.token}`;
-      setCookie("db_token", data.data.token, 7);
-    });
+// Beta
+MountApp();
+function MountApp() {
+  root.render(
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <BrowserRouter>
+        <CacheProvider value={cacheRtl}>
+          <App />
+        </CacheProvider>
+      </BrowserRouter>
+    </LocalizationProvider>
+  );
 }
 
 // If you want to start measuring performance in your app, pass a function

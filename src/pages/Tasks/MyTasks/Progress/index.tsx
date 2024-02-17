@@ -1,7 +1,7 @@
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 
 function ProgressSection({ incoming, ongoing }: PropsType) {
-  const incomingPercentage = (ongoing / (incoming + ongoing)) * 100;
+  const incomingPercentage = (incoming / (incoming + ongoing)) * 100;
 
   return (
     <Stack

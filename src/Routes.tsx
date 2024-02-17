@@ -114,7 +114,7 @@ function RoutesComponent() {
             {hasAnyOfPermissions([
               Permission.TASKS_SHOW,
               Permission.TENDERS_SHOW,
-            ]) && <Route path="controlpanel" element={<ControlPanal />} />}
+            ]) && <Route path="controlpanel" element={<MyTasks />} />}
 
             {hasPermission(Permission.TENDERS_SHOW) && (
               <Route path=":id" element={<TenderDetails />} />
@@ -150,6 +150,9 @@ function RoutesComponent() {
 
             {hasPermission(Permission.SOIL_SHOW) && (
               <Route path="show/:id" element={<SoilDetails />} />
+            )}
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="showtask/:id" element={<SoilDetails />} />
             )}
           </Route>
         </Route>

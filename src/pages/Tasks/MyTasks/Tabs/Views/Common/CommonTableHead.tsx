@@ -15,10 +15,9 @@ function CommonTableHead() {
         <TableCell>رقم الوارد</TableCell>
         <TableCell>نوع الخدمة</TableCell>
         <TableCell>الرقم المرجعي</TableCell>
-        <TableCell>رقم العميل</TableCell>
-        <TableCell>اسم العميل</TableCell>
+        <TableCell>طالب الخدمة</TableCell>
         <TableCell>تاريخ الورود</TableCell>
-        <TableCell>تاريخ الانتهاء</TableCell>
+        <TableCell>تاريخ التقديم المطلوب</TableCell>
         <TableCell>الحالة السابقة</TableCell>
         <TableCell>اسم المسؤول</TableCell>
         <TableCell>عرض</TableCell>

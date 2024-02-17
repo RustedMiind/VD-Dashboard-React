@@ -1,23 +1,25 @@
-import { useContext, useMemo, useState } from "react";
-import {
-  Grid,
-  GridProps,
-  TypographyProps,
-  Typography,
-  Box,
-  Button,
-  TextField,
-} from "@mui/material";
+import { useContext, useMemo, useRef, useState } from "react";
+import { Grid, GridProps, Typography, Box, Button } from "@mui/material";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
-import { SoilContext } from "../../../../SoilContext";
 import { SoilDataContext } from "../../..";
 import { formatDate } from "../../../../../../methods";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import DialogShowLocation from "./Dialog";
+import { styled } from "@mui/material/styles";
+import PrintIcon from "@mui/icons-material/Print";
+import ReactToPrint from "react-to-print";
 
 function GridItem(props: GridProps) {
   return <Grid item lg={6} xs={12} {...props} />;
 }
+export const NotPrintableTableCell = styled(Grid)({
+  "@media print": {
+    display: "none",
+  },
+});
+export type IdListType = {
+  id: number[];
+};
 
 function InfoItem(props: { label: string; value?: React.ReactNode }) {
   return (
@@ -37,7 +39,13 @@ function InfoItem(props: { label: string; value?: React.ReactNode }) {
 function DetailsView(): JSX.Element {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { soilData } = useContext(SoilDataContext);
-  function apperData() {}
+  const reportPrint: React.RefObject<HTMLTableElement> =
+    useRef<HTMLTableElement>(null);
+  const handlePrint = () => {
+    if (reportPrint.current) {
+      window.print();
+    }
+  };
   return (
     <>
       {typeof soilData === "object" ? (
@@ -45,7 +53,7 @@ function DetailsView(): JSX.Element {
           <Typography variant={"h5"} sx={{ mb: 4, fontWeight: 600 }}>
             معلومات الطلب
           </Typography>
-          <Grid container rowSpacing={4} columnSpacing={2}>
+          <Grid container rowSpacing={4} columnSpacing={2} ref={reportPrint}>
             <InfoItem label="رقم الطلب" value={soilData?.id} />
             <InfoItem
               label="تاريخ الطلب"
@@ -74,7 +82,7 @@ function DetailsView(): JSX.Element {
             />
             <InfoItem
               label="طريقة السداد"
-              // value={soilData?.soil_order?.number_bodies}
+              value={soilData?.soil_order?.payment}
             />
             <Grid item md={6}>
               <Typography>
@@ -93,7 +101,18 @@ function DetailsView(): JSX.Element {
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "end", my: 2 }}>
-            <Button variant="contained">الطباعة</Button>
+            <ReactToPrint
+              trigger={() => (
+                <Button
+                  variant="contained"
+                  startIcon={<PrintIcon />}
+                  onClick={handlePrint}
+                >
+                  طباعه
+                </Button>
+              )}
+              content={() => reportPrint.current}
+            />
           </Box>
           <DialogShowLocation
             openDialog={openDialog}

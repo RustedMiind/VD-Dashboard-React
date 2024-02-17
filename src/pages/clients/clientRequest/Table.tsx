@@ -143,7 +143,6 @@ const ClientTableComponent = ({
               <TableCell>نوع العميل </TableCell>
               <TableCell>الفرع</TableCell>
               <TableCell>نوع الطلب</TableCell>
-              <TableCell>القسم</TableCell>
               <TableCell>حالة الطلب</TableCell>
               <TableCell>الملاحظات</TableCell>
             </TableRow>
@@ -195,9 +194,7 @@ const ClientTableComponent = ({
                       {request?.order?.order_type?.name}
                     </Button>
                   </TableCell>
-                  <TableCell>
-                    {request?.department?.name ? request?.department?.name : ""}
-                  </TableCell>
+
                   <TableCell id={`${request?.step_status_id}`}>
                     {generateChip(request, request.form_id)}
                   </TableCell>

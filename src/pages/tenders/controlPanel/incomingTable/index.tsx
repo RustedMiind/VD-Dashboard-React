@@ -42,7 +42,7 @@ export default function IncomingTable() {
     let url: string = "";
     switch (type) {
       case TaskType.SOIL:
-        url = `../../services/soil/show/-1/${id}`;
+        url = `../../services/soil/show/${id}`;
         break;
       case TaskType.CLIENT_REQUEST:
         url = `../../clients/requests/`;

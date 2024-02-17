@@ -21,12 +21,12 @@ export enum TenderApprovalStatus {
 }
 
 export enum TenderStep {
-  ACCEPTION = "1",
-  PURCHASE = "2",
-  TECHNICAL = "3",
-  FINANCIAL = "4",
-  FILE = "5",
-  APPLY = "6",
+  ACCEPTION = 1,
+  PURCHASE = 2,
+  TECHNICAL = 3,
+  FINANCIAL = 4,
+  FILE = 5,
+  APPLY = 6,
 }
 export enum TenderPay {
   PAYED = TenderItemStatus.ONGOING,
