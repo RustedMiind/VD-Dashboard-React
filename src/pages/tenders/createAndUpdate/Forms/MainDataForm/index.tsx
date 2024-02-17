@@ -207,6 +207,7 @@ export default function MainDataForm() {
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.applyDate)}
+            shouldDisableTime={disableDateAfter(dayjs(form.endDate))}
             shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
@@ -246,6 +247,7 @@ export default function MainDataForm() {
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
+            shouldDisableTime={disableDateBefore(dayjs(form.applyDate))}
             shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
             value={dayjs(form.endDate)}
             onChange={(date) => {

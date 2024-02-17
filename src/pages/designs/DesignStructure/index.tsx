@@ -19,6 +19,7 @@ import { useSnackbar } from "notistack";
 import CustomFilePond from "../../../components/CustomFilepond";
 import { FileBondState } from "../../../types/FileBondState";
 import { Media } from "../../../types";
+import { serialize } from "object-to-formdata";
 
 const GridItem = (props: GridProps) => (
   <Grid sx={{ padding: "0.5rem" }} item md={6} {...props} />
@@ -32,11 +33,14 @@ function DesignStructurePage() {
   const [bannerUploadedImages, setBannerUploadedImages] = useState<Media[]>([]);
   const handleFormSubmit = handleSubmit((formData) => {
     setFormStatus("loading");
-    console.log(formData);
     axios
-      .post(Api("client/strucre-design"), formData, {
-        headers: { from: "website" },
-      })
+      .post(
+        Api("client/strucre-design"),
+        serialize({ ...formData, banner: banner[0] }),
+        {
+          headers: { from: "website" },
+        }
+      )
       .then((res) => {
         enqueueSnackbar("تم نحديث هيكل التصميم بنجاح");
       })
