@@ -88,12 +88,11 @@ export function UserContextProvider({
     console.log("passedToken: ", token, "calculatedToken: ", tokenToUse);
     if (tokenToUse) {
       setToken(tokenToUse, true);
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       axios
-        .post<{ data: { token: string; user: User } }>(Api("employee/user"))
+        .post<{ data: User }>(Api("employee/user"))
         .then(({ data }) => {
           setAccountStatus(AccountStatus.IS_USER);
-          setAccountData({ token: data.data.token, user: data.data.user });
+          setAccountData({ user: data.data, token: tokenToUse });
         })
         .catch(() => {
           resetAuth(true);

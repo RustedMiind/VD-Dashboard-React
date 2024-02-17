@@ -25,6 +25,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { useSnackbar } from "notistack";
+import { useUser } from "../../../../contexts/user/user";
 function MessageComponent({ message }: PropsType) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -38,8 +39,8 @@ function MessageComponent({ message }: PropsType) {
 
   const handleDeleteMessage = (id?: string | number) => {
     return () => {
+      handleClose();
       axios.post(Api(`employee/tender/chat/${id}/delete`)).catch((err) => {
-        handleClose();
         enqueueSnackbar(
           err.response?.data?.msg ||
             err.response?.data?.msg ||
@@ -48,6 +49,8 @@ function MessageComponent({ message }: PropsType) {
       });
     };
   };
+  const { user } = useUser();
+  console.log(message.sender_id !== user?.employee_id, user, message);
   return (
     <>
       <Stack component={Paper} direction="row">
@@ -113,7 +116,10 @@ function MessageComponent({ message }: PropsType) {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleDeleteMessage(message.id)}>
+        <MenuItem
+          onClick={handleDeleteMessage(message.id)}
+          disabled={message.sender_id !== user?.employee_id}
+        >
           <ListItemIcon>
             <DeleteIcon color="error" />
           </ListItemIcon>

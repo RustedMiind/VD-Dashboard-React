@@ -34,7 +34,7 @@ function TasksContextProvider({ children }: { children: React.ReactNode }) {
   const [searchType, setSearchType] = useState<SearchType>(
     SearchType.REFERENCE_NUMBER
   );
-  const [status, setStatus] = useState<StatusType>("none");
+  const [status, setStatus] = useState<TaskStatusType>("none");
 
   function applySearch() {
     setStatus("loading");
@@ -97,7 +97,7 @@ function TasksContextProvider({ children }: { children: React.ReactNode }) {
 }
 
 type TasksContext = {
-  status: StatusType;
+  status: TaskStatusType;
   incomingTasks?: IncomingTasks;
   ongoingTasks?: OngoingTasks;
   search: string;
@@ -107,7 +107,7 @@ type TasksContext = {
   applySearch: () => void;
 };
 
-type StatusType = "loading" | "error" | "none";
+export type TaskStatusType = "loading" | "error" | "none";
 
 type IncomingTasks = EmployeeTask[];
 type OngoingTasks = EmployeeTask[];

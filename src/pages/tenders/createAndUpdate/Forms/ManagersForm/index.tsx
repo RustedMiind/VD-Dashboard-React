@@ -137,6 +137,9 @@ function ManagersForm() {
                 shouldDisableDate={disableDateAfter(
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
+                shouldDisableTime={disableDateAfter(
+                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                )}
                 {...inputProps}
               />
             </AddLabelToEl>
@@ -181,6 +184,10 @@ function ManagersForm() {
                   dayjs(form.approvalEndDate),
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
+                shouldDisableTime={onlyDateBetween(
+                  dayjs(form.approvalEndDate),
+                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                )}
                 {...inputProps}
               />
             </AddLabelToEl>
@@ -216,6 +223,10 @@ function ManagersForm() {
                 disablePast
                 value={dayjs(form.technecalEndDate)}
                 shouldDisableDate={onlyDateBetween(
+                  dayjs(form.approvalEndDate),
+                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                )}
+                shouldDisableTime={onlyDateBetween(
                   dayjs(form.approvalEndDate),
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
@@ -260,6 +271,10 @@ function ManagersForm() {
                 disablePast
                 value={dayjs(form.technicalAlternativeEndDate)}
                 shouldDisableDate={onlyDateBetween(
+                  dayjs(form.approvalEndDate),
+                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                )}
+                shouldDisableTime={onlyDateBetween(
                   dayjs(form.approvalEndDate),
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
@@ -345,6 +360,10 @@ function ManagersForm() {
                   dayjs(form.approvalEndDate),
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
+                shouldDisableTime={onlyDateBetween(
+                  dayjs(form.approvalEndDate),
+                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                )}
                 onChange={(date) => {
                   dispatch(
                     generateReducerAction(
@@ -393,6 +412,10 @@ function ManagersForm() {
                   );
                 }}
                 shouldDisableDate={onlyDateBetween(
+                  dayjs(form.approvalEndDate),
+                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                )}
+                shouldDisableTime={onlyDateBetween(
                   dayjs(form.approvalEndDate),
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
