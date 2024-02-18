@@ -42,11 +42,11 @@ export default function Items() {
   console.log("items", items);
 
   if (Array.isArray(items)) {
-    const visit = items.find((item) => item.type_id === 4),
-      test = items.find((item) => item.type_id === 5),
-      report = items.find((item) => item.type_id === 6),
-      approved = items.find((item) => item.type_id === 2);
-    console.log(report);
+    // const visit = items.find((item) => item.type_id === 4),
+    //   test = items.find((item) => item.type_id === 5),
+    //   report = items.find((item) => item.type_id === 6),
+    //   approved = items.find((item) => item.type_id === 2);
+    // console.log(report);
     return (
       <GradientBg reverseBg>
         <Stack>
@@ -59,7 +59,7 @@ export default function Items() {
                 <Label label={item?.form?.name} />
                 <Content>
                   {item?.is_current
-                    ? generateChip(visit?.order_steps_form?.status)
+                    ? generateChip(item?.order_steps_form?.status)
                     : generateChip(102152)}
                 </Content>
               </>

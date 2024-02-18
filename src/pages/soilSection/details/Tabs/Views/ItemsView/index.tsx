@@ -24,7 +24,8 @@ import ReportDialog from "./Dialogs/reportDialog";
 import TestDialog from "./Dialogs/testDialog";
 import VisitDialog from "./Dialogs/visitDialog";
 import { Step } from "../../../../../../types/Soil/Step";
-function ItemsView() {
+
+function ItemsView({ strictOnlyAccess }: PropsType) {
   const { items, soilData } = useContext(SoilDataContext);
   console.log(items);
   const [selectId, setSeletId] = useState<number>();
@@ -195,3 +196,6 @@ function ItemsView() {
 }
 
 export default ItemsView;
+type PropsType = {
+  strictOnlyAccess?: boolean;
+};
