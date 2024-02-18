@@ -16,7 +16,6 @@ const Content = (props: GridProps) => <Grid item xs={7} {...props} />;
 export const generateChip = (value: number | undefined): JSX.Element => {
   const variant = "outlined";
   let chip: JSX.Element = <></>;
-
   switch (value) {
     case 0:
       chip = <NonRoundedChip color="primary" variant={variant} label="جاري" />;
@@ -40,13 +39,14 @@ export const generateChip = (value: number | undefined): JSX.Element => {
 };
 export default function Items() {
   const { items } = useContext(SoilDataContext);
+  console.log("items", items);
 
   if (Array.isArray(items)) {
     const visit = items.find((item) => item.type_id === 4),
       test = items.find((item) => item.type_id === 5),
       report = items.find((item) => item.type_id === 6),
       approved = items.find((item) => item.type_id === 2);
-
+    console.log(report);
     return (
       <GradientBg reverseBg>
         <Stack>
@@ -54,9 +54,17 @@ export default function Items() {
             <Label label="البنود" />
             <Label xs={7} label="الحاله" />
 
-            <Label label="الزيارة" />
-            <Content>{generateChip(visit?.order_steps_form?.status)}</Content>
-
+            {items.map((item) => (
+              <>
+                <Label label={item?.form?.name} />
+                <Content>
+                  {item?.is_current
+                    ? generateChip(visit?.order_steps_form?.status)
+                    : generateChip(102152)}
+                </Content>
+              </>
+            ))}
+            {/* 
             <Label label="الاختبار" />
             <Content>{generateChip(test?.order_steps_form?.status)}</Content>
 
@@ -65,7 +73,7 @@ export default function Items() {
             <Label label="نموذج اعتماد" />
             <Content>
               {generateChip(approved?.order_steps_form?.status)}
-            </Content>
+            </Content> */}
           </Grid>
         </Stack>
       </GradientBg>

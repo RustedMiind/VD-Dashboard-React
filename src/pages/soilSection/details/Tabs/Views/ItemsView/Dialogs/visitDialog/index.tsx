@@ -73,7 +73,7 @@ export default function VisitDialog({ open, onClose, id }: PropsType) {
           setItems && setItems();
         })
         .catch((err) => {
-          enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
+          enqueueSnackbar("تعذر في اتخاذ الاجراء" || "", {
             variant: "error",
           });
           setFormStatus("none");
