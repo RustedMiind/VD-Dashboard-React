@@ -26,6 +26,7 @@ export default function AcceptDialog({ open, onClose, id }: PropsType) {
   const [formStatus, setFormStatus] = useState<FormStatus>("none");
   const objectTest: TypeAccept = {
     status: "",
+    note: "",
   };
   const [amountData, setAmountData] = useState<TypeAccept>(objectTest);
   function updateAmountData(partial: Partial<TypeAccept>) {
@@ -47,7 +48,7 @@ export default function AcceptDialog({ open, onClose, id }: PropsType) {
           setItems && setItems();
         })
         .catch((err) => {
-          enqueueSnackbar("يجب تعبئة جميع الحقول" || "", {
+          enqueueSnackbar("تعذر في اتخاذ الاجراء" || "", {
             variant: "error",
           });
           setFormStatus("none");
@@ -92,6 +93,12 @@ export default function AcceptDialog({ open, onClose, id }: PropsType) {
           <Grid item md={12}>
             <Typography>الملاحظة</Typography>
             <TextField
+              value={amountData.note}
+              onChange={(e) => {
+                updateAmountData({
+                  note: e.target.value as string,
+                });
+              }}
               multiline
               minRows={4}
               fullWidth
@@ -115,6 +122,7 @@ export default function AcceptDialog({ open, onClose, id }: PropsType) {
 }
 type TypeAccept = {
   status: string;
+  note: string;
 };
 type PropsType = {
   open: boolean;

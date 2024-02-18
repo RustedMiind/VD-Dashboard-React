@@ -35,8 +35,10 @@ function SoilRequestTable() {
   function handleDelete() {
     setSelectSoilId && setSelectSoilId([]);
     axios
-      .post(Api(`employee/client/order/steps/forms/delete/${selectSoilId}`), {
-        data: { id: selectSoilId },
+      .post(Api(`employee/client/order/steps/forms/delete`), {
+        id: selectSoilId,
+
+        // data: { id: selectSoilId },
       })
       .then((res) => {
         snackbar.enqueueSnackbar("تم حذف  المختارة بنجاح");

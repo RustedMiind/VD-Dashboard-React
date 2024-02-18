@@ -32,7 +32,7 @@ const ModelDialog = ({ open, onClose, id }: PropsType) => {
           setItems && setItems();
         })
         .catch((err) => {
-          enqueueSnackbar(err.response.data.message || "", {
+          enqueueSnackbar("تعذر في اتخاذ الاجراء" || "", {
             variant: "error",
           });
         });
