@@ -40,6 +40,13 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
     | "test"
     | "visit"
   >(undefined);
+
+  let itemsToShow: Step[] | undefined;
+  if (items) {
+    if (strictOnlyAccess) itemsToShow = items.filter((i) => i.has_access);
+    else itemsToShow = items;
+  }
+
   function handleDialog(formId: number, id: number) {
     return () => {
       switch (formId) {
@@ -158,7 +165,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
               <TableCell>عرض الملف</TableCell>
             </TableRow>
           </TableHead>
-          {items?.map((item) => {
+          {itemsToShow?.map((item) => {
             return (
               <TableBody key={item.id}>
                 <TableCell>{item?.form?.name}</TableCell>
