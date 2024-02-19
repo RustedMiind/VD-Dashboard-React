@@ -19,6 +19,7 @@ import { StepType } from "../types/Step";
 import React from "react";
 import SelectManager from "./SelectManager";
 import { ActionType } from "./reducer";
+import SelectWithFilter from "../../../../components/SelectWithFilter";
 
 const TableComponent = ({ level, dataForm, dispatch }: PropsType) => {
   return (
@@ -54,36 +55,25 @@ const TableComponent = ({ level, dataForm, dispatch }: PropsType) => {
 
             <TableCell>
               <Box width={{ lg: 150, xl: 200 }}>
-                <FormControl fullWidth size={"small"}>
-                  <InputLabel size="small">الموظف</InputLabel>
-                  <Select
-                    label={"الموظف"}
-                    size={"small"}
-                    value={level.employee_id}
-                    disabled={level.department_id !== null}
-                    onChange={(e) => {
-                      dispatch({
-                        type: "SET_EMPLOYEE",
-                        payload: e.target.value as number,
-                      });
-                    }}
-                  >
-                    <MenuItem value={0}>اختار الموظف</MenuItem>
-                    {dataForm?.department_workAt.map((department) =>
-                      department.work_ats.map((employee) => {
-                        return (
-                          <MenuItem
-                            key={employee.employee_id}
-                            value={employee.employee_id}
-                            disabled={employee?.employee?.name === ""}
-                          >
-                            {employee?.employee?.name || "لا يوجد موظف"}
-                          </MenuItem>
-                        );
-                      })
-                    )}
-                  </Select>
-                </FormControl>
+                <SelectWithFilter
+                  label={"الموظف"}
+                  size={"small"}
+                  value={level.employee_id}
+                  disabled={level.department_id !== null}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "SET_EMPLOYEE",
+                      payload: e.target.value as unknown as number,
+                    });
+                  }}
+                  options={[
+                    { label: "لم يتم اختيار موظف", value: 0 },
+                    ...(dataForm?.employees?.map((emplyee) => ({
+                      label: emplyee.name,
+                      value: emplyee.id,
+                    })) || []),
+                  ]}
+                />
               </Box>
             </TableCell>
 
