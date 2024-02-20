@@ -31,7 +31,7 @@ export interface FormData {
       ];
     }
   ];
-  employees: [];
+  employees?: EmployeeType[];
   stetues: [];
   typeOrder: [];
 }

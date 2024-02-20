@@ -1,6 +1,6 @@
 import { Media } from "../Media";
 
-export type FileTechnical = {
+export type TakeActionFiles = {
   client_id: number;
   collection: number;
   department_id: number;

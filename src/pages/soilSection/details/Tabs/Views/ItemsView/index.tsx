@@ -24,7 +24,8 @@ import ReportDialog from "./Dialogs/reportDialog";
 import TestDialog from "./Dialogs/testDialog";
 import VisitDialog from "./Dialogs/visitDialog";
 import { Step } from "../../../../../../types/Soil/Step";
-function ItemsView() {
+
+function ItemsView({ strictOnlyAccess }: PropsType) {
   const { items, soilData } = useContext(SoilDataContext);
   console.log(items);
   const [selectId, setSeletId] = useState<number>();
@@ -39,6 +40,13 @@ function ItemsView() {
     | "test"
     | "visit"
   >(undefined);
+
+  let itemsToShow: Step[] | undefined;
+  if (items) {
+    if (strictOnlyAccess) itemsToShow = items.filter((i) => i.has_access);
+    else itemsToShow = items;
+  }
+
   function handleDialog(formId: number, id: number) {
     return () => {
       switch (formId) {
@@ -157,7 +165,7 @@ function ItemsView() {
               <TableCell>عرض الملف</TableCell>
             </TableRow>
           </TableHead>
-          {items?.map((item) => {
+          {itemsToShow?.map((item) => {
             return (
               <TableBody key={item.id}>
                 <TableCell>{item?.form?.name}</TableCell>
@@ -195,3 +203,6 @@ function ItemsView() {
 }
 
 export default ItemsView;
+type PropsType = {
+  strictOnlyAccess?: boolean;
+};

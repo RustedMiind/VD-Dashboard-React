@@ -12,7 +12,7 @@ import Cards from "./Cards";
 import { SoilRequest } from "../../../types/Soil/SoilRequest";
 import { Step } from "../../../types/Soil/Step";
 import {
-  FileTechnical,
+  TakeActionFiles,
   IncomingFiles,
 } from "../../../types/Soil/FileFinancial";
 // import Chat from "./Chat";
@@ -27,9 +27,15 @@ function SoilDetails() {
     : "employee/soil/";
   const [soilData, setSoilData] = useState<SoilRequest | undefined>(undefined);
   const [items, setItems] = useState<Step[] | undefined>(undefined);
-  const [fileTechnical, setFileTechnical] = useState<
-    FileTechnical[] | undefined
-  >(undefined);
+  const [reportFiles, setReportFiles] = useState<TakeActionFiles | undefined>(
+    undefined
+  );
+  const [visitFiles, setVisitFiles] = useState<TakeActionFiles | undefined>(
+    undefined
+  );
+  const [taskFiles, setTaskFiles] = useState<TakeActionFiles | undefined>(
+    undefined
+  );
   const [incomingFiles, setIncomingFiles] = useState<IncomingFiles | undefined>(
     undefined
   );
@@ -39,7 +45,9 @@ function SoilDetails() {
         data: SoilRequest;
         step: Step[];
         tasks: Step[];
-        file_technical: FileTechnical[];
+        file_visit?: TakeActionFiles;
+        file_task?: TakeActionFiles;
+        file_report?: TakeActionFiles;
         incoming_fills: IncomingFiles;
       }>(Api(`${url}` + id))
       .then((res) => {
@@ -54,7 +62,7 @@ function SoilDetails() {
 
         setSoilData(res.data.data);
         setItems(arr);
-        setFileTechnical(res.data.file_technical);
+        setReportFiles(res.data.file_visit);
         setIncomingFiles(res.data.incoming_fills);
       })
       .catch((err) => {});
@@ -67,7 +75,9 @@ function SoilDetails() {
         soilData,
         items,
         setItems: getData,
-        fileTechnical,
+        reportFiles,
+        taskFiles,
+        visitFiles,
         incomingFiles,
       }}
     >
@@ -90,7 +100,9 @@ type SoilDataContextType = {
   soilData?: SoilRequest;
   items?: Step[];
   setItems?: () => void;
-  fileTechnical?: FileTechnical[];
+  reportFiles?: TakeActionFiles;
+  taskFiles?: TakeActionFiles;
+  visitFiles?: TakeActionFiles;
   incomingFiles?: IncomingFiles;
 };
 export default SoilDetails;
