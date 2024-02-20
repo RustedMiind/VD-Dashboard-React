@@ -6,7 +6,7 @@ export default function NotFound(props: PropsType) {
       <Paper>
         <Box
           sx={{
-            height: "49vh",
+            height: props?.height ?? "49vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -33,5 +33,6 @@ export default function NotFound(props: PropsType) {
 }
 
 type PropsType = {
-  title: string;
+  title: string | React.ReactNode;
+  height?: string;
 };

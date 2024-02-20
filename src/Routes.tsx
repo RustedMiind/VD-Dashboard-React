@@ -31,6 +31,10 @@ import DesignDataPage from "./pages/designs/DesignsData";
 import SoilDetails from "./pages/soilSection/details";
 import EnvoysDataPage from "./pages/envoy/data";
 import MyTasks from "./pages/Tasks/MyTasks";
+import ElectricityConstractors from "./pages/electricity/contractors";
+import WorkOrderPage from "./pages/electricity/workOrder";
+import CreateOrUpdateWorkOrderType from "./pages/electricity/workOrder/Add";
+import WorkOrdersTypesDetails from "./pages/electricity/workOrdersTypesDetails";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -39,7 +43,6 @@ function RoutesComponent() {
     <Routes>
       <Route path="react/*">
         <Route path="test" element={<ForTest />} />
-
         <Route path="" element={<MainPage />} />
         {/* Employees Section */}
         <Route path="employees">
@@ -50,7 +53,6 @@ function RoutesComponent() {
             <Route path="requests" element={<EmplyeesRequests />} />
           )}
         </Route>
-
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           {
@@ -85,11 +87,18 @@ function RoutesComponent() {
             <Route path="requests" element={<ClientRequests />} />
           )}
         </Route>
-
         <Route path="mytasks" element={<MyTasks />} />
-
         <Route path="envoy">
           <Route path="" element={<EnvoysDataPage />} />
+        </Route>
+        <Route path="electricity">
+          <Route path="contractors" element={<ElectricityConstractors />} />
+          <Route path="workorder">
+            <Route path="" element={<WorkOrderPage />} />
+            <Route path="add" element={<CreateOrUpdateWorkOrderType />} />
+            <Route path="edit/:id" element={<CreateOrUpdateWorkOrderType />} />
+            <Route path="details/:id" element={<WorkOrdersTypesDetails/>} />
+          </Route>
         </Route>
         {hasAnyOfPermissions([
           Permission.TENDERS_SHOW,

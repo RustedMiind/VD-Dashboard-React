@@ -111,6 +111,16 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/envoy",
         react: true,
       },
+      {
+        name: "المقاولين",
+        path: "/electricity/contractors",
+        react: true,
+      },
+      {
+        name: "أنواع أوامر العمل",
+        path: "/electricity/workorder",
+        react: true,
+      },
     ],
   },
   {
