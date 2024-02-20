@@ -17,22 +17,14 @@ import { useContext } from "react";
 import LimitTypography from "../../../../../../../components/LimitTypograpgy";
 import { formatDate } from "../../../../../../../methods";
 import { useParams } from "react-router-dom";
-import {
-  FileTechnical,
-  IncomingFiles,
-} from "../../../../../../../types/Soil/FileFinancial";
-export default function TableComponent({
-  title,
-  noData,
-  incomingFiles,
-  fileTechnical,
-}: PropsType) {
+import { Media } from "../../../../../../../types/Media";
+
+export default function TableComponent({ title, noData, files }: PropsType) {
   const { items } = useContext(SoilDataContext);
   function convertBytetoMB(byte: number): string {
     const mb = `${(byte / 1024 ** 2).toFixed(2)}MB`;
     return mb;
   }
-  console.log(fileTechnical);
   return (
     <Stack component={Paper} bgcolor={"Background"} p={2}>
       <Typography variant="h6" sx={{ fontWeight: "800" }} gutterBottom>
@@ -54,8 +46,7 @@ export default function TableComponent({
 
             <TableBody>
               {!noData &&
-                incomingFiles?.media &&
-                incomingFiles?.media?.map((file) => (
+                files?.map((file) => (
                   <TableRow>
                     <TableCell sx={{ display: "flex", alignItems: "center" }}>
                       <IconButton
@@ -90,49 +81,6 @@ export default function TableComponent({
                     </TableCell>
                   </TableRow>
                 ))}
-              {!noData &&
-                fileTechnical &&
-                fileTechnical?.map((item) =>
-                  item?.media?.map((file) => (
-                    <TableRow>
-                      <TableCell sx={{ display: "flex", alignItems: "center" }}>
-                        <IconButton
-                          component={`a`}
-                          href={`${file?.original_url}`}
-                          target="_blank"
-                          download
-                          color="primary"
-                          size="small"
-                        >
-                          <SourceOutlinedIcon
-                            sx={{ fontSize: "20px", mr: 1 }}
-                          />
-                        </IconButton>
-                        <LimitTypography>{file?.file_name}</LimitTypography>
-                      </TableCell>
-                      <TableCell>{file?.mime_type}</TableCell>
-                      <TableCell> {convertBytetoMB(file?.size)}</TableCell>
-                      <TableCell>
-                        <LimitTypography>
-                          {file?.collection_name}
-                        </LimitTypography>
-                      </TableCell>
-                      <TableCell>{formatDate(file?.created_at)}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          component={`a`}
-                          href={`${file?.original_url}`}
-                          target="_blank"
-                          download
-                          color="primary"
-                          size="small"
-                        >
-                          <CloudDownloadOutlinedIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -144,6 +92,5 @@ export default function TableComponent({
 type PropsType = {
   title: string;
   noData?: boolean;
-  incomingFiles?: IncomingFiles;
-  fileTechnical?: FileTechnical[];
+  files?: Media[];
 };
