@@ -15,6 +15,7 @@ import {
   TakeActionFiles,
   IncomingFiles,
 } from "../../../types/Soil/FileFinancial";
+import Chat from "./Chat";
 // import Chat from "./Chat";
 
 export const SoilDataContext = createContext<SoilDataContextType>({});
@@ -87,9 +88,9 @@ function SoilDetails() {
           <Grid item md={9} sm={6}>
             <TabsContainer />
           </Grid>
-          {/* <Grid item md={3} sm={8}>
+          <Grid item md={3} sm={8}>
             <Chat />
-          </Grid> */}
+          </Grid>
         </Grid>
       </Stack>
     </SoilDataContext.Provider>
