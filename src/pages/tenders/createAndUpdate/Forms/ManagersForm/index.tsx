@@ -117,6 +117,10 @@ function ManagersForm() {
                   value: i.value,
                 }))}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled ||
+                  !!tenderContext?.tender?.eng_employee_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -141,6 +145,10 @@ function ManagersForm() {
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled ||
+                  !!tenderContext?.tender?.eng_employee_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -163,6 +171,9 @@ function ManagersForm() {
                   value: i.value,
                 }))}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.buy_date
+                }
               />
             </AddLabelToEl>
           </GridItem>{" "}
@@ -189,6 +200,9 @@ function ManagersForm() {
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.buy_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -213,6 +227,9 @@ function ManagersForm() {
                   value: i.value,
                 }))}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.technical_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -239,6 +256,9 @@ function ManagersForm() {
                   );
                 }}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.technical_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -261,6 +281,9 @@ function ManagersForm() {
                   value: i.value,
                 }))}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.trace_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -287,6 +310,9 @@ function ManagersForm() {
                   );
                 }}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.trace_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -347,6 +373,10 @@ function ManagersForm() {
                   value: i.value,
                 }))}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled ||
+                  !!tenderContext?.tender?.file_finacial_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -373,6 +403,10 @@ function ManagersForm() {
                   );
                 }}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled ||
+                  !!tenderContext?.tender?.file_finacial_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -394,6 +428,9 @@ function ManagersForm() {
                   value: i.value,
                 }))}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.apply_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
@@ -420,6 +457,9 @@ function ManagersForm() {
                   dayjs(tenderContext.tender?.tenderdata?.strat_date)
                 )}
                 {...inputProps}
+                disabled={
+                  inputProps.disabled || !!tenderContext?.tender?.apply_date
+                }
               />
             </AddLabelToEl>
           </GridItem>
