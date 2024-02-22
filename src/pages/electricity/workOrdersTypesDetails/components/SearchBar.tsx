@@ -17,17 +17,6 @@ function SearchBar(props: PropsType) {
         }}
       >
         <TextField
-          label="أسم المهمة"
-          value={props.mission}
-          size="small"
-          sx={{ flexGrow: 1 }}
-          onChange={(
-            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            props.setMission(e.target.value);
-          }}
-        />
-        <TextField
           label="أسم العمل"
           value={props.workName}
           size="small"
@@ -36,6 +25,17 @@ function SearchBar(props: PropsType) {
             e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
           ) => {
             props.setWorkName(e.target.value);
+          }}
+        />
+        <TextField
+          label="أسم المهمة"
+          value={props.mission}
+          size="small"
+          sx={{ flexGrow: 1 }}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
+            props.setMission(e.target.value);
           }}
         />
         <Button

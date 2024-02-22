@@ -135,12 +135,6 @@ function CreateEditDailog({
 
           <GridItem>
             <AddLabelToEl label="رقم الجوال" required>
-              {/* <TextField
-                {...textFieldProps}
-                {...register("phone")}
-                type="tel"
-                placeholder="رقم الجوال"
-              /> */}
               <PhoneInput
                 defaultCountry="eg"
                 value={phone}
