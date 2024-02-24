@@ -22,6 +22,7 @@
 
 # Dev Token Data
 /src/DevUser.tsx
+/src/firebase.config.ts
 
 npm-debug.log*
 yarn-debug.log*

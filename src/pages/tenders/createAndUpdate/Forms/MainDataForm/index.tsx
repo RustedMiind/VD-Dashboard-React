@@ -89,8 +89,9 @@ export default function MainDataForm() {
           path ? "تم تعديل بيانات المنافسة بنجاح" : "تم حفظ بيانات المنافسة"
         );
         setError(undefined);
-        tenderContext.setTenderId &&
-          tenderContext.setTenderId(res.data.data.tender_id);
+        if (typeof tenderContext.tender === "object")
+          tenderContext.getTenderData?.();
+        else tenderContext.setTenderId?.(res.data.data.tender_id);
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
         snackbar.enqueueSnackbar(
