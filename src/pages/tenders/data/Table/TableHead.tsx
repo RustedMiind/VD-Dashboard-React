@@ -38,6 +38,7 @@ function TableHead() {
         <TableCell>اسم المنافسة</TableCell>
         <TableCell>أخر موعد للتقديم</TableCell>
         <TableCell>تاريخ الإنتهاء من التقديم</TableCell>
+        <TableCell>الوقت المتبقي للتقديم</TableCell>
         <TableCell>قيمة المنافسة</TableCell>
         <TableCell>مدة العقد</TableCell>
         <TableCell>القسم التابع له</TableCell>
