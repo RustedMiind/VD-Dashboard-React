@@ -32,9 +32,11 @@ import SoilDetails from "./pages/soilSection/details";
 import EnvoysDataPage from "./pages/envoy/data";
 import MyTasks from "./pages/Tasks/MyTasks";
 import ElectricityConstractors from "./pages/electricity/contractors";
-import WorkOrderPage from "./pages/electricity/workOrder";
-import CreateOrUpdateWorkOrderType from "./pages/electricity/workOrder/Add";
+import WorkOrderPage from "./pages/electricity/workOrderTypes";
+import CreateOrUpdateWorkOrderType from "./pages/electricity/workOrderTypes/Add";
 import WorkOrdersTypesDetails from "./pages/electricity/workOrdersTypesDetails";
+import WorkOrdersPage from "./pages/electricity/workOrders";
+import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -93,11 +95,17 @@ function RoutesComponent() {
         </Route>
         <Route path="electricity">
           <Route path="contractors" element={<ElectricityConstractors />} />
-          <Route path="workorder">
+          <Route path="workorders">
+            <Route path="" element={<WorkOrdersPage />} />
+            <Route path="add" element={<CreateOrUpdateWorkOrder />} />
+            <Route path="edit/:id" element={<CreateOrUpdateWorkOrder />} />
+            <Route path="show/:id" element={<CreateOrUpdateWorkOrder show={true}/>} />
+          </Route>
+          <Route path="workordertypes">
             <Route path="" element={<WorkOrderPage />} />
             <Route path="add" element={<CreateOrUpdateWorkOrderType />} />
             <Route path="edit/:id" element={<CreateOrUpdateWorkOrderType />} />
-            <Route path="details/:id" element={<WorkOrdersTypesDetails/>} />
+            <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
           </Route>
         </Route>
         {hasAnyOfPermissions([
