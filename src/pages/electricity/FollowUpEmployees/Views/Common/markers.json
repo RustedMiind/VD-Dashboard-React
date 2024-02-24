@@ -1,0 +1,31 @@
+[
+    {
+      "id": 1,
+      "latitude": 40.7128,
+      "longitude": -74.006,
+      "name": "New York City",
+      "description": "The largest city in the United States"
+    },
+    {
+      "id": 2,
+      "latitude": 34.0522,
+      "longitude": -118.2437,
+      "name": "Los Angeles",
+      "description": "The second-most populous city in the United States"
+    },
+    {
+      "id": 3,
+      "latitude": 41.8781,
+      "longitude": -87.6298,
+      "name": "Chicago",
+      "description": "The third-most populous city in the United States"
+    },
+    {
+      "id": 4,
+      "latitude": 29.7604,
+      "longitude": -95.3698,
+      "name": "Houston",
+      "description": "The most populous city in Texas"
+    }
+  ]
+  
