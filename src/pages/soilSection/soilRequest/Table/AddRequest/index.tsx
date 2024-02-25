@@ -13,7 +13,6 @@ import { Typography } from "@mui/material";
 import { Stack } from "@mui/material";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import { IconButton } from "@mui/material";
-import { Map } from "./Leaflet/Map";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
 import { useForm } from "react-hook-form";
 import { ZodType, z } from "zod";
@@ -21,8 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError, HttpStatusCode } from "axios";
 import { Api } from "../../../../../constants";
 import { useEffect, useState } from "react";
-import { LocationFormOptionsType } from "./Types";
+import { LocationFormOptionsType, StoreFormBody } from "./Types";
 import { LoadingButton } from "@mui/lab";
+import { MapType } from "../../../../../types/Soil";
+import { MapComponent } from "./Leaflet/Map";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const GridItem = ({
   children,
@@ -67,27 +70,49 @@ const calculationFormSchema: ZodType<CalculationForm> = z.object({
   bodies: z.number(defineErrorObject),
   depth: z.number(defineErrorObject),
   price: z.number(defineErrorObject),
+  total_price: z.number(defineErrorObject),
 });
 type CalculationForm = {
   bodies: number;
   depth: number;
   price: number;
+  total_price: number;
 };
 export default function AddRequest() {
+  const { id } = useParams();
   const [options, setOptions] = useState<LocationFormOptionsType | undefined>(
     undefined
   );
+  const navigate = useNavigate();
+  const [currentMap, setCurrentMap] = useState<MapType | undefined>(undefined);
+  const [calculationPriceData, setCalculationPriceData] = useState<
+    CalculationForm | undefined
+  >(undefined);
+  const [locationFormData, setLocationFormData] = useState<
+    LocationForm | undefined
+  >(undefined);
+  const [selectedPin, setSelectedPin] = useState<[number, number] | null>(null);
   const getOptions = () => {
     return new Promise((ressolve, reject) => {
+      setLocationState("unknown");
+      setCurrentMap(undefined);
       axios
-        .get<LocationFormOptionsType>(Api("employee/soil/order/use"))
+        .get<LocationFormOptionsType>(Api("employee/soil/order/use"), {
+          params: {
+            lat: selectedPin?.[0],
+            long: selectedPin?.[1],
+          },
+        })
         .then(({ data }) => {
           setOptions(data);
           ressolve(data);
+          setCurrentMap(data.map?.[0]);
+          setLocationState("inside");
         })
         .catch((err: AxiosError<LocationFormOptionsType>) => {
           if (err.response?.status === HttpStatusCode.BadRequest) {
             setOptions(err.response.data);
+            setLocationState("outside");
             ressolve(err.response.data);
           } else {
             reject();
@@ -95,9 +120,13 @@ export default function AddRequest() {
         });
     });
   };
+  const [locationState, setLocationState] = useState<
+    "unknown" | "inside" | "outside"
+  >("unknown");
   useEffect(() => {
     getOptions();
-  }, []);
+  }, [selectedPin?.[0], selectedPin?.[1]]);
+  const { enqueueSnackbar } = useSnackbar();
   const [isLocationFormDone, setIsLocationFormDone] = useState(false);
   const [isCustomCalculationConfirmed, setIsCustomCalculationConfirmed] =
     useState(false);
@@ -106,18 +135,18 @@ export default function AddRequest() {
     resolver: zodResolver(locationFormSchema),
     disabled: isLocationFormDone,
   });
-  const LocationFormSubmit = locationForm.handleSubmit((data) => {
+  const LocationFormSubmit = locationForm.handleSubmit((formData) => {
     return new Promise((ressolve, reject) => {
       axios
         .get<{
           number_bodies?: number;
           depth?: number;
-          price: 0;
-          total_price: 0;
+          price: number;
+          total_price: number;
         }>(Api("employee/soil/order/calculate"), {
           params: {
-            ...data,
-            map_price: 300,
+            ...formData,
+            map_price: currentMap?.price,
           },
         })
         .then(({ data }) => {
@@ -126,6 +155,14 @@ export default function AddRequest() {
             bodies: data.number_bodies,
             depth: data.depth,
             price: data.price,
+          });
+          setLocationFormData(formData);
+
+          setCalculationPriceData({
+            bodies: data.number_bodies || 0,
+            depth: data.depth || 0,
+            price: data.price,
+            total_price: data.total_price,
           });
           setIsLocationFormDone(true);
         })
@@ -139,28 +176,10 @@ export default function AddRequest() {
     } as const;
 
   const calculationForm = useForm<CalculationForm>({
-    resolver: zodResolver(calculationFormSchema),
+    // resolver: zodResolver(calculationFormSchema),
     disabled: !isManualInputs || !isLocationFormDone,
   });
 
-  const calculationFormSubmit = calculationForm.handleSubmit((data) => {
-    return new Promise((ressolve, reject) => {
-      axios
-        .get(Api("employee/soil/order/calculate"), {
-          params: {
-            ...data,
-            map_price: 300,
-          },
-        })
-        .then(({ data }) => {
-          ressolve(data);
-          calculationForm.reset({
-            bodies: data,
-          });
-        })
-        .catch(reject);
-    });
-  });
   const getCustomCalculation = calculationForm.handleSubmit((data) => {
     return new Promise((ressolve, reject) => {
       axios
@@ -172,13 +191,27 @@ export default function AddRequest() {
         }>(Api("employee/soil/order/calculate_price"), {
           params: {
             bodies: data.bodies,
-            map_price: data.price,
+            map_price: currentMap?.price,
             depth: data.depth,
           },
         })
         .then(({ data }) => {
+          setIsCustomCalculationConfirmed(true);
+          setCalculationPriceData({
+            price: data.price,
+            total_price: data.total_price,
+            bodies: calculationPriceData?.bodies || 0,
+            depth: calculationPriceData?.depth || 0,
+          });
+          // calculationForm.resetField("price", data.price);
+          // calculationForm.resetField("total_price", {
+          //   defaultValue: data.total_price,
+          // });
+          calculationForm.reset({
+            price: data.price,
+            total_price: data.total_price,
+          });
           ressolve(data);
-          calculationForm.resetField("price", { defaultValue: data.price });
         })
         .catch(reject);
     });
@@ -188,6 +221,51 @@ export default function AddRequest() {
     {
       disabled: calculationForm.formState.disabled,
     } as const;
+  const handleStore = () => {
+    console.log("locationFormData?.soilFloorId", locationFormData?.soilFloorId);
+    const body = {
+      area_id: currentMap?.soil_location_id,
+      client_id: id,
+      depth: calculationPriceData?.depth,
+      floor_id: locationFormData?.soilFloorId,
+      lat: selectedPin?.[0],
+      long: selectedPin?.[1],
+      license_id: 1,
+      map: currentMap?.id,
+      number_bodies: calculationPriceData?.bodies,
+      number_floor: options?.soilFloor?.find(
+        (floor) => floor.id == locationFormData?.soilFloorId
+      )?.number_floors,
+      order_type_id: locationFormData?.order_type_id,
+      payment: "cash",
+      price: calculationPriceData?.price,
+      total_price: calculationPriceData?.total_price,
+    };
+    axios
+      .post(Api("employee/soil/order/store"), body)
+      .then(() => {
+        enqueueSnackbar("تم الطلب بنجاح");
+        navigate("/react/services/soil");
+      })
+      .catch((err) => {
+        enqueueSnackbar(
+          err.response?.data?.msg ||
+            err.response?.data?.message ||
+            "تعذر في تسجيل الطلب",
+          { variant: "error" }
+        );
+      });
+  };
+  console.log(currentMap);
+  console.log(calculationForm?.formState?.errors);
+  console.log(
+    "isLocationFormDone",
+    isLocationFormDone,
+    "isCustomCalculationConfirmed",
+    isCustomCalculationConfirmed,
+    "isManualInputs",
+    isManualInputs
+  );
 
   return (
     <>
@@ -265,6 +343,7 @@ export default function AddRequest() {
           </GridItem>
           <GridItem label="الموقع">
             <TextField
+              value={selectedPin?.join(" | ")}
               InputProps={{
                 endAdornment: (
                   <IconButton {...LocationFormInputCommonProps}>
@@ -275,9 +354,25 @@ export default function AddRequest() {
               fullWidth
               size="small"
               {...LocationFormInputCommonProps}
+              disabled
               placeholder="الموقع"
             />
+
+            {!!(locationState === "inside" && selectedPin) && (
+              <ErrorText color="success">الموقع داخل المساحة المغطاة</ErrorText>
+            )}
+            {locationState === "outside" && (
+              <ErrorText>الموقع خارج المساحة المغطاة</ErrorText>
+            )}
           </GridItem>
+          {!isLocationFormDone && (
+            <Grid item xs={12}>
+              <MapComponent
+                setSelectedPin={setSelectedPin}
+                selectedPin={selectedPin}
+              />
+            </Grid>
+          )}
           <Grid item xs={6} my={2}>
             <LoadingButton
               fullWidth
@@ -285,7 +380,10 @@ export default function AddRequest() {
               type="submit"
               color="secondary"
               loading={locationForm.formState.isSubmitting}
-              {...LocationFormInputCommonProps}
+              disabled={
+                LocationFormInputCommonProps.disabled ||
+                locationState !== "inside"
+              }
             >
               حساب عدد الجسات
             </LoadingButton>
@@ -293,6 +391,8 @@ export default function AddRequest() {
         </GridContainer>
         <GridContainer
           sx={{ display: isLocationFormDone ? undefined : "none" }}
+          component={"form"}
+          onSubmit={getCustomCalculation}
         >
           <GridItem label="عدد الجسات">
             <TextField
@@ -318,15 +418,29 @@ export default function AddRequest() {
               })}
             />
           </GridItem>
+          <GridItem label="الاجمالي">
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="الاجمالي"
+              type="number"
+              {...calculationForm.register("price", {
+                valueAsNumber: true,
+                ...calculationFormInputCommonProps,
+                disabled: true,
+              })}
+            />
+          </GridItem>
           <GridItem label="الاجمالي المطلوب">
             <TextField
               fullWidth
               size="small"
               placeholder="الاجمالي المطلوب"
               type="number"
-              {...calculationForm.register("price", {
+              {...calculationForm.register("total_price", {
                 valueAsNumber: true,
                 ...calculationFormInputCommonProps,
+                disabled: true,
               })}
             />
           </GridItem>
@@ -336,15 +450,18 @@ export default function AddRequest() {
               size="small"
               placeholder="طريقة الدفع"
               {...calculationFormInputCommonProps}
+              disabled
+              value={"نقدي"}
             />
           </GridItem>
-          {/* <Grid item xs={6} /> */}
+          <Grid item xs={6} />
+
           {isManualInputs ? (
             <Grid item xs={6} my={2}>
               <LoadingButton
                 fullWidth
                 variant="contained"
-                onClick={getCustomCalculation}
+                type="submit"
                 color="secondary"
                 loading={locationForm.formState.isSubmitting}
               >
@@ -356,9 +473,11 @@ export default function AddRequest() {
               <LoadingButton
                 fullWidth
                 variant="contained"
+                type="button"
                 onClick={() => {
-                  setIsManualInputs(true);
-                  calculationForm.reset();
+                  setTimeout(() => {
+                    setIsManualInputs(true);
+                  }, 300);
                 }}
                 color="secondary"
                 loading={locationForm.formState.isSubmitting}
@@ -368,7 +487,17 @@ export default function AddRequest() {
             </Grid>
           )}
         </GridContainer>
-        <Map />
+        <Button
+          disabled={
+            !isLocationFormDone ||
+            (!isCustomCalculationConfirmed && isManualInputs)
+          }
+          variant="contained"
+          size="large"
+          onClick={handleStore}
+        >
+          تأكيد الطلب
+        </Button>
       </Stack>
     </>
   );

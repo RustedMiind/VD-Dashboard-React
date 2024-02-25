@@ -4,8 +4,7 @@ import { Stack } from "@mui/material";
 import { Icon } from "leaflet";
 import img1 from "../../../../../../assets/images/pngwing.com.png";
 
-export function Map() {
-  const [selectedPin, setSelectedPin] = useState<[number, number] | null>(null);
+export function MapComponent({ selectedPin, setSelectedPin }: PropsType) {
   const customIcon = new Icon({
     iconUrl: img1,
     iconSize: [50, 50],
@@ -53,3 +52,10 @@ export function Map() {
     </Stack>
   );
 }
+
+type SelectedPinType = [number, number] | null;
+
+type PropsType = {
+  selectedPin: SelectedPinType;
+  setSelectedPin: (value: SelectedPinType) => void;
+};
