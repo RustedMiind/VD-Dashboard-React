@@ -28,7 +28,6 @@ export function MapComponent({ selectedPin, setSelectedPin }: PropsType) {
         if (long !== lng) {
           setCenter([lat, long]);
         }
-        console.log(long, lng, long !== lng);
       },
     });
 
