@@ -65,12 +65,12 @@ function TendersFilters() {
         </GridItem>
         <GridItem>
           <TextField
-            value={dataToSearch.organization_number}
+            value={dataToSearch.reference_number}
             onChange={(e) => {
-              updateDataToSearch({ organization_number: e.target.value });
+              updateDataToSearch({ reference_number: e.target.value });
             }}
             fullWidth
-            label="رقم الجهة"
+            label="الرقم المرجعي"
             size="small"
           />
         </GridItem>
@@ -150,4 +150,5 @@ type TypeDataToSearch = {
   strat_date?: string;
   end_date?: string;
   status?: TenderStatus;
+  reference_number?: string;
 };

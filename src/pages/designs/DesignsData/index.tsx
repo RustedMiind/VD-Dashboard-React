@@ -9,7 +9,6 @@ import axios from "axios";
 import { Api } from "../../../constants";
 
 function DesignDataPage() {
-  const [search, setSearch] = useState("");
   const [currentTab, setCurrentTab] = useState(1);
   const [counts, setCounts] = useState<undefined | Counts>(undefined);
   useEffect(() => {
@@ -20,10 +19,6 @@ function DesignDataPage() {
       });
   }, []);
 
-  //handleSearch
-  function handleSearch(): void {
-    console.log(search);
-  }
   const isCurrentTab = (tab: number) => tab === currentTab;
   const setThisTab = (tab: number) => () => setCurrentTab(tab);
 
@@ -40,7 +35,6 @@ function DesignDataPage() {
           count={counts?.["count-all"]}
         />
         <ClassificationCard
-          disabled
           isCurrentTab={isCurrentTab(2)}
           setThisTab={setThisTab(2)}
           title="طلبات الشراء"
@@ -54,7 +48,7 @@ function DesignDataPage() {
           count={counts?.["count-loading"]}
         />
       </ClassificationCardContainer>
-      <Views />
+      <Views currentPage={currentTab} />
       {/* Search Filters */}
     </Stack>
   );

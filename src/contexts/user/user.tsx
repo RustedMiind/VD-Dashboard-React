@@ -50,7 +50,7 @@ function resetAuth(disableRedirect?: boolean) {
   deleteCookie("db_token");
   deleteCookie("vision_session");
   deleteCookie("XSRF-TOKEN");
-  if (!disableRedirect) window.location.replace(Domain("admin/login"));
+  if (!disableRedirect) window.location.href = Domain("admin/login");
 }
 
 function setToken(token: string, override?: boolean) {

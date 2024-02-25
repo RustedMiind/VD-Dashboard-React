@@ -1,0 +1,782 @@
+.iconsaxlineararrowdown2 {
+    height: 18px;
+    width: 18px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .div2 {
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .iconsaxlineararrowdown2Parent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-5xs);
+  }
+  .ellipseShape {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    border-radius: 50%;
+    background-color: #c4c4c4;
+  }
+  .ellipseShapeParent,
+  .sm {
+    display: flex;
+    align-items: center;
+  }
+  .sm {
+    width: 24px;
+    height: 14px;
+    position: relative;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+    margin-top: -25px;
+  }
+  .ellipseShapeParent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .userProfile {
+    height: 36px;
+    width: 36px;
+    position: relative;
+    text-align: center;
+    color: var(--color-white);
+    font-family: var(--font-cairo);
+  }
+  .frameParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 0 0 var(--padding-12xs);
+    gap: 0 15px;
+  }
+  .iconsaxlinearnotificationop {
+    height: 24px;
+    width: 24px;
+    position: relative;
+  }
+  .div1,
+  .wrapper {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .div1 {
+    flex-direction: row;
+    align-items: center;
+    gap: 0 32px;
+  }
+  .wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0 14px;
+  }
+  .b {
+    position: relative;
+    white-space: nowrap;
+  }
+  .iconsaxlineararrowleft2 {
+    height: 16px;
+    width: 16px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .div3 {
+    height: 30px;
+    position: relative;
+    font-family: var(--font-thesans);
+    color: rgba(0, 70, 147, 0.5);
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .backButton {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0 6px;
+  }
+  .b1 {
+    position: relative;
+    white-space: nowrap;
+  }
+  .iconsaxlineararrowleft21 {
+    height: 24px;
+    width: 24px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+  .searchSection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0 11px;
+    font-size: var(--font-size-base);
+  }
+  .backButtonParent,
+  .pageFollowers {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+  }
+  .backButtonParent {
+    width: 500px;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0 167px;
+    text-align: right;
+    font-size: var(--font-size-lg);
+    font-family: var(--font-cairo);
+  }
+  .pageFollowers {
+    align-self: stretch;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--gap-xl);
+    text-align: left;
+    font-size: var(--font-size-sm);
+    color: var(--color-darkslateblue-100);
+    font-family: var(--font-thesans);
+  }
+  .accountsGroupChild {
+    height: 54px;
+    width: 133px;
+  }
+  .accountsGroupItem {
+    height: 54px;
+    width: 120px;
+  }
+  .accountsGroupInner {
+    height: 54px;
+    width: 114px;
+  }
+  .accountsGroup,
+  .controlsGroup {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+  .accountsGroup {
+    flex: 1;
+    overflow-x: auto;
+    gap: 0 3px;
+  }
+  .controlsGroup {
+    width: 379px;
+    padding: 0 3px;
+    box-sizing: border-box;
+  }
+  .wrapperGroup1035Child {
+    height: 100%;
+    width: 100%;
+    max-height: 100%;
+    z-index: 1;
+    object-fit: contain;
+    position: absolute;
+    left: 0;
+    top: 1px;
+    transform: scale(1.027);
+  }
+  .wrapperGroup1035 {
+    height: 100%;
+    width: 894px;
+    position: absolute;
+    margin: 0 !important;
+    top: 0;
+    bottom: 0;
+    left: -10px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .frameChild {
+    height: 386.3px;
+    width: 72.3px;
+    position: relative;
+    border-radius: 11.86px;
+    background-color: var(--color-white);
+    box-shadow: 0 1.1px 10.17px 2.26px rgba(0, 0, 0, 0.08);
+    display: none;
+  }
+  .bxSearchAlt21Icon,
+  .bxsPen1Icon,
+  .bxsRuler1Icon,
+  .bxsShare1Icon {
+    width: 33.3px;
+    height: 33.3px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .bxsPen1Parent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 var(--padding-12xs) 0 0;
+    gap: 68px 0;
+    z-index: 1;
+  }
+  .rectangleParent {
+    margin: 0 !important;
+    position: absolute;
+    top: 157px;
+    left: -53px;
+    border-radius: 11.86px;
+    background-color: var(--color-white);
+    box-shadow: 0 1.1px 10.17px 2.26px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 18px 26px var(--padding-xl);
+    z-index: 2;
+  }
+  .filterFrameChild {
+    width: 1282px;
+    height: 814px;
+    position: relative;
+    border-radius: var(--br-xs);
+    background-color: var(--color-whitesmoke);
+    display: none;
+    max-width: 100%;
+    z-index: 0;
+  }
+  .b2 {
+    height: 32px;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+  }
+  .iconsaxlinearfiltersquare {
+    height: 24px;
+    width: 24px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .filterFrameInner,
+  .parent {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .parent {
+    align-items: center;
+    gap: 0 9px;
+  }
+  .filterFrameInner {
+    align-items: flex-start;
+    padding: 0 13px;
+  }
+  .searchBarFrame {
+    height: 1px;
+    flex: 1;
+    position: relative;
+    border-top: 1px solid var(--color-darkslateblue-100);
+    box-sizing: border-box;
+    z-index: 1;
+  }
+  .clientsFrame {
+    width: 306px;
+    height: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 0 var(--padding-5xs);
+    box-sizing: border-box;
+  }
+  .followUpPageTitle,
+  .searchFrameInstance,
+  .textfield {
+    border: 0;
+    background-color: transparent;
+    align-self: stretch;
+    height: 43px;
+    font-family: var(--font-thesans);
+    font-size: var(--font-size-sm);
+    color: var(--color-darkgray);
+  }
+  .followUpPageTitle,
+  .textfield {
+    height: 40px;
+  }
+  .textfield {
+    height: 43px;
+    font-size: var(--font-size-base);
+    z-index: 1;
+  }
+  .div4,
+  .iconsax {
+    position: relative;
+    z-index: 1;
+  }
+  .div4 {
+    height: 30px;
+    display: inline-block;
+  }
+  .iconsax {
+    height: 24px;
+    width: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .commandsFrame {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0 8px;
+  }
+  .div5,
+  .iconsax1 {
+    position: relative;
+    z-index: 1;
+  }
+  .div5 {
+    height: 30px;
+    display: inline-block;
+  }
+  .iconsax1 {
+    height: 24px;
+    width: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .ordersFrame,
+  .searchLabel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0 8px;
+  }
+  .ordersFrame {
+    align-self: stretch;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px 0;
+  }
+  .button {
+    align-self: stretch;
+    height: 43px;
+    z-index: 1;
+  }
+  .clientsFrameParent {
+    width: 313px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 0 41px;
+    box-sizing: border-box;
+    gap: 14px 0;
+    font-size: var(--font-size-lg);
+  }
+  .backArrowInstance {
+    border: 0;
+    background-color: transparent;
+    width: 306px;
+    height: 44px;
+    font-family: var(--font-thesans);
+    font-weight: 700;
+    font-size: var(--font-size-lgi);
+    color: var(--color-darkslateblue-100);
+  }
+  .b3 {
+    position: relative;
+  }
+  .button1 {
+    align-self: stretch;
+    height: 43px;
+  }
+  .b4 {
+    position: relative;
+  }
+  .button2 {
+    align-self: stretch;
+    height: 43px;
+  }
+  .customersFrame {
+    width: 287px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 4px 0;
+  }
+  .b5 {
+    position: relative;
+  }
+  .followingEmployeesText {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 0 var(--padding-5xs);
+  }
+  .div7 {
+    align-self: stretch;
+    width: 26px;
+    position: relative;
+    display: none;
+  }
+  .div6 {
+    flex: 1;
+    border-radius: var(--br-xs);
+    background-color: var(--color-whitesmoke);
+    border: 1px solid var(--color-darkslateblue-100);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: var(--padding-5xs) var(--padding-13xl);
+  }
+  .customersLabel {
+    width: 120px;
+    border: 0;
+    outline: 0;
+    font-family: var(--font-thesans);
+    font-size: var(--font-size-sm);
+    background-color: transparent;
+    height: 24px;
+    position: absolute;
+    margin: 0 !important;
+    right: 29px;
+    bottom: 9px;
+    color: var(--color-darkslateblue-100);
+    text-align: right;
+    display: inline-block;
+    z-index: 1;
+  }
+  .cocolinelocationIcon,
+  .iconsaxlineararrowdown {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .iconsaxlineararrowdown {
+    top: -0.5px;
+    left: 0.1px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 2;
+  }
+  .locationInstance {
+    height: 24px;
+    width: 24px;
+    position: absolute;
+    margin: 0 !important;
+    top: 10px;
+    left: 22px;
+  }
+  .phoneNumberFrame {
+    width: 287px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: var(--color-darkgray);
+    font-family: var(--font-thesans);
+  }
+  .b6,
+  .frameItem {
+    position: relative;
+  }
+  .frameItem {
+    width: 69px;
+    height: 59px;
+    border-radius: var(--br-5xs);
+    background-color: var(--color-whitesmoke);
+    display: none;
+  }
+  .chatFill1Icon,
+  .div8 {
+    height: 20px;
+    position: relative;
+  }
+  .chatFill1Icon {
+    width: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .div8 {
+    align-self: stretch;
+    display: inline-block;
+  }
+  .frameInner,
+  .rectangleGroup {
+    align-self: stretch;
+    border-radius: var(--br-5xs);
+    background-color: var(--color-whitesmoke);
+  }
+  .rectangleGroup {
+    width: 69px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-8xs) 17px 0 16px;
+    box-sizing: border-box;
+    gap: var(--gap-5xs);
+    text-align: right;
+  }
+  .frameInner {
+    height: 59px;
+    position: relative;
+    display: none;
+  }
+  .cameraVideoFill1Icon {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .div9 {
+    width: 31px;
+    height: 20px;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+  }
+  .rectangleContainer,
+  .rectangleDiv {
+    width: 69px;
+    border-radius: var(--br-5xs);
+    background-color: var(--color-whitesmoke);
+  }
+  .rectangleContainer {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-6xs) 0 0;
+    box-sizing: border-box;
+    gap: 3px;
+  }
+  .rectangleDiv {
+    height: 59px;
+    position: relative;
+    display: none;
+  }
+  .telephoneFill21 {
+    width: 23px;
+    height: 23px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .div10 {
+    align-self: stretch;
+    height: 20px;
+    position: relative;
+    display: inline-block;
+  }
+  .communicationLabel,
+  .groupDiv {
+    display: flex;
+    box-sizing: border-box;
+  }
+  .groupDiv {
+    align-self: stretch;
+    width: 69px;
+    border-radius: var(--br-5xs);
+    background-color: var(--color-whitesmoke);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-8xs) var(--padding-xl) 0 var(--padding-2xl);
+    gap: 5px;
+  }
+  .communicationLabel {
+    width: 273px;
+    height: 59px;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0;
+    gap: var(--gap-xl);
+    text-align: center;
+    font-size: var(--font-size-xs);
+    font-family: var(--font-thesans);
+  }
+  .backButtonFrame {
+    align-self: stretch;
+    height: 302px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 4px 0;
+    z-index: 2;
+  }
+  .addressResult,
+  .videoCallButton {
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  .videoCallButton {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 0 0 0 var(--padding-12xs);
+    gap: 18px 0;
+  }
+  .addressResult {
+    width: 612px;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0 var(--padding-6xs);
+    text-align: right;
+    font-size: var(--font-size-base);
+    font-family: var(--font-cairo);
+  }
+  .rectangleShape {
+    width: 6px;
+    height: 403px;
+    position: absolute;
+    margin: 0 !important;
+    top: 139px;
+    right: 378px;
+    border-radius: 11px;
+    background-color: #bababa;
+    z-index: 3;
+  }
+  .filterFrame,
+  .iconsaxLineararrowleft {
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    max-width: 100%;
+  }
+  .filterFrame {
+    flex: 1;
+    border-radius: var(--br-xs);
+    background-color: var(--color-whitesmoke);
+    flex-direction: column;
+    align-items: flex-end;
+    padding: var(--padding-13xl) var(--padding-6xl) 0;
+    box-sizing: border-box;
+    gap: 12px 0;
+  }
+  .iconsaxLineararrowleft {
+    align-self: stretch;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .searchFrame {
+    width: 1282px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+  }
+  .clientFrame,
+  .div,
+  .userProfileFrame {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .clientFrame {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px 0;
+    max-width: 100%;
+    text-align: center;
+    font-size: var(--font-size-lgi);
+    color: var(--color-darkslateblue-100);
+    font-family: var(--font-thesans);
+  }
+  .div,
+  .userProfileFrame {
+    box-sizing: border-box;
+  }
+  .userProfileFrame {
+    align-self: stretch;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0 var(--padding-2xl) 0 var(--padding-6xl);
+    max-width: 100%;
+  }
+  .div {
+    width: 100%;
+    position: relative;
+    background-color: var(--color-white);
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--padding-15xl) var(--padding-8xl) var(--padding-15xl)
+      var(--padding-13xl);
+    gap: 67px 0;
+    mix-blend-mode: normal;
+    letter-spacing: normal;
+  }
+  @media screen and (max-width: 725px) {
+    .backButton {
+      display: none;
+    }
+    .backButtonParent {
+      width: 236px;
+    }
+    .div {
+      gap: 67px 0;
+    }
+  }
+  @media screen and (max-width: 650px) {
+    .backButtonParent {
+      gap: 0 167px;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .backButtonParent {
+      gap: 0 167px;
+    }
+    .clientsFrameParent {
+      padding-bottom: var(--padding-8xl);
+      box-sizing: border-box;
+    }
+    .div {
+      gap: 67px 0;
+    }
+  }
+  
