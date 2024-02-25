@@ -35,6 +35,7 @@ import ElectricityConstractors from "./pages/electricity/contractors";
 import WorkOrderPage from "./pages/electricity/workOrder";
 import CreateOrUpdateWorkOrderType from "./pages/electricity/workOrder/Add";
 import WorkOrdersTypesDetails from "./pages/electricity/workOrdersTypesDetails";
+import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -97,7 +98,7 @@ function RoutesComponent() {
             <Route path="" element={<WorkOrderPage />} />
             <Route path="add" element={<CreateOrUpdateWorkOrderType />} />
             <Route path="edit/:id" element={<CreateOrUpdateWorkOrderType />} />
-            <Route path="details/:id" element={<WorkOrdersTypesDetails/>} />
+            <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
           </Route>
         </Route>
         {hasAnyOfPermissions([
@@ -162,6 +163,9 @@ function RoutesComponent() {
             )}
             {hasPermission(Permission.SOIL_SHOW) && (
               <Route path="showtask/:id" element={<SoilDetails />} />
+            )}
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="addrequest" element={<AddRequest />} />
             )}
           </Route>
         </Route>

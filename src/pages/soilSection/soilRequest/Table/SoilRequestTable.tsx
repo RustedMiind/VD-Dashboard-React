@@ -10,7 +10,7 @@ import {
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Typography } from "@mui/material";
 import TableContent from "./TableContent";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TableContext } from "../TableContext";
 import LoadingTable from "../../../../components/LoadingTable";
 import NotFound from "../../../../components/NotFound";
@@ -20,6 +20,7 @@ import { useSnackbar } from "notistack";
 import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import { Api } from "../../../../constants";
+import DialogAddRequest from "./DialogAddRequest";
 
 function SoilRequestTable() {
   const {
@@ -31,7 +32,10 @@ function SoilRequestTable() {
     selectSoilId,
   } = useContext(TableContext);
   const snackbar = useSnackbar();
-
+  const [open, setOpen] = useState<boolean>(false);
+  function closeDialog() {
+    setOpen(!open);
+  }
   function handleDelete() {
     setSelectSoilId && setSelectSoilId([]);
     axios
@@ -77,7 +81,9 @@ function SoilRequestTable() {
               variant="contained"
               startIcon={<AddCircleOutlineIcon />}
               sx={{ mb: 1 }}
-              disabled
+              onClick={() => {
+                setOpen(!open);
+              }}
             >
               اضافة الطلب
             </Button>
@@ -132,6 +138,7 @@ function SoilRequestTable() {
           </Button>
         </Stack>
       </Box>
+      <DialogAddRequest open={open} closeDialog={closeDialog} />
     </Stack>
   );
 }
