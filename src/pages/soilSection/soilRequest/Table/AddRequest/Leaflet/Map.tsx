@@ -3,8 +3,12 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { Stack } from "@mui/material";
 import { Icon } from "leaflet";
 import img1 from "../../../../../../assets/images/pngwing.com.png";
+import { normalizeLongitude } from "../../../../../../methods/normalizeLongitude";
 
 export function MapComponent({ selectedPin, setSelectedPin }: PropsType) {
+  const [center, setCenter] = useState<[number, number]>([
+    24.774265, 46.738586,
+  ]);
   const customIcon = new Icon({
     iconUrl: img1,
     iconSize: [50, 50],
@@ -18,8 +22,13 @@ export function MapComponent({ selectedPin, setSelectedPin }: PropsType) {
     const map = useMapEvents({
       click: (event) => {
         const { lat, lng } = event.latlng;
-        const position: [number, number] = [lat, lng];
+        const long = normalizeLongitude(lng);
+        const position: [number, number] = [lat, long];
         handlePinClick(position);
+        if (long !== lng) {
+          setCenter([lat, long]);
+        }
+        console.log(long, lng, long !== lng);
       },
     });
 
@@ -35,8 +44,9 @@ export function MapComponent({ selectedPin, setSelectedPin }: PropsType) {
       }}
     >
       <MapContainer
-        center={[51.505, -0.09]}
-        zoom={15}
+        key={`${(center[0], center[1])}`}
+        center={center}
+        zoom={7}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
       >
