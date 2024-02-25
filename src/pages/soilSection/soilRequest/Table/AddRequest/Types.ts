@@ -1,4 +1,5 @@
 import { Client } from "../../../../../types/Clients";
+import { MapType } from "../../../../../types/Soil";
 
 export interface LocationFormOptionsType {
   success: boolean;
@@ -6,7 +7,7 @@ export interface LocationFormOptionsType {
   type_order?: TypeOrder[];
   soilArea?: SoilArea[];
   soilFloor?: SoilFloor[];
-  map?: unknown;
+  map?: MapType[];
   clients?: Client[];
 }
 
@@ -38,4 +39,21 @@ export interface SoilFloor {
   created_at: string;
   updated_at: string;
   deleted_at?: string;
+}
+
+export interface StoreFormBody {
+  number_bodies: number;
+  number_floor: number;
+  total_price: number;
+  order_type_id: number;
+  license_id: number;
+  map: number;
+  client_id: number;
+  payment: string;
+  depth: number;
+  area_id: number;
+  floor_id: number;
+  price: number;
+  lat: number;
+  long: number;
 }

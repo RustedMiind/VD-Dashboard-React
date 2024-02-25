@@ -19,19 +19,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Client } from "../../../../../types/Clients";
 import { Api } from "../../../../../constants";
-const brokers = [
-  {
-    name: "test",
-    id: 1,
-  },
-];
+import { NavLink } from "react-router-dom";
+import ClientData from "../../../../clients/data";
+
 export default function DialogAddRequest({ open, closeDialog }: PropsType) {
-  const [requests, setRequests] = useState<Client[]>([]);
+  const [allClients, setAllClients] = useState<Client[]>([]);
+  const [selectedClient, setSelectedClient] = useState<Client | undefined>(
+    undefined
+  );
   useEffect(() => {
     axios
       .get<{ data: Client[] }>(Api("employee/client"))
       .then(({ data }) => {
-        setRequests(data.data);
+        setAllClients(data.data);
         console.log(data.data);
       })
       .catch((err) => {});
@@ -82,9 +82,16 @@ export default function DialogAddRequest({ open, closeDialog }: PropsType) {
               <SelectWithFilter
                 size="small"
                 select
-                value={""}
-                onChange={(e) => {}}
-                options={requests.map((client) => ({
+                value={selectedClient?.id || -1}
+                onChange={(e) => {
+                  setSelectedClient(
+                    allClients.find(
+                      (client) =>
+                        client.id === (e.target.value as unknown as number)
+                    )
+                  );
+                }}
+                options={allClients.map((client) => ({
                   label: client.name,
                   value: client.id,
                 }))}
@@ -95,14 +102,24 @@ export default function DialogAddRequest({ open, closeDialog }: PropsType) {
             </Stack>
           </Grid>
           <Grid item md={4}>
-            <Button fullWidth variant="contained" href="../clients/add">
+            <Button
+              fullWidth
+              variant="contained"
+              component={NavLink}
+              to="/react/clients/add"
+            >
               اضافة عميل
             </Button>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="contained" href="soil/addrequest">
+        <Button
+          variant="contained"
+          disabled={!selectedClient}
+          component={NavLink}
+          to={`addrequest/${selectedClient?.id}`}
+        >
           بدء الطلب
         </Button>
       </DialogActions>

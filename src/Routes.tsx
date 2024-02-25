@@ -178,7 +178,7 @@ function RoutesComponent() {
               <Route path="showtask/:id" element={<SoilDetails />} />
             )}
             {hasPermission(Permission.SOIL_SHOW) && (
-              <Route path="addrequest" element={<AddRequest />} />
+              <Route path="addrequest/:id" element={<AddRequest />} />
             )}
           </Route>
         </Route>
