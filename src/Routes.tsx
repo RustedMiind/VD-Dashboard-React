@@ -38,6 +38,7 @@ import WorkOrdersTypesDetails from "./pages/electricity/workOrdersTypesDetails";
 import FollowUpEmployees from "./pages/electricity/FollowUpEmployees";
 import WorkOrdersPage from "./pages/electricity/workOrders";
 import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
+import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
