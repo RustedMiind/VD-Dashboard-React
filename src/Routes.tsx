@@ -100,7 +100,10 @@ function RoutesComponent() {
             <Route path="" element={<WorkOrdersPage />} />
             <Route path="add" element={<CreateOrUpdateWorkOrder />} />
             <Route path="edit/:id" element={<CreateOrUpdateWorkOrder />} />
-            <Route path="show/:id" element={<CreateOrUpdateWorkOrder show={true}/>} />
+            <Route
+              path="show/:id"
+              element={<CreateOrUpdateWorkOrder show={true} />}
+            />
           </Route>
           <Route path="workordertypes">
             <Route path="" element={<WorkOrderPage />} />
@@ -108,7 +111,7 @@ function RoutesComponent() {
             <Route path="edit/:id" element={<CreateOrUpdateWorkOrderType />} />
             <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
           </Route>
-            <Route path="FollowUpEmployees" element={<FollowUpEmployees/>} />
+          <Route path="FollowUpEmployees" element={<FollowUpEmployees />} />
         </Route>
         {hasAnyOfPermissions([
           Permission.TENDERS_SHOW,
@@ -172,6 +175,9 @@ function RoutesComponent() {
             )}
             {hasPermission(Permission.SOIL_SHOW) && (
               <Route path="showtask/:id" element={<SoilDetails />} />
+            )}
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="addrequest" element={<AddRequest />} />
             )}
           </Route>
         </Route>

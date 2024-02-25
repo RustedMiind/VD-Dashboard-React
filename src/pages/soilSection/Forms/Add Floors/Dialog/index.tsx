@@ -77,12 +77,6 @@ function DialogAddFloor(props: TypeProps) {
     }
   }, [props.idToUpdate]);
 
-  // function updateAmountData(partial: Partial<TypeFloorData>) {
-  //   setAmountData({
-  //     ...amountData,
-  //     ...partial,
-  //   });
-  // }
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
     if (props.createOrEdit === "create") {
