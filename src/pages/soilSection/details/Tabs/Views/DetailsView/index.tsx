@@ -1,19 +1,18 @@
-import { useContext, useMemo, useState } from "react";
-import {
-  Grid,
-  GridProps,
-  TypographyProps,
-  Typography,
-  Box,
-  Button,
-  TextField,
-} from "@mui/material";
+import { useContext, useMemo, useRef, useState } from "react";
+import { Grid, GridProps, Typography, Box, Button } from "@mui/material";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
-import { SoilContext } from "../../../../SoilContext";
 import { SoilDataContext } from "../../..";
 import { formatDate } from "../../../../../../methods";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import DialogShowLocation from "./Dialog";
+import { styled } from "@mui/material/styles";
+import PrintIcon from "@mui/icons-material/Print";
+import ReactToPrint from "react-to-print";
+export const NotPrintableTableCell = styled(Box)({
+  "@media print": {
+    display: "none",
+  },
+});
 
 function GridItem(props: GridProps) {
   return <Grid item lg={6} xs={12} {...props} />;
@@ -37,14 +36,19 @@ function InfoItem(props: { label: string; value?: React.ReactNode }) {
 function DetailsView(): JSX.Element {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { soilData } = useContext(SoilDataContext);
-  function apperData() {}
+
   return (
     <>
       {typeof soilData === "object" ? (
-        <>
-          <Typography variant={"h5"} sx={{ mb: 4, fontWeight: 600 }}>
-            معلومات الطلب
-          </Typography>
+        <Box>
+          <NotPrintableTableCell>
+            <Box>
+              <Typography variant={"h5"} sx={{ mb: 4, fontWeight: 600 }}>
+                معلومات الطلب
+              </Typography>
+            </Box>
+          </NotPrintableTableCell>
+
           <Grid container rowSpacing={4} columnSpacing={2}>
             <InfoItem label="رقم الطلب" value={soilData?.id} />
             <InfoItem
@@ -74,41 +78,34 @@ function DetailsView(): JSX.Element {
             />
             <InfoItem
               label="طريقة السداد"
-              // value={soilData?.soil_order?.number_bodies}
+              value={soilData?.soil_order?.payment}
             />
             <Grid item md={6}>
-              <Typography>
-                عرض الموقع
-                <RequiredSymbol />
-              </Typography>
-              {/* <Button variant="contained">عرض الموقع</Button> */}
-              <TextField
-                disabled
-                sx={{ mt: 1 }}
-                size="small"
-                InputProps={{
-                  endAdornment: (
-                    <Button
-                      onClick={() => {
-                        setOpenDialog(true);
-                      }}
-                    >
-                      عرض
-                    </Button>
-                  ),
-                }}
-                placeholder="عرض الموقع"
-              />
+              <NotPrintableTableCell>
+                <Box>
+                  <Typography>
+                    عرض الموقع
+                    <RequiredSymbol />
+                  </Typography>
+                  <Button
+                    sx={{ width: 0.3 }}
+                    variant="contained"
+                    onClick={() => {
+                      setOpenDialog(true);
+                    }}
+                  >
+                    عرض
+                  </Button>
+                </Box>
+              </NotPrintableTableCell>
             </Grid>
           </Grid>
-          <Box sx={{ display: "flex", justifyContent: "end", my: 2 }}>
-            <Button variant="contained">الطباعة</Button>
-          </Box>
+
           <DialogShowLocation
             openDialog={openDialog}
             setOpenDialog={setOpenDialog}
           />
-        </>
+        </Box>
       ) : (
         <></>
       )}

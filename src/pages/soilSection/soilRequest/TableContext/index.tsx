@@ -12,7 +12,7 @@ export function SoilRequestTableContextProvider({
   children: React.ReactNode;
 }) {
   const [soilRequest, setSoilRequest] = useState<SoilStateType>("none");
-  const [selectSoilId, setselectSoilId] = useState<number[]>([]);
+  const [selectSoilId, setSelectSoilId] = useState<number[]>([]);
   let [limit, setLimit] = useState<string>("25");
   let [counts, setCounts] = useState<Counts | undefined>(undefined);
   function getSoilData(params?: unknown) {
@@ -41,7 +41,7 @@ export function SoilRequestTableContextProvider({
         soilRequest,
         setSoilRequest: getSoilData,
         selectSoilId,
-        setselectSoilId,
+        setSelectSoilId,
         limit,
         setLimit: setLimitAndUpdate,
         counts,
@@ -56,7 +56,7 @@ type ContextType = {
   soilRequest?: SoilStateType;
   setSoilRequest?: ((param?: unknown) => void) | null;
   selectSoilId?: number[];
-  setselectSoilId?: React.Dispatch<React.SetStateAction<number[]>>;
+  setSelectSoilId?: React.Dispatch<React.SetStateAction<number[]>>;
   limit?: string | null;
   setLimit?: ((rows: string) => void) | null;
   counts?: Counts;

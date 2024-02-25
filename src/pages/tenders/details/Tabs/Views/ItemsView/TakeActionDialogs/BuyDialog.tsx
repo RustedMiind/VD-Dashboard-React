@@ -30,10 +30,18 @@ import {
   TenderPay,
   TenderStep,
 } from "../../../../../../../types/Tenders/Status.enum";
-import { Department } from "../../../../../../../types";
+import {
+  Department,
+  Management,
+  Media,
+  TenderPayment,
+} from "../../../../../../../types";
 import { TenderDataContext } from "../../../..";
 import { DtoType } from "./DtoType";
 import SubmitTypeDialog from "./SubmitTypeDialog";
+import CustomFilePond from "../../../../../../../components/CustomFilepond";
+import { FileBondState } from "../../../../../../../types/FileBondState";
+import MediaMenuList from "../MediaMenu";
 
 export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
@@ -65,7 +73,13 @@ const GridItem = (props: GridProps & { label: string }) => (
   </Grid>
 );
 
-export default function BuyDialog({ close, ...props }: PropsType) {
+export default function BuyDialog({
+  close,
+  uploadedFile,
+  status,
+  buyTender,
+  ...props
+}: PropsType) {
   const { register, handleSubmit, reset } = useForm<DtoType>({
     defaultValues: {
       status: "-1",
@@ -82,8 +96,8 @@ export default function BuyDialog({ close, ...props }: PropsType) {
   const { tender, refresh } = useContext(TenderDataContext);
   const { enqueueSnackbar } = useSnackbar();
   const [endDate, setEndDate] = useState("");
-  const [file, setFile] = useState<File | undefined>(undefined);
-  const [departments, setDepartments] = useState<Department[] | undefined>(
+  const [file, setFile] = useState<FileBondState>([]);
+  const [managements, setManagements] = useState<Management[] | undefined>(
     undefined
   );
 
@@ -101,14 +115,17 @@ export default function BuyDialog({ close, ...props }: PropsType) {
     if (typeof tender === "object") {
       setFormStatus(FetchStatusEnum.LOADING);
       setCheckDialogOpen(false);
+      const obj = {
+        ...dto,
+        image: file[0],
+        user_type: TenderStep.PURCHASE,
+      };
+      console.log(obj);
       axios
         .post(
           Api("employee/tender/form/status/" + id),
-          objectToFormData({
-            ...dto,
-            image: file,
-            user_type: tender.user_type,
-          })
+
+          objectToFormData(obj)
         )
         .then((res) => {
           console.log(res);
@@ -154,14 +171,19 @@ export default function BuyDialog({ close, ...props }: PropsType) {
   });
 
   useEffect(() => {
-    reset();
+    reset({
+      status: status?.toString(),
+      iban: buyTender?.bank_account,
+      reciept_number: buyTender?.payment_number,
+      department_id: buyTender?.department_id?.toString(),
+    });
   }, [props.open]);
 
   useEffect(() => {
     axios
-      .get<{ departments: Department[] }>(Api("employee/all-departments"))
+      .get<{ managements: Management[] }>(Api("employee/all-managements"))
       .then((res) => {
-        setDepartments(res.data.departments);
+        setManagements(res.data.managements);
       })
       .catch(console.log);
   }, []);
@@ -198,7 +220,13 @@ export default function BuyDialog({ close, ...props }: PropsType) {
           </Grid>
           <Grid display={"flex"} alignItems={"center"} mb={5} item md={6}>
             <Typography sx={{ mr: 2 }}>الحاله </Typography>
-            <TextField {...register("status")} fullWidth size="small" select>
+            <TextField
+              {...register("status")}
+              defaultValue={status}
+              fullWidth
+              size="small"
+              select
+            >
               {buyOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -225,20 +253,27 @@ export default function BuyDialog({ close, ...props }: PropsType) {
               size="small"
               select
             >
-              {departments?.map((department) => (
-                <MenuItem key={department.id} value={department.id}>
-                  {department.name}
+              {managements?.map((management) => (
+                <MenuItem key={management.id} value={management.id?.toString()}>
+                  {management.name}
                 </MenuItem>
               ))}
             </TextField>
           </GridItem>
           <GridItem label="ارفاق ملف">
-            <UploadFileInput
+            <MediaMenuList media={uploadedFile} />
+            <CustomFilePond
+              files={file}
+              onupdatefiles={(fileItems) => {
+                setFile(fileItems.map((fileItem) => fileItem.file));
+              }}
+            />
+            {/* <UploadFileInput
               size="sm"
               value={file}
               subTitle=""
               setValue={(file) => setFile(file)}
-            />
+            /> */}
           </GridItem>
         </Grid>
       </DialogContent>
@@ -261,4 +296,7 @@ export default function BuyDialog({ close, ...props }: PropsType) {
 type PropsType = {
   close: () => void;
   userType: TenderStep;
+  uploadedFile?: Media;
+  status?: number;
+  buyTender?: TenderPayment;
 } & DialogProps;

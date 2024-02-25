@@ -89,8 +89,9 @@ export default function MainDataForm() {
           path ? "تم تعديل بيانات المنافسة بنجاح" : "تم حفظ بيانات المنافسة"
         );
         setError(undefined);
-        tenderContext.setTenderId &&
-          tenderContext.setTenderId(res.data.data.tender_id);
+        if (typeof tenderContext.tender === "object")
+          tenderContext.getTenderData?.();
+        else tenderContext.setTenderId?.(res.data.data.tender_id);
       })
       .catch((err: AxiosErrorType<LaravelValidationError<unknown>>) => {
         snackbar.enqueueSnackbar(
@@ -207,6 +208,7 @@ export default function MainDataForm() {
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
             value={dayjs(form.applyDate)}
+            shouldDisableTime={disableDateAfter(dayjs(form.endDate))}
             shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
@@ -246,6 +248,7 @@ export default function MainDataForm() {
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             disablePast
+            shouldDisableTime={disableDateBefore(dayjs(form.applyDate))}
             shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
             value={dayjs(form.endDate)}
             onChange={(date) => {

@@ -46,16 +46,19 @@ const RequestTypesToggles = ({
       </Badge>
       {orderType?.map((chip, index) => {
         const count = findCount(index + 1)?.count || 0;
-        return (
-          <Badge key={chip.name} badgeContent={count} max={19} color="error">
-            <NonRoundedChip
-              color="primary"
-              onClick={setCurrent(chip.id)}
-              variant={orderTypeId === chip.id ? "filled" : "outlined"}
-              label={chip.name}
-            />
-          </Badge>
-        );
+        console.log(count);
+        if (chip.id !== 4) {
+          return (
+            <Badge key={chip.name} badgeContent={count} max={19} color="error">
+              <NonRoundedChip
+                color="primary"
+                onClick={setCurrent(chip.id)}
+                variant={orderTypeId === chip.id ? "filled" : "outlined"}
+                label={chip.name}
+              />
+            </Badge>
+          );
+        }
       })}
     </Stack>
   );

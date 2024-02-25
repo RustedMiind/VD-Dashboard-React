@@ -14,17 +14,58 @@ import { useContext } from "react";
 import { TableContext } from "../TableContext";
 import { formatDate } from "../../../../methods";
 import { NavLink } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 function TableContent() {
-  const { soilRequest, limit, setLimit } = useContext(TableContext);
-  console.log(soilRequest);
+  const { soilRequest, setSoilRequest, selectSoilId, setSelectSoilId } =
+    useContext(TableContext);
+  const snackbar = useSnackbar();
+
+  const selectAllHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    let values: number[] | undefined =
+      typeof soilRequest === "object"
+        ? soilRequest?.map((item) => {
+            return item.id;
+          })
+        : [];
+    if (checked) {
+      setSelectSoilId && setSelectSoilId(values || []);
+    } else setSelectSoilId && setSelectSoilId([]);
+  };
+  function CheckboxHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    let isSelect = e.target.checked;
+
+    let value = parseInt(e.target.value);
+    if (isSelect) {
+      setSelectSoilId &&
+        selectSoilId &&
+        setSelectSoilId([...selectSoilId, value]);
+    } else {
+      setSelectSoilId &&
+        setSelectSoilId((prevData) => {
+          return prevData.filter((id) => {
+            return id !== value;
+          });
+        });
+    }
+  }
 
   return (
     <>
       <MuiTableHead>
         <TableRow>
           <TableCell>
-            <Checkbox />
+            <Checkbox
+              checked={
+                typeof soilRequest === "object" &&
+                selectSoilId?.length != 0 &&
+                selectSoilId?.length === soilRequest.length
+              }
+              onChange={selectAllHandler}
+            />
           </TableCell>
           <TableCell>رقم الطلب</TableCell>
           <TableCell>اسم العميل</TableCell>
@@ -41,9 +82,13 @@ function TableContent() {
       <MuiTableBody>
         {Array.isArray(soilRequest) &&
           soilRequest?.map((req) => (
-            <TableRow>
+            <TableRow key={req.id}>
               <TableCell>
-                <Checkbox />
+                <Checkbox
+                  value={req.id}
+                  checked={selectSoilId?.includes(req.id)}
+                  onChange={CheckboxHandler}
+                />
               </TableCell>
               <TableCell>
                 <Typography
@@ -91,7 +136,11 @@ function TableContent() {
                 {req?.soil_order?.depth ? req?.soil_order?.depth : ""}
               </TableCell>
               <TableCell>
-                <IconButton color="primary">
+                <IconButton
+                  color="primary"
+                  component={NavLink}
+                  to={`show/${req.id}`}
+                >
                   <RemoveRedEyeIcon />
                 </IconButton>
               </TableCell>

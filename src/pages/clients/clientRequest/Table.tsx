@@ -27,9 +27,46 @@ const ClientTableComponent = ({
   tableRef,
   dispatch,
   limit,
+  openFinance,
+  openReport,
+  openAccept,
+  openTest,
+  openVisit,
 }: PropsType) => {
   const [rowsCount, setRowsCount] = useState(limit);
-  function generateChip(request: PanelData | StepStatusData): JSX.Element {
+  function handleDialog(id: number, request: PanelData | StepStatusData) {
+    return () => {
+      switch (id) {
+        case 1:
+          openModel(request)();
+          break;
+        case 2:
+          openModel(request)();
+          break;
+        case 3:
+          openFinance(request)();
+          break;
+        case 4:
+          openAccept(request)();
+          break;
+        case 5:
+          openVisit(request)();
+          break;
+        case 6:
+          openTest(request)();
+          break;
+        case 7:
+          openReport(request)();
+          break;
+        default:
+          break;
+      }
+    };
+  }
+  function generateChip(
+    request: PanelData | StepStatusData,
+    formID: number
+  ): JSX.Element {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
     switch (parseInt(request.step_status_id)) {
@@ -39,7 +76,7 @@ const ClientTableComponent = ({
             size="small"
             color="primary"
             sx={{ textDecoration: "underline !important", fontWeight: 700 }}
-            onClick={openModel(request)}
+            onClick={handleDialog(formID, request)}
             id={request.id.toString()}
           >
             اتخاذ الاجراء
@@ -97,7 +134,7 @@ const ClientTableComponent = ({
   return (
     <>
       <TableContainer sx={{ minHeight: 500 }} ref={tableRef}>
-        <Table aria-label="simple table">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>رقم الطلب</TableCell>
@@ -106,7 +143,6 @@ const ClientTableComponent = ({
               <TableCell>نوع العميل </TableCell>
               <TableCell>الفرع</TableCell>
               <TableCell>نوع الطلب</TableCell>
-              <TableCell>القسم</TableCell>
               <TableCell>حالة الطلب</TableCell>
               <TableCell>الملاحظات</TableCell>
             </TableRow>
@@ -158,11 +194,9 @@ const ClientTableComponent = ({
                       {request?.order?.order_type?.name}
                     </Button>
                   </TableCell>
-                  <TableCell>
-                    {request?.department?.name ? request?.department?.name : ""}
-                  </TableCell>
+
                   <TableCell id={`${request?.step_status_id}`}>
-                    {generateChip(request)}
+                    {generateChip(request, request.form_id)}
                   </TableCell>
                   <TableCell>{request?.note || "----"}</TableCell>
                 </TableRow>
@@ -206,6 +240,11 @@ const ClientTableComponent = ({
 type PropsType = {
   requests: PanelData[];
   openModel: (res: PanelData | StepStatusData) => () => void;
+  openFinance: (res: PanelData | StepStatusData) => () => void;
+  openReport: (res: PanelData | StepStatusData) => () => void;
+  openAccept: (res: PanelData | StepStatusData) => () => void;
+  openTest: (res: PanelData | StepStatusData) => () => void;
+  openVisit: (res: PanelData | StepStatusData) => () => void;
   openStatus: (res: PanelData | StepStatusData) => () => void;
   openDetails: (res: PanelData | StepStatusData) => () => void;
   tableRef: React.RefObject<HTMLTableElement>;

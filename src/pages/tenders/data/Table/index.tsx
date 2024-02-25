@@ -40,7 +40,7 @@ function TendersTable(props: PropsType) {
               bgcolor: "Background",
             }}
           >
-            <Table padding="normal" sx={{ minWidth: 2200 }} stickyHeader>
+            <Table padding="normal" sx={{ minWidth: 2500 }} stickyHeader>
               <TableHead />
               <TableBody />
             </Table>

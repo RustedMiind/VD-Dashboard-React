@@ -1,4 +1,5 @@
 import { Contract } from "../Contracts";
+import { SoilOrder } from "../Soil/SoilRequest";
 import { Client } from "./Client";
 
 export interface ClientDetailsType {
@@ -6,7 +7,11 @@ export interface ClientDetailsType {
   contract_late: number;
   contract_stop: number;
   contract_work: number;
-  data?: (Contract & { remaining_time?: string; completion_rate?: string })[];
+  data?: (Contract & {
+    remaining_time?: string;
+    completion_rate?: string;
+    soil_order: SoilOrder;
+  })[];
   payment?: Payment;
   msg: string;
   client?: Client;

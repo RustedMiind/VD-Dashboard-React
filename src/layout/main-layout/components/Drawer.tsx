@@ -13,6 +13,7 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 // Icons
 import SecurityIcon from "@mui/icons-material/Security";
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AutoAwesomeMosaicIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import GroupIcon from "@mui/icons-material/Group";
@@ -20,6 +21,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import BiotechIcon from "@mui/icons-material/Biotech";
 import { AdminUrl } from "../../../constants/AdminUrl";
 import { Permission } from "../../../constants/Permission";
 import usePermissions from "../../../Permissions/hook";
@@ -77,21 +79,56 @@ const routesCollections: RoutesCollectionType[] = [
       Permission.TENDERS_SHOW,
       Permission.TASKS_SHOW,
       Permission.TENDERS_VIEW,
+      Permission.SOIL_SHOW,
     ],
     routes: [
       {
         name: "المنافسات",
         path: "/tenders",
         react: true,
+        isPrivate: Permission.TENDERS_VIEW,
       },
       {
         name: "مهامي",
         path: "/tenders/controlpanel",
         react: true,
+        isPrivate: Permission.TASKS_SHOW,
       },
       {
         name: "التربة والخرسانة",
         path: "/services/soil",
+        react: true,
+        isPrivate: Permission.SOIL_SHOW,
+      },
+    ],
+  },
+  {
+    name: "الكهرباء",
+    icon: ElectricBoltIcon,
+    routes: [
+      {
+        name: "المناديب",
+        path: "/envoy",
+        react: true,
+      },
+      {
+        name: "المقاولين",
+        path: "/electricity/contractors",
+        react: true,
+      },
+      {
+        name: "أوامر العمل",
+        path: "/electricity/workOrders",
+        react: true,
+      },
+      {
+        name: "أنواع أوامر العمل",
+        path: "/electricity/workordertypes",
+        react: true,
+      },
+      {
+        name: "متابعة الموظفين",
+        path: "/electricity/FollowUpEmployees",
         react: true,
       },
     ],
@@ -145,6 +182,7 @@ const routesCollections: RoutesCollectionType[] = [
       Permission.ATTENDANCE_VIEW,
       Permission.TICKETS_VIEW,
       Permission.DASHBOARD_SETTING_SHIFT_VIEW,
+      Permission.ATTENDANCE_REQUESTS_VIEW,
     ],
     routes: [
       {
@@ -179,23 +217,30 @@ const routesCollections: RoutesCollectionType[] = [
   {
     name: "الخدمات",
     icon: DesignServicesIcon,
+    isPrivate: [Permission.DESIGN_SHOW, Permission.DESIGN_CREATE],
     routes: [
       {
         name: "خدمات التصاميم",
         path: "/services/design",
         react: true,
+        isPrivate: Permission.DESIGN_SHOW,
       },
       {
         name: "هيكل تصميم المباني",
         path: "/services/design/structure",
         react: true,
+        isPrivate: Permission.DESIGN_CREATE,
       },
     ],
   },
   {
     name: "الاعدادات",
     icon: AdminPanelSettingsIcon,
-    isPrivate: [Permission.DASHBOARD_SETTING_VIEW, Permission.PLATFORMS_VIEW],
+    isPrivate: [
+      Permission.DASHBOARD_SETTING_VIEW,
+      Permission.PLATFORMS_VIEW,
+      Permission.SOIL_CREATE,
+    ],
     routes: [
       {
         name: "اعدادات لوحة التحكم",
@@ -217,17 +262,21 @@ const routesCollections: RoutesCollectionType[] = [
         name: "اعدادات التربة",
         path: "/services/soil/create",
         react: true,
+        isPrivate: Permission.SOIL_CREATE,
       },
     ],
   },
-  // {
-  //   name: "الموظفين",
-  //   icon: BadgeIcon,
-  //   routes: [
-  //     { name: "حضور الموظفين", path: "" },
-  //     { name: "محددات المشاريع", path: "" },
-  //   ],
-  // },
+  {
+    name: "تحت التطوير",
+    icon: BiotechIcon,
+    routes: [
+      {
+        name: "مهامي",
+        path: "/mytasks",
+        react: true,
+      },
+    ],
+  },
 ];
 
 function DrawerComponent(props: PropsType) {

@@ -7,18 +7,12 @@ import {
   TextField,
   Typography,
   IconButton,
-  FormControl,
-  Select,
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { MenuItem } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { useSnackbar } from "notistack";
-import { LoadingButton } from "@mui/lab";
 import RequiredSymbol from "../../../../../../../components/RequiredSymbol";
-import { Map } from "../Leaflet/Map";
+import { ShowMap } from "../../../../../../../components/Leaflet/Map";
 import { SoilDataContext } from "../../../..";
 
 export default function DialogShowLocation(props: TypeProps) {
@@ -28,10 +22,10 @@ export default function DialogShowLocation(props: TypeProps) {
   useEffect(() => {
     let str =
       typeof soilData === "object" &&
-      soilData.soil_order.soil_location_map?.map.slice(2, -2);
-    let arr = str.toString().split("},{");
+      soilData?.soil_order?.soil_location_map?.map.slice(2, -2);
+    let arr = str?.toString().split("},{");
     let positions: [number, number][] = [];
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr?.length; i++) {
       let cordin = arr[i].split(",");
       let temp: [number, number] = [
         +cordin[0].split(":")[1],
@@ -41,7 +35,6 @@ export default function DialogShowLocation(props: TypeProps) {
       positions.push(temp);
     }
     setPositionClick(positions);
-    console.log(positionClick);
   }, []);
 
   function closeDialog() {
@@ -74,8 +67,8 @@ export default function DialogShowLocation(props: TypeProps) {
                 </Typography>
                 <TextField
                   value={
-                    soilData?.soil_order?.soil_location_map.soil_location
-                      .location_name
+                    soilData?.soil_order?.soil_location_map?.soil_location
+                      ?.location_name
                   }
                   disabled
                   type="text"
@@ -90,8 +83,8 @@ export default function DialogShowLocation(props: TypeProps) {
                 <TextField
                   disabled
                   value={
-                    soilData?.soil_order?.soil_location_map.soil_location.city
-                      .name
+                    soilData?.soil_order?.soil_location_map?.soil_location?.city
+                      ?.name
                   }
                   type="text"
                   size="small"
@@ -100,7 +93,9 @@ export default function DialogShowLocation(props: TypeProps) {
               </Grid>
 
               <Grid item md={12}>
-                <Map
+                <ShowMap
+                  lat={soilData?.soil_order?.lat}
+                  long={soilData?.soil_order?.long}
                   positionClick={positionClick}
                   setPositionClick={setPositionClick}
                 />

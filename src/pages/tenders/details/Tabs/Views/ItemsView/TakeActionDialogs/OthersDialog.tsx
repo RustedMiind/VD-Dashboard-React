@@ -15,7 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import UploadFileInput from "../../../../../../../components/UploadFileInput";
 import { DtoType } from "./DtoType";
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { statusOptions } from "./BuyDialog";
 import axios from "axios";
 import { Api } from "../../../../../../../constants";
@@ -27,6 +27,8 @@ import { TenderDataContext } from "../../../..";
 import { useParams } from "react-router-dom";
 import { objectToFormData } from "../../../../../../../methods";
 import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
+import { Media } from "../../../../../../../types";
+import MediaMenuList from "../MediaMenu";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -41,14 +43,13 @@ export default function OthersDialog({
   close,
   endDate,
   userType,
+  uploadedFile,
+  status,
   ...dialogProps
 }: PropsType) {
-  const { register, handleSubmit } = useForm<DtoType>({
+  const { register, handleSubmit, reset } = useForm<DtoType>({
     defaultValues: {
       status: "-1",
-      iban: "",
-      reciept_number: "",
-      department_id: "",
     },
   });
   const [formStatus, setFormStatus] = useState<FetchStatus>(
@@ -68,11 +69,16 @@ export default function OthersDialog({
     sendData(data);
   });
 
+  useEffect(() => {
+    reset({
+      status: status?.toString(),
+    });
+  }, [dialogProps.open]);
+
   function sendData(dto: DtoType) {
     if (typeof tender === "object") {
       setFormStatus(FetchStatusEnum.LOADING);
       setCheckDialogOpen(false);
-      console.log("Abdo File", file);
       axios
         .post(
           Api("employee/tender/form/status/" + id),
@@ -136,6 +142,7 @@ export default function OthersDialog({
             <TextField value={endDate} disabled fullWidth size="small" />
           </GridItem>
           <GridItem label="ارفق عرض التقديم">
+            <MediaMenuList media={uploadedFile} />
             <UploadFileInput
               size="sm"
               value={file}
@@ -166,4 +173,6 @@ type PropsType = {
   close: () => void;
   endDate?: string;
   userType: TenderStep;
+  uploadedFile?: Media;
+  status?: number;
 } & DialogProps;

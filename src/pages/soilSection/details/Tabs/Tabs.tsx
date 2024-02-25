@@ -26,7 +26,7 @@ function Tabs() {
       <Chip {...createChipProps("البنود", TabEnum.ITEMS)} />
       <Chip {...createChipProps("المرفقات", TabEnum.ATTACHMENTS)} />
       <Chip {...createChipProps("المواعيد")} />
-      <Chip {...createChipProps("مساحة العمل")} />
+      <Chip {...createChipProps("مساحة العمل", TabEnum.WORK_SPACE)} />
       <Chip {...createChipProps("سجل الحركة")} />
     </Stack>
   );

@@ -20,7 +20,7 @@ function TabViews(): JSX.Element {
     case TabEnum.ATTACHMENTS:
       return <AttachmentTables />;
     case TabEnum.WORK_SPACE:
-      return <>Hello WORK SPACE</>;
+      return <ItemsView strictOnlyAccess />;
     default:
       return <></>;
   }

@@ -26,7 +26,7 @@ function TabViews(): JSX.Element {
     case TabEnum.REQUESTS:
       return <>Hello Requests</>;
     case TabEnum.WORK_SPACE:
-      return <>Hello WORK SPACE</>;
+      return <ItemsView strictOnlyAccess />;
     default:
       return <></>;
   }

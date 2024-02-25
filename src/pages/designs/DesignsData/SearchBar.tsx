@@ -33,7 +33,6 @@ function SearchBar(props: PropsType) {
         <Button
           variant="contained"
           //  disabled
-          onClick={() => {}}
           type={"submit"}
         >
           بحث

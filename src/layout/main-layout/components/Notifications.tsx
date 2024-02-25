@@ -3,7 +3,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import React, { useEffect, useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -17,30 +16,45 @@ function Notifications() {
   const [notifications, setNotifications] = useState<Notification[] | null>(
     null
   );
+  const [counts, setCounts] = useState(0);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    readNotifications();
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
+  function getNotifications() {
     axios
-      .get<{ data: Notification[] }>(Api("employee/notifications"))
+      .get<{ notifications: Notification[]; unread?: number }>(
+        Api("employee/notifications")
+      )
       .then((res) => {
-        if (res.data.data.length <= 10) setNotifications(res.data.data);
-        else setNotifications(res.data.data.slice(0, 11));
+        setNotifications(res.data.notifications.slice(0, 11));
+        setCounts(res.data.unread || 0);
       })
       .catch((err) => {
         setNotifications(null);
       });
-  }, []);
+  }
+
+  function readNotifications() {
+    axios
+      .post(Api("employee/notifications"))
+      .then(getNotifications)
+      .catch((err) => {
+        setNotifications(null);
+      });
+  }
+
+  useEffect(getNotifications, []);
 
   return (
     <React.Fragment>
       <Tooltip title="الاشعارات">
         <IconButton onClick={handleClick} size="medium" sx={{ ml: 2 }}>
-          <Badge badgeContent={0} color="error">
+          <Badge badgeContent={counts} color="error">
             <NotificationsIcon color="action" />
           </Badge>
         </IconButton>

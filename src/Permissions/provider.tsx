@@ -6,12 +6,14 @@ import { Permission } from "../constants/Permission";
 import { useSnackbar } from "notistack";
 import { Backdrop } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import { AccountStatus, useUser } from "../contexts/user/user";
 
 function PermissionsContextProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = useUser();
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [status, setStatus] = useState<"loading" | "done" | "error">("done");
   function hasPermission(permission: Permission): boolean {
@@ -36,17 +38,19 @@ function PermissionsContextProvider({
   const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     setStatus("loading");
-    axios
-      .get<{ permissions?: Permission[] }>(Api("employee/get-permissions"))
-      .then(({ data }) => {
-        setPermissions(data.permissions || []);
-        setStatus("done");
-      })
-      .catch(() => {
-        enqueueSnackbar("فشل في تحميل صلاحيات العميل", { variant: "error" });
-        setStatus("error");
-      });
-  }, []);
+
+    if (user.status === AccountStatus.IS_USER)
+      axios
+        .get<{ permissions?: Permission[] }>(Api("employee/get-permissions"))
+        .then(({ data }) => {
+          setPermissions(data.permissions || []);
+          setStatus("done");
+        })
+        .catch(() => {
+          enqueueSnackbar("فشل في تحميل صلاحيات العميل", { variant: "error" });
+          setStatus("error");
+        });
+  }, [user.status]);
 
   return (
     <PermissionsContext.Provider

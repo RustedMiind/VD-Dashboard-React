@@ -29,6 +29,15 @@ import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
 import DesignDataPage from "./pages/designs/DesignsData";
 import SoilDetails from "./pages/soilSection/details";
+import EnvoysDataPage from "./pages/envoy/data";
+import MyTasks from "./pages/Tasks/MyTasks";
+import ElectricityConstractors from "./pages/electricity/contractors";
+import WorkOrderPage from "./pages/electricity/workOrderTypes";
+import CreateOrUpdateWorkOrderType from "./pages/electricity/workOrderTypes/Add";
+import WorkOrdersTypesDetails from "./pages/electricity/workOrdersTypesDetails";
+import FollowUpEmployees from "./pages/electricity/FollowUpEmployees";
+import WorkOrdersPage from "./pages/electricity/workOrders";
+import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -37,9 +46,7 @@ function RoutesComponent() {
     <Routes>
       <Route path="react/*">
         <Route path="test" element={<ForTest />} />
-
         <Route path="" element={<MainPage />} />
-        <Route path="designReports" element={<DesignReports />} />
         {/* Employees Section */}
         <Route path="employees">
           {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
@@ -49,7 +56,6 @@ function RoutesComponent() {
             <Route path="requests" element={<EmplyeesRequests />} />
           )}
         </Route>
-
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
           {
@@ -84,14 +90,35 @@ function RoutesComponent() {
             <Route path="requests" element={<ClientRequests />} />
           )}
         </Route>
+        <Route path="mytasks" element={<MyTasks />} />
+        <Route path="envoy">
+          <Route path="" element={<EnvoysDataPage />} />
+        </Route>
+        <Route path="electricity">
+          <Route path="contractors" element={<ElectricityConstractors />} />
+          <Route path="workorders">
+            <Route path="" element={<WorkOrdersPage />} />
+            <Route path="add" element={<CreateOrUpdateWorkOrder />} />
+            <Route path="edit/:id" element={<CreateOrUpdateWorkOrder />} />
+            <Route path="show/:id" element={<CreateOrUpdateWorkOrder show={true}/>} />
+          </Route>
+          <Route path="workordertypes">
+            <Route path="" element={<WorkOrderPage />} />
+            <Route path="add" element={<CreateOrUpdateWorkOrderType />} />
+            <Route path="edit/:id" element={<CreateOrUpdateWorkOrderType />} />
+            <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
+          </Route>
+            <Route path="FollowUpEmployees" element={<FollowUpEmployees/>} />
+        </Route>
         {hasAnyOfPermissions([
           Permission.TENDERS_SHOW,
+          Permission.TENDERS_VIEW,
           Permission.TENDERS_CREATE,
           Permission.TENDERS_EDIT,
           Permission.TASKS_SHOW,
         ]) && (
           <Route path="tenders">
-            {hasPermission(Permission.TENDERS_SHOW) && (
+            {hasPermission(Permission.TENDERS_VIEW) && (
               <Route path="" element={<TendersData />} />
             )}
 
@@ -106,7 +133,7 @@ function RoutesComponent() {
             {hasAnyOfPermissions([
               Permission.TASKS_SHOW,
               Permission.TENDERS_SHOW,
-            ]) && <Route path="controlpanel" element={<ControlPanal />} />}
+            ]) && <Route path="controlpanel" element={<MyTasks />} />}
 
             {hasPermission(Permission.TENDERS_SHOW) && (
               <Route path=":id" element={<TenderDetails />} />
@@ -115,15 +142,37 @@ function RoutesComponent() {
         )}
         <Route path="services">
           <Route path="design">
-            <Route path="" element={<DesignDataPage />} />
-            <Route path="create" element={<CreateOrUpdateDesign />} />
-            <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
-            <Route path="structure" element={<DesignStructurePage />} />
+            {hasPermission(Permission.DESIGN_SHOW) && (
+              <Route path="" element={<DesignDataPage />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="create" element={<CreateOrUpdateDesign />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="edit/:designId" element={<CreateOrUpdateDesign />} />
+            )}
+
+            {hasPermission(Permission.DESIGN_CREATE) && (
+              <Route path="structure" element={<DesignStructurePage />} />
+            )}
           </Route>
           <Route path="soil">
-            <Route path="create" element={<FormsSection />} />
-            <Route path="" element={<SoilSection />} />
-            <Route path="show/:id" element={<SoilDetails />} />
+            {hasPermission(Permission.SOIL_EDIT) && (
+              <Route path="create" element={<FormsSection />} />
+            )}
+
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="" element={<SoilSection />} />
+            )}
+
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="show/:id" element={<SoilDetails />} />
+            )}
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="showtask/:id" element={<SoilDetails />} />
+            )}
           </Route>
         </Route>
 
