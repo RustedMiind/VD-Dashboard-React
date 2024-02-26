@@ -26,6 +26,10 @@ import { MapType } from "../../../../../types/Soil";
 import { MapComponent } from "./Leaflet/Map";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { FileBondState } from "../../../../../types/FileBondState";
+import { FilePond } from "react-filepond";
+import CustomFilePond from "../../../../../components/CustomFilepond";
+import { serialize } from "object-to-formdata";
 
 const GridItem = ({
   children,
@@ -83,6 +87,7 @@ export default function AddRequest() {
   const [options, setOptions] = useState<LocationFormOptionsType | undefined>(
     undefined
   );
+  const [images, setImages] = useState<FileBondState>([]);
   const navigate = useNavigate();
   const [currentMap, setCurrentMap] = useState<MapType | undefined>(undefined);
   const [calculationPriceData, setCalculationPriceData] = useState<
@@ -240,9 +245,11 @@ export default function AddRequest() {
       payment: "cash",
       price: calculationPriceData?.price,
       total_price: calculationPriceData?.total_price,
+      image: images.filter((file) => file instanceof File),
     };
+    console.log("body object", body);
     axios
-      .post(Api("employee/soil/order/store"), body)
+      .post(Api("employee/soil/order/store"), serialize(body))
       .then(() => {
         enqueueSnackbar("تم الطلب بنجاح");
         navigate("/react/services/soil");
@@ -387,6 +394,17 @@ export default function AddRequest() {
             >
               حساب عدد الجسات
             </LoadingButton>
+          </Grid>
+
+          <Grid item xs={6} my={2}>
+            <CustomFilePond
+              files={images}
+              maxFiles={5}
+              allowMultiple
+              onupdatefiles={(fileItems) => {
+                setImages(fileItems.map((fileItem) => fileItem.file));
+              }}
+            />
           </Grid>
         </GridContainer>
         <GridContainer
