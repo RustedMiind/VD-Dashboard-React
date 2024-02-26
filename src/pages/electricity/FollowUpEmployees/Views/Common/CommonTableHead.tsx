@@ -411,7 +411,8 @@ function renderMarker(marker:any) {
           eventHandlers={{ click: () => handleMarkerClick(marker) }}
       >
           <Tooltip>
-              Latitude: {latitude} - Longitude: {longitude}
+              {/* Latitude: {latitude} - Longitude: {longitude} */}
+              {marker.name ? marker.name : `(${marker.type_work_instruction ? marker.type_work_instruction.name : '' })`}
           </Tooltip>
       </Marker>
   );
