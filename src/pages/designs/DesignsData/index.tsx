@@ -13,7 +13,7 @@ function DesignDataPage() {
   const [counts, setCounts] = useState<undefined | Counts>(undefined);
   useEffect(() => {
     axios
-      .get<Counts>(Api("client/design"), { headers: { from: "website" } })
+      .get<Counts>(Api("client/design"), { headers: { from: "dashboard" } })
       .then(({ data }) => {
         setCounts(data);
       });
