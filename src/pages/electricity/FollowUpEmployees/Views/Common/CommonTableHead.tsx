@@ -110,7 +110,8 @@ export default function SignInSide(props: any ) {
 
   const [selectedOption, setSelectedOption] = useState('orders');
   const [data, setData] = useState([]);
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  type DataItem = SearchResultItem | Marker | SearchEmployeeResultItem;
+  const [markers, setMarkers] = useState<DataItem[]>([]);
 
   
 
@@ -279,13 +280,14 @@ const handleOrderSearchButton = async () => {
     url = url.slice(0, -1);
     console.log(url);
     
-
   try {
       // const response = await fetch(url);
       const response = await axios.get<{map_report:SearchResultItem[]}>(Api(url)).then((response)=>{
         // setMarkers(response.data.map_report);
         console.log(response.data.map_report);
         setSearchResult(response.data.map_report);
+        setMarkers(response.data.map_report);
+
       }).finally(()=>{});
   } catch (error) {
       console.error('Error fetching data:', error);
@@ -327,6 +329,7 @@ if (dateTo) {
       const response = await axios.get<{map_report:SearchEmployeeResultItem[]}>(Api(url)).then((response)=>{
         console.log(response.data.map_report);
         setEmploeeSearchResult(response.data.map_report);
+        setMarkers(response.data.map_report);
       }).finally(()=>{});
   } catch (error) {
       console.error('Error fetching data:', error);
@@ -380,9 +383,9 @@ console.log(markers);
 
 useEffect(() => {
   fetchMarkerData();
-  renderMarker(markers);
 }, [selectedOption]);
 
+// renderMarker(markers);
 function renderMarker(marker:any) {
   let  latitude, longitude;
 
@@ -448,34 +451,6 @@ function renderMarker(marker:any) {
   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
   {markers.map(marker => renderMarker(marker))}
 </MapContainer>
-
-
-  {/* {markers.map(marker => (   
-    <Container key={marker.id}>
-
-      <Marker 
-      position={[parseFloat(selectedOption === 'employees' ? marker.employee_track.latitude : marker.latitude), 
-      parseFloat(selectedOption === 'employees' ? marker.employee_track.longitude : marker.longitude)]}
-      icon={customIcon} eventHandlers={{click: () => handleMarkerClick(marker)}}>
-      <Tooltip>Latitude: {selectedOption === 'employees' ? marker.employee_track.latitude : marker.latitude} - Longitude: {selectedOption === 'employees' ? marker.employee_track.longitude : marker.longitude}</Tooltip>
-
-      </Marker>
-    </Container>
-  ))} */}
-
-
-
-
-
-
-
-    {/* position={[parseFloat(marker.latitude) , parseFloat(marker.longitude)]}  */}
-  {/* <Tooltip>Latitude: {marker.latitude} - Longitude: {marker.longitude}</Tooltip> */}
-
-
-
-
-
           </Grid>
 
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -501,133 +476,6 @@ function renderMarker(marker:any) {
         فلتر
        </Typography>
       </Box>
-
-
-
-      {/* <FormControl component="fieldset" sx={{ marginTop: 2 }}>
-      <RadioGroup
-        aria-label="form-selector"
-        name="form-selector"
-        value={selectedValue}
-        onChange={handleChange}
-        sx={{ flexDirection: 'row' }}
-      >
-        <FormControlLabel value="أوامر العمل" control={<Radio />} label="أوامر العمل" />
-        <FormControlLabel value="الموظفين" control={<Radio />} label="الموظفين" />
-      </RadioGroup>
-      {selectedValue === 'أوامر العمل' && (
-        <div>
-          <TextField
-            label="الرقم المرجعي"
-            fullWidth
-            value={referenceNumber}
-            onChange={(e) => setReferenceNumber(e.target.value)}
-            sx={{ marginTop: 2 }}
-          />
-          <TextField
-            label="اسم أمر العمل"
-            fullWidth
-            value={typeWorkInstructionId}
-            onChange={(e) => setTypeWorkInstructionId(e.target.value)}
-            sx={{ marginTop: 2 }}
-          />
-          <TextField
-            label="وصف أمر العمل"
-            fullWidth
-            value={expectedCost}
-            onChange={(e) => setExpectedCost(e.target.value)}
-            sx={{ marginTop: 2 }}
-          />
-          <TextField
-            label="نوع أمر العمل"
-            fullWidth
-            value={realCost}
-            onChange={(e) => setRealCost(e.target.value)}
-            sx={{ marginTop: 2 }}
-          />
-        </div>
-      )}
-      {selectedValue === 'الموظفين' && (
-        <div>
-          <TextField label="رقم الجوال" fullWidth sx={{ marginTop: 2 }} />
-          <TextField label="الاسم" fullWidth sx={{ marginTop: 2 }} />
-          <TextField label="العنوان" fullWidth sx={{ marginTop: 2 }} />
-        </div>
-      )}
-      <Button variant="contained" onClick={handleSubmit} sx={{ marginTop: 2 }}>ابحث</Button>
-      {searchMessage && <div>{searchMessage}</div>}
-      
-    </FormControl>
-     
-    <LocalizationProvider >
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <DatePicker
-            label="تاريخ التقديم من"
-            value={fromDate}
-            onChange={handleFromDateChange}
-            {...props}
-            slots={{
-              textField: textFieldProps => <TextField {...textFieldProps} />,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <DatePicker
-            label="تاريخ التقديم إلى"
-            value={toDate}
-            onChange={handleToDateChange}
-            {...props}
-            slots={{
-              textField: textFieldProps => <TextField {...textFieldProps} />,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">اختر نوع البحث</FormLabel>
-            <RadioGroup
-              aria-label="searchType"
-              name="searchType"
-              value={selectedRadio}
-              onChange={handleRadioChange}
-            >
-              <FormControlLabel value="orders" control={<Radio />} label="أوامر العمل" />
-              <FormControlLabel value="employees" control={<Radio />} label="الموظفين" />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={handleSearch}>ابحث</Button>
-        </Grid>
-        
-        
-        {Array.isArray(searchResults) && searchResults.map((result) => (
-          <Grid item xs={12} key={result.id}>
-            
-          </Grid>
-        ))}
-      </Grid>
-    </LocalizationProvider> */}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div>
             <RadioGroup
                 aria-label="searchType"
