@@ -13,6 +13,7 @@ import { Box, Stack } from "@mui/material";
 import { TypeLocationData } from "../Dialog";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { IconButton } from "@mui/material";
+import { normalizeLongitude } from "../../../../../methods/normalizeLongitude";
 let TargetPositions: [number, number][] = [];
 
 const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
@@ -33,9 +34,18 @@ export function Map({
   setPositionClick,
   updateAmountData,
 }: PropsType) {
-  const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
+  const [center, setCenter] = useState<[number, number]>([
+    24.774265, 46.738586,
+  ]);
   const handleMapClick = (position: [number, number]) => {
-    setPositionClick([...positionClick, position]);
+    const positionHandler: [number, number] = [
+      position[0],
+      normalizeLongitude(position[1]),
+    ];
+    if (position[1] !== positionHandler[1]) {
+      setCenter([position[0], positionHandler[1]]);
+    }
+    setPositionClick([...positionClick, positionHandler]);
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
       (ele) => ({ lat: ele[0], long: ele[1] })
     );
@@ -70,8 +80,9 @@ export function Map({
       }}
     >
       <MapContainer
-        center={positionClick?.length ? positionClick[0] : center}
-        zoom={15}
+        key={`${(center[0], center[1])}`}
+        center={center}
+        zoom={7}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
       >
