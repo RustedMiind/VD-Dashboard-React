@@ -422,10 +422,10 @@ function renderMarker(marker:any) {
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         {selectedOption === 'orders' ? (
-        <MapPopUp isOpen={isOpen} handleClose={handleClose} marker={selectedMarker} />
-        ) : (
-        <MapPopUpEmployee isOpen={isOpen} handleClose={handleClose} marker={selectedMarker} />
-        )}
+         <MapPopUp isOpen={isOpen} handleClose={handleClose} marker={selectedMarker} /> 
+          ) : (
+            <MapPopUpEmployee isOpen={isOpen} handleClose={handleClose} marker={selectedMarker} />
+            )}
 
         <Grid
           item
