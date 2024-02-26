@@ -13,6 +13,8 @@ type MapPopUpProps = {
     status: number;
     period: number;
     created_at: string;
+    address: string;
+    phone: string;
     contractor: {
       id: number;
       name: string;
@@ -49,88 +51,36 @@ const MapPopUp: React.FC<MapPopUpProps> = ({ isOpen, handleClose, marker }) => {
           <Grid item xs={6}>
 
             <TextField
-              label="الرقم المرجعي"
+              label="الأسم"
               variant="outlined"
               fullWidth
               disabled
-              value={marker.reference_number}
+              value={marker.name}
             />
 
           </Grid>
           <Grid item xs={6}>
             <TextField
-              label="نوع أمر العمل"
+              label="رقم الجوال"
               variant="outlined"
               fullWidth
               disabled
-              value={marker.type_work_instruction.name}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="وصف أمر العمل"
-              variant="outlined"
-              fullWidth
-              disabled
-              value={marker.type_work_instruction.description}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="التكلفة التقديرية"
-              variant="outlined"
-              fullWidth
-              disabled
-              value={marker.expected_cost}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="الاحداثيات "
-              variant="outlined"
-              fullWidth
-              disabled
-              value={`Longitude: ${marker.longitude} - Latitude: ${marker.latitude} `}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="المقاول"
-              variant="outlined"
-              fullWidth
-              disabled
-              value={marker.contractor.name}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="حالة أمر العمل"
-              variant="outlined"
-              fullWidth
-              disabled
-              value={marker.status}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="المدة"
-              variant="outlined"
-              fullWidth
-              disabled
-              value={marker.period}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="تاريخ الاسناد"
-              variant="outlined"
-              fullWidth
-              disabled
-              value={marker.created_at}
+              value={marker.phone}
             />
           </Grid>
 
-        </Grid>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label="العنوان"
+              variant="outlined"
+              fullWidth
+              disabled
+              value={marker.address}
+            />
+          </Grid>
+
+        
         <Grid container spacing={2} sx={{ mb: 2 }}>
           {/* <Grid item xs={6}>
             <TextField label="العنوان" variant="outlined" fullWidth disabled value={marker.costable_id} InputProps={{

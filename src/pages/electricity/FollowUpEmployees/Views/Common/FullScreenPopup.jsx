@@ -6,7 +6,7 @@ const FullScreenPopup = ({ marker, onClose }) => {
     <Popup>
       <div className="full-screen-popup">
         <button onClick={onClose}>Close</button>
-        <h2>{marker.title}</h2>
+        <h2>{marker}</h2>
         <p>{marker.description}</p>
       </div>
     </Popup>
