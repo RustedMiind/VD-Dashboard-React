@@ -5,7 +5,11 @@ import { Icon } from "leaflet";
 import img1 from "../../../../../../assets/images/pngwing.com.png";
 import { normalizeLongitude } from "../../../../../../methods/normalizeLongitude";
 
-export function MapComponent({ selectedPin, setSelectedPin }: PropsType) {
+export function MapComponent({
+  selectedPin,
+  setSelectedPin,
+  handleCloseMap,
+}: PropsType) {
   const [center, setCenter] = useState<[number, number]>([
     24.774265, 46.738586,
   ]);
@@ -67,4 +71,5 @@ type SelectedPinType = [number, number] | null;
 type PropsType = {
   selectedPin: SelectedPinType;
   setSelectedPin: (value: SelectedPinType) => void;
+  handleCloseMap: () => void;
 };

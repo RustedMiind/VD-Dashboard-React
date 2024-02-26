@@ -26,6 +26,7 @@ import { MapType } from "../../../../../types/Soil";
 import { MapComponent } from "./Leaflet/Map";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import DailogMap from "./DailogMap";
 
 const GridItem = ({
   children,
@@ -92,6 +93,10 @@ export default function AddRequest() {
     LocationForm | undefined
   >(undefined);
   const [selectedPin, setSelectedPin] = useState<[number, number] | null>(null);
+  const [openMap, setOpenMap] = useState<boolean>(false);
+  function handleCloseMap() {
+    setOpenMap(!openMap);
+  }
   const getOptions = () => {
     return new Promise((ressolve, reject) => {
       setLocationState("unknown");
@@ -346,7 +351,10 @@ export default function AddRequest() {
               value={selectedPin?.join(" | ")}
               InputProps={{
                 endAdornment: (
-                  <IconButton {...LocationFormInputCommonProps}>
+                  <IconButton
+                    onClick={handleCloseMap}
+                    {...LocationFormInputCommonProps}
+                  >
                     <AddLocationIcon />
                   </IconButton>
                 ),
@@ -361,17 +369,18 @@ export default function AddRequest() {
             {!!(locationState === "inside" && selectedPin) && (
               <ErrorText color="success">الموقع داخل المساحة المغطاة</ErrorText>
             )}
+
             {locationState === "outside" && (
               <ErrorText>الموقع خارج المساحة المغطاة</ErrorText>
             )}
           </GridItem>
           {!isLocationFormDone && (
-            <Grid item xs={12}>
-              <MapComponent
-                setSelectedPin={setSelectedPin}
-                selectedPin={selectedPin}
-              />
-            </Grid>
+            <DailogMap
+              openMap={openMap}
+              handleCloseMap={handleCloseMap}
+              setSelectedPin={setSelectedPin}
+              selectedPin={selectedPin}
+            />
           )}
           <Grid item xs={6} my={2}>
             <LoadingButton
