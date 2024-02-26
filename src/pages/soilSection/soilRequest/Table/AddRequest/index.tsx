@@ -318,7 +318,7 @@ export default function AddRequest() {
             >
               {options?.soilArea?.map((area) => (
                 <MenuItem value={area.id} key={area.id}>
-                  {area.number}
+                  {area.area_from} - {area.area_to}
                 </MenuItem>
               ))}
             </TextField>
@@ -340,7 +340,7 @@ export default function AddRequest() {
             >
               {options?.soilFloor?.map((floor) => (
                 <MenuItem value={floor.id} key={floor.id}>
-                  {floor.depth}
+                  {floor.number_floors}
                 </MenuItem>
               ))}
             </TextField>
