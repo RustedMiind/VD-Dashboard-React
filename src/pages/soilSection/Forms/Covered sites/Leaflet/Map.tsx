@@ -34,7 +34,6 @@ export function Map({
   updateAmountData,
 }: PropsType) {
   const [center, setCenter] = useState({ lat: 21.4925, lng: 39.17757 });
-
   const handleMapClick = (position: [number, number]) => {
     setPositionClick([...positionClick, position]);
     let _positions: { lat: number; long: number }[] = TargetPositions.map(
@@ -61,6 +60,7 @@ export function Map({
 
     return polylines;
   }
+
   return (
     <Stack
       sx={{
