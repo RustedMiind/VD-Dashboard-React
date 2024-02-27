@@ -15,12 +15,18 @@ import { formatDate } from "../../../methods";
 import { requestTypes } from "./RequestTypes";
 import { useState } from "react";
 import NonRoundedChip from "../../../components/NonRoundedChip";
+import { NavLink } from "react-router-dom";
 
 /*
 -1 pending
 1 active
 0 rejected
 */
+
+export const requsetTypeName = (prefix?: string) =>
+  requestTypes.find((x) =>
+    prefix?.toLowerCase().includes(x.prefix.toLowerCase())
+  )?.name;
 
 function EmployeesRequestsTable(props: PropsType) {
   const [rowsCount] = useState(10);
@@ -44,18 +50,25 @@ function EmployeesRequestsTable(props: PropsType) {
           </TableHead>
           <TableBody>
             {toView.map((request, index) => {
-              const requsetType = requestTypes.find((x) =>
-                request.requestable_type
-                  .toLowerCase()
-                  .includes(x.prefix.toLowerCase())
-              )?.name;
+              const requestType = requsetTypeName(request?.requestable_type);
               const note =
                 request.checkedSteps &&
                 request.checkedSteps[request.checkedSteps.length - 1]
                   ?.model_details?.note;
               return (
                 <TableRow key={request.id}>
-                  <TableCell>{request.id}</TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      sx={{ textDecoration: "underline" }}
+                      fontWeight={700}
+                      color="secondary.main"
+                      component={NavLink}
+                      to={`${request.id}`}
+                    >
+                      {request.id}
+                    </Typography>
+                  </TableCell>
                   <TableCell>
                     <Box
                       component="span"
@@ -84,7 +97,7 @@ function EmployeesRequestsTable(props: PropsType) {
                       }}
                       onClick={props.openDetails(request)}
                     >
-                      {requsetType}
+                      {requestType}
                     </Button>
                   </TableCell>
                   <TableCell>{request.departmentName || "-"}</TableCell>

@@ -1,5 +1,7 @@
+import { EmployeeRequestType } from "../pages/employees/requests/EmployeeRequest.enum";
 import { DepartmentEmployee } from "./DepartmentEmployee";
 import { EmployeeType } from "./Employee";
+import { RequestDetails } from "./RequestDetails";
 
 export interface EmployeeRequest {
   id: number;
@@ -9,12 +11,13 @@ export interface EmployeeRequest {
   employee?: EmployeeType;
   created_at: string;
   updated_at: string;
-  requestable: Requestable;
+  requestable?: RequestDetails;
   nextStep: NextStep | null;
   // steps_of_approval: StepOfApproval[] | null;
   checkedSteps: StepOfApproval[] | null;
   status: RequestStatusType;
   departmentName: string | null;
+  type: EmployeeRequestType;
 }
 
 interface NextStep {
