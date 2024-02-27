@@ -1,3 +1,4 @@
+import { EmployeeRequestType } from "../pages/employees/requests/EmployeeRequest.enum";
 import { EmployeeType } from "./Employee";
 import { StepOfApproval } from "./EmployeeRequest";
 import { Requestable } from "./Requestable";
@@ -23,13 +24,14 @@ export interface RequestDetails {
   project_name?: string;
   description?: string;
   amount?: number;
-  type?: number;
+  type?: EmployeeRequestType;
   duration?: string;
   date?: string;
   salary_first?: number;
   requestable?: Requestable;
   exchange_date?: string;
   steps_of_approval?: StepOfApproval[];
+  requestable_type?: string;
 }
 
 export type LastAdvance = {

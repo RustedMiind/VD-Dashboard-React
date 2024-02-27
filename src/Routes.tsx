@@ -39,6 +39,7 @@ import FollowUpEmployees from "./pages/electricity/FollowUpEmployees";
 import WorkOrdersPage from "./pages/electricity/workOrders";
 import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
 import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
+import EmployeeRequest from "./pages/employees/request";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -56,6 +57,8 @@ function RoutesComponent() {
           {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
             <Route path="requests" element={<EmplyeesRequests />} />
           )}
+
+          <Route path="requests/:requestId" element={<EmployeeRequest />} />
         </Route>
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
