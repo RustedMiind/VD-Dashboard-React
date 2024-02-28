@@ -34,6 +34,14 @@ export interface Contract {
   levers?: ContractAttachment[];
   card_image?: string;
   Contract_status: string;
+  contract_item_title: string;
+  contract_item_description: string;
+  contract_item_start_date: string;
+  contract_item_end_date: string;
+  contract_item_user: string;
+  contract_item_name: string;
+  contract_item_eng: string;
+  contract_item_allowance: string;
   // deleted_at: null;
   // end_date: null;
   // management: null;

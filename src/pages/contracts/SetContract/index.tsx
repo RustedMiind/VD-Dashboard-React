@@ -6,6 +6,7 @@ import Attachments from "./FormSections/AttachmentsSection";
 import SectionAccordion from "./Components/SectionAccordion";
 import { useEffect, useState } from "react";
 import ContractDetailsContextProvider from "./ContractDetailsContext";
+import BnodElamal from './FormSections/BnodElamal/BnodElamal'
 
 export default function CreateContracts(props: PropsType) {
   const isCreate = props.type === "create";
@@ -48,9 +49,10 @@ export default function CreateContracts(props: PropsType) {
             setCurrentOpened(2);
           }}
           title="بنود ومهام العقد"
-          disabled={isCreate}
-        >
-          <ContractTasks />
+          >
+          {/* disabled={isCreate} */}
+          {/* <ContractTasks /> */}
+          <BnodElamal edit={!isCreate}/>
         </SectionAccordion>
 
         <SectionAccordion
