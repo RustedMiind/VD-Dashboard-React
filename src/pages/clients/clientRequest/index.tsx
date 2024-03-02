@@ -20,6 +20,7 @@ import ReportDialog from "./Dialogs/reportDialog";
 import TestDialog from "./Dialogs/testDialog";
 import VisitDialog from "./Dialogs/visitDialog";
 import AcceptDialog from "./Dialogs/acceptDialog";
+import useOpenDialog from "../hooks/useOpenDialog";
 
 const ClientRequests = () => {
   const tableRef: React.RefObject<HTMLTableElement> =
@@ -34,20 +35,22 @@ const ClientRequests = () => {
   const [requests, setRequests] = useState<
     PanelData[] | StepStatusData[] | "loading" | "none" | "error"
   >("loading");
-  const [dialogRequest, setDialogRequest] = useState<
-    PanelData | StepStatusData | null
-  >(null);
-  const [dialogOpen, setDialogOpen] = useState<
-    | undefined
-    | "model"
-    | "status"
-    | "details"
-    | "accept"
-    | "finance"
-    | "report"
-    | "test"
-    | "visit"
-  >(undefined);
+  const {
+    DialogComponent,
+    dialogOpen,
+    dialogRequest,
+    handleCloseDialog,
+    handleOpenAccept,
+    handleOpenDetails,
+    handleOpenFinance,
+    handleOpenModel,
+    handleOpenReport,
+    handleOpenStatus,
+    handleOpenTest,
+    handleOpenVisit,
+    setDialogOpen,
+    setDialogRequest,
+  } = useOpenDialog();
   const [selectedType, setSelectedType] = useState<number | undefined>(
     undefined
   );
@@ -94,58 +97,6 @@ const ClientRequests = () => {
     });
   };
 
-  const handleOpenModel = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogOpen("model");
-      setDialogRequest(request);
-    };
-  };
-  const handleOpenStatus = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("status");
-    };
-  };
-  const handleOpenDetails = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("details");
-    };
-  };
-  const handleOpenFinance = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("finance");
-    };
-  };
-  const handleOpenVisit = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("visit");
-    };
-  };
-  const handleOpenReport = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("report");
-    };
-  };
-  const handleOpenTest = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("test");
-    };
-  };
-  const handleOpenAccept = (request: PanelData | StepStatusData) => {
-    return () => {
-      setDialogRequest(request);
-      setDialogOpen("accept");
-    };
-  };
-  const handleCloseDialog = () => {
-    setDialogOpen(undefined);
-  };
-
   useEffect(() => {
     getRequests();
     getFormData();
@@ -168,61 +119,7 @@ const ClientRequests = () => {
 
   return (
     <>
-      <ModelDialog
-        open={dialogOpen === "model"}
-        onClose={handleCloseDialog}
-        requestId={dialogRequest?.id}
-        stepId={dialogRequest?.id}
-        setRequests={getRequests}
-      />
-      <DetailsDialog
-        open={dialogOpen === "details"}
-        requestId={dialogRequest?.id}
-        onClose={handleCloseDialog}
-      />
-      <StatusDialog
-        open={dialogOpen === "status"}
-        onClose={handleCloseDialog}
-        setRequests={setRequests}
-        id={dialogRequest?.id}
-      />
-      <FinanceDialog
-        open={dialogOpen === "finance"}
-        onClose={handleCloseDialog}
-        requestId={dialogRequest?.id}
-        stepId={dialogRequest?.id}
-        setRequests={getRequests}
-      />
-      <AcceptDialog
-        open={dialogOpen === "accept"}
-        onClose={handleCloseDialog}
-        requestId={dialogRequest?.id}
-        stepId={dialogRequest?.id}
-        setRequests={getRequests}
-      />
-
-      <ReportDialog
-        open={dialogOpen === "report"}
-        onClose={handleCloseDialog}
-        requestId={dialogRequest?.id}
-        stepId={dialogRequest?.id}
-        setRequests={getRequests}
-      />
-      <TestDialog
-        open={dialogOpen === "test"}
-        onClose={handleCloseDialog}
-        requestId={dialogRequest?.id}
-        stepId={dialogRequest?.id}
-        setRequests={getRequests}
-      />
-      <VisitDialog
-        open={dialogOpen === "visit"}
-        onClose={handleCloseDialog}
-        requestId={dialogRequest?.id}
-        stepId={dialogRequest?.id}
-        setRequests={getRequests}
-      />
-
+      {DialogComponent}
       <Stack>
         <Typography variant="h5" fontWeight={600} mb={3}>
           طلبات العملاء

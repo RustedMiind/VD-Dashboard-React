@@ -73,7 +73,7 @@ export default function VisitDialog({
           })
         )
         .then((res) => {
-          setRequests();
+          setRequests?.();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
           setFormStatus("none");
@@ -184,7 +184,7 @@ export default function VisitDialog({
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  setRequests: () => void;
+  setRequests?: () => void;
   requestId?: number;
   stepId?: number;
 };

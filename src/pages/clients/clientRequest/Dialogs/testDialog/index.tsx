@@ -69,7 +69,7 @@ export default function TestDialog({
           })
         )
         .then((res) => {
-          setRequests();
+          setRequests?.();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
           setFormStatus("none");
@@ -161,7 +161,7 @@ export default function TestDialog({
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  setRequests: () => void;
+  setRequests?: () => void;
   requestId?: number;
   stepId?: number;
 };

@@ -70,7 +70,7 @@ export default function ReportDialog({
           })
         )
         .then((res) => {
-          setRequests();
+          setRequests?.();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
           setFormStatus("none");
@@ -163,7 +163,7 @@ export default function ReportDialog({
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  setRequests: () => void;
+  setRequests?: () => void;
   requestId?: number;
   stepId?: number;
 };

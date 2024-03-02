@@ -40,7 +40,7 @@ const ModelDialog = ({
       axios
         .post(Api(`employee/client/order/add-step/${stepId}`), formData)
         .then((res) => {
-          setRequests();
+          setRequests?.();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
         })
@@ -130,7 +130,7 @@ const ModelDialog = ({
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  setRequests: () => void;
+  setRequests?: () => void;
   requestId?: number;
   stepId?: number;
 };

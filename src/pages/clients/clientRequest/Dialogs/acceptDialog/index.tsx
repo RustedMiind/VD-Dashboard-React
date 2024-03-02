@@ -44,7 +44,7 @@ export default function AcceptDialog({
       axios
         .post(Api(`employee/client/order/add-step/${stepId}`), amountData)
         .then((res) => {
-          setRequests();
+          setRequests?.();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
           setFormStatus("none");
@@ -120,7 +120,7 @@ export default function AcceptDialog({
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  setRequests: () => void;
+  setRequests?: () => void;
   requestId?: number;
   stepId?: number;
 };

@@ -1,4 +1,4 @@
-import { Grid, GridProps, Stack } from "@mui/material";
+import { Box, Button, Grid, GridProps, Paper, Stack } from "@mui/material";
 
 import Typography, { TypographyProps } from "@mui/material/Typography";
 
@@ -10,6 +10,9 @@ import RequestDetailsComponent from "./RequestDetails";
 import { RequestDetails } from "../../../types/RequestDetails";
 import { ClientRequestType } from "../../../types/Clients/ClientRequestType";
 import ClientCard from "./ClientCard";
+import StatusTable from "../clientRequest/Dialogs/StatusDialog/StatusTable";
+import useOpenDialog from "../hooks/useOpenDialog";
+import { PanelData, StepStatusData } from "../clientRequest/types";
 
 const GridItem = (props: GridProps) => <Grid item p={2} {...props} />;
 const SectionTitle = (props: TypographyProps) => (
@@ -22,6 +25,25 @@ function EmployeeRequest() {
   const [request, setRequest] = useState<ClientRequestType | undefined>(
     undefined
   );
+
+  const { handleOpenModel, DialogComponent } = useOpenDialog();
+
+  function handleDialog(id: number, request: PanelData | StepStatusData) {
+    return () => {
+      switch (id) {
+        case 1:
+          handleOpenModel(request)();
+          break;
+        case 2:
+          handleOpenModel(request)();
+          break;
+
+        default:
+          break;
+      }
+    };
+  }
+
   function getRequest() {
     if (requestId) {
       axios
@@ -40,10 +62,35 @@ function EmployeeRequest() {
   if (request)
     return (
       <Stack>
+        {DialogComponent}
         <Grid container>
           <GridItem xs={12} md={6} lg={8} xl={9}>
-            <SectionTitle>بيانات الطلب</SectionTitle>
-            <RequestDetailsComponent request={request} />
+            <Stack spacing={4}>
+              <Box>
+                <SectionTitle>بيانات الطلب</SectionTitle>
+                <RequestDetailsComponent request={request} />
+              </Box>
+              <Box>
+                <SectionTitle>حالة الاجرائات</SectionTitle>
+                <Paper elevation={3}>
+                  <StatusTable details={request} />
+                </Paper>
+              </Box>
+              {
+                <Button
+                  fullWidth
+                  variant="contained"
+                  disabled={
+                    request.step_status_id !== 0 ||
+                    !(request.form_id === 1 || request.form_id === 2)
+                  }
+                  onClick={handleDialog(request.form_id, request)}
+                  size="large"
+                >
+                  اتخاذ اجراء
+                </Button>
+              }
+            </Stack>
           </GridItem>
           <GridItem xs={12} md={6} lg={4} xl={3}>
             {request && (

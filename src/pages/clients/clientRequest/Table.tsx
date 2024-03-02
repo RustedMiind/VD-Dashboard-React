@@ -70,7 +70,7 @@ const ClientTableComponent = ({
   ): JSX.Element {
     const variant = "outlined";
     let chip: JSX.Element = <></>;
-    switch (parseInt(request.step_status_id)) {
+    switch (request.step_status_id) {
       case 0:
         chip = (
           <Button

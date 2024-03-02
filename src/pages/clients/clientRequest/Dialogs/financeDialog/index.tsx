@@ -58,7 +58,7 @@ export default function FinanceDialog({
       axios
         .post(Api(`employee/client/order/add-step/${stepId}`), amountData)
         .then((res) => {
-          setRequests();
+          setRequests?.();
           enqueueSnackbar("تم اتخاذ الاجراء بنجاح");
           onClose();
           setAmountData(objectFinance);
@@ -159,7 +159,7 @@ export default function FinanceDialog({
 type PropsType = {
   open: boolean;
   onClose: () => void;
-  setRequests: () => void;
+  setRequests?: () => void;
   requestId?: number;
   stepId?: number;
 };
