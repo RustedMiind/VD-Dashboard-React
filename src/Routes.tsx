@@ -40,6 +40,7 @@ import WorkOrdersPage from "./pages/electricity/workOrders";
 import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
 import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
 import EmployeeRequest from "./pages/employees/request";
+import ClientRequest from "./pages/clients/request";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -93,6 +94,7 @@ function RoutesComponent() {
           {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
             <Route path="requests" element={<ClientRequests />} />
           )}
+          <Route path="requests/:requestId" element={<ClientRequest />} />
         </Route>
         <Route path="mytasks" element={<MyTasks />} />
         <Route path="envoy">
