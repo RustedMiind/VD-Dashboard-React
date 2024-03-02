@@ -13,8 +13,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
-import HomeIcon from "@mui/icons-material/Home";
-import { EmployeeType } from "../../../types";
+import BadgeIcon from "@mui/icons-material/Badge";
 import { Client } from "../../../types/Clients";
 
 function ClientCard({ client }: PropsType) {
@@ -22,37 +21,48 @@ function ClientCard({ client }: PropsType) {
     <Card>
       <CardMedia>
         <Stack alignItems={"center"} justifyContent={"center"} pt={4}>
-          <Avatar sx={{ width: 70, height: 70 }}>
-            <Typography variant="h4" color={"inherit"}>
-              <img src={client?.card_image} />
-            </Typography>
-          </Avatar>
+          <Avatar
+            src={client?.card_image}
+            sx={{ width: 70, height: 70 }}
+          ></Avatar>
         </Stack>
       </CardMedia>
       <CardContent>
         <Typography variant="h5" component="div" sx={{ textAlign: "center" }}>
           {client.name}
         </Typography>
-        {/* <Typography
+        <Typography
           sx={{ mb: 1.5, textAlign: "center", px: 3 }}
           color="text.secondary"
         >
-          {client.work_at?.departmentName}
-        </Typography> */}
+          {client?.type === "individual" ? "فرد" : "شركة"}
+        </Typography>
         <Divider />
         <MenuList dense>
+          <ListItem>
+            <ListItemIcon>
+              <BadgeIcon />
+            </ListItemIcon>
+            <ListItemText>
+              {client?.type === "individual"
+                ? client?.card_id
+                : client?.register_number}
+            </ListItemText>
+          </ListItem>
           <ListItem>
             <ListItemIcon>
               <LocalPhoneIcon />
             </ListItemIcon>
             <ListItemText>{client.phone}</ListItemText>
           </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <EmailIcon />
-            </ListItemIcon>
-            <ListItemText>{client.email}</ListItemText>
-          </ListItem>
+          {client?.email && (
+            <ListItem>
+              <ListItemIcon>
+                <EmailIcon />
+              </ListItemIcon>
+              <ListItemText>{client?.email}</ListItemText>
+            </ListItem>
+          )}
           {/* <ListItem>
             <ListItemIcon>
               <HomeIcon />

@@ -38,10 +38,7 @@ function RequestDetailsComponent({ request }: PropsType) {
           value={formatDate(request?.order?.updated_at)}
         />
         <DataItem label="رقم الطلب" value={request?.order_id} />
-        <DataItem
-          label="نوع العميل"
-          value={request?.order?.client?.type === "individual" ? "فرد" : "شركة"}
-        />
+
         <DataItem label="الملاحظات" value={request?.note || "----"} />
 
         {/* {((): React.ReactElement | "" | undefined => {
