@@ -14,10 +14,11 @@ import DetailsDialog from "./DetailsDialog";
 import { CountType } from "../../../types/Count";
 import Pagination from "./Pagination";
 import { LaravelPagination } from "../../../types/LaravelPagination";
+import { NumberParam, useQueryParam } from "use-query-params";
 
 function EmplyeesRequests() {
   const [currentTab, setCurrentTab] = useState<number>(-1);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPageState, setCurrentPage] = useQueryParam("page", NumberParam);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [filters, dispatch] = useReducer(reducer, FiltersInit);
   const [requests, setRequests] = useState<
@@ -25,17 +26,26 @@ function EmplyeesRequests() {
   >("loading");
   const [counts, setCounts] = useState<CountType[] | null>(null);
   const [search, setSearch] = useState("");
-  const [selectedType, setSelectedType] = useState<number | undefined>(
-    undefined
+  const [selectedType, setSelectedTypeState] = useQueryParam(
+    "type",
+    NumberParam
   );
+  const setSelectedType = (type: number | undefined | null) => {
+    setSelectedTypeState(type);
+    setCurrentPage(1);
+  };
   const [dialogOpen, setDialogOpen] = useState<
     undefined | "model" | "status" | "details"
   >(undefined);
   const [dialogRequest, setdialogRequest] = useState<EmployeeRequest | null>(
     null
   );
+  const currentPage = currentPageState || 1;
   const IS_REQUESTS_EXISTS = typeof requests === "object";
-
+  useEffect(() => {
+    if (currentPage) {
+    }
+  }, []);
   let filtered: EmployeeRequest[] | undefined = IS_REQUESTS_EXISTS
     ? requests
     : undefined;

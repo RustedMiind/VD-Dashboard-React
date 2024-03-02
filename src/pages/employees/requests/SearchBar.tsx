@@ -81,8 +81,8 @@ type PropsType = {
   applySearch: () => void;
   dispatch: React.Dispatch<ActionTypes>;
   filters: FilterType;
-  selectedType: number | undefined;
-  setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
+  selectedType?: number | null;
+  setSelectedType: (type: number | undefined | null) => void;
 };
 
 export default SearchBar;

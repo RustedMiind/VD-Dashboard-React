@@ -35,7 +35,7 @@ export function createTaskType(type: TaskType): {
       return {
         name: "طلبات الموظفين",
         route(path) {
-          return `/react/employees/requests/`;
+          return `/react/employees/requests/${path}`;
         },
       };
   }
