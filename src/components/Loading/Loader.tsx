@@ -2,7 +2,7 @@ import React from "react";
 import "./Loader.css";
 import { Box, Typography } from "@mui/material";
 
-const Loader = ({ h }: { h?: string }) => {
+const Loader = ({ h,title }: { h?: string,title?:string }) => {
   return (
     <Box
       sx={{
@@ -16,7 +16,7 @@ const Loader = ({ h }: { h?: string }) => {
     >
       <Box className="loaderDiv"></Box>
       <Typography sx={{ marginTop: "1rem" }} variant="body2">
-        جاري التحميل
+        {(title && title?.length > 0) ? title:'جاري التحميل'}
       </Typography>
     </Box>
   );
