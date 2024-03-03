@@ -45,6 +45,8 @@ import AddLabelToEl from "../../../../../components/AddLabelToEl";
 import { useForm } from "react-hook-form";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { useRef } from "react";
+import Loader from "../../../../../components/Loading/Loader";
+
 
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack p={1}>{props.children}</Stack>;
@@ -188,7 +190,48 @@ const ContractItems = (props: PropsType) => {
     console.log("handleGoogleDriveClick");
   };
 
+  // To Edit Contract Items
+
+  const [editedData, setEditedData] = useState<editedDataType>();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (props.edit) {
+      axios
+        .get(Api(`employee/contract/${id}`))
+        .then((res) => {
+          
+          console.log("Breakpoint101 in details page:", res.data.data);
+          setEditedData(res.data.data.contract_items);
+        })
+        .catch((err) => {
+          console.log("Error101 :-", err);
+          enqueueSnackbar("تعذر تحميل الداتا", { variant: "error" });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [props.edit]);
+
   return (
+<Box sx={{ position: "relative" }}>
+    {loading && (
+      <Box
+        sx={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          background: "#80808091",
+          zIndex: 1500,
+          borderRadius: "6px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader />
+      </Box>
+    )}
     <Box p={1} component="form" onSubmit={addContractItemHandler}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -208,7 +251,8 @@ const ContractItems = (props: PropsType) => {
                         </IconButton>
                       ),
                     }}
-                    value={ContractItemsData.name}
+                    // value={ContractItemsData.name}
+                    defaultValue={props.edit? editedData?.name?? "" : ""}
                     onChange={(e) => {
                       dispatch({
                         type: "UPDATE_NAME",
@@ -221,7 +265,7 @@ const ContractItems = (props: PropsType) => {
                   <TextField
                     fullWidth
                     placeholder="وصف انجاز الاعمال بأمانة جدة"
-                    defaultValue="وصف انجاز الاعمال بأمانة جدة"
+                    // defaultValue="وصف انجاز الاعمال بأمانة جدة"
                     disabled={!isEditingTitle}
                     variant="standard"
                     InputProps={{
@@ -231,7 +275,8 @@ const ContractItems = (props: PropsType) => {
                         </IconButton>
                       ),
                     }}
-                    value={ContractItemsData.description}
+                    // value={ContractItemsData.description}
+                    defaultValue={props.edit? editedData?.description?? "" : "وصف انجاز الاعمال بأمانة جدة"}
                     onChange={(e) => {
                       dispatch({
                         type: "UPDATE_DESCRIPTION",
@@ -245,7 +290,8 @@ const ContractItems = (props: PropsType) => {
                     id="outlined-select-currency"
                     size="small"
                     select
-                    value={selectedEmployeeId}
+                    // value={selectedEmployeeId}
+                    defaultValue={props.edit? editedData?.manager_id?? "" : ""}
                     variant="standard"
                     fullWidth
                     placeholder="اختيار مدير المهمة"
@@ -283,6 +329,7 @@ const ContractItems = (props: PropsType) => {
                     <TextField
                       type="date"
                       fullWidth
+                      defaultValue={props.edit? editedData?.start_date?? "" : ""}
                       onChange={(e) => {
                         dispatch({
                           type: "UPDATE_START_DATE",
@@ -296,6 +343,7 @@ const ContractItems = (props: PropsType) => {
                     <TextField
                       type="date"
                       fullWidth
+                      defaultValue={props.edit? editedData?.end_date?? "" : ""}
                       onChange={(e) => {
                         dispatch({
                           type: "UPDATE_END_DATE",
@@ -578,6 +626,7 @@ const ContractItems = (props: PropsType) => {
         </Grid>
       </Grid>
     </Box>
+    </Box>
   );
 };
 export default ContractItems;
@@ -622,6 +671,15 @@ type SubItem = {
   is_progress_bar: "1" | "0";
   is_processing: "1" | "0";
   is_attachment: "0" | "1";
+};
+type editedDataType = {
+  name: string;
+  description: string;
+  manager_id: string;
+  start_date: string;
+  end_date: string;
+  sub_items: SubItem[];
+  attachments: File[];
 };
 
 type Payload = {
