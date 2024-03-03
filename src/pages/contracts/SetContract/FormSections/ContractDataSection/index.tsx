@@ -38,6 +38,9 @@ const ContractData = (props: PropsType) => {
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
   const { enqueueSnackbar } = useSnackbar();
+  console.log(contractDetails);
+  
+  
 
   useEffect(() => {
     if (!props.edit) {
