@@ -81,7 +81,7 @@ export default function OthersDialog({
       if (!file) resolve("");
       uploadFileInChunks(
         file as File,
-        1024 ** 2 * 0.3,
+        1024 ** 2 * 10,
         Api("employee/tender/form/status/" + id),
         dto
       )

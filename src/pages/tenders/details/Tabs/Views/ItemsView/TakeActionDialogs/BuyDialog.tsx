@@ -117,7 +117,7 @@ export default function BuyDialog({
       if (!file[0]) resolve("");
       uploadFileInChunks(
         file[0] as File,
-        1024 ** 2 * 0.3,
+        1024 ** 2 * 10,
         Api("employee/tender/form/status/" + id),
         dto
       )
