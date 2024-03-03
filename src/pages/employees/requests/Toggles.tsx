@@ -44,8 +44,8 @@ function RequestTypesToggles({ selected, setSelected, counts }: PropsType) {
 }
 
 type PropsType = {
-  selected: number | undefined;
-  setSelected: React.Dispatch<React.SetStateAction<number | undefined>>;
+  selected: number | undefined | null;
+  setSelected: (type: number | undefined | null) => void;
   counts: CountType[] | null;
 };
 
