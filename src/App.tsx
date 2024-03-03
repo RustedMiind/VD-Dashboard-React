@@ -14,12 +14,15 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { UserContextProvider } from "./contexts/user/user";
+
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 function App() {
   return (
+
     <QueryParamProvider adapter={ReactRouter6Adapter}>
       <ThemeProvider theme={theme}>
+      
         <UserContextProvider>
           <SnackbarProvider
             transitionDuration={{ appear: 500, exit: 500, enter: 300 }}
@@ -35,6 +38,7 @@ function App() {
             </PermissionsContextProvider>
           </SnackbarProvider>
         </UserContextProvider>
+      
       </ThemeProvider>
     </QueryParamProvider>
   );

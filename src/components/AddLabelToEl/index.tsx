@@ -3,10 +3,19 @@ import RequiredSymbol from "../RequiredSymbol";
 
 function AddLabelToEl(props: PropsType) {
   return (
-    <Stack width={1}>
+    <Stack
+      width={1}
+      {...(props.row
+        ? {
+            direction: "row",
+            spacing: 2,
+            alignItems: "center",
+          }
+        : undefined)}
+    >
       <Typography
         component="label"
-        gutterBottom
+        gutterBottom={!props.row}
         {...props.labelTypographyProps}
       >
         {props.label} {props.required && <RequiredSymbol />}
@@ -23,4 +32,5 @@ type PropsType = {
   label: string;
   required?: boolean;
   labelTypographyProps?: TypographyProps;
+  row?: boolean;
 };

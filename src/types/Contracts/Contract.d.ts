@@ -4,6 +4,7 @@ import { ContractAttachment } from "./ContractAttachment";
 import { ContractPayment } from "./ContractPayment";
 import { ContractTask } from "./ContractTask";
 import { ContractType } from "./ContractType";
+import { ContractItems } from "./ContractItems";
 
 export interface Contract {
   Contract_status: string;
@@ -34,6 +35,8 @@ export interface Contract {
   levers?: ContractAttachment[];
   card_image?: string;
   Contract_status: string;
+  Contract_items?: ContractItems[];
+
   // deleted_at: null;
   // end_date: null;
   // management: null;
