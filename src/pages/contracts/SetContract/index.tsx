@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import ContractData from "./FormSections/ContractDataSection";
 import ContractTasks from "./FormSections/TasksSection/ContractTasks";
+import ContractItems from './FormSections/ContractItems/ContractItems'
 import Payments from "./FormSections/PaymentsSection";
 import Attachments from "./FormSections/AttachmentsSection";
 import SectionAccordion from "./Components/SectionAccordion";
@@ -33,7 +34,6 @@ type contractT = {
   contract_type: number;
   id: number;
 };
-import ContractItems from './FormSections/ContractItems/ContractItems'
 
 export default function CreateContracts(props: PropsType) {
   // TODO::declare our component
@@ -252,7 +252,8 @@ export default function CreateContracts(props: PropsType) {
                 <Typography>بنود ومهام العقد</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <ContractTasks />
+                {/* <ContractTasks /> */}
+                <ContractItems edit={!isCreate} Contract_ID={createdContract?.id}/>
               </AccordionDetails>
             </Accordion>
             <Accordion

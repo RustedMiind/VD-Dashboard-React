@@ -76,7 +76,10 @@ const ContractItems = (props: PropsType) => {
     setIsEditingDescription(true);
   };
   const [itemCount, setItemCount] = useState(1);
-  const { id } = useParams<{ id: string }>();
+  let { id } = useParams<{ id: string }>();
+  if(!id){
+    id = props?.Contract_ID?.toString();
+  }
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number[]>([]);
@@ -580,6 +583,7 @@ const ContractItems = (props: PropsType) => {
 export default ContractItems;
 type PropsType = {
   edit: boolean;
+  Contract_ID?: number;
 };
 
 export interface Form {
