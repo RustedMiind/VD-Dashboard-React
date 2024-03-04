@@ -47,7 +47,6 @@ import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { useRef } from "react";
 import Loader from "../../../../../components/Loading/Loader";
 
-
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack p={1}>{props.children}</Stack>;
 }
@@ -57,6 +56,13 @@ const ContractItems = (props: PropsType) => {
   const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   console.log(contractDetails);
+  console.log(contractDetails.contract);
+
+  const [contractItemsDetails, setContractItemsDetails] = useState(
+    contractDetails.contract?.Contract_items
+  );
+  console.log(contractItemsDetails);
+
   const [ContractItemsData, dispatch] = useReducer(
     reducer,
     contractItemsIntial
@@ -79,7 +85,7 @@ const ContractItems = (props: PropsType) => {
   };
   const [itemCount, setItemCount] = useState(1);
   let { id } = useParams<{ id: string }>();
-  if(!id){
+  if (!id) {
     id = props?.Contract_ID?.toString();
   }
 
@@ -190,442 +196,631 @@ const ContractItems = (props: PropsType) => {
     console.log("handleGoogleDriveClick");
   };
 
-  // To Edit Contract Items
-
-  const [editedData, setEditedData] = useState<editedDataType>();
+  const [contractItem, setContractItem] = useState(null);
+  const [editedData, setEditedData] = useState<editedDataType | undefined>(
+    undefined
+  );
   const [loading, setLoading] = useState(false);
+
+  const fetchData = () => {
+    setLoading(true);
+    axios
+      .get(Api(`employee/contract/${id}`))
+      .then((res) => {
+        console.log("Breakpoint101 edit data:", res.data.data.contract_type);
+        setEditedData(res.data.data.contract_items[0]);
+        console.log(res.data.data.contract_items[0]);
+      })
+      .catch((err) => {
+        console.log("Error101 :-", err);
+        enqueueSnackbar("تعذر الحفظ", { variant: "error" });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (props.edit) {
-      axios
-        .get(Api(`employee/contract/${id}`))
-        .then((res) => {
-          
-          console.log("Breakpoint101 in details page:", res.data.data);
-          setEditedData(res.data.data.contract_items);
-        })
-        .catch((err) => {
-          console.log("Error101 :-", err);
-          enqueueSnackbar("تعذر تحميل الداتا", { variant: "error" });
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      fetchData();
     }
   }, [props.edit]);
 
-  return (
-<Box sx={{ position: "relative" }}>
-    {loading && (
-      <Box
-        sx={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          background: "#80808091",
-          zIndex: 1500,
-          borderRadius: "6px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Loader />
-      </Box>
-    )}
-    <Box p={1} component="form" onSubmit={addContractItemHandler}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Stack spacing={2}>
-                <AddLabelToEl row label="عنوان البند">
-                  <TextField
-                    fullWidth
-                    placeholder="انجاز الاعمال بأمانة جدة"
-                    disabled={!isEditingTitle}
-                    variant="standard"
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton color="secondary" onClick={handleEditTitle}>
-                          <Edit />
-                        </IconButton>
-                      ),
-                    }}
-                    // value={ContractItemsData.name}
-                    defaultValue={props.edit? editedData?.name?? "" : ""}
-                    onChange={(e) => {
-                      dispatch({
-                        type: "UPDATE_NAME",
-                        payload: e.target.value,
-                      });
-                    }}
-                  />
-                </AddLabelToEl>
-                <AddLabelToEl row label="وصف">
-                  <TextField
-                    fullWidth
-                    placeholder="وصف انجاز الاعمال بأمانة جدة"
-                    // defaultValue="وصف انجاز الاعمال بأمانة جدة"
-                    disabled={!isEditingTitle}
-                    variant="standard"
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton color="secondary" onClick={handleEditTitle}>
-                          <Edit />
-                        </IconButton>
-                      ),
-                    }}
-                    // value={ContractItemsData.description}
-                    defaultValue={props.edit? editedData?.description?? "" : "وصف انجاز الاعمال بأمانة جدة"}
-                    onChange={(e) => {
-                      dispatch({
-                        type: "UPDATE_DESCRIPTION",
-                        payload: e.target.value,
-                      });
-                    }}
-                  />
-                </AddLabelToEl>
-                <AddLabelToEl row label="اختيار مدير المهمة">
-                  <TextField
-                    id="outlined-select-currency"
-                    size="small"
-                    select
-                    // value={selectedEmployeeId}
-                    defaultValue={props.edit? editedData?.manager_id?? "" : ""}
-                    variant="standard"
-                    fullWidth
-                    placeholder="اختيار مدير المهمة"
-                    onChange={(e) => {
-                      const selectedId = e.target.value.toString();
-                      setSelectedEmployeeId(selectedId);
-                      dispatch({
-                        type: "UPDATE_MANAGER_ID",
-                        payload: selectedId,
-                      });
-                    }}
-                  >
-                    {contractDetails?.use?.employees?.map((employee) => (
-                      <MenuItem key={employee.id} value={employee.id}>
-                        {employee.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </AddLabelToEl>
-              </Stack>
-            </Grid>
-            <Grid container spacing={2} style={{ padding: 10 }}>
-              <Grid item xs={12}>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="flex-start"
-                  bgcolor="white"
-                  padding={2}
-                  borderRadius={1}
-                  style={{ marginLeft: -5 }}
-                >
-                  <Grid item xs={6}>
-                    <Typography>تاريخ البداية</Typography>
-                    <TextField
-                      type="date"
-                      fullWidth
-                      defaultValue={props.edit? editedData?.start_date?? "" : ""}
-                      onChange={(e) => {
-                        dispatch({
-                          type: "UPDATE_START_DATE",
-                          payload: e.target.value,
-                        });
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6} style={{ marginRight: 10 }}>
-                    <Typography>تاريخ الانتهاء</Typography>
-                    <TextField
-                      type="date"
-                      fullWidth
-                      defaultValue={props.edit? editedData?.end_date?? "" : ""}
-                      onChange={(e) => {
-                        dispatch({
-                          type: "UPDATE_END_DATE",
-                          payload: e.target.value,
-                        });
-                      }}
-                    />
-                  </Grid>
-                </Box>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} style={{ padding: 10 }}>
-              <Grid item xs={12}>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-start"
-                  bgcolor="white"
-                  padding={2}
-                  borderRadius={1}
-                  style={{ marginLeft: -5 }}
-                >
-                  <Typography>اضافة مستخدمين للمهام</Typography>
-                </Box>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} style={{ padding: 10 }}>
-              <Grid item xs={12}>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-start"
-                  bgcolor="white"
-                  padding={2}
-                  borderRadius={1}
-                  style={{ marginLeft: -5 }}
-                >
-                  <Box display="flex" justifyContent="space-between">
-                    <Box display="flex" alignItems="center" flex={1}>
-                      <Box>
-                        <Typography>المرفقات</Typography>
-                      </Box>
-                    </Box>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      flex={1}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Box>
-                        <Box
-                          border="1px dashed #ccc"
-                          display="flex"
-                          alignItems="center"
-                          marginRight="10px"
-                          style={{ cursor: "pointer" }}
-                          onClick={handleClick}
-                        >
-                          <Box padding="5px" marginRight="10px">
-                            <CloudUpload />
-                          </Box>
-                          <Box>
-                            <Typography variant="body2">
-                              اضافة المرفقات
-                            </Typography>
-                            <Typography variant="caption">
-                              الصيغ المناسبة PNG - PDF - JPG
-                            </Typography>
-                          </Box>
-                        </Box>
-                        {selectedFiles.length > 0 && (
-                          <ul>
-                            {selectedFiles.map((file, index) => (
-                              <li key={index}>
-                                {file.name}
-                                <LinearProgress
-                                  variant="determinate"
-                                  value={uploadProgress[index]}
-                                />
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                        <input
-                          type="file"
-                          multiple
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                          onChange={handleInputChange}
-                        />
-                      </Box>
-                    </Box>
+  useEffect(() => {
+    console.log(editedData);
+    console.log(editedData?.contract_sub_items);
+  }, [editedData]);
 
-                    <Box display="flex" alignItems="center" flex={1}>
+  return (
+    <Box sx={{ position: "relative" }}>
+      {loading && (
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            background: "#80808091",
+            zIndex: 1500,
+            borderRadius: "6px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loader />
+        </Box>
+      )}
+      <Box p={1} component="form" onSubmit={addContractItemHandler}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Stack spacing={2}>
+                  <AddLabelToEl row label="عنوان البند">
+                    {loading ? (
+                      "   جاري التحميل .."
+                    ) : (
+                      <TextField
+                        fullWidth
+                        placeholder="انجاز الاعمال بأمانة جدة"
+                        disabled={!isEditingTitle}
+                        variant="standard"
+                        InputProps={{
+                          endAdornment: (
+                            <IconButton
+                              color="secondary"
+                              onClick={handleEditTitle}
+                            >
+                              <Edit />
+                            </IconButton>
+                          ),
+                        }}
+                        defaultValue={editedData?.name ?? ""}
+                        onChange={(e) => {
+                          dispatch({
+                            type: "UPDATE_NAME",
+                            payload: e.target.value,
+                          });
+                        }}
+                      />
+                    )}
+                  </AddLabelToEl>
+                  <AddLabelToEl row label="وصف">
+                    {loading ? (
+                      "   جاري التحميل .."
+                    ) : (
+                      <TextField
+                        fullWidth
+                        disabled={!isEditingTitle}
+                        variant="standard"
+                        InputProps={{
+                          endAdornment: (
+                            <IconButton
+                              color="secondary"
+                              onClick={handleEditTitle}
+                            >
+                              <Edit />
+                            </IconButton>
+                          ),
+                        }}
+                        defaultValue={editedData?.description ?? ""}
+                        onChange={(e) => {
+                          dispatch({
+                            type: "UPDATE_DESCRIPTION",
+                            payload: e.target.value,
+                          });
+                        }}
+                      />
+                    )}
+                  </AddLabelToEl>
+                  <AddLabelToEl row label="اختيار مدير المهمة">
+                    {loading ? (
+                      "   جاري التحميل .."
+                    ) : (
+                      <TextField
+                        id="outlined-select-currency"
+                        size="small"
+                        select
+                        variant="standard"
+                        fullWidth
+                        placeholder="اختيار مدير المهمة"
+                        defaultValue={
+                          editedData?.manager_id ?? selectedEmployeeId
+                        }
+                        onChange={(e) => {
+                          const selectedId = e.target.value.toString();
+                          setSelectedEmployeeId(selectedId);
+                          dispatch({
+                            type: "UPDATE_MANAGER_ID",
+                            payload: selectedId,
+                          });
+                        }}
+                      >
+                        {editedData && Object.keys(editedData).length !== 0 && (
+                          <MenuItem
+                            key={editedData.manager_id}
+                            value={editedData.manager_id}
+                          >
+                            {
+                              contractDetails?.use?.employees?.find(
+                                (employee) =>
+                                  employee.id === editedData.manager_id
+                              )?.name
+                            }
+                          </MenuItem>
+                        )}
+
+                        {contractDetails?.use?.employees?.map((employee) => (
+                          <MenuItem key={employee.id} value={employee.id}>
+                            {employee.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
+                  </AddLabelToEl>
+                </Stack>
+              </Grid>
+              <Grid container spacing={2} style={{ padding: 10 }}>
+                <Grid item xs={12}>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="flex-start"
+                    bgcolor="white"
+                    padding={2}
+                    borderRadius={1}
+                    style={{ marginLeft: -5 }}
+                  >
+                    <Grid item xs={6}>
+                      <Typography>تاريخ البداية</Typography>
+                      {loading ? (
+                        "   جاري التحميل .."
+                      ) : (
+                        <TextField
+                          type="date"
+                          fullWidth
+                          defaultValue={
+                            editedData && Object.keys(editedData).length !== 0
+                              ? editedData.start_date.substring(0, 10)
+                              : ""
+                          }
+                          onChange={(e) => {
+                            dispatch({
+                              type: "UPDATE_START_DATE",
+                              payload: e.target.value,
+                            });
+                          }}
+                        />
+                      )}
+                    </Grid>
+                    <Grid item xs={6} style={{ marginRight: 10 }}>
+                      <Typography>تاريخ الانتهاء</Typography>
+
+                      {loading ? (
+                        "   جاري التحميل .."
+                      ) : (
+                        <TextField
+                          type="date"
+                          fullWidth
+                          defaultValue={
+                            editedData && Object.keys(editedData).length !== 0
+                              ? editedData.end_date.substring(0, 10)
+                              : ""
+                          }
+                          onChange={(e) => {
+                            dispatch({
+                              type: "UPDATE_END_DATE",
+                              payload: e.target.value,
+                            });
+                          }}
+                        />
+                      )}
+                    </Grid>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} style={{ padding: 10 }}>
+                <Grid item xs={12}>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    bgcolor="white"
+                    padding={2}
+                    borderRadius={1}
+                    style={{ marginLeft: -5 }}
+                  >
+                    <Typography>اضافة مستخدمين للمهام</Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} style={{ padding: 10 }}>
+                <Grid item xs={12}>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    bgcolor="white"
+                    padding={2}
+                    borderRadius={1}
+                    style={{ marginLeft: -5 }}
+                  >
+                    <Box display="flex" justifyContent="space-between">
+                      <Box display="flex" alignItems="center" flex={1}>
+                        <Box>
+                          <Typography>المرفقات</Typography>
+                        </Box>
+                      </Box>
                       <Box
                         display="flex"
-                        flexDirection="column"
                         alignItems="center"
-                        marginLeft="10px"
+                        flex={1}
+                        style={{ cursor: "pointer" }}
                       >
-                        <Typography>أو استخراج من الدرايف</Typography>
-                        <IconButton onClick={handleGoogleDriveClick}>
-                          <img
-                            src={GDicon}
-                            alt="Google Drive"
-                            style={{ width: 40, height: 40 }}
+                        <Box>
+                          <Box
+                            border="1px dashed #ccc"
+                            display="flex"
+                            alignItems="center"
+                            marginRight="10px"
+                            style={{ cursor: "pointer" }}
+                            onClick={handleClick}
+                          >
+                            <Box padding="5px" marginRight="10px">
+                              <CloudUpload />
+                            </Box>
+                            <Box>
+                              <Typography variant="body2">
+                                اضافة المرفقات
+                              </Typography>
+                              <Typography variant="caption">
+                                الصيغ المناسبة PNG - PDF - JPG
+                              </Typography>
+                            </Box>
+                          </Box>
+                          {selectedFiles.length > 0 && (
+                            <ul>
+                              {selectedFiles.map((file, index) => (
+                                <li key={index}>
+                                  {file.name}
+                                  <LinearProgress
+                                    variant="determinate"
+                                    value={uploadProgress[index]}
+                                  />
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                          <input
+                            type="file"
+                            multiple
+                            ref={fileInputRef}
+                            style={{ display: "none" }}
+                            onChange={handleInputChange}
                           />
-                        </IconButton>
+                        </Box>
+                      </Box>
+
+                      <Box display="flex" alignItems="center" flex={1}>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
+                          marginLeft="10px"
+                        >
+                          <Typography>أو استخراج من الدرايف</Typography>
+                          <IconButton onClick={handleGoogleDriveClick}>
+                            <img
+                              src={GDicon}
+                              alt="Google Drive"
+                              style={{ width: 40, height: 40 }}
+                            />
+                          </IconButton>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={2} style={{ padding: 10 }}>
-              <Grid item xs={12}>
-                {[...Array(itemCount)].map((_, index) => (
-                  <React.Fragment key={index}>
-                    <Box
-                      display="flex"
-                      flexDirection="row"
-                      alignItems="flex-start"
-                      bgcolor="white"
-                      padding={2}
-                      borderRadius={1}
-                      style={{ marginLeft: -5 }}
-                      marginTop={2}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "50%",
-                          marginRight: "8px",
-                          justifyContent: "flex-start",
-                        }}
-                      >
-                        <Typography>اسم البند</Typography>
-                        <TextField
-                          placeholder="اسم البند"
-                          sx={{ width: "100%" }}
-                          value={ContractItemsData.sub_items[index]?.name || ""}
-                          onChange={(e) => handleChangeSubItemName(e, index)}
-                        />
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "flex-start",
-                          width: "50%",
-                        }}
-                      >
-                        <Typography>اختيار المهندس</Typography>
+              <Grid container spacing={2} style={{ padding: 10 }}>
+                <Grid item xs={12}>
+                  {loading
+                    ? "جاري التحميل .."
+                    : editedData &&
+                      Object.keys(editedData).length !== 0 &&
+                      editedData.contract_sub_items
+                    ? // Render fields based on editedData.contract_sub_items
+                      editedData.contract_sub_items.map(
+                        (item: any, index: number) => (
+                          <React.Fragment key={`${index}_${Math.random()}`}>
+                            <Box
+                              display="flex"
+                              flexDirection="row"
+                              alignItems="flex-start"
+                              bgcolor="white"
+                              padding={2}
+                              borderRadius={1}
+                              style={{ marginLeft: -5 }}
+                              marginTop={2}
+                            >
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  width: "50%",
+                                  marginRight: "8px",
+                                  justifyContent: "flex-start",
+                                }}
+                              >
+                                <Typography>اسم البند</Typography>
+                                <TextField
+                                  placeholder="اسم البند"
+                                  sx={{ width: "100%" }}
+                                  // defaultValue={item ? item.name : ""}
+                                  defaultValue={item?.name ?? ""}
+                                  // editedData?.name ?? ""
+                                  //  onChange={(e) => handleChangeSubItemName(e, index)}
+                                />
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "flex-start",
+                                  width: "50%",
+                                }}
+                              >
+                                <Typography>اختيار المهندس</Typography>
+                                <FormControl sx={{ width: "100%" }}>
+                                  <InputLabel>اختيار المهندس</InputLabel>
+                                  <Select
+                                    // value={item ? item.employee_id : ""}
+                                    defaultValue={item?.employee_id ?? ""}
+                                    // onChange={(e) => handleChangeEngineer(e, index)}
+                                  >
+                                    {contractDetails?.use?.employees?.map(
+                                      (employee) => (
+                                        <MenuItem
+                                          key={employee.id}
+                                          value={employee.id}
+                                        >
+                                          {employee.name}
+                                        </MenuItem>
+                                      )
+                                    )}
+                                  </Select>
+                                </FormControl>
+                              </Box>
+                            </Box>
+                            <Box
+                              display="flex"
+                              flexDirection="row"
+                              alignItems="flex-start"
+                              bgcolor="white"
+                              padding={2}
+                              borderRadius={1}
+                              style={{ marginLeft: -5 }}
+                              marginTop={2}
+                            >
+                              <Box display="flex" flexDirection="column">
+                                <Typography>المسموح للبند</Typography>
+                                <Box display="flex">
+                                  <FormGroup row>
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          defaultChecked={
+                                            item?.is_progress_bar === 1
+                                          }
+                                          // onChange={(e) => handleChangeCheckbox(e, index, "is_progress_bar")}
+                                        />
+                                      }
+                                      label="النسبة المئوية"
+                                    />
 
-                        <FormControl sx={{ width: "100%" }}>
-                          <InputLabel>اختيار المهندس</InputLabel>
-                          <Select
-                            value={
-                              ContractItemsData.sub_items[index]?.employee_id ||
-                              ""
-                            }
-                            onChange={(e) => handleChangeEngineer(e, index)}
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          defaultChecked={
+                                            item?.is_processing === 1
+                                          }
+                                          // onChange={(e) => handleChangeCheckbox(e, index, "is_processing")}
+                                        />
+                                      }
+                                      label="معاملات"
+                                    />
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          defaultChecked={
+                                            item?.is_attachment === 1
+                                          }
+                                          // onChange={(e) => handleChangeCheckbox(e, index, "is_attachment")}
+                                        />
+                                      }
+                                      label="المرفقات"
+                                    />
+                                  </FormGroup>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </React.Fragment>
+                        )
+                      )
+                    : //Render fields based on ContractItemsData.sub_items
+                      [...Array(itemCount)].map((_, index) => (
+                        <React.Fragment key={index}>
+                          <Box
+                            display="flex"
+                            flexDirection="row"
+                            alignItems="flex-start"
+                            bgcolor="white"
+                            padding={2}
+                            borderRadius={1}
+                            style={{ marginLeft: -5 }}
+                            marginTop={2}
                           >
-                            {contractDetails?.use?.employees?.map(
-                              (employee) => (
-                                <MenuItem key={employee.id} value={employee.id}>
-                                  {employee.name}
-                                </MenuItem>
-                              )
-                            )}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Box>
-
-                    <Box
-                      display="flex"
-                      flexDirection="row"
-                      alignItems="flex-start"
-                      bgcolor="white"
-                      padding={2}
-                      borderRadius={1}
-                      style={{ marginLeft: -5 }}
-                      marginTop={2}
-                    >
-                      <Box display="flex" flexDirection="column">
-                        <Typography>المسموح للبند</Typography>
-                        <Box display="flex">
-                          <FormGroup row>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                width: "50%",
+                                marginRight: "8px",
+                                justifyContent: "flex-start",
+                              }}
+                            >
+                              <Typography>اسم البند</Typography>
+                              <TextField
+                                placeholder="اسم البند"
+                                sx={{ width: "100%" }}
+                                value={
+                                  ContractItemsData.sub_items[index]?.name || ""
+                                }
+                                onChange={(e) =>
+                                  handleChangeSubItemName(e, index)
+                                }
+                              />
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                                width: "50%",
+                              }}
+                            >
+                              <Typography>اختيار المهندس</Typography>
+                              <FormControl sx={{ width: "100%" }}>
+                                <InputLabel>اختيار المهندس</InputLabel>
+                                <Select
+                                  value={
                                     ContractItemsData.sub_items[index]
-                                      ?.is_progress_bar === "1"
+                                      ?.employee_id || ""
                                   }
                                   onChange={(e) =>
-                                    handleChangeCheckbox(
-                                      e,
-                                      index,
-                                      "is_progress_bar"
+                                    handleChangeEngineer(e, index)
+                                  }
+                                >
+                                  {contractDetails?.use?.employees?.map(
+                                    (employee) => (
+                                      <MenuItem
+                                        key={employee.id}
+                                        value={employee.id}
+                                      >
+                                        {employee.name}
+                                      </MenuItem>
                                     )
-                                  }
-                                />
-                              }
-                              label="النسبة المئوية"
-                            />
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={
-                                    ContractItemsData.sub_items[index]
-                                      ?.is_processing === "1"
-                                  }
-                                  onChange={(e) =>
-                                    handleChangeCheckbox(
-                                      e,
-                                      index,
-                                      "is_processing"
-                                    )
-                                  }
-                                />
-                              }
-                              label="معاملات"
-                            />
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={
-                                    ContractItemsData.sub_items[index]
-                                      ?.is_attachment === "1"
-                                  }
-                                  onChange={(e) =>
-                                    handleChangeCheckbox(
-                                      e,
-                                      index,
-                                      "is_attachment"
-                                    )
-                                  }
-                                />
-                              }
-                              label="المرفقات"
-                            />
-                          </FormGroup>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </React.Fragment>
-                ))}
+                                  )}
+                                </Select>
+                              </FormControl>
+                            </Box>
+                          </Box>
+                          <Box
+                            display="flex"
+                            flexDirection="row"
+                            alignItems="flex-start"
+                            bgcolor="white"
+                            padding={2}
+                            borderRadius={1}
+                            style={{ marginLeft: -5 }}
+                            marginTop={2}
+                          >
+                            <Box display="flex" flexDirection="column">
+                              <Typography>المسموح للبند</Typography>
+                              <Box display="flex">
+                                <FormGroup row>
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        checked={
+                                          ContractItemsData.sub_items[index]
+                                            ?.is_progress_bar === "1"
+                                        }
+                                        onChange={(e) =>
+                                          handleChangeCheckbox(
+                                            e,
+                                            index,
+                                            "is_progress_bar"
+                                          )
+                                        }
+                                      />
+                                    }
+                                    label="النسبة المئوية"
+                                  />
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        checked={
+                                          ContractItemsData.sub_items[index]
+                                            ?.is_processing === "1"
+                                        }
+                                        onChange={(e) =>
+                                          handleChangeCheckbox(
+                                            e,
+                                            index,
+                                            "is_processing"
+                                          )
+                                        }
+                                      />
+                                    }
+                                    label="معاملات"
+                                  />
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        checked={
+                                          ContractItemsData.sub_items[index]
+                                            ?.is_attachment === "1"
+                                        }
+                                        onChange={(e) =>
+                                          handleChangeCheckbox(
+                                            e,
+                                            index,
+                                            "is_attachment"
+                                          )
+                                        }
+                                      />
+                                    }
+                                    label="المرفقات"
+                                  />
+                                </FormGroup>
+                              </Box>
+                            </Box>
+                          </Box>
+                        </React.Fragment>
+                      ))}
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                startIcon={<AddBoxOutlinedIcon />}
-                style={{
-                  backgroundColor: "#d0dce9",
-                  color: "#0c4f98",
-                  justifyContent: "flex-start",
-                }}
-                onClick={() => setItemCount(itemCount + 1)}
-              >
-                <div dir="rtl">اضافة بند فرعي اخر</div>
-              </Button>
-            </Grid>
-            <Grid item xs={1}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                حفظ
-              </Button>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  startIcon={<AddBoxOutlinedIcon />}
+                  style={{
+                    backgroundColor: "#d0dce9",
+                    color: "#0c4f98",
+                    justifyContent: "flex-start",
+                  }}
+                  onClick={() => setItemCount(itemCount + 1)}
+                >
+                  <div dir="rtl">اضافة بند فرعي اخر</div>
+                </Button>
+              </Grid>
+              <Grid item xs={1}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  حفظ
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
     </Box>
   );
 };
@@ -673,9 +868,15 @@ type SubItem = {
   is_attachment: "0" | "1";
 };
 type editedDataType = {
-  name: string;
+  id: number;
+  contract_id: number;
+  name?: string;
+  contract_item_employees: [];
+  contract_sub_items: [];
+  created_at: string;
   description: string;
-  manager_id: string;
+  manager_id?: number | string;
+  media: [];
   start_date: string;
   end_date: string;
   sub_items: SubItem[];
@@ -686,3 +887,19 @@ type Payload = {
   index: number;
   subItem: SubItem;
 };
+
+interface EditedData {
+  name: string;
+  description: string;
+  manager_id: string;
+  contract_id: string;
+  start_date: string;
+  end_date: string;
+  contract_sub_items: {
+    name: string;
+    employee_id: string;
+    is_progress_bar: string;
+    is_processing: string;
+    is_attachment: number;
+  }[];
+}
