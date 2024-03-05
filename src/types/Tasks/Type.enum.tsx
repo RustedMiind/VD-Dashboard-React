@@ -38,5 +38,12 @@ export function createTaskType(type: TaskType): {
           return `/react/employees/requests/${path}`;
         },
       };
+    default:
+      return {
+        name: "unkn",
+        route(path) {
+          return `/`;
+        },
+      };
   }
 }

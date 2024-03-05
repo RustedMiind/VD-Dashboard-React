@@ -128,7 +128,7 @@ function ManagersForm() {
             <AddLabelToEl label="تاريخ انتهاء الموافقة" required>
               <DateTimePicker
                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
-                disablePast
+                // disablePast
                 value={dayjs(form.approvalEndDate)}
                 onChange={(date) => {
                   dispatch(
@@ -138,12 +138,12 @@ function ManagersForm() {
                     )
                   );
                 }}
-                shouldDisableDate={disableDateAfter(
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
-                shouldDisableTime={disableDateAfter(
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
+                // shouldDisableDate={disableDateAfter(
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
+                // shouldDisableTime={disableDateAfter(
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
                 {...inputProps}
                 disabled={
                   inputProps.disabled ||
@@ -181,7 +181,7 @@ function ManagersForm() {
             <AddLabelToEl label="تاريخ وموعد الشراء" required>
               <DateTimePicker
                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
-                disablePast
+                // disablePast
                 value={dayjs(form.purchaseDate)}
                 onChange={(date) => {
                   dispatch(
@@ -191,14 +191,14 @@ function ManagersForm() {
                     )
                   );
                 }}
-                shouldDisableDate={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
-                shouldDisableTime={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
+                // shouldDisableDate={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
+                // shouldDisableTime={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
                 {...inputProps}
                 disabled={
                   inputProps.disabled || !!tenderContext?.tender?.buy_date
@@ -237,16 +237,16 @@ function ManagersForm() {
             <AddLabelToEl label="تاريخ الانتهاء" required>
               <DateTimePicker
                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
-                disablePast
+                // disablePast
                 value={dayjs(form.technecalEndDate)}
-                shouldDisableDate={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
-                shouldDisableTime={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
+                // shouldDisableDate={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
+                // shouldDisableTime={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
                 onChange={(date) => {
                   dispatch(
                     generateReducerAction(
@@ -291,16 +291,16 @@ function ManagersForm() {
             <AddLabelToEl label="تاريخ الانتهاء" required>
               <DateTimePicker
                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
-                disablePast
+                // disablePast
                 value={dayjs(form.technicalAlternativeEndDate)}
-                shouldDisableDate={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
-                shouldDisableTime={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
+                // shouldDisableDate={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
+                // shouldDisableTime={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
                 onChange={(date) => {
                   dispatch(
                     generateReducerAction(
@@ -384,16 +384,16 @@ function ManagersForm() {
             <AddLabelToEl label="تاريخ وموعد التقديم" required>
               <DateTimePicker
                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
-                disablePast
+                // disablePast
                 value={dayjs(form.financialEndDate)}
-                shouldDisableDate={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
-                shouldDisableTime={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
+                // shouldDisableDate={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
+                // shouldDisableTime={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
                 onChange={(date) => {
                   dispatch(
                     generateReducerAction(
@@ -438,7 +438,7 @@ function ManagersForm() {
             <AddLabelToEl label="تاريخ وموعد التقديم" required>
               <DateTimePicker
                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
-                disablePast
+                // disablePast
                 value={dayjs(form.applyDate)}
                 onChange={(date) => {
                   dispatch(
@@ -448,14 +448,14 @@ function ManagersForm() {
                     )
                   );
                 }}
-                shouldDisableDate={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
-                shouldDisableTime={onlyDateBetween(
-                  dayjs(form.approvalEndDate),
-                  dayjs(tenderContext.tender?.tenderdata?.strat_date)
-                )}
+                // shouldDisableDate={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
+                // shouldDisableTime={onlyDateBetween(
+                //   dayjs(form.approvalEndDate),
+                //   dayjs(tenderContext.tender?.tenderdata?.strat_date)
+                // )}
                 {...inputProps}
                 disabled={
                   inputProps.disabled || !!tenderContext?.tender?.apply_date

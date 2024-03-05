@@ -206,10 +206,10 @@ export default function MainDataForm() {
         <AddLabelToEl label="تاريخ التقديم المطلوب">
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
-            disablePast
+            // disablePast
             value={dayjs(form.applyDate)}
-            shouldDisableTime={disableDateAfter(dayjs(form.endDate))}
-            shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
+            // shouldDisableTime={disableDateAfter(dayjs(form.endDate))}
+            // shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
                 generateReducerAction("SET_APPLY_DATE", date?.format() || "")
@@ -247,9 +247,9 @@ export default function MainDataForm() {
         <AddLabelToEl label="تاريخ انتهاء المنافسة" required>
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
-            disablePast
-            shouldDisableTime={disableDateBefore(dayjs(form.applyDate))}
-            shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
+            // disablePast
+            // shouldDisableTime={disableDateBefore(dayjs(form.applyDate))}
+            // shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
             value={dayjs(form.endDate)}
             onChange={(date) => {
               dispatch(
