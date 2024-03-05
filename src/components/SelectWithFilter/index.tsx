@@ -12,6 +12,7 @@ function SelectWithFilter({
     exist: option.label.toLowerCase().includes(filter.toLowerCase()),
     ...option,
   }));
+  console.log(filter, filtered?.length, filtered);
   return (
     <TextField select {...props}>
       <TextField
@@ -37,7 +38,7 @@ function SelectWithFilter({
           {option.label}
         </MenuItem>
       ))}
-      {filtered?.length === 0 && onFilterEmpty}
+      {filtered?.every((option) => !option.exist) && onFilterEmpty}
     </TextField>
   );
 }
