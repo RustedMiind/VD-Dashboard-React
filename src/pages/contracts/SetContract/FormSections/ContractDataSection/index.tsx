@@ -9,22 +9,30 @@ import {
   Typography,
 } from "@mui/material";
 
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem from "../../Components/Select";
 import { SelectOptions } from "./SelectOptions";
-import { Api } from "../../../../../constants";
+import { Api, Domain } from "../../../../../constants";
 import axios from "axios";
 import { reducer, contractIntial } from "./reducer";
 import { useNavigate, useParams } from "react-router-dom";
-import BtnFile from "../../../../clients/addClient/BtnFile";
-import { objectToFormData } from "../../../../../methods";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
 import { Contract } from "../../../../../types";
 import dayjs from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
-import FilePreview from "../../../../../components/FilePreview";
 import { useSnackbar } from "notistack";
+import { SelectWithFilteration } from "../../../../../components/SelectWithFilteration";
+import Loader from "../../../../../components/Loading/Loader";
+import SelectWithFilter from "../../../../../components/SelectWithFilter";
+import CustomFilePond from "../../../../../components/CustomFilepond";
+import { FileBondState } from "../../../../../types/FileBondState";
+import { serialize } from "object-to-formdata";
+import {
+  CustomMenuList,
+  ImageMenuItem,
+} from "../../../../designs/CreateOrUpdate/FormSections/images";
 
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack p={1}>{props.children}</Stack>;
@@ -41,9 +49,10 @@ const ContractData = (props: PropsType) => {
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState<FileBondState>([]);
+  const [imageIsExist, setImageIsExist] = useState(false);
   console.log(contractDetails);
-  
-  
 
   useEffect(() => {
     if (!props.edit) {
@@ -57,13 +66,19 @@ const ContractData = (props: PropsType) => {
   }, [props.edit, !!contractDetails.contract]);
 
   useEffect(() => {
+    setLoading(false);
     axios
       .get<SelectOptions>(Api("employee/contract/use"))
       .then((res) => {
+        console.log("Requests........", res.data);
         setRequests(res.data);
       })
       .catch((err) => {
+        console.log("Error...Requests.....", err);
         setRequests(null);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -84,7 +99,7 @@ const ContractData = (props: PropsType) => {
       axios
         .post<{ data: Contract }>(
           Api("employee/contract/store"),
-          objectToFormData(contractData)
+          serialize(contractData)
         )
         .then((res) => {
           enqueueSnackbar("تم حفظ العقد بنجاح");
@@ -99,10 +114,7 @@ const ContractData = (props: PropsType) => {
         });
     } else {
       axios
-        .post(
-          Api(`employee/contract/update/${id}`),
-          objectToFormData(contractData)
-        )
+        .post(Api(`employee/contract/update/${id}`), serialize(contractData))
         .then((response) => {
           enqueueSnackbar("تم تعديل العقد بنجاح");
           if (props.enabledTabs && props.setEnabledTabs) {
@@ -118,6 +130,25 @@ const ContractData = (props: PropsType) => {
         });
     }
   };
+
+  const handleChangeInClientName = (newVal: string) => {
+    dispatch({
+      type: "CLIENT_ID",
+      payload: parseInt(newVal),
+    });
+  };
+
+  useEffect(() => {
+    console.log("ContractData", contractData);
+    if (
+      contractData?.cardImageUrl &&
+      contractData?.cardImageUrl?.endsWith("null")
+    ) {
+      setImageIsExist(false);
+    } else if (contractData?.cardImageUrl) {
+      setImageIsExist(true);
+    }
+  }, [contractData]);
 
   return (
     <Box
@@ -277,26 +308,33 @@ const ContractData = (props: PropsType) => {
         <Grid item md={6}>
           <GridChildren>
             <Typography component="label">اسم العميل</Typography>
-            <TextField
+            <SelectWithFilter
+              options={requests?.client?.map((ele) => ({
+                label: ele?.name ? ele?.name.toString() : "",
+                value: ele?.id ? ele?.id.toString() : "",
+              }))}
               size="small"
               select
-              value={contractData?.client_id}
               onChange={(e) => {
                 dispatch({
                   type: "CLIENT_ID",
                   payload: parseInt(e.target.value),
                 });
               }}
-            >
-              {requests?.client?.map((client) => (
-                <MenuItem key={client.id} value={client.id}>
-                  {client.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <Typography variant="body2" color="error">
-              {errors?.client_id && errors?.client_id[0]}
-            </Typography>
+              onFilterEmpty={
+                <Stack alignItems="center" p={1}>
+                  <Button
+                    variant="outlined"
+                    component={"a"}
+                    href={Domain("react/clients/add")}
+                    startIcon={<PersonAddIcon />}
+                    fullWidth
+                  >
+                    اضافة عميل
+                  </Button>
+                </Stack>
+              }
+            />
           </GridChildren>
         </Grid>
         <Grid item md={6}>
@@ -322,19 +360,39 @@ const ContractData = (props: PropsType) => {
         <Grid item md={6}>
           <GridChildren>
             <Typography component="label">ارفاق الملف</Typography>
-            {!!props.edit ? (
-              <FilePreview
-                height={40}
-                fileName="Image"
-                fileLink={contractData.cardImageUrl}
-              />
-            ) : (
-              <BtnFile
-                file={contractData.card_image}
-                setFile={(file: File) => {
-                  dispatch({ type: "CARD_IMAGE", payload: file });
-                }}
-              />
+            <CustomFilePond
+              acceptedFileTypes={["image/jpeg"]}
+              files={image}
+              onupdatefiles={(fileItems) => {
+                dispatch({
+                  type: "CARD_IMAGE",
+                  payload: fileItems[0]?.file as File,
+                });
+              }}
+            />
+            {contractData?.cardImageUrl && imageIsExist && (
+              <CustomMenuList>
+                <ImageMenuItem
+                  onDelete={() => {
+                    // TODO::There is a problem in API in Back-end.
+                    axios
+                      .delete(Api(`employee/contract/delete-media/${id}`), {
+                        headers: { from: "website" },
+                      })
+                      .then((res) => {
+                        setImageIsExist(false);
+                        enqueueSnackbar("تم حذف المرفق بنجاح");
+                      })
+                      .catch(() => {
+                        enqueueSnackbar("تعذر في حذف المرفق", {
+                          variant: "error",
+                        });
+                      });
+                  }}
+                  name={"main image"}
+                  url={contractData?.cardImageUrl}
+                />
+              </CustomMenuList>
             )}
           </GridChildren>
           <Typography variant="body2" color="error">
