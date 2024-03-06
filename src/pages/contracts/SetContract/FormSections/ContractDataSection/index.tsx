@@ -31,13 +31,19 @@ function GridChildren(props: { children: React.ReactNode }) {
 }
 
 const ContractData = (props: PropsType) => {
-  const { type, id } = useParams();
+  let { type, id } = useParams();
+  if (!id) {
+    id = props.contractId ? props.contractId.toString() : undefined;
+  }
   const navigate = useNavigate();
   const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
   const { enqueueSnackbar } = useSnackbar();
+  console.log(contractDetails);
+  
+  
 
   useEffect(() => {
     if (!props.edit) {
@@ -99,11 +105,16 @@ const ContractData = (props: PropsType) => {
         )
         .then((response) => {
           enqueueSnackbar("تم تعديل العقد بنجاح");
+          if (props.enabledTabs && props.setEnabledTabs) {
+            let arr = props.enabledTabs;
+            arr.push("panel1.5");
+            props.setEnabledTabs([...arr]);
+          }
         })
         .catch((error) => {
           const current: ErrorObject | undefined = error?.response?.data?.data;
           setErrors(current);
-          enqueueSnackbar("تعذر في تعديل العقد ");
+          enqueueSnackbar("تعذر في تعديل العقد ", { variant: "error" });
         });
     }
   };
@@ -229,11 +240,11 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">موضوع العقد</Typography>
+            <Typography component="label">اسم المشروع</Typography>
             <TextField
               type="text"
               size="small"
-              placeholder="موضوع العقد"
+              placeholder="اسم المشروع"
               value={contractData?.details}
               onChange={(e) => {
                 dispatch({
@@ -375,6 +386,9 @@ const ContractData = (props: PropsType) => {
 export default ContractData;
 type PropsType = {
   edit: boolean;
+  contractId?: number;
+  setEnabledTabs?: React.Dispatch<React.SetStateAction<string[]>>;
+  enabledTabs?: string[];
 };
 
 type ErrorObject = {

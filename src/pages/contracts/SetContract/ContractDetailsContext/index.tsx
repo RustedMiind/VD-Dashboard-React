@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer, useState , Reducer} from "react";
 import {
   Branch,
   Broker,
@@ -11,6 +11,10 @@ import {
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { useParams } from "react-router-dom";
+import { ContractItems } from "../../../../types/Contracts/ContractItems";
+import { ActionTypes , ContractItemsState , SubItem} from "../FormSections/ContractItems/reducer";
+import { contractItemsIntial, reducer } from '../FormSections/ContractItems/reducer';
+
 
 export const ContractDetailsContext = createContext<{
   contract?: Contract;
@@ -21,6 +25,8 @@ export const ContractDetailsContext = createContext<{
   }) => Promise<ContractUse>;
   refreshContract?: () => void;
   disableInputs?: boolean;
+  contractItemsData?: ContractItemsState;
+  updateContractItemsData?: React.Dispatch<ActionTypes>;
 }>({});
 
 function ContractDetailsContextProvider({ children }: PropsType) {
@@ -32,6 +38,23 @@ function ContractDetailsContextProvider({ children }: PropsType) {
   const [contractUse, setContractUse] = useState<undefined | ContractUse>(
     undefined
   );
+  const [contractItemsData, updateContractItemsData] = useReducer(reducer, contractItemsIntial);
+
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get<{ data: ContractItemsState }>(Api(`employee/contract/items/${id}`))
+        .then((res) => {
+          // Assuming your API response contains the contract items data
+          // updateContractItemsData({ type: 'SET_CONTRACT_ITEMS', payload: res.data.data });
+        })
+        .catch((err) => {
+          // Handle error
+        });
+    }
+  }, [id]);
+
 
   useEffect(getContract, []);
 
@@ -81,6 +104,8 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         refreshContract: getContract,
         refreshUse: getUse,
         disableInputs,
+        contractItemsData,
+        updateContractItemsData,
       }}
     >
       {children}
@@ -99,5 +124,14 @@ export type ContractUse = {
   employees?: EmployeeType[];
   management?: Management[];
 };
+
+
+
+
+
+
+
+
+
 
 export default ContractDetailsContextProvider;
