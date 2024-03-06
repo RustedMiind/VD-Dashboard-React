@@ -23,7 +23,6 @@ import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
 import FormsSection from "./pages/soilSection/Forms";
 import SoilSection from "./pages/soilSection";
-// import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
