@@ -302,6 +302,7 @@ const ProjectWorkDetails = (props: PropsType) => {
                   }}
                 />
               }
+              disabled={true} //* disabled temporarily
               label="الموقع"
             />
             <FormControlLabel
@@ -319,6 +320,7 @@ const ProjectWorkDetails = (props: PropsType) => {
                   }}
                 />
               }
+              disabled={true} //* disabled temporarily
               label="التطبيق"
             />
             <FormControlLabel

@@ -70,7 +70,6 @@ const ContractData = (props: PropsType) => {
     axios
       .get<SelectOptions>(Api("employee/contract/use"))
       .then((res) => {
-        console.log("Requests........", res.data);
         setRequests(res.data);
       })
       .catch((err) => {
@@ -102,8 +101,9 @@ const ContractData = (props: PropsType) => {
           serialize(contractData)
         )
         .then((res) => {
+          console.log("Dragonx res", res);
           enqueueSnackbar("تم حفظ العقد بنجاح");
-          navigate(`../${res.data.data.id}/edit`);
+          // navigate(`../${res.data.data.id}/edit`);
         })
         .catch((err) => {
           enqueueSnackbar("تعذر في حفظ العقد ", { variant: "error" });
@@ -113,9 +113,11 @@ const ContractData = (props: PropsType) => {
           setErrors(current);
         });
     } else {
+      setLoading(true);
       axios
         .post(Api(`employee/contract/update/${id}`), serialize(contractData))
         .then((response) => {
+          console.log("Dragonx res", response);
           enqueueSnackbar("تم تعديل العقد بنجاح");
           if (props.enabledTabs && props.setEnabledTabs) {
             let arr = props.enabledTabs;
@@ -127,7 +129,8 @@ const ContractData = (props: PropsType) => {
           const current: ErrorObject | undefined = error?.response?.data?.data;
           setErrors(current);
           enqueueSnackbar("تعذر في تعديل العقد ", { variant: "error" });
-        });
+        })
+        .finally(() => setLoading(false));
     }
   };
 
@@ -156,7 +159,27 @@ const ContractData = (props: PropsType) => {
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         addContractHandler(e);
       }}
+      sx={{
+        position: "relative",
+      }}
     >
+      {loading && (
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            background: "#80808091",
+            zIndex: 9,
+            borderRadius: "6px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loader />
+        </Box>
+      )}
       <Grid container width={0.9} paddingBottom={2}>
         <Grid item md={6}>
           <GridChildren>
@@ -315,6 +338,8 @@ const ContractData = (props: PropsType) => {
               }))}
               size="small"
               select
+              //client_id
+              value={contractData?.client_id}
               onChange={(e) => {
                 dispatch({
                   type: "CLIENT_ID",

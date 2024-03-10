@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import ContractData from "./FormSections/ContractDataSection";
 import ContractTasks from "./FormSections/TasksSection/ContractTasks";
-import ContractItems from './FormSections/ContractItems/ContractItems'
+import ContractItems from "./FormSections/ContractItems/ContractItems";
 import Payments from "./FormSections/PaymentsSection";
 import Attachments from "./FormSections/AttachmentsSection";
 import SectionAccordion from "./Components/SectionAccordion";
@@ -25,6 +25,7 @@ import { Api } from "../../../constants";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import Loader from "../../../components/Loading/Loader";
+import TermsAndTasksOFContract from "./FormSections/TermsAndTasks";
 
 type WorkTypes = {
   id: string;
@@ -60,7 +61,6 @@ export default function CreateContracts(props: PropsType) {
    * handleSaveWorkType:: function for save contract type.
    */
   const handleSaveWorkType = async () => {
-    
     (isCreate
       ? axios.post<{ contract: contractT }>(
           Api("employee/contract/store-type"),
@@ -238,7 +238,7 @@ export default function CreateContracts(props: PropsType) {
                 />
               </AccordionDetails>
             </Accordion>
-
+            {/* Contract Terms and Tasks */}
             <Accordion
               disabled={isCreate && enabledTabs.indexOf("panel1.5") == -1}
               expanded={expanded === "panel2"}
@@ -253,7 +253,15 @@ export default function CreateContracts(props: PropsType) {
               </AccordionSummary>
               <AccordionDetails>
                 {/* <ContractTasks /> */}
-                <ContractItems edit={!isCreate} Contract_ID={createdContract?.id}/>
+                <TermsAndTasksOFContract 
+                edit={!isCreate} 
+                contractId={
+                    isCreate ? createdContract?.id : id ? +id : undefined
+                  }/>
+                {/* <ContractItems
+                  edit={!isCreate}
+                  Contract_ID={createdContract?.id}
+                /> */}
               </AccordionDetails>
             </Accordion>
             <Accordion
