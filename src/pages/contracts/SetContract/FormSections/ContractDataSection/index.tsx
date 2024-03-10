@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SelectItem from "../../Components/Select";
@@ -33,6 +32,7 @@ import {
   CustomMenuList,
   ImageMenuItem,
 } from "../../../../designs/CreateOrUpdate/FormSections/images";
+import "./index.scss";
 
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack p={1}>{props.children}</Stack>;
@@ -52,7 +52,6 @@ const ContractData = (props: PropsType) => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<FileBondState>([]);
   const [imageIsExist, setImageIsExist] = useState(false);
-  console.log(contractDetails);
 
   useEffect(() => {
     if (!props.edit) {
@@ -94,6 +93,7 @@ const ContractData = (props: PropsType) => {
 
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!props.edit) {
       axios
         .post<{ data: Contract }>(
@@ -101,6 +101,7 @@ const ContractData = (props: PropsType) => {
           serialize(contractData)
         )
         .then((res) => {
+          setErrors(undefined);
           console.log("Dragonx res", res);
           enqueueSnackbar("تم حفظ العقد بنجاح");
           // navigate(`../${res.data.data.id}/edit`);
@@ -117,6 +118,7 @@ const ContractData = (props: PropsType) => {
       axios
         .post(Api(`employee/contract/update/${id}`), serialize(contractData))
         .then((response) => {
+          setErrors(undefined);
           console.log("Dragonx res", response);
           enqueueSnackbar("تم تعديل العقد بنجاح");
           if (props.enabledTabs && props.setEnabledTabs) {
@@ -183,10 +185,12 @@ const ContractData = (props: PropsType) => {
       <Grid container width={0.9} paddingBottom={2}>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">
-              الفرع <RequiredSymbol />
-            </Typography>
-            <TextField
+            <Typography component="label">نوع الفرع</Typography>
+            <SelectWithFilter
+              options={requests?.branches?.map((ele) => ({
+                label: ele?.name ? ele?.name.toString() : "",
+                value: ele?.id ? ele?.id.toString() : "",
+              }))}
               size="small"
               select
               disabled={contractDetails.disableInputs}
@@ -197,13 +201,7 @@ const ContractData = (props: PropsType) => {
                   payload: parseInt(e.target.value),
                 });
               }}
-            >
-              {requests?.branches?.map((branch) => (
-                <MenuItem key={branch.id} value={branch.id}>
-                  {branch.name}
-                </MenuItem>
-              ))}
-            </TextField>
+            />
             <Typography variant="body2" color="error">
               {errors?.branch_id && errors?.branch_id[0]}
             </Typography>
@@ -211,15 +209,18 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">
-              الادارة <RequiredSymbol />
-            </Typography>
-            <TextField
+            <Typography component="label">الادارة</Typography>
+
+            <SelectWithFilter
+              options={contractDetails?.use?.management?.map((ele) => ({
+                label: ele?.name ? ele?.name.toString() : "",
+                value: ele?.id ? ele?.id.toString() : "",
+              }))}
               size="small"
+              select
               disabled={
                 contractDetails.disableInputs || !contractData.branch_id
               }
-              select
               value={contractData?.management_id}
               onChange={(e) => {
                 dispatch({
@@ -227,13 +228,7 @@ const ContractData = (props: PropsType) => {
                   payload: parseInt(e.target.value),
                 });
               }}
-            >
-              {contractDetails?.use?.management?.map((manage) => (
-                <MenuItem key={manage.id} value={manage.id}>
-                  {manage.name}
-                </MenuItem>
-              ))}
-            </TextField>
+            />
             <Typography variant="body2" color="error">
               {errors?.management_id && errors?.management_id[0]}
             </Typography>
@@ -241,7 +236,9 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">مدة العقد</Typography>
+            <Typography component="label">
+              مدة العقد <RequiredSymbol />
+            </Typography>
             <TextField
               type="number"
               placeholder="مدة العقد"
@@ -261,16 +258,18 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">رقم العقد</Typography>
+            <Typography component="label">
+              رقم العقد <RequiredSymbol />
+            </Typography>
             <TextField
-              type="number"
+              type="text"
               size="small"
               placeholder="رقم العقد"
               value={contractData?.code}
               onChange={(e) => {
                 dispatch({
                   type: "CODE",
-                  payload: parseInt(e.target.value),
+                  payload: e.target.value,
                 });
               }}
             />
@@ -281,37 +280,9 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <SelectItem
-              isDisabled
-              selected={+(type || 4)}
-              options={requests?.contractType?.map((type) => ({
-                title: type.name,
-                value: type.id,
-              }))}
-              title="نوع العقد"
-            />
-          </GridChildren>
-        </Grid>
-        <Grid item md={6}>
-          <GridChildren>
-            <Typography component="label">اسم المشروع</Typography>
-            <TextField
-              type="text"
-              size="small"
-              placeholder="اسم المشروع"
-              value={contractData?.details}
-              onChange={(e) => {
-                dispatch({
-                  type: "DETAILS",
-                  payload: e.target.value,
-                });
-              }}
-            />
-          </GridChildren>
-        </Grid>
-        <Grid item md={6}>
-          <GridChildren>
-            <Typography component="label">تاريخ العقد</Typography>
+            <Typography component="label">
+              تاريخ العقد <RequiredSymbol />
+            </Typography>
             <DatePicker
               slotProps={{ textField: { size: "small" } }}
               sx={{ w: 1 }}
@@ -330,7 +301,50 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">اسم العميل</Typography>
+            <Typography component="label">
+              اسم المشروع <RequiredSymbol />
+            </Typography>
+            <TextField
+              type="text"
+              size="small"
+              placeholder="اسم المشروع"
+              value={contractData?.details}
+              onChange={(e) => {
+                dispatch({
+                  type: "DETAILS",
+                  payload: e.target.value,
+                });
+              }}
+            />
+          </GridChildren>
+        </Grid>
+        <Grid item md={6}>
+          <GridChildren>
+            <Typography component="label">
+              قيمه العقد <RequiredSymbol />
+            </Typography>
+            <TextField
+              type="number"
+              size="small"
+              placeholder="قيمه العقد"
+              value={contractData ? contractData?.amount : "قيمه العقد"}
+              onChange={(e) => {
+                dispatch({
+                  type: "AMOUNT",
+                  payload: parseInt(e.target.value),
+                });
+              }}
+            />
+            <Typography variant="body2" color="error">
+              {errors?.amount && errors?.amount[0]}
+            </Typography>
+          </GridChildren>
+        </Grid>
+        <Grid item md={6}>
+          <GridChildren>
+            <Typography component="label">
+              العميل <RequiredSymbol />
+            </Typography>
             <SelectWithFilter
               options={requests?.client?.map((ele) => ({
                 label: ele?.name ? ele?.name.toString() : "",
@@ -364,27 +378,37 @@ const ContractData = (props: PropsType) => {
         </Grid>
         <Grid item md={6}>
           <GridChildren>
-            <Typography component="label">قيمه العقد</Typography>
-            <TextField
-              type="number"
+            <Typography component="label">
+              المهندس المسؤول <RequiredSymbol />
+            </Typography>
+            <SelectWithFilter
+              options={contractDetails?.use?.employees?.map((ele) => ({
+                label: ele?.name ? ele?.name.toString() : "",
+                value: ele?.id ? ele?.id.toString() : "",
+              }))}
               size="small"
-              placeholder="قيمه العقد"
-              value={contractData ? contractData?.amount : "قيمه العقد"}
+              select
+              value={contractData?.employee_id}
               onChange={(e) => {
                 dispatch({
-                  type: "AMOUNT",
+                  type: "EMPLOYEE_ID",
                   payload: parseInt(e.target.value),
                 });
               }}
+              disabled={
+                contractDetails.disableInputs || !contractData.management_id
+              }
             />
             <Typography variant="body2" color="error">
-              {errors?.amount && errors?.amount[0]}
+              {errors?.employee_id && errors?.employee_id[0]}
             </Typography>
           </GridChildren>
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} id="IP_C_AttachImage">
           <GridChildren>
-            <Typography component="label">ارفاق الملف</Typography>
+            <Typography component="label">
+              ارفاق صورة من العقد <RequiredSymbol />
+            </Typography>
             <CustomFilePond
               acceptedFileTypes={["image/jpeg"]}
               files={image}
@@ -423,37 +447,6 @@ const ContractData = (props: PropsType) => {
           <Typography variant="body2" color="error">
             {errors?.card_image && errors?.card_image[0]}
           </Typography>
-        </Grid>
-        <Grid item md={6}>
-          <GridChildren>
-            <Typography component="label">
-              المهندس المسؤول <RequiredSymbol />
-            </Typography>
-            <TextField
-              disabled={
-                contractDetails.disableInputs || !contractData.management_id
-              }
-              id="outlined-select-currency"
-              size="small"
-              select
-              value={contractData?.employee_id}
-              onChange={(e) => {
-                dispatch({
-                  type: "EMPLOYEE_ID",
-                  payload: parseInt(e.target.value),
-                });
-              }}
-            >
-              {contractDetails?.use?.employees?.map((employee) => (
-                <MenuItem key={employee.id} value={employee.id}>
-                  {employee.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <Typography variant="body2" color="error">
-              {errors?.employee_id && errors?.employee_id[0]}
-            </Typography>
-          </GridChildren>
         </Grid>
         <Grid item mt={4} md={11} sx={{ mx: "auto" }}>
           <GridChildren>

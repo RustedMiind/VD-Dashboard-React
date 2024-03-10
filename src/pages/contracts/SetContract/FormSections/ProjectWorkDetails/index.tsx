@@ -31,6 +31,7 @@ import UploadImageFile from "./UploadImg";
 import Loader from "../../../../../components/Loading/Loader";
 import { objectToFormData } from "../../../../../methods";
 import { serialize } from "object-to-formdata";
+import RequiredSymbol from "../../../../../components/RequiredSymbol";
 
 type HeaderFieldName =
   | "numberOfPieces"
@@ -129,8 +130,10 @@ const ProjectWorkDetails = (props: PropsType) => {
       <Grid item xs={6} paddingX={1}>
         <AddLabelToEl label={text} required>
           <TextField
+            type={name == "location" ? "text" : "number"}
             sx={{ background: "#fff" }}
             required
+            //size="small"
             {...register(name)}
             placeholder={text}
           />
@@ -282,7 +285,12 @@ const ProjectWorkDetails = (props: PropsType) => {
       )}
       {/* show way options */}
       <Box sx={{ display: "flex" }}>
-        <Typography variant="h6" fontWeight={700} sx={{ paddingRight: "4rem" }}>
+        <Typography
+          variant="body1"
+          fontSize={17}
+          fontWeight={600}
+          sx={{ paddingRight: "4rem", paddingTop: "9px" }}
+        >
           طريقة العرض
         </Typography>
         <RadioGroup name="use-radio-group">
@@ -356,14 +364,16 @@ const ProjectWorkDetails = (props: PropsType) => {
           {FormHeaders.map((header) => {
             return (
               <FieldGrid
-                key={header.id}
+                key={`h_${header.id}_${Math.random()}`}
                 text={header.text}
                 name={header.name}
               />
             );
           })}
           <Grid p={1} item xs={12} md={6}>
-            <Typography>ارفاق صورة البنر</Typography>
+            <Typography>
+              ارفاق صورة البنر <RequiredSymbol />
+            </Typography>
             <Box
               sx={{
                 display: "flex",
@@ -375,7 +385,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                 images={bannerImg}
                 width={bannerImg.length > 0 ? `90%` : "100%"}
                 setImages={(ar) => {
-                  console.log("Image:", ar);
                   setBannerImg(ar);
                 }}
               />
@@ -426,7 +435,9 @@ const ProjectWorkDetails = (props: PropsType) => {
             </Box>
           </Grid>
           <Grid p={1} item xs={12} md={6}>
-            <Typography>اضافة صورة الماستر بلان</Typography>
+            <Typography>
+              اضافة صورة الماستر بلان <RequiredSymbol />
+            </Typography>
             <Box
               sx={{
                 display: "flex",
@@ -488,7 +499,9 @@ const ProjectWorkDetails = (props: PropsType) => {
             </Box>
           </Grid>
           <Grid p={1} item xs={12} md={6}>
-            <Typography>ارفاق ايكون المشروع</Typography>
+            <Typography>
+              ارفاق ايكون المشروع <RequiredSymbol />
+            </Typography>
             <Box
               sx={{
                 display: "flex",

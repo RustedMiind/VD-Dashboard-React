@@ -2,7 +2,7 @@ import { Domain } from "../../../../../constants";
 import { Contract, ReducerAction } from "../../../../../types";
 
 export const contractIntial: BaseContractType = {
-  code: null,
+  code: "",
   date: "",
   amount: null,
   period: null,
@@ -58,7 +58,7 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
           "storage/" + action.payload.card_image
         ) as unknown as string,
         branch_id: action.payload.branch_id,
-        code: parseInt(action.payload.code),
+        code: action.payload.code,
         contract_type_id: action.payload.contract_type_id,
         details: action.payload.details,
         employee_id: action.payload.employee_id,
@@ -76,7 +76,7 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
   }
 }
 
-interface CodeActionType extends ReducerAction<number> {
+interface CodeActionType extends ReducerAction<string> {
   type: "CODE";
 }
 interface DateActionType extends ReducerAction<string> {
@@ -140,7 +140,7 @@ export type ActionTypes =
   | SetAllActionType;
 
 export interface BaseContractType {
-  code: number | null;
+  code: string;
   date: string;
   card_image: File | null;
   type: number | null;
