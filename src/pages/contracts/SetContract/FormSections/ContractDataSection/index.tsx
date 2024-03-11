@@ -52,6 +52,9 @@ const ContractData = (props: PropsType) => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<FileBondState>([]);
   const [imageIsExist, setImageIsExist] = useState(false);
+  const [engineers, setEngineers] = useState<{ id: number; name: string }[]>(
+    []
+  );
 
   useEffect(() => {
     if (!props.edit) {
@@ -78,6 +81,20 @@ const ContractData = (props: PropsType) => {
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    type Enginee = { id: number; name: string };
+    axios
+      .post<{ data: Enginee[] }>(Api(`employee/employees`))
+      .then((res) => {
+        setEngineers(res?.data?.data);
+      })
+      .catch((err) => {
+        console.log("Error in fetch data:", err);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -382,7 +399,7 @@ const ContractData = (props: PropsType) => {
               المهندس المسؤول <RequiredSymbol />
             </Typography>
             <SelectWithFilter
-              options={contractDetails?.use?.employees?.map((ele) => ({
+              options={engineers?.map((ele) => ({
                 label: ele?.name ? ele?.name.toString() : "",
                 value: ele?.id ? ele?.id.toString() : "",
               }))}
@@ -395,9 +412,7 @@ const ContractData = (props: PropsType) => {
                   payload: parseInt(e.target.value),
                 });
               }}
-              disabled={
-                contractDetails.disableInputs || !contractData.management_id
-              }
+              disabled={loading}
             />
             <Typography variant="body2" color="error">
               {errors?.employee_id && errors?.employee_id[0]}
