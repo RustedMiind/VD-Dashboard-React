@@ -34,7 +34,7 @@ import dayjs from "dayjs";
 import { DateFormatString } from "../../../../../constants/DateFormat";
 import FilePreview from "../../../../../components/FilePreview";
 import { useSnackbar } from "notistack";
-import GDicon from "./assets/GDicon.png";
+// import GDicon from "./assets/GDicon.png";
 import { IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
@@ -510,11 +510,11 @@ const ContractItems = (props: PropsType) => {
                         >
                           <Typography>أو استخراج من الدرايف</Typography>
                           <IconButton onClick={handleGoogleDriveClick}>
-                            <img
+                            {/* <img
                               src={GDicon}
                               alt="Google Drive"
                               style={{ width: 40, height: 40 }}
-                            />
+                            /> */}
                           </IconButton>
                         </Box>
                       </Box>
@@ -860,13 +860,6 @@ type ErrorObject = {
   amount?: string[] | null;
 };
 
-type SubItem = {
-  name: string;
-  employee_id: string;
-  is_progress_bar: "1" | "0";
-  is_processing: "1" | "0";
-  is_attachment: "0" | "1";
-};
 type editedDataType = {
   id: number;
   contract_id: number;
@@ -881,6 +874,13 @@ type editedDataType = {
   end_date: string;
   sub_items: SubItem[];
   attachments: File[];
+};
+type SubItem = {
+  name: string;
+  employee_id: string;
+  is_progress_bar: "1" | "0";
+  is_processing: "1" | "0";
+  is_attachment: "0" | "1";
 };
 
 type Payload = {

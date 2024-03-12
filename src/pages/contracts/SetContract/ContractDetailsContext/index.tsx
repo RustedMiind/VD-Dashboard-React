@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState , Reducer} from "react";
+import { createContext, useEffect, useReducer, useState, Reducer } from "react";
 import {
   Branch,
   Broker,
@@ -12,9 +12,15 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 import { useParams } from "react-router-dom";
 import { ContractItems } from "../../../../types/Contracts/ContractItems";
-import { ActionTypes , ContractItemsState , SubItem} from "../FormSections/ContractItems/reducer";
-import { contractItemsIntial, reducer } from '../FormSections/ContractItems/reducer';
-
+import {
+  ActionTypes,
+  ContractItemsState,
+  SubItem,
+} from "../FormSections/ContractItems/reducer";
+import {
+  contractItemsIntial,
+  reducer,
+} from "../FormSections/ContractItems/reducer";
 
 export const ContractDetailsContext = createContext<{
   contract?: Contract;
@@ -38,8 +44,10 @@ function ContractDetailsContextProvider({ children }: PropsType) {
   const [contractUse, setContractUse] = useState<undefined | ContractUse>(
     undefined
   );
-  const [contractItemsData, updateContractItemsData] = useReducer(reducer, contractItemsIntial);
-
+  const [contractItemsData, updateContractItemsData] = useReducer(
+    reducer,
+    contractItemsIntial
+  );
 
   useEffect(() => {
     if (id) {
@@ -54,7 +62,6 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         });
     }
   }, [id]);
-
 
   useEffect(getContract, []);
 
@@ -124,14 +131,5 @@ export type ContractUse = {
   employees?: EmployeeType[];
   management?: Management[];
 };
-
-
-
-
-
-
-
-
-
 
 export default ContractDetailsContextProvider;
