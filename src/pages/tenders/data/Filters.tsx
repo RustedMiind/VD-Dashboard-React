@@ -11,6 +11,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useContext, useState } from "react";
 import { TableContext } from "./TableContext";
 import dayjs from "dayjs";
+import { DateFormatString } from "../../../constants/DateFormat";
 
 enum TenderStatus {
   DONE = "done",
@@ -89,7 +90,9 @@ function TendersFilters() {
           <DatePicker
             value={dayjs(dataToSearch.strat_date)}
             onChange={(date) => {
-              updateDataToSearch({ strat_date: date?.format() });
+              updateDataToSearch({
+                strat_date: date?.format(DateFormatString),
+              });
             }}
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             label={"تاريخ التقديم"}
@@ -99,7 +102,7 @@ function TendersFilters() {
           <DatePicker
             value={dayjs(dataToSearch.end_date)}
             onChange={(date) => {
-              updateDataToSearch({ end_date: date?.format() });
+              updateDataToSearch({ end_date: date?.format(DateFormatString) });
             }}
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
             label={"تاريخ الانتهاء"}

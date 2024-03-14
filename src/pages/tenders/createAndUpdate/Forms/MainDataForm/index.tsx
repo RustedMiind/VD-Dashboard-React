@@ -34,6 +34,7 @@ import {
   disableDateAfter,
   disableDateBefore,
 } from "../../../../../methods/DayjsDatePicker";
+import { DateFormatString } from "../../../../../constants/DateFormat";
 const type_id = [
   { name: "منافسة عامه", value: 1 },
   { name: "منافسة محدده", value: 2 },
@@ -212,7 +213,10 @@ export default function MainDataForm() {
             // shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
-                generateReducerAction("SET_APPLY_DATE", date?.format() || "")
+                generateReducerAction(
+                  "SET_APPLY_DATE",
+                  date?.format(DateFormatString) || ""
+                )
               );
             }}
             {...inputProps}
@@ -253,7 +257,10 @@ export default function MainDataForm() {
             value={dayjs(form.endDate)}
             onChange={(date) => {
               dispatch(
-                generateReducerAction("SET_END_DATE", date?.format() || "")
+                generateReducerAction(
+                  "SET_END_DATE",
+                  date?.format(DateFormatString) || ""
+                )
               );
             }}
             {...inputProps}
