@@ -129,7 +129,7 @@ function SetAnnouncement() {
             <ErrorMessage> {errors.title?.message} </ErrorMessage>
           </GridItem>
           <GridItem>
-            <AddLabelToEl label="صورة الاعلان">
+            <AddLabelToEl label="تاريخ الاعلان">
               <Controller
                 name="date"
                 control={control}
