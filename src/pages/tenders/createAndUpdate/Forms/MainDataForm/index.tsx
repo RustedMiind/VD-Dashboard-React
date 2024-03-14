@@ -220,7 +220,7 @@ export default function MainDataForm() {
         </AddLabelToEl>
       </GridItem>
       <GridItem>
-        <AddLabelToEl label="الجهة الحكومية" required>
+        <AddLabelToEl label="اسم العميل" required>
           <SelectWithFilter
             id="outlined-select-currency"
             size="small"

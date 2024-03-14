@@ -34,7 +34,7 @@ function TableHead() {
         </TableCell>
         <TableCell>الرقم المرجعي</TableCell>
         <TableCell>رقم المنافسة</TableCell>
-        <TableCell>الجهة الحكومية</TableCell>
+        <TableCell>اسم العميل</TableCell>
         <TableCell>اسم المنافسة</TableCell>
         <TableCell>أخر موعد للتقديم</TableCell>
         <TableCell>تاريخ الإنتهاء من التقديم</TableCell>
