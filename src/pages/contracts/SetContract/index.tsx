@@ -2,13 +2,14 @@ import {
   AccordionDetails,
   Box,
   Button,
+  Grid,
   MenuItem,
   Stack,
   Typography,
 } from "@mui/material";
 import ContractData from "./FormSections/ContractDataSection";
 import ContractTasks from "./FormSections/TasksSection/ContractTasks";
-import ContractItems from './FormSections/ContractItems/ContractItems'
+import ContractItems from "./FormSections/ContractItems/ContractItems";
 import Payments from "./FormSections/PaymentsSection";
 import Attachments from "./FormSections/AttachmentsSection";
 import SectionAccordion from "./Components/SectionAccordion";
@@ -25,9 +26,17 @@ import { Api } from "../../../constants";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import Loader from "../../../components/Loading/Loader";
+import TermsAndTasksOFContract from "./FormSections/TermsAndTasks";
 
-type WorkTypes = {
-  id: string;
+type WorkType = {
+  id: number;
+  name: string;
+};
+
+type workSubType = {
+  id: number;
+  direct_entry_type_id: number;
+  name: string;
 };
 
 type contractT = {
@@ -39,8 +48,10 @@ export default function CreateContracts(props: PropsType) {
   // TODO::declare our component
   const isCreate = props.type === "create";
   const [expanded, setExpanded] = useState("panel0");
-  const [workTypes, setWorkTypes] = useState<Partial<WorkTypes>>({});
+  const [workTypes, setWorkTypes] = useState<WorkType[]>([]);
+  const [workSubTypes, setWorkSubTypes] = useState<workSubType[]>([]);
   const [selectedWorkType, setSelectedWorkType] = useState<number>();
+  const [selectedSubWorkType, setSelectedSubWorkType] = useState<number>();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [createdContract, setCreatedContract] = useState<contractT>();
@@ -60,18 +71,17 @@ export default function CreateContracts(props: PropsType) {
    * handleSaveWorkType:: function for save contract type.
    */
   const handleSaveWorkType = async () => {
-    
     (isCreate
       ? axios.post<{ contract: contractT }>(
           Api("employee/contract/store-type"),
           {
-            contract_type: selectedWorkType,
+            contract_type: selectedSubWorkType,
           }
         )
       : axios.post<{ contract: contractT }>(
           Api(`employee/contract/update-type/${id}`),
           {
-            contract_type: selectedWorkType,
+            contract_type: selectedSubWorkType,
           }
         )
     )
@@ -103,8 +113,12 @@ export default function CreateContracts(props: PropsType) {
       axios
         .get(Api(`employee/contract/${id}`))
         .then((res) => {
-          console.log("Breakpoint101 edit data:", res.data.data.contract_type);
           setSelectedWorkType(res.data.data.contract_type);
+          if (res.data.data.contract_direct_entry_sub_type.id) {
+            setSelectedSubWorkType(
+              res.data.data.contract_direct_entry_sub_type.id
+            );
+          }
         })
         .catch((err) => {
           console.log("Error101 :-", err);
@@ -121,8 +135,9 @@ export default function CreateContracts(props: PropsType) {
 
   useEffect(() => {
     axios
-      .get<{ types: WorkTypes }>(Api("employee/contract/types"))
+      .get<{ types: WorkType[] }>(Api("employee/contract/types"))
       .then(({ data }) => {
+        console.log("data.types", data);
         setWorkTypes(data.types);
       })
       .catch((err) => {
@@ -130,6 +145,19 @@ export default function CreateContracts(props: PropsType) {
         enqueueSnackbar("تعذر في تحميل بيانات", { variant: "error" });
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get<{ sub_types: workSubType[] }>(
+        Api(`employee/contract/types/${selectedWorkType}`)
+      )
+      .then(({ data }) => {
+        setWorkSubTypes(data.sub_types);
+      })
+      .catch((err) => {
+        console.log("Error in fetch data:", err);
+      });
+  }, [selectedWorkType]);
 
   return (
     <ContractDetailsContextProvider>
@@ -157,23 +185,59 @@ export default function CreateContracts(props: PropsType) {
                 <Typography>نوع العقد</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <AddLabelToEl label={"اختر نوع العقد"} required>
-                  <Select
-                    required
-                    color="primary"
-                    defaultValue={!isCreate ? selectedWorkType : 0}
-                    size={"small"}
-                    onChange={(e) => {
-                      setSelectedWorkType(+e.target.value);
-                    }}
+                <Grid container xs={12}>
+                  {/* main type */}
+                  <Grid item xs={selectedWorkType ? 6 : 12} paddingX={3}>
+                    <AddLabelToEl label={"اختر نوع العقد"} required>
+                      <Select
+                        required
+                        color="primary"
+                        defaultValue={!isCreate ? selectedWorkType : 0}
+                        size={"small"}
+                        onChange={(e) => {
+                          setSelectedWorkType(+e.target.value);
+                        }}
+                      >
+                        {workTypes.map((item, idx) => (
+                          <MenuItem
+                            key={`CT_${idx}_${item.name}`}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </AddLabelToEl>
+                  </Grid>
+                  {/* sub type */}
+                  <Grid
+                    item
+                    xs={6}
+                    paddingX={3}
+                    display={selectedWorkType ? "block" : "none"}
                   >
-                    {Object.entries(workTypes).map(([key, value]) => (
-                      <MenuItem key={`CT_${value}`} value={value}>
-                        {key}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </AddLabelToEl>
+                    <AddLabelToEl label={"اختر تصنيف العقد"} required>
+                      <Select
+                        required
+                        color="primary"
+                        defaultValue={!isCreate ? selectedSubWorkType : 0}
+                        size={"small"}
+                        onChange={(e) => {
+                          setSelectedSubWorkType(+e.target.value);
+                        }}
+                      >
+                        {workSubTypes.map((item, idx) => (
+                          <MenuItem
+                            key={`CT_${idx}_${item.name}`}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </AddLabelToEl>
+                  </Grid>
+                </Grid>
                 <Box
                   sx={{
                     width: "100%",
@@ -238,7 +302,7 @@ export default function CreateContracts(props: PropsType) {
                 />
               </AccordionDetails>
             </Accordion>
-
+            {/* Contract Terms and Tasks */}
             <Accordion
               disabled={isCreate && enabledTabs.indexOf("panel1.5") == -1}
               expanded={expanded === "panel2"}
@@ -253,7 +317,16 @@ export default function CreateContracts(props: PropsType) {
               </AccordionSummary>
               <AccordionDetails>
                 {/* <ContractTasks /> */}
-                <ContractItems edit={!isCreate} Contract_ID={createdContract?.id}/>
+                <TermsAndTasksOFContract
+                  edit={!isCreate}
+                  contractId={
+                    isCreate ? createdContract?.id : id ? +id : undefined
+                  }
+                />
+                {/* <ContractItems
+                  edit={!isCreate}
+                  Contract_ID={createdContract?.id}
+                /> */}
               </AccordionDetails>
             </Accordion>
             <Accordion

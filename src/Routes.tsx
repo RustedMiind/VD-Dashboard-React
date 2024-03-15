@@ -42,6 +42,7 @@ import EmployeeRequest from "./pages/employees/request";
 import ClientRequest from "./pages/clients/request";
 import AnnouncementsPage from "./pages/ApplicationSettings/announcement/main";
 import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announcement";
+import CommunicationPeople from "./pages/ApplicationSettings/communication-people/main";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -214,6 +215,10 @@ function RoutesComponent() {
           <Route path="" element={<AnnouncementsPage />} />
           <Route path="edit/:id" element={<SetAnnouncement />} />
           <Route path="create" element={<SetAnnouncement />} />
+        </Route>
+
+        <Route path="communication">
+          <Route path="" element={<CommunicationPeople />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
