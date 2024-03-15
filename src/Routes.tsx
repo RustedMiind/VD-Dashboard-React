@@ -40,6 +40,8 @@ import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
 import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
 import EmployeeRequest from "./pages/employees/request";
 import ClientRequest from "./pages/clients/request";
+import AnnouncementsPage from "./pages/ApplicationSettings/announcement/main";
+import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announcement";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -206,6 +208,12 @@ function RoutesComponent() {
               <Route path="edit" element={<CreateContracts type="edit" />} />
             )}
           </Route>
+        </Route>
+
+        <Route path="announcements">
+          <Route path="" element={<AnnouncementsPage />} />
+          <Route path="edit/:id" element={<SetAnnouncement />} />
+          <Route path="create" element={<SetAnnouncement />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

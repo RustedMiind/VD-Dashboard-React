@@ -8809,7 +8809,7 @@ react-form-hook@^0.0.1:
 
 react-hook-form-mui@^7.0.0-beta.0:
   version "7.0.0-beta.0"
-  resolved "https://registry.npmjs.org/react-hook-form-mui/-/react-hook-form-mui-7.0.0-beta.0.tgz"
+  resolved "https://registry.yarnpkg.com/react-hook-form-mui/-/react-hook-form-mui-7.0.0-beta.0.tgz#4356286b418fd58f6f2e41d8a996d569894f694a"
   integrity sha512-pj+GNsrWtmhS1BhXJdEqSxPcsuZqI2xJ/N/yPMVKT0iVwKPrIzl9MkC564Xtgti3Ucd4fByEmVkUacS4SWHxSA==
 
 react-hook-form@^7.49.3:
