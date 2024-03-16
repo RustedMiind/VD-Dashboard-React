@@ -17,6 +17,7 @@ import CenteredPagination from "../../../../components/CenteredPagination";
 import { LaravelPagination } from "../../../../types/LaravelPagination";
 import DeleteDialog from "./DeleteDialog";
 import { useSnackbar } from "notistack";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface AnnouncementsGetRoot {
   announcements?: LaravelPagination<Announcement[]>;
@@ -180,11 +181,7 @@ function AnnouncementsPage() {
             }}
             sx={{ flexGrow: 1 }}
           />
-          <Button
-            variant="contained"
-            startIcon={<ControlPointIcon />}
-            type="submit"
-          >
+          <Button variant="contained" startIcon={<SearchIcon />} type="submit">
             البحث
           </Button>
         </Stack>
