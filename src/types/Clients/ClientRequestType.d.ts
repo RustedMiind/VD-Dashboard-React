@@ -1,0 +1,34 @@
+import { Order } from "../../pages/clients/clientRequest/types";
+import { OrderStep } from "../ClientRequests";
+import { Department } from "../Department";
+import { Client } from "./Client";
+
+type ClientRequestType = {
+  id: number;
+  collection: number;
+  status: number;
+  note: "";
+  form_name: null;
+  end_date: null;
+  order_step_id: number;
+  step_number: number;
+  form_id: number;
+  client_id: number;
+  employee_id: number;
+  department_id: number;
+  last_status_id: number;
+  deleted_at: null;
+  type_id: number;
+  order_id: number;
+  orderStep: number;
+  orderStepForm: null;
+  step_status: string;
+  step_status_id: number;
+  pictures: [];
+  department: Department;
+  order: Order;
+  order_step: OrderStep[];
+  media: [];
+  created_at: string;
+  updated_at: string;
+};

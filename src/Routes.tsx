@@ -23,7 +23,6 @@ import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
 import FormsSection from "./pages/soilSection/Forms";
 import SoilSection from "./pages/soilSection";
-// import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
@@ -40,6 +39,7 @@ import WorkOrdersPage from "./pages/electricity/workOrders";
 import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
 import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
 import EmployeeRequest from "./pages/employees/request";
+import ClientRequest from "./pages/clients/request";
 import AnnouncementsPage from "./pages/ApplicationSettings/announcement/main";
 import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announcement";
 import CommunicationPeople from "./pages/ApplicationSettings/communication-people/main";
@@ -96,6 +96,7 @@ function RoutesComponent() {
           {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
             <Route path="requests" element={<ClientRequests />} />
           )}
+          <Route path="requests/:requestId" element={<ClientRequest />} />
         </Route>
         <Route path="mytasks" element={<MyTasks />} />
         <Route path="envoy">
