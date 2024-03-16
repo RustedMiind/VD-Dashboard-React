@@ -5,6 +5,8 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 import { useEffect, useState } from "react";
 import CommunicationCard from "./CommunicationCard";
+import CenteredPagination from "../../../../components/CenteredPagination";
+import { useSnackbar } from "notistack";
 
 export interface RootResponse {
   contact_us: LaravelPagination<CommunicationPerson[]>;
@@ -30,10 +32,21 @@ function CommunicationPeople() {
   const [communication, setCommunications] = useState<
     RootResponse["contact_us"] | undefined
   >(undefined);
-
+  const updateCommunication = (
+    partial: Partial<RootResponse["contact_us"]>
+  ) => {
+    setCommunications(
+      communication ? { ...communication, ...partial } : undefined
+    );
+  };
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
-    GetCommunication().then(setCommunications).catch(console.log);
-  }, []);
+    GetCommunication({ page: communication?.current_page })
+      .then(setCommunications)
+      .catch((err) => {
+        enqueueSnackbar("تعذر في تجميل بيانات المستخدمين");
+      });
+  }, [communication?.current_page]);
 
   return (
     <>
@@ -54,6 +67,11 @@ function CommunicationPeople() {
               </Grid>
             ))}
           </Grid>
+          <CenteredPagination
+            page={communication?.current_page || 1}
+            count={communication?.last_page || 1}
+            onChange={(e, page) => updateCommunication({ current_page: page })}
+          />
         </Box>
       </Stack>
     </>
