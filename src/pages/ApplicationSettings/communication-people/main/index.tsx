@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import CommunicationCard from "./CommunicationCard";
 import CenteredPagination from "../../../../components/CenteredPagination";
 import { useSnackbar } from "notistack";
+import AddDialog from "./Dialog/AddDialog";
 
 export interface RootResponse {
   contact_us: LaravelPagination<CommunicationPerson[]>;
@@ -40,14 +41,29 @@ function CommunicationPeople() {
     );
   };
   const { enqueueSnackbar } = useSnackbar();
-  useEffect(() => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [type, setType] = useState<"add" | "edit">("add");
+  const [idToEdit, setIdToEdit] = useState<number>();
+  const [deleteAll, setDeleteAll] = useState<number[]>([]);
+  const arr: number[] = [];
+
+  function handleClose() {
+    setOpen(!open);
+  }
+  function CommunicationData() {
     GetCommunication({ page: communication?.current_page })
       .then(setCommunications)
       .catch((err) => {
         enqueueSnackbar("تعذر في تجميل بيانات المستخدمين");
       });
+  }
+  useEffect(() => {
+    CommunicationData();
   }, [communication?.current_page]);
-
+  useEffect(() => {
+    communication?.data.map((person) => arr.push(person.id));
+    setDeleteAll(arr);
+  }, []);
   return (
     <>
       {/* Create and Update Dialog */}
@@ -56,14 +72,38 @@ function CommunicationPeople() {
           <Typography fontWeight={700} variant="h5" gutterBottom>
             مسؤولين التواصل
           </Typography>
-          <Button variant="contained">اضافة</Button>
+          <Box>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleClose();
+                setType("add");
+              }}
+            >
+              اضافة
+            </Button>
+            {/* <Button
+              color="error"
+              variant="outlined"
+              sx={{ ml: 2 }}
+              onClick={() => {}}
+            >
+              حذف الكل
+            </Button> */}
+          </Box>
         </Box>
         {/* Search Component */}
         <Box>
           <Grid container spacing={2}>
             {communication?.data.map((person) => (
               <Grid item xs={12} sm={6} md={4} lg={3} xl={12 / 5}>
-                <CommunicationCard person={person} />
+                <CommunicationCard
+                  person={person}
+                  handleClose={handleClose}
+                  setType={setType}
+                  setIdToEdit={setIdToEdit}
+                  CommunicationData={CommunicationData}
+                />
               </Grid>
             ))}
           </Grid>
@@ -73,6 +113,13 @@ function CommunicationPeople() {
             onChange={(e, page) => updateCommunication({ current_page: page })}
           />
         </Box>
+        <AddDialog
+          open={open}
+          handleClose={handleClose}
+          CommunicationData={CommunicationData}
+          type={type}
+          idToEdit={idToEdit}
+        />
       </Stack>
     </>
   );

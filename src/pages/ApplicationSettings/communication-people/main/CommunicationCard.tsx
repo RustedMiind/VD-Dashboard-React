@@ -6,8 +6,18 @@ import {
   Typography,
 } from "@mui/material";
 import { CommunicationPerson } from "../../../../types/CommunicationPeople";
+import { useState } from "react";
+import DeleteDialog from "./Dialog/DeleteDialog";
 
-function CommunicationCard({ person }: PropsType) {
+function CommunicationCard({
+  person,
+  handleClose,
+  setType,
+  setIdToEdit,
+  CommunicationData,
+}: PropsType) {
+  const [open, setOpen] = useState<boolean>(false);
+  const [idToDeleted, setIdToDeleted] = useState<number>();
   return (
     <Card elevation={2}>
       <CardContent>
@@ -29,9 +39,35 @@ function CommunicationCard({ person }: PropsType) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button variant="text" color="primary" size="small">
+        <Button
+          variant="text"
+          color="primary"
+          size="small"
+          onClick={() => {
+            handleClose();
+            setType("edit");
+            setIdToEdit(person.id);
+          }}
+        >
           تعديل البيانات
         </Button>
+        <Button
+          color="error"
+          variant="text"
+          sx={{ ml: 2 }}
+          onClick={() => {
+            setOpen(!open);
+            setIdToDeleted(person.id);
+          }}
+        >
+          حذف
+        </Button>
+        <DeleteDialog
+          open={open}
+          setOpen={setOpen}
+          CommunicationData={CommunicationData}
+          id={idToDeleted}
+        />
       </CardActions>
     </Card>
   );
@@ -39,6 +75,10 @@ function CommunicationCard({ person }: PropsType) {
 
 type PropsType = {
   person: CommunicationPerson;
+  handleClose: () => void;
+  setType: React.Dispatch<React.SetStateAction<"add" | "edit">>;
+  setIdToEdit: React.Dispatch<React.SetStateAction<number | undefined>>;
+  CommunicationData: () => void;
 };
 
 export default CommunicationCard;
