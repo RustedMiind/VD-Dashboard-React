@@ -76,9 +76,9 @@ export default function AddDialog({
   useEffect(() => {
     if (editData && type == "edit") {
       reset({
-        title: editData.title,
-        phone: editData.phone,
-        inside_saudi: editData.inside_saudi,
+        title: editData?.title,
+        phone: editData?.phone,
+        inside_saudi: editData?.inside_saudi,
       });
     } else {
       reset({
@@ -127,27 +127,30 @@ export default function AddDialog({
               />
             </Grid>
             <Grid item md={6}>
-              <FormControl>
-                <FormLabel>المنطقة</FormLabel>
-                <Controller
-                  name="inside_saudi"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup {...field}>
-                      <FormControlLabel
-                        value={1}
-                        control={<Radio />}
-                        label="داخل السعودية"
-                      />
-                      <FormControlLabel
-                        value={0}
-                        control={<Radio />}
-                        label="خارج السعودية"
-                      />
-                    </RadioGroup>
-                  )}
-                />
-              </FormControl>
+              <Controller
+                control={control}
+                name="inside_saudi"
+                defaultValue={editData?.inside_saudi ? 0 : 1}
+                render={({ field }) => {
+                  return (
+                    <FormControl>
+                      <FormLabel>المنطقة</FormLabel>
+                      <RadioGroup {...field}>
+                        <FormControlLabel
+                          value={1}
+                          control={<Radio />}
+                          label="داخل السعودية"
+                        />
+                        <FormControlLabel
+                          value={0}
+                          control={<Radio />}
+                          label="خارج السعودية"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  );
+                }}
+              />
             </Grid>
           </Grid>
         </DialogContent>
