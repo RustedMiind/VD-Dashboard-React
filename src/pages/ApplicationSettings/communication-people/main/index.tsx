@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { CommunicationPerson } from "../../../../types/CommunicationPeople";
 import { LaravelPagination } from "../../../../types/LaravelPagination";
 import axios from "axios";
@@ -39,9 +39,12 @@ function CommunicationPeople() {
     <>
       {/* Create and Update Dialog */}
       <Stack spacing={2}>
-        <Typography fontWeight={700} variant="h5" gutterBottom>
-          مسؤولين التواصل
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography fontWeight={700} variant="h5" gutterBottom>
+            مسؤولين التواصل
+          </Typography>
+          <Button variant="contained">اضافة</Button>
+        </Box>
         {/* Search Component */}
         <Box>
           <Grid container spacing={2}>
