@@ -23,6 +23,20 @@ import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { serialize } from "object-to-formdata";
 import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
+
+export const rootResponseSchema = z.object({
+  story: z.object({
+    name: z.string(),
+    end_date: z.string(),
+    updated_at: z.string(),
+    created_at: z.string(),
+    id: z.number(),
+  }),
+  message: z.string().optional(),
+  status: z.boolean().optional(),
+});
+type RootResponse = z.infer<typeof rootResponseSchema>;
 
 const GridItem = (props: GridProps) => <Grid item xs={12} lg={6} {...props} />;
 const InputContainer = ({
@@ -73,23 +87,29 @@ function SetView({ story }: PropsType) {
   } = useForm<FormType>({ resolver: zodResolver(FormTypeSchema) });
 
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.request({
-        ...(story
+      const updatedStory = await axios.request({
+        ...(story // Handle request metadata based on mode (create || edit)
           ? {
               url: Api(`employee/client/stories/${story.id}`),
-              method: "POST",
               params: {
                 _method: "PUT",
               },
             }
-          : { url: Api("employee/client/stories/store"), method: "POST" }),
+          : { url: Api("employee/client/stories/store") }),
+        method: "POST",
         data: serialize(data),
         headers: { from: "dashboard" },
       });
       enqueueSnackbar("تم الحفظ بنجاح");
+      const parsed = rootResponseSchema.parse(updatedStory.data); // Parse the response to check if its in the correct format
+      navigate({
+        search: "?step=1",
+        pathname: `/react/stories/edit/${parsed.story.id || story?.id}`,
+      }); // Switch to edit mode using the storyId
       return;
     } catch (error) {
       enqueueSnackbar("تعذر في حفظ القصة", { variant: "error" });
@@ -99,7 +119,7 @@ function SetView({ story }: PropsType) {
 
   useEffect(() => {
     if (story) {
-      reset({ end_date: story.end_date, name: story.name });
+      reset({ end_date: story.end_date, name: story.name }); // Reset the form fields when id changes
     }
   }, [story?.id]);
 

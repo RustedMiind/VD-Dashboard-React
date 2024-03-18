@@ -11,6 +11,7 @@ import axios from "axios";
 import { Api } from "../../../../constants";
 import { useSnackbar } from "notistack";
 import { NumberParam, useQueryParam } from "use-query-params";
+import AttachmentsView from "./Views/Attachments";
 
 const steps = ["بيانات القصة", "مرفقات القصة"];
 
@@ -47,20 +48,19 @@ function SetStory() {
   }
   const step = +(paramStep || !!paramStep);
 
+  // Fetch story data on init state
   useEffect(() => {
     seedStory();
   }, []);
 
+  // Render the current step view
   let view: React.ReactNode;
   switch (step) {
-    case 0:
-      view = <SetView story={story} />;
-      break;
     case 1:
-      view = <></>;
+      view = <AttachmentsView story={story} />;
       break;
     default:
-      view = <></>;
+      view = <SetView story={story} />;
   }
 
   return (
@@ -72,7 +72,10 @@ function SetStory() {
         <Stepper activeStep={step} alternativeLabel>
           {steps.map((label, index) => (
             <Step key={label}>
-              <StepLabel onClick={() => setStep(index)}>{label}</StepLabel>
+              {/* Can navigate between steps only in edit mode */}
+              <StepLabel onClick={() => (storyId ? setStep(index) : undefined)}>
+                {label}
+              </StepLabel>
             </Step>
           ))}
         </Stepper>
