@@ -280,6 +280,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/communication",
         react: true,
       },
+      {
+        name: "القصص",
+        path: "/stories",
+        react: true,
+      },
     ],
   },
 ];

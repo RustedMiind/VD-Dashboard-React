@@ -1,10 +1,12 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { Story } from "../../../../types/Stories";
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import StoryCard from "./StoryCard";
+import AddIcon from "@mui/icons-material/Add";
+import { NavLink } from "react-router-dom";
 
 interface Root {
   stories: Story[];
@@ -42,9 +44,20 @@ function StoriesPage() {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5" fontWeight={700} gutterBottom>
-        القصص
-      </Typography>
+      <Stack direction={"row"} gap={2}>
+        <Typography variant="h5" flexGrow={1} fontWeight={700} gutterBottom>
+          القصص
+        </Typography>
+
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          component={NavLink}
+          to={"create"}
+        >
+          اضافة قصة جديدة
+        </Button>
+      </Stack>
       <Box>
         <Grid container spacing={2}>
           {stories?.map((story) => (

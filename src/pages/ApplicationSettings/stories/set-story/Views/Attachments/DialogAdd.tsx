@@ -11,7 +11,11 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { useEffect, useState } from "react";
-import { Mobile_Services, Story } from "../../../../../../types/Stories";
+import {
+  Mobile_Services,
+  Story,
+  StoryBanner,
+} from "../../../../../../types/Stories";
 import { useSnackbar } from "notistack";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
@@ -33,16 +37,36 @@ export default function DialogAdd({
   open,
   handleClose,
   story,
+  selectedStoryBanner,
   seedStory,
 }: PropsType) {
-  const { register, reset, handleSubmit, control } = useForm<FormFields>({});
-  const [type, setType] = useState<"add" | "edit">("add");
-  // const [editData, setEditData] = useState<CardDataType | null>(null);
-  const snackbar = useSnackbar();
+  const {
+    reset,
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = useForm<FormFields>();
+  const { enqueueSnackbar } = useSnackbar();
   const [mobileServices, setmobileServices] = useState<
     Mobile_Services[] | null
   >(null);
 
+  // Reset the form based on type (Edit | Create)
+  useEffect(() => {
+    console.log("type: ", selectedStoryBanner ? "edit" : "create");
+    if (selectedStoryBanner) {
+      reset({
+        end_date: selectedStoryBanner.end_date,
+        service_id: selectedStoryBanner.service_id?.toString(),
+      });
+    } else
+      reset({
+        end_date: undefined,
+        service_id: undefined,
+      });
+  }, [open]);
+
+  // Fetch Services for options in the form
   useEffect(() => {
     axios
       .get<{ mobile_services: Mobile_Services[] }>(
@@ -55,27 +79,44 @@ export default function DialogAdd({
   }, []);
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await axios.post(
-        Api(type === "add" ? "employee/client/services-banners/store" : ``),
-        serialize(
-          {
-            category_service_id: story?.id,
-            data: [
-              {
-                end_date: data.end_date,
+      await axios.request({
+        // Checks if its edit or create
+        method: "POST",
+        ...(selectedStoryBanner
+          ? {
+              url: Api(
+                `employee/client/services-banners/${selectedStoryBanner.id}`
+              ),
+              data: serialize({
+                category_service_id: story?.id,
                 service_id: data.service_id,
+                end_date: data.end_date,
                 image: data.image,
-              },
-            ],
-          },
-          { indices: true }
-        )
-      );
-      snackbar.enqueueSnackbar("تم حفظ ");
+              }),
+            }
+          : {
+              url: Api("employee/client/services-banners/store"),
+              data: serialize(
+                {
+                  category_service_id: story?.id,
+                  data: [
+                    {
+                      end_date: data.end_date,
+                      service_id: data.service_id,
+                      image: data.image,
+                    },
+                  ],
+                },
+                { indices: true }
+              ),
+            }),
+      });
+      enqueueSnackbar("تم حفظ ");
       seedStory();
       handleClose();
     } catch (err) {
-      snackbar.enqueueSnackbar(" تعذر في حفظ  ", {
+      console.log(err);
+      enqueueSnackbar(" تعذر في حفظ  ", {
         variant: "error",
       });
     }
@@ -83,7 +124,7 @@ export default function DialogAdd({
   return (
     <>
       <Dialog
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
         open={open}
         onClose={handleClose}
@@ -100,7 +141,7 @@ export default function DialogAdd({
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      {...register("service_id")}
+                      {...field}
                       select
                       placeholder="الخدمة"
                       size="small"
@@ -157,7 +198,7 @@ export default function DialogAdd({
         <DialogActions>
           <Button onClick={handleClose}>الغاء</Button>
           <LoadingButton
-            // loading={sendState === "loading"}
+            loading={isSubmitting}
             variant="contained"
             type="submit"
           >
@@ -173,4 +214,5 @@ type PropsType = {
   handleClose: () => void;
   story?: Story;
   seedStory: () => void;
+  selectedStoryBanner: StoryBanner | undefined;
 };

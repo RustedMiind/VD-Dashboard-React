@@ -9,22 +9,28 @@ import {
   TableCell,
   TableBody,
   IconButton,
+  Container,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import PrintIcon from "@mui/icons-material/Print";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import { Story } from "../../../../../../types/Stories";
-export default function TableData({ story }: PropsType) {
+import { Story, StoryBanner } from "../../../../../../types/Stories";
+export default function TableData({
+  story,
+  openEditDialog,
+  handleDelete,
+}: PropsType) {
   return (
     <Stack>
-      <TableContainer sx={{ height: 500 }}>
+      <TableContainer>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>كود المرفق</TableCell>
               <TableCell>نوع المرفق</TableCell>
+              <TableCell>تاريخ الانتهاء</TableCell>
               <TableCell>الملف المرفق</TableCell>
               <TableCell>الاعدادات</TableCell>
             </TableRow>
@@ -38,6 +44,7 @@ export default function TableData({ story }: PropsType) {
                     <TableCell>
                       {item?.first_gallery_media?.mime_type}
                     </TableCell>
+                    <TableCell>{item?.end_date}</TableCell>
                     <TableCell>
                       <Button
                         startIcon={<FolderOpenIcon />}
@@ -49,13 +56,17 @@ export default function TableData({ story }: PropsType) {
                       </Button>
                     </TableCell>
                     <TableCell>
-                      <IconButton size="small">
-                        <PrintIcon />
-                      </IconButton>
-                      <IconButton size="small">
+                      <IconButton
+                        size="small"
+                        onClick={() => openEditDialog(item)}
+                      >
                         <EditIcon />
                       </IconButton>
-                      <IconButton size="small" color="error">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => handleDelete(item.id)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -70,4 +81,6 @@ export default function TableData({ story }: PropsType) {
 }
 type PropsType = {
   story?: Story;
+  openEditDialog: (banner: StoryBanner) => void;
+  handleDelete: (bannerId: number) => void;
 };

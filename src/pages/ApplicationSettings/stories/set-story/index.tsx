@@ -51,7 +51,7 @@ function SetStory() {
   // Fetch story data on init state
   useEffect(() => {
     seedStory();
-  }, []);
+  }, [storyId]);
 
   // Render the current step view
   let view: React.ReactNode;
@@ -60,7 +60,7 @@ function SetStory() {
       view = <AttachmentsView story={story} seedStory={seedStory} />;
       break;
     default:
-      view = <SetView story={story} />;
+      view = <SetView story={story} getStory={seedStory} />;
   }
 
   return (

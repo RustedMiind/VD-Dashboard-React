@@ -77,7 +77,7 @@ const FormTypeSchema = z.object({
 
 type FormType = z.infer<typeof FormTypeSchema>;
 
-function SetView({ story }: PropsType) {
+function SetView({ story, getStory }: PropsType) {
   const {
     register,
     control,
@@ -110,6 +110,7 @@ function SetView({ story }: PropsType) {
         search: "?step=1",
         pathname: `/react/stories/edit/${parsed.story.id || story?.id}`,
       }); // Switch to edit mode using the storyId
+      getStory();
       return;
     } catch (error) {
       enqueueSnackbar("تعذر في حفظ القصة", { variant: "error" });
@@ -203,5 +204,6 @@ function SetView({ story }: PropsType) {
 
 type PropsType = {
   story?: Story;
+  getStory: () => void;
 };
 export default SetView;
