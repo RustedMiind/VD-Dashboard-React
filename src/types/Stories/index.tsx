@@ -19,3 +19,17 @@ export interface StoryBanner {
   updated_at: string;
   first_gallery_media: Media;
 }
+
+export interface Mobile_Services {
+  id: number;
+  name: string;
+  description: string;
+  features: string;
+  specifications: string;
+  updated_at: string;
+  created_at: string;
+  pictures: {};
+  media: [];
+  mobile_service_id: null;
+  child: null;
+}

@@ -57,7 +57,7 @@ function SetStory() {
   let view: React.ReactNode;
   switch (step) {
     case 1:
-      view = <AttachmentsView story={story} />;
+      view = <AttachmentsView story={story} seedStory={seedStory} />;
       break;
     default:
       view = <SetView story={story} />;
