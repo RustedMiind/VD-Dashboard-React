@@ -144,9 +144,7 @@ const ProjectWorkDetails = (props: PropsType) => {
 
   const handleDeleteFile = (idx: number) => {
     let arr = imagesAlpom;
-    console.log("Breakpoint 101:", arr, idx);
     arr.splice(idx, 1);
-    console.log("Breakpoint 102:", arr);
     setImagesAlpom([...arr]);
   };
 
@@ -173,7 +171,6 @@ const ProjectWorkDetails = (props: PropsType) => {
       ),
     };
     setLoading(true);
-    console.log("Data :-", data);
     (!editedData?.id
       ? axios.post(Api(`employee/contract/details/store`), serialize(data))
       : axios.post(
@@ -182,7 +179,6 @@ const ProjectWorkDetails = (props: PropsType) => {
         )
     )
       .then((res) => {
-        console.log("response101", res);
         if (editedData?.id) enqueueSnackbar("تم تعديل تفاصيل المشروع بنجاح");
         else enqueueSnackbar("تم حفظ تفاصيل المشروع بنجاح");
       })
@@ -201,7 +197,6 @@ const ProjectWorkDetails = (props: PropsType) => {
       axios
         .get(Api(`employee/contract/${props.contractId}`))
         .then((res) => {
-          console.log("Breakpoint101 in details page:", res.data.data);
           setEditedData(res.data.data.contract_details);
         })
         .catch((err) => {
@@ -225,7 +220,6 @@ const ProjectWorkDetails = (props: PropsType) => {
       let banner = editedData?.media.filter(
         (ele) => ele.collection_name == "banner"
       )[0] as ImageType;
-      console.log("Target Banner Image : ", banner);
       if (banner != undefined) setBannerImg([banner]);
 
       let master = editedData?.media.filter(
@@ -241,7 +235,6 @@ const ProjectWorkDetails = (props: PropsType) => {
       let subImgs = editedData?.media.filter(
         (ele) => ele.collection_name == "sub_images"
       ) as ImageListType;
-      console.log("subImgs", subImgs);
       if (subImgs != undefined && subImgs.length > 0) setImagesAlpom(subImgs);
 
       setShowOptions({
@@ -391,7 +384,6 @@ const ProjectWorkDetails = (props: PropsType) => {
               {bannerImg.length > 0 && (
                 <DeleteIcon
                   onClick={() => {
-                    console.log(bannerImg[0]);
                     if (bannerImg.length) {
                       if (bannerImg[0]?.id) {
                         setLoading(true);
@@ -402,7 +394,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                             )
                           )
                           .then((res) => {
-                            console.log("response101", res);
                             setBannerImg([]);
                             enqueueSnackbar("تم حذف الملف بنجاح");
                           })
@@ -449,7 +440,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                 images={masterPlanImg}
                 width={masterPlanImg.length > 0 ? `90%` : "100%"}
                 setImages={(ar) => {
-                  console.log("Image:", ar);
                   setMasterPlanImg(ar);
                 }}
               />
@@ -466,7 +456,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                             )
                           )
                           .then((res) => {
-                            console.log("response101", res);
                             setMasterPlanImg([]);
                             enqueueSnackbar("تم حذف الملف بنجاح");
                           })
@@ -513,7 +502,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                 images={iconImg}
                 width={iconImg.length > 0 ? `90%` : "100%"}
                 setImages={(ar) => {
-                  console.log("Image:", ar);
                   setIconImg(ar);
                 }}
               />
@@ -530,7 +518,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                             )
                           )
                           .then((res) => {
-                            console.log("response101", res);
                             setIconImg([]);
                             enqueueSnackbar("تم حذف الملف بنجاح");
                           })
@@ -623,7 +610,6 @@ const ProjectWorkDetails = (props: PropsType) => {
                                 )
                               )
                               .then((res) => {
-                                console.log("response101", res);
                                 handleDeleteFile(idx);
                                 enqueueSnackbar("تم حذف الملف بنجاح");
                               })

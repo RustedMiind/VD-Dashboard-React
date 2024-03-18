@@ -11,7 +11,7 @@ import {
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
 import { useEffect, useState } from "react";
 
-type userT = { id: number; name: string };
+type userT = { id: number; full_name: string };
 type PandT = {
   name: string;
   eng_id: number | undefined;
@@ -104,14 +104,14 @@ export default function SinglePand({
             select
             variant="outlined"
             fullWidth
-            defaultValue={Pand.eng_id}
+            value={Pand.eng_id}
             onChange={(e) =>
               setPand((prev) => ({ ...prev, eng_id: +e.target.value }))
             }
           >
             {users?.map((employee) => (
               <MenuItem key={employee.id} value={employee.id}>
-                {employee.name}
+                {employee.full_name}
               </MenuItem>
             ))}
           </TextField>
