@@ -42,6 +42,7 @@ import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
 import EmployeeRequest from "./pages/employees/request";
 import AnnouncementsPage from "./pages/ApplicationSettings/announcement/main";
 import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announcement";
+import InfrastructureContractsDetails from "./pages/contracts/InfrastructureContractsDetails";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -207,6 +208,10 @@ function RoutesComponent() {
               <Route path="edit" element={<CreateContracts type="edit" />} />
             )}
           </Route>
+          <Route
+            path="details/:id"
+            element={<InfrastructureContractsDetails />}
+          />
         </Route>
 
         <Route path="announcements">
