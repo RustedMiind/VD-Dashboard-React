@@ -30,8 +30,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers";
 import AddLabelToEl from "../../../../components/AddLabelToEl";
 import CustomFilePond from "../../../../components/CustomFilepond";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { FilePond } from "react-filepond";
+import { FileBondState } from "../../../../types/FileBondState";
 
 export interface GetServiceByIdRoot {
   service: unknown;
@@ -107,13 +109,14 @@ function SetMobileServicePage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormType>({ resolver: zodResolver(formSchema) });
-
+  const snackbar = useSnackbar();
   let formType: "edit" | "create" = "create";
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   if (id) formType = "edit";
   const [service, setService] = useState<MobileService | undefined>(undefined);
+  const [images, setImages] = useState<FileBondState>([]);
 
   useEffect(() => {
     if (id) {
@@ -121,13 +124,27 @@ function SetMobileServicePage() {
     }
   }, [id]);
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-  });
+  const onSubmit: SubmitHandler<FormType> = async (data) => {
+    try {
+      await axios.post(
+        Api("employee/client/mobile-services/store"),
+        serialize(data, { indices: true, booleansAsIntegers: true })
+      );
+      enqueueSnackbar("تم حفظ ");
+    } catch (err) {
+      enqueueSnackbar(" تعذر في حفظ  ", {
+        variant: "error",
+      });
+    }
+  };
 
   return (
     <Stack>
-      <Container maxWidth={"lg"} component={"form"} onSubmit={onSubmit}>
+      <Container
+        maxWidth={"lg"}
+        component={"form"}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Grid container spacing={1} columnSpacing={2}>
           <InputContainer label="اسم الخدمة">
             <TextField
@@ -159,7 +176,36 @@ function SetMobileServicePage() {
               {...register("specifications")}
             />
           </InputContainer>
-
+          <InputContainer label="ارفاق صورة">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field }) => (
+                <CustomFilePond
+                  {...field}
+                  onupdatefiles={(files) => {
+                    field.onChange(files.map((file) => file.file)?.[0]);
+                  }}
+                  allowMultiple={false}
+                />
+              )}
+            />
+          </InputContainer>
+          <InputContainer label="ارفاق البانرات">
+            <Controller
+              name="banners"
+              control={control}
+              render={({ field }) => (
+                <CustomFilePond
+                  {...field}
+                  onupdatefiles={(files) => {
+                    field.onChange(files.map((file) => file.file));
+                  }}
+                  allowMultiple={true}
+                />
+              )}
+            />
+          </InputContainer>
           <GridItem>
             <Controller
               control={control}
