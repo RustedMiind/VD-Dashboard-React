@@ -45,6 +45,8 @@ import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announ
 import CommunicationPeople from "./pages/ApplicationSettings/communication-people/main";
 import StoriesPage from "./pages/ApplicationSettings/stories/main";
 import SetStory from "./pages/ApplicationSettings/stories/set-story";
+import MobileServicesMainPage from "./pages/ApplicationSettings/services/main";
+import SetMobileServicePage from "./pages/ApplicationSettings/services/set-service";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -222,6 +224,11 @@ function RoutesComponent() {
           <Route path="" element={<StoriesPage />} />
           <Route path="create" element={<SetStory />} />
           <Route path="edit/:storyId" element={<SetStory />} />
+        </Route>
+        <Route path="mobile-services">
+          <Route path="" element={<MobileServicesMainPage />} />
+          <Route path="create" element={<SetMobileServicePage />} />
+          <Route path="edit/:id" element={<SetMobileServicePage />} />
         </Route>
 
         <Route path="communication">
