@@ -271,8 +271,18 @@ const routesCollections: RoutesCollectionType[] = [
     icon: BiotechIcon,
     routes: [
       {
-        name: "مهامي",
-        path: "/mytasks",
+        name: "الاعلانات",
+        path: "/announcements",
+        react: true,
+      },
+      {
+        name: "تواصل معنا",
+        path: "/communication",
+        react: true,
+      },
+      {
+        name: "القصص",
+        path: "/stories",
         react: true,
       },
     ],

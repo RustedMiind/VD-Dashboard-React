@@ -18,6 +18,7 @@ import { useState } from "react";
 import { formatDate } from "../../../methods";
 import { ActionTypes } from "./Filter/reducer";
 import NonRoundedChip from "../../../components/NonRoundedChip";
+import { NavLink } from "react-router-dom";
 
 const ClientTableComponent = ({
   requests,
@@ -156,7 +157,18 @@ const ClientTableComponent = ({
               //   request.order_step_form[0].order_step[0].department;
               return (
                 <TableRow key={request.id}>
-                  <TableCell>{request.order_id}</TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      sx={{ textDecoration: "underline" }}
+                      fontWeight={700}
+                      color="secondary.main"
+                      component={NavLink}
+                      to={`${request.id}`}
+                    >
+                      {request.order_id}
+                    </Typography>
+                  </TableCell>
                   <TableCell>
                     <Box
                       component="span"

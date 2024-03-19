@@ -30,6 +30,7 @@ import {
   disableDateAfter,
   onlyDateBetween,
 } from "../../../../../methods/DayjsDatePicker";
+import { DateFormatString } from "../../../../../constants/DateFormat";
 
 function ManagersForm() {
   const [error, setError] = useState<undefined | React.ReactNode>(undefined);
@@ -134,7 +135,7 @@ function ManagersForm() {
                   dispatch(
                     generateReducerAction(
                       "SET_APPROVAL_END_DATE",
-                      date?.format() || ""
+                      date?.format(DateFormatString) || ""
                     )
                   );
                 }}
@@ -187,7 +188,7 @@ function ManagersForm() {
                   dispatch(
                     generateReducerAction(
                       "SET_PURCHASE_DATE",
-                      date?.format() || ""
+                      date?.format(DateFormatString) || ""
                     )
                   );
                 }}
@@ -251,7 +252,7 @@ function ManagersForm() {
                   dispatch(
                     generateReducerAction(
                       "SET_TECHNICAL_END_DATE",
-                      date?.format() || ""
+                      date?.format(DateFormatString) || ""
                     )
                   );
                 }}
@@ -305,7 +306,7 @@ function ManagersForm() {
                   dispatch(
                     generateReducerAction(
                       "SET_TECHNICAL_ALTERNATIVE_END_DATE",
-                      date?.format() || ""
+                      date?.format(DateFormatString) || ""
                     )
                   );
                 }}
@@ -398,7 +399,7 @@ function ManagersForm() {
                   dispatch(
                     generateReducerAction(
                       "SET_FINANCIAL_END_DATE",
-                      date?.format() || ""
+                      date?.format(DateFormatString) || ""
                     )
                   );
                 }}
@@ -444,7 +445,7 @@ function ManagersForm() {
                   dispatch(
                     generateReducerAction(
                       "SET_APPLY_DATE",
-                      date?.format() || ""
+                      date?.format(DateFormatString) || ""
                     )
                   );
                 }}

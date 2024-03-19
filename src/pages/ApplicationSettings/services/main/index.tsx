@@ -15,29 +15,35 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CenteredPagination from "../../../../components/CenteredPagination";
 import { LaravelPagination } from "../../../../types/LaravelPagination";
-import DeleteDialog from "./DeleteDialog";
 import { useSnackbar } from "notistack";
 import SearchIcon from "@mui/icons-material/Search";
+import DeleteDialog from "./DeleteDialog";
+import {
+  MobileService,
+  mobileServiceSchema,
+} from "../../../../types/MobileServices";
+import { z } from "zod";
 
-interface AnnouncementsGetRoot {
-  announcements?: LaravelPagination<Announcement[]>;
-  search: unknown[];
+export interface Root {
+  mobile_services: unknown[];
+  search: [];
   message: string;
   status: boolean;
 }
+
+const mobileServicesArraySchema = z.array(mobileServiceSchema);
 
 const GridItem = (props: GridProps) => (
   <Grid item xs={12} sm={12} md={6} lg={4} xl={3} {...props} />
 );
 
-const AnnouncementCard = ({
-  announcement,
+const ServiceCard = ({
+  service,
   onDelete,
 }: {
-  announcement: Announcement;
-  onDelete: (announcement: Announcement) => void;
+  service: MobileService;
+  onDelete: (service: MobileService) => void;
 }) => {
-  const { body, title, date, first_gallery_media, id } = announcement;
   return (
     <Card
       elevation={2}
@@ -45,90 +51,94 @@ const AnnouncementCard = ({
     >
       <CardMedia
         sx={{ height: 200 }}
-        image={first_gallery_media?.original_url}
+        image={service.pictures?.image?.[0]?.original_url}
       />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          اعلان {id}
+          الخدمة رقم {service.id}
         </Typography>
         <Typography variant="h5" component="div">
-          {title}
+          {service.name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {date}
+          {service.specifications}
         </Typography>
-        <Typography variant="body2">{body}</Typography>
+        <Typography variant="body2">{service.description}</Typography>
       </CardContent>
       <CardActions>
-        <Button startIcon={<EditIcon />} component={NavLink} to={`edit/${id}`}>
-          تعديل الاعلان
+        <Button
+          startIcon={<EditIcon />}
+          component={NavLink}
+          to={`edit/${service.id}`}
+        >
+          تعديل الحدمة
         </Button>
         <Button
           startIcon={<DeleteIcon />}
           onClick={() => {
-            onDelete(announcement);
+            onDelete(service);
           }}
           color="error"
         >
-          حذف الاعلان
+          حذف الخدمة
         </Button>
       </CardActions>
     </Card>
   );
 };
 
-function getAnnouncements(
-  params?: ParamsType
-): Promise<LaravelPagination<Announcement[]>> {
+function getServices(params?: ParamsType): Promise<MobileService[]> {
   return new Promise((resolve, reject) => {
-    axios
-      .get<AnnouncementsGetRoot>(Api("employee/client/announcement"), {
-        params: {
-          page: params?.page,
-          body: params?.search,
-        },
-      })
-      .then(({ data: { announcements } }) => {
-        if (announcements) resolve(announcements);
-      })
-      .catch(console.log);
+    try {
+      axios
+        .get(Api("employee/client/mobile-services"), {
+          params: {},
+        })
+        .then(({ data }) => {
+          const services = mobileServicesArraySchema.parse(
+            data?.["mobile_services"]
+          );
+          resolve(services);
+        })
+        .catch(console.log);
+    } catch (error) {
+      console.log("cached in try-catch block: ", error);
+    }
   });
 }
 
-type ParamsType = {
-  totalPages?: number;
-  page?: number;
-  search?: string;
-  perPage?: number;
-};
+type ParamsType = {};
 
-function AnnouncementsPage() {
+function MobileServicesMainPage() {
   //Hooks
   const { enqueueSnackbar } = useSnackbar();
 
   // State
-  const [announcements, setAnnouncements] = useState<
-    Announcement[] | undefined
-  >(undefined);
-  const [toDelete, setToDelete] = useState<Announcement | undefined>(undefined);
+  const [services, setServices] = useState<MobileService[] | undefined>(
+    undefined
+  );
+  const [toDelete, setToDelete] = useState<MobileService | undefined>(
+    undefined
+  );
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const [params, setParams] = useState<ParamsType>({});
   const updateParams = (p: Partial<ParamsType>) =>
     setParams({ ...params, ...p });
 
-  const requestAnnouncements = () => {
-    getAnnouncements(params).then(({ data, current_page, last_page }) => {
-      setAnnouncements(data);
-      updateParams({ page: current_page, totalPages: last_page });
+  const requestServices = () => {
+    getServices(params).then((services) => {
+      setServices(services);
     });
   };
 
-  const deleteAnnouncement = (a: Announcement) => {
+  const deleteService = (service: MobileService) => {
     axios
-      .delete(Api(`employee/client/announcement/${a.id}`))
+      .post(Api(`employee/client/mobile-services/multi-delete`), {
+        ids: [service.id],
+      })
       .then(() => {
-        requestAnnouncements();
+        requestServices();
         setDeleteDialogOpen(false);
         enqueueSnackbar("تم حذف الاعلان بنجاح");
       })
@@ -136,19 +146,19 @@ function AnnouncementsPage() {
         enqueueSnackbar("تعذر في حذف الاعلان", { variant: "error" });
       });
   };
-  useEffect(requestAnnouncements, [params.page]);
+  useEffect(requestServices, []);
 
   return (
     <>
       <DeleteDialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
-        announcement={toDelete}
-        onConfirmDelete={deleteAnnouncement}
+        service={toDelete}
+        onConfirmDelete={deleteService}
       />
       <Stack>
         <Stack direction="row" justifyContent="space-between" mb={2}>
-          <Typography variant="h5">الاعلانات</Typography>
+          <Typography variant="h5">خدمات التطبيق</Typography>
 
           <Button
             variant="contained"
@@ -156,7 +166,7 @@ function AnnouncementsPage() {
             component={NavLink}
             to={"create"}
           >
-            اضافة اعلان جديد
+            اضافة حدمة جديد
           </Button>
         </Stack>
         <Stack
@@ -167,11 +177,11 @@ function AnnouncementsPage() {
           component="form"
           onSubmit={(e) => {
             e.preventDefault();
-            requestAnnouncements();
+            requestServices();
           }}
           mb={2}
         >
-          <TextField
+          {/* <TextField
             placeholder="البحث"
             label="البحث"
             size="small"
@@ -183,32 +193,32 @@ function AnnouncementsPage() {
           />
           <Button variant="contained" startIcon={<SearchIcon />} type="submit">
             البحث
-          </Button>
+          </Button> */}
         </Stack>
         <Grid container spacing={2}>
-          {announcements?.map((announcement) => (
+          {services?.map((service) => (
             <GridItem>
-              <AnnouncementCard
-                announcement={announcement}
-                onDelete={(announcement: Announcement) => {
+              <ServiceCard
+                service={service}
+                onDelete={(service: MobileService) => {
                   setDeleteDialogOpen(true);
-                  setToDelete(announcement);
+                  setToDelete(service);
                 }}
               />
             </GridItem>
           ))}
         </Grid>
-        <CenteredPagination
+        {/* <CenteredPagination
           page={params.page || 1}
           count={params.totalPages}
           onChange={(e, page) => {
             console.log(page);
             updateParams({ page });
           }}
-        />
+        /> */}
       </Stack>
     </>
   );
 }
 
-export default AnnouncementsPage;
+export default MobileServicesMainPage;

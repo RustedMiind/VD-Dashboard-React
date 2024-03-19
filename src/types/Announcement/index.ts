@@ -1,3 +1,5 @@
+import { Media } from "../Media";
+
 export interface Announcement {
   id: number;
   title: string;
@@ -5,4 +7,5 @@ export interface Announcement {
   date: string;
   created_at: string;
   updated_at: string;
+  first_gallery_media?: Media;
 }

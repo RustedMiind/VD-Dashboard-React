@@ -133,10 +133,17 @@ export function generateTenderApprovalStatusChip(
   return chip;
 }
 function TableBody() {
-  const { tenderTableData, setSelectedTenderId, selectedTenderId } =
-    useContext(TableContext);
+  const {
+    tenderTableData,
+    setSelectedTenderId,
+    selectedTenderId,
+    setTenderTableData,
+  } = useContext(TableContext);
   const [open, setOpen] = useState<boolean>(false);
   const [displayData, setDisplayData] = useState<TypeDisplayData>({});
+  const [openedTenderId, setOpenedTenderId] = useState<number | undefined>(
+    undefined
+  );
   const { enqueueSnackbar } = useSnackbar();
   const [directorateAnchorEl, setDirectorateAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -163,9 +170,13 @@ function TableBody() {
       setDirectorateAnchorEl(null);
       axios
         .post(
-          Api(`employee/tender/form/change-directorate-for-tender/${tenderId}`)
+          Api(
+            `employee/tender/form/change-directorate-for-tender/${openedTenderId}`
+          ),
+          { status: e.currentTarget.value }
         )
         .then(() => {
+          setTenderTableData?.();
           enqueueSnackbar("تم تعديل حالة المنافسة لدي الجهة بنجاح");
         })
         .catch((err: AxiosError<{ message?: string; msg?: string }>) => {
@@ -331,6 +342,7 @@ function TableBody() {
                   {isAcceptedTender &&
                     generateTenderStatus(tender.directorate_status, {
                       onClick: (e) => {
+                        setOpenedTenderId(tender.id);
                         setDirectorateAnchorEl(e.currentTarget);
                       },
                     })}

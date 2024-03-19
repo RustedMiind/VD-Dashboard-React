@@ -55,7 +55,7 @@ function ContentPanal() {
             onChange={(e) => {
               updateDataToSearch({ organization_name: e.target.value });
             }}
-            label="الجهة الحكومية"
+            label="اسم العميل"
             size="small"
             fullWidth
           />
