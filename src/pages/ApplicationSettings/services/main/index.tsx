@@ -71,7 +71,7 @@ const ServiceCard = ({
           component={NavLink}
           to={`edit/${service.id}`}
         >
-          تعديل الحدمة
+          تعديل الخدمة
         </Button>
         <Button
           startIcon={<DeleteIcon />}
@@ -166,7 +166,7 @@ function MobileServicesMainPage() {
             component={NavLink}
             to={"create"}
           >
-            اضافة حدمة جديد
+            اضافة خدمة جديد
           </Button>
         </Stack>
         <Stack

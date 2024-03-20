@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Grid,
   GridProps,
+  MenuItem,
   Paper,
   Stack,
   Switch,
@@ -34,9 +35,10 @@ import { Controller, useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { FilePond } from "react-filepond";
 import { FileBondState } from "../../../../types/FileBondState";
+import ServiceMedia from "./ServiceMedia";
 
 export interface GetServiceByIdRoot {
-  service: unknown;
+  mobile_service: unknown;
   message: string;
   status: boolean;
 }
@@ -51,12 +53,14 @@ const InputContainer = ({
   label,
   children,
   error,
+  hidden,
 }: {
   label: string;
   error?: string;
   children?: React.ReactNode;
+  hidden?: boolean;
 }) => (
-  <GridItem>
+  <GridItem sx={{ display: hidden ? "none" : undefined }}>
     <AddLabelToEl label={label}>
       {children}
       {error && (
@@ -83,21 +87,26 @@ export async function getMobileServiceById(
     await axios.get<GetServiceByIdRoot>(
       Api("employee/client/mobile-services/" + id)
     )
-  ).data.service;
+  ).data?.mobile_service;
   const service = mobileServiceSchema.parse(resService);
   if (service) return service;
   else throw new Error();
 }
 
 const formSchema = z.object({
-  name: z.string(),
+  name: z.string().min(4).max(16),
   features: z.string().optional(),
   description: z.string().optional(),
   specifications: z.string().optional(),
-  mobile_service_id: z.number().optional(),
+  mobile_service_id: z
+    .number()
+    .optional()
+    .transform((value) => {
+      return value && value > 0 ? value : null;
+    }),
   banners: z.array(z.instanceof(File)).optional(), // Assuming File is a type representing uploaded files
   image: z.instanceof(File).optional(), // Assuming File is a type representing uploaded files
-  is_responsible_service: z.boolean(),
+  is_responsible_service: z.boolean().default(false),
 });
 
 type FormType = z.infer<typeof formSchema>;
@@ -107,53 +116,92 @@ function SetMobileServicePage() {
     register,
     control,
     handleSubmit,
+    reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormType>({ resolver: zodResolver(formSchema) });
-  const snackbar = useSnackbar();
-  let formType: "edit" | "create" = "create";
   const { id } = useParams();
+  const formType: "edit" | "create" = id ? "edit" : "create";
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  if (id) formType = "edit";
   const [service, setService] = useState<MobileService | undefined>(undefined);
-  const [images, setImages] = useState<FileBondState>([]);
+  const [parentServices, setParentServices] = useState<MobileService[]>([]);
+  const isParent = watch("is_responsible_service");
+
+  function seedService() {
+    if (id) {
+      getMobileServiceById(id)
+        .then((service) => {
+          setService(service);
+          reset({
+            description: service.description || "",
+            features: service.features || "",
+            is_responsible_service: !!service.is_responsible_service,
+            name: service.name,
+            mobile_service_id: service.mobile_service_id
+              ? service.mobile_service_id
+              : -1,
+            specifications: service.specifications || "",
+          });
+        })
+        .catch(console.log);
+    }
+  }
 
   useEffect(() => {
-    if (id) {
-      getMobileServiceById(id).then(setService).catch(console.log);
-    }
-  }, [id]);
+    axios
+      .get<{ mobile_services: unknown }>(
+        Api("employee/client/mobile-services/parents")
+      )
+      .then(({ data: { mobile_services } }) => {
+        try {
+          const servicesSchema = z.array(mobileServiceSchema);
+          const services = servicesSchema.parse(mobile_services);
+          setParentServices(services);
+        } catch (error) {
+          setParentServices([]);
+        }
+      });
+  }, []);
 
-  const onSubmit: SubmitHandler<FormType> = async (data) => {
+  useEffect(seedService, [id]);
+
+  const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log(data);
       await axios.post(
-        Api("employee/client/mobile-services/store"),
+        Api(
+          formType === "create"
+            ? "employee/client/mobile-services/store"
+            : `employee/client/mobile-services/${id}`
+        ),
         serialize(data, { indices: true, booleansAsIntegers: true })
       );
-      enqueueSnackbar("تم حفظ ");
+      enqueueSnackbar("تم حفظ الخدمة بنجاح");
+      navigate("/react/mobile-services");
     } catch (err) {
-      enqueueSnackbar(" تعذر في حفظ  ", {
+      enqueueSnackbar(" تعذر في حفظ الخدمة", {
         variant: "error",
       });
     }
-  };
+  });
 
   return (
     <Stack>
-      <Container
-        maxWidth={"lg"}
-        component={"form"}
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <Container maxWidth={"lg"} component={"form"} onSubmit={onSubmit}>
         <Grid container spacing={1} columnSpacing={2}>
-          <InputContainer label="اسم الخدمة">
+          <InputContainer label="اسم الخدمة" error={errors.name?.message}>
             <TextField
               {...textFieldProps("اسم الخدمة")}
               {...register("name")}
             />
           </InputContainer>
 
-          <InputContainer label="مميزات الخدمة">
+          <InputContainer
+            label="مميزات الخدمة"
+            error={errors.features?.message}
+            hidden={isParent}
+          >
             <TextField
               {...textFieldProps("مميزات الخدمة")}
               multiline
@@ -161,7 +209,11 @@ function SetMobileServicePage() {
             />
           </InputContainer>
 
-          <InputContainer label="وصف الخدمة">
+          <InputContainer
+            label="وصف الخدمة"
+            error={errors.description?.message}
+            hidden={isParent}
+          >
             <TextField
               {...textFieldProps("وصف الخدمة")}
               multiline
@@ -169,14 +221,18 @@ function SetMobileServicePage() {
             />
           </InputContainer>
 
-          <InputContainer label="تفاصيل الخدمة">
+          <InputContainer
+            label="تفاصيل الخدمة"
+            error={errors.specifications?.message}
+            hidden={isParent}
+          >
             <TextField
               {...textFieldProps("تفاصيل الخدمة")}
               multiline
               {...register("specifications")}
             />
           </InputContainer>
-          <InputContainer label="ارفاق صورة">
+          <InputContainer label="ارفاق صورة" error={errors.image?.message}>
             <Controller
               name="image"
               control={control}
@@ -191,7 +247,11 @@ function SetMobileServicePage() {
               )}
             />
           </InputContainer>
-          <InputContainer label="ارفاق البانرات">
+          <InputContainer
+            label="ارفاق البانرات"
+            error={errors.banners?.message}
+            hidden={isParent}
+          >
             <Controller
               name="banners"
               control={control}
@@ -206,23 +266,69 @@ function SetMobileServicePage() {
               )}
             />
           </InputContainer>
-          <GridItem>
+
+          <InputContainer
+            label=""
+            error={errors.is_responsible_service?.message}
+          >
             <Controller
               control={control}
               name="is_responsible_service"
               render={({ field }) => (
                 <FormControlLabel
-                  label="هل خدمة أم"
+                  checked={field.value}
+                  label="خدمة أم"
                   {...field}
                   control={<Switch />}
                 />
               )}
             />
-          </GridItem>
+          </InputContainer>
+          <InputContainer
+            label="اختر الخدمة الام"
+            error={errors.is_responsible_service?.message}
+            hidden={isParent}
+          >
+            <Controller
+              name="mobile_service_id"
+              control={control}
+              defaultValue={service?.mobile_service_id || -1} // Set default value
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  select
+                  placeholder="المقاول"
+                  value={field.value} // Ensure value is controlled
+                  onChange={(e) => field.onChange(e.target.value)} // Handle onChange event
+                  {...textFieldProps()}
+                >
+                  {[
+                    { name: "لم يتم اختيار خدمة ام", id: -1 },
+                    ...parentServices,
+                  ].map((service) => (
+                    <MenuItem key={service.id} value={service.id}>
+                      {service.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </InputContainer>
         </Grid>
-        <LoadingButton type="submit" fullWidth>
+        <LoadingButton
+          sx={{ mt: 2 }}
+          loading={isSubmitting}
+          type="submit"
+          variant="contained"
+          fullWidth
+        >
           حفظ
         </LoadingButton>
+        {service && (
+          <Stack mt={4}>
+            <ServiceMedia service={service} seedService={seedService} />
+          </Stack>
+        )}
       </Container>
     </Stack>
   );
