@@ -49,7 +49,15 @@ type editedDataType = {
   id: number;
   contract_id: number;
   name: string;
-  contract_item_employees: [];
+  contract_item_employees: {
+    contract_item_id: number;
+    employee: {
+      id: number;
+      full_name: string;
+    };
+    employee_id: number;
+    id: number;
+  }[];
   contract_sub_items: {
     name: string;
     employee_id: string;
@@ -104,11 +112,14 @@ export default function TermsAndTasksOFContract(props: propsType) {
     pandDescription: false,
     taskManager: false,
   });
-  const [engineers, setEngineers] = useState<{ id: number; name: string }[]>(
-    []
-  );
+  const [engineers, setEngineers] = useState<
+    { id: number; full_name: string }[]
+  >([]);
+  const [contractEmployees, setContractEmployees] = useState<
+    { id: number; full_name: string }[]
+  >([]);
   const [setselectedEngineeras, setSetselectedEngineeras] = useState<
-    { id: number; name: string }[]
+    { id: number; full_name: string }[]
   >([]);
   const [subPands, setSubPands] = useState<PandT[]>([
     {
@@ -138,7 +149,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
   // TODO::fetch data of selects
   useEffect(() => {
     setLoading(true);
-    type Enginee = { id: number; name: string };
+    type Enginee = { id: number; full_name: string };
     axios
       .post<{ data: Enginee[] }>(Api(`employee/employees`))
       .then((res) => {
@@ -156,14 +167,8 @@ export default function TermsAndTasksOFContract(props: propsType) {
       axios
         .get(Api(`employee/contract/${id}`))
         .then((res) => {
-          console.log(
-            "Breakpoint101XZ in details page:",
-            res.data.data.contract_items[0],
-            engineers.filter(
-              (ele) => ele.id == res.data.data.contract_items[0].manager_id
-            )
-          );
           setEditedData(res.data.data.contract_items[0]);
+          setEditIstanceId(res.data.data.contract_items[0].id);
         })
         .catch((err) => {
           console.log("Error101 :-", err);
@@ -186,6 +191,12 @@ export default function TermsAndTasksOFContract(props: propsType) {
       });
       setMangeredId(+editedData.manager_id);
       setMediaFiles(editedData.media);
+      setSetselectedEngineeras(
+        editedData?.contract_item_employees?.map((ele) => ({
+          id: ele?.employee_id,
+          full_name: ele?.employee?.full_name,
+        }))
+      );
 
       setSubPands(
         editedData?.contract_sub_items.map((ele) => {
@@ -209,15 +220,35 @@ export default function TermsAndTasksOFContract(props: propsType) {
   // TODO::define my functions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    console.log("Files :-", files);
     setInputFiles(files);
   };
-
+  //
   const removeFile = (idx: number) => {
     if (inputFiles && inputFiles.length) {
       let arr = Array.from(inputFiles).filter((f, i) => i != idx);
       setInputFiles(arr as unknown as FileList);
     }
+  };
+  //remove file from server
+  const deleteFileFromServer = (mideiId: number, idx: number) => {
+    setLoading(true);
+    axios
+      .delete(
+        Api(`employee/contract/items/delete-media/${editIstanceId}/${mideiId}`)
+      )
+      .then((res) => {
+        setMediaFiles(mediaFiles.filter((f, i) => i != idx));
+        enqueueSnackbar("تم حذف الملف بنجاح");
+      })
+      .catch((err) => {
+        console.log("Error101 :-", err);
+        enqueueSnackbar("تعذر الحذف", {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleFormSubmit = handleSubmit((formData) => {
@@ -237,9 +268,8 @@ export default function TermsAndTasksOFContract(props: propsType) {
         name: ele.name,
       })),
       attachments: inputFiles,
-      // contract_item_employees: setselectedEngineeras.map((ele) => ele.id),
+      employees: setselectedEngineeras.map((ele) => ele.id),
     };
-    console.log("formData :-", data, formData, subPands);
     return new Promise((resolve, reject) => {
       (!editIstanceId
         ? axios.post(
@@ -252,7 +282,6 @@ export default function TermsAndTasksOFContract(props: propsType) {
           )
       )
         .then((res) => {
-          console.log("response101", res);
           if (editIstanceId)
             enqueueSnackbar("تم تعديل بنود و مهام العقد بنجاح");
           else enqueueSnackbar("تم حفظ بنود و مهام العقد بنجاح");
@@ -415,7 +444,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                   size="small"
                   select
                   variant="standard"
-                  value={mangeredId?.toString()}
+                  value={mangeredId ? mangeredId : 0}
                   // value={editedData?.manager_id ? +editedData?.manager_id : ""}
                   sx={{
                     width: mainFieldsShow.taskManager ? "70%" : "4%",
@@ -447,8 +476,8 @@ export default function TermsAndTasksOFContract(props: propsType) {
                     ),
                   }}
                   onChange={(e) => {
-                    console.log("TargetVal:", e.target.value);
                     setMangeredId(+e.target.value);
+                    setValue("manager_id", e.target.value);
                   }}
                 >
                   {engineers?.map((employee) => (
@@ -456,7 +485,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                       key={`ele_${employee.id}_${Math.random()}`}
                       value={employee.id}
                     >
-                      {employee.name}
+                      {employee.full_name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -523,7 +552,6 @@ export default function TermsAndTasksOFContract(props: propsType) {
             fullWidth
             {...register("end_date")}
             onChange={(e) => {
-              console.log("Date:", e.target.value, getValues("start_date"));
               if (getValues("start_date")) {
                 let d1 = new Date(getValues("start_date"));
                 let d2 = new Date(e.target.value);
@@ -564,6 +592,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
         <ContractAddUsersSelect
           disabled={isSubmitting}
           users={engineers}
+          selectedUsers={setselectedEngineeras}
           setValue={setSetselectedEngineeras}
         />
       </Grid>
@@ -731,7 +760,9 @@ export default function TermsAndTasksOFContract(props: propsType) {
                       </Typography>
                     </Box>
                     <DeleteOutlineOutlinedIcon
-                      onClick={() => removeFile(idx)}
+                      onClick={() => {
+                        deleteFileFromServer(item.id, idx);
+                      }}
                       sx={{
                         transition: "all 0.5 ease",
                         cursor: "pointer",
