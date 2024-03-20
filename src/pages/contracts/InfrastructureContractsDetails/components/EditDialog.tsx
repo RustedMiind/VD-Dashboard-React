@@ -14,7 +14,7 @@ import DoneAndReminder from "./DoneAndReminder";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
-    children: React.ReactElement<any, any>;
+    children: React.ReactElement;
   },
   ref: React.Ref<unknown>
 ) {
@@ -44,13 +44,15 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description">
+        aria-describedby="alert-dialog-slide-description"
+      >
         <Typography
           variant="h6"
           width={"32rem"}
           fontWeight={700}
           textAlign={"center"}
-          marginTop={2}>
+          marginTop={2}
+        >
           تعديل نسب الانجاز الكلية
         </Typography>
         <DialogContent>
