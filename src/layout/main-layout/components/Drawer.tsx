@@ -285,6 +285,11 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/stories",
         react: true,
       },
+      {
+        name: "حدمات التطبيق",
+        path: "/mobile-services",
+        react: true,
+      },
     ],
   },
 ];
