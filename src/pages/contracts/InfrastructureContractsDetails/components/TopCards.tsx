@@ -475,9 +475,10 @@ export default function TopCards({ contractData }: TopCardsProps) {
                 position: "relative",
                 paddingX: "1rem",
               }}
+              className="RatioCircularProgress"
             >
               <CircularProgress
-                style={{ width: "90px" }}
+                style={{ width: "90px", }}
                 variant="determinate"
                 color={"warning"}
                 value={85.5}
