@@ -252,7 +252,11 @@ export default function BandInformation({
             },
           }}
         >
-          {showChatBox ? <KeyboardArrowDownSharpIcon /> : <ForumSharpIcon />}
+          {showChatBox ? (
+            <KeyboardArrowDownSharpIcon style={{ fontSize: "2.2rem" }} />
+          ) : (
+            <ForumSharpIcon style={{ fontSize: "2.2rem" }} />
+          )}
         </Button>
       </Grid>
     </Grid>
