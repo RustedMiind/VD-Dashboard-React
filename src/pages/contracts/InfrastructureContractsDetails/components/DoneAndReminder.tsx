@@ -43,7 +43,7 @@ export default function DoneAndReminder({ column }: { column?: boolean }) {
             display: "inline-block",
             width: "15px",
             height: "15px",
-            backgroundColor: "gray",
+            backgroundColor: "#DFDFDF",
             margin: "0 3px",
           }}
         ></span>

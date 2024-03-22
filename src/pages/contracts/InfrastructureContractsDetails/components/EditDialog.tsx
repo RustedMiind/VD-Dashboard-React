@@ -27,7 +27,7 @@ type dialogProps = {
 };
 
 export default function EditRaioDialog({ open, setOpen }: dialogProps) {
-  const [ratio, setRatio] = React.useState("");
+  const [ratio, setRatio] = React.useState("85.5");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -95,7 +95,7 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
                   color={"warning"}
                   variant="body2"
                 >
-                  85.5%
+                  {ratio.length ? ratio : "0"}%
                 </Typography>
               </Box>
             </Grid>

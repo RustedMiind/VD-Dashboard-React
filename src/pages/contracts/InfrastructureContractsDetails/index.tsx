@@ -88,7 +88,7 @@ export default function InfrastructureContractsDetails() {
       {/* Tabs Buttons */}
       <TabsButtons />
       {/* Add new pand */}
-      <Grid item xs={12} textAlign={"right"} marginY={"2rem"}>
+      <Grid item xs={12} textAlign={"right"} marginY={"1rem"}>
         <Button
           sx={{
             bgcolor: "primary.main",
