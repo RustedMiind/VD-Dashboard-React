@@ -42,6 +42,7 @@ import SubmitTypeDialog from "./SubmitTypeDialog";
 import CustomFilePond from "../../../../../../../components/CustomFilepond";
 import { FileBondState } from "../../../../../../../types/FileBondState";
 import MediaMenuList from "../MediaMenu";
+import { uploadFileInChunks } from "../../../../../../../methods/uploadChunks";
 
 export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
@@ -111,27 +112,44 @@ export default function BuyDialog({
     sendData(data);
   });
 
+  function sendImage(dto?: Record<string, unknown>) {
+    return new Promise((resolve, reject) => {
+      if (!file[0]) resolve("");
+      uploadFileInChunks(
+        file[0] as File,
+        1024 ** 2 * 10,
+        Api("employee/tender/form/status/" + id),
+        dto
+      )
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
   function sendData(dto: DtoType) {
     if (typeof tender === "object") {
       setFormStatus(FetchStatusEnum.LOADING);
       setCheckDialogOpen(false);
       const obj = {
         ...dto,
-        image: file[0],
         user_type: TenderStep.PURCHASE,
       };
       console.log(obj);
-      axios
-        .post(
-          Api("employee/tender/form/status/" + id),
 
-          objectToFormData(obj)
-        )
+      sendImage(obj)
         .then((res) => {
+          // axios
+          //   .post(
+          //     Api("employee/tender/form/status/" + id),
+
+          //     objectToFormData(obj)
+          //   )
+          //   .then((res) => {
           console.log(res);
           close();
           enqueueSnackbar("تم اتخاذ الاجراء");
           refresh();
+          // });
         })
         .catch((err) => {
           console.log(err);

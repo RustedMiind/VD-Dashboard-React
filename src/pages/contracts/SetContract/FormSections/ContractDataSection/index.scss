@@ -1,0 +1,12 @@
+#IP_C_AttachImage {
+    .filepond--drop-label {
+        transform: translate3d(0px, 0px, 0px);
+        background-color: #f3f5f7;
+        opacity: 1;
+        background: inherit;
+        border: 1px dotted gray;
+        border-radius: 10px;
+        height: 50px;
+        cursor: pointer;
+    }
+}

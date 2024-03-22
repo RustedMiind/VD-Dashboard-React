@@ -165,6 +165,6 @@ type PropsType = {
   opened: boolean;
   dispatch: React.Dispatch<ActionTypes>;
   filters: FilterType;
-  selectedType: number | undefined;
-  setSelectedType: React.Dispatch<React.SetStateAction<number | undefined>>;
+  selectedType: number | undefined | null;
+  setSelectedType: (type: number | undefined | null) => void;
 };

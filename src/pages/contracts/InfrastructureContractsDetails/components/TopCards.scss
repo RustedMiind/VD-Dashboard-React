@@ -1,0 +1,24 @@
+.fadeInUp {
+    animation-delay: 2s;
+    animation: fadeInUp 1s ease backwards;
+}
+
+.RatioCircularProgress {
+    svg.MuiCircularProgress-svg.muirtl-1idz92c-MuiCircularProgress-svg {
+        border: 1px solid #f19b0059;
+        border-radius: 50%;
+        padding: 2px;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        transform: translate(0px, 100px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(0px, 0);
+        opacity: 1;
+    }
+}

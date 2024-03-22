@@ -29,6 +29,7 @@ import { objectToFormData } from "../../../../../../../methods";
 import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
 import { Media } from "../../../../../../../types";
 import MediaMenuList from "../MediaMenu";
+import { uploadFileInChunks } from "../../../../../../../methods/uploadChunks";
 
 const GridItem = (props: GridProps & { label: string }) => (
   <Grid item md={6} {...props}>
@@ -75,19 +76,36 @@ export default function OthersDialog({
     });
   }, [dialogProps.open]);
 
+  function sendImage(dto?: Record<string, unknown>) {
+    return new Promise((resolve, reject) => {
+      if (!file) resolve("");
+      uploadFileInChunks(
+        file as File,
+        1024 ** 2 * 10,
+        Api("employee/tender/form/status/" + id),
+        dto
+      )
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
   function sendData(dto: DtoType) {
     if (typeof tender === "object") {
       setFormStatus(FetchStatusEnum.LOADING);
       setCheckDialogOpen(false);
-      axios
-        .post(
-          Api("employee/tender/form/status/" + id),
-          objectToFormData({
-            ...dto,
-            image: file,
-            user_type: userType,
-          })
-        )
+      sendImage({
+        ...dto,
+        user_type: userType,
+      })
+        // axios
+        //   .post(
+        //     Api("employee/tender/form/status/" + id),
+        //     objectToFormData({
+        //       ...dto,
+        //       user_type: userType,
+        //     })
+        //   )
         .then((res) => {
           console.log(res);
           close();

@@ -6,7 +6,6 @@ import {
   useMapEvents,
   Polyline,
   Polygon,
-  Popup,
 } from "react-leaflet";
 import { Icon, LeafletMouseEvent } from "leaflet";
 import { Box, Stack } from "@mui/material";
@@ -29,7 +28,7 @@ const MapClickHandler: React.FC<MapClickHandlerProps> = ({ onMapClick }) => {
 export function ShowMap({ positionClick, lat, long }: PropsType) {
   const customIcon = new Icon({
     iconUrl: img1,
-    iconSize: [20, 20],
+    iconSize: [50, 50],
   });
 
   let centerLat = 0,
@@ -39,7 +38,6 @@ export function ShowMap({ positionClick, lat, long }: PropsType) {
     positionClick.forEach(([lat, lng]) => {
       centerLat += lat;
       centerLong += lng;
-      console.log("lat lng types :", typeof lat, typeof lng);
     });
     centerLat /= positionClick.length;
     centerLong /= positionClick.length;

@@ -1,8 +1,5 @@
-import {
-  KeyToArabic,
-  KeyWithArabic,
-  RequestDetails,
-} from "../types/RequestDetails";
+import { KeyToArabic, KeyWithArabic } from "../types";
+import { RequestDetails } from "../types/RequestDetails";
 import { formatDate } from "./formateDate";
 
 export const keyToArabic: KeyToArabic[] = [

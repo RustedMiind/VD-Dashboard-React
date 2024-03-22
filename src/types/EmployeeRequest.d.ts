@@ -1,20 +1,43 @@
+import { EmployeeRequestType } from "../pages/employees/requests/EmployeeRequest.enum";
 import { DepartmentEmployee } from "./DepartmentEmployee";
 import { EmployeeType } from "./Employee";
+import { RequestDetails } from "./RequestDetails";
+import { Requestable } from "./Requestable";
 
 export interface EmployeeRequest {
   id: number;
-  requestable_id: RequestableIdType;
-  requestable_type: string;
-  employee_id: number;
   employee?: EmployeeType;
+  car_type?: string;
+  number_car?: string;
+  employee_id: number;
   created_at: string;
   updated_at: string;
-  requestable: Requestable;
-  nextStep: NextStep | null;
-  // steps_of_approval: StepOfApproval[] | null;
-  checkedSteps: StepOfApproval[] | null;
+  typeInArabic?: string;
+  name?: string;
+  responsible?: string;
+  time_from?: string;
+  time_to?: string;
+  time_valid_in_seconds?: string;
+  time_valid_to?: string;
+  latitude?: string;
+  longitude?: string;
+  address?: string;
+  project_name?: string;
+  description?: string;
+  amount?: number;
+  type: EmployeeRequestType;
+  duration?: string;
+  date?: string;
+  salary_first?: number;
+  requestable?: Requestable;
+  exchange_date?: string;
+  steps_of_approval?: StepOfApproval[];
+  requestable_type?: string;
+  requestable_id?: number;
   status: RequestStatusType;
-  departmentName: string | null;
+  departmentName?: string;
+  nextStep?: NextStep;
+  checkedSteps: StepOfApproval[] | null;
 }
 
 interface NextStep {
@@ -29,6 +52,19 @@ interface NextStep {
   type: number;
   hasAccess: boolean;
 }
+
+export type LastAdvance = {
+  amount: number;
+  balance: number;
+};
+
+export type KeyToArabic = { name: string; key: string };
+
+export type KeyWithArabic = {
+  name: string;
+  value: unknown;
+  key: string;
+};
 /*
 {
     "id": 112,

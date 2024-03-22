@@ -34,6 +34,7 @@ import {
   disableDateAfter,
   disableDateBefore,
 } from "../../../../../methods/DayjsDatePicker";
+import { DateFormatString } from "../../../../../constants/DateFormat";
 const type_id = [
   { name: "منافسة عامه", value: 1 },
   { name: "منافسة محدده", value: 2 },
@@ -206,13 +207,16 @@ export default function MainDataForm() {
         <AddLabelToEl label="تاريخ التقديم المطلوب">
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
-            disablePast
+            // disablePast
             value={dayjs(form.applyDate)}
-            shouldDisableTime={disableDateAfter(dayjs(form.endDate))}
-            shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
+            // shouldDisableTime={disableDateAfter(dayjs(form.endDate))}
+            // shouldDisableDate={disableDateAfter(dayjs(form.endDate))}
             onChange={(date) => {
               dispatch(
-                generateReducerAction("SET_APPLY_DATE", date?.format() || "")
+                generateReducerAction(
+                  "SET_APPLY_DATE",
+                  date?.format(DateFormatString) || ""
+                )
               );
             }}
             {...inputProps}
@@ -220,7 +224,7 @@ export default function MainDataForm() {
         </AddLabelToEl>
       </GridItem>
       <GridItem>
-        <AddLabelToEl label="الجهة الحكومية" required>
+        <AddLabelToEl label="اسم العميل" required>
           <SelectWithFilter
             id="outlined-select-currency"
             size="small"
@@ -247,13 +251,16 @@ export default function MainDataForm() {
         <AddLabelToEl label="تاريخ انتهاء المنافسة" required>
           <DateTimePicker
             slotProps={{ textField: { fullWidth: true, size: "small" } }}
-            disablePast
-            shouldDisableTime={disableDateBefore(dayjs(form.applyDate))}
-            shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
+            // disablePast
+            // shouldDisableTime={disableDateBefore(dayjs(form.applyDate))}
+            // shouldDisableDate={disableDateBefore(dayjs(form.applyDate))}
             value={dayjs(form.endDate)}
             onChange={(date) => {
               dispatch(
-                generateReducerAction("SET_END_DATE", date?.format() || "")
+                generateReducerAction(
+                  "SET_END_DATE",
+                  date?.format(DateFormatString) || ""
+                )
               );
             }}
             {...inputProps}

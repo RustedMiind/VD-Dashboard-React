@@ -23,7 +23,6 @@ import usePermissions from "./Permissions/hook";
 import { Permission } from "./constants/Permission";
 import FormsSection from "./pages/soilSection/Forms";
 import SoilSection from "./pages/soilSection";
-// import ForTest from "./pages/forTest";
 import CreateOrUpdateDesign from "./pages/designs/CreateOrUpdate";
 import NotFoundPage from "./pages/NotFound/Index";
 import DesignStructurePage from "./pages/designs/DesignStructure";
@@ -38,6 +37,18 @@ import WorkOrdersTypesDetails from "./pages/electricity/workOrdersTypesDetails";
 import FollowUpEmployees from "./pages/electricity/FollowUpEmployees";
 import WorkOrdersPage from "./pages/electricity/workOrders";
 import CreateOrUpdateWorkOrder from "./pages/electricity/workOrders/Add";
+import AddRequest from "./pages/soilSection/soilRequest/Table/AddRequest";
+import EmployeeRequest from "./pages/employees/request";
+import ClientRequest from "./pages/clients/request";
+import AnnouncementsPage from "./pages/ApplicationSettings/announcement/main";
+import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announcement";
+import InfrastructureContractsDetails from "./pages/contracts/InfrastructureContractsDetails";
+import CommunicationPeople from "./pages/ApplicationSettings/communication-people/main";
+import StoriesPage from "./pages/ApplicationSettings/stories/main";
+import SetStory from "./pages/ApplicationSettings/stories/set-story";
+import MobileServicesMainPage from "./pages/ApplicationSettings/services/main";
+import SetMobileServicePage from "./pages/ApplicationSettings/services/set-service";
+
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -55,6 +66,8 @@ function RoutesComponent() {
           {hasPermission(Permission.ATTENDANCE_REQUESTS_VIEW) && (
             <Route path="requests" element={<EmplyeesRequests />} />
           )}
+
+          <Route path="requests/:requestId" element={<EmployeeRequest />} />
         </Route>
         <Route path="datalib">
           <Route path="" element={<>{/* Dashboard Settings Page */}</>} />
@@ -89,6 +102,7 @@ function RoutesComponent() {
           {hasPermission(Permission.CLIENT_REQUESTS_VIEW) && (
             <Route path="requests" element={<ClientRequests />} />
           )}
+          <Route path="requests/:requestId" element={<ClientRequest />} />
         </Route>
         <Route path="mytasks" element={<MyTasks />} />
         <Route path="envoy">
@@ -100,7 +114,10 @@ function RoutesComponent() {
             <Route path="" element={<WorkOrdersPage />} />
             <Route path="add" element={<CreateOrUpdateWorkOrder />} />
             <Route path="edit/:id" element={<CreateOrUpdateWorkOrder />} />
-            <Route path="show/:id" element={<CreateOrUpdateWorkOrder show={true}/>} />
+            <Route
+              path="show/:id"
+              element={<CreateOrUpdateWorkOrder show={true} />}
+            />
           </Route>
           <Route path="workordertypes">
             <Route path="" element={<WorkOrderPage />} />
@@ -108,7 +125,7 @@ function RoutesComponent() {
             <Route path="edit/:id" element={<CreateOrUpdateWorkOrderType />} />
             <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
           </Route>
-            <Route path="FollowUpEmployees" element={<FollowUpEmployees/>} />
+          <Route path="FollowUpEmployees" element={<FollowUpEmployees />} />
         </Route>
         {hasAnyOfPermissions([
           Permission.TENDERS_SHOW,
@@ -173,6 +190,9 @@ function RoutesComponent() {
             {hasPermission(Permission.SOIL_SHOW) && (
               <Route path="showtask/:id" element={<SoilDetails />} />
             )}
+            {hasPermission(Permission.SOIL_SHOW) && (
+              <Route path="addrequest/:id" element={<AddRequest />} />
+            )}
           </Route>
         </Route>
 
@@ -195,6 +215,30 @@ function RoutesComponent() {
               <Route path="edit" element={<CreateContracts type="edit" />} />
             )}
           </Route>
+          <Route
+            path="details/:id"
+            element={<InfrastructureContractsDetails />}
+          />
+        </Route>
+
+        <Route path="announcements">
+          <Route path="" element={<AnnouncementsPage />} />
+          <Route path="edit/:id" element={<SetAnnouncement />} />
+          <Route path="create" element={<SetAnnouncement />} />
+        </Route>
+        <Route path="stories">
+          <Route path="" element={<StoriesPage />} />
+          <Route path="create" element={<SetStory />} />
+          <Route path="edit/:storyId" element={<SetStory />} />
+        </Route>
+        <Route path="mobile-services">
+          <Route path="" element={<MobileServicesMainPage />} />
+          <Route path="create" element={<SetMobileServicePage />} />
+          <Route path="edit/:id" element={<SetMobileServicePage />} />
+        </Route>
+
+        <Route path="communication">
+          <Route path="" element={<CommunicationPeople />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
