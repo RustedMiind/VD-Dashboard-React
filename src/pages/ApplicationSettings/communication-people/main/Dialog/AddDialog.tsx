@@ -63,15 +63,17 @@ export default function AddDialog({
     }
   };
   useEffect(() => {
-    axios
-      .get<{ contact_us: CardDataType }>(
-        Api(`employee/client/contact-us/${idToEdit}`)
-      )
-      .then((res) => {
-        setEditData(res.data.contact_us);
-      })
-      .catch((err) => {})
-      .finally(() => {});
+    if (idToEdit) {
+      axios
+        .get<{ contact_us: CardDataType }>(
+          Api(`employee/client/contact-us/${idToEdit}`)
+        )
+        .then((res) => {
+          setEditData(res.data.contact_us);
+        })
+        .catch((err) => {})
+        .finally(() => {});
+    }
   }, [idToEdit]);
   useEffect(() => {
     if (editData && type == "edit") {

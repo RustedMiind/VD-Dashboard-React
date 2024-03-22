@@ -8,34 +8,33 @@ import CommunicationCard from "./CommunicationCard";
 import CenteredPagination from "../../../../components/CenteredPagination";
 import { useSnackbar } from "notistack";
 import AddDialog from "./Dialog/AddDialog";
+import AddIcon from "@mui/icons-material/Add";
+import Table from "./Table";
 
-export interface RootResponse {
-  contact_us: LaravelPagination<CommunicationPerson[]>;
-  search: unknown[];
+interface RootResponse {
   message: string;
-  status: boolean;
+  outside: CommunicationPerson[];
+  inside: CommunicationPerson[];
 }
 
-function GetCommunication(
-  params?: unknown
-): Promise<RootResponse["contact_us"]> {
+function GetCommunication(params?: unknown): Promise<RootResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .get<RootResponse>(Api("employee/client/contact-us"), { params })
+      .get<RootResponse>(Api("employee/client/contact-us"), {
+        headers: { from: "application" },
+      })
       .then(({ data }) => {
-        resolve(data.contact_us);
+        resolve(data);
       })
       .catch(reject);
   });
 }
 
 function CommunicationPeople() {
-  const [communication, setCommunications] = useState<
-    RootResponse["contact_us"] | undefined
-  >(undefined);
-  const updateCommunication = (
-    partial: Partial<RootResponse["contact_us"]>
-  ) => {
+  const [communication, setCommunications] = useState<RootResponse | undefined>(
+    undefined
+  );
+  const updateCommunication = (partial: Partial<RootResponse>) => {
     setCommunications(
       communication ? { ...communication, ...partial } : undefined
     );
@@ -51,7 +50,7 @@ function CommunicationPeople() {
     setOpen(!open);
   }
   function CommunicationData() {
-    GetCommunication({ page: communication?.current_page })
+    GetCommunication()
       .then(setCommunications)
       .catch((err) => {
         enqueueSnackbar("تعذر في تجميل بيانات المستخدمين");
@@ -59,11 +58,11 @@ function CommunicationPeople() {
   }
   useEffect(() => {
     CommunicationData();
-  }, [communication?.current_page]);
-  useEffect(() => {
-    communication?.data.map((person) => arr.push(person.id));
-    setDeleteAll(arr);
   }, []);
+  // useEffect(() => {
+  //   communication?.data.map((person) => arr.push(person.id));
+  //   setDeleteAll(arr);
+  // }, []);
   return (
     <>
       {/* Create and Update Dialog */}
@@ -79,8 +78,9 @@ function CommunicationPeople() {
                 handleClose();
                 setType("add");
               }}
+              startIcon={<AddIcon />}
             >
-              اضافة
+              اضافة مسؤول تواصل جديد
             </Button>
             {/* <Button
               color="error"
@@ -95,23 +95,44 @@ function CommunicationPeople() {
         {/* Search Component */}
         <Box>
           <Grid container spacing={2}>
-            {communication?.data.map((person) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} xl={12 / 5}>
-                <CommunicationCard
-                  person={person}
-                  handleClose={handleClose}
-                  setType={setType}
-                  setIdToEdit={setIdToEdit}
-                  CommunicationData={CommunicationData}
-                />
-              </Grid>
-            ))}
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h6" gutterBottom>
+                داخل المملكة
+              </Typography>
+              <Table>
+                {communication?.inside.map((person) => (
+                  <CommunicationCard
+                    person={person}
+                    handleClose={handleClose}
+                    setType={setType}
+                    setIdToEdit={setIdToEdit}
+                    CommunicationData={CommunicationData}
+                  />
+                ))}
+              </Table>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h6" gutterBottom>
+                خارج المملكة
+              </Typography>
+              <Table>
+                {communication?.outside.map((person) => (
+                  <CommunicationCard
+                    person={person}
+                    handleClose={handleClose}
+                    setType={setType}
+                    setIdToEdit={setIdToEdit}
+                    CommunicationData={CommunicationData}
+                  />
+                ))}
+              </Table>
+            </Grid>
           </Grid>
-          <CenteredPagination
+          {/* <CenteredPagination
             page={communication?.current_page || 1}
             count={communication?.last_page || 1}
             onChange={(e, page) => updateCommunication({ current_page: page })}
-          />
+          /> */}
         </Box>
         <AddDialog
           open={open}

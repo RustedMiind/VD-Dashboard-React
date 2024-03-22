@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { mediaSchema } from "../Media";
 
-export const mobileServiceSchema = z.object({
+const baseMobileServiceSchema = z.object({
   id: z.number(),
   name: z.string(),
   mobile_service_id: z
@@ -31,4 +31,8 @@ export const mobileServiceSchema = z.object({
   is_responsible_service: z.literal(0).or(z.literal(1)).nullable(),
 });
 
-export type MobileService = z.infer<typeof mobileServiceSchema>;
+export const mobileServiceSchema :z.ZodType<MobileService> = baseMobileServiceSchema.extend({
+    children: z.lazy(() => mobileServiceSchema.array().optional()),
+}) as z.ZodType<MobileService>;
+
+export type MobileService = z.infer<typeof baseMobileServiceSchema> & {children?:MobileService[]};
