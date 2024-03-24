@@ -172,7 +172,7 @@ function SetAnnouncement() {
                 {...TextFieldCommonProps}
               />
             </AddLabelToEl>
-            <ErrorMessage> {errors.body?.message} </ErrorMessage>
+            <ErrorMessage> {errors.duration?.message} </ErrorMessage>
           </GridItem>
           <GridItem>
             <AddLabelToEl label="صورة الاعلان">
