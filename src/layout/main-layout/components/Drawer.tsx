@@ -286,7 +286,7 @@ const routesCollections: RoutesCollectionType[] = [
         react: true,
       },
       {
-        name: "حدمات التطبيق",
+        name: "خدمات التطبيق",
         path: "/mobile-services",
         react: true,
       },
