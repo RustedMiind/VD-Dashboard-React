@@ -14,8 +14,8 @@ function DeleteDialog({ open, setOpen, CommunicationData, id }: PropsType) {
   }
   function handleDelete() {
     axios
-      .delete(Api("employee/client/contact-us/multi-delete"), {
-        data: { ids: [id] },
+      .post(Api("employee/client/contact-us/multi-delete"), {
+        ids: [id],
       })
       .then((res) => {
         CommunicationData();
