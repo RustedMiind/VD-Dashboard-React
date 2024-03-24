@@ -180,9 +180,18 @@ function SetMobileServicePage() {
       enqueueSnackbar("تم حفظ الخدمة بنجاح");
       navigate("/react/mobile-services");
     } catch (err) {
-      enqueueSnackbar(" تعذر في حفظ الخدمة", {
-        variant: "error",
+      const errorSchema = z.object({
+        response: z.object({ data: z.object({ message: z.string() }) }),
       });
+      const validationError = errorSchema.safeParse(err);
+      enqueueSnackbar(
+        (validationError.success &&
+          validationError.data.response.data.message) ||
+          " تعذر في حفظ الخدمة",
+        {
+          variant: "error",
+        }
+      );
     }
   });
 
@@ -258,6 +267,7 @@ function SetMobileServicePage() {
               render={({ field }) => (
                 <CustomFilePond
                   {...field}
+                  maxFiles={7 - (service?.pictures?.banners?.length || 0)}
                   onupdatefiles={(files) => {
                     field.onChange(files.map((file) => file.file));
                   }}
