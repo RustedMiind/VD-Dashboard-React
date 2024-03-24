@@ -176,10 +176,10 @@ function MobileServicesMainPage() {
       .then(() => {
         requestServices();
         setDeleteDialogOpen(false);
-        enqueueSnackbar("تم حذف الاعلان بنجاح");
+        enqueueSnackbar("تم حذف الخدمة بنجاح");
       })
       .catch((err) => {
-        enqueueSnackbar("تعذر في حذف الاعلان", { variant: "error" });
+        enqueueSnackbar("تعذر في حذف الخدمة", { variant: "error" });
       });
   };
   useEffect(requestServices, []);

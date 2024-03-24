@@ -17,10 +17,10 @@ function DeleteDialog({
 }) {
   return (
     <Dialog {...props}>
-      <DialogTitle>حذف الاعلان</DialogTitle>
+      <DialogTitle>حذف الخدمة</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          هل انت متأكد من رغبتك في حذف اعلان ({service?.name})
+          هل انت متأكد من رغبتك في حذف الخدمة ({service?.name})
         </DialogContentText>
       </DialogContent>
       <DialogActions>
