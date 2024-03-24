@@ -45,8 +45,6 @@ const ServiceCard = ({
   onDelete: (service: MobileService) => void;
   toggleTheme?: boolean;
 }) => {
-  const [expanded, setExpanded] = useState(false);
-
   return (
     <Stack>
       <Accordion
@@ -69,7 +67,8 @@ const ServiceCard = ({
           ) : undefined}
         </AccordionSummary>
         <AccordionDetails>
-          {service.children && service.children.length > 0 ? (
+          {service.children ? (
+            // && service.children.length > 0
             <Stack spacing={1}>
               {service.children.map((child) => (
                 <ServiceCard
