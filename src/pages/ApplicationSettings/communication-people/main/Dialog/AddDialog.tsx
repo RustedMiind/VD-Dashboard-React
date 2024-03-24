@@ -166,7 +166,6 @@ export default function AddDialog({
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      ;
     </>
   );
 }
