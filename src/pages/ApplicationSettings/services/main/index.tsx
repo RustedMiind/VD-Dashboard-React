@@ -24,6 +24,7 @@ import {
   mobileServiceSchema,
 } from "../../../../types/MobileServices";
 import { z } from "zod";
+import ServiceMedia from "../set-service/ServiceMedia";
 
 export interface Root {
   mobile_services: unknown[];
@@ -67,7 +68,7 @@ const ServiceCard = ({
           ) : undefined}
         </AccordionSummary>
         <AccordionDetails>
-          {service.children ? (
+          {service.children && service.is_responsible_service ? (
             // && service.children.length > 0
             <Stack spacing={1}>
               {service.children.map((child) => (
@@ -97,6 +98,7 @@ const ServiceCard = ({
               <Typography variant="body1">{service.features}</Typography>
             </Stack>
           )}
+          <ServiceMedia service={service} showOnly seedService={() => {}} />
         </AccordionDetails>
         <AccordionActions sx={{ gap: 1 }}>
           <Fab
