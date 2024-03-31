@@ -101,7 +101,7 @@ function AttachmentSection() {
               <TableRow>
                 <TableCell>كود المرفق</TableCell>
                 <TableCell>اسم المرفق</TableCell>
-                <TableCell>رقم المرفق</TableCell>
+                <TableCell>وصف المرفق</TableCell>
                 <TableCell>نوع المرفق</TableCell>
                 <TableCell>الملف المرفق</TableCell>
                 <TableCell>الاعدادات</TableCell>

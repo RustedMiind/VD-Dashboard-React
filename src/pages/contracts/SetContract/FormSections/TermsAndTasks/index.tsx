@@ -44,6 +44,8 @@ type PandT = {
   is_percent: boolean;
   is_treatment: boolean;
   is_attachment: boolean;
+  is_mission: boolean;
+  is_Letter: boolean;
 };
 type editedDataType = {
   id: number;
@@ -64,6 +66,8 @@ type editedDataType = {
     is_progress_bar: "1" | "0";
     is_processing: "1" | "0";
     is_attachment: "1" | "0";
+    is_mission: "1" | "0";
+    is_Letter: "1" | "0";
   }[];
   created_at: string;
   description: string;
@@ -85,6 +89,8 @@ type SubItem = {
   is_progress_bar: "1" | "0";
   is_processing: "1" | "0";
   is_attachment: "0" | "1";
+  is_mission: "1" | "0";
+  is_Letter: "1" | "0";
 };
 
 export default function TermsAndTasksOFContract(props: propsType) {
@@ -128,8 +134,11 @@ export default function TermsAndTasksOFContract(props: propsType) {
       is_attachment: false,
       is_percent: false,
       is_treatment: false,
+      is_mission: false,
+      is_Letter: false,
     },
   ]);
+  const [processLoading, setProcessLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -206,6 +215,8 @@ export default function TermsAndTasksOFContract(props: propsType) {
             is_percent: ele.is_progress_bar == "1" ? true : false,
             is_treatment: ele.is_processing == "1" ? true : false,
             is_attachment: ele.is_attachment == "1" ? true : false,
+            is_mission: ele.is_mission == "1" ? true : false,
+            is_Letter: ele.is_Letter == "1" ? true : false,
           };
         })
       );
@@ -265,12 +276,15 @@ export default function TermsAndTasksOFContract(props: propsType) {
         is_progress_bar: ele.is_percent ? 1 : 0,
         is_processing: ele.is_treatment ? 1 : 0,
         is_attachment: ele.is_attachment ? 1 : 0,
+        is_mission: ele.is_mission ? 1 : 0,
+        is_Letter: ele.is_Letter ? 1 : 0,
         name: ele.name,
       })),
       attachments: inputFiles,
       employees: setselectedEngineeras.map((ele) => ele.id),
     };
     return new Promise((resolve, reject) => {
+      setProcessLoading(true);
       (!editIstanceId
         ? axios.post(
             Api(`employee/contract/items/store`),
@@ -285,16 +299,20 @@ export default function TermsAndTasksOFContract(props: propsType) {
           if (editIstanceId)
             enqueueSnackbar("تم تعديل بنود و مهام العقد بنجاح");
           else enqueueSnackbar("تم حفظ بنود و مهام العقد بنجاح");
+          setProcessLoading(false);
           resolve(res);
         })
         .catch((err) => {
           console.log("Error101 :-", err);
           enqueueSnackbar("تعذر الحفظ", { variant: "error" });
+          setProcessLoading(false);
           reject(err);
-        })
-        .finally(() => {
-          setLoading(false);
         });
+    }).catch((err) => {
+      console.log("Error101 :-", err);
+      enqueueSnackbar("تعذر الحفظ", { variant: "error" });
+      setProcessLoading(false);
+      setLoading(false);
     });
   });
 
@@ -335,7 +353,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       noValidate
       autoComplete="on"
     >
-      {isSubmitting && (
+      {processLoading && (
         <Box
           sx={{
             position: "absolute",
@@ -373,7 +391,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                 width: mainFieldsShow.pandName ? "70%" : "4%",
                 transition: "width 0.4s ease",
               }}
-              disabled={isSubmitting}
+              disabled={processLoading}
               {...register("name")}
               InputProps={{
                 endAdornment: (
@@ -407,7 +425,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                 width: mainFieldsShow.pandDescription ? "70%" : "4%",
                 transition: "width 0.4s ease",
               }}
-              disabled={isSubmitting}
+              disabled={processLoading}
               {...register("description")}
               InputProps={{
                 endAdornment: (
@@ -450,7 +468,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                     width: mainFieldsShow.taskManager ? "70%" : "4%",
                     transition: "width 0.4s ease",
                   }}
-                  disabled={isSubmitting}
+                  disabled={processLoading}
                   fullWidth
                   placeholder="اختيار مدير المهمة"
                   InputProps={{
@@ -521,7 +539,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
           <TextField
             type="date"
             fullWidth
-            disabled={isSubmitting}
+            disabled={processLoading}
             {...register("start_date")}
             onChange={(e) => {
               if (getValues("end_date")) {
@@ -547,7 +565,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
         >
           <Typography>تاريخ الانتهاء</Typography>
           <TextField
-            disabled={isSubmitting}
+            disabled={processLoading}
             type="date"
             fullWidth
             {...register("end_date")}
@@ -590,7 +608,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       >
         <Typography variant="h6">اضافة مستخدمين للمهام</Typography>
         <ContractAddUsersSelect
-          disabled={isSubmitting}
+          disabled={processLoading}
           users={engineers}
           selectedUsers={setselectedEngineeras}
           setValue={setSetselectedEngineeras}
@@ -782,7 +800,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       {subPands.map((pand, idx) => {
         return (
           <SinglePand
-            disabled={isSubmitting}
+            disabled={processLoading}
             key={`pand_${idx}_${Math.random()}`}
             users={setselectedEngineeras}
             subPandsArr={subPands}
@@ -804,7 +822,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
             color: "#0c4f98",
             justifyContent: "flex-start",
           }}
-          disabled={isSubmitting}
+          disabled={processLoading}
           onClick={() => {
             setSubPands((prev) => [
               ...prev,
@@ -814,6 +832,8 @@ export default function TermsAndTasksOFContract(props: propsType) {
                 is_attachment: false,
                 is_percent: false,
                 is_treatment: false,
+                is_mission: false,
+                is_Letter: false,
               },
             ]);
           }}
@@ -824,7 +844,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       {/* Save */}
       <Grid item xs={1} marginY={4}>
         <LoadingButton
-          loading={isSubmitting}
+          loading={processLoading}
           type="submit"
           variant="contained"
           color="primary"
