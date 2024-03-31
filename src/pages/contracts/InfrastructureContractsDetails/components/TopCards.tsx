@@ -13,11 +13,14 @@ import EditRaioDialog from "./EditDialog";
 import { useContext, useState } from "react";
 import "./TopCards.scss";
 import { ContractDetailsContext, ContractIncomeDataType } from "..";
+import { useUser } from "../../../../contexts/user/user";
 
 export default function TopCards() {
   // declare our component variables/state
   const [openDialog, setOpenDialog] = useState(false);
   const contractData = useContext(ContractDetailsContext);
+  const { user } = useUser();
+
   return (
     <Grid
       item
@@ -444,24 +447,26 @@ export default function TopCards() {
         >
           نسب الانجاز الكلية
         </Typography>
-        <Button
-          sx={{
-            bgcolor: "#fff",
-            position: "absolute",
-            right: "5%",
-            boxShadow: "1px 1px 2px 2px lightgray",
-            transition: "all 0.5 ease-in-out",
-            ":hover": {
-              color: "#fff",
-              bgcolor: "primary.main",
-              transform: "scale(1.056)",
-            },
-          }}
-          startIcon={<SettingsOutlinedIcon />}
-          onClick={() => setOpenDialog(true)}
-        >
-          تعديل
-        </Button>
+        {user?.employee_id === contractData?.ManagerId && (
+          <Button
+            sx={{
+              bgcolor: "#fff",
+              position: "absolute",
+              right: "5%",
+              boxShadow: "1px 1px 2px 2px lightgray",
+              transition: "all 0.5 ease-in-out",
+              ":hover": {
+                color: "#fff",
+                bgcolor: "primary.main",
+                transform: "scale(1.056)",
+              },
+            }}
+            startIcon={<SettingsOutlinedIcon />}
+            onClick={() => setOpenDialog(true)}
+          >
+            تعديل
+          </Button>
+        )}
         <Grid container sx={{ paddingBottom: "1rem" }}>
           <Grid item xs={4}>
             <DoneAndReminder column={true} />

@@ -75,6 +75,7 @@ export default function InfrastructureContractsDetails() {
           wayOfShow: showWays,
           card_image: data?.data?.data?.card_image,
           users: _user,
+          ManagerId: data?.data?.data?.employee_id,
         });
       })
       .catch((err) => {
@@ -116,5 +117,6 @@ export type ContractIncomeDataType = {
   numberOfPieces: string;
   wayOfShow: string;
   card_image: string;
+  ManagerId: number;
   users: { id: number; name: string }[];
 };

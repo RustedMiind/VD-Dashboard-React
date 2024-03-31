@@ -42,7 +42,7 @@ function SetDialog(props: PropsType) {
     e.preventDefault();
     if (ContractDetails.contract?.id) {
       setSendState("loading");
-
+      console.log("Data in state::", state);
       (props.edit
         ? axios.post(
             Api(`employee/contract/lever/${props.attachmentData.id}`),
@@ -123,7 +123,7 @@ function SetDialog(props: PropsType) {
           <Grid container>
             <Grid p={1} item md={6}>
               <Typography>
-                رقم المرفق
+                وصف المرفق
                 {"  "}
                 <RequiredSymbol />
               </Typography>
@@ -158,7 +158,7 @@ function SetDialog(props: PropsType) {
               <ErrorTypography>{errorState.name}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
-              <Typography>اسم المرفق</Typography>
+              <Typography>نوع المرفق</Typography>
               <TextField
                 fullWidth
                 size="small"

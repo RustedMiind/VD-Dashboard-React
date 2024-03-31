@@ -49,9 +49,7 @@ export function reducer(
     case "SET_NAME":
       return { ...state, name: action.payload };
     case "SET_CODE":
-      if (isStringAllNumbers(action.payload))
-        return { ...state, code: action.payload };
-      else return state;
+      return { ...state, code: action.payload };
     case "SET_TYPE":
       return { ...state, type: action.payload };
     case "SET_FILE":
