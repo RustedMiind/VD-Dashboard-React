@@ -1,4 +1,12 @@
-import { Box, Fab, Grid, GridProps, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Fab,
+  Grid,
+  GridProps,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useContext, useState } from "react";
 import ForumSharpIcon from "@mui/icons-material/ForumSharp";
 // import ChatBox from "../components/ChatBox";
@@ -6,6 +14,7 @@ import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSha
 import "../../../components/TopCards.scss";
 import { ContractDetailsContext } from "../../..";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
+import ChatBox from "../../../components/ChatBox";
 
 const GridItem = (props: GridProps) => (
   <Grid item xs={12} sm={6} lg={4} xl={3} {...props} />
@@ -18,7 +27,7 @@ const DetailsItem = ({
   children?: React.ReactNode;
 }) => (
   <GridItem>
-    <AddLabelToEl label={label}>
+    <AddLabelToEl label={label} labelTypographyProps={{ gutterBottom: false }}>
       <Typography fontWeight={700}>{children}</Typography>
     </AddLabelToEl>
   </GridItem>
@@ -28,86 +37,51 @@ export default function DetailsView() {
   // * declare component state variables
   const [showChatBox, setShowChatBox] = useState<Boolean>(false);
   const contractData = useContext(ContractDetailsContext);
-  let mainInfo = [
-    { id: `mI0_${Math.random()}`, title: "نوع العقد", value: "البنية التحتية" },
-    {
-      id: `mI1_${Math.random()}`,
-      title: "الادارة",
-      value: contractData?.managementName,
-    },
-    {
-      id: `mI2_${Math.random()}`,
-      title: "رقم العقد",
-      value: contractData?.contractNumber,
-    },
-    {
-      id: `mI3_${Math.random()}`,
-      title: "اسم المشروع",
-      value: contractData?.name,
-    },
-    {
-      id: `mI4_${Math.random()}`,
-      title: "العميل",
-      value: contractData?.clientName,
-    },
-    {
-      id: `mI5_${Math.random()}`,
-      title: "نوع الفرع",
-      value: contractData?.branchName,
-    },
-    {
-      id: `mI6_${Math.random()}`,
-      title: "مدة العقد",
-      value: contractData?.contractPeriod,
-    },
-    {
-      id: `mI7_${Math.random()}`,
-      title: "تاريخ العقد",
-      value: contractData?.contractDate,
-    },
-    {
-      id: `mI8_${Math.random()}`,
-      title: "قيمة العقد",
-      value: `${contractData?.contractAmount} رس`,
-    },
-    {
-      id: `mI9_${Math.random()}`,
-      title: "المهندس المسؤول",
-      value: contractData?.engineerName,
-    },
-    {
-      id: `mI10_${Math.random()}`,
-      title: "صورة العقد",
-      value: contractData?.card_image,
-    }, //file here
-    {
-      id: `mI11_${Math.random()}`,
-      title: "عدد القطع",
-      value: contractData?.numberOfPieces,
-    },
-    {
-      id: `mI12_${Math.random()}`,
-      title: "الموقع",
-      value: contractData?.location,
-    },
-    {
-      id: `mI13_${Math.random()}`,
-      title: "طريقة العرض",
-      value: contractData?.wayOfShow,
-    },
-    {
-      id: `mI14_${Math.random()}`,
-      title: "المساحة",
-      value: `${contractData?.area} م`,
-    },
-  ];
 
   return (
     <Stack sx={{ position: "relative" }}>
-      <Grid container>
+      <Grid container columnSpacing={1} rowSpacing={4}>
         <DetailsItem label="نوع العقد">البنية التحتية</DetailsItem>
+        <DetailsItem label="نوع الفرع">{contractData?.branchName}</DetailsItem>
+        <DetailsItem label="صورة العقد">
+          <Button
+            component={"a"}
+            target="_blank"
+            href={contractData?.card_image}
+          >
+            عرض الصورة
+          </Button>
+        </DetailsItem>
+        <DetailsItem label="طريقة العرض">{contractData?.wayOfShow}</DetailsItem>
         <DetailsItem label="الادارة">
           {contractData?.managementName}
+        </DetailsItem>
+        <DetailsItem label="مدة العقد">
+          {contractData?.contractPeriod}
+        </DetailsItem>
+        <DetailsItem label="المساحة">{contractData?.area} م</DetailsItem>
+        <DetailsItem label="رقم العقد">
+          {contractData?.managementName}
+        </DetailsItem>
+        <DetailsItem label="الادارة">
+          {contractData?.managementName}
+        </DetailsItem>
+        <DetailsItem label="تاريخ العقد">
+          {contractData?.contractDate}
+        </DetailsItem>
+        <DetailsItem label="الموقع">{contractData?.location}</DetailsItem>
+
+        <DetailsItem label="" />
+        <DetailsItem label="اسم المشروع">{contractData?.name}</DetailsItem>
+        <DetailsItem label="قيمة العقد">
+          {contractData?.contractAmount} ر.س.
+        </DetailsItem>
+
+        <DetailsItem label="" />
+        <DetailsItem label="" />
+        <DetailsItem label="العميل">{contractData?.clientName}</DetailsItem>
+        <DetailsItem label="المهندس المسؤول">
+          {contractData?.engineerName}
         </DetailsItem>
         {/* Complete the values based on the mainInfo array and remove the grid items below  */}
 
@@ -115,7 +89,7 @@ export default function DetailsView() {
         {/* btn */}
         {showChatBox && (
           <>
-            {/* <ChatBox /> */}
+            <ChatBox />
             <Box
               sx={{
                 position: "fixed",
