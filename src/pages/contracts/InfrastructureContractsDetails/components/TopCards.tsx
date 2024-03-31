@@ -10,14 +10,14 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import DoneAndReminder from "./DoneAndReminder";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import EditRaioDialog from "./EditDialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./TopCards.scss";
-import { ContractIncomeDataType } from "..";
+import { ContractDetailsContext, ContractIncomeDataType } from "..";
 
-export default function TopCards({ contractData }: TopCardsProps) {
+export default function TopCards() {
   // declare our component variables/state
   const [openDialog, setOpenDialog] = useState(false);
-
+  const contractData = useContext(ContractDetailsContext);
   return (
     <Grid
       item
@@ -478,7 +478,7 @@ export default function TopCards({ contractData }: TopCardsProps) {
               className="RatioCircularProgress"
             >
               <CircularProgress
-                style={{ width: "90px", }}
+                style={{ width: "90px" }}
                 variant="determinate"
                 color={"warning"}
                 value={85.5}
@@ -504,7 +504,3 @@ export default function TopCards({ contractData }: TopCardsProps) {
     </Grid>
   );
 }
-
-type TopCardsProps = {
-  contractData: ContractIncomeDataType | undefined;
-};

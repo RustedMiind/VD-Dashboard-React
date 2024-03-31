@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import TopCards from "./components/TopCards";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Stack } from "@mui/material";
 import TabsButtons from "./components/TabsButtons";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import BandInformation from "./Tabs/BandInformation";
+import BandInformation from "./Tabs-old/BandInformation";
 import axios from "axios";
 import { Api } from "../../../constants";
 import Loader from "../../../components/Loading/Loader";
+import TabsContainer from "./Tabs";
+
+export const ContractDetailsContext = createContext<
+  ContractIncomeDataType | undefined
+>(undefined);
 
 export default function InfrastructureContractsDetails() {
   // TODO::Declare our component state.
@@ -82,41 +87,15 @@ export default function InfrastructureContractsDetails() {
   if (loading) return <Loader title="جاري تحميل بيانات العقد" />;
   // *normal case
   return (
-    <Grid container xl={12}>
-      {/* row - top headers containers */}
-      <TopCards  contractData={contractData}  />
-      {/* Tabs Buttons */}
-      <TabsButtons />
-      {/* Add new pand */}
-      <Grid item xs={12} textAlign={"right"} marginY={"1rem"}>
-        <Button
-          sx={{
-            bgcolor: "primary.main",
-            color: "#fff",
-            borderRadius: "12px",
-            fontSize: "13px",
-            fontWeight: "600",
-            marginX: "10px",
-            paddingX: "1.2rem",
-            marginRight: "auto",
-            transition: "all 0.5s ease-in-out",
-            ":hover": {
-              bgcolor: "#fff",
-              color: "primary.main",
-              transform: "scale(1.056)",
-              boxShadow: "1px 1px 3px 3px lightgray",
-            },
-          }}
-          startIcon={<AddBoxOutlinedIcon />}
-          component={NavLink}
-          to="#"
-        >
-          انشاء بند
-        </Button>
-      </Grid>
-      {/* Show Active Tab */}
-      <BandInformation contractData={contractData} />
-    </Grid>
+    <ContractDetailsContext.Provider value={contractData}>
+      <Stack spacing={4}>
+        <Grid container>
+          {/* row - top headers containers */}
+          <TopCards />
+        </Grid>
+        <TabsContainer />
+      </Stack>
+    </ContractDetailsContext.Provider>
   );
 }
 
