@@ -42,11 +42,13 @@ import EmployeeRequest from "./pages/employees/request";
 import ClientRequest from "./pages/clients/request";
 import AnnouncementsPage from "./pages/ApplicationSettings/announcement/main";
 import SetAnnouncement from "./pages/ApplicationSettings/announcement/set-announcement";
+import InfrastructureContractsDetails from "./pages/contracts/InfrastructureContractsDetails";
 import CommunicationPeople from "./pages/ApplicationSettings/communication-people/main";
 import StoriesPage from "./pages/ApplicationSettings/stories/main";
 import SetStory from "./pages/ApplicationSettings/stories/set-story";
 import MobileServicesMainPage from "./pages/ApplicationSettings/services/main";
 import SetMobileServicePage from "./pages/ApplicationSettings/services/set-service";
+
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -213,6 +215,10 @@ function RoutesComponent() {
               <Route path="edit" element={<CreateContracts type="edit" />} />
             )}
           </Route>
+          <Route
+            path="details/:id"
+            element={<InfrastructureContractsDetails />}
+          />
         </Route>
 
         <Route path="announcements">

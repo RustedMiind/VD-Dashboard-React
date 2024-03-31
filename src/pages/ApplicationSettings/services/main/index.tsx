@@ -1,10 +1,14 @@
-import { Stack, Grid, GridProps, CardMedia, TextField } from "@mui/material";
-import { Announcement } from "../../../../types/Announcement";
-import Box from "@mui/material/Box";
+import { Stack, Grid, GridProps, CardMedia, Fab } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionActions from "@mui/material/AccordionActions";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Button from "@mui/material/Button";
+
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -13,16 +17,14 @@ import { NavLink } from "react-router-dom";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CenteredPagination from "../../../../components/CenteredPagination";
-import { LaravelPagination } from "../../../../types/LaravelPagination";
 import { useSnackbar } from "notistack";
-import SearchIcon from "@mui/icons-material/Search";
 import DeleteDialog from "./DeleteDialog";
 import {
   MobileService,
   mobileServiceSchema,
 } from "../../../../types/MobileServices";
 import { z } from "zod";
+import ServiceMedia from "../set-service/ServiceMedia";
 
 export interface Root {
   mobile_services: unknown[];
@@ -33,57 +35,92 @@ export interface Root {
 
 const mobileServicesArraySchema = z.array(mobileServiceSchema);
 
-const GridItem = (props: GridProps) => (
-  <Grid item xs={12} sm={12} md={6} lg={4} xl={3} {...props} />
-);
+const GridItem = (props: GridProps) => <Grid item xs={12} md={6} {...props} />;
 
 const ServiceCard = ({
   service,
   onDelete,
+  toggleTheme,
 }: {
   service: MobileService;
   onDelete: (service: MobileService) => void;
+  toggleTheme?: boolean;
 }) => {
   return (
-    <Card
-      elevation={2}
-      sx={{ height: 1, display: "flex", flexDirection: "column" }}
-    >
-      <CardMedia
-        sx={{ height: 200 }}
-        image={service.pictures?.image?.[0]?.original_url}
-      />
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          الخدمة رقم {service.id}
-        </Typography>
-        <Typography variant="h5" component="div">
+    <Stack>
+      <Accordion
+        sx={{
+          bgcolor: toggleTheme ? "background.default" : "background.paper",
+        }}
+        variant={service.is_responsible_service ? "outlined" : undefined}
+        // expanded={expanded}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           {service.name}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {service.specifications}
-        </Typography>
-        <Typography variant="body2">{service.description}</Typography>
-      </CardContent>
-      <CardActions>
-        <Button
-          startIcon={<EditIcon />}
-          component={NavLink}
-          to={`edit/${service.id}`}
-        >
-          تعديل الحدمة
-        </Button>
-        <Button
-          startIcon={<DeleteIcon />}
-          onClick={() => {
-            onDelete(service);
-          }}
-          color="error"
-        >
-          حذف الخدمة
-        </Button>
-      </CardActions>
-    </Card>
+          {service.is_responsible_service ? (
+            <Typography
+              color={"secondary.main"}
+              sx={{ ml: 1 }}
+              fontWeight={700}
+            >
+              خدمة ام
+            </Typography>
+          ) : undefined}
+        </AccordionSummary>
+        <AccordionDetails>
+          {service.children && service.is_responsible_service ? (
+            // && service.children.length > 0
+            <Stack spacing={1}>
+              {service.children.map((child) => (
+                <ServiceCard
+                  service={child}
+                  onDelete={onDelete}
+                  toggleTheme={!toggleTheme}
+                />
+              ))}
+            </Stack>
+          ) : (
+            <Stack spacing={0}>
+              <Typography variant="h6" fontWeight={700} gutterBottom>
+                تفاصيل الخدمة
+              </Typography>
+              <Typography variant="body2" fontWeight={700}>
+                اسم الخدمة
+              </Typography>
+              <Typography variant="body1">{service.name}</Typography>
+              <Typography variant="body2" fontWeight={700}>
+                وصف الخدمة
+              </Typography>
+              <Typography variant="body1">{service.description}</Typography>
+              <Typography variant="body2" fontWeight={700}>
+                مميزات الخدمة
+              </Typography>
+              <Typography variant="body1">{service.features}</Typography>
+            </Stack>
+          )}
+          <ServiceMedia service={service} showOnly seedService={() => {}} />
+        </AccordionDetails>
+        <AccordionActions sx={{ gap: 1 }}>
+          <Fab
+            component={NavLink}
+            to={`edit/${service.id}`}
+            color="info"
+            size="small"
+          >
+            <EditIcon />
+          </Fab>
+          <Fab
+            onClick={() => {
+              onDelete(service);
+            }}
+            size="small"
+            color="error"
+          >
+            <DeleteIcon />
+          </Fab>
+        </AccordionActions>
+      </Accordion>
+    </Stack>
   );
 };
 
@@ -140,10 +177,10 @@ function MobileServicesMainPage() {
       .then(() => {
         requestServices();
         setDeleteDialogOpen(false);
-        enqueueSnackbar("تم حذف الاعلان بنجاح");
+        enqueueSnackbar("تم حذف الخدمة بنجاح");
       })
       .catch((err) => {
-        enqueueSnackbar("تعذر في حذف الاعلان", { variant: "error" });
+        enqueueSnackbar("تعذر في حذف الخدمة", { variant: "error" });
       });
   };
   useEffect(requestServices, []);
@@ -166,7 +203,7 @@ function MobileServicesMainPage() {
             component={NavLink}
             to={"create"}
           >
-            اضافة حدمة جديد
+            اضافة خدمة جديد
           </Button>
         </Stack>
         <Stack

@@ -1,17 +1,17 @@
-import { Checkbox, IconButton } from "@mui/material";
+import { Checkbox, IconButton, Typography } from "@mui/material";
 import { TableCell } from "@mui/material";
 import { TableBody, TableRow } from "@mui/material";
 import { ChangeEvent, useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { ContractsContext } from "../../Context/ContractsContext";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function ContractsDataTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
   const toView = typeof contracts === "object" ? contracts?.data : undefined;
-
+  console.log("ASD 1::", toView);
   return (
     <TableBody>
       {toView?.map((request) => {
@@ -24,7 +24,19 @@ function ContractsDataTable(props: PropsType) {
                 onChange={props.CheckboxHandler(request.id)}
               />
             </TableCell>
-            <TableCell>{request.code}</TableCell>
+            <TableCell>
+              <TableCell>
+                <Typography
+                  component={NavLink}
+                  to={`details/${request.id}`}
+                  variant="body2"
+                  color={"primary.main"}
+                  fontWeight={700}
+                >
+                  {request.code}
+                </Typography>
+              </TableCell>
+            </TableCell>
             <TableCell>{request.type?.name}</TableCell>
             <TableCell>{request.client?.name}</TableCell>
             <TableCell>{request.branch?.name}</TableCell>

@@ -55,7 +55,7 @@ function DesignProjectsView() {
     axios
       .get<{ designs: Design[]; count: number }>(Api("client/design"), {
         params: { page, name: search },
-        headers: { from: "website" },
+        headers: { from: "dashboard" },
       })
       .then(({ data }) => {
         setLoadingStatus("none");

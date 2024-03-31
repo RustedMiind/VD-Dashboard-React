@@ -22,6 +22,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import BiotechIcon from "@mui/icons-material/Biotech";
+import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
 import { AdminUrl } from "../../../constants/AdminUrl";
 import { Permission } from "../../../constants/Permission";
 import usePermissions from "../../../Permissions/hook";
@@ -267,8 +268,8 @@ const routesCollections: RoutesCollectionType[] = [
     ],
   },
   {
-    name: "تحت التطوير",
-    icon: BiotechIcon,
+    name: "اعدادات التطبيق",
+    icon: AppSettingsAltIcon,
     routes: [
       {
         name: "الاعلانات",
@@ -285,7 +286,17 @@ const routesCollections: RoutesCollectionType[] = [
         path: "/stories",
         react: true,
       },
+      {
+        name: "خدمات التطبيق",
+        path: "/mobile-services",
+        react: true,
+      },
     ],
+  },
+  {
+    name: "تحت التطوير",
+    icon: BiotechIcon,
+    routes: [],
   },
 ];
 

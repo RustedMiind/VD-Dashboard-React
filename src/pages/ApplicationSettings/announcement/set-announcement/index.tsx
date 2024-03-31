@@ -58,6 +58,7 @@ export async function getAnnouncementById(
 const FormTypeSchema = z.object({
   title: z.string().min(4),
   body: z.string().min(4),
+  duration: z.string().optional(),
   date: z.string(), // Assuming date is a string in "YYYY-MM-DD" format
   image: z.instanceof(File).optional(), // Assuming 'image' is a file object
 });
@@ -110,6 +111,7 @@ function SetAnnouncement() {
         body: announcement.body,
         date: announcement.date,
         title: announcement.title,
+        duration: announcement.duration?.toString(),
       });
     }
   }, [announcement?.id]);
@@ -158,6 +160,19 @@ function SetAnnouncement() {
               />
             </AddLabelToEl>
             <ErrorMessage> {errors.body?.message} </ErrorMessage>
+          </GridItem>
+          <GridItem>
+            <AddLabelToEl label="يتكرر الاعلان كل">
+              <TextField
+                {...register("duration")}
+                type="number"
+                InputProps={{ endAdornment: "يوم" }}
+                multiline
+                placeholder="فارغة في حالة عدم تكرار الاعلان"
+                {...TextFieldCommonProps}
+              />
+            </AddLabelToEl>
+            <ErrorMessage> {errors.duration?.message} </ErrorMessage>
           </GridItem>
           <GridItem>
             <AddLabelToEl label="صورة الاعلان">

@@ -11,13 +11,15 @@ import {
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
 import { useEffect, useState } from "react";
 
-type userT = { id: number; name: string };
+type userT = { id: number; full_name: string };
 type PandT = {
   name: string;
   eng_id: number | undefined;
   is_percent: boolean;
   is_treatment: boolean;
   is_attachment: boolean;
+  is_mission: boolean;
+  is_Letter: boolean;
 };
 
 export default function SinglePand({
@@ -42,6 +44,8 @@ export default function SinglePand({
       subPandsArr.length > idx ? subPandsArr[idx].is_treatment : false,
     is_attachment:
       subPandsArr.length > idx ? subPandsArr[idx].is_attachment : false,
+    is_mission: subPandsArr.length > idx ? subPandsArr[idx].is_mission : false,
+    is_Letter: subPandsArr.length > idx ? subPandsArr[idx].is_Letter : false,
   });
 
   useEffect(() => {
@@ -104,14 +108,14 @@ export default function SinglePand({
             select
             variant="outlined"
             fullWidth
-            defaultValue={Pand.eng_id}
+            value={Pand.eng_id}
             onChange={(e) =>
               setPand((prev) => ({ ...prev, eng_id: +e.target.value }))
             }
           >
             {users?.map((employee) => (
               <MenuItem key={employee.id} value={employee.id}>
-                {employee.name}
+                {employee.full_name}
               </MenuItem>
             ))}
           </TextField>
@@ -155,6 +159,28 @@ export default function SinglePand({
                   />
                 }
                 label="المرفقات"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked={Pand.is_mission}
+                    onChange={(e, checked) =>
+                      setPand((prev) => ({ ...prev, is_mission: checked }))
+                    }
+                  />
+                }
+                label="المهمات"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked={Pand.is_Letter}
+                    onChange={(e, checked) =>
+                      setPand((prev) => ({ ...prev, is_Letter: checked }))
+                    }
+                  />
+                }
+                label="الخطابات"
               />
             </FormGroup>
           </Box>

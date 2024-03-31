@@ -4,10 +4,11 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from "@mui/material";
 import GenerateStatusChip from "../Components/StatusChips";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ChangeEvent, useContext } from "react";
 import { ContractContext } from "../../Context/Store";
 import { ContractsContext } from "../../Context/ContractsContext";
@@ -16,12 +17,13 @@ function ManageContractTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
   const toView = typeof contracts === "object" ? contracts?.data : undefined;
+  console.log("ASD 2::", toView);
   return (
     <TableBody>
       {props.secondTabValue === 0 &&
         toView?.map((request) => {
           return (
-            <TableRow>
+            <TableRow key={`${Math.random()}_${request.id}`}>
               <TableCell>
                 <Checkbox
                   checked={selectedIdsContext?.selectedIds?.includes(
@@ -31,7 +33,15 @@ function ManageContractTable(props: PropsType) {
                   onChange={props.CheckboxHandler(request.id)}
                 />
               </TableCell>
-              <TableCell>{request.code}</TableCell>
+              <Typography
+                component={NavLink}
+                to={`details/${request.id}`}
+                variant="body2"
+                color={"primary.main"}
+                fontWeight={700}
+              >
+                {request.code}
+              </Typography>
               <TableCell>{request.date}</TableCell>
               <TableCell>{request.type?.name}</TableCell>
               <TableCell>{request.client?.name}</TableCell>
