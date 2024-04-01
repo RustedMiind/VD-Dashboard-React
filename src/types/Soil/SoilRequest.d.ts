@@ -13,6 +13,7 @@ type SoilRequest = {
   soil_order: SoilOrder;
   created_at: string;
   updated_at: string;
+  serial_number: number;
 };
 
 type SoilOrder = {

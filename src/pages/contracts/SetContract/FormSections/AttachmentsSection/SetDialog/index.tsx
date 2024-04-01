@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, Typography } from "@mui/material";
+import { Grid, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 import axios from "axios";
@@ -26,6 +26,7 @@ import { AxiosErrorType } from "../../../../../../types/Axios";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { useSnackbar } from "notistack";
+import { FormControl } from "@mui/material";
 
 function SetDialog(props: PropsType) {
   const ContractDetails = useContext(ContractDetailsContext);
@@ -159,16 +160,18 @@ function SetDialog(props: PropsType) {
             </Grid>
             <Grid p={1} item md={6}>
               <Typography>نوع المرفق</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                label="نوع المرفق"
-                error={!!errorState.type}
-                value={state.type}
-                onChange={(e) => {
-                  dispatch({ type: "SET_TYPE", payload: e.target.value });
-                }}
-              />
+              <FormControl fullWidth size="small">
+                <Select
+                  value={state.type}
+                  onChange={(e) => {
+                    dispatch({ type: "SET_TYPE", payload: e.target.value });
+                  }}
+                >
+                  {ContractDetails?.use?.attachments_types?.map((item) => (
+                    <MenuItem value={item.id}>{item.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <ErrorTypography>{errorState.type}</ErrorTypography>
             </Grid>
             <Grid p={1} item md={6}>
