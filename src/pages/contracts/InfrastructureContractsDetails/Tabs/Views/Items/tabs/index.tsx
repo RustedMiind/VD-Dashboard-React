@@ -3,6 +3,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { Button, Paper } from "@mui/material";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
+import CreateOrUpdateTransactionsD1 from "../CreateTransaction/CreateOrUpdateTransactionsD1";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -14,7 +17,8 @@ function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Paper
+      elevation={2}
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -26,7 +30,7 @@ function CustomTabPanel(props: TabPanelProps) {
           <Typography>{children}</Typography>
         </Box>
       )}
-    </div>
+    </Paper>
   );
 }
 
@@ -44,6 +48,10 @@ export type TabType = {
 
 export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
   const [value, setValue] = React.useState(0);
+  const [
+    openCreateOrEditTransactionDialog,
+    setOpenCreateOrEditTransactionDialog,
+  ] = React.useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -51,7 +59,15 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Tabs
           value={value}
           onChange={handleChange}
@@ -72,8 +88,20 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
             />
           ))}
         </Tabs>
+        {value == 0 && (
+          <Button
+            onClick={() => setOpenCreateOrEditTransactionDialog(true)}
+            variant="contained"
+            startIcon={<AddBoxOutlinedIcon />}
+          >
+            انشاء معاملة
+          </Button>
+        )}
       </Box>
-
+      <CreateOrUpdateTransactionsD1
+        open={openCreateOrEditTransactionDialog}
+        setOpen={setOpenCreateOrEditTransactionDialog}
+      />
       {TabsHeaders.map((ele) => (
         <CustomTabPanel
           key={`${Math.random()}_${ele.index}`}
