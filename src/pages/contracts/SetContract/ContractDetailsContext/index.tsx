@@ -130,6 +130,7 @@ export type ContractUse = {
   contractType?: ContractType[];
   employees?: EmployeeType[];
   management?: Management[];
+  attachments_types?: ContractType[];
 };
 
 export default ContractDetailsContextProvider;

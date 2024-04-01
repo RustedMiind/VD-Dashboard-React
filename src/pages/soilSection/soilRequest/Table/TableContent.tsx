@@ -98,7 +98,7 @@ function TableContent() {
                   color={"primary.main"}
                   fontWeight={700}
                 >
-                  {req?.id ? req?.id : ""}
+                  {req?.serial_number ? req?.serial_number : ""}
                 </Typography>
               </TableCell>
               <TableCell>
