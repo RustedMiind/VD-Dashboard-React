@@ -115,7 +115,9 @@ function AttachmentSection() {
                       <TableCell>{lever.id}</TableCell>
                       <TableCell>{lever.name}</TableCell>
                       <TableCell>{lever.code}</TableCell>
-                      <TableCell>{lever.type}</TableCell>
+                      <TableCell>
+                        {lever.contract_lever_attachment_type.name}
+                      </TableCell>
                       <TableCell>
                         <Button
                           startIcon={<FolderOpenIcon />}
