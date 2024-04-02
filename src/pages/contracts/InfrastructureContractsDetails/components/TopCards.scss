@@ -2,6 +2,10 @@
     animation-delay: 2s;
     animation: fadeInUp 1s ease backwards;
 }
+.fadeInDown {
+    animation-delay: 2s;
+    animation: fadeInDownAnim 1s ease backwards;
+}
 
 .RatioCircularProgress {
     svg.MuiCircularProgress-svg.muirtl-1idz92c-MuiCircularProgress-svg {
@@ -22,3 +26,14 @@
         opacity: 1;
     }
 }
+
+@keyframes fadeInDownAnim {
+    0% {
+       opacity: 0;
+       transform: translateY(-20px);
+    }
+    100% {
+       opacity: 1;
+       transform: translateY(0);
+    }
+ } 
