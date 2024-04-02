@@ -26,7 +26,7 @@ export default function InfrastructureContractsDetails() {
     axios
       .get(Api(`employee/contract-details/${id}`))
       .then((data) => {
-        console.log("Response101::", data?.data?.data, data);
+        console.log("Response101 Contract Items::", data?.data?.data, data);
         // * prepare users
         let _user = [];
         if (
@@ -76,6 +76,7 @@ export default function InfrastructureContractsDetails() {
           card_image: data?.data?.data?.card_image,
           users: _user,
           ManagerId: data?.data?.data?.employee_id,
+          contractMainItems: data?.data?.data?.contract_items,
         });
       })
       .catch((err) => {
@@ -100,6 +101,43 @@ export default function InfrastructureContractsDetails() {
   );
 }
 
+// contract sub item type
+export type ContractSubItemType = {
+  contract_item_id: number;
+  created_at: string;
+  employee_id: number;
+  id: number;
+  is_attachment: number;
+  is_letter: number;
+  is_mission: number;
+  is_processing: number;
+  is_progress_bar: number;
+  name: string;
+  updated_at: string;
+};
+// contract main items users type
+export type MainContractItemUserType = {
+  contract_item_id: number;
+  created_at: string;
+  employee: { id: number; name: string };
+  employee_id: number;
+  id: number;
+  updated_at: string;
+};
+// Contract main Items Type
+export type ContractMainType = {
+  contract_id: number;
+  contract_item_employees: MainContractItemUserType[];
+  contract_sub_items: ContractSubItemType[];
+  created_at: string;
+  description: string;
+  end_date: string;
+  id: number;
+  manager_id: number;
+  name: string;
+  start_date: string;
+  updated_at: string;
+};
 // define incomming contract data
 export type ContractIncomeDataType = {
   id: number;
@@ -119,4 +157,5 @@ export type ContractIncomeDataType = {
   card_image: string;
   ManagerId: number;
   users: { id: number; name: string }[];
+  contractMainItems: ContractMainType[];
 };

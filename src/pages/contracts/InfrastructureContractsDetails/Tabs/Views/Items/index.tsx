@@ -1,11 +1,15 @@
+import { useContext } from "react";
+import { ContractDetailsContext } from "../../..";
 import MainPand from "./components/MainPand";
 
 export default function ContractItemsDetails() {
+  const contractData = useContext(ContractDetailsContext);
+  console.log("MainPand::", contractData?.contractMainItems);
   return (
     <>
-      <MainPand />
-      <MainPand />
-      <MainPand />
+      {contractData?.contractMainItems?.map((contract) => (
+        <MainPand key={contract.contract_id} contractData={contract} />
+      ))}
     </>
   );
 }

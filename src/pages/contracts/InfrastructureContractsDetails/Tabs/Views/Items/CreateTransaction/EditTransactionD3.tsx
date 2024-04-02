@@ -57,6 +57,7 @@ export default function EditTransactionD3({
   //TODO::Declare helpers methods
   const handleClose = () => {
     setOpen(false);
+    reset({});
     setAttachmentTypes([]);
   };
   const FieldGrid = ({

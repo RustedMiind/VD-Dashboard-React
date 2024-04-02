@@ -7,6 +7,7 @@ import InternalTabs, { TabType } from "../tabs";
 import Transactions from "../tabs/Transactions";
 import AttatchmentsSection from "../tabs/Attachments";
 import CompletionRatioOfItem from "../tabs/CompletionRatio";
+import { ContractMainType } from "../../../..";
 
 export enum MainPandBtns {
   LOCATION,
@@ -22,7 +23,7 @@ const TabsHeaders: TabType[] = [
   { index: 3, label: "المهام", children: <h2>المهام</h2> },
   { index: 4, label: "الخطابات", children: <h2>الخطابات</h2> },
 ];
-export default function MainPand() {
+export default function MainPand({ contractData }: MainPandProps) {
   // TODO::declare component variables
   const [expended, setExpended] = useState(false);
   const [activePandId, setActivePandId] = useState(1);
@@ -32,6 +33,11 @@ export default function MainPand() {
     <>
       {/* MainPand Header */}
       <MainPandHeader
+        name={contractData.name}
+        numberOfSubItems={contractData.contract_sub_items.length}
+        managerName={"" + contractData.manager_id}
+        endDate={contractData.end_date}
+        startDate={contractData.start_date}
         expended={expended}
         setExpended={setExpended}
         activeBtn={activeBtn}
@@ -46,15 +52,23 @@ export default function MainPand() {
         <Grid container xs={12} spacing={1}>
           <Grid item xl={2} xs={3}>
             <SubPandsList
+              contractSubItems={contractData.contract_sub_items}
               activePandId={activePandId}
               setActivePandId={setActivePandId}
             />
           </Grid>
           <Grid item xs={9} xl={10}>
-            <InternalTabs TabsHeaders={TabsHeaders} />
+            <InternalTabs
+              activePandId={activePandId}
+              TabsHeaders={TabsHeaders}
+            />
           </Grid>
         </Grid>
       </Accordion>
     </>
   );
 }
+
+type MainPandProps = {
+  contractData: ContractMainType;
+};
