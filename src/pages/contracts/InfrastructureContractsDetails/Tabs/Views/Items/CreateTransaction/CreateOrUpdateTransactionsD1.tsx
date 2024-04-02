@@ -13,6 +13,7 @@ import EditTransitionD2 from "./EditTransitionD2";
 
 export default function CreateOrUpdateTransactionsD1({
   open,
+  activePandId,
   setOpen,
 }: CreateOrUpdateTransactionsD1Props) {
   //   TODO::define our component state variables
@@ -96,7 +97,7 @@ export default function CreateOrUpdateTransactionsD1({
           </Button>
         </DialogContent>
       </Dialog>
-      <CreateTransactionsD2 open={openCreateD2} setOpen={setOpenCreateD2} />
+      <CreateTransactionsD2 open={openCreateD2} setOpen={setOpenCreateD2} activePandId={activePandId} />
       <EditTransitionD2 open={openEditD2} setOpen={setOpenEditD2} />
     </>
   );
@@ -104,5 +105,6 @@ export default function CreateOrUpdateTransactionsD1({
 
 type CreateOrUpdateTransactionsD1Props = {
   open: boolean;
+  activePandId: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

@@ -8,27 +8,36 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { ContractSubItemType } from "../../../..";
+import { useEffect } from "react";
 
 export default function SubPandsList({
   activePandId,
+  contractSubItems,
   setActivePandId,
 }: SubPandsListProps) {
-  let SingleBtn = ({ id }: { id: number }) => (
+  // declare single btn component
+  let SingleBtn = ({ id, name }: { id: number; name: string }) => (
     <Button
       size="large"
       startIcon={
-        <Fab color={id != activePandId ? "primary" : undefined}size="small">
+        <Fab color={id != activePandId ? "primary" : undefined} size="small">
           <KeyboardBackspaceIcon />
         </Fab>
       }
-      sx={{fontSize:20}}
+      sx={{ fontSize: 20 }}
       variant={id == activePandId ? "contained" : undefined}
       fullWidth
       onClick={() => setActivePandId(id)}
     >
-      بند رقم 2
+      {name}
     </Button>
   );
+
+  // handle set active item id in beginning
+  useEffect(() => {
+    if (contractSubItems.length) setActivePandId(contractSubItems[0].id);
+  }, []);
 
   return (
     <Stack
@@ -38,9 +47,9 @@ export default function SubPandsList({
       spacing={1}
       component={Paper}
     >
-      <SingleBtn id={1} />
-      <SingleBtn id={2} />
-      <SingleBtn id={3} />
+      {contractSubItems.map((subItem, idx) => (
+        <SingleBtn key={subItem.id} id={subItem.id} name={subItem.name} />
+      ))}
     </Stack>
   );
 }
@@ -48,4 +57,5 @@ export default function SubPandsList({
 type SubPandsListProps = {
   activePandId: number;
   setActivePandId: React.Dispatch<React.SetStateAction<number>>;
+  contractSubItems: ContractSubItemType[];
 };

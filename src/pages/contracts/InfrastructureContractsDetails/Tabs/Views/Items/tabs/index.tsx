@@ -46,7 +46,7 @@ export type TabType = {
   children?: React.ReactNode;
 };
 
-export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
+export default function InternalTabs({ activePandId,TabsHeaders }: InternalTabsProps) {
   const [value, setValue] = React.useState(0);
   const [
     openCreateOrEditTransactionDialog,
@@ -99,6 +99,7 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
         )}
       </Box>
       <CreateOrUpdateTransactionsD1
+        activePandId={activePandId}
         open={openCreateOrEditTransactionDialog}
         setOpen={setOpenCreateOrEditTransactionDialog}
       />
@@ -117,4 +118,5 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
 
 type InternalTabsProps = {
   TabsHeaders: TabType[];
+  activePandId: number;
 };

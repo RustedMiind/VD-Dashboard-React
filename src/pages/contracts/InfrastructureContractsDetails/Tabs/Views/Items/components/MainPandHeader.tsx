@@ -108,10 +108,10 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
           {/* Pand Name */}
           <Box paddingLeft={2}>
             <Typography variant="h6" fontWeight={700}>
-              بند رئيسي امانة جدة
+              {props.name}
             </Typography>
             <Typography variant="body2" color={"#077BB5"}>
-              عدد البنود الفرعبة:4
+              عدد البنود الفرعية : {props.numberOfSubItems}
             </Typography>
           </Box>
         </Grid>
@@ -127,7 +127,7 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
                 المسؤول
               </Typography>
               <Typography variant="body2" fontSize={"17px"} fontWeight={600}>
-                محمد راغب
+                {props.managerName}
               </Typography>
             </Box>
             {/* تاريخ الانتهاء */}
@@ -136,7 +136,9 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
                 تاريخ الانتهاء
               </Typography>
               <Typography variant="body2" fontSize={"17px"} fontWeight={600}>
-                29/04/2024
+                {props.endDate
+                  ? new Date(props.endDate).toLocaleDateString()
+                  : ""}
               </Typography>
             </Box>
           </Box>
@@ -194,7 +196,12 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
           </Box>
         </Grid>
       </Grid>
-      <TimeMapOfPanDialog open={openTimeMap} setOpen={setOpenTimeMap} />
+      <TimeMapOfPanDialog
+        startDate={props.startDate}
+        endDate={props.startDate}
+        open={openTimeMap}
+        setOpen={setOpenTimeMap}
+      />
     </>
   );
 }
@@ -204,4 +211,9 @@ type MainPandHeaderProps = {
   setExpended: React.Dispatch<React.SetStateAction<boolean>>;
   activeBtn: MainPandBtns;
   setActiveBtn: React.Dispatch<React.SetStateAction<MainPandBtns>>;
+  name: string;
+  numberOfSubItems: number;
+  managerName: string;
+  endDate: string;
+  startDate: string;
 };
