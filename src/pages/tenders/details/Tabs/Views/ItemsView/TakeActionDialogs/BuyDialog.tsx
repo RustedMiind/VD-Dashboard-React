@@ -79,6 +79,7 @@ export default function BuyDialog({
   uploadedFile,
   status,
   buyTender,
+  onDeleteMedia,
   ...props
 }: PropsType) {
   const { register, handleSubmit, reset } = useForm<DtoType>({
@@ -279,7 +280,7 @@ export default function BuyDialog({
             </TextField>
           </GridItem>
           <GridItem label="ارفاق ملف">
-            <MediaMenuList media={uploadedFile} />
+            <MediaMenuList media={uploadedFile} onDeleteMedia={onDeleteMedia} />
             <CustomFilePond
               files={file}
               onupdatefiles={(fileItems) => {
@@ -314,7 +315,8 @@ export default function BuyDialog({
 type PropsType = {
   close: () => void;
   userType: TenderStep;
-  uploadedFile?: Media;
+  uploadedFile?: Media[];
   status?: number;
   buyTender?: TenderPayment;
+  onDeleteMedia: (mediaId: number) => void;
 } & DialogProps;

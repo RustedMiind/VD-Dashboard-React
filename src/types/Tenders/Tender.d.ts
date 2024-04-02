@@ -98,10 +98,10 @@ type Organization = {
 };
 
 type Images = {
-  eng_employee?: Media;
-  file_finacial_tender?: Media;
-  technical_tender?: Media;
-  employee_trace?: Media;
-  buy_tender?: Media;
-  apply_tender?: Media;
+  eng_employee?: Media[];
+  file_finacial_tender?: Media[];
+  technical_tender?: Media[];
+  employee_trace?: Media[];
+  buy_tender?: Media[];
+  apply_tender?: Media[];
 };

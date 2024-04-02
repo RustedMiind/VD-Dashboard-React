@@ -24,11 +24,15 @@ import OthersDialog from "./TakeActionDialogs/OthersDialog";
 import ApprovalRowComponent from "./ApprovalRowComponent";
 import TenderApproveDialog from "./TakeActionDialogs/TenderApproveDialog";
 import PayRowComponent from "./PayRowComponent";
+import axios from "axios";
+import { Api } from "../../../../../../constants";
+import { useSnackbar } from "notistack";
 
 const Th = (props: TableCellProps) => <TableCell {...props} />;
 
 function ItemsView({ strictOnlyAccess }: PropsType) {
-  const { tender } = useContext(TenderDataContext);
+  const { tender, refresh } = useContext(TenderDataContext);
+  const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = useState<undefined | TenderStep>(
     undefined
   );
@@ -80,6 +84,16 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
         );
       }
     };
+
+    const onDeleteMedia = (mediaId: number) => {
+      axios
+        .post(Api(`employee/tender/delete-media/${tender.id}/${mediaId}`))
+        .then(refresh)
+        .catch((err) => {
+          enqueueSnackbar("تعذر في حذف المرفق", { variant: "error" });
+        });
+    };
+
     return (
       <>
         <BuyDialog
@@ -90,6 +104,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
           status={tender?.buy_status}
           uploadedFile={tender.pictures?.buy_tender}
           buyTender={tender?.buy_tender}
+          onDeleteMedia={onDeleteMedia}
         />
         <TenderApproveDialog
           open={dialogOpen === TenderStep.ACCEPTION}
@@ -114,6 +129,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
           endDate={tender?.tender_tasks?.end_dete_technical}
           status={tender?.technical_status}
           uploadedFile={tender.pictures?.technical_tender}
+          onDeleteMedia={onDeleteMedia}
         />
         <OthersDialog
           close={closeDialog}
@@ -124,6 +140,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
           endDate={tender?.tender_tasks?.end_dete_trace}
           status={tender?.trace_status}
           uploadedFile={tender.pictures?.employee_trace}
+          onDeleteMedia={onDeleteMedia}
         />
         <OthersDialog
           close={closeDialog}
@@ -134,6 +151,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
           endDate={tender?.tender_tasks?.dete_file_finacial}
           status={tender?.file_finacial_status}
           uploadedFile={tender.pictures?.file_finacial_tender}
+          onDeleteMedia={onDeleteMedia}
         />
         <OthersDialog
           close={closeDialog}
@@ -144,6 +162,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
           endDate={tender?.tender_tasks?.end_dete_trace}
           status={tender?.trace_status}
           uploadedFile={tender.pictures?.employee_trace}
+          onDeleteMedia={onDeleteMedia}
         />
         <OthersDialog
           close={closeDialog}
@@ -154,6 +173,7 @@ function ItemsView({ strictOnlyAccess }: PropsType) {
           endDate={tender?.tender_tasks?.dete_apply_tender}
           status={tender?.apply_status}
           uploadedFile={tender.pictures?.apply_tender}
+          onDeleteMedia={onDeleteMedia}
         />
         <TableContainer>
           <Table>

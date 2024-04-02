@@ -29,7 +29,7 @@ export default function TenderApproveDialog(
   props: DialogProps & {
     close: () => void;
     userType: TenderStep;
-    uploadedFile?: Media;
+    uploadedFile?: Media[];
     status?: number;
   }
 ) {

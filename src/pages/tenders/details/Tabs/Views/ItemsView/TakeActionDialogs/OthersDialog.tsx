@@ -46,6 +46,7 @@ export default function OthersDialog({
   userType,
   uploadedFile,
   status,
+  onDeleteMedia,
   ...dialogProps
 }: PropsType) {
   const { register, handleSubmit, reset } = useForm<DtoType>({
@@ -160,7 +161,7 @@ export default function OthersDialog({
             <TextField value={endDate} disabled fullWidth size="small" />
           </GridItem>
           <GridItem label="ارفق عرض التقديم">
-            <MediaMenuList media={uploadedFile} />
+            <MediaMenuList media={uploadedFile} onDeleteMedia={onDeleteMedia} />
             <UploadFileInput
               size="sm"
               value={file}
@@ -191,6 +192,7 @@ type PropsType = {
   close: () => void;
   endDate?: string;
   userType: TenderStep;
-  uploadedFile?: Media;
+  uploadedFile?: Media[];
   status?: number;
+  onDeleteMedia: (mediaId: number) => void;
 } & DialogProps;
