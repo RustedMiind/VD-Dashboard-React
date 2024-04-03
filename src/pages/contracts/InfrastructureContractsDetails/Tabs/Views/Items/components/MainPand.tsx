@@ -35,7 +35,7 @@ export default function MainPand({ contractData }: MainPandProps) {
       <MainPandHeader
         name={contractData.name}
         numberOfSubItems={contractData.contract_sub_items.length}
-        managerName={"" + contractData.manager_id}
+        managerName={contractData?.manager?.name}
         endDate={contractData.end_date}
         startDate={contractData.start_date}
         expended={expended}

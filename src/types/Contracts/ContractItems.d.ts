@@ -6,6 +6,7 @@ export interface ContractItem {
   name: string;
   description: string;
   manager_id: number;
+  manager: { id: number; name: string };
   start_date: string;
   end_date: string;
   created_at: string;
