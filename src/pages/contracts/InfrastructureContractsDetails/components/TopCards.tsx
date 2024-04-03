@@ -59,7 +59,7 @@ export default function TopCards() {
         alignItems: "center",
         justifyContent: "space-between",
       }}
-      className="fadeInUp"
+      // className="fadeInUp"
     >
       {/* First Card */}
       <Box
