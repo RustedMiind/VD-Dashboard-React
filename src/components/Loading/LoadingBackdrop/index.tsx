@@ -6,7 +6,11 @@ import Button from "@mui/material/Button";
 function LoadingBackdrop(props: BackdropProps) {
   return (
     <Backdrop {...props}>
-      <CircularProgress color="inherit" />
+      <CircularProgress
+        variant="indeterminate"
+        size={50}
+        sx={{ color: "background.default" }}
+      />
     </Backdrop>
   );
 }
