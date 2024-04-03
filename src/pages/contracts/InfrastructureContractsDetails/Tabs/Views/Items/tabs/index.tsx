@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button, Paper } from "@mui/material";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import CreateOrUpdateTransactionsD1 from "../CreateTransaction/CreateOrUpdateTransactionsD1";
+import ChooseOperationTypeDialog from "../CreateTransaction/ChooseOperationTypeDialog";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,7 +46,10 @@ export type TabType = {
   children?: React.ReactNode;
 };
 
-export default function InternalTabs({ activePandId,TabsHeaders }: InternalTabsProps) {
+export default function InternalTabs({
+  activePandId,
+  TabsHeaders,
+}: InternalTabsProps) {
   const [value, setValue] = React.useState(0);
   const [
     openCreateOrEditTransactionDialog,
@@ -98,7 +101,7 @@ export default function InternalTabs({ activePandId,TabsHeaders }: InternalTabsP
           </Button>
         )}
       </Box>
-      <CreateOrUpdateTransactionsD1
+      <ChooseOperationTypeDialog
         activePandId={activePandId}
         open={openCreateOrEditTransactionDialog}
         setOpen={setOpenCreateOrEditTransactionDialog}

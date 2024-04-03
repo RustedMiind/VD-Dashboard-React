@@ -5,7 +5,6 @@ import DialogContent from "@mui/material/DialogContent";
 import { DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../../../../../components/AddLabelToEl";
-import ChooseAttachmentTypesDialog from "./ChooseAttachmentTypesDialog";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import TableShowAttachments from "./TableShowAttachments";
 
@@ -150,11 +149,11 @@ export default function EditTransactionD3({
               </Grid>
             )}
             {/* show table for attachments */}
-            {attachmentTypes.length > 0 && (
+            {/* {attachmentTypes.length > 0 && (
               <Grid item xs={12}>
                 <TableShowAttachments attachmentTypes={attachmentTypes} />
               </Grid>
-            )}
+            )} */}
             {/* save btn */}
             <Grid
               item
@@ -185,12 +184,6 @@ export default function EditTransactionD3({
           </Grid>
         </DialogContent>
       </Dialog>
-      <ChooseAttachmentTypesDialog
-        open={openAttachmentTypesDialog}
-        setOpen={setOpenAttachmentTypesDialog}
-        setAttachmentTypes={setAttachmentTypes}
-        attachmentTypes={attachmentTypes}
-      />
     </>
   );
 }

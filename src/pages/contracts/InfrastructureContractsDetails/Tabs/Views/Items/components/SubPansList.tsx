@@ -8,29 +8,40 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export default function SubPandsList({
   activePandId,
   contractSubItems,
   setActivePandId,
 }: SubPandsListProps) {
+  // get create transaction context data
+  const transactionCxtData = useContext(CreateTransactionContext);
+  
+  
   // declare single btn component
-  let SingleBtn = ({ id, name }: { id: number; name: string }) => (
+  let SingleBtn = ({ item }: { item: ContractSubItem }) => (
     <Button
       size="large"
       startIcon={
-        <Fab color={id != activePandId ? "primary" : undefined} size="small">
+        <Fab
+          color={item.id != activePandId ? "primary" : undefined}
+          size="small"
+        >
           <KeyboardBackspaceIcon />
         </Fab>
       }
       sx={{ fontSize: 20 }}
-      variant={id == activePandId ? "contained" : undefined}
+      variant={item.id == activePandId ? "contained" : undefined}
       fullWidth
-      onClick={() => setActivePandId(id)}
+      onClick={() => {
+        setActivePandId(item.id);
+        transactionCxtData.setContractSubItem(item);
+      }}
     >
-      {name}
+      {item.name}
     </Button>
   );
 
@@ -48,7 +59,7 @@ export default function SubPandsList({
       component={Paper}
     >
       {contractSubItems.map((subItem, idx) => (
-        <SingleBtn key={subItem.id} id={subItem.id} name={subItem.name} />
+        <SingleBtn key={subItem.id} item={subItem} />
       ))}
     </Stack>
   );

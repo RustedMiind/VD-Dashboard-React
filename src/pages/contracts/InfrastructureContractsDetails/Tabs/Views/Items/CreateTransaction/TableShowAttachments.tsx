@@ -1,89 +1,51 @@
 import {
-  MenuItem,
-  Select,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
+  Tooltip,
 } from "@mui/material";
-import { useState } from "react";
-import { ImageType } from "react-images-uploading";
-import UploadImageFile from "./UploadAttachmentFile";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const dummyOptions = [
-  { id: 1, value: "1", name: "نوع 1" },
-  { id: 2, value: "0", name: "نوع 2" },
-];
-export default function TableShowAttachments({
-  attachmentTypes,
-}: TableShowAttachmentsProps) {
-  const SingleRow = ({ type }: { type: string }) => {
-    const [attachmentFile, setAttachmentFile] = useState<ImageType[]>([]);
-    const [description, setDescription] = useState("");
+export default function TableShowAttachments({}: TableShowAttachmentsProps) {
+  //Declaration component State variables...
+  const SingleRow = () => {
     return (
       <TableRow>
-        <TableCell>{type}</TableCell>
+        <TableCell>Type 1</TableCell>
+        <TableCell>file 101</TableCell>
+        <TableCell>description</TableCell>
         <TableCell>
-          <UploadImageFile
-            images={attachmentFile}
-            width={attachmentFile.length > 0 ? `90%` : "100%"}
-            setImages={(ar) => {
-              setAttachmentFile(ar);
-            }}
-          />
-        </TableCell>
-        <TableCell>
-          <TextField
-            value={description}
-            size="small"
-            onChange={(e) => setDescription(e.target.value)}
-            id="outlined-basic"
-            variant="outlined"
-          />
-        </TableCell>
-        <TableCell>
-          <Select defaultValue={1} color="primary" size={"small"}>
-            {dummyOptions.map((option) => (
-              <MenuItem
-                key={`${option.id}_${option.value}`}
-                value={option.value}
-              >
-                {option.name}
-              </MenuItem>
-            ))}
-          </Select>
+          <IconButton size="small" onClick={() => {}} color="error">
+            <Tooltip title="حذف" placement="top">
+              <DeleteIcon />
+            </Tooltip>
+          </IconButton>
         </TableCell>
       </TableRow>
     );
   };
 
+  //* return component ui.
   return (
     <>
-      <TableContainer
-        sx={{
-          marginTop: "0.5rem",
-          borderRadius: "12px",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Table>
-          {/* Table Headers */}
+      <TableContainer>
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>نوع المرفق</TableCell>
-              <TableCell></TableCell>
-              <TableCell>الوصف</TableCell>
-              <TableCell>نوع المرفق</TableCell>
+              <TableCell>ملف المرفق</TableCell>
+              <TableCell>وصف المرفق</TableCell>
+              <TableCell>الاعدادات</TableCell>
             </TableRow>
           </TableHead>
-          {/* Table body */}
+
           <TableBody>
-            {attachmentTypes.map((type) => (
-              <SingleRow key={`${Math.random()}_${type}`} type={type} />
-            ))}
+            <SingleRow />
+            <SingleRow />
           </TableBody>
         </Table>
       </TableContainer>
@@ -91,6 +53,4 @@ export default function TableShowAttachments({
   );
 }
 
-type TableShowAttachmentsProps = {
-  attachmentTypes: string[];
-};
+type TableShowAttachmentsProps = {};

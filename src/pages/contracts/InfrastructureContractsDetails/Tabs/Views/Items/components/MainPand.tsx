@@ -1,5 +1,5 @@
 import { Accordion, Grid } from "@mui/material";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MainPandHeader from "./MainPandHeader";
 import "../../../../components/TopCards.scss";
 import SubPandsList from "./SubPansList";
@@ -8,6 +8,7 @@ import Transactions from "../tabs/Transactions";
 import AttatchmentsSection from "../tabs/Attachments";
 import CompletionRatioOfItem from "../tabs/CompletionRatio";
 import { ContractItem } from "../../../../../../../types/Contracts/ContractItems";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export enum MainPandBtns {
   LOCATION,
@@ -24,11 +25,16 @@ const TabsHeaders: TabType[] = [
   { index: 4, label: "الخطابات", children: <h2>الخطابات</h2> },
 ];
 export default function MainPand({ contractData }: MainPandProps) {
+  // get create transaction context data
+  const transactionCxtData = useContext(CreateTransactionContext);
   // TODO::declare component variables
   const [expended, setExpended] = useState(false);
   const [activePandId, setActivePandId] = useState(1);
   const [activeBtn, setActiveBtn] = useState(MainPandBtns.LOCATION);
 
+  useEffect(() => {
+    console.log("transactionCxtData ef", transactionCxtData);
+  }, [transactionCxtData]);
   return (
     <>
       {/* MainPand Header */}
