@@ -10,7 +10,7 @@ function generateStatusChip(status?: TenderPay): JSX.Element {
   if (typeof status === "number" || typeof status === "string")
     switch (status) {
       case TenderPay.NOTPAYED:
-        chip = <StatusChip label="غير مدفوعة" disabled color="default" />;
+        chip = <StatusChip label="غير مدفوعة" color="error" />;
         break;
       case TenderPay.PAYED:
         chip = <StatusChip label="مدفوعة" color="success" />;

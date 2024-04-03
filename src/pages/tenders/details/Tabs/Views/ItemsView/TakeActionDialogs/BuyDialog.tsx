@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
 import { FetchStatus } from "../../../../../../../types/FetchStatus";
 import { FetchStatusEnum } from "../../../../../../../types/FetchStatusEnum";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Api } from "../../../../../../../constants";
 import { objectToFormData } from "../../../../../../../methods";
 import { useSnackbar } from "notistack";
@@ -115,15 +115,18 @@ export default function BuyDialog({
 
   function sendImage(dto?: Record<string, unknown>) {
     return new Promise((resolve, reject) => {
-      if (!file[0]) resolve("");
-      uploadFileInChunks(
-        file[0] as File,
-        1024 ** 2 * 10,
-        Api("employee/tender/form/status/" + id),
-        dto
-      )
-        .then(resolve)
-        .catch(reject);
+      // if (!file[0]) reject("");
+      file[0]
+        ? uploadFileInChunks(
+            file[0] as File,
+            1024 ** 2 * 10,
+            Api("employee/tender/form/status/" + id),
+            dto
+          )
+        : axios
+            .post(Api("employee/tender/form/status/" + id), dto)
+            .then(resolve)
+            .catch(reject);
     });
   }
 
@@ -152,9 +155,11 @@ export default function BuyDialog({
           refresh();
           // });
         })
-        .catch((err) => {
+        .catch((err: AxiosError<{ msg?: string }>) => {
           console.log(err);
-          enqueueSnackbar("تعذر في اتخاذ الاجراء", { variant: "error" });
+          enqueueSnackbar(err.response?.data?.msg || "تعذر في اتخاذ الاجراء", {
+            variant: "error",
+          });
         })
         .finally(() => {
           setFormStatus(FetchStatusEnum.NONE);
