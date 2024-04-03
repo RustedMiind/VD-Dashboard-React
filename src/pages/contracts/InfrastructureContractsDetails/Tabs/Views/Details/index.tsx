@@ -36,52 +36,40 @@ const DetailsItem = ({
 export default function DetailsView() {
   // * declare component state variables
   const [showChatBox, setShowChatBox] = useState<Boolean>(false);
-  const contractData = useContext(ContractDetailsContext);
+  const { contract } = useContext(ContractDetailsContext);
 
   return (
     <Stack sx={{ position: "relative" }}>
       <Grid container columnSpacing={1} rowSpacing={4}>
         <DetailsItem label="نوع العقد">البنية التحتية</DetailsItem>
-        <DetailsItem label="نوع الفرع">{contractData?.branchName}</DetailsItem>
+        <DetailsItem label="نوع الفرع">{contract?.branch?.name}</DetailsItem>
         <DetailsItem label="صورة العقد">
-          <Button
-            component={"a"}
-            target="_blank"
-            href={contractData?.card_image}
-          >
+          <Button component={"a"} target="_blank" href={contract?.card_image}>
             عرض الصورة
           </Button>
         </DetailsItem>
-        <DetailsItem label="طريقة العرض">{contractData?.wayOfShow}</DetailsItem>
-        <DetailsItem label="الادارة">
-          {contractData?.managementName}
+        {/* <DetailsItem label="طريقة العرض">{contract?.wayOfShow}</DetailsItem> */}
+        <DetailsItem label="الادارة">{contract?.management?.name}</DetailsItem>
+        <DetailsItem label="مدة العقد">{contract?.period}</DetailsItem>
+        <DetailsItem label="المساحة">
+          {contract?.contract_details?.area} م
         </DetailsItem>
-        <DetailsItem label="مدة العقد">
-          {contractData?.contractPeriod}
-        </DetailsItem>
-        <DetailsItem label="المساحة">{contractData?.area} م</DetailsItem>
-        <DetailsItem label="رقم العقد">
-          {contractData?.managementName}
-        </DetailsItem>
-        <DetailsItem label="الادارة">
-          {contractData?.managementName}
-        </DetailsItem>
-        <DetailsItem label="تاريخ العقد">
-          {contractData?.contractDate}
-        </DetailsItem>
-        <DetailsItem label="الموقع">{contractData?.location}</DetailsItem>
-
-        <DetailsItem label="" />
-        <DetailsItem label="اسم المشروع">{contractData?.name}</DetailsItem>
-        <DetailsItem label="قيمة العقد">
-          {contractData?.contractAmount} ر.س.
+        <DetailsItem label="رقم العقد">{contract?.code}</DetailsItem>
+        <DetailsItem label="الادارة">{contract?.management?.name}</DetailsItem>
+        <DetailsItem label="تاريخ العقد">{contract?.created_at}</DetailsItem>
+        <DetailsItem label="الموقع">
+          {contract?.contract_details?.location}
         </DetailsItem>
 
         <DetailsItem label="" />
+        <DetailsItem label="اسم المشروع">{contract?.details}</DetailsItem>
+        <DetailsItem label="قيمة العقد">{contract?.amount} ر.س.</DetailsItem>
+
         <DetailsItem label="" />
-        <DetailsItem label="العميل">{contractData?.clientName}</DetailsItem>
+        <DetailsItem label="" />
+        <DetailsItem label="العميل">{contract?.client?.name}</DetailsItem>
         <DetailsItem label="المهندس المسؤول">
-          {contractData?.engineerName}
+          {contract?.employee?.name}
         </DetailsItem>
         {/* Complete the values based on the mainInfo array and remove the grid items below  */}
 

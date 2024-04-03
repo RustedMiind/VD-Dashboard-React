@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { ContractSubItemType } from "../../../..";
 import { useEffect } from "react";
+import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
 
 export default function SubPandsList({
   activePandId,
@@ -57,5 +57,5 @@ export default function SubPandsList({
 type SubPandsListProps = {
   activePandId: number;
   setActivePandId: React.Dispatch<React.SetStateAction<number>>;
-  contractSubItems: ContractSubItemType[];
+  contractSubItems: ContractSubItem[];
 };

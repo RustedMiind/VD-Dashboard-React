@@ -125,7 +125,7 @@ function TableDetails({
                               ?.location_name
                           }
                         </TableCell>
-                        <TableCell>{item.branch.name}</TableCell>
+                        <TableCell>{item.branch?.name}</TableCell>
                         <TableCell>{item.remaining_time || 0} يوم</TableCell>
                         <TableCell>{item.employee?.name}</TableCell>
                         <TableCell>

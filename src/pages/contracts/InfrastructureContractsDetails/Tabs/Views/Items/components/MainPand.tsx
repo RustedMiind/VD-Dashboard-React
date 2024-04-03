@@ -7,7 +7,7 @@ import InternalTabs, { TabType } from "../tabs";
 import Transactions from "../tabs/Transactions";
 import AttatchmentsSection from "../tabs/Attachments";
 import CompletionRatioOfItem from "../tabs/CompletionRatio";
-import { ContractMainType } from "../../../..";
+import { ContractItem } from "../../../../../../../types/Contracts/ContractItems";
 
 export enum MainPandBtns {
   LOCATION,
@@ -70,5 +70,5 @@ export default function MainPand({ contractData }: MainPandProps) {
 }
 
 type MainPandProps = {
-  contractData: ContractMainType;
+  contractData: ContractItem;
 };

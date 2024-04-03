@@ -11,7 +11,6 @@ import {
 import axios from "axios";
 import { Api } from "../../../../constants";
 import { useParams } from "react-router-dom";
-import { ContractItems } from "../../../../types/Contracts/ContractItems";
 import {
   ActionTypes,
   ContractItemsState,

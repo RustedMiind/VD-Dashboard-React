@@ -39,4 +39,4 @@ function GenerateStatusChip(props: PropsType): JSX.Element {
 
 export default GenerateStatusChip;
 
-type PropsType = { statusId: number; contractStatus: string };
+type PropsType = { statusId: number; contractStatus: string | number };

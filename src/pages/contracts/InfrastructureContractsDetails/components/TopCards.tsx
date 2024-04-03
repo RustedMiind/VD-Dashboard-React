@@ -10,16 +10,44 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import DoneAndReminder from "./DoneAndReminder";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import EditRaioDialog from "./EditDialog";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import "./TopCards.scss";
-import { ContractDetailsContext, ContractIncomeDataType } from "..";
+import { ContractDetailsContext } from "..";
 import { useUser } from "../../../../contexts/user/user";
+import { EmployeeType } from "../../../../types";
+
+interface Item {
+  id: number;
+}
+function removeDuplicates<T extends Item>(items: T[]): T[] {
+  const seenIds = new Set<number>();
+  const uniqueItems: T[] = [];
+
+  items.forEach((item) => {
+    if (!seenIds.has(item.id)) {
+      seenIds.add(item.id);
+      uniqueItems.push(item);
+    }
+  });
+
+  return uniqueItems;
+}
 
 export default function TopCards() {
   // declare our component variables/state
   const [openDialog, setOpenDialog] = useState(false);
-  const contractData = useContext(ContractDetailsContext);
+  const { contract, refreshToggler } = useContext(ContractDetailsContext);
   const { user } = useUser();
+  const workStaff = useMemo(() => {
+    const staff: EmployeeType[] = [];
+    contract?.contract_items?.forEach((item) => {
+      item.contract_item_employees?.forEach((contractItemEmployee) => {
+        if (contractItemEmployee.employee)
+          staff.push(contractItemEmployee.employee);
+      });
+    });
+    return removeDuplicates<EmployeeType>(staff);
+  }, [refreshToggler]);
 
   return (
     <Grid
@@ -317,7 +345,7 @@ export default function TopCards() {
             scrollbarWidth: "thin",
           }}
         >
-          {contractData?.users.map((user, idx) => {
+          {workStaff.map((user, idx) => {
             return (
               <Box
                 key={`user_${idx}_${user.id}_${Math.random()}`}
@@ -447,7 +475,7 @@ export default function TopCards() {
         >
           نسب الانجاز الكلية
         </Typography>
-        {user?.employee_id === contractData?.ManagerId && (
+        {user?.employee_id === contract?.employee_id && (
           <Button
             sx={{
               bgcolor: "#fff",

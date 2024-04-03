@@ -59,7 +59,7 @@ const ContractItems = (props: PropsType) => {
   console.log(contractDetails.contract);
 
   const [contractItemsDetails, setContractItemsDetails] = useState(
-    contractDetails.contract?.Contract_items
+    contractDetails.contract?.contract_items
   );
   console.log(contractItemsDetails);
 

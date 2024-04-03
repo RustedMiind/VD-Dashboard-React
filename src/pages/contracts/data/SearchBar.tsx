@@ -23,7 +23,7 @@ function SearchBar() {
     axios
       .get<Contract>(Api("employee/contract/use"))
       .then((res) => {
-        setContractSearch(res?.data.client);
+        setContractSearch(res?.data?.client ? [res?.data?.client] : null);
       })
       .catch((err) => {
         setContractSearch(null);

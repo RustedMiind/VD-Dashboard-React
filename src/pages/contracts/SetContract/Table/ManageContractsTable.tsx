@@ -45,7 +45,7 @@ function ManageContractTable(props: PropsType) {
               <TableCell>{request.date}</TableCell>
               <TableCell>{request.type?.name}</TableCell>
               <TableCell>{request.client?.name}</TableCell>
-              <TableCell>{request.branch.name}</TableCell>
+              <TableCell>{request.branch?.name}</TableCell>
               <TableCell>{request.management?.name}</TableCell>
               <TableCell>
                 <GenerateStatusChip
