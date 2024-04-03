@@ -18,41 +18,12 @@ import { MainPandBtns } from "./MainPand";
 import TimeMapOfPanDialog from "./TimeMapOfPanDialog";
 import { useState } from "react";
 import NotificationList from "./NotificationsList";
+import RoundedIconButton from "../../../../../../../components/RoundedIconButton";
 
 export default function MainPandHeader(props: MainPandHeaderProps) {
   // define our variables
   const [openTimeMap, setOpenTimeMap] = useState(false);
   const [showNotificationsList, setShowNotificationsList] = useState(false);
-  const btnStyle = (val: MainPandBtns) => {
-    let _style = {
-      bgcolor: props.activeBtn == val ? "secondary.main" : "#fff",
-      color: props.activeBtn == val ? "#fff" : "primary.main",
-      width: "30px",
-      height: "34px",
-      borderRadius: "10px",
-      position: "relative",
-      ":hover": {
-        color: props.activeBtn == val ? "secondary.main" : "primary.main",
-      },
-    };
-
-    return _style;
-  };
-  // Last notification
-  const LastNotification = ({ statment }: { statment: String }) => (
-    <Box
-      position={"absolute"}
-      top={"-125%"}
-      left={"-960%"}
-      bgcolor={"#fff"}
-      borderRadius={"22px"}
-      width={"325px"}
-      fontSize={"20px"}
-      padding={"8px"}
-    >
-      {statment}
-    </Box>
-  );
 
   const handleBtnClick = (val: MainPandBtns) => {
     props.setActiveBtn(val);
@@ -157,41 +128,37 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
             justifyContent={"space-around"}
             width={"70%"}
           >
-            <IconButton
+            <RoundedIconButton
               onClick={() => handleBtnClick(MainPandBtns.LOCATION)}
-              sx={btnStyle(MainPandBtns.LOCATION)}
+              color="secondary"
             >
               <LocationOnIcon />
-            </IconButton>
-            <IconButton
+            </RoundedIconButton>
+            <RoundedIconButton
               onClick={() => handleBtnClick(MainPandBtns.PRINTER)}
-              sx={btnStyle(MainPandBtns.PRINTER)}
             >
               <LocalPrintshopIcon />
-            </IconButton>
-            <IconButton
+            </RoundedIconButton>
+            <RoundedIconButton
               onClick={() => handleBtnClick(MainPandBtns.ENGINEER)}
-              sx={btnStyle(MainPandBtns.ENGINEER)}
             >
               <PersonIcon />
-            </IconButton>
-            <IconButton
+            </RoundedIconButton>
+            <RoundedIconButton
               onClick={() => handleBtnClick(MainPandBtns.EDIT)}
-              sx={btnStyle(MainPandBtns.EDIT)}
             >
               <EditIcon />
-            </IconButton>
+            </RoundedIconButton>
             <Tooltip title="تم التعديل بواسطة مهندس احمد" placement="top-start">
-              <IconButton
+              <RoundedIconButton
                 onClick={() => handleBtnClick(MainPandBtns.NOTIFICATIONS)}
-                sx={btnStyle(MainPandBtns.NOTIFICATIONS)}
               >
                 {/* <LastNotification statment={"تم التعديل بواسطة مهندس احمد"} /> */}
                 {showNotificationsList && <NotificationList />}
                 <Badge badgeContent={4} color="error">
                   <NotificationsIcon />
                 </Badge>
-              </IconButton>
+              </RoundedIconButton>
             </Tooltip>
           </Box>
         </Grid>
