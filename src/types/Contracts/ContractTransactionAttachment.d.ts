@@ -22,4 +22,6 @@ export type TransactionType = {
   created_at: string;
   updated_at: string;
   attachment: TansactionAttachmentType[];
+  comments_count?: number;
+  system_logs?: DbOptionType[];
 };

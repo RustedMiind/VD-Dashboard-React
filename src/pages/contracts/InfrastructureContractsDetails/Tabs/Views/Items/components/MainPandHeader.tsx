@@ -16,8 +16,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { MainPandBtns } from "./MainPand";
 import TimeMapOfPanDialog from "./TimeMapOfPanDialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import NotificationList from "./NotificationsList";
+import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export default function MainPandHeader(props: MainPandHeaderProps) {
   // define our variables
@@ -38,6 +40,7 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
 
     return _style;
   };
+  const transactionCxtData = useContext(CreateTransactionContext);
   // Last notification
   const LastNotification = ({ statment }: { statment: String }) => (
     <Box
@@ -83,7 +86,15 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
           display="flex"
           alignItems="center"
           sx={{ cursor: "pointer" }}
-          onClick={() => props.setExpended(!props.expended)}
+          onClick={() => {
+            if (props.contract_sub_items.length) {
+              transactionCxtData.setContractSubItem(
+                props.contract_sub_items[0]
+              );
+              props.setActivePandId(props.contract_sub_items[0].id);
+            }
+            props.setExpended(!props.expended);
+          }}
         >
           {/* Icon */}
           {!props.expended ? (
@@ -216,4 +227,6 @@ type MainPandHeaderProps = {
   managerName: string;
   endDate: string;
   startDate: string;
+  contract_sub_items: ContractSubItem[];
+  setActivePandId: React.Dispatch<React.SetStateAction<number>>;
 };

@@ -6,7 +6,7 @@ import { DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../../../../../components/AddLabelToEl";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
-import TableShowAttachments from "./TableShowAttachments";
+import TableShowAttachments from "./SetTransaction/step2/TableShowAttachments";
 
 // TODO::define and declare our types
 export type CreateTransactionFormHeaderType = "notes" | "reply";

@@ -1,6 +1,6 @@
 import { Box, Button, DialogContent, Stack } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import TableShowAttachments from "../../TableShowAttachments";
+import TableShowAttachments from "./TableShowAttachments";
 import CreateTransactionAttachmentFileDialog from "./CreateTransactionAttachmentDialog";
 import { useContext, useEffect, useState } from "react";
 import { CreateTransactionContext } from "../../../context/CreateTransactionContext";

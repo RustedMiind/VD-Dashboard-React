@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useContext, useEffect, useState } from "react";
@@ -7,23 +7,28 @@ import axios from "axios";
 import { Api } from "../../../../../../../constants";
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
 import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
+import Loader from "../../../../../../../components/Loading/Loader";
 
 export default function Transactions() {
   //TODO::declare and define component state and variables
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   // get create transaction context data
   const transactionCxtData = useContext(CreateTransactionContext);
+  const [loading, setLoading] = useState(false);
 
   // TODO::define helpers method
   // * This method will be refresh method in context :)
   const getTransactionData = async (id: number) => {
     try {
+      setLoading(true);
       const { data } = await axios.get<{
         contract_sub_item: ContractSubItem;
       }>(Api(`employee/contract/items/show-subitem/${id}`));
       console.log("getTransactionData", data);
       setTransactions(data.contract_sub_item.processing || []);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("Error in fetch data::", err);
     }
   };
@@ -31,39 +36,16 @@ export default function Transactions() {
   // Fetch sub item transactions data
   useEffect(() => {
     if (transactionCxtData?.contractSubItem?.id) {
-      // getTransactionData(transactionCxtData?.contractSubItem?.id);
-      getTransactionData(75);
+      getTransactionData(transactionCxtData?.contractSubItem?.id);
     }
   }, [transactionCxtData]);
-  // TODO::define helper variables and methods
+  // TODO::define helper variables
   let attachementsBtns = (
     <>
       <RemoveRedEyeIcon />
       <CloudDownloadIcon color="secondary" />
     </>
   );
-  let rowDummyData = [
-    { id: `r_${Math.random() * 100}`, label: "رقم المعاملة", value: "3222" },
-    {
-      id: `r_${Math.random() * 100}`,
-      label: "تاريخ الارسال",
-      value: "12-03-2023",
-    },
-    { id: `r_${Math.random() * 100}`, label: "عدد الردود", value: "3222" },
-    { id: `r_${Math.random() * 100}`, label: "اسم الراسل", value: "سلام راضي" },
-    {
-      id: `r_${Math.random() * 100}`,
-      label: "اخر رد",
-      value: "تم ارسال الملف",
-    },
-    { id: `r_${Math.random() * 100}`, label: "الاجراء", value: "مرسل" },
-    {
-      id: `r_${Math.random() * 100}`,
-      label: "المرفقات",
-      value: attachementsBtns,
-    },
-    { id: `r_${Math.random() * 100}`, label: "اخر تحديث", value: "25-02-2024" },
-  ];
   let RowItem = ({
     label,
     value,
@@ -79,30 +61,67 @@ export default function Transactions() {
     </Box>
   );
 
-  const SingleRow = () => (
-    <Grid
-      item
-      xs={12}
-      padding={2}
-      borderRadius={"12px"}
-      display={"flex"}
-      alignItems={"center"}
-      marginY={2}
-      justifyContent={"space-around"}
-      bgcolor="#fff"
-    >
-      {rowDummyData.map((ele) => (
-        <RowItem key={ele.id} label={ele.label} value={ele.value} />
-      ))}
-    </Grid>
-  );
+  const SingleRow = ({ item }: { item: TransactionType }) => {
+    console.log("Item88", item);
+    return (
+      <Grid
+        item
+        xs={12}
+        padding={2}
+        borderRadius={"12px"}
+        display={"flex"}
+        alignItems={"center"}
+        marginY={2}
+        justifyContent={"space-around"}
+        bgcolor="#fff"
+      >
+        <RowItem label="رقم المعاملة" value={"" + item.id} />
+        <RowItem
+          label="تاريخ الارسال"
+          value={new Date(item.created_at).toLocaleDateString()}
+        />
+        <RowItem
+          label="عدد الردود"
+          value={item?.comments_count ? "" + item?.comments_count : "0"}
+        />
+        <RowItem
+          label="اسم الراسل"
+          value={
+            item?.system_logs && item?.system_logs?.length > 0
+              ? item?.system_logs[0]?.name
+              : ""
+          }
+        />
+        <RowItem label="اخر رد" value={"تم ارسال الملف"} />
+        <RowItem label="الاجراء" value={"مرسل"} />
+        <RowItem label="المرفقات" value={attachementsBtns} />
+        <RowItem
+          label="اخر تحديث"
+          value={new Date(item.updated_at).toLocaleDateString()}
+        />
+      </Grid>
+    );
+  };
 
   return (
     <Grid container xs={12}>
-      <SingleRow />
-      <SingleRow />
-      <SingleRow />
+      {loading && <Loader title={"جاري تحميل البنود الفرعية"} />}
+      {!loading && transactions.length == 0 && (
+        <Stack
+          width={"100%"}
+          minHeight={"300px"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography variant="body1" textAlign={"center"} fontWeight={600}>
+            لايوجد معاملات فى هذالبند
+          </Typography>
+        </Stack>
+      )}
+      {transactions.length > 0 &&
+        transactions.map((item) => (
+          <SingleRow key={`SR-${item.id}`} item={item} />
+        ))}
     </Grid>
   );
 }
-

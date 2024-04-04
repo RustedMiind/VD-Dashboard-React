@@ -59,6 +59,9 @@ export default function InternalTabs({
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const handleOpenDialog = () => {
+    setOpenCreateOrEditTransactionDialog(true);
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -93,7 +96,7 @@ export default function InternalTabs({
         </Tabs>
         {value == 0 && (
           <Button
-            onClick={() => setOpenCreateOrEditTransactionDialog(true)}
+            onClick={() => handleOpenDialog()}
             variant="contained"
             startIcon={<AddBoxOutlinedIcon />}
           >

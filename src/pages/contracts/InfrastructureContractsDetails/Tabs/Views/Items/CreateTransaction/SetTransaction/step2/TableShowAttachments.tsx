@@ -13,15 +13,16 @@ import { useContext, useEffect, useState } from "react";
 import {
   TansactionAttachmentType,
   TransactionType,
-} from "../../../../../../../types/Contracts/ContractTransactionAttachment";
+} from "../../../../../../../../../types/Contracts/ContractTransactionAttachment";
 import axios from "axios";
-import { Api } from "../../../../../../../constants";
-import { CreateTransactionContext } from "../context/CreateTransactionContext";
-import Loader from "../../../../../../../components/Loading/Loader";
+import { Api } from "../../../../../../../../../constants";
+import { CreateTransactionContext } from "../../../context/CreateTransactionContext";
+import Loader from "../../../../../../../../../components/Loading/Loader";
+import { useSnackbar } from "notistack";
 
 export default function TableShowAttachments(props: TableShowAttachmentsProps) {
   //Declaration component State variables...
-
+  const { enqueueSnackbar } = useSnackbar();
   const SingleRow = ({
     type,
     description,
@@ -33,16 +34,32 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
     fileName: string;
     attachmentId: number;
   }) => {
-    const handleDeleteAttachement = async () => {
-      console.log("AttachmentId", attachmentId);
+    const handleDeleteAttachement = () => {
+      axios
+        .post(
+          Api(
+            `employee/contract/items/processing/delete-attachment-type/${attachmentId}`
+          )
+        )
+        .then((res) => {
+          enqueueSnackbar("تم الحذف بنجاح");
+        })
+        .catch((err) => {
+          enqueueSnackbar("تعذر حذف البيانات", { variant: "error" });
+        });
     };
+    
     return (
       <TableRow>
         <TableCell>{type}</TableCell>
         <TableCell>{fileName}</TableCell>
         <TableCell>{description}</TableCell>
         <TableCell>
-          <IconButton size="small" onClick={() => {}} color="error">
+          <IconButton
+            size="small"
+            onClick={() => handleDeleteAttachement()}
+            color="error"
+          >
             <Tooltip title="حذف" placement="top">
               <DeleteIcon />
             </Tooltip>

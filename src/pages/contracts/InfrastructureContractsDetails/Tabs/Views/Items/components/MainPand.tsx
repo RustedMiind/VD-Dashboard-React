@@ -38,10 +38,12 @@ export default function MainPand({ contractData }: MainPandProps) {
         managerName={contractData?.manager?.name??''}
         endDate={contractData.end_date}
         startDate={contractData.start_date}
+        contract_sub_items={contractData.contract_sub_items}
         expended={expended}
         setExpended={setExpended}
         activeBtn={activeBtn}
         setActiveBtn={setActiveBtn}
+        setActivePandId={setActivePandId}
       />
       {/* Main Header Body */}
       {/* !dont work<Accordion expanded={false}> */}
