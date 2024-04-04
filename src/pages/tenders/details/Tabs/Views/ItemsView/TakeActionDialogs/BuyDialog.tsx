@@ -43,6 +43,7 @@ import CustomFilePond from "../../../../../../../components/CustomFilepond";
 import { FileBondState } from "../../../../../../../types/FileBondState";
 import MediaMenuList from "../MediaMenu";
 import { uploadFileInChunks } from "../../../../../../../methods/uploadChunks";
+import AddLabelToEl from "../../../../../../../components/AddLabelToEl";
 
 export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
@@ -67,10 +68,15 @@ export const buyOptions: { value: TenderPay; label: string }[] = [
   },
 ];
 
-const GridItem = (props: GridProps & { label: string }) => (
+const GridItem = (props: GridProps & { label: string; required?: boolean }) => (
   <Grid item md={6} {...props}>
-    <Typography variant="body1">{props.label}</Typography>
-    {props.children}
+    <AddLabelToEl
+      label={props.label}
+      required={props.required}
+      labelTypographyProps={{ gutterBottom: false }}
+    >
+      {props.children}
+    </AddLabelToEl>
   </Grid>
 );
 
@@ -123,6 +129,8 @@ export default function BuyDialog({
             Api("employee/tender/form/status/" + id),
             dto
           )
+            .then(resolve)
+            .catch(reject)
         : axios
             .post(Api("employee/tender/form/status/" + id), dto)
             .then(resolve)
@@ -284,7 +292,7 @@ export default function BuyDialog({
               ))}
             </TextField>
           </GridItem>
-          <GridItem label="ارفاق ملف">
+          <GridItem label="ارفاق ملف" required>
             <MediaMenuList media={uploadedFile} onDeleteMedia={onDeleteMedia} />
             <CustomFilePond
               files={file}
