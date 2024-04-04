@@ -24,6 +24,7 @@ import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export default function MainPandHeader(props: MainPandHeaderProps) {
   // define our variables
+  const transactionCxtData = useContext(CreateTransactionContext);
   const [openTimeMap, setOpenTimeMap] = useState(false);
   const [showNotificationsList, setShowNotificationsList] = useState(false);
 
