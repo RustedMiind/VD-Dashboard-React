@@ -1,9 +1,11 @@
 import { Dialog } from "@mui/material";
-import CreateTransactionTab1 from "./CreateTransactionTab1";
-import CreateTransactionTab2 from "./createTransactionTab2";
+import CreateTransactionTab1 from "./step1/CreateTransactionTab1";
+import CreateTransactionTab2 from "./step2/createTransactionTab2";
 import { useState } from "react";
 
-export default function CreateTransactionDialog(props: CreateTransactionDialogProps) {
+export default function CreateTransactionDialog(
+  props: CreateTransactionDialogProps
+) {
   // TODO::Declaration of component state and variables
   const [operationProgress, setOperationProgress] = useState<"Step1" | "Step2">(
     "Step1"
@@ -29,7 +31,10 @@ export default function CreateTransactionDialog(props: CreateTransactionDialogPr
     <>
       <Dialog
         open={props.open}
-        onClose={() => props.setOpen(false)}
+        onClose={() => {
+          setOperationProgress("Step1");
+          props.setOpen(false);
+        }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         maxWidth={"md"}

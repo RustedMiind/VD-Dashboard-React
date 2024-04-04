@@ -1,14 +1,21 @@
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
-import { DialogTitle, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  CircularProgress,
+  DialogTitle,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
-import AddLabelToEl from "../../../../../../../components/AddLabelToEl";
+import AddLabelToEl from "../../../../../../../../../components/AddLabelToEl";
 import axios from "axios";
-import { Api } from "../../../../../../../constants";
+import { Api } from "../../../../../../../../../constants";
 import { useSnackbar } from "notistack";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateTransactionContext } from "../context/CreateTransactionContext";
+import { CreateTransactionContext } from "../../../context/CreateTransactionContext";
 import { useContext, useState } from "react";
 
 // TODO::define and declare our types
@@ -113,6 +120,7 @@ export default function CreateTransactionTab1(
             required
             size="small"
             {...register(name)}
+            disabled={loading}
             placeholder={text}
           />
         </AddLabelToEl>
@@ -164,8 +172,10 @@ export default function CreateTransactionTab1(
                 }}
                 variant="contained"
                 fullWidth
+                disabled={loading}
               >
-                حفظ
+                حفظ{" "}
+                {loading && <CircularProgress size={"small"} color="primary" />}
               </Button>
             </Grid>
           </Grid>

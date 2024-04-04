@@ -1,18 +1,20 @@
 import { EmployeeType } from "../Employee";
+import { Media } from "../Media";
 import { Employee } from "../User/user";
+import { DbOptionType } from "../other/DbOptionType";
 
 export interface ContractItem {
   id: number;
   name: string;
   description: string;
   manager_id: number;
-  manager: { id: number; name: string };
+  manager?: DbOptionType;
   start_date: string;
   end_date: string;
   created_at: string;
   updated_at: string;
   contract_id: number;
-  media: Medum2[];
+  media?: Media[];
   contract_item_employees?: ContractItemEmployee[];
   contract_sub_items: ContractSubItem[];
 }
@@ -37,4 +39,6 @@ export interface ContractSubItem {
   is_letter: number;
   created_at: string;
   updated_at: string;
+  achievement_percentage?: string;
+  processing?: TransactionType[];
 }

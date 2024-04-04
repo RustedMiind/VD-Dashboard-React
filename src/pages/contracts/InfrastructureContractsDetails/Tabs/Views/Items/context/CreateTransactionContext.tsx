@@ -23,6 +23,7 @@ export function CreateTransactionContextProvider({ children }: childrenProps) {
     setContractSubItem(data);
   };
   const handleSetTransactionId = (num: number) => {
+    if (num == -1) setTransactionId(undefined);
     setTransactionId(num);
   };
   return (

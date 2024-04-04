@@ -8,7 +8,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import CreateTransactionDialog from "./CreateTransactionD2";
+import CreateTransactionDialog from "./SetTransaction";
 import EditTransitionD2 from "./EditTransitionD2";
 
 export default function ChooseOperationTypeDialog({
@@ -97,7 +97,11 @@ export default function ChooseOperationTypeDialog({
           </Button>
         </DialogContent>
       </Dialog>
-      <CreateTransactionDialog open={openCreateD2} setOpen={setOpenCreateD2} activePandId={activePandId} />
+      <CreateTransactionDialog
+        open={openCreateD2}
+        setOpen={setOpenCreateD2}
+        activePandId={activePandId}
+      />
       <EditTransitionD2 open={openEditD2} setOpen={setOpenEditD2} />
     </>
   );

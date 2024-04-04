@@ -9,15 +9,38 @@ import {
   Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useContext, useEffect, useState } from "react";
+import {
+  TansactionAttachmentType,
+  TransactionType,
+} from "../../../../../../../types/Contracts/ContractTransactionAttachment";
+import axios from "axios";
+import { Api } from "../../../../../../../constants";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
+import Loader from "../../../../../../../components/Loading/Loader";
 
-export default function TableShowAttachments({}: TableShowAttachmentsProps) {
+export default function TableShowAttachments(props: TableShowAttachmentsProps) {
   //Declaration component State variables...
-  const SingleRow = () => {
+
+  const SingleRow = ({
+    type,
+    description,
+    fileName,
+    attachmentId,
+  }: {
+    type: string;
+    description: string;
+    fileName: string;
+    attachmentId: number;
+  }) => {
+    const handleDeleteAttachement = async () => {
+      console.log("AttachmentId", attachmentId);
+    };
     return (
       <TableRow>
-        <TableCell>Type 1</TableCell>
-        <TableCell>file 101</TableCell>
-        <TableCell>description</TableCell>
+        <TableCell>{type}</TableCell>
+        <TableCell>{fileName}</TableCell>
+        <TableCell>{description}</TableCell>
         <TableCell>
           <IconButton size="small" onClick={() => {}} color="error">
             <Tooltip title="حذف" placement="top">
@@ -28,6 +51,8 @@ export default function TableShowAttachments({}: TableShowAttachmentsProps) {
       </TableRow>
     );
   };
+
+  if (props.loading) return <Loader />;
 
   //* return component ui.
   return (
@@ -44,8 +69,16 @@ export default function TableShowAttachments({}: TableShowAttachmentsProps) {
           </TableHead>
 
           <TableBody>
-            <SingleRow />
-            <SingleRow />
+            {props.transactionsAttachments?.length > 0 &&
+              props.transactionsAttachments.map((ele, idx) => (
+                <SingleRow
+                  key={`TA-${idx}`}
+                  type={ele.attachment_type?.name ?? ""}
+                  description={ele.description}
+                  attachmentId={ele.id}
+                  fileName={ele?.media ? ele?.media[0]?.file_name ?? "" : ""}
+                />
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -53,4 +86,7 @@ export default function TableShowAttachments({}: TableShowAttachmentsProps) {
   );
 }
 
-type TableShowAttachmentsProps = {};
+type TableShowAttachmentsProps = {
+  transactionsAttachments: TansactionAttachmentType[];
+  loading: boolean;
+};

@@ -1,8 +1,41 @@
 import { Box, Grid, Typography } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { useContext, useEffect, useState } from "react";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
+import axios from "axios";
+import { Api } from "../../../../../../../constants";
+import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
+import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
 
 export default function Transactions() {
+  //TODO::declare and define component state and variables
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  // get create transaction context data
+  const transactionCxtData = useContext(CreateTransactionContext);
+
+  // TODO::define helpers method
+  // * This method will be refresh method in context :)
+  const getTransactionData = async (id: number) => {
+    try {
+      const { data } = await axios.get<{
+        contract_sub_item: ContractSubItem;
+      }>(Api(`employee/contract/items/show-subitem/${id}`));
+      console.log("getTransactionData", data);
+      setTransactions(data.contract_sub_item.processing || []);
+    } catch (err) {
+      console.log("Error in fetch data::", err);
+    }
+  };
+
+  // Fetch sub item transactions data
+  useEffect(() => {
+    if (transactionCxtData?.contractSubItem?.id) {
+      // getTransactionData(transactionCxtData?.contractSubItem?.id);
+      getTransactionData(75);
+    }
+  }, [transactionCxtData]);
+  // TODO::define helper variables and methods
   let attachementsBtns = (
     <>
       <RemoveRedEyeIcon />
@@ -72,3 +105,4 @@ export default function Transactions() {
     </Grid>
   );
 }
+
