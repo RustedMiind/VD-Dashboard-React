@@ -1,50 +1,64 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
 import AddLabelToEl from "../../../../components/AddLabelToEl";
 import { Box, Grid, TextField, Typography } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import DoneAndReminder from "./DoneAndReminder";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { Api } from "../../../../constants";
+import { useParams } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ContractDetailsContext } from "..";
+import { useContext, useEffect } from "react";
 
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
+const formSchema = z.object({
+  achievement_percentage: z.number().min(0).max(100),
 });
-
-type dialogProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
+type FormType = z.infer<typeof formSchema>;
 export default function EditRaioDialog({ open, setOpen }: dialogProps) {
-  const [ratio, setRatio] = React.useState("85.5");
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+  const { enqueueSnackbar } = useSnackbar();
+  const { contract, refresh } = useContext(ContractDetailsContext);
+  const { id } = useParams();
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post(
+        Api(`employee/contract/update-contract-achievement/${id}`),
+        data
+      );
+      enqueueSnackbar("تم الحفظ بنجاح");
+      refresh();
+      handleClose();
+    } catch (err) {
+      enqueueSnackbar("تعذر في حفظ  ", { variant: "error" });
+    }
+  });
   const handleClose = () => {
     setOpen(false);
   };
-
+  useEffect(() => {
+    if (id) {
+      reset({ achievement_percentage: contract?.achievement_percentage });
+    }
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <Dialog
         open={open}
-        TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
+        onSubmit={onSubmit}
+        component={"form"}
       >
         <Typography
           variant="h6"
@@ -58,11 +72,16 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
         <DialogContent>
           <AddLabelToEl label="النسبة المئوية">
             <TextField
-              onChange={(e) => setRatio(e.target.value)}
-              value={ratio}
+              {...register("achievement_percentage", {
+                valueAsNumber: true,
+              })}
               size="small"
               placeholder="النسبة المئوية"
+              type="number"
             />
+            <Typography variant="body2" color={"error"}>
+              {errors.achievement_percentage?.message}
+            </Typography>
           </AddLabelToEl>
           <br />
           <Grid container sx={{ paddingBottom: "1rem" }}>
@@ -83,7 +102,7 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
                   style={{ width: "90px" }}
                   variant="determinate"
                   color={"warning"}
-                  value={85.5}
+                  value={watch("achievement_percentage") | 0}
                 />
                 <Typography
                   sx={{
@@ -95,7 +114,7 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
                   color={"warning"}
                   variant="body2"
                 >
-                  {ratio.length ? ratio : "0"}%
+                  {watch("achievement_percentage") | 0}%
                 </Typography>
               </Box>
             </Grid>
@@ -112,6 +131,7 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
             }}
           >
             <Button
+              type="submit"
               sx={{
                 width: "60%",
                 bgcolor: "primary.main",
@@ -149,6 +169,10 @@ export default function EditRaioDialog({ open, setOpen }: dialogProps) {
           </Grid>
         </DialogContent>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }
+type dialogProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
