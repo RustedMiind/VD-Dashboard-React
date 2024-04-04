@@ -121,7 +121,7 @@ export default function TableComponent() {
                       <TableCell sx={{ display: "flex", alignItems: "center" }}>
                         <IconButton
                           component={`a`}
-                          href={`${tender.pictures?.file_finacial_tender?.[0].original_url}`}
+                          href={`${tender.pictures?.file_finacial_tender?.[0]?.original_url}`}
                           target="_blank"
                           download
                           color="primary"
@@ -132,27 +132,27 @@ export default function TableComponent() {
                           />
                         </IconButton>
                         <LimitTypography>
-                          {tender.pictures.file_finacial_tender?.[0].name}
+                          {tender.pictures.file_finacial_tender?.[0]?.name}
                         </LimitTypography>
                       </TableCell>
                       <TableCell>
-                        {tender.pictures.file_finacial_tender?.[0].mime_type}
+                        {tender.pictures.file_finacial_tender?.[0]?.mime_type}
                       </TableCell>
                       <TableCell>
                         {convertBytetoMB(
-                          tender.pictures.file_finacial_tender?.[0].size
+                          tender.pictures.file_finacial_tender?.[0]?.size
                         )}
                       </TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>
                         {formatDate(
-                          tender.pictures.file_finacial_tender?.[0].created_at
+                          tender.pictures.file_finacial_tender?.[0]?.created_at
                         )}
                       </TableCell>
                       <TableCell>
                         <IconButton
                           component={`a`}
-                          href={`${tender.pictures.file_finacial_tender?.[0].original_url}`}
+                          href={`${tender.pictures.file_finacial_tender?.[0]?.original_url}`}
                           target="_blank"
                           download
                           color="primary"
@@ -182,7 +182,7 @@ export default function TableComponent() {
                       <TableCell sx={{ display: "flex", alignItems: "center" }}>
                         <IconButton
                           component={`a`}
-                          href={`${tender.pictures?.technical_tender?.[0].original_url}`}
+                          href={`${tender.pictures?.technical_tender?.[0]?.original_url}`}
                           target="_blank"
                           download
                           color="primary"
@@ -193,27 +193,27 @@ export default function TableComponent() {
                           />
                         </IconButton>
                         <LimitTypography>
-                          {tender.pictures?.technical_tender?.[0].name}
+                          {tender.pictures?.technical_tender?.[0]?.name}
                         </LimitTypography>
                       </TableCell>
                       <TableCell>
-                        {tender.pictures?.technical_tender?.[0].mime_type}
+                        {tender.pictures?.technical_tender?.[0]?.mime_type}
                       </TableCell>
                       <TableCell>
                         {convertBytetoMB(
-                          tender.pictures?.technical_tender?.[0].size
+                          tender.pictures?.technical_tender?.[0]?.size
                         )}
                       </TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>
                         {formatDate(
-                          tender.pictures?.technical_tender?.[0].created_at
+                          tender.pictures?.technical_tender?.[0]?.created_at
                         )}
                       </TableCell>
                       <TableCell>
                         <IconButton
                           component={`a`}
-                          href={`${tender.pictures?.technical_tender?.[0].original_url}`}
+                          href={`${tender.pictures?.technical_tender?.[0]?.original_url}`}
                           target="_blank"
                           download
                           color="primary"

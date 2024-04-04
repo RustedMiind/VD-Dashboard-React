@@ -59,7 +59,7 @@ export default function TopCards() {
         alignItems: "center",
         justifyContent: "space-between",
       }}
-      className="fadeInUp"
+      // className="fadeInUp"
     >
       {/* First Card */}
       <Box
@@ -514,7 +514,7 @@ export default function TopCards() {
                 style={{ width: "90px" }}
                 variant="determinate"
                 color={"warning"}
-                value={85.5}
+                value={contract?.achievement_percentage}
               />
               <Typography
                 sx={{
@@ -526,7 +526,7 @@ export default function TopCards() {
                 color={"warning"}
                 variant="body2"
               >
-                85.5%
+                {contract?.achievement_percentage}%
               </Typography>
             </Box>
           </Grid>

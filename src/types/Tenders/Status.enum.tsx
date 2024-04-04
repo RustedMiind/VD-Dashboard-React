@@ -30,5 +30,6 @@ export enum TenderStep {
 }
 export enum TenderPay {
   PAYED = TenderItemStatus.ONGOING,
-  NOTPAYED = TenderItemStatus.PENDING,
+  NOTPAYED = 0,
+  PENDING = TenderItemStatus.PENDING,
 }

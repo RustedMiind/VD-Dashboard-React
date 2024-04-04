@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
 import { FetchStatus } from "../../../../../../../types/FetchStatus";
 import { FetchStatusEnum } from "../../../../../../../types/FetchStatusEnum";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Api } from "../../../../../../../constants";
 import { objectToFormData } from "../../../../../../../methods";
 import { useSnackbar } from "notistack";
@@ -43,6 +43,7 @@ import CustomFilePond from "../../../../../../../components/CustomFilepond";
 import { FileBondState } from "../../../../../../../types/FileBondState";
 import MediaMenuList from "../MediaMenu";
 import { uploadFileInChunks } from "../../../../../../../methods/uploadChunks";
+import AddLabelToEl from "../../../../../../../components/AddLabelToEl";
 
 export const statusOptions: { value: TenderItemStatus; label: string }[] = [
   {
@@ -67,10 +68,15 @@ export const buyOptions: { value: TenderPay; label: string }[] = [
   },
 ];
 
-const GridItem = (props: GridProps & { label: string }) => (
+const GridItem = (props: GridProps & { label: string; required?: boolean }) => (
   <Grid item md={6} {...props}>
-    <Typography variant="body1">{props.label}</Typography>
-    {props.children}
+    <AddLabelToEl
+      label={props.label}
+      required={props.required}
+      labelTypographyProps={{ gutterBottom: false }}
+    >
+      {props.children}
+    </AddLabelToEl>
   </Grid>
 );
 
@@ -115,15 +121,20 @@ export default function BuyDialog({
 
   function sendImage(dto?: Record<string, unknown>) {
     return new Promise((resolve, reject) => {
-      if (!file[0]) resolve("");
-      uploadFileInChunks(
-        file[0] as File,
-        1024 ** 2 * 10,
-        Api("employee/tender/form/status/" + id),
-        dto
-      )
-        .then(resolve)
-        .catch(reject);
+      // if (!file[0]) reject("");
+      file[0]
+        ? uploadFileInChunks(
+            file[0] as File,
+            1024 ** 2 * 10,
+            Api("employee/tender/form/status/" + id),
+            dto
+          )
+            .then(resolve)
+            .catch(reject)
+        : axios
+            .post(Api("employee/tender/form/status/" + id), dto)
+            .then(resolve)
+            .catch(reject);
     });
   }
 
@@ -152,9 +163,11 @@ export default function BuyDialog({
           refresh();
           // });
         })
-        .catch((err) => {
+        .catch((err: AxiosError<{ msg?: string }>) => {
           console.log(err);
-          enqueueSnackbar("تعذر في اتخاذ الاجراء", { variant: "error" });
+          enqueueSnackbar(err.response?.data?.msg || "تعذر في اتخاذ الاجراء", {
+            variant: "error",
+          });
         })
         .finally(() => {
           setFormStatus(FetchStatusEnum.NONE);
@@ -279,7 +292,7 @@ export default function BuyDialog({
               ))}
             </TextField>
           </GridItem>
-          <GridItem label="ارفاق ملف">
+          <GridItem label="ارفاق ملف" required>
             <MediaMenuList media={uploadedFile} onDeleteMedia={onDeleteMedia} />
             <CustomFilePond
               files={file}

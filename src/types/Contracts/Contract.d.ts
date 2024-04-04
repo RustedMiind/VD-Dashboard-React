@@ -45,6 +45,7 @@ export interface Contract {
   contract_details?: ContractDetails; // Assuming both interfaces use the same type
   contract_items?: ContractItem[]; // Resolving optional property conflict
   contract_direct_entry_sub_type: ContractDirectEntrySubType; // Assuming both interfaces use the same type
+  achievement_percentage: number;
 }
 
 type Management = {

@@ -17,7 +17,7 @@ import { DtoType } from "./DtoType";
 import { useForm } from "react-hook-form";
 import { useContext, useEffect, useState } from "react";
 import { statusOptions } from "./BuyDialog";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Api } from "../../../../../../../constants";
 import SubmitTypeDialog from "./SubmitTypeDialog";
 import { FetchStatus } from "../../../../../../../types/FetchStatus";
@@ -30,11 +30,17 @@ import { TenderStep } from "../../../../../../../types/Tenders/Status.enum";
 import { Media } from "../../../../../../../types";
 import MediaMenuList from "../MediaMenu";
 import { uploadFileInChunks } from "../../../../../../../methods/uploadChunks";
+import AddLabelToEl from "../../../../../../../components/AddLabelToEl";
 
-const GridItem = (props: GridProps & { label: string }) => (
+const GridItem = (props: GridProps & { label: string; required?: boolean }) => (
   <Grid item md={6} {...props}>
-    <Typography variant="body1">{props.label}</Typography>
-    {props.children}
+    <AddLabelToEl
+      label={props.label}
+      required={props.required}
+      labelTypographyProps={{ gutterBottom: false }}
+    >
+      {props.children}
+    </AddLabelToEl>
   </Grid>
 );
 
@@ -79,15 +85,20 @@ export default function OthersDialog({
 
   function sendImage(dto?: Record<string, unknown>) {
     return new Promise((resolve, reject) => {
-      if (!file) resolve("");
-      uploadFileInChunks(
-        file as File,
-        1024 ** 2 * 10,
-        Api("employee/tender/form/status/" + id),
-        dto
-      )
-        .then(resolve)
-        .catch(reject);
+      // if (!file[0]) reject("");
+      file
+        ? uploadFileInChunks(
+            file as File,
+            1024 ** 2 * 10,
+            Api("employee/tender/form/status/" + id),
+            dto
+          )
+            .then(resolve)
+            .catch(reject)
+        : axios
+            .post(Api("employee/tender/form/status/" + id), dto)
+            .then(resolve)
+            .catch(reject);
     });
   }
 
@@ -113,9 +124,11 @@ export default function OthersDialog({
           enqueueSnackbar("تم اتخاذ الاجراء");
           refresh();
         })
-        .catch((err) => {
+        .catch((err: AxiosError<{ msg?: string }>) => {
           console.log(err);
-          enqueueSnackbar("تعذر في اتخاذ الاجراء", { variant: "error" });
+          enqueueSnackbar(err.response?.data?.msg || "تعذر في اتخاذ الاجراء", {
+            variant: "error",
+          });
         })
         .finally(() => {
           setFormStatus(FetchStatusEnum.NONE);
@@ -160,7 +173,7 @@ export default function OthersDialog({
           <GridItem label="تاريخ الانتهاء">
             <TextField value={endDate} disabled fullWidth size="small" />
           </GridItem>
-          <GridItem label="ارفق عرض التقديم">
+          <GridItem label="ارفق عرض التقديم" required>
             <MediaMenuList media={uploadedFile} onDeleteMedia={onDeleteMedia} />
             <UploadFileInput
               size="sm"
