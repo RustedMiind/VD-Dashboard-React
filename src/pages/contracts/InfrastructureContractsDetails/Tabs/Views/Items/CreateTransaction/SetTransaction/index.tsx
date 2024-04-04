@@ -17,7 +17,6 @@ export default function CreateTransactionDialog(
       case "Step1":
         return (
           <CreateTransactionTab1
-            activePandId={props.activePandId}
             setOperationProgress={setOperationProgress}
           />
         );
@@ -49,6 +48,5 @@ export default function CreateTransactionDialog(
 
 type CreateTransactionDialogProps = {
   open: boolean;
-  activePandId: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

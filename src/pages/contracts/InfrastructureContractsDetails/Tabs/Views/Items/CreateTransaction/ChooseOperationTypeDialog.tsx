@@ -10,13 +10,14 @@ import {
 } from "@mui/material";
 import CreateTransactionDialog from "./SetTransaction";
 import EditTransitionD2 from "./EditTransitionD2";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export default function ChooseOperationTypeDialog({
   open,
-  activePandId,
   setOpen,
 }: CreateOrUpdateTransactionsD1Props) {
   //   TODO::define our component state variables
+  const transactionCxtData = React.useContext(CreateTransactionContext);
   const [operationType, setOperationType] = React.useState("create");
   const [openCreateD2, setOpenCreateD2] = React.useState(false);
   const [openEditD2, setOpenEditD2] = React.useState(false);
@@ -100,7 +101,6 @@ export default function ChooseOperationTypeDialog({
       <CreateTransactionDialog
         open={openCreateD2}
         setOpen={setOpenCreateD2}
-        activePandId={activePandId}
       />
       <EditTransitionD2 open={openEditD2} setOpen={setOpenEditD2} />
     </>
@@ -109,6 +109,5 @@ export default function ChooseOperationTypeDialog({
 
 type CreateOrUpdateTransactionsD1Props = {
   open: boolean;
-  activePandId: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

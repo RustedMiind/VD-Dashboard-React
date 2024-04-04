@@ -13,7 +13,7 @@ export const CreateTransactionContext =
     setContractSubItem: (data) => {},
     transactionId: undefined,
     setTransactionId: (num) => {},
-    // refresh:)
+    refresh: () => {},
   });
 
 export function CreateTransactionContextProvider({ children }: childrenProps) {
@@ -34,6 +34,7 @@ export function CreateTransactionContextProvider({ children }: childrenProps) {
         setContractSubItem: handleSetContractSubItem,
         transactionId: transactionId,
         setTransactionId: handleSetTransactionId,
+        refresh: () => {},
       }}
     >
       {children}
@@ -45,4 +46,5 @@ type CreateTransactionContextType = {
   setContractSubItem: (data: ContractSubItem) => void;
   transactionId: number | undefined;
   setTransactionId: (num: number) => void;
+  refresh: () => void;
 };

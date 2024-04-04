@@ -21,6 +21,7 @@ import NotificationList from "./NotificationsList";
 import RoundedIconButton from "../../../../../../../components/RoundedIconButton";
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
 import { CreateTransactionContext } from "../context/CreateTransactionContext";
+import NotificationBtn from "./NotificationBtn";
 
 export default function MainPandHeader(props: MainPandHeaderProps) {
   // define our variables
@@ -62,7 +63,7 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
               transactionCxtData.setContractSubItem(
                 props.contract_sub_items[0]
               );
-              props.setActivePandId(props.contract_sub_items[0].id);
+              props.setActiveSubItemId(props.contract_sub_items[0].id);
             }
             props.setExpended(!props.expended);
           }}
@@ -161,15 +162,7 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
               <EditIcon />
             </RoundedIconButton>
             <Tooltip title="تم التعديل بواسطة مهندس احمد" placement="top-start">
-              <RoundedIconButton
-                onClick={() => handleBtnClick(MainPandBtns.NOTIFICATIONS)}
-              >
-                {/* <LastNotification statment={"تم التعديل بواسطة مهندس احمد"} /> */}
-                {showNotificationsList && <NotificationList />}
-                <Badge badgeContent={4} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </RoundedIconButton>
+              <NotificationBtn handleBtnClick={handleBtnClick} />
             </Tooltip>
           </Box>
         </Grid>
@@ -195,5 +188,5 @@ type MainPandHeaderProps = {
   endDate: string;
   startDate: string;
   contract_sub_items: ContractSubItem[];
-  setActivePandId: React.Dispatch<React.SetStateAction<number>>;
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };

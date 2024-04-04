@@ -22,10 +22,10 @@ export default function CreateTransactionTab2() {
 
   // fetch transactions data
   useEffect(() => {
-    getTransactionData();
+    refreshTransactionData();
   }, []);
 
-  const getTransactionData = async () => {
+  const refreshTransactionData = async () => {
     setLoading(true);
     setTransactionsAttachments([]);
     let response = await axios
@@ -40,6 +40,7 @@ export default function CreateTransactionTab2() {
     setTransactionsAttachments(response.processing.attachment);
     setLoading(false);
   };
+  transactionCxtData.refresh = refreshTransactionData;
 
   // *return component ui
   return (
@@ -72,7 +73,6 @@ export default function CreateTransactionTab2() {
       <CreateTransactionAttachmentFileDialog
         open={openDialog}
         handleClose={() => setOpenDialog(false)}
-        refresh={() => getTransactionData()}
       />
     </>
   );

@@ -85,7 +85,7 @@ export default function CreateTransactionTab1(
       letter_num: data.letterNum,
       subject: data.transactionSubject,
       receiver: data.sendTo,
-      contract_sub_item_id: props.activePandId,
+      contract_sub_item_id: transactionCxtData.contractSubItem?.id,
       contract_attachment_types: [],
     };
     try {
@@ -186,6 +186,5 @@ export default function CreateTransactionTab1(
 }
 
 type CreateTransactionTab1Props = {
-  activePandId: number;
   setOperationProgress: React.Dispatch<React.SetStateAction<"Step1" | "Step2">>;
 };

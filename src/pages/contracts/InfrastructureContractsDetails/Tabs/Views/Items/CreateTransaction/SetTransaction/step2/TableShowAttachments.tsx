@@ -22,6 +22,7 @@ import { useSnackbar } from "notistack";
 
 export default function TableShowAttachments(props: TableShowAttachmentsProps) {
   //Declaration component State variables...
+  const transactionCxtData = useContext(CreateTransactionContext);
   const { enqueueSnackbar } = useSnackbar();
   const SingleRow = ({
     type,
@@ -35,6 +36,7 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
     attachmentId: number;
   }) => {
     const handleDeleteAttachement = () => {
+      console.log("Delete Attach file");
       axios
         .post(
           Api(
@@ -43,12 +45,13 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
         )
         .then((res) => {
           enqueueSnackbar("تم الحذف بنجاح");
+          transactionCxtData.refresh();
         })
         .catch((err) => {
           enqueueSnackbar("تعذر حذف البيانات", { variant: "error" });
         });
     };
-    
+
     return (
       <TableRow>
         <TableCell>{type}</TableCell>
@@ -57,7 +60,10 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
         <TableCell>
           <IconButton
             size="small"
-            onClick={() => handleDeleteAttachement()}
+            onClick={() => {
+              console.log("Delete File::");
+              handleDeleteAttachement();
+            }}
             color="error"
           >
             <Tooltip title="حذف" placement="top">
@@ -68,8 +74,6 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
       </TableRow>
     );
   };
-
-  if (props.loading) return <Loader />;
 
   //* return component ui.
   return (

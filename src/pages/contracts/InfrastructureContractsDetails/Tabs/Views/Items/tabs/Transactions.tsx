@@ -9,7 +9,7 @@ import { ContractSubItem } from "../../../../../../../types/Contracts/ContractIt
 import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
 import Loader from "../../../../../../../components/Loading/Loader";
 
-export default function Transactions() {
+export default function Transactions(props: PropsType) {
   //TODO::declare and define component state and variables
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   // get create transaction context data
@@ -24,7 +24,6 @@ export default function Transactions() {
       const { data } = await axios.get<{
         contract_sub_item: ContractSubItem;
       }>(Api(`employee/contract/items/show-subitem/${id}`));
-      console.log("getTransactionData", data);
       setTransactions(data.contract_sub_item.processing || []);
       setLoading(false);
     } catch (err) {
@@ -35,10 +34,10 @@ export default function Transactions() {
 
   // Fetch sub item transactions data
   useEffect(() => {
-    if (transactionCxtData?.contractSubItem?.id) {
-      getTransactionData(transactionCxtData?.contractSubItem?.id);
+    if (props.activeSubItemId != -1) {
+      getTransactionData(props.activeSubItemId);
     }
-  }, [transactionCxtData]);
+  }, [props.activeSubItemId]);
   // TODO::define helper variables
   let attachementsBtns = (
     <>
@@ -62,7 +61,6 @@ export default function Transactions() {
   );
 
   const SingleRow = ({ item }: { item: TransactionType }) => {
-    console.log("Item88", item);
     return (
       <Grid
         item
@@ -125,3 +123,7 @@ export default function Transactions() {
     </Grid>
   );
 }
+
+type PropsType = {
+  activeSubItemId: number;
+};

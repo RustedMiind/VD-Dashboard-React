@@ -13,32 +13,38 @@ import { ContractSubItem } from "../../../../../../../types/Contracts/ContractIt
 import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export default function SubPandsList({
-  activePandId,
   contractSubItems,
-  setActivePandId,
+  setActiveSubItemId,
 }: SubPandsListProps) {
   // get create transaction context data
   const transactionCxtData = useContext(CreateTransactionContext);
-  
-  
+
   // declare single btn component
   let SingleBtn = ({ item }: { item: ContractSubItem }) => (
     <Button
       size="large"
       startIcon={
         <Fab
-          color={item.id != activePandId ? "primary" : undefined}
+          color={
+            item.id != transactionCxtData.contractSubItem?.id
+              ? "primary"
+              : undefined
+          }
           size="small"
         >
           <KeyboardBackspaceIcon />
         </Fab>
       }
       sx={{ fontSize: 20 }}
-      variant={item.id == activePandId ? "contained" : undefined}
+      variant={
+        item.id == transactionCxtData.contractSubItem?.id
+          ? "contained"
+          : undefined
+      }
       fullWidth
       onClick={() => {
-        setActivePandId(item.id);
         transactionCxtData.setContractSubItem(item);
+        setActiveSubItemId(item.id);
       }}
     >
       {item.name}
@@ -46,9 +52,10 @@ export default function SubPandsList({
   );
 
   // handle set active item id in beginning
-  useEffect(() => {
-    if (contractSubItems.length) setActivePandId(contractSubItems[0].id);
-  }, []);
+  // useEffect(() => {
+  //   if (contractSubItems.length)
+  //     transactionCxtData.setContractSubItem(contractSubItems[0]);
+  // }, []);
 
   return (
     <Stack
@@ -66,7 +73,6 @@ export default function SubPandsList({
 }
 
 type SubPandsListProps = {
-  activePandId: number;
-  setActivePandId: React.Dispatch<React.SetStateAction<number>>;
   contractSubItems: ContractSubItem[];
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };

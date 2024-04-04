@@ -72,7 +72,7 @@ function CreateTransactionAttachmentFileDialog(props: PropsType) {
         reset({ description: "" });
 
         setFile([]);
-        props.refresh();
+        transactionCxtData.refresh();
         props.handleClose();
         // transactionCxtData.setTransactionId(-1);
       })
@@ -153,7 +153,6 @@ function CreateTransactionAttachmentFileDialog(props: PropsType) {
 type PropsType = {
   open: boolean;
   handleClose: () => void;
-  refresh: () => Promise<void>;
 };
 
 export default CreateTransactionAttachmentFileDialog;
