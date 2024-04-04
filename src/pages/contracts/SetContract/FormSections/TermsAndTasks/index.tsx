@@ -45,7 +45,7 @@ type PandT = {
   is_treatment: boolean;
   is_attachment: boolean;
   is_mission: boolean;
-  is_Letter: boolean;
+  is_letter: boolean;
 };
 type editedDataType = {
   id: number;
@@ -67,7 +67,7 @@ type editedDataType = {
     is_processing: "1" | "0";
     is_attachment: "1" | "0";
     is_mission: "1" | "0";
-    is_Letter: "1" | "0";
+    is_letter: "1" | "0";
   }[];
   created_at: string;
   description: string;
@@ -90,7 +90,7 @@ type SubItem = {
   is_processing: "1" | "0";
   is_attachment: "0" | "1";
   is_mission: "1" | "0";
-  is_Letter: "1" | "0";
+  is_letter: "1" | "0";
 };
 
 export default function TermsAndTasksOFContract(props: propsType) {
@@ -135,7 +135,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       is_percent: false,
       is_treatment: false,
       is_mission: false,
-      is_Letter: false,
+      is_letter: false,
     },
   ]);
   const [processLoading, setProcessLoading] = useState(false);
@@ -216,7 +216,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
             is_treatment: ele.is_processing == "1" ? true : false,
             is_attachment: ele.is_attachment == "1" ? true : false,
             is_mission: ele.is_mission == "1" ? true : false,
-            is_Letter: ele.is_Letter == "1" ? true : false,
+            is_letter: ele.is_letter == "1" ? true : false,
           };
         })
       );
@@ -277,7 +277,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
         is_processing: ele.is_treatment ? 1 : 0,
         is_attachment: ele.is_attachment ? 1 : 0,
         is_mission: ele.is_mission ? 1 : 0,
-        is_Letter: ele.is_Letter ? 1 : 0,
+        is_letter: ele.is_letter ? 1 : 0,
         name: ele.name,
       })),
       attachments: inputFiles,
@@ -833,7 +833,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                 is_percent: false,
                 is_treatment: false,
                 is_mission: false,
-                is_Letter: false,
+                is_letter: false,
               },
             ]);
           }}

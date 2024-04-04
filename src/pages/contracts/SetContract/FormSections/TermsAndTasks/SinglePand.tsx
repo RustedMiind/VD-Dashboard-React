@@ -19,7 +19,7 @@ type PandT = {
   is_treatment: boolean;
   is_attachment: boolean;
   is_mission: boolean;
-  is_Letter: boolean;
+  is_letter: boolean;
 };
 
 export default function SinglePand({
@@ -45,7 +45,7 @@ export default function SinglePand({
     is_attachment:
       subPandsArr.length > idx ? subPandsArr[idx].is_attachment : false,
     is_mission: subPandsArr.length > idx ? subPandsArr[idx].is_mission : false,
-    is_Letter: subPandsArr.length > idx ? subPandsArr[idx].is_Letter : false,
+    is_letter: subPandsArr.length > idx ? subPandsArr[idx].is_letter : false,
   });
 
   useEffect(() => {
@@ -174,9 +174,9 @@ export default function SinglePand({
               <FormControlLabel
                 control={
                   <Checkbox
-                    defaultChecked={Pand.is_Letter}
+                    defaultChecked={Pand.is_letter}
                     onChange={(e, checked) =>
-                      setPand((prev) => ({ ...prev, is_Letter: checked }))
+                      setPand((prev) => ({ ...prev, is_letter: checked }))
                     }
                   />
                 }
