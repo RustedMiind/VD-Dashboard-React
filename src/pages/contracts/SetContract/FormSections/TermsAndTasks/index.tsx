@@ -500,7 +500,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                 >
                   {engineers?.map((employee) => (
                     <MenuItem
-                      key={`ele_${employee.id}_${Math.random()}`}
+                      key={`ele_${employee.id}`}
                       value={employee.id}
                     >
                       {employee.full_name}
@@ -801,7 +801,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
         return (
           <SinglePand
             disabled={processLoading}
-            key={`pand_${idx}_${Math.random()}`}
+            key={`pand_${idx}`}
             users={setselectedEngineeras}
             subPandsArr={subPands}
             setPandData={setSubPands}

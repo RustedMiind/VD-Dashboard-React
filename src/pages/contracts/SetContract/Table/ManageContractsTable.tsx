@@ -23,7 +23,7 @@ function ManageContractTable(props: PropsType) {
       {props.secondTabValue === 0 &&
         toView?.map((request) => {
           return (
-            <TableRow key={`${Math.random()}_${request.id}`}>
+            <TableRow key={`TR_${request.id}`}>
               <TableCell>
                 <Checkbox
                   checked={selectedIdsContext?.selectedIds?.includes(

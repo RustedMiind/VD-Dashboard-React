@@ -1,5 +1,7 @@
 import {
+  CircularProgress,
   IconButton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -7,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useContext, useEffect, useState } from "react";
@@ -88,7 +91,6 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
               <TableCell>الاعدادات</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {props.transactionsAttachments?.length > 0 &&
               props.transactionsAttachments.map((ele, idx) => (
@@ -102,6 +104,28 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
               ))}
           </TableBody>
         </Table>
+        {props.loading && (
+          <Stack
+            width={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            marginY={3}
+          >
+            <CircularProgress />
+          </Stack>
+        )}
+        {!props.loading && props.transactionsAttachments?.length == 0 && (
+          <Stack
+            width={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            marginY={3}
+          >
+            <Typography variant="body2" fontWeight={500}>
+              لا يوجد مرفقات فى هذه المعاملة
+            </Typography>
+          </Stack>
+        )}
       </TableContainer>
     </>
   );

@@ -44,6 +44,8 @@ export default function MainPand({ contractData }: MainPandProps) {
     }
   }, []);
 
+  console.log("MainPand");
+
   return (
     <>
       {/* MainPand Header */}
@@ -68,10 +70,13 @@ export default function MainPand({ contractData }: MainPandProps) {
       >
         <Grid container xs={12} spacing={1}>
           <Grid item xl={2} xs={3}>
-            <SubPandsList contractSubItems={contractData.contract_sub_items} setActiveSubItemId={setActiveSubItemId} />
+            <SubPandsList
+              contractSubItems={contractData.contract_sub_items}
+              setActiveSubItemId={setActiveSubItemId}
+            />
           </Grid>
           <Grid item xs={9} xl={10}>
-            <InternalTabs TabsHeaders={TabsHeaders} />
+            <InternalTabs TabsHeaders={TabsHeaders} setActiveSubItemId={setActiveSubItemId}/>
           </Grid>
         </Grid>
       </Accordion>

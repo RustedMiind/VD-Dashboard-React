@@ -357,7 +357,7 @@ const ProjectWorkDetails = (props: PropsType) => {
           {FormHeaders.map((header) => {
             return (
               <FieldGrid
-                key={`h_${header.id}_${Math.random()}`}
+                key={`h_${header.id}`}
                 text={header.text}
                 name={header.name}
               />

@@ -348,7 +348,7 @@ export default function TopCards() {
           {workStaff.map((user, idx) => {
             return (
               <Box
-                key={`user_${idx}_${user.id}_${Math.random()}`}
+                key={`user_${idx}_${user.id}`}
                 sx={{
                   display: "flex",
                   alignItems: "center",

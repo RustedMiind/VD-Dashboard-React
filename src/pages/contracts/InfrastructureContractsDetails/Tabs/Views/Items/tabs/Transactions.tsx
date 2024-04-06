@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { CreateTransactionContext } from "../context/CreateTransactionContext";
 import axios from "axios";
 import { Api } from "../../../../../../../constants";
@@ -101,6 +101,7 @@ export default function Transactions(props: PropsType) {
     );
   };
 
+  console.log("Transactions")
   return (
     <Grid container xs={12}>
       {loading && <Loader title={"جاري تحميل البنود الفرعية"} />}

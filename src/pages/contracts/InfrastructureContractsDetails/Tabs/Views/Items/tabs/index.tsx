@@ -46,7 +46,10 @@ export type TabType = {
   children?: React.ReactNode;
 };
 
-export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
+export default function InternalTabs({
+  TabsHeaders,
+  setActiveSubItemId,
+}: InternalTabsProps) {
   const [value, setValue] = React.useState(0);
   const [
     openCreateOrEditTransactionDialog,
@@ -60,6 +63,7 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
     setOpenCreateOrEditTransactionDialog(true);
   };
 
+  console.log("InternalTabs");
   return (
     <Box sx={{ width: "100%" }}>
       <Box
@@ -78,7 +82,7 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
         >
           {TabsHeaders.map((ele) => (
             <Tab
-              key={`${Math.random()}_${ele.index}`}
+              key={`tab_${ele.index}`}
               label={ele.label}
               {...a11yProps(ele.index)}
               sx={{
@@ -104,10 +108,11 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
       <ChooseOperationTypeDialog
         open={openCreateOrEditTransactionDialog}
         setOpen={setOpenCreateOrEditTransactionDialog}
+        setActiveSubItemId={setActiveSubItemId}
       />
       {TabsHeaders.map((ele) => (
         <CustomTabPanel
-          key={`${Math.random()}_${ele.index}`}
+          key={`$CT_${ele.index}`}
           value={value}
           index={ele.index}
         >
@@ -120,4 +125,5 @@ export default function InternalTabs({ TabsHeaders }: InternalTabsProps) {
 
 type InternalTabsProps = {
   TabsHeaders: TabType[];
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };
