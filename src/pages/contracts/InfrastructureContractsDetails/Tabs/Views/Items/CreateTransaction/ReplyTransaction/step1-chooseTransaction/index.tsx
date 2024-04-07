@@ -6,10 +6,12 @@ import AddLabelToEl from "../../../../../../../../../components/AddLabelToEl";
 import SelectWithFilter from "../../../../../../../../../components/SelectWithFilter";
 import { useContext, useState } from "react";
 import { TransactionContext } from "../../../context/TransactionContext";
+import { ReplyTransactionContext } from "../../../context/ReplyTransactionContext";
 
 export default function ReplyTransactionTab1(props: Tab1Props) {
   //TODO::define our component state variables
   const TransactionContextData = useContext(TransactionContext);
+  const ReplyTransactionContextData = useContext(ReplyTransactionContext);
   const [transactionId, setTransactionId] = useState("");
   const [error, setError] = useState(false);
 
@@ -19,6 +21,8 @@ export default function ReplyTransactionTab1(props: Tab1Props) {
       setError(true);
       return;
     } else setError(false);
+    //!There is an operation here we will handle it.
+    ReplyTransactionContextData.handleSetTransactionId(parseInt(transactionId));
     props.setOperationProgress("Step2");
   };
 

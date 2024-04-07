@@ -3,6 +3,12 @@ import DialogContent from "@mui/material/DialogContent";
 import { DialogTitle, Grid, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../../../../../../../components/AddLabelToEl";
+import { ReplyTransactionContext } from "../../../context/ReplyTransactionContext";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { Api } from "../../../../../../../../../constants";
+import { useSnackbar } from "notistack";
+import { CreateTransactionContext } from "../../../context/CreateTransactionContext";
 
 // TODO::define and declare our types
 export type CreateTransactionFormHeaderType = "notes" | "reply";
@@ -37,14 +43,40 @@ export const CreateTransactionFormHeaders: CreateTransactionFormHeadersElementTy
 
 export default function ReplyTransactionTab2(props: Tab2Props) {
   // TODO::declare our state variables
+  const ReplyTransactionContextData = useContext(ReplyTransactionContext);
+  const transactionCxtData = useContext(CreateTransactionContext);
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const { register, reset, handleSubmit } = useForm<CreateTransactionFormType>(
     {}
   );
 
   //TODO::submit form function
-  const handleSaveComment = handleSubmit((data) => {
-    console.log("submitted data::", data);
-    props.setOperationProgress("Step3");
+  const handleSaveComment = handleSubmit(async (data) => {
+    console.log("submitted data::", data, transactionCxtData);
+    try {
+      //prepare body data
+      let body = {
+        comment: data.reply,
+        note: data.notes,
+        processing_contract_sub_item_id: transactionCxtData.contractSubItem?.id,
+        contract_attachment_types: [],
+      };
+      let response = await axios.post(
+        Api("employee/contract/items/comment-processing/store"),
+        body
+      );
+      console.log("response101", response);
+      return;
+      ReplyTransactionContextData.handleSetCommentId(
+        response.data.processing.id
+      );
+      setLoading(false);
+      enqueueSnackbar("تم الحفظ بنجاح");
+      props.setOperationProgress("Step3");
+    } catch (err) {
+      console.log("Error in save comment::", err);
+    }
   });
   //TODO::Declare helpers methods
   const FieldGrid = ({

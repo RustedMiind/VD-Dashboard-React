@@ -4,6 +4,7 @@ import MainPand from "./components/MainPand";
 import { Button, Stack, Typography } from "@mui/material";
 import { CreateTransactionContextProvider } from "./context/CreateTransactionContext";
 import { TransactionContextProvider } from "./context/TransactionContext";
+import { ReplyTransactionContextProvider } from "./context/ReplyTransactionContext";
 
 export default function ContractItemsDetails() {
   const { contract } = useContext(ContractDetailsContext);
@@ -12,7 +13,9 @@ export default function ContractItemsDetails() {
       <CreateTransactionContextProvider>
         {contract?.contract_items?.map((contract) => (
           <TransactionContextProvider key={contract.contract_id}>
-            <MainPand contractData={contract} />
+            <ReplyTransactionContextProvider>
+              <MainPand contractData={contract} />
+            </ReplyTransactionContextProvider>
           </TransactionContextProvider>
         ))}
         {contract?.contract_items?.length == 0 && (
