@@ -1,13 +1,27 @@
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CreateTransactionContext } from "../context/CreateTransactionContext";
 import axios from "axios";
 import { Api } from "../../../../../../../constants";
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
 import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
 import Loader from "../../../../../../../components/Loading/Loader";
+
+export interface refreshComponentCxtType {
+  refresh: (id: number) => void;
+}
+
+export const refreshComponentCxt = createContext<refreshComponentCxtType>({
+  refresh(id: number) {},
+});
 
 export default function Transactions(props: PropsType) {
   //TODO::declare and define component state and variables
@@ -34,6 +48,7 @@ export default function Transactions(props: PropsType) {
 
   // Fetch sub item transactions data
   useEffect(() => {
+    console.log("props.activeSubItemId", props.activeSubItemId);
     if (props.activeSubItemId != -1) {
       getTransactionData(props.activeSubItemId);
     }
@@ -101,27 +116,35 @@ export default function Transactions(props: PropsType) {
     );
   };
 
-  console.log("Transactions")
+  console.log("Transactions");
   return (
-    <Grid container xs={12}>
-      {loading && <Loader title={"جاري تحميل البنود الفرعية"} />}
-      {!loading && transactions.length == 0 && (
-        <Stack
-          width={"100%"}
-          minHeight={"300px"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <Typography variant="body1" textAlign={"center"} fontWeight={600}>
-            لايوجد معاملات فى هذالبند
-          </Typography>
-        </Stack>
-      )}
-      {transactions.length > 0 &&
-        transactions.map((item) => (
-          <SingleRow key={`SR-${item.id}`} item={item} />
-        ))}
-    </Grid>
+    <refreshComponentCxt.Provider
+      value={{
+        refresh: (id: number) => {
+          getTransactionData(id);
+        },
+      }}
+    >
+      <Grid container xs={12}>
+        {loading && <Loader title={"جاري تحميل البنود الفرعية"} />}
+        {!loading && transactions.length == 0 && (
+          <Stack
+            width={"100%"}
+            minHeight={"300px"}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <Typography variant="body1" textAlign={"center"} fontWeight={600}>
+              لايوجد معاملات فى هذالبند
+            </Typography>
+          </Stack>
+        )}
+        {transactions.length > 0 &&
+          transactions.map((item) => (
+            <SingleRow key={`SR-${item.id}`} item={item} />
+          ))}
+      </Grid>
+    </refreshComponentCxt.Provider>
   );
 }
 

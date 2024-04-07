@@ -44,8 +44,6 @@ export default function MainPand({ contractData }: MainPandProps) {
     }
   }, []);
 
-  console.log("MainPand");
-
   return (
     <>
       {/* MainPand Header */}

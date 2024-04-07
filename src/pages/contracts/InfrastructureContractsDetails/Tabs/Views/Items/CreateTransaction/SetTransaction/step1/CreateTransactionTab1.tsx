@@ -98,6 +98,12 @@ export default function CreateTransactionTab1(
       setLoading(false);
       enqueueSnackbar("تم الحفظ بنجاح");
       props.setOperationProgress("Step2");
+      let prevVal = -1;
+      props.setActiveSubItemId((prev) => {
+        prevVal = prev;
+        return -1;
+      });
+      props.setActiveSubItemId(prevVal);
     } catch (err) {
       setLoading(false);
       enqueueSnackbar("تعذر في حفظ", { variant: "error" });
@@ -187,4 +193,5 @@ export default function CreateTransactionTab1(
 
 type CreateTransactionTab1Props = {
   setOperationProgress: React.Dispatch<React.SetStateAction<"Step1" | "Step2">>;
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };
