@@ -89,6 +89,7 @@ export default function CreateTransactionTab1(
       contract_attachment_types: [],
     };
     try {
+      console.log("bodyData ", bodyData);
       setLoading(true);
       let response = await axios.post(
         Api("employee/contract/items/processing/store"),

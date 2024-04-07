@@ -14,43 +14,19 @@ import { Api } from "../../../../../../../constants";
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
 import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
 import Loader from "../../../../../../../components/Loading/Loader";
-
-export interface refreshComponentCxtType {
-  refresh: (id: number) => void;
-}
-
-export const refreshComponentCxt = createContext<refreshComponentCxtType>({
-  refresh(id: number) {},
-});
+import { TransactionContext } from "../context/TransactionContext";
 
 export default function Transactions(props: PropsType) {
   //TODO::declare and define component state and variables
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  const TransactionContextData = useContext(TransactionContext);
+  let { transactions, loading, refresh } = TransactionContextData;
   // get create transaction context data
   const transactionCxtData = useContext(CreateTransactionContext);
-  const [loading, setLoading] = useState(false);
-
-  // TODO::define helpers method
-  // * This method will be refresh method in context :)
-  const getTransactionData = async (id: number) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get<{
-        contract_sub_item: ContractSubItem;
-      }>(Api(`employee/contract/items/show-subitem/${id}`));
-      setTransactions(data.contract_sub_item.processing || []);
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      console.log("Error in fetch data::", err);
-    }
-  };
-
   // Fetch sub item transactions data
   useEffect(() => {
     console.log("props.activeSubItemId", props.activeSubItemId);
     if (props.activeSubItemId != -1) {
-      getTransactionData(props.activeSubItemId);
+      refresh(props.activeSubItemId);
     }
   }, [props.activeSubItemId]);
   // TODO::define helper variables
@@ -118,33 +94,25 @@ export default function Transactions(props: PropsType) {
 
   console.log("Transactions");
   return (
-    <refreshComponentCxt.Provider
-      value={{
-        refresh: (id: number) => {
-          getTransactionData(id);
-        },
-      }}
-    >
-      <Grid container xs={12}>
-        {loading && <Loader title={"جاري تحميل البنود الفرعية"} />}
-        {!loading && transactions.length == 0 && (
-          <Stack
-            width={"100%"}
-            minHeight={"300px"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            <Typography variant="body1" textAlign={"center"} fontWeight={600}>
-              لايوجد معاملات فى هذالبند
-            </Typography>
-          </Stack>
-        )}
-        {transactions.length > 0 &&
-          transactions.map((item) => (
-            <SingleRow key={`SR-${item.id}`} item={item} />
-          ))}
-      </Grid>
-    </refreshComponentCxt.Provider>
+    <Grid container xs={12}>
+      {loading && <Loader title={"جاري تحميل البنود الفرعية"} />}
+      {!loading && transactions.length == 0 && (
+        <Stack
+          width={"100%"}
+          minHeight={"300px"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography variant="body1" textAlign={"center"} fontWeight={600}>
+            لايوجد معاملات فى هذالبند
+          </Typography>
+        </Stack>
+      )}
+      {transactions.length > 0 &&
+        transactions.map((item) => (
+          <SingleRow key={`SR-${item.id}`} item={item} />
+        ))}
+    </Grid>
   );
 }
 

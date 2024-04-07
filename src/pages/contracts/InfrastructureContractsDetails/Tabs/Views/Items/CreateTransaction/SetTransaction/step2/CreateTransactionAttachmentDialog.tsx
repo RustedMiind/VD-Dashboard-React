@@ -22,7 +22,6 @@ import {
   TansactionAttachmentType,
   TransactionType,
 } from "../../../../../../../../../types/Contracts/ContractTransactionAttachment";
-import { refreshComponentCxt } from "../../../tabs/Transactions";
 
 export type CreateTransactionFormType = {
   description: string;

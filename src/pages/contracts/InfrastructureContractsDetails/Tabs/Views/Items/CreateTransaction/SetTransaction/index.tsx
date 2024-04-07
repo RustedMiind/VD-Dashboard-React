@@ -4,14 +4,15 @@ import CreateTransactionTab2 from "./step2/createTransactionTab2";
 import { useContext, useState } from "react";
 import { ContractDetailsContext } from "../../../../..";
 import { CreateTransactionContext } from "../../context/CreateTransactionContext";
-import { refreshComponentCxt } from "../../tabs/Transactions";
+import { TransactionContext } from "../../context/TransactionContext";
 
 export default function CreateTransactionDialog(
   props: CreateTransactionDialogProps
 ) {
   // TODO::Declaration of component state and variables
   const transactionCxtData = useContext(CreateTransactionContext);
-  const refreshComponentCxtData = useContext(refreshComponentCxt);
+  const TransactionContextData = useContext(TransactionContext);
+  let { refresh } = TransactionContextData;
   const [operationProgress, setOperationProgress] = useState<"Step1" | "Step2">(
     "Step1"
   );
@@ -32,13 +33,13 @@ export default function CreateTransactionDialog(
   };
   const handleClose = async () => {
     setOperationProgress("Step1");
+    // refresh here
     let id = -1;
     await props.setActiveSubItemId((prev) => {
       id = prev;
       return prev;
     });
-    console.log("HandleClosee",id,refreshComponentCxtData.refresh)
-    refreshComponentCxtData.refresh(id);
+    refresh(id);
     props.setOpen(false);
   };
 

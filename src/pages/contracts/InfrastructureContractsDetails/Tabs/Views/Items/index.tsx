@@ -3,6 +3,7 @@ import { ContractDetailsContext } from "../../..";
 import MainPand from "./components/MainPand";
 import { Button, Stack, Typography } from "@mui/material";
 import { CreateTransactionContextProvider } from "./context/CreateTransactionContext";
+import { TransactionContextProvider } from "./context/TransactionContext";
 
 export default function ContractItemsDetails() {
   const { contract } = useContext(ContractDetailsContext);
@@ -10,7 +11,9 @@ export default function ContractItemsDetails() {
     <>
       <CreateTransactionContextProvider>
         {contract?.contract_items?.map((contract) => (
-          <MainPand key={contract.contract_id} contractData={contract} />
+          <TransactionContextProvider key={contract.contract_id}>
+            <MainPand contractData={contract} />
+          </TransactionContextProvider>
         ))}
         {contract?.contract_items?.length == 0 && (
           <Stack justifyContent={"center"} alignItems={"center"}>
