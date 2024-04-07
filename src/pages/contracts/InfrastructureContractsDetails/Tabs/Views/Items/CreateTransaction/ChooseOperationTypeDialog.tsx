@@ -9,7 +9,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 import CreateTransactionDialog from "./SetTransaction";
-import EditTransitionD2 from "./EditTransitionD2";
+import EditTransitionD2 from "./ReplyTransaction";
 
 export default function ChooseOperationTypeDialog({
   open,
