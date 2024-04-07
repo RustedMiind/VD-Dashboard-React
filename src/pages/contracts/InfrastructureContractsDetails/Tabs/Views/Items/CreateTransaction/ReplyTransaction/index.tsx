@@ -1,15 +1,18 @@
 import Dialog from "@mui/material/Dialog";
-import EditTransactionD3 from "./step2-createComment";
 import ReplyTransactionTab1 from "./step1-chooseTransaction";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ReplyTransactionTab2 from "./step2-createComment";
 import ReplyTransactionTab3 from "./step3-transactionAttachments";
+import { TransactionContext } from "../../context/TransactionContext";
+import { CreateTransactionContext } from "../../context/CreateTransactionContext";
 
 export default function EditTransitionD2({
   open,
   setOpen,
 }: EditTransitionD2Props) {
   //TODO::define our component state variables
+  const TransactionContextData = useContext(TransactionContext);
+  const CreateTransactionContextData = useContext(CreateTransactionContext);
   const [operationProgress, setOperationProgress] = useState<
     "Step1" | "Step2" | "Step3"
   >("Step1");
@@ -17,6 +20,10 @@ export default function EditTransitionD2({
   //TODO::define helper functions
   const handleClose = () => {
     setOpen(false);
+    TransactionContextData.refresh(
+      CreateTransactionContextData.contractSubItem?.id
+    );
+    setOperationProgress("Step1");
   };
   const ViewActiveTab = () => {
     switch (operationProgress) {
@@ -36,6 +43,7 @@ export default function EditTransitionD2({
     }
   };
 
+  //*return ui.
   return (
     <>
       <Dialog

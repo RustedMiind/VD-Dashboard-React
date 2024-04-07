@@ -1,6 +1,12 @@
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
-import { DialogTitle, Grid, Stack, TextField } from "@mui/material";
+import {
+  CircularProgress,
+  DialogTitle,
+  Grid,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../../../../../../../components/AddLabelToEl";
 import { ReplyTransactionContext } from "../../../context/ReplyTransactionContext";
@@ -53,23 +59,21 @@ export default function ReplyTransactionTab2(props: Tab2Props) {
 
   //TODO::submit form function
   const handleSaveComment = handleSubmit(async (data) => {
-    console.log("submitted data::", data, transactionCxtData);
     try {
       //prepare body data
       let body = {
         comment: data.reply,
         note: data.notes,
-        processing_contract_sub_item_id: transactionCxtData.contractSubItem?.id,
+        processing_contract_sub_item_id:
+          ReplyTransactionContextData.transactionId,
         contract_attachment_types: [],
       };
       let response = await axios.post(
         Api("employee/contract/items/comment-processing/store"),
         body
       );
-      console.log("response101", response);
-      return;
       ReplyTransactionContextData.handleSetCommentId(
-        response.data.processing.id
+        response.data.comment_processing.id
       );
       setLoading(false);
       enqueueSnackbar("تم الحفظ بنجاح");
@@ -96,6 +100,7 @@ export default function ReplyTransactionTab2(props: Tab2Props) {
             size="small"
             {...register(name)}
             placeholder={text}
+            disabled={loading}
           />
         </AddLabelToEl>
       </Grid>
@@ -144,8 +149,10 @@ export default function ReplyTransactionTab2(props: Tab2Props) {
                 onClick={() => handleSaveComment() /*handle create comment*/}
                 variant="contained"
                 fullWidth
+                disabled={loading}
               >
-                ارسال الرد
+                ارسال الرد{" "}
+                {loading && <CircularProgress size={"small"} color="primary" />}
               </Button>
             </Grid>
           </Grid>

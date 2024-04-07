@@ -16,6 +16,8 @@ import { getUseData } from "../../../../../../../../../methods/getUseData";
 import { Api } from "../../../../../../../../../constants";
 import AddLabelToEl from "../../../../../../../../../components/AddLabelToEl";
 import CustomFilePond from "../../../../../../../../../components/CustomFilepond";
+import { ReplyTransactionContext } from "../../../context/ReplyTransactionContext";
+import { CreateTransactionContext } from "../../../context/CreateTransactionContext";
 
 export type CreateTransactionFormType = {
   description: string;
@@ -28,6 +30,8 @@ export default function CreateAttachmentDialog(props: PropsType) {
   const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState<FileBondState>([]);
   const [loading, setLoading] = useState(false);
+  const ReplyTransactionContextData = useContext(ReplyTransactionContext);
+  const transactionCxtData = useContext(CreateTransactionContext);
   const { register, reset, handleSubmit } = useForm<CreateTransactionFormType>(
     {}
   );
@@ -55,7 +59,9 @@ export default function CreateAttachmentDialog(props: PropsType) {
     setLoading(true);
     axios
       .post(
-        Api(`employee/contract/items/processing/store-attachment-type/${505}`),
+        Api(
+          `employee/contract/items/comment-processing/store-attachment-type/${ReplyTransactionContextData.commentId}`
+        ),
         serialize(bodyData)
       )
       .then(() => {
@@ -63,6 +69,7 @@ export default function CreateAttachmentDialog(props: PropsType) {
         reset({ description: "" });
 
         setFile([]);
+        transactionCxtData.refresh();
         props.handleClose();
       })
       .catch((err) => {

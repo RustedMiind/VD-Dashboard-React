@@ -43,7 +43,9 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
       axios
         .post(
           Api(
-            `employee/contract/items/processing/delete-attachment-type/${attachmentId}`
+            props.deleteURL
+              ? `${props.deleteURL}${attachmentId}`
+              : `employee/contract/items/processing/delete-attachment-type/${attachmentId}`
           )
         )
         .then((res) => {
@@ -134,4 +136,5 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
 type TableShowAttachmentsProps = {
   transactionsAttachments: TansactionAttachmentType[];
   loading: boolean;
+  deleteURL?: string;
 };
