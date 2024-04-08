@@ -1,4 +1,5 @@
 import {
+  Box,
   CircularProgress,
   IconButton,
   Stack,
@@ -32,11 +33,13 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
     description,
     fileName,
     attachmentId,
+    url,
   }: {
     type: string;
     description: string;
     fileName: string;
     attachmentId: number;
+    url: string;
   }) => {
     const handleDeleteAttachement = () => {
       console.log("Delete Attach file");
@@ -60,7 +63,16 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
     return (
       <TableRow>
         <TableCell>{type}</TableCell>
-        <TableCell>{fileName}</TableCell>
+        <TableCell>
+          <Box
+            component="a"
+            href={url}
+            target="_blank"
+            sx={{ textDecoration: "none", color: "primary.main" }}
+          >
+            {fileName}
+          </Box>
+        </TableCell>
         <TableCell>{description}</TableCell>
         <TableCell>
           <IconButton
@@ -102,6 +114,7 @@ export default function TableShowAttachments(props: TableShowAttachmentsProps) {
                   description={ele.description}
                   attachmentId={ele.id}
                   fileName={ele?.media ? ele?.media[0]?.file_name ?? "" : ""}
+                  url={ele?.media ? ele?.media[0]?.original_url ?? "" : ""}
                 />
               ))}
           </TableBody>

@@ -73,7 +73,7 @@ export default function CreateAttachmentDialog(props: PropsType) {
         props.handleClose();
       })
       .catch((err) => {
-        enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
+        enqueueSnackbar(err?.response?.data?.message ?? "تعذر في الحفظ", { variant: "error" });
       })
       .finally(() => {
         setLoading(false);

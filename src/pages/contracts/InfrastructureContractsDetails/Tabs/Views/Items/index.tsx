@@ -17,6 +17,7 @@ export default function ContractItemsDetails() {
             variant="contained"
             sx={{ width: "150px", marginY: 2 }}
             startIcon={<AddBoxOutlinedIcon />}
+            disabled={true}
           >
             انشاء بند
           </Button>
@@ -40,6 +41,7 @@ export default function ContractItemsDetails() {
               variant="contained"
               sx={{ width: "150px", marginY: 2 }}
               startIcon={<AddBoxOutlinedIcon />}
+              disabled={true}
             >
               انشاء بند
             </Button>

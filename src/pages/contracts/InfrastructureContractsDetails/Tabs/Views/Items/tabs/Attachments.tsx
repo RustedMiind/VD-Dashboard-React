@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import FilePresentOutlinedIcon from "@mui/icons-material/FilePresentOutlined";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { ContractDetailsContext } from "../../../..";
@@ -49,14 +49,22 @@ export default function AttatchmentsSection() {
       marginY={1}
       padding={2}
     >
-      {currentMainItem?.media?.map((mediaFile) => {
-        return (
-          <SiingleFile
-            key={`MF-${mediaFile.id}`}
-            url={mediaFile.original_url}
-          />
-        );
-      })}
+      {currentMainItem?.media && currentMainItem?.media?.length > 0 ? (
+        currentMainItem?.media?.map((mediaFile) => {
+          return (
+            <SiingleFile
+              key={`MF-${mediaFile.id}`}
+              url={mediaFile.original_url}
+            />
+          );
+        })
+      ) : (
+        <Stack justifyContent={"center"} alignItems={"center"} width={"100%"}>
+          <Typography variant="body1" fontSize={18}>
+            لا يوجد مرفقات فى هذا البند
+          </Typography>
+        </Stack>
+      )}
     </Grid>
   );
 }

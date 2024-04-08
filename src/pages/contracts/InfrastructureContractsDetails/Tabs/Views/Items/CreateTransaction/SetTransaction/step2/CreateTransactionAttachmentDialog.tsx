@@ -77,7 +77,10 @@ function CreateTransactionAttachmentFileDialog(props: PropsType) {
         // transactionCxtData.setTransactionId(-1);
       })
       .catch((err) => {
-        enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
+        console.log("Error", err);
+        enqueueSnackbar(err?.response?.data?.message ?? "تعذر في الحفظ", {
+          variant: "error",
+        });
       })
       .finally(() => {
         setLoading(false);
