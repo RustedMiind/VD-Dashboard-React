@@ -22,7 +22,7 @@ function Tabs() {
 
   return (
     <Stack component={Paper} gap={1} p={2} direction="row" flexWrap="wrap">
-      <Chip {...createChipProps("معلومات المنافسة", TabEnum.DETAILS)} />
+      <Chip {...createChipProps("معلومات العقد", TabEnum.DETAILS)} />
       <Chip {...createChipProps("البنود", TabEnum.ITEMS)} />
       <Chip {...createChipProps("المعاملات")} />
       <Chip {...createChipProps("الحدول الزمني")} />
