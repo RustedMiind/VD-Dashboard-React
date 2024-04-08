@@ -56,7 +56,9 @@ export default function DetailsView() {
         </DetailsItem>
         <DetailsItem label="رقم العقد">{contract?.code}</DetailsItem>
         <DetailsItem label="الادارة">{contract?.management?.name}</DetailsItem>
-        <DetailsItem label="تاريخ العقد">{contract?.created_at}</DetailsItem>
+        <DetailsItem label="تاريخ العقد">
+          {new Date(contract?.created_at ?? "").toLocaleDateString()}
+        </DetailsItem>
         <DetailsItem label="الموقع">
           {contract?.contract_details?.location}
         </DetailsItem>

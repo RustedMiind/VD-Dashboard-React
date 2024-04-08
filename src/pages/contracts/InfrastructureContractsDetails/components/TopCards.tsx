@@ -38,6 +38,7 @@ export default function TopCards() {
   const [openDialog, setOpenDialog] = useState(false);
   const { contract, refreshToggler } = useContext(ContractDetailsContext);
   const { user } = useUser();
+
   const workStaff = useMemo(() => {
     const staff: EmployeeType[] = [];
     contract?.contract_items?.forEach((item) => {
@@ -47,7 +48,28 @@ export default function TopCards() {
       });
     });
     return removeDuplicates<EmployeeType>(staff);
-  }, [refreshToggler]);
+  }, [refreshToggler, contract?.id]);
+
+  // Fetch transactionNumbers Array - contract_items
+  const transactionNumbers = useMemo(() => {
+    const transactions: { id: number; type: string }[] = [];
+    contract?.contract_items?.forEach((item) => {
+      item.contract_sub_items?.forEach((sub_item) => {
+        sub_item?.processing?.forEach((transaction) => {
+          if (
+            transaction.attachment_type &&
+            transaction.attachment_type.length > 0
+          ) {
+            transactions.push({
+              id: transaction.id,
+              type: transaction.attachment_type[0].name,
+            });
+          }
+        });
+      });
+    });
+    return transactions;
+  }, [refreshToggler, contract?.id]);
 
   return (
     <Grid
@@ -100,7 +122,7 @@ export default function TopCards() {
               variant="body2"
               fontWeight={600}
             >
-              100000
+              {contract?.amount ?? 0}
             </Typography>
             <Typography
               color={"primary.main"}
@@ -148,7 +170,7 @@ export default function TopCards() {
               variant="body2"
               fontWeight={600}
             >
-              150000
+              {contract?.amount ?? 0}
             </Typography>
             <Typography
               color={"primary.main"}
@@ -167,7 +189,8 @@ export default function TopCards() {
             fontSize={12}
           >
             <ReplayIcon sx={{ color: "secondary.main", fontSize: "12px" }} />{" "}
-            اخر تحديث {"15/09/2023"}
+            اخر تحديث{" "}
+            {new Date(contract?.updated_at ?? "").toLocaleDateString()}
           </Typography>
 
           <Box
@@ -213,7 +236,7 @@ export default function TopCards() {
                   variant="body2"
                   fontWeight={600}
                 >
-                  8000
+                  0
                 </Typography>
                 <Typography
                   color={"primary.main"}
@@ -258,7 +281,7 @@ export default function TopCards() {
                   variant="body2"
                   fontWeight={600}
                 >
-                  1000
+                  {contract?.payed ?? 0}
                 </Typography>
                 <Typography
                   color={"primary.main"}
@@ -303,7 +326,7 @@ export default function TopCards() {
                   variant="body2"
                   fontWeight={600}
                 >
-                  500
+                  {contract?.remaining ?? 0}
                 </Typography>
                 <Typography
                   color={"primary.main"}
@@ -391,67 +414,36 @@ export default function TopCards() {
           sx={{
             height: "150px",
             display: "flex",
-            justifyContent: "space-around",
+            justifyContent: "start",
             flexDirection: "column",
+            overflowY: "auto",
+            scrollBehavior: "smooth",
+            scrollbarWidth: "thin",
           }}
         >
-          <Box sx={{ display: "flex" }}>
-            <Typography
-              color={"primary.main"}
-              variant="body2"
-              fontSize={14}
-              fontWeight={500}
-              marginX={1}
-            >
-              الكهرباء
-            </Typography>
-            <Typography
-              color={"secondary.main"}
-              variant="body2"
-              fontSize={14}
-              fontWeight={500}
-            >
-              100,000
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex" }}>
-            <Typography
-              color={"primary.main"}
-              variant="body2"
-              fontSize={14}
-              fontWeight={500}
-              marginX={1}
-            >
-              الكهرباء
-            </Typography>
-            <Typography
-              color={"secondary.main"}
-              variant="body2"
-              fontSize={14}
-              fontWeight={500}
-            >
-              100,000
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex" }}>
-            <Typography
-              color={"primary.main"}
-              variant="body2"
-              fontSize={14}
-              fontWeight={500}
-              marginX={1}
-            >
-              الكهرباء
-            </Typography>
-            <Typography
-              color={"secondary.main"}
-              variant="body2"
-              fontSize={14}
-              fontWeight={500}
-            >
-              100,000
-            </Typography>
-          </Box>
+          {transactionNumbers?.map((item) => {
+            return (
+              <Box key={item.id} display={"flex"} marginY={2}>
+                <Typography
+                  color={"primary.main"}
+                  variant="body2"
+                  fontSize={14}
+                  fontWeight={500}
+                  marginX={1}
+                >
+                  {item.type}
+                </Typography>
+                <Typography
+                  color={"secondary.main"}
+                  variant="body2"
+                  fontSize={14}
+                  fontWeight={500}
+                >
+                  {item.id}
+                </Typography>
+              </Box>
+            );
+          })}
         </Box>
       </Box>
       {/* Forth Card */}

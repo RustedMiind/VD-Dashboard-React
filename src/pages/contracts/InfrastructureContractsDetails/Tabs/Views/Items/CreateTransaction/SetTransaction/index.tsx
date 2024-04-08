@@ -19,17 +19,19 @@ export default function CreateTransactionDialog(
 
   // TODO::define helper methods
   const ViewActiveTab = () => {
-    switch (operationProgress) {
-      case "Step1":
-        return (
-          <CreateTransactionTab1
-            setOperationProgress={setOperationProgress}
-            setActiveSubItemId={props.setActiveSubItemId}
-          />
-        );
-      case "Step2":
-        return <CreateTransactionTab2 />;
-    }
+    if (TransactionContextData.open) return <CreateTransactionTab2 />;
+    else
+      switch (operationProgress) {
+        case "Step1":
+          return (
+            <CreateTransactionTab1
+              setOperationProgress={setOperationProgress}
+              setActiveSubItemId={props.setActiveSubItemId}
+            />
+          );
+        case "Step2":
+          return <CreateTransactionTab2 />;
+      }
   };
   const handleClose = async () => {
     setOperationProgress("Step1");
@@ -39,7 +41,8 @@ export default function CreateTransactionDialog(
       id = prev;
       return prev;
     });
-    refresh(id);
+    if (!TransactionContextData.open) refresh(id);
+    TransactionContextData.handleClose();
     props.setOpen(false);
   };
 
@@ -47,7 +50,7 @@ export default function CreateTransactionDialog(
   return (
     <>
       <Dialog
-        open={props.open}
+        open={props.open || TransactionContextData.open}
         onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

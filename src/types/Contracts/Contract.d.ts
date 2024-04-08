@@ -31,6 +31,8 @@ export interface Contract {
   deleted_at: null; // Resolving property type conflict
   last_status: string;
   order_id?: number;
+  payed?:number,
+  remaining?:number,
   is_done: DB_Boolean;
   dateEnd: string; // Resolving conflict in property names
   end_date_period: number;

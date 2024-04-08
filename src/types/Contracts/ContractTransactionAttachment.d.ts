@@ -12,6 +12,15 @@ export type TansactionAttachmentType = {
   media?: Media[];
   attachment_type?: DbOptionType;
 };
+export type TransactionComment = {
+  comment: string;
+  created_at: string;
+  employee_id: number;
+  id: number;
+  note: string;
+  processing_contract_sub_item_id: number;
+  updated_at: string;
+};
 export type TransactionType = {
   id: number;
   contract_sub_item_id: number;
@@ -23,5 +32,6 @@ export type TransactionType = {
   updated_at: string;
   attachment: TansactionAttachmentType[];
   comments_count?: number;
+  comments?: TransactionComment[];
   system_logs?: DbOptionType[];
 };

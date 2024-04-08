@@ -21,10 +21,13 @@ export default function ContractItemsDetails() {
             انشاء بند
           </Button>
         </Stack>
-        {contract?.contract_items?.map((contract) => (
-          <TransactionContextProvider key={contract.contract_id}>
+        {contract?.contract_items?.map((mainItem) => (
+          <TransactionContextProvider
+            key={mainItem.contract_id}
+            currentMainItem={mainItem}
+          >
             <ReplyTransactionContextProvider>
-              <MainPand contractData={contract} />
+              <MainPand contractData={mainItem} />
             </ReplyTransactionContextProvider>
           </TransactionContextProvider>
         ))}

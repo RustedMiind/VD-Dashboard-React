@@ -169,7 +169,7 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
       </Grid>
       <TimeMapOfPanDialog
         startDate={props.startDate}
-        endDate={props.startDate}
+        endDate={props.endDate}
         open={openTimeMap}
         setOpen={setOpenTimeMap}
       />

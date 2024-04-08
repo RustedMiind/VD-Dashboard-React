@@ -1,4 +1,11 @@
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {
@@ -20,8 +27,8 @@ export default function Transactions(props: PropsType) {
   //TODO::declare and define component state and variables
   const TransactionContextData = useContext(TransactionContext);
   let { transactions, loading, refresh } = TransactionContextData;
-  // get create transaction context data
   const transactionCxtData = useContext(CreateTransactionContext);
+
   // Fetch sub item transactions data
   useEffect(() => {
     console.log("props.activeSubItemId", props.activeSubItemId);
@@ -29,13 +36,7 @@ export default function Transactions(props: PropsType) {
       refresh(props.activeSubItemId);
     }
   }, [props.activeSubItemId]);
-  // TODO::define helper variables
-  let attachementsBtns = (
-    <>
-      <RemoveRedEyeIcon />
-      <CloudDownloadIcon color="secondary" />
-    </>
-  );
+
   let RowItem = ({
     label,
     value,
@@ -52,6 +53,18 @@ export default function Transactions(props: PropsType) {
   );
 
   const SingleRow = ({ item }: { item: TransactionType }) => {
+    // get last comment
+    let lastComment = "--";
+    if (item?.comments && item?.comments.length > 0) {
+      let n = item?.comments?.length;
+      lastComment = item?.comments[n - 1].comment;
+    }
+    // * Handle Show transactions attachments
+    const showAttachments = (id: number) => {
+      transactionCxtData.setTransactionId(id);
+      TransactionContextData.handleOpen();
+    };
+
     return (
       <Grid
         item
@@ -81,9 +94,29 @@ export default function Transactions(props: PropsType) {
               : ""
           }
         />
-        <RowItem label="اخر رد" value={"تم ارسال الملف"} />
-        <RowItem label="الاجراء" value={"مرسل"} />
-        <RowItem label="المرفقات" value={attachementsBtns} />
+        <RowItem label="اخر رد" value={lastComment} />
+        <RowItem label="الاجراء" value={"--"} />
+        <RowItem
+          label="المرفقات"
+          value={
+            <>
+              <IconButton
+                onClick={() => showAttachments(item.id)}
+                color="primary"
+                size="small"
+              >
+                <RemoveRedEyeIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => showAttachments(item.id)}
+                color="primary"
+                size="small"
+              >
+                <CloudDownloadIcon color="secondary" />
+              </IconButton>
+            </>
+          }
+        />
         <RowItem
           label="اخر تحديث"
           value={new Date(item.updated_at).toLocaleDateString()}

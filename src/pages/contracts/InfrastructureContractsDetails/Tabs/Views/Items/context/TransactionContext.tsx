@@ -1,29 +1,45 @@
 import { createContext, useState } from "react";
 import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
 import axios from "axios";
-import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
+import {
+  ContractItem,
+  ContractSubItem,
+} from "../../../../../../../types/Contracts/ContractItems";
 import { Api } from "../../../../../../../constants";
 
 export interface TransactionContextType {
   refresh: (id?: number) => void;
-  loading:boolean;
+  loading: boolean;
   transactions: TransactionType[];
+  currentMainItem: ContractItem | undefined;
+  // open transaction setting
+  open: boolean;
+  handleOpen: () => void;
+  handleClose: () => void;
 }
 
 export const TransactionContext = createContext<TransactionContextType>({
   refresh() {},
-  loading:false,
+  loading: false,
   transactions: [],
+  currentMainItem: undefined,
+  // open transaction setting
+  open: false,
+  handleOpen: () => {},
+  handleClose: () => {},
 });
 
 export function TransactionContextProvider({
+  currentMainItem,
   children,
 }: {
+  currentMainItem: ContractItem;
   children: React.ReactNode;
 }) {
   //TODO::declare and define component state and variables
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   // TODO::define helpers method
   // * This method will be refresh method in context :)
@@ -41,6 +57,8 @@ export function TransactionContextProvider({
       console.log("Error in fetch data::", err);
     }
   };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <TransactionContext.Provider
@@ -50,6 +68,10 @@ export function TransactionContextProvider({
         refresh: (id) => {
           if (id) getTransactionData(id);
         },
+        currentMainItem,
+        open,
+        handleOpen,
+        handleClose,
       }}
     >
       {children}
