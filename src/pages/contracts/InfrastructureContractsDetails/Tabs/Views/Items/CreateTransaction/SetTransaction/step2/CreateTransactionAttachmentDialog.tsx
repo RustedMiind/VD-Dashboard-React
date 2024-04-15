@@ -16,7 +16,7 @@ import { useContext, useEffect, useState } from "react";
 import { FileBondState } from "../../../../../../../../../types/FileBondState";
 import { serialize } from "object-to-formdata";
 import { CreateTransactionContext } from "../../../context/CreateTransactionContext";
-import { getUseData } from "../../../../../../../../../methods/getUseData";
+import { getUseData } from "../../../../../../../../../methods/apiRequests/contracts/getUseData";
 import { DbOptionType } from "../../../../../../../../../types/other/DbOptionType";
 import {
   TansactionAttachmentType,

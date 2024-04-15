@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Api } from "../constants";
-import { DbOptionType } from "../types/other/DbOptionType";
+import { Api } from "../../../constants";
+import { DbOptionType } from "../../../types/other/DbOptionType";
 
 /**
  * getUseData()
@@ -8,13 +8,10 @@ import { DbOptionType } from "../types/other/DbOptionType";
  * - attachments_types
  */
 export async function getUseData() {
-  let response = await axios
-    .get<returnedUsedData>(Api("employee/contract/use"))
-    .then((res) => {
-      return res.data;
-    });
-
-  return response;
+  let response = await axios.get<returnedUsedData>(
+    Api("employee/contract/use")
+  );
+  return response.data;
 }
 
 // declare type u want

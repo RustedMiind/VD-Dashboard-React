@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { serialize } from "object-to-formdata";
 import { FileBondState } from "../../../../../../../../../types/FileBondState";
 import { DbOptionType } from "../../../../../../../../../types/other/DbOptionType";
-import { getUseData } from "../../../../../../../../../methods/getUseData";
+import { getUseData } from "../../../../../../../../../methods/apiRequests/contracts/getUseData";
 import { Api } from "../../../../../../../../../constants";
 import AddLabelToEl from "../../../../../../../../../components/AddLabelToEl";
 import CustomFilePond from "../../../../../../../../../components/CustomFilepond";

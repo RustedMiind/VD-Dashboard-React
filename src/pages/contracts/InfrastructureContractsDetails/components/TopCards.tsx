@@ -50,6 +50,7 @@ export default function TopCards() {
     return removeDuplicates<EmployeeType>(staff);
   }, [refreshToggler, contract?.id]);
 
+  console.log("contract109::", contract);
   // Fetch transactionNumbers Array - contract_items
   const transactionNumbers = useMemo(() => {
     const transactions: { id: number; type: string }[] = [];
