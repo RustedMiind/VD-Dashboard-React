@@ -16,12 +16,16 @@ import EditIcon from "@mui/icons-material/Edit";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { MainPandBtns } from "./MainPand";
 import TimeMapOfPanDialog from "./TimeMapOfPanDialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import NotificationList from "./NotificationsList";
 import RoundedIconButton from "../../../../../../../components/RoundedIconButton";
+import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
+import NotificationBtn from "./NotificationBtn";
 
 export default function MainPandHeader(props: MainPandHeaderProps) {
   // define our variables
+  const transactionCxtData = useContext(CreateTransactionContext);
   const [openTimeMap, setOpenTimeMap] = useState(false);
   const [showNotificationsList, setShowNotificationsList] = useState(false);
 
@@ -54,7 +58,15 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
           display="flex"
           alignItems="center"
           sx={{ cursor: "pointer" }}
-          onClick={() => props.setExpended(!props.expended)}
+          onClick={() => {
+            if (props.contract_sub_items.length) {
+              transactionCxtData.setContractSubItem(
+                props.contract_sub_items[0]
+              );
+              props.setActiveSubItemId(props.contract_sub_items[0].id);
+            }
+            props.setExpended(!props.expended);
+          }}
         >
           {/* Icon */}
           {!props.expended ? (
@@ -150,22 +162,14 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
               <EditIcon />
             </RoundedIconButton>
             <Tooltip title="تم التعديل بواسطة مهندس احمد" placement="top-start">
-              <RoundedIconButton
-                onClick={() => handleBtnClick(MainPandBtns.NOTIFICATIONS)}
-              >
-                {/* <LastNotification statment={"تم التعديل بواسطة مهندس احمد"} /> */}
-                {showNotificationsList && <NotificationList />}
-                <Badge badgeContent={4} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </RoundedIconButton>
+              <NotificationBtn handleBtnClick={handleBtnClick} />
             </Tooltip>
           </Box>
         </Grid>
       </Grid>
       <TimeMapOfPanDialog
         startDate={props.startDate}
-        endDate={props.startDate}
+        endDate={props.endDate}
         open={openTimeMap}
         setOpen={setOpenTimeMap}
       />
@@ -183,4 +187,6 @@ type MainPandHeaderProps = {
   managerName: string;
   endDate: string;
   startDate: string;
+  contract_sub_items: ContractSubItem[];
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };

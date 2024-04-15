@@ -8,13 +8,13 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import CreateTransactionsD2 from "./CreateTransactionD2";
-import EditTransitionD2 from "./EditTransitionD2";
+import CreateTransactionDialog from "./SetTransaction";
+import EditTransitionD2 from "./ReplyTransaction";
 
-export default function CreateOrUpdateTransactionsD1({
+export default function ChooseOperationTypeDialog({
   open,
-  activePandId,
   setOpen,
+  setActiveSubItemId
 }: CreateOrUpdateTransactionsD1Props) {
   //   TODO::define our component state variables
   const [operationType, setOperationType] = React.useState("create");
@@ -41,7 +41,7 @@ export default function CreateOrUpdateTransactionsD1({
     <>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         PaperProps={{
@@ -90,14 +90,14 @@ export default function CreateOrUpdateTransactionsD1({
               fontWeight: "bold",
               fontSize: "1rem",
             }}
-            onClick={handleNextStep}
+            onClick={() => handleNextStep()}
             variant="contained"
           >
             التالي
           </Button>
         </DialogContent>
       </Dialog>
-      <CreateTransactionsD2 open={openCreateD2} setOpen={setOpenCreateD2} activePandId={activePandId} />
+      <CreateTransactionDialog open={openCreateD2} setOpen={setOpenCreateD2} setActiveSubItemId={setActiveSubItemId} />
       <EditTransitionD2 open={openEditD2} setOpen={setOpenEditD2} />
     </>
   );
@@ -105,6 +105,6 @@ export default function CreateOrUpdateTransactionsD1({
 
 type CreateOrUpdateTransactionsD1Props = {
   open: boolean;
-  activePandId: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };

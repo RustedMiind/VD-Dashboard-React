@@ -44,7 +44,7 @@ export default function InfrastructureContractsDetails() {
       .then(({ data }) => {
         setStatus("loaded");
         setContract(data.data);
-        setRefreshToggler((prevState) => !prevState);
+        //setRefreshToggler((prevState) => !prevState);
       })
       .catch(() => {
         enqueueSnackbar("تعذر في تحميل بيانات العقد", { variant: "error" });

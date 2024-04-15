@@ -1,19 +1,35 @@
 import { EmployeeType } from "../Employee";
+import { Media } from "../Media";
 import { Employee } from "../User/user";
+import { DbOptionType } from "../other/DbOptionType";
+
+export interface SystemLogType {
+  created_at: string;
+  id: number;
+  laravel_through_key: number;
+  modelable_id: number;
+  modelable_type: string;
+  name: string;
+  time: string;
+  updated_at: string;
+  user_id: number;
+}
 
 export interface ContractItem {
   id: number;
   name: string;
   description: string;
   manager_id: number;
+  manager?: DbOptionType;
   start_date: string;
   end_date: string;
   created_at: string;
   updated_at: string;
   contract_id: number;
-  media: Medum2[];
+  media?: Media[];
   contract_item_employees?: ContractItemEmployee[];
   contract_sub_items: ContractSubItem[];
+  system_logs?: SystemLogType[];
 }
 
 export interface ContractItemEmployee {
@@ -36,4 +52,6 @@ export interface ContractSubItem {
   is_letter: number;
   created_at: string;
   updated_at: string;
+  achievement_percentage?: string;
+  processing?: TransactionType[];
 }

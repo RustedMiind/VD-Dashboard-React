@@ -8,36 +8,54 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
 
 export default function SubPandsList({
-  activePandId,
   contractSubItems,
-  setActivePandId,
+  setActiveSubItemId,
 }: SubPandsListProps) {
+  // get create transaction context data
+  const transactionCxtData = useContext(CreateTransactionContext);
+
   // declare single btn component
-  let SingleBtn = ({ id, name }: { id: number; name: string }) => (
+  let SingleBtn = ({ item }: { item: ContractSubItem }) => (
     <Button
       size="large"
       startIcon={
-        <Fab color={id != activePandId ? "primary" : undefined} size="small">
+        <Fab
+          color={
+            item.id != transactionCxtData.contractSubItem?.id
+              ? "primary"
+              : undefined
+          }
+          size="small"
+        >
           <KeyboardBackspaceIcon />
         </Fab>
       }
       sx={{ fontSize: 20 }}
-      variant={id == activePandId ? "contained" : undefined}
+      variant={
+        item.id == transactionCxtData.contractSubItem?.id
+          ? "contained"
+          : undefined
+      }
       fullWidth
-      onClick={() => setActivePandId(id)}
+      onClick={() => {
+        transactionCxtData.setContractSubItem(item);
+        setActiveSubItemId(item.id);
+      }}
     >
-      {name}
+      {item.name}
     </Button>
   );
 
   // handle set active item id in beginning
-  useEffect(() => {
-    if (contractSubItems.length) setActivePandId(contractSubItems[0].id);
-  }, []);
+  // useEffect(() => {
+  //   if (contractSubItems.length)
+  //     transactionCxtData.setContractSubItem(contractSubItems[0]);
+  // }, []);
 
   return (
     <Stack
@@ -48,14 +66,13 @@ export default function SubPandsList({
       component={Paper}
     >
       {contractSubItems.map((subItem, idx) => (
-        <SingleBtn key={subItem.id} id={subItem.id} name={subItem.name} />
+        <SingleBtn key={subItem.id} item={subItem} />
       ))}
     </Stack>
   );
 }
 
 type SubPandsListProps = {
-  activePandId: number;
-  setActivePandId: React.Dispatch<React.SetStateAction<number>>;
   contractSubItems: ContractSubItem[];
+  setActiveSubItemId: React.Dispatch<React.SetStateAction<number>>;
 };

@@ -1,16 +1,18 @@
-import * as React from "react";
 import Divider from "@mui/material/Divider";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
-import ContentCut from "@mui/icons-material/ContentCut";
-import Cloud from "@mui/icons-material/Cloud";
+import { TransactionContext } from "../context/TransactionContext";
+import { useContext } from "react";
+import { SystemLogType } from "../../../../../../../types/Contracts/ContractItems";
 
 export default function NotificationList() {
-  const NotificationItem = () => (
-    <MenuItem>
+  // get logs
+  const TransactionContextData = useContext(TransactionContext);
+  
+  const NotificationItem = ({ item }: { item: SystemLogType }) => (
+    <MenuItem sx={{minWidth:'270px'}}>
       <ListItemText
         sx={{
           color: "primary.main",
@@ -19,36 +21,28 @@ export default function NotificationList() {
           fontSize: "1rem",
           overflow: "hidden",
           transition: "all 0.2s ease-in-out",
-          ":hover": {
-            borderLeft: "7px solid #f19b02",
-          },
         }}
       >
-        تم التعديل بواسطة مهندس احمد
+        {item.modelable_type}
       </ListItemText>
       <Typography variant="body2" color="text.secondary">
-        اليوم
+        {new Date(item.updated_at ?? "").toLocaleDateString() ?? ""}
         <br />
-        02:35
+        {new Date(item.updated_at ?? "").toLocaleTimeString() ?? ""}
       </Typography>
     </MenuItem>
   );
+
   return (
-    <MenuList
-      sx={{
-        position: "absolute",
-        bottom: "-720%",
-        background: "#fff",
-        zIndex: "100",
-        right: "54%",
-        width: "330px",
-      }}
-    >
-      <NotificationItem />
-      <NotificationItem />
+    <>
+      {TransactionContextData?.currentMainItem?.system_logs?.map((item) => {
+        return <NotificationItem key={item.id} item={item} />;
+      })}
+
+      {/* <NotificationItem />
       <NotificationItem />
       <Divider />
-      <NotificationItem />
-    </MenuList>
+      <NotificationItem /> */}
+    </>
   );
 }
