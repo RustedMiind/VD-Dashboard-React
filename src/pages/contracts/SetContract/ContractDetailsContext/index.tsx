@@ -32,10 +32,13 @@ export const ContractDetailsContext = createContext<{
   disableInputs?: boolean;
   contractItemsData?: ContractItemsState;
   updateContractItemsData?: React.Dispatch<ActionTypes>;
+  forceId?: (id: number | undefined) => void;
 }>({});
 
 function ContractDetailsContextProvider({ children }: PropsType) {
-  const { id } = useParams();
+  const params = useParams();
+  const [forceId, setForceId] = useState<number | undefined>(undefined);
+  const id = forceId || params.id;
   const [contractDetails, setContractDetails] = useState<undefined | Contract>(
     undefined
   );
@@ -48,19 +51,19 @@ function ContractDetailsContextProvider({ children }: PropsType) {
     contractItemsIntial
   );
 
-  useEffect(() => {
-    if (id) {
-      axios
-        .get<{ data: ContractItemsState }>(Api(`employee/contract/items/${id}`))
-        .then((res) => {
-          // Assuming your API response contains the contract items data
-          // updateContractItemsData({ type: 'SET_CONTRACT_ITEMS', payload: res.data.data });
-        })
-        .catch((err) => {
-          // Handle error
-        });
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     axios
+  //       .get<{ data: ContractItemsState }>(Api(`employee/contract/items/${id}`))
+  //       .then((res) => {
+  //         // Assuming your API response contains the contract items data
+  //         // updateContractItemsData({ type: 'SET_CONTRACT_ITEMS', payload: res.data.data });
+  //       })
+  //       .catch((err) => {
+  //         // Handle error
+  //       });
+  //   }
+  // }, [id]);
 
   useEffect(getContract, []);
 
@@ -112,6 +115,7 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         disableInputs,
         contractItemsData,
         updateContractItemsData,
+        forceId: setForceId,
       }}
     >
       {children}
