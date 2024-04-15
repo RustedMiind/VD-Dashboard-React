@@ -52,6 +52,6 @@ export interface ContractSubItem {
   is_letter: number;
   created_at: string;
   updated_at: string;
-  achievement_percentage?: string;
+  achievement_percentage?: number;
   processing?: TransactionType[];
 }
