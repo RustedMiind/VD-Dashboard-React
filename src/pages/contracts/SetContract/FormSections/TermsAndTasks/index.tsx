@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Loader from "../../../../../components/Loading/Loader";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
 import { CloudUpload, Edit } from "@mui/icons-material";
@@ -27,6 +27,7 @@ import { useSnackbar } from "notistack";
 import { serialize } from "object-to-formdata";
 import { LoadingButton } from "@mui/lab";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
+import { ContractDetailsContext } from "../../ContractDetailsContext";
 
 // * define our component type
 type FormHeaders = {
@@ -150,9 +151,10 @@ export default function TermsAndTasksOFContract(props: propsType) {
   } = useForm<FormHeaders>({
     defaultValues: {},
   });
+  const contractDetails = useContext(ContractDetailsContext);
   let { id } = useParams();
   if (!id) {
-    id = props.contractId?.toString();
+    id = contractDetails.createdContract.id.toString();
   }
 
   // TODO::fetch data of selects
@@ -271,15 +273,17 @@ export default function TermsAndTasksOFContract(props: propsType) {
       contract_id: id,
       start_date: formData.start_date,
       end_date: formData.end_date,
-      sub_items: subPands.map((ele) => ({
-        employee_id: ele.eng_id,
-        is_progress_bar: ele.is_percent ? 1 : 0,
-        is_processing: ele.is_treatment ? 1 : 0,
-        is_attachment: ele.is_attachment ? 1 : 0,
-        is_mission: ele.is_mission ? 1 : 0,
-        is_letter: ele.is_letter ? 1 : 0,
-        name: ele.name,
-      })),
+      sub_items: subPands
+        .filter((ele) => ele.eng_id != undefined && ele.name.length > 0)
+        .map((ele) => ({
+          employee_id: ele.eng_id,
+          is_progress_bar: ele.is_percent ? 1 : 0,
+          is_processing: ele.is_treatment ? 1 : 0,
+          is_attachment: ele.is_attachment ? 1 : 0,
+          is_mission: ele.is_mission ? 1 : 0,
+          is_letter: ele.is_letter ? 1 : 0,
+          name: ele.name,
+        })),
       attachments: inputFiles,
       employees: setselectedEngineeras.map((ele) => ele.id),
     };
@@ -499,10 +503,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
                   }}
                 >
                   {engineers?.map((employee) => (
-                    <MenuItem
-                      key={`ele_${employee.id}`}
-                      value={employee.id}
-                    >
+                    <MenuItem key={`ele_${employee.id}`} value={employee.id}>
                       {employee.full_name}
                     </MenuItem>
                   ))}
@@ -797,18 +798,22 @@ export default function TermsAndTasksOFContract(props: propsType) {
         </Box>
       </Grid>
       {/* Sub Items */}
-      {subPands.map((pand, idx) => {
-        return (
-          <SinglePand
-            disabled={processLoading}
-            key={`pand_${idx}`}
-            users={setselectedEngineeras}
-            subPandsArr={subPands}
-            setPandData={setSubPands}
-            idx={idx}
-          />
-        );
-      })}
+      {subPands.filter((ele) =>
+        !props.edit ? true : ele.eng_id != undefined && ele.name.length > 0
+      ).length > 0 &&
+        subPands.map((pand, idx) => {
+          console.log("KKKK", `pand_${idx}`, pand);
+          return (
+            <SinglePand
+              disabled={processLoading}
+              key={`pand_${idx}`}
+              users={setselectedEngineeras}
+              subPandsArr={subPands}
+              setPandData={setSubPands}
+              idx={idx}
+            />
+          );
+        })}
 
       {/* Add anthor Pand */}
       <Grid container xs={12} sx={{ width: "95%" }}>
@@ -858,6 +863,5 @@ export default function TermsAndTasksOFContract(props: propsType) {
 }
 
 type propsType = {
-  contractId: number | undefined;
   edit: boolean;
 };

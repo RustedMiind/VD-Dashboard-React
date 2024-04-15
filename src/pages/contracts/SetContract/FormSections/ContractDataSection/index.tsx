@@ -40,11 +40,11 @@ function GridChildren(props: { children: React.ReactNode }) {
 
 const ContractData = (props: PropsType) => {
   let { type, id } = useParams();
+  const contractDetails = useContext(ContractDetailsContext);
   if (!id) {
-    id = props.contractId ? props.contractId.toString() : undefined;
+    id = contractDetails.createdContract.id.toString();
   }
   const navigate = useNavigate();
-  const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
@@ -55,6 +55,9 @@ const ContractData = (props: PropsType) => {
   const [engineers, setEngineers] = useState<{ id: number; name: string }[]>(
     []
   );
+  useEffect(() => {
+    console.log("contractDetails", contractDetails.createdContract.id);
+  }, [contractDetails]);
 
   useEffect(() => {
     if (!props.edit) {
@@ -477,7 +480,6 @@ const ContractData = (props: PropsType) => {
 export default ContractData;
 type PropsType = {
   edit: boolean;
-  contractId?: number;
   setEnabledTabs?: React.Dispatch<React.SetStateAction<string[]>>;
   enabledTabs?: string[];
 };

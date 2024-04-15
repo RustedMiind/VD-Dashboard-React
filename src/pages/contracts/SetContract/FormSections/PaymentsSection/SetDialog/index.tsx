@@ -21,6 +21,7 @@ import { ArrayToMultiline } from "../../../../../../methods";
 import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { useSnackbar } from "notistack";
+import { useParams } from "react-router-dom";
 
 function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
@@ -38,9 +39,15 @@ function SetDialog(props: PropsType) {
   >("none");
   const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
   const { enqueueSnackbar } = useSnackbar();
+  let { id } = useParams();
+  if (!id) {
+    id = ContractDetails.createdContract.id.toString();
+  }
+
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    if (ContractDetails.contract?.id) {
+
+    if (id) {
       setSendState("loading");
       (props.edit
         ? axios.patch(
@@ -53,7 +60,7 @@ function SetDialog(props: PropsType) {
             }
           )
         : axios.post(Api("employee/contract/payment/store"), {
-            contract_id: ContractDetails.contract?.id,
+            contract_id: id,
             ...state,
           })
       )

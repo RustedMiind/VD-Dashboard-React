@@ -27,6 +27,7 @@ import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { useSnackbar } from "notistack";
 import { FormControl } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 function SetDialog(props: PropsType) {
   const ContractDetails = useContext(ContractDetailsContext);
@@ -38,17 +39,21 @@ function SetDialog(props: PropsType) {
     ChangeTypeValues<Partial<AddAttachmentFormType>, string>
   >({});
   const { enqueueSnackbar } = useSnackbar();
+  let { id } = useParams();
+  if (!id) {
+    id = ContractDetails.createdContract.id.toString();
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    if (ContractDetails.contract?.id) {
+    if (id) {
       setSendState("loading");
       console.log("Data in state::", state);
       (props.edit
         ? axios.post(
             Api(`employee/contract/lever/${props.attachmentData.id}`),
             objectToFormData({
-              contract_id: ContractDetails.contract?.id,
+              contract_id: id,
               card_image: state.file,
               name: state.name,
               type: state.type,
@@ -63,7 +68,7 @@ function SetDialog(props: PropsType) {
         : axios.post(
             Api("employee/contract/lever/store"),
             objectToFormData({
-              contract_id: ContractDetails.contract?.id,
+              contract_id: id,
               card_image: state.file,
               name: state.name,
               type: state.type,

@@ -21,8 +21,15 @@ import {
   reducer,
 } from "../FormSections/ContractItems/reducer";
 
+// use contractT because back-end dont return all contract data in first function we may tell him and update it.
+type contractT = {
+  contract_type: number;
+  id: number;
+};
 export const ContractDetailsContext = createContext<{
   contract?: Contract;
+  createdContract: contractT;
+  updateCreatedContractData(data: contractT): void;
   use?: ContractUse;
   refreshUse?: (queries: {
     branchId?: number;
@@ -33,7 +40,10 @@ export const ContractDetailsContext = createContext<{
   contractItemsData?: ContractItemsState;
   updateContractItemsData?: React.Dispatch<ActionTypes>;
   forceId?: (id: number | undefined) => void;
-}>({});
+}>({
+  createdContract: { id: 0, contract_type: 0 },
+  updateCreatedContractData: (data) => {},
+});
 
 function ContractDetailsContextProvider({ children }: PropsType) {
   const params = useParams();
@@ -50,6 +60,10 @@ function ContractDetailsContextProvider({ children }: PropsType) {
     reducer,
     contractItemsIntial
   );
+  const [createdContract, setCreatedContract] = useState<contractT>({
+    contract_type: 0,
+    id: 0,
+  });
 
   // useEffect(() => {
   //   if (id) {
@@ -104,11 +118,15 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         });
     });
   }
+  function updateCreatedContractData(data: contractT) {
+    setCreatedContract(data);
+  }
 
   return (
     <ContractDetailsContext.Provider
       value={{
         contract: contractDetails,
+        createdContract: createdContract,
         use: contractUse,
         refreshContract: getContract,
         refreshUse: getUse,
@@ -116,6 +134,7 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         contractItemsData,
         updateContractItemsData,
         forceId: setForceId,
+        updateCreatedContractData,
       }}
     >
       {children}

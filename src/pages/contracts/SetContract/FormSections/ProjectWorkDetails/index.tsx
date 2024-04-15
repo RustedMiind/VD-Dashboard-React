@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import AddLabelToEl from "../../../../../components/AddLabelToEl";
 import UploadFileInput from "../../../../../components/UploadFileInput";
@@ -32,6 +32,8 @@ import Loader from "../../../../../components/Loading/Loader";
 import { objectToFormData } from "../../../../../methods";
 import { serialize } from "object-to-formdata";
 import RequiredSymbol from "../../../../../components/RequiredSymbol";
+import { ContractDetailsContext } from "../../ContractDetailsContext";
+import { useParams } from "react-router-dom";
 
 type HeaderFieldName =
   | "numberOfPieces"
@@ -117,6 +119,11 @@ const ProjectWorkDetails = (props: PropsType) => {
   >([]);
   const [editedData, setEditedData] = useState<contractDetails>();
   const { enqueueSnackbar } = useSnackbar();
+  const contractDetails = useContext(ContractDetailsContext);
+  let { id } = useParams();
+  if (!id) {
+    id = contractDetails.createdContract.id.toString();
+  }
 
   // TODO::define global
   const FieldGrid = ({
@@ -147,10 +154,11 @@ const ProjectWorkDetails = (props: PropsType) => {
     arr.splice(idx, 1);
     setImagesAlpom([...arr]);
   };
+  console.log("Test101GO", id, contractDetails.createdContract.id);
 
   const handleFormSubmit = handleSubmit((formData) => {
     let data = {
-      contract_id: props.contractId,
+      contract_id: id,
       number_parts: formData.numberOfPieces,
       area: formData.area,
       location: formData.location,
@@ -195,7 +203,7 @@ const ProjectWorkDetails = (props: PropsType) => {
   useEffect(() => {
     if (props.edit) {
       axios
-        .get(Api(`employee/contract/${props.contractId}`))
+        .get(Api(`employee/contract/${id}`))
         .then((res) => {
           setEditedData(res.data.data.contract_details);
         })
@@ -672,6 +680,5 @@ const ProjectWorkDetails = (props: PropsType) => {
 export default ProjectWorkDetails;
 type PropsType = {
   edit: boolean;
-  contractId?: number;
   saveStatment?: string;
 };
