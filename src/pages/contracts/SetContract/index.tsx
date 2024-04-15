@@ -24,7 +24,7 @@ import ProjectWorkDetails from "./FormSections/ProjectWorkDetails";
 import axios from "axios";
 import { Api } from "../../../constants";
 import { useSnackbar } from "notistack";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../components/Loading/Loader";
 import TermsAndTasksOFContract from "./FormSections/TermsAndTasks";
 
@@ -67,6 +67,8 @@ export default function CreateContracts(props: PropsType) {
     else setExpanded(str);
   };
 
+  const navigate = useNavigate();
+
   /**
    * handleSaveWorkType:: function for save contract type.
    */
@@ -90,6 +92,7 @@ export default function CreateContracts(props: PropsType) {
         setCreatedContract(res.data.contract);
         let arr = enabledTabs;
         arr.push("panel1");
+        navigate(`/react/contracts/${res.data.contract.id}/edit`);
         setEnabledTabs([...arr]);
         if (isCreate) enqueueSnackbar("تم الأضافة بنجاح");
         else enqueueSnackbar("تم التعديل بنجاح");
