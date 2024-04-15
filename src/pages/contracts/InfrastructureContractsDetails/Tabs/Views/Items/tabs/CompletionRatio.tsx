@@ -66,14 +66,15 @@ export default function CompletionRatioOfItem() {
         </Box>
       </Grid>
       <Grid item xs={2}>
-        {/* {user?.employee_id === contract?.management?.manager_id && ( */}
-        <Button
-          variant="contained"
-          startIcon={<SettingsOutlinedIcon />}
-          onClick={() => setOpenDialog(true)}
-        >
-          تعديل
-        </Button>
+        {user?.employee_id === contractSubItem?.employee_id && (
+          <Button
+            variant="contained"
+            startIcon={<SettingsOutlinedIcon />}
+            onClick={() => setOpenDialog(true)}
+          >
+            تعديل
+          </Button>
+        )}
       </Grid>
       <EditRaioDialog
         open={openDialog}
