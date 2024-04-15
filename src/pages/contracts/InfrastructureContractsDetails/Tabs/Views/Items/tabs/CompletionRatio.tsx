@@ -1,7 +1,21 @@
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import DoneAndReminder from "../../../../components/DoneAndReminder";
+import { useUser } from "../../../../../../../contexts/user/user";
+import { ContractDetailsContext } from "../../../..";
+import { useContext, useEffect, useState } from "react";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import { CreateTransactionContext } from "../context/CreateTransactionContext";
+import EditRaioDialog from "./EditDialog";
 
 export default function CompletionRatioOfItem() {
+  const [openDialog, setOpenDialog] = useState(false);
+  const { user } = useUser();
+  const { contract, refreshToggler } = useContext(ContractDetailsContext);
+  const { contractSubItem } = useContext(CreateTransactionContext);
+  const [ratio, setRatio] = useState(contractSubItem?.achievement_percentage);
+  useEffect(() => {
+    setRatio(contractSubItem?.achievement_percentage);
+  }, [contractSubItem?.id]);
   return (
     <Grid
       container
@@ -20,7 +34,7 @@ export default function CompletionRatioOfItem() {
       <Grid item xs={2} marginTop={1}>
         <DoneAndReminder column={true} />
       </Grid>
-      <Grid item xs={6} sx={{ marginTop: "3.4rem" }}>
+      <Grid item xs={4} sx={{ marginTop: "3.4rem" }}>
         <Box
           sx={{
             width: "100%",
@@ -35,7 +49,7 @@ export default function CompletionRatioOfItem() {
             style={{ width: "90px" }}
             variant="determinate"
             color={"warning"}
-            value={85.5}
+            value={ratio}
           />
           <Typography
             sx={{
@@ -47,10 +61,26 @@ export default function CompletionRatioOfItem() {
             color={"warning"}
             variant="body2"
           >
-            85.5%
+            {ratio}%
           </Typography>
         </Box>
       </Grid>
+      <Grid item xs={2}>
+        {user?.employee_id === contractSubItem?.employee_id && (
+          <Button
+            variant="contained"
+            startIcon={<SettingsOutlinedIcon />}
+            onClick={() => setOpenDialog(true)}
+          >
+            تعديل
+          </Button>
+        )}
+      </Grid>
+      <EditRaioDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        setRatio={setRatio}
+      />
     </Grid>
   );
 }
