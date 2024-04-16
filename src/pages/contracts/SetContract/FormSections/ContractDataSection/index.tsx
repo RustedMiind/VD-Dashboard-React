@@ -110,7 +110,7 @@ const ContractData = (props: PropsType) => {
 
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    console.log("contract details", contract);
     if (!isEdit) {
       axios
         .post<{ data: Contract }>(
@@ -135,7 +135,10 @@ const ContractData = (props: PropsType) => {
       axios
         .post(
           Api(`employee/contract/update/${contract?.id}`),
-          serialize(contractData)
+          serialize({
+            ...contractData,
+            contract_type_id: contract.contract_type,
+          })
         )
         .then((response) => {
           setErrors(undefined);

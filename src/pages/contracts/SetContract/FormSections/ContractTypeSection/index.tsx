@@ -45,12 +45,12 @@ export default function ContractTypeSection({
       //TODO::fetch contract Data
 
       console.log("Breakpoint101 Edit Data::", contract);
-      setSelectedWorkType(contract?.type?.id);
-      if (contract?.contract_direct_entry_sub_type.id) {
+      setSelectedWorkType(contract.contract_type);
+      if (contract.contract_direct_entry_sub_type?.id) {
         setSelectedSubWorkType(contract.contract_direct_entry_sub_type.id);
       }
     }
-  }, [contract?.id]);
+  }, [contract?.id, contract?.contract_type]);
 
   useEffect(() => {
     axios
@@ -124,6 +124,7 @@ export default function ContractTypeSection({
             <Grid item xs={selectedWorkType ? 6 : 12} paddingX={3}>
               <AddLabelToEl label={"اختر نوع العقد"} required>
                 <Select
+                  key={selectedWorkType}
                   required
                   color="primary"
                   value={selectedWorkType}
@@ -151,7 +152,7 @@ export default function ContractTypeSection({
                 <Select
                   required
                   color="primary"
-                  defaultValue={!isCreate ? selectedSubWorkType : 0}
+                  value={!isCreate ? selectedSubWorkType : 0}
                   size={"small"}
                   onChange={(e) => {
                     setSelectedSubWorkType(+e.target.value);
@@ -167,9 +168,9 @@ export default function ContractTypeSection({
             </Grid>
           </>
         )}
-        {loading && (
+        {/* {loading && (
           <Typography color={"InfoText"}>جاري تحميل البيانات . . .</Typography>
-        )}
+        )} */}
       </Grid>
       <Box
         sx={{

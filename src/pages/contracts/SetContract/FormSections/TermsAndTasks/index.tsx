@@ -812,7 +812,6 @@ export default function TermsAndTasksOFContract(props: propsType) {
             />
           );
         })}
-
       {/* Add anthor Pand */}
       <Grid container xs={12} sx={{ width: "95%" }}>
         <Button
