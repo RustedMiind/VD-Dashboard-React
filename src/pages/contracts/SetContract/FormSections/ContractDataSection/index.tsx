@@ -40,9 +40,8 @@ function GridChildren(props: { children: React.ReactNode }) {
 
 const ContractData = (props: PropsType) => {
   let { type } = useParams();
-  const { contract, refreshUse, disableInputs, use } = useContext(
-    ContractDetailsContext
-  );
+  const { contract, refreshUse, disableInputs, use, refreshContract } =
+    useContext(ContractDetailsContext);
   const isEdit = !!contract;
   const navigate = useNavigate();
   const [requests, setRequests] = useState<SelectOptions | null>(null);
@@ -51,7 +50,6 @@ const ContractData = (props: PropsType) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<FileBondState>([]);
-  const [imageIsExist, setImageIsExist] = useState(false);
   const [engineers, setEngineers] = useState<{ id: number; name: string }[]>(
     []
   );
@@ -67,7 +65,7 @@ const ContractData = (props: PropsType) => {
         payload: contract,
       });
     }
-  }, [contract?.id]);
+  }, [contract?.id, contract ? JSON.stringify(contract) : undefined]);
 
   useEffect(() => {
     setLoading(false);
@@ -110,7 +108,7 @@ const ContractData = (props: PropsType) => {
 
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("contract details", contract);
+    console.log("contract details", contract, refreshContract);
     if (!isEdit) {
       axios
         .post<{ data: Contract }>(
@@ -121,6 +119,7 @@ const ContractData = (props: PropsType) => {
           setErrors(undefined);
           console.log("Dragonx res", res);
           enqueueSnackbar("تم حفظ العقد بنجاح");
+          refreshContract?.();
           // navigate(`../${res.data.data.id}/edit`);
         })
         .catch((err) => {
@@ -149,6 +148,7 @@ const ContractData = (props: PropsType) => {
             arr.push("panel1.5");
             props.setEnabledTabs([...arr]);
           }
+          refreshContract?.();
         })
         .catch((error) => {
           const current: ErrorObject | undefined = error?.response?.data?.data;
@@ -172,9 +172,7 @@ const ContractData = (props: PropsType) => {
       contractData?.cardImageUrl &&
       contractData?.cardImageUrl?.endsWith("null")
     ) {
-      setImageIsExist(false);
     } else if (contractData?.cardImageUrl) {
-      setImageIsExist(true);
     }
   }, [contractData]);
 
@@ -438,7 +436,7 @@ const ContractData = (props: PropsType) => {
                 });
               }}
             />
-            {contractData?.cardImageUrl && imageIsExist && (
+            {contractData?.cardImageUrl && isEdit && (
               <CustomMenuList>
                 <ImageMenuItem
                   onDelete={() => {
@@ -451,7 +449,6 @@ const ContractData = (props: PropsType) => {
                         }
                       )
                       .then((res) => {
-                        setImageIsExist(false);
                         enqueueSnackbar("تم حذف المرفق بنجاح");
                       })
                       .catch(() => {

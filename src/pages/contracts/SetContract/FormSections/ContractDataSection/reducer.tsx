@@ -49,14 +49,17 @@ export function reducer(state: FormData, action: ActionTypes): FormData {
     case "MANAGEMENT_ID":
       return { ...state, employee_id: 0, management_id: action.payload };
     case "DTO_TO_FORM":
+      console.log("action", action);
       return {
         amount: action.payload.amount,
         period: parseInt(action.payload.period),
         date: action.payload.date,
         client_id: action.payload.client_id,
-        cardImageUrl: Domain(
-          "storage/" + action.payload.card_image
-        ) as unknown as string,
+        cardImageUrl: action.payload.card_image
+          ? (Domain(
+              "storage/" + action.payload.card_image
+            ) as unknown as string)
+          : undefined,
         branch_id: action.payload.branch_id,
         code: action.payload.code,
         contract_type_id: action.payload.contract_type_id,

@@ -77,6 +77,7 @@ function ContractDetailsContextProvider({ children }: PropsType) {
   useEffect(getContract, [id]);
 
   function getContract() {
+    console.log("refresh contract executed");
     if (id)
       axios
         .get<{ data: Contract }>(Api(`employee/contract/${id}`))
