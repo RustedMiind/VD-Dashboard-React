@@ -48,14 +48,16 @@ export default function DetailsView() {
             عرض الصورة
           </Button>
         </DetailsItem>
-        {/* <DetailsItem label="طريقة العرض">{contract?.wayOfShow}</DetailsItem> */}
+        <DetailsItem label="طريقة العرض">{"-"}</DetailsItem>
         <DetailsItem label="الادارة">{contract?.management?.name}</DetailsItem>
+        <DetailsItem label="عدد القطع">
+          {contract?.contract_details?.number_parts}
+        </DetailsItem>
         <DetailsItem label="مدة العقد">{contract?.period}</DetailsItem>
         <DetailsItem label="المساحة">
           {contract?.contract_details?.area} م
         </DetailsItem>
         <DetailsItem label="رقم العقد">{contract?.code}</DetailsItem>
-        <DetailsItem label="الادارة">{contract?.management?.name}</DetailsItem>
         <DetailsItem label="تاريخ العقد">
           {new Date(contract?.created_at ?? "").toLocaleDateString()}
         </DetailsItem>

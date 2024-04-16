@@ -31,8 +31,8 @@ export interface Contract {
   deleted_at: null; // Resolving property type conflict
   last_status: string;
   order_id?: number;
-  payed?:number,
-  remaining?:number,
+  payed?: number;
+  remaining?: number;
   is_done: DB_Boolean;
   dateEnd: string; // Resolving conflict in property names
   end_date_period: number;
@@ -46,8 +46,9 @@ export interface Contract {
   levers?: ContractAttachment[]; // Resolving optional property conflict
   contract_details?: ContractDetails; // Assuming both interfaces use the same type
   contract_items?: ContractItem[]; // Resolving optional property conflict
-  contract_direct_entry_sub_type: ContractDirectEntrySubType; // Assuming both interfaces use the same type
+  contract_direct_entry_sub_type?: ContractDirectEntrySubType; // Assuming both interfaces use the same type
   achievement_percentage: number;
+  contract_type?: number;
 }
 
 type Management = {
@@ -84,9 +85,9 @@ export type Childrens = {
 
 export interface ContractDirectEntrySubType {
   id: number;
-  direct_entry_type_id: number;
+  direct_entry_type_id?: number;
   name: string;
-  contract_direct_entry_type: ContractDirectEntryType;
+  contract_direct_entry_type?: ContractDirectEntryType;
 }
 
 export interface ContractDirectEntryType {

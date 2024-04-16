@@ -27,9 +27,10 @@ import { ErrorTypography } from "../../../../../../components/ErrorTypography";
 import RequiredSymbol from "../../../../../../components/RequiredSymbol";
 import { useSnackbar } from "notistack";
 import { FormControl } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 function SetDialog(props: PropsType) {
-  const ContractDetails = useContext(ContractDetailsContext);
+  const { contract, refreshContract, use } = useContext(ContractDetailsContext);
   const [sendState, setSendState] = useState<
     "loading" | "error" | "success" | "none"
   >("none");
@@ -41,14 +42,14 @@ function SetDialog(props: PropsType) {
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    if (ContractDetails.contract?.id) {
+    if (contract?.id) {
       setSendState("loading");
       console.log("Data in state::", state);
       (props.edit
         ? axios.post(
             Api(`employee/contract/lever/${props.attachmentData.id}`),
             objectToFormData({
-              contract_id: ContractDetails.contract?.id,
+              contract_id: contract.id,
               card_image: state.file,
               name: state.name,
               type: state.type,
@@ -63,7 +64,7 @@ function SetDialog(props: PropsType) {
         : axios.post(
             Api("employee/contract/lever/store"),
             objectToFormData({
-              contract_id: ContractDetails.contract?.id,
+              contract_id: contract?.id,
               card_image: state.file,
               name: state.name,
               type: state.type,
@@ -76,7 +77,7 @@ function SetDialog(props: PropsType) {
           props.handleClose();
           dispatch({ type: "SET_RESET", payload: undefined });
           enqueueSnackbar("تم الحفظ بنجاح");
-          ContractDetails.refreshContract && ContractDetails.refreshContract();
+          refreshContract?.();
         })
         .catch(
           (
@@ -167,7 +168,7 @@ function SetDialog(props: PropsType) {
                     dispatch({ type: "SET_TYPE", payload: e.target.value });
                   }}
                 >
-                  {ContractDetails?.use?.attachments_types?.map((item) => (
+                  {use?.attachments_types?.map((item) => (
                     <MenuItem value={item.id}>{item.name}</MenuItem>
                   ))}
                 </Select>

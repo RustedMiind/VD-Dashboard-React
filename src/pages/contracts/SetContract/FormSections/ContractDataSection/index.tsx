@@ -39,12 +39,12 @@ function GridChildren(props: { children: React.ReactNode }) {
 }
 
 const ContractData = (props: PropsType) => {
-  let { type, id } = useParams();
-  if (!id) {
-    id = props.contractId ? props.contractId.toString() : undefined;
-  }
+  let { type } = useParams();
+  const { contract, refreshUse, disableInputs, use } = useContext(
+    ContractDetailsContext
+  );
+  const isEdit = !!contract;
   const navigate = useNavigate();
-  const contractDetails = useContext(ContractDetailsContext);
   const [requests, setRequests] = useState<SelectOptions | null>(null);
   const [contractData, dispatch] = useReducer(reducer, contractIntial);
   const [errors, setErrors] = useState<ErrorObject | undefined>(undefined);
@@ -56,16 +56,18 @@ const ContractData = (props: PropsType) => {
     []
   );
 
+  console.log("is edit ?", isEdit, contract);
+
   useEffect(() => {
-    if (!props.edit) {
+    if (!isEdit) {
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
-    } else if (contractDetails.contract) {
+    } else if (contract) {
       dispatch({
         type: "DTO_TO_FORM",
-        payload: contractDetails.contract,
+        payload: contract,
       });
     }
-  }, [props.edit, !!contractDetails.contract]);
+  }, [contract?.id]);
 
   useEffect(() => {
     setLoading(false);
@@ -98,20 +100,18 @@ const ContractData = (props: PropsType) => {
   }, []);
 
   useEffect(() => {
-    contractDetails.refreshUse &&
-      contractDetails
-        .refreshUse({
-          branchId: contractData.branch_id,
-          managementId: contractData.management_id,
-        })
-        .then((result) => {})
-        .catch((err) => {});
+    refreshUse?.({
+      branchId: contractData.branch_id,
+      managementId: contractData.management_id,
+    })
+      .then((result) => {})
+      .catch((err) => {});
   }, [contractData.branch_id, contractData.management_id]);
 
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!props.edit) {
+    console.log("contract details", contract);
+    if (!isEdit) {
       axios
         .post<{ data: Contract }>(
           Api("employee/contract/store"),
@@ -133,7 +133,13 @@ const ContractData = (props: PropsType) => {
     } else {
       setLoading(true);
       axios
-        .post(Api(`employee/contract/update/${id}`), serialize(contractData))
+        .post(
+          Api(`employee/contract/update/${contract?.id}`),
+          serialize({
+            ...contractData,
+            contract_type_id: contract.contract_type,
+          })
+        )
         .then((response) => {
           setErrors(undefined);
           console.log("Dragonx res", response);
@@ -210,7 +216,7 @@ const ContractData = (props: PropsType) => {
               }))}
               size="small"
               select
-              disabled={contractDetails.disableInputs}
+              disabled={disableInputs}
               value={contractData?.branch_id}
               onChange={(e) => {
                 dispatch({
@@ -229,15 +235,13 @@ const ContractData = (props: PropsType) => {
             <Typography component="label">الادارة</Typography>
 
             <SelectWithFilter
-              options={contractDetails?.use?.management?.map((ele) => ({
+              options={use?.management?.map((ele) => ({
                 label: ele?.name ? ele?.name.toString() : "",
                 value: ele?.id ? ele?.id.toString() : "",
               }))}
               size="small"
               select
-              disabled={
-                contractDetails.disableInputs || !contractData.branch_id
-              }
+              disabled={disableInputs || !contractData.branch_id}
               value={contractData?.management_id}
               onChange={(e) => {
                 dispatch({
@@ -440,9 +444,12 @@ const ContractData = (props: PropsType) => {
                   onDelete={() => {
                     // TODO::There is a problem in API in Back-end.
                     axios
-                      .delete(Api(`employee/contract/delete-media/${id}`), {
-                        headers: { from: "website" },
-                      })
+                      .delete(
+                        Api(`employee/contract/delete-media/${contract?.id}`),
+                        {
+                          headers: { from: "website" },
+                        }
+                      )
                       .then((res) => {
                         setImageIsExist(false);
                         enqueueSnackbar("تم حذف المرفق بنجاح");
@@ -476,8 +483,6 @@ const ContractData = (props: PropsType) => {
 };
 export default ContractData;
 type PropsType = {
-  edit: boolean;
-  contractId?: number;
   setEnabledTabs?: React.Dispatch<React.SetStateAction<string[]>>;
   enabledTabs?: string[];
 };

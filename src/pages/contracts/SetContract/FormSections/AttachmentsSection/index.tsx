@@ -32,6 +32,7 @@ function AttachmentSection() {
   const [attachmentToEdit, setAttachmentToEdit] = useState<
     ContractAttachment | undefined
   >(undefined);
+  
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
