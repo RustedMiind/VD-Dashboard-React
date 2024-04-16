@@ -40,6 +40,7 @@ type FormHeaders = {
   sub_items: [];
 };
 type PandT = {
+  id?: number;
   name: string;
   eng_id: number | undefined;
   is_percent: boolean;
@@ -128,17 +129,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
   const [setselectedEngineeras, setSetselectedEngineeras] = useState<
     { id: number; full_name: string }[]
   >([]);
-  const [subPands, setSubPands] = useState<PandT[]>([
-    {
-      name: "",
-      eng_id: undefined,
-      is_attachment: false,
-      is_percent: false,
-      is_treatment: false,
-      is_mission: false,
-      is_letter: false,
-    },
-  ]);
+  const [subPands, setSubPands] = useState<PandT[]>([]);
   const [processLoading, setProcessLoading] = useState(false);
   const {
     register,
@@ -796,22 +787,24 @@ export default function TermsAndTasksOFContract(props: propsType) {
         </Box>
       </Grid>
       {/* Sub Items */}
-      {subPands.filter((ele) =>
-        !isEdit ? true : ele.eng_id != undefined && ele.name.length > 0
-      ).length > 0 &&
+      {
+        // subPands.filter((ele) =>
+        //   !isEdit ? true : ele.eng_id != undefined && ele.name.length > 0
+        // ).length > 0 &&
         subPands.map((pand, idx) => {
           console.log("KKKK", `pand_${idx}`, pand);
           return (
             <SinglePand
               disabled={processLoading}
-              key={`pand_${idx}`}
+              key={pand.id || `new-${idx}`}
               users={setselectedEngineeras}
               subPandsArr={subPands}
               setPandData={setSubPands}
               idx={idx}
             />
           );
-        })}
+        })
+      }
       {/* Add anthor Pand */}
       <Grid container xs={12} sx={{ width: "95%" }}>
         <Button

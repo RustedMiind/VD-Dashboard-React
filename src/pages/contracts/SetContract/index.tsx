@@ -109,10 +109,7 @@ export default function CreateContracts(props: PropsType) {
                 <Typography>تفاصيل عمل المشروع</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <ProjectWorkDetails
-                  edit={!isCreate}
-                  saveStatment={saveStatment}
-                />
+                <ProjectWorkDetails saveStatment={saveStatment} />
               </AccordionDetails>
             </Accordion>
             {/* Contract Terms and Tasks */}

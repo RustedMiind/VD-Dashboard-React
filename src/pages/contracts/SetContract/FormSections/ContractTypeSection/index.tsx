@@ -152,7 +152,7 @@ export default function ContractTypeSection({
                 <Select
                   required
                   color="primary"
-                  value={!isCreate ? selectedSubWorkType : 0}
+                  value={selectedSubWorkType}
                   size={"small"}
                   onChange={(e) => {
                     setSelectedSubWorkType(+e.target.value);
