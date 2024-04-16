@@ -151,11 +151,9 @@ export default function TermsAndTasksOFContract(props: propsType) {
   } = useForm<FormHeaders>({
     defaultValues: {},
   });
-  const contractDetails = useContext(ContractDetailsContext);
-  let { id } = useParams();
-  if (!id) {
-    id = contractDetails.createdContract.id.toString();
-  }
+  const { contract } = useContext(ContractDetailsContext);
+
+  const isEdit = !!contract;
 
   // TODO::fetch data of selects
   useEffect(() => {
@@ -173,10 +171,10 @@ export default function TermsAndTasksOFContract(props: propsType) {
   }, []);
   // TODO::fetch data of contract if Edit Approach
   useEffect(() => {
-    if (props.edit) {
+    if (isEdit) {
       setLoading(true);
       axios
-        .get(Api(`employee/contract/${id}`))
+        .get(Api(`employee/contract/${contract.id}`))
         .then((res) => {
           setEditedData(res.data.data.contract_items[0]);
           setEditIstanceId(res.data.data.contract_items[0].id);
@@ -189,7 +187,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
           setLoading(false);
         });
     }
-  }, [props.edit]);
+  }, [isEdit]);
 
   useEffect(() => {
     if (editedData) {
@@ -228,7 +226,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
         taskManager: editedData.manager_id ? true : false,
       });
     }
-  }, [props.edit, editedData]);
+  }, [isEdit, editedData]);
 
   // TODO::define my functions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -270,7 +268,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       name: formData.name,
       description: formData.description,
       manager_id: formData.manager_id,
-      contract_id: id,
+      contract_id: contract?.id,
       start_date: formData.start_date,
       end_date: formData.end_date,
       sub_items: subPands
@@ -799,7 +797,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
       </Grid>
       {/* Sub Items */}
       {subPands.filter((ele) =>
-        !props.edit ? true : ele.eng_id != undefined && ele.name.length > 0
+        !isEdit ? true : ele.eng_id != undefined && ele.name.length > 0
       ).length > 0 &&
         subPands.map((pand, idx) => {
           console.log("KKKK", `pand_${idx}`, pand);
@@ -855,7 +853,7 @@ export default function TermsAndTasksOFContract(props: propsType) {
           color="primary"
           fullWidth
         >
-          {props.edit ? "تعديل" : "حفظ"}
+          {isEdit ? "تعديل" : "حفظ"}
         </LoadingButton>
       </Grid>
     </Box>
@@ -863,5 +861,5 @@ export default function TermsAndTasksOFContract(props: propsType) {
 }
 
 type propsType = {
-  edit: boolean;
+  // edit: boolean;
 };

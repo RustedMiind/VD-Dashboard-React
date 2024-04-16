@@ -23,11 +23,8 @@ type contractT = {
 };
 
 export default function ContractTypeSection({
-  isCreate,
   enabledTabs,
   setEnabledTabs,
-  saveStatment,
-  setSaveStatment,
 }: PropsType) {
   // TODO::Declare and define component state and variables
   const [loading, setLoading] = useState(false);
@@ -35,10 +32,9 @@ export default function ContractTypeSection({
   const [selectedSubWorkType, setSelectedSubWorkType] = useState<number>();
   const [workTypes, setWorkTypes] = useState<WorkType[]>([]);
   const [workSubTypes, setWorkSubTypes] = useState<workSubType[]>([]);
-  const [createdContract, setCreatedContract] = useState<contractT>();
   const { enqueueSnackbar } = useSnackbar();
-  const ContractDetailsContextData = useContext(ContractDetailsContext);
-  let { id } = useParams();
+  const { contract, forceId } = useContext(ContractDetailsContext);
+  const isCreate = !contract;
 
   //TODO::handle side effects
   useEffect(() => {
@@ -47,29 +43,14 @@ export default function ContractTypeSection({
     else {
       console.log("Breakpoint101 Edit Approach .. . .");
       //TODO::fetch contract Data
-      setLoading(true);
-      setSaveStatment("تعديل");
-      axios
-        .get(Api(`employee/contract/${id}`))
-        .then((res) => {
-          console.log("Breakpoint101 Edit Data::", res);
-          setSelectedWorkType(res.data.data.contract_type);
-          if (res.data.data.contract_direct_entry_sub_type.id) {
-            setSelectedSubWorkType(
-              res.data.data.contract_direct_entry_sub_type.id
-            );
-          }
-        })
-        .catch((err) => {
-          console.log("Error101 :-", err);
-          enqueueSnackbar("تعذر الحفظ", { variant: "error" });
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-      console.log("Breakpoint101 Edit Approach .. id:", id);
+
+      console.log("Breakpoint101 Edit Data::", contract);
+      setSelectedWorkType(contract?.type?.id);
+      if (contract?.contract_direct_entry_sub_type.id) {
+        setSelectedSubWorkType(contract.contract_direct_entry_sub_type.id);
+      }
     }
-  }, [createdContract]);
+  }, [contract?.id]);
 
   useEffect(() => {
     axios
@@ -109,7 +90,7 @@ export default function ContractTypeSection({
           }
         )
       : axios.post<{ contract: contractT }>(
-          Api(`employee/contract/update-type/${id}`),
+          Api(`employee/contract/update-type/${contract?.id}`),
           {
             contract_type: selectedSubWorkType,
           }
@@ -117,10 +98,9 @@ export default function ContractTypeSection({
     )
       .then((res) => {
         console.log("Breakpoint1002 created contract data::", res);
-        setCreatedContract(res.data.contract);
         let arr = enabledTabs;
         arr.push("panel1");
-        ContractDetailsContextData.updateCreatedContractData(res.data.contract);
+        forceId?.(res.data.contract.id);
         setEnabledTabs([...arr]);
         if (isCreate) enqueueSnackbar("تم الأضافة بنجاح");
         else enqueueSnackbar("تم التعديل بنجاح");
@@ -152,8 +132,8 @@ export default function ContractTypeSection({
                     setSelectedWorkType(+e.target.value);
                   }}
                 >
-                  {workTypes.map((item, idx) => (
-                    <MenuItem key={`CT_${idx}_${item.name}`} value={item.id}>
+                  {workTypes.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
                       {item.name}
                     </MenuItem>
                   ))}
@@ -178,7 +158,7 @@ export default function ContractTypeSection({
                   }}
                 >
                   {workSubTypes.map((item, idx) => (
-                    <MenuItem key={`CT_${idx}_${item.name}`} value={item.id}>
+                    <MenuItem key={item.id} value={item.id}>
                       {item.name}
                     </MenuItem>
                   ))}
@@ -205,7 +185,7 @@ export default function ContractTypeSection({
           onClick={() => handleSaveWorkType()}
           size="large"
         >
-          {saveStatment}
+          حفظ
         </Button>
       </Box>
     </>
@@ -213,9 +193,6 @@ export default function ContractTypeSection({
 }
 
 type PropsType = {
-  isCreate: boolean;
   enabledTabs: string[];
   setEnabledTabs: React.Dispatch<React.SetStateAction<string[]>>;
-  saveStatment: string;
-  setSaveStatment: React.Dispatch<React.SetStateAction<string>>;
 };

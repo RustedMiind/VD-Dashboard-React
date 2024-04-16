@@ -119,11 +119,7 @@ const ProjectWorkDetails = (props: PropsType) => {
   >([]);
   const [editedData, setEditedData] = useState<contractDetails>();
   const { enqueueSnackbar } = useSnackbar();
-  const contractDetails = useContext(ContractDetailsContext);
-  let { id } = useParams();
-  if (!id) {
-    id = contractDetails.createdContract.id.toString();
-  }
+  const { contract } = useContext(ContractDetailsContext);
 
   // TODO::define global
   const FieldGrid = ({
@@ -154,11 +150,11 @@ const ProjectWorkDetails = (props: PropsType) => {
     arr.splice(idx, 1);
     setImagesAlpom([...arr]);
   };
-  console.log("Test101GO", id, contractDetails.createdContract.id);
+  console.log("Test101GO", contract?.id);
 
   const handleFormSubmit = handleSubmit((formData) => {
     let data = {
-      contract_id: id,
+      contract_id: contract?.id,
       number_parts: formData.numberOfPieces,
       area: formData.area,
       location: formData.location,
@@ -203,7 +199,7 @@ const ProjectWorkDetails = (props: PropsType) => {
   useEffect(() => {
     if (props.edit) {
       axios
-        .get(Api(`employee/contract/${id}`))
+        .get(Api(`employee/contract/${contract?.id}`))
         .then((res) => {
           setEditedData(res.data.data.contract_details);
         })

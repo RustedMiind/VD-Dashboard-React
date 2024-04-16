@@ -30,7 +30,7 @@ function FormTextField(props: TextfieldPropsType) {
 type TextfieldPropsType = TextFieldProps;
 
 function SetDialog(props: PropsType) {
-  const ContractDetails = useContext(ContractDetailsContext);
+  const { contract, refreshContract } = useContext(ContractDetailsContext);
   const [errorState, setErrorState] = useState<
     ChangeTypeValues<Partial<AddPaymentFormType>, string>
   >({});
@@ -39,15 +39,11 @@ function SetDialog(props: PropsType) {
   >("none");
   const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
   const { enqueueSnackbar } = useSnackbar();
-  let { id } = useParams();
-  if (!id) {
-    id = ContractDetails.createdContract.id.toString();
-  }
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
 
-    if (id) {
+    if (contract?.id) {
       setSendState("loading");
       (props.edit
         ? axios.patch(
@@ -60,7 +56,7 @@ function SetDialog(props: PropsType) {
             }
           )
         : axios.post(Api("employee/contract/payment/store"), {
-            contract_id: id,
+            contract_id: contract.id,
             ...state,
           })
       )
@@ -69,7 +65,7 @@ function SetDialog(props: PropsType) {
           props.handleClose();
           dispatch({ type: "SET_RESET", payload: undefined });
           enqueueSnackbar("تم الحفظ بنجاح");
-          ContractDetails.refreshContract && ContractDetails.refreshContract();
+          refreshContract?.();
         })
         .catch(
           (err: AxiosErrorType<LaravelValidationError<AddPaymentFormType>>) => {
@@ -177,7 +173,7 @@ function SetDialog(props: PropsType) {
                   </ListItemIcon>
                   بعد انتهاء مهمة
                 </MenuItem>
-                {ContractDetails.contract?.tasks?.map((task) => (
+                {contract?.tasks?.map((task) => (
                   <MenuItem value={task.id}> {task.name} </MenuItem>
                 ))}
               </FormTextField>

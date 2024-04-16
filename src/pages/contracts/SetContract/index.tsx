@@ -70,11 +70,8 @@ export default function CreateContracts(props: PropsType) {
               </AccordionSummary>
               <AccordionDetails>
                 <ContractTypeSection
-                  saveStatment={saveStatment}
-                  setSaveStatment={setSaveStatment}
                   enabledTabs={enabledTabs}
                   setEnabledTabs={setEnabledTabs}
-                  isCreate={isCreate}
                 />
               </AccordionDetails>
             </Accordion>
@@ -93,7 +90,6 @@ export default function CreateContracts(props: PropsType) {
               </AccordionSummary>
               <AccordionDetails>
                 <ContractData
-                  edit={true}
                   setEnabledTabs={setEnabledTabs}
                   enabledTabs={enabledTabs}
                 />
@@ -134,7 +130,7 @@ export default function CreateContracts(props: PropsType) {
               </AccordionSummary>
               <AccordionDetails>
                 {/* <ContractTasks /> */}
-                <TermsAndTasksOFContract edit={!isCreate} />
+                <TermsAndTasksOFContract />
               </AccordionDetails>
             </Accordion>
             {/* Payments */}
