@@ -150,6 +150,7 @@ export default function ContractTypeSection({
             >
               <AddLabelToEl label={"اختر تصنيف العقد"} required>
                 <Select
+                  key={selectedSubWorkType}
                   required
                   color="primary"
                   value={selectedSubWorkType}
