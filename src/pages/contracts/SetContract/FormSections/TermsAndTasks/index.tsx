@@ -28,6 +28,7 @@ import { serialize } from "object-to-formdata";
 import { LoadingButton } from "@mui/lab";
 import SelectWithFilter from "../../../../../components/SelectWithFilter";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
+import { Media } from "../../../../../types/Media";
 
 // * define our component type
 type FormHeaders = {
@@ -99,18 +100,11 @@ export default function TermsAndTasksOFContract(props: propsType) {
   // TODO::declare our state var...
   const [loading, setLoading] = useState(false);
   const [datesError, setDatesError] = useState(false);
-  const [editIstanceId, setEditIstanceId] = useState<number | undefined>(
-    undefined
-  );
-  const [editedData, setEditedData] = useState<editedDataType>();
-  const [mediaFiles, setMediaFiles] = useState<
-    {
-      id: number;
-      file_name: string;
-      size: number;
-      original_url: string;
-    }[]
-  >([]);
+  // const [editIstanceId, setEditIstanceId] = useState<number | undefined>(
+  //   undefined
+  // );
+  //const [editedData, setEditedData] = useState<editedDataType>();
+  const [mediaFiles, setMediaFiles] = useState<Media[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [inputFiles, setInputFiles] = useState<FileList | null>(null);
   const [mangeredId, setMangeredId] = useState<number>();
@@ -143,6 +137,8 @@ export default function TermsAndTasksOFContract(props: propsType) {
     defaultValues: {},
   });
   const { contract } = useContext(ContractDetailsContext);
+  const editedData = contract?.contract_items?.[0];
+  const editIstanceId = editedData?.id;
 
   const isEdit = !!contract;
 
@@ -162,62 +158,65 @@ export default function TermsAndTasksOFContract(props: propsType) {
   }, []);
   // TODO::fetch data of contract if Edit Approach
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && contract.id) {
       setLoading(true);
       axios
         .get(Api(`employee/contract/${contract.id}`))
         .then((res) => {
-          setEditedData(res.data.data.contract_items[0]);
-          setEditIstanceId(res.data.data.contract_items[0].id);
+          //setEditedData(res.data.data.contract_items[0]);
+          //setEditIstanceId(res.data.data.contract_items[0].id);
         })
         .catch((err) => {
           console.log("Error101 :-", err);
+
           enqueueSnackbar("تعذر تحميل الداتا", { variant: "error" });
         })
         .finally(() => {
           setLoading(false);
         });
     }
-  }, [isEdit]);
+  }, [isEdit, contract?.id]);
 
   useEffect(() => {
-    if (editedData) {
+    if (contract?.id) {
       reset({
-        name: editedData.name,
-        description: editedData.description,
-        manager_id: editedData.manager_id,
-        start_date: editedData.start_date?.slice(0, 10),
-        end_date: editedData.end_date?.slice(0, 10),
+        name: editedData?.name,
+        description: editedData?.description,
+        manager_id: `${editedData?.manager_id || ""}`,
+        start_date: editedData?.start_date?.slice(0, 10),
+        end_date: editedData?.end_date?.slice(0, 10),
       });
-      setMangeredId(+editedData.manager_id);
-      setMediaFiles(editedData.media);
+      setMangeredId(
+        editedData?.manager_id ? +editedData?.manager_id : undefined
+      );
+      setMediaFiles(editedData?.media || []);
       setSetselectedEngineeras(
         editedData?.contract_item_employees?.map((ele) => ({
           id: ele?.employee_id,
-          full_name: ele?.employee?.full_name,
-        }))
+          full_name: ele?.employee?.full_name || "",
+        })) || []
       );
 
       setSubPands(
-        editedData?.contract_sub_items.map((ele) => {
+        editedData?.contract_sub_items?.map((ele) => {
           return {
             name: ele.name,
             eng_id: +ele.employee_id,
-            is_percent: ele.is_progress_bar == "1" ? true : false,
-            is_treatment: ele.is_processing == "1" ? true : false,
-            is_attachment: ele.is_attachment == "1" ? true : false,
-            is_mission: ele.is_mission == "1" ? true : false,
-            is_letter: ele.is_letter == "1" ? true : false,
+            is_percent: ele?.is_progress_bar == 1 ? true : false,
+            is_treatment: ele.is_processing == 1 ? true : false,
+            is_attachment: ele.is_attachment == 1 ? true : false,
+            is_mission: ele.is_mission == 1 ? true : false,
+            is_letter: ele.is_letter == 1 ? true : false,
           };
-        })
+        }) || []
       );
       setMainFieldsShow({
-        pandName: editedData.name ? true : false,
-        pandDescription: editedData.description ? true : false,
-        taskManager: editedData.manager_id ? true : false,
+        pandName: editedData?.name ? true : false,
+        pandDescription: editedData?.description ? true : false,
+        taskManager: editedData?.manager_id ? true : false,
       });
     }
-  }, [isEdit, editedData]);
+  }, [isEdit, contract?.id]);
 
   // TODO::define my functions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -756,11 +755,11 @@ export default function TermsAndTasksOFContract(props: propsType) {
                     <DescriptionIcon />
                     <Box>
                       <Typography variant="body1" fontSize={13}>
-                        {item.file_name.slice(
+                        {item?.file_name?.slice(
                           0,
-                          Math.min(18, item.file_name.length)
+                          Math.min(18, item?.file_name?.length)
                         )}
-                        {(item.file_name?.length || 0) > 18 ? ".." : ""}
+                        {(item?.file_name?.length || 0) > 18 ? ".." : ""}
                       </Typography>
                       <Typography variant="body1" fontSize={10}>
                         {new Date().toLocaleDateString()} ,{" "}

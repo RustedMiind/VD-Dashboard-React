@@ -65,16 +65,17 @@ export default function ContractTypeSection({
   }, []);
 
   useEffect(() => {
-    axios
-      .get<{ sub_types: workSubType[] }>(
-        Api(`employee/contract/types/${selectedWorkType}`)
-      )
-      .then(({ data }) => {
-        setWorkSubTypes(data.sub_types);
-      })
-      .catch((err) => {
-        console.log("Error in fetch data:", err);
-      });
+    if (selectedWorkType)
+      axios
+        .get<{ sub_types: workSubType[] }>(
+          Api(`employee/contract/types/${selectedWorkType}`)
+        )
+        .then(({ data }) => {
+          setWorkSubTypes(data.sub_types);
+        })
+        .catch((err) => {
+          console.log("Error in fetch data:", err);
+        });
   }, [selectedWorkType]);
 
   //TODO::define and declare helper methods
