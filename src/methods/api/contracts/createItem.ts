@@ -14,11 +14,11 @@ const schema = z.object({
     z.object({
       name: z.string(),
       employee_id: z.number().gt(0),
-      is_progress_bar: z.boolean().optional(),
-      is_processing: z.boolean().optional(),
-      is_attachment: z.boolean().optional(),
-      is_letter: z.boolean().optional(),
-      is_mission: z.boolean().optional(),
+      is_progress_bar: z.boolean(),
+      is_processing: z.boolean(),
+      is_attachment: z.boolean(),
+      is_letter: z.boolean(),
+      is_mission: z.boolean(),
     })
   ),
   employees: z.array(z.number()).optional(),
@@ -26,13 +26,45 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>;
 
-async function storeItem(contractId: number, data: SchemaType) {
+const initialValue: SchemaType = {
+  name: "",
+  description: "",
+  manager_id: -1,
+  start_date: "",
+  end_date: "",
+  attachments: [],
+  sub_items: [],
+  employees: [],
+};
+
+async function storeItem(
+  contractDetails: {
+    id: number;
+    itemId?: number;
+  },
+
+  data: SchemaType,
+  employees?: number[]
+) {
   return axios.post(
-    Api("employee/contract/items/store"),
-    serialize({ ...data, contract_id: contractId }, { indices: true })
+    Api(
+      contractDetails.itemId
+        ? `employee/contract/items/${contractDetails.itemId}`
+        : "employee/contract/items/store"
+    ),
+    serialize(
+      {
+        ...data,
+        contract_id: contractDetails.id,
+        employees,
+        item_id: contractDetails.itemId || undefined,
+      },
+      { indices: true, booleansAsIntegers: true }
+    )
   );
 }
 
 export const storeContractItemSchema = schema;
 export type StoreContractItemSchemaType = SchemaType;
 export const storeContractItem = storeItem;
+export const contractItemSchemaInitial = initialValue;

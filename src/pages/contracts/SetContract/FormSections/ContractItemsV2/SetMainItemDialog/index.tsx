@@ -26,10 +26,12 @@ import {
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  contractItemSchemaInitial,
+  storeContractItem,
   storeContractItemSchema,
   StoreContractItemSchemaType,
 } from "../../../../../../methods/api/contracts";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SelectWithFilter from "../../../../../../components/SelectWithFilter";
 import { DbOptionType } from "../../../../../../types/other/DbOptionType";
 import axios from "axios";
@@ -40,6 +42,10 @@ import ContractAddUsersSelect from "../../TermsAndTasks/SelectFromUsers";
 import CustomFilePond from "../../../../../../components/CustomFilepond";
 import { DateOnlyFormatString } from "../../../../../../constants/DateFormat";
 import { LoadingButton } from "@mui/lab";
+import { ContractDetailsContext } from "../../../ContractDetailsContext";
+import { useSnackbar } from "notistack";
+import { getContractItem } from "../../../../../../methods/api/contracts/getItem";
+import { ContractItem } from "../../../../../../types/Contracts/ContractItems";
 
 // TODO::define helpers variables ans subcomponents
 const ErrorMessage = (props: TypographyProps) => (
@@ -64,13 +70,18 @@ const textFieldDefaultProps: TextFieldProps = {
 type EngineeOptionType = { id: number; full_name: string };
 
 //* Main Component
-function SetMainItemDialog({ onClose, open }: PropsType) {
+function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
+  const isEdit = !!itemId;
   //TODO:: Declare ansd define component state and variables
   const [loading, setLoading] = useState(false);
+  const [contractItem, setContractItem] = useState<undefined | ContractItem>(
+    undefined
+  );
   const {
     handleSubmit,
     control,
     register,
+    reset,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<StoreContractItemSchemaType>({
@@ -80,11 +91,12 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
   const [setselectedEngineeras, setSetselectedEngineeras] = useState<
     EngineeOptionType[]
   >([]);
-
+  const { contract, refreshContract } = useContext(ContractDetailsContext);
   const { append, remove, fields } = useFieldArray({
     control,
     name: "sub_items",
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   // TODO::fetch data of selects
   useEffect(() => {
@@ -102,13 +114,47 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
       .finally(() => setLoading(false));
   }, []);
 
-  // Todo::handle form submit
-  const submit = handleSubmit((data) => {
-    // prepare our form data
-    let employees = setselectedEngineeras.map((ele) => ele.id);
-    let bodyData = { ...data, employees };
+  const fetchItemData = async (itemId: number) => {
+    try {
+      const {
+        data: { contract_item },
+      } = await getContractItem(itemId);
+      setContractItem(contract_item);
+    } catch (error) {
+      enqueueSnackbar("تعذر في تحميل بيانات البند للتعديل", {
+        variant: "error",
+      });
+      setContractItem(undefined);
+      onClose();
+    }
+  };
 
-    console.log("bodyData", bodyData);
+  useEffect(() => {
+    if (!isEdit) {
+      reset(contractItemSchemaInitial);
+    } else {
+      fetchItemData(itemId);
+    }
+  }, [itemId, open]);
+
+  // Todo::handle form submit
+  const submit = handleSubmit(async (data) => {
+    try {
+      if (!contract)
+        throw new Error(
+          `Cannot save contract item, contract is ${typeof contract}`
+        );
+      let employees = setselectedEngineeras.map((ele) => ele.id);
+      const res = await storeContractItem({ id: contract.id }, data, employees);
+      console.log(res.data);
+      enqueueSnackbar("تم حفظ البند بنجاح");
+      // prepare our form data
+      onClose();
+    } catch (error) {
+      enqueueSnackbar("تعذر في حفظ البند", {
+        variant: "error",
+      });
+    }
   });
 
   return (
@@ -370,6 +416,8 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
                     is_attachment: false,
                     is_processing: false,
                     is_progress_bar: false,
+                    is_letter: false,
+                    is_mission: false,
                     employee_id: -1,
                   })
                 }
@@ -402,6 +450,7 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
 type PropsType = {
   onClose: () => void;
   open: boolean;
+  itemId?: number;
 };
 
 export default SetMainItemDialog;

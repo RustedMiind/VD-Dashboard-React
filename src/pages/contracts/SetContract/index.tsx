@@ -113,24 +113,6 @@ export default function CreateContracts(props: PropsType) {
                 <ProjectWorkDetails saveStatment={saveStatment} />
               </AccordionDetails>
             </Accordion>
-            {/* Contract Terms and Tasks */}
-            <Accordion
-              disabled={isCreate && enabledTabs.indexOf("panel1.5") == -1}
-              expanded={expanded === "panel2"}
-              onChange={() => HandleChangeExpanded("panel2")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2-content"
-                id="panel2-header"
-              >
-                <Typography>بنود ومهام العقد</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {/* <ContractTasks /> */}
-                <TermsAndTasksOFContract />
-              </AccordionDetails>
-            </Accordion>
             {/* Contract Items */}
             <Accordion
               disabled={isCreate && enabledTabs.indexOf("panel1.5") == -1}
