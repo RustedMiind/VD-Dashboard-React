@@ -13,7 +13,7 @@ function ContractItemsV2() {
 
   return (
     <>
-      <SetMainItemDialog />
+      <SetMainItemDialog open={true} onClose={() => null} />
 
       <Stack spacing={2}>
         <Stack direction="row" alignItems="center">
