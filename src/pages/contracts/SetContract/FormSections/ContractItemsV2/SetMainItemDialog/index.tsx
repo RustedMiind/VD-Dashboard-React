@@ -186,11 +186,13 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
       onClose={onClose}
       component={"form"}
       onSubmit={submit}
-      // maxWidth="lg"
-      // fullWidth
-      fullScreen
+      maxWidth="lg"
+      fullWidth
+      // fullScreen
     >
-      <DialogTitle>اضافة بند جديد</DialogTitle>
+      <DialogTitle>
+        {isEdit ? `تعديل بند ${contractItem?.name}` : "اضافة بند جديد"}
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
           {/* Main Item Data title,description and manager */}

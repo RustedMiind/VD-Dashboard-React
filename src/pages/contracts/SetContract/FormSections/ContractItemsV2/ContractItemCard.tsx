@@ -7,8 +7,15 @@ import Typography from "@mui/material/Typography";
 import { ContractItem } from "../../../../../types/Contracts/ContractItems";
 import dayjs from "dayjs";
 import { Avatar } from "@mui/material";
+import { deleteContractItem } from "../../../../../methods/api/contracts";
+import { ContractDetailsContext } from "../../ContractDetailsContext";
+import { useContext } from "react";
+import { useSnackbar } from "notistack";
 
 function ContractItemCard({ data, selectItemToEdit }: PropsType) {
+  const { refreshContract } = useContext(ContractDetailsContext);
+  const { enqueueSnackbar } = useSnackbar();
+
   const startDate = data.start_date
     ? dayjs(data.start_date).format("YYYY-MM-DD")
     : undefined;
@@ -45,6 +52,24 @@ function ContractItemCard({ data, selectItemToEdit }: PropsType) {
       <CardActions>
         <Button size="small" onClick={() => selectItemToEdit(data.id)}>
           تعديل
+        </Button>
+        <Button
+          size="small"
+          color="error"
+          onClick={async () => {
+            try {
+              if (!data.id) throw new Error();
+              await deleteContractItem(data.id);
+              enqueueSnackbar("تم حذف البند");
+              refreshContract?.();
+            } catch (error) {
+              enqueueSnackbar("تعذر في حذف البند", {
+                variant: "error",
+              });
+            }
+          }}
+        >
+          حذف
         </Button>
       </CardActions>
     </Card>
