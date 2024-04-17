@@ -11,7 +11,10 @@ const GridItem = (props: GridProps) => (
 function ContractItemsV2() {
   const { contract } = useContext(ContractDetailsContext);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const handleOpenCreateDialog = () => setCreateDialogOpen(true);
+  const handleOpenCreateDialog = () => {
+    setSelectedItemToEdit(undefined);
+    setCreateDialogOpen(true);
+  };
   const handleCloseCreateDialog = () => setCreateDialogOpen(false);
   const [selectedItemToEdit, setSelectedItemToEdit] = useState<
     number | undefined

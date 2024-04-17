@@ -58,7 +58,6 @@ async function storeItem(
         ...data,
         contract_id: contractDetails.id,
         employees,
-        item_id: contractDetails.itemId || undefined,
       },
       { indices: true, booleansAsIntegers: true }
     )

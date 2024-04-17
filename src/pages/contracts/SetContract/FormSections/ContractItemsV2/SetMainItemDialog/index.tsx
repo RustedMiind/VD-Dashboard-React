@@ -8,6 +8,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import {
   Box,
   FormControlLabel,
@@ -22,12 +23,17 @@ import {
   Typography,
   TypographyProps,
   MenuItem,
+  MenuList,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   contractItemSchemaInitial,
   contractItemToStoreSchema,
+  deleteContractItemMedia,
   storeContractItem,
   storeContractItemSchema,
   StoreContractItemSchemaType,
@@ -86,7 +92,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<StoreContractItemSchemaType>({
-    // resolver: zodResolver(storeContractItemSchema),
+    resolver: zodResolver(storeContractItemSchema),
   });
   const [engineers, setEngineers] = useState<EngineeOptionType[]>([]);
   const [setselectedEngineeras, setSetselectedEngineeras] = useState<
@@ -122,6 +128,12 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
       } = await getContractItem(itemId);
       if (!contract_item) throw new Error("Couldn't get the item details");
       setContractItem(contract_item);
+      setSetselectedEngineeras(
+        contract_item?.contract_item_employees?.map(({ employee }) => ({
+          full_name: employee?.full_name || "",
+          id: employee?.id || NaN,
+        })) || []
+      );
       reset(contractItemToStoreSchema(contract_item));
     } catch (error) {
       enqueueSnackbar("تعذر في تحميل بيانات البند للتعديل", {
@@ -133,12 +145,13 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
   };
 
   useEffect(() => {
+    setContractItem(undefined);
+    reset(contractItemSchemaInitial);
     if (!isEdit) {
-      reset(contractItemSchemaInitial);
     } else {
       fetchItemData(itemId);
     }
-  }, [open]);
+  }, [itemId]);
 
   // Todo::handle form submit
   const submit = handleSubmit(async (data) => {
@@ -148,9 +161,14 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
           `Cannot save contract item, contract is ${typeof contract}`
         );
       let employees = setselectedEngineeras.map((ele) => ele.id);
-      const res = await storeContractItem({ id: contract.id }, data, employees);
+      const res = await storeContractItem(
+        { id: contract.id, itemId },
+        data,
+        employees
+      );
       console.log(res.data);
       enqueueSnackbar("تم حفظ البند بنجاح");
+      refreshContract?.();
       // prepare our form data
       onClose();
     } catch (error) {
@@ -159,6 +177,8 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
       });
     }
   });
+
+  if (isEdit && !contractItem) return <React.Fragment />;
 
   return (
     <Dialog
@@ -189,20 +209,21 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
           {/* Manager */}
           <GridItem>
             <AddLabelToEl label="اختيار مدير المهمة">
-              {loading ? (
-                <Typography color={"info"}>جاري تحميل البيانات </Typography>
-              ) : (
-                <SelectWithFilter
-                  select
-                  onChange={(e) => {
-                    setValue("manager_id", +e.target.value);
-                  }}
-                  options={engineers?.map((engineer) => ({
-                    label: engineer.full_name ?? "",
-                    value: engineer.id,
-                  }))}
-                ></SelectWithFilter>
-              )}
+              <Controller
+                name="manager_id"
+                control={control}
+                render={({ field }) => (
+                  <SelectWithFilter
+                    select
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={engineers?.map((engineer) => ({
+                      label: engineer.full_name ?? "",
+                      value: engineer.id,
+                    }))}
+                  />
+                )}
+              />
             </AddLabelToEl>
           </GridItem>
 
@@ -259,6 +280,42 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
           <Separator />
           <GridItem>
             <AddLabelToEl label="المرفقات">
+              <MenuList>
+                {contractItem?.media?.map((media) => (
+                  <ListItem key={media.id}>
+                    <ListItemIcon>
+                      <IconButton
+                        component="a"
+                        href={media.original_url}
+                        target="_blank"
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </ListItemIcon>
+
+                    <ListItemText sx={{ flexGrow: 1 }}>
+                      {media.file_name}
+                    </ListItemText>
+                    <IconButton
+                      onClick={async () => {
+                        try {
+                          if (!itemId) throw new Error();
+                          await deleteContractItemMedia(itemId, media.id);
+                          enqueueSnackbar("تم حذف الملف بنجاج");
+                          fetchItemData(itemId);
+                        } catch (error) {
+                          enqueueSnackbar("تعذر في حذف الملف", {
+                            variant: "error",
+                          });
+                        }
+                      }}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </MenuList>
               <Controller
                 name="attachments"
                 control={control}
@@ -303,21 +360,28 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
                     </Grid>
                     {/* Sub item engineer */}
                     <Grid item xs={5.5}>
-                      <TextField
-                        disabled={loading}
-                        placeholder={"المهندس المسئول عن البند الفرعي"}
-                        size="small"
-                        select
-                        variant="outlined"
-                        fullWidth
-                        {...register(`sub_items.${index}.employee_id`)}
-                      >
-                        {setselectedEngineeras?.map((employee) => (
-                          <MenuItem key={employee.id} value={employee.id}>
-                            {employee.full_name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                      <Controller
+                        control={control}
+                        name={`sub_items.${index}.employee_id`}
+                        render={({ field }) => (
+                          <TextField
+                            disabled={loading}
+                            placeholder={"المهندس المسئول عن البند الفرعي"}
+                            size="small"
+                            select
+                            variant="outlined"
+                            fullWidth
+                            {...field}
+                          >
+                            {setselectedEngineeras?.map((employee) => (
+                              <MenuItem key={employee.id} value={employee.id}>
+                                {employee.full_name}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        )}
+                      />
+
                       <ErrorMessage>
                         {errors.sub_items?.[index]?.name?.message}
                       </ErrorMessage>
