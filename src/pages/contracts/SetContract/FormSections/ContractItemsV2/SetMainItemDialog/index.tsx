@@ -19,6 +19,7 @@ import {
   TextFieldProps,
   Typography,
   TypographyProps,
+  MenuItem,
 } from "@mui/material";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,12 +27,20 @@ import {
   storeContractItemSchema,
   StoreContractItemSchemaType,
 } from "../../../../../../methods/api/contracts";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import SelectWithFilter from "../../../../../../components/SelectWithFilter";
+import { DbOptionType } from "../../../../../../types/other/DbOptionType";
+import axios from "axios";
+import { Api } from "../../../../../../constants";
+import dayjs, { Dayjs } from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers";
+import ContractAddUsersSelect from "../../TermsAndTasks/SelectFromUsers";
+import CustomFilePond from "../../../../../../components/CustomFilepond";
 
+// TODO::define helpers variables ans subcomponents
 const ErrorMessage = (props: TypographyProps) => (
   <Typography variant="body2" color="error" {...props} />
 );
-
 const GridItem = ({
   schemaError,
   ...props
@@ -45,23 +54,57 @@ const GridItem = ({
 const textFieldDefaultProps: TextFieldProps = {
   fullWidth: true,
 };
+type EngineeOptionType = { id: number; full_name: string };
 
+//* Main Component
 function SetMainItemDialog({ onClose, open }: PropsType) {
+  //TODO:: Declare ansd define component state and variables
+  const [loading, setLoading] = useState(false);
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const {
     handleSubmit,
     control,
     register,
+    setValue,
     formState: { errors },
   } = useForm<StoreContractItemSchemaType>({
     // resolver: zodResolver(storeContractItemSchema),
   });
+  const [engineers, setEngineers] = useState<EngineeOptionType[]>([]);
+  const [setselectedEngineeras, setSetselectedEngineeras] = useState<
+    EngineeOptionType[]
+  >([]);
 
   const { append, remove, fields } = useFieldArray({
     control,
     name: "sub_items",
   });
 
-  const submit = handleSubmit((data) => console.log("form data", data));
+  // TODO::fetch data of selects
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .post<{ data: EngineeOptionType[] }>(Api(`employee/employees`))
+      .then((res) => {
+        console.log("Engineer Date::", res?.data?.data);
+        setEngineers(res?.data?.data);
+      })
+      .catch((err) => {
+        setEngineers([]);
+        console.log("Error in fetch data:", err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Todo::handle form submit
+  const submit = handleSubmit((data) => {
+    // prepare our form data
+    let employees = setselectedEngineeras.map((ele) => ele.id);
+    let bodyData = { ...data, employees };
+    
+    console.log("bodyData", bodyData);
+  });
 
   return (
     <Dialog
@@ -76,16 +119,127 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
       <DialogTitle>اضافة بند جديد</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
+          {/* Main Item Data title,description and manager */}
+          {/* Title */}
           <GridItem>
             <AddLabelToEl label="عنوان البند">
-              <TextField label="عنوان البند" />
+              <TextField {...register("name")} label="عنوان البند" />
             </AddLabelToEl>
           </GridItem>
+          {/* Description */}
           <GridItem>
             <AddLabelToEl label="وصف البند">
-              <TextField label="وصف البند" />
+              <TextField {...register("description")} label="وصف البند" />
             </AddLabelToEl>
           </GridItem>
+          {/* Manager */}
+          <GridItem>
+            <AddLabelToEl label="اختيار مدير المهمة">
+              {loading ? (
+                <Typography color={"info"}>جاري تحميل البيانات </Typography>
+              ) : (
+                <SelectWithFilter
+                  select
+                  onChange={(e) => {
+                    setValue("manager_id", +e.target.value);
+                  }}
+                  options={engineers?.map((engineer) => ({
+                    label: engineer.full_name ?? "",
+                    value: engineer.id,
+                  }))}
+                ></SelectWithFilter>
+              )}
+            </AddLabelToEl>
+          </GridItem>
+
+          {/* Start/end Dates */}
+          <Stack
+            direction={"row"}
+            margin={"3rem 1.3rem"}
+            spacing={2}
+            width={"95%"}
+            padding={"2rem 1rem 1rem"}
+            borderRadius={"12px"}
+          >
+            <Stack spacing={1} width={"48%"} alignItems={"start"}>
+              <Typography>تاريخ البداية</Typography>
+              <DatePicker
+                //defaultValue={dayjs("2024-04-17")}
+                maxDate={dayjs("2024-04-25")} //for validation cant choose date > maxDate
+                value={startDate}
+                onChange={(newValue) => {
+                  setValue("start_date", newValue?.format("DD/MM/YYYY") || "");
+                  setStartDate(newValue);
+                }}
+                sx={{ width: "90%" }}
+              />
+            </Stack>
+            <Stack spacing={1} width={"48%"} alignItems={"start"}>
+              <Typography>تاريخ الانتهاء</Typography>
+              <DatePicker
+                //defaultValue={dayjs("2024-04-17")}
+                maxDate={dayjs("2024-04-25")} //for validation cant choose date > maxDate
+                value={endDate}
+                onChange={(newValue) => {
+                  setValue("end_date", newValue?.format("DD/MM/YYYY") || "");
+                  setEndDate(newValue);
+                }}
+                sx={{ width: "90%" }}
+              />
+            </Stack>
+          </Stack>
+          {/* Add users */}
+          <Stack
+            spacing={2}
+            width={"95%"}
+            p={2}
+            margin={"3rem 1.3rem"}
+            borderRadius={"12px"}
+            justifyContent="center"
+            alignItems="start"
+          >
+            <Typography variant="h6">اضافة مستخدمين للمهام</Typography>
+            <ContractAddUsersSelect
+              disabled={loading}
+              users={engineers}
+              selectedUsers={setselectedEngineeras}
+              setValue={setSetselectedEngineeras}
+            />
+          </Stack>
+
+          {/* Attachments */}
+          <Stack
+            spacing={2}
+            sx={{
+              width: "70%",
+              padding: "1rem",
+              marginBottom: "2rem",
+              borderRadius: "12px",
+              justifyContent: "center",
+              alignItems: "start",
+            }}
+          >
+            <Typography variant="h6">المرفقات</Typography>
+            <Controller
+              name="attachments"
+              control={control}
+              render={({ field }) => (
+                <Box width={"100%"}>
+                  <CustomFilePond
+                    {...field}
+                    maxFiles={4}
+                    onupdatefiles={(files) => {
+                      field.onChange(files.map((file) => file.file));
+                    }}
+                    allowMultiple={true}
+                    imagePreviewMinHeight={200}
+                  />
+                </Box>
+              )}
+            />
+          </Stack>
+
+          {/* Subitems of main item */}
           <Grid item xs={12}>
             <Stack spacing={1} component={Paper} bgcolor={"Background"} p={2}>
               <Typography fontWeight={700} gutterBottom>
@@ -95,6 +249,7 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
                 <Paper key={field.id} sx={{ py: 2, px: 1 }}>
                   <Typography gutterBottom>بند فرعي {index + 1}</Typography>
                   <Grid container spacing={1} alignItems={"center"}>
+                    {/* Sub item title */}
                     <Grid item xs={5.5}>
                       <TextField
                         label={"اسم البند الفرعي"}
@@ -106,13 +261,23 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
                         {errors.sub_items?.[index]?.name?.message}
                       </ErrorMessage>
                     </Grid>
+                    {/* Sub item engineer */}
                     <Grid item xs={5.5}>
                       <TextField
-                        label={"مسرول البند الفرعي"}
+                        disabled={loading}
+                        placeholder={"المهندس المسئول عن البند الفرعي"}
                         size="small"
-                        {...textFieldDefaultProps}
+                        select
+                        variant="outlined"
+                        fullWidth
                         {...register(`sub_items.${index}.employee_id`)}
-                      />
+                      >
+                        {setselectedEngineeras?.map((employee) => (
+                          <MenuItem key={employee.id} value={employee.id}>
+                            {employee.full_name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                       <ErrorMessage>
                         {errors.sub_items?.[index]?.name?.message}
                       </ErrorMessage>
