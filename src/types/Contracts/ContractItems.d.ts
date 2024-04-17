@@ -19,8 +19,8 @@ export interface ContractItem {
   id: number;
   name: string;
   description: string;
-  manager_id: number;
-  manager?: DbOptionType;
+  manager_id?: number;
+  manager?: EmployeeType;
   start_date: string;
   end_date: string;
   created_at: string;

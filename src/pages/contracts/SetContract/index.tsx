@@ -25,6 +25,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../components/Loading/Loader";
 import TermsAndTasksOFContract from "./FormSections/TermsAndTasks";
 import ContractTypeSection from "./FormSections/ContractTypeSection";
+import ContractItemsV2 from "./FormSections/ContractItemsV2";
 
 export default function CreateContracts(props: PropsType) {
   // TODO::declare our component
@@ -128,6 +129,24 @@ export default function CreateContracts(props: PropsType) {
               <AccordionDetails>
                 {/* <ContractTasks /> */}
                 <TermsAndTasksOFContract />
+              </AccordionDetails>
+            </Accordion>
+            {/* Contract Items */}
+            <Accordion
+              disabled={isCreate && enabledTabs.indexOf("panel1.5") == -1}
+              expanded={expanded === "panel2"}
+              onChange={() => HandleChangeExpanded("panel2")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+              >
+                <Typography>بنود ومهام العقد</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {/* <ContractTasks /> */}
+                <ContractItemsV2 />
               </AccordionDetails>
             </Accordion>
             {/* Payments */}
