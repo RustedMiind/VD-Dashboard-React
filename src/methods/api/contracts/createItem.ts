@@ -2,6 +2,7 @@ import axios from "axios";
 import { z } from "zod";
 import { Api } from "../../../constants";
 import { serialize } from "object-to-formdata";
+import { ContractItem } from "../../../types/Contracts/ContractItems";
 
 const schema = z.object({
   name: z.string(),
@@ -63,6 +64,36 @@ async function storeItem(
     )
   );
 }
+
+export const contractItemToStoreSchema = (item: ContractItem): SchemaType => {
+  return {
+    attachments: [],
+    description: item.description,
+    end_date: item.end_date,
+    manager_id: item.manager_id || -1,
+    name: item.name,
+    start_date: item.start_date,
+    sub_items: item.contract_sub_items?.map(
+      ({
+        employee_id,
+        is_attachment,
+        is_letter,
+        is_mission,
+        is_processing,
+        is_progress_bar,
+        name,
+      }) => ({
+        employee_id,
+        is_attachment: Boolean(is_attachment),
+        is_letter: Boolean(is_letter),
+        is_mission: Boolean(is_mission),
+        is_processing: Boolean(is_processing),
+        is_progress_bar: Boolean(is_progress_bar),
+        name,
+      })
+    ),
+  };
+};
 
 export const storeContractItemSchema = schema;
 export type StoreContractItemSchemaType = SchemaType;

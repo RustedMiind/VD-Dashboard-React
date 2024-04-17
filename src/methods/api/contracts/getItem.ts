@@ -4,7 +4,7 @@ import { ContractItem } from "../../../types/Contracts/ContractItems";
 
 const getItem = async (itemId: number) => {
   return await axios.get<{ contract_item?: ContractItem }>(
-    Api(`employee/contract/items/show-subitem/${itemId}`)
+    Api(`employee/contract/items/${itemId}`)
   );
 };
 

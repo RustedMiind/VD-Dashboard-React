@@ -27,6 +27,7 @@ import AddLabelToEl from "../../../../../../components/AddLabelToEl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   contractItemSchemaInitial,
+  contractItemToStoreSchema,
   storeContractItem,
   storeContractItemSchema,
   StoreContractItemSchemaType,
@@ -119,7 +120,9 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
       const {
         data: { contract_item },
       } = await getContractItem(itemId);
+      if (!contract_item) throw new Error("Couldn't get the item details");
       setContractItem(contract_item);
+      reset(contractItemToStoreSchema(contract_item));
     } catch (error) {
       enqueueSnackbar("تعذر في تحميل بيانات البند للتعديل", {
         variant: "error",
@@ -135,7 +138,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
     } else {
       fetchItemData(itemId);
     }
-  }, [itemId, open]);
+  }, [open]);
 
   // Todo::handle form submit
   const submit = handleSubmit(async (data) => {

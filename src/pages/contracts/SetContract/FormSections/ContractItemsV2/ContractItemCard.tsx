@@ -8,7 +8,7 @@ import { ContractItem } from "../../../../../types/Contracts/ContractItems";
 import dayjs from "dayjs";
 import { Avatar } from "@mui/material";
 
-function ContractItemCard({ data }: PropsType) {
+function ContractItemCard({ data, selectItemToEdit }: PropsType) {
   const startDate = data.start_date
     ? dayjs(data.start_date).format("YYYY-MM-DD")
     : undefined;
@@ -43,12 +43,14 @@ function ContractItemCard({ data }: PropsType) {
         <Typography variant="h5"></Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">تعديل</Button>
+        <Button size="small" onClick={() => selectItemToEdit(data.id)}>
+          تعديل
+        </Button>
       </CardActions>
     </Card>
   );
 }
 
-type PropsType = { data: ContractItem };
+type PropsType = { data: ContractItem; selectItemToEdit: (id: number) => void };
 
 export default ContractItemCard;

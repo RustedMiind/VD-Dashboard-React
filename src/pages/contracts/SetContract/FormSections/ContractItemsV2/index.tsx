@@ -13,12 +13,21 @@ function ContractItemsV2() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const handleOpenCreateDialog = () => setCreateDialogOpen(true);
   const handleCloseCreateDialog = () => setCreateDialogOpen(false);
+  const [selectedItemToEdit, setSelectedItemToEdit] = useState<
+    number | undefined
+  >(undefined);
+
+  const selectItemToEdit = (id: number) => {
+    setCreateDialogOpen(true);
+    setSelectedItemToEdit(id);
+  };
 
   return (
     <>
       <SetMainItemDialog
         open={createDialogOpen}
         onClose={handleCloseCreateDialog}
+        itemId={selectedItemToEdit}
       />
 
       <Stack spacing={2}>
@@ -35,7 +44,10 @@ function ContractItemsV2() {
             <Grid container spacing={2}>
               {contract.contract_items.map((item) => (
                 <GridItem key={item.id}>
-                  <ContractItemCard data={item} />
+                  <ContractItemCard
+                    selectItemToEdit={selectItemToEdit}
+                    data={item}
+                  />
                 </GridItem>
               ))}
             </Grid>
