@@ -6,6 +6,8 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   Box,
   FormControlLabel,
@@ -36,6 +38,8 @@ import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import ContractAddUsersSelect from "../../TermsAndTasks/SelectFromUsers";
 import CustomFilePond from "../../../../../../components/CustomFilepond";
+import { DateOnlyFormatString } from "../../../../../../constants/DateFormat";
+import { LoadingButton } from "@mui/lab";
 
 // TODO::define helpers variables ans subcomponents
 const ErrorMessage = (props: TypographyProps) => (
@@ -43,13 +47,16 @@ const ErrorMessage = (props: TypographyProps) => (
 );
 const GridItem = ({
   schemaError,
+  fullWidth,
   ...props
-}: GridProps & { schemaError?: string }) => (
-  <Grid item xs={12} lg={6} {...props}>
+}: GridProps & { schemaError?: string; fullWidth?: boolean }) => (
+  <Grid item xs={12} lg={fullWidth ? undefined : 6} {...props}>
     {props.children}
     {schemaError && <ErrorMessage>{schemaError}</ErrorMessage>}
   </Grid>
 );
+
+const Separator = () => <GridItem fullWidth />;
 
 const textFieldDefaultProps: TextFieldProps = {
   fullWidth: true,
@@ -60,14 +67,12 @@ type EngineeOptionType = { id: number; full_name: string };
 function SetMainItemDialog({ onClose, open }: PropsType) {
   //TODO:: Declare ansd define component state and variables
   const [loading, setLoading] = useState(false);
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const {
     handleSubmit,
     control,
     register,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<StoreContractItemSchemaType>({
     // resolver: zodResolver(storeContractItemSchema),
   });
@@ -102,7 +107,7 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
     // prepare our form data
     let employees = setselectedEngineeras.map((ele) => ele.id);
     let bodyData = { ...data, employees };
-    
+
     console.log("bodyData", bodyData);
   });
 
@@ -153,91 +158,77 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
           </GridItem>
 
           {/* Start/end Dates */}
-          <Stack
-            direction={"row"}
-            margin={"3rem 1.3rem"}
-            spacing={2}
-            width={"95%"}
-            padding={"2rem 1rem 1rem"}
-            borderRadius={"12px"}
-          >
-            <Stack spacing={1} width={"48%"} alignItems={"start"}>
-              <Typography>تاريخ البداية</Typography>
-              <DatePicker
-                //defaultValue={dayjs("2024-04-17")}
-                maxDate={dayjs("2024-04-25")} //for validation cant choose date > maxDate
-                value={startDate}
-                onChange={(newValue) => {
-                  setValue("start_date", newValue?.format("DD/MM/YYYY") || "");
-                  setStartDate(newValue);
-                }}
-                sx={{ width: "90%" }}
+          <Separator />
+          <GridItem>
+            <AddLabelToEl label="تاريخ البداية">
+              <Controller
+                control={control}
+                name="start_date"
+                render={({ field }) => (
+                  <DatePicker
+                    slotProps={{ textField: { fullWidth: true } }}
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(newValue) => {
+                      field.onChange(newValue?.format(DateOnlyFormatString));
+                    }}
+                  />
+                )}
               />
-            </Stack>
-            <Stack spacing={1} width={"48%"} alignItems={"start"}>
-              <Typography>تاريخ الانتهاء</Typography>
-              <DatePicker
-                //defaultValue={dayjs("2024-04-17")}
-                maxDate={dayjs("2024-04-25")} //for validation cant choose date > maxDate
-                value={endDate}
-                onChange={(newValue) => {
-                  setValue("end_date", newValue?.format("DD/MM/YYYY") || "");
-                  setEndDate(newValue);
-                }}
-                sx={{ width: "90%" }}
+            </AddLabelToEl>
+          </GridItem>
+          <GridItem>
+            <AddLabelToEl label="تاريخ النهاية">
+              <Controller
+                control={control}
+                name="end_date"
+                render={({ field }) => (
+                  <DatePicker
+                    slotProps={{ textField: { fullWidth: true } }}
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(newValue) => {
+                      field.onChange(newValue?.format(DateOnlyFormatString));
+                    }}
+                  />
+                )}
               />
-            </Stack>
-          </Stack>
+            </AddLabelToEl>
+          </GridItem>
           {/* Add users */}
-          <Stack
-            spacing={2}
-            width={"95%"}
-            p={2}
-            margin={"3rem 1.3rem"}
-            borderRadius={"12px"}
-            justifyContent="center"
-            alignItems="start"
-          >
-            <Typography variant="h6">اضافة مستخدمين للمهام</Typography>
-            <ContractAddUsersSelect
-              disabled={loading}
-              users={engineers}
-              selectedUsers={setselectedEngineeras}
-              setValue={setSetselectedEngineeras}
-            />
-          </Stack>
+          <Separator />
+          <GridItem>
+            <AddLabelToEl label="اضافة مستخدمين للمهام">
+              <ContractAddUsersSelect
+                disabled={loading}
+                users={engineers}
+                selectedUsers={setselectedEngineeras}
+                setValue={setSetselectedEngineeras}
+              />
+            </AddLabelToEl>
+          </GridItem>
 
           {/* Attachments */}
-          <Stack
-            spacing={2}
-            sx={{
-              width: "70%",
-              padding: "1rem",
-              marginBottom: "2rem",
-              borderRadius: "12px",
-              justifyContent: "center",
-              alignItems: "start",
-            }}
-          >
-            <Typography variant="h6">المرفقات</Typography>
-            <Controller
-              name="attachments"
-              control={control}
-              render={({ field }) => (
-                <Box width={"100%"}>
-                  <CustomFilePond
-                    {...field}
-                    maxFiles={4}
-                    onupdatefiles={(files) => {
-                      field.onChange(files.map((file) => file.file));
-                    }}
-                    allowMultiple={true}
-                    imagePreviewMinHeight={200}
-                  />
-                </Box>
-              )}
-            />
-          </Stack>
+          <Separator />
+          <GridItem>
+            <AddLabelToEl label="المرفقات">
+              <Controller
+                name="attachments"
+                control={control}
+                render={({ field }) => (
+                  <Box width={"100%"}>
+                    <CustomFilePond
+                      {...field}
+                      maxFiles={4}
+                      onupdatefiles={(files) => {
+                        field.onChange(files.map((file) => file.file));
+                      }}
+                      allowMultiple={true}
+                      imagePreviewMinHeight={200}
+                    />
+                  </Box>
+                )}
+              />
+            </AddLabelToEl>
+          </GridItem>
 
           {/* Subitems of main item */}
           <Grid item xs={12}>
@@ -370,7 +361,9 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
                 </Paper>
               ))}
               <Button
-                variant="outlined"
+                variant="contained"
+                startIcon={<AddIcon />}
+                sx={{ width: "fit-content" }}
                 onClick={() =>
                   append({
                     name: "",
@@ -388,12 +381,19 @@ function SetMainItemDialog({ onClose, open }: PropsType) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button color="error" onClick={onClose}>
+        <Button color="error" onClick={onClose} disabled={isSubmitting}>
           الغاء
         </Button>
-        <Button color="primary" type="submit" variant="contained">
+        <LoadingButton
+          loading={isSubmitting}
+          color="primary"
+          type="submit"
+          variant="contained"
+          startIcon={<SaveIcon />}
+          sx={{ px: 4 }}
+        >
           حفظ
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
