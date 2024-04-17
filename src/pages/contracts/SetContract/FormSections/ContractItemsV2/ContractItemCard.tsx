@@ -6,11 +6,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ContractItem } from "../../../../../types/Contracts/ContractItems";
 import dayjs from "dayjs";
-import { Avatar } from "@mui/material";
+import {
+  Avatar,
+  Grid,
+  ListItem,
+  ListItemIcon,
+  MenuList,
+  Stack,
+} from "@mui/material";
 import { deleteContractItem } from "../../../../../methods/api/contracts";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { useContext } from "react";
 import { useSnackbar } from "notistack";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import AddLabelToEl from "../../../../../components/AddLabelToEl";
 
 function ContractItemCard({ data, selectItemToEdit }: PropsType) {
   const { refreshContract } = useContext(ContractDetailsContext);
@@ -45,6 +54,22 @@ function ContractItemCard({ data, selectItemToEdit }: PropsType) {
             <Typography variant="body1" color="secondary.main">
               {data.manager.name}
             </Typography>
+          </Box>
+        )}
+        {data.contract_sub_items && Boolean(data.contract_sub_items.length) && (
+          <Box mt={2}>
+            <AddLabelToEl label="البنود الفرعية">
+              <MenuList>
+                {data.contract_sub_items.map((subitem) => (
+                  <ListItem>
+                    <ListItemIcon>
+                      <ChevronLeftIcon />
+                    </ListItemIcon>
+                    {subitem.name}
+                  </ListItem>
+                ))}
+              </MenuList>
+            </AddLabelToEl>
           </Box>
         )}
         <Typography variant="h5"></Typography>

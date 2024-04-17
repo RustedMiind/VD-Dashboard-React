@@ -95,7 +95,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
     resolver: zodResolver(storeContractItemSchema),
   });
   const [engineers, setEngineers] = useState<EngineeOptionType[]>([]);
-  const [setselectedEngineeras, setSetselectedEngineeras] = useState<
+  const [setselectedEngineers, setSetSelectedEngineers] = useState<
     EngineeOptionType[]
   >([]);
   const { contract, refreshContract } = useContext(ContractDetailsContext);
@@ -128,7 +128,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
       } = await getContractItem(itemId);
       if (!contract_item) throw new Error("Couldn't get the item details");
       setContractItem(contract_item);
-      setSetselectedEngineeras(
+      setSetSelectedEngineers(
         contract_item?.contract_item_employees?.map(({ employee }) => ({
           full_name: employee?.full_name || "",
           id: employee?.id || NaN,
@@ -147,6 +147,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
   useEffect(() => {
     setContractItem(undefined);
     reset(contractItemSchemaInitial);
+    setSetSelectedEngineers([]);
     if (!isEdit) {
     } else {
       fetchItemData(itemId);
@@ -160,7 +161,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
         throw new Error(
           `Cannot save contract item, contract is ${typeof contract}`
         );
-      let employees = setselectedEngineeras.map((ele) => ele.id);
+      let employees = setselectedEngineers.map((ele) => ele.id);
       const res = await storeContractItem(
         { id: contract.id, itemId },
         data,
@@ -272,8 +273,8 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
               <ContractAddUsersSelect
                 disabled={loading}
                 users={engineers}
-                selectedUsers={setselectedEngineeras}
-                setValue={setSetselectedEngineeras}
+                selectedUsers={setselectedEngineers}
+                setValue={setSetSelectedEngineers}
               />
             </AddLabelToEl>
           </GridItem>
@@ -375,7 +376,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
                             fullWidth
                             {...field}
                           >
-                            {setselectedEngineeras?.map((employee) => (
+                            {setselectedEngineers?.map((employee) => (
                               <MenuItem key={employee.id} value={employee.id}>
                                 {employee.full_name}
                               </MenuItem>
