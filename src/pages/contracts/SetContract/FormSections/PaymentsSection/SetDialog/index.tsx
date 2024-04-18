@@ -11,7 +11,11 @@ import axios from "axios";
 import { Api } from "../../../../../../constants";
 import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { LoadingButton } from "@mui/lab";
-import { ChangeTypeValues, ContractPayment } from "../../../../../../types";
+import {
+  ChangeTypeValues,
+  Contract,
+  ContractPayment,
+} from "../../../../../../types";
 
 // Icons
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -27,7 +31,39 @@ function FormTextField(props: TextfieldPropsType) {
   return <TextField {...props} size="small" fullWidth variant="outlined" />;
 }
 
+export enum PayementsStatusPrefix {
+  DAYS = "-",
+  MAIN_ITEM = "MI_",
+  SUB_ITEM = "SI_",
+}
+
 type TextfieldPropsType = TextFieldProps;
+
+export function getOptions(contract?: Contract) {
+  const options: { name: string; value: string }[] = [];
+  if (contract?.contract_items) {
+    [15, 30, 60].forEach((days) =>
+      options.push({
+        name: `بعد ${days} يوم`,
+        value: `${PayementsStatusPrefix.DAYS}${days}`,
+      })
+    );
+    contract.contract_items.forEach((item) => {
+      options.push({
+        name: `بعد بند رئيسي  (${item.name})`,
+        value: `${PayementsStatusPrefix.MAIN_ITEM}${item.id}`,
+      });
+      if (item.contract_sub_items)
+        item.contract_sub_items.forEach((subItem) => {
+          options.push({
+            name: `بعد انتهاء بند فرعي (${subItem.name})`,
+            value: `${PayementsStatusPrefix.SUB_ITEM}${subItem.id}`,
+          });
+        });
+    });
+  }
+  return options;
+}
 
 function SetDialog(props: PropsType) {
   const { contract, refreshContract } = useContext(ContractDetailsContext);
@@ -39,6 +75,8 @@ function SetDialog(props: PropsType) {
   >("none");
   const [state, dispatch] = useReducer(reducer, AddTaskFormInit);
   const { enqueueSnackbar } = useSnackbar();
+
+  const options = getOptions(contract);
 
   function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -165,16 +203,10 @@ function SetDialog(props: PropsType) {
                   });
                 }}
               >
-                <MenuItem value={"-30"}>بعد 30 يوم</MenuItem>
-                <MenuItem value={"-60"}>بعد 60 يوم</MenuItem>
-                <MenuItem value={undefined} disabled>
-                  <ListItemIcon>
-                    <ArrowDropDownIcon />
-                  </ListItemIcon>
-                  بعد انتهاء مهمة
-                </MenuItem>
-                {contract?.tasks?.map((task) => (
-                  <MenuItem value={task.id}> {task.name} </MenuItem>
+                {options?.map((option) => (
+                  <MenuItem value={option.value} key={option.value}>
+                    {option.name}
+                  </MenuItem>
                 ))}
               </FormTextField>
               <ErrorTypography>{errorState.status}</ErrorTypography>
