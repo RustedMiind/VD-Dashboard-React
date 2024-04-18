@@ -8,9 +8,11 @@ import RoundedIconButton from "../../../../../../../components/RoundedIconButton
 import { Badge } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import NotificationList from "./NotificationsList";
+import { TransactionContext } from "../context/TransactionContext";
 
 export default function NotificationBtn(props: PropsType) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const TransactionContextData = React.useContext(TransactionContext);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -29,7 +31,12 @@ export default function NotificationBtn(props: PropsType) {
         aria-expanded={open ? "true" : undefined}
         onClick={(e) => handleClick(e)}
       >
-        <Badge badgeContent={4} color="error">
+        <Badge
+          badgeContent={
+            TransactionContextData?.currentMainItem?.system_logs?.length
+          }
+          color="error"
+        >
           <NotificationsIcon />
         </Badge>
       </RoundedIconButton>

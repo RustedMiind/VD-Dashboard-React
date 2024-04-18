@@ -19,6 +19,7 @@ export interface ContractItem {
   id: number;
   name: string;
   description: string;
+  achievement_percentage?: number;
   manager_id?: number;
   manager?: EmployeeType;
   start_date: string;
