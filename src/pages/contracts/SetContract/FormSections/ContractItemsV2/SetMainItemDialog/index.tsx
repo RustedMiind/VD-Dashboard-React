@@ -33,6 +33,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   contractItemSchemaInitial,
   contractItemToStoreSchema,
+  contractSubItemInital,
   deleteContractItemMedia,
   storeContractItem,
   storeContractItemSchema,
@@ -89,7 +90,6 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
     control,
     register,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<StoreContractItemSchemaType>({
     resolver: zodResolver(storeContractItemSchema),
@@ -104,6 +104,8 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
     name: "sub_items",
   });
   const { enqueueSnackbar } = useSnackbar();
+
+  console.log("errors ", errors);
 
   // TODO::fetch data of selects
   useEffect(() => {
@@ -198,19 +200,19 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
         <Grid container spacing={2}>
           {/* Main Item Data title,description and manager */}
           {/* Title */}
-          <GridItem>
+          <GridItem schemaError={errors.name?.message}>
             <AddLabelToEl label="عنوان البند">
               <TextField {...register("name")} label="عنوان البند" />
             </AddLabelToEl>
           </GridItem>
           {/* Description */}
-          <GridItem>
+          <GridItem schemaError={errors.description?.message}>
             <AddLabelToEl label="وصف البند">
               <TextField {...register("description")} label="وصف البند" />
             </AddLabelToEl>
           </GridItem>
           {/* Manager */}
-          <GridItem>
+          <GridItem schemaError={errors.manager_id?.message}>
             <AddLabelToEl label="اختيار مدير المهمة">
               <Controller
                 name="manager_id"
@@ -232,7 +234,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
 
           {/* Start/end Dates */}
           <Separator />
-          <GridItem>
+          <GridItem schemaError={errors.start_date?.message}>
             <AddLabelToEl label="تاريخ البداية">
               <Controller
                 control={control}
@@ -249,7 +251,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
               />
             </AddLabelToEl>
           </GridItem>
-          <GridItem>
+          <GridItem schemaError={errors.end_date?.message}>
             <AddLabelToEl label="تاريخ النهاية">
               <Controller
                 control={control}
@@ -345,10 +347,10 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
               <Typography fontWeight={700} gutterBottom>
                 البنود الفرعية
               </Typography>
-              {fields.map((field, index) => (
+              {fields.map((field, index, allFields) => (
                 <Paper key={field.id} sx={{ py: 2, px: 1 }}>
                   <Typography gutterBottom>بند فرعي {index + 1}</Typography>
-                  <Grid container spacing={1} alignItems={"center"}>
+                  <Grid container spacing={1}>
                     {/* Sub item title */}
                     <Grid item xs={5.5}>
                       <TextField
@@ -386,12 +388,16 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
                       />
 
                       <ErrorMessage>
-                        {errors.sub_items?.[index]?.name?.message}
+                        {errors.sub_items?.[index]?.employee_id?.message}
                       </ErrorMessage>
                     </Grid>
                     <Grid item xs={1}>
                       <Stack alignItems={"center"}>
-                        <IconButton color="error" onClick={() => remove(index)}>
+                        <IconButton
+                          color="error"
+                          onClick={() => remove(index)}
+                          disabled={allFields.length <= 1}
+                        >
                           <DeleteIcon />
                         </IconButton>
                       </Stack>
@@ -480,17 +486,7 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
                 variant="contained"
                 startIcon={<AddIcon />}
                 sx={{ width: "fit-content" }}
-                onClick={() =>
-                  append({
-                    name: "",
-                    is_attachment: false,
-                    is_processing: false,
-                    is_progress_bar: false,
-                    is_letter: false,
-                    is_mission: false,
-                    employee_id: -1,
-                  })
-                }
+                onClick={() => append(contractSubItemInital)}
               >
                 اضافة بند فرعي
               </Button>
