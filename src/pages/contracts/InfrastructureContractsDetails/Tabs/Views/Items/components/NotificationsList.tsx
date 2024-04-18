@@ -10,9 +10,9 @@ import { SystemLogType } from "../../../../../../../types/Contracts/ContractItem
 export default function NotificationList() {
   // get logs
   const TransactionContextData = useContext(TransactionContext);
-  
+
   const NotificationItem = ({ item }: { item: SystemLogType }) => (
-    <MenuItem sx={{minWidth:'270px'}}>
+    <MenuItem sx={{ minWidth: "270px" }}>
       <ListItemText
         sx={{
           color: "primary.main",
