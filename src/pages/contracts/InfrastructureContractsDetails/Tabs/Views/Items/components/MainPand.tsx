@@ -1,4 +1,4 @@
-import { Accordion, Grid } from "@mui/material";
+import { Accordion, AccordionDetails, Grid } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import MainPandHeader from "./MainPandHeader";
 import "../../../../components/TopCards.scss";
@@ -47,36 +47,39 @@ export default function MainPand({ contractData }: MainPandProps) {
   return (
     <>
       {/* MainPand Header */}
-      <MainPandHeader
-        name={contractData.name}
-        numberOfSubItems={contractData.contract_sub_items.length}
-        managerName={contractData?.manager?.name ?? ""}
-        endDate={contractData.end_date}
-        startDate={contractData.start_date}
-        contract_sub_items={contractData.contract_sub_items}
-        expended={expended}
-        setExpended={setExpended}
-        activeBtn={activeBtn}
-        setActiveBtn={setActiveBtn}
-        setActiveSubItemId={setActiveSubItemId}
-      />
-      {/* Main Header Body */}
-      {/* !dont work<Accordion expanded={false}> */}
-      <Accordion
-        className="fadeInDown"
-        sx={{ display: expended ? "block" : "none" }}
-      >
-        <Grid container xs={12} spacing={1}>
-          <Grid item xl={2} xs={3}>
-            <SubPandsList
-              contractSubItems={contractData.contract_sub_items}
-              setActiveSubItemId={setActiveSubItemId}
-            />
+      <Accordion expanded={expended} disableGutters>
+        <MainPandHeader
+          name={contractData.name}
+          numberOfSubItems={contractData.contract_sub_items.length}
+          managerName={contractData?.manager?.name ?? ""}
+          endDate={contractData.end_date}
+          startDate={contractData.start_date}
+          contract_sub_items={contractData.contract_sub_items}
+          expended={expended}
+          setExpended={setExpended}
+          activeBtn={activeBtn}
+          setActiveBtn={setActiveBtn}
+          setActiveSubItemId={setActiveSubItemId}
+        />
+        {/* Main Header Body */}
+        {/* !dont work<Accordion expanded={false}> */}
+        {/* Now Working */}
+        <AccordionDetails>
+          <Grid container xs={12} spacing={1}>
+            <Grid item xl={2} xs={3}>
+              <SubPandsList
+                contractSubItems={contractData.contract_sub_items}
+                setActiveSubItemId={setActiveSubItemId}
+              />
+            </Grid>
+            <Grid item xs={9} xl={10}>
+              <InternalTabs
+                TabsHeaders={TabsHeaders}
+                setActiveSubItemId={setActiveSubItemId}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={9} xl={10}>
-            <InternalTabs TabsHeaders={TabsHeaders} setActiveSubItemId={setActiveSubItemId}/>
-          </Grid>
-        </Grid>
+        </AccordionDetails>
       </Accordion>
     </>
   );
