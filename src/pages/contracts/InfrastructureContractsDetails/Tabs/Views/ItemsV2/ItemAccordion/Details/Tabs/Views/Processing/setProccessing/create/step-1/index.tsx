@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Api } from "../../../../../../../../../../../../../../constants";
@@ -15,6 +15,7 @@ import {
   TextField,
 } from "@mui/material";
 import AddLabelToEl from "../../../../../../../../../../../../../../components/AddLabelToEl";
+import { SetProccessingContext } from "../../../context/SetProccessingContext";
 
 // TODO::define and declare our types
 export type CreateTransactionFormHeaderType =
@@ -75,36 +76,37 @@ export default function CreateNewProccessingStep1(
   // TODO::declare component variables and state
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const SetProccessingContextData = useContext(SetProccessingContext);
   const { register, handleSubmit } = useForm<CreateTransactionFormType>({
     resolver: zodResolver(CreateTransactionFormSchema),
   });
 
   //TODO::submit form function
   const handleCreateTransaction = handleSubmit(async (data) => {
-    props.setOperationProgress("Step2");
-    // let bodyData = {
-    //   order_num: data.requestNum,
-    //   letter_num: data.letterNum,
-    //   subject: data.transactionSubject,
-    //   receiver: data.sendTo,
-    //   // contract_sub_item_id: transactionCxtData.contractSubItem?.id,
-    //   contract_attachment_types: [],
-    // };
-    // try {
-    //   console.log("bodyData ", bodyData);
-    //   setLoading(true);
-    //   let response = await axios.post(
-    //     Api("employee/contract/items/processing/store"),
-    //     bodyData
-    //   );
-    //   //transactionCxtData.setTransactionId(response.data.processing.id);
-    //   setLoading(false);
-    //   enqueueSnackbar("تم الحفظ بنجاح");
-    //   props.setOperationProgress("Step2");
-    // } catch (err) {
-    //   setLoading(false);
-    //   enqueueSnackbar("تعذر في حفظ", { variant: "error" });
-    // }
+    let bodyData = {
+      order_num: data.requestNum,
+      letter_num: data.letterNum,
+      subject: data.transactionSubject,
+      receiver: data.sendTo,
+      contract_sub_item_id: SetProccessingContextData.subItemId,
+      contract_attachment_types: [],
+    };
+    
+    try {
+      setLoading(true);
+      let response = await axios.post(
+        Api("employee/contract/items/processing/store"),
+        bodyData
+      );
+      
+      SetProccessingContextData.setTransactionId(response.data.processing.id);
+      setLoading(false);
+      enqueueSnackbar("تم الحفظ بنجاح");
+      props.setOperationProgress("Step2");
+    } catch (err) {
+      setLoading(false);
+      enqueueSnackbar("تعذر في حفظ", { variant: "error" });
+    }
   });
 
   //TODO::Declare helpers methods

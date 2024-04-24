@@ -16,6 +16,7 @@ import { getUseData } from "../../../../../../../../../../../../../../methods/ge
 import { Api } from "../../../../../../../../../../../../../../constants";
 import AddLabelToEl from "../../../../../../../../../../../../../../components/AddLabelToEl";
 import CustomFilePond from "../../../../../../../../../../../../../../components/CustomFilepond";
+import { SetProccessingContext } from "../../../context/SetProccessingContext";
 
 export type CreateTransactionFormType = {
   description: string;
@@ -26,7 +27,7 @@ export type CreateTransactionFormType = {
 function AddAttachmentDialog(props: PropsType) {
   // Declare component State and variables
   const { enqueueSnackbar } = useSnackbar();
-  //   const transactionCxtData = useContext(CreateTransactionContext);
+  const SetProccessingContextData = useContext(SetProccessingContext);
   const [file, setFile] = useState<FileBondState>([]);
   const [loading, setLoading] = useState(false);
   const { register, reset, handleSubmit } = useForm<CreateTransactionFormType>(
@@ -52,33 +53,32 @@ function AddAttachmentDialog(props: PropsType) {
       contract_attachment_type_id: data.type,
       image: file[0],
     };
-    console.log("bodyData", bodyData);
-    setLoading(true);
-    // axios
-    //   .post(
-    //     Api(
-    //       `employee/contract/items/processing/store-attachment-type/${transactionCxtData.transactionId}`
-    //     ),
-    //     serialize(bodyData)
-    //   )
-    //   .then(() => {
-    //     enqueueSnackbar("تم الحفظ بنجاح");
-    //     reset({ description: "" });
 
-    //     setFile([]);
-    //     transactionCxtData.refresh();
-    //     props.handleClose();
-    //     // transactionCxtData.setTransactionId(-1);
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error", err);
-    //     enqueueSnackbar(err?.response?.data?.message ?? "تعذر في الحفظ", {
-    //       variant: "error",
-    //     });
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    axios
+      .post(
+        Api(
+          `employee/contract/items/processing/store-attachment-type/${SetProccessingContextData.transactionId}`
+        ),
+        serialize(bodyData)
+      )
+      .then(() => {
+        enqueueSnackbar("تم الحفظ بنجاح");
+        reset({ description: "" });
+
+        setFile([]);
+        SetProccessingContextData.refreshTransactionAttachments();
+        props.handleClose();
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        enqueueSnackbar(err?.response?.data?.message ?? "تعذر في الحفظ", {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   });
 
   return (

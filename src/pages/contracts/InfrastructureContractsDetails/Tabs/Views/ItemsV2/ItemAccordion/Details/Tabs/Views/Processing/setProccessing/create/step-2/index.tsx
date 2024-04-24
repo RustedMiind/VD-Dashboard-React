@@ -9,18 +9,20 @@ import {
 import { Api } from "../../../../../../../../../../../../../../constants";
 import AttachmentsTable from "./AttachmentsTable";
 import AddAttachmentDialog from "./AddAttachmentDialog";
+import { SetProccessingContext } from "../../../context/SetProccessingContext";
 
 export default function CreateNewProccessingStep2() {
   //* Declaration component State variables...
+  const SetProccessingContextData = useContext(SetProccessingContext);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [transactionsAttachments, setTransactionsAttachments] = useState<
     TansactionAttachmentType[]
   >([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   // fetch transactions data
   useEffect(() => {
-    // refreshTransactionData();
+    refreshTransactionData();
   }, []);
 
   const refreshTransactionData = async () => {
@@ -29,8 +31,7 @@ export default function CreateNewProccessingStep2() {
     let response = await axios
       .get<{ processing: TransactionType }>(
         Api(
-          `employee/contract/items/processing/${192}`
-          //   `employee/contract/items/processing/${transactionCxtData.transactionId}`
+          `employee/contract/items/processing/${SetProccessingContextData.transactionId}`
         )
       )
       .then((res) => {
@@ -39,7 +40,8 @@ export default function CreateNewProccessingStep2() {
     setTransactionsAttachments(response.processing.attachment);
     setLoading(false);
   };
-  //   transactionCxtData.refresh = refreshTransactionData;
+  SetProccessingContextData.refreshTransactionAttachments =
+    refreshTransactionData;
 
   // *return component ui
   return (

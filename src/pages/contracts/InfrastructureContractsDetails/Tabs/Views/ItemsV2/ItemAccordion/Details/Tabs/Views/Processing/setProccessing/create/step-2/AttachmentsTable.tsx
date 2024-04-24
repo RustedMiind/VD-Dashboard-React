@@ -18,10 +18,11 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import { Api } from "../../../../../../../../../../../../../../constants";
 import { TansactionAttachmentType } from "../../../../../../../../../../../../../../types/Contracts/ContractTransactionAttachment";
+import { SetProccessingContext } from "../../../context/SetProccessingContext";
 
 export default function AttachmentsTable(props: TableShowAttachmentsProps) {
   //Declaration component State variables...
-  //   const transactionCxtData = useContext(CreateTransactionContext);
+  const SetProccessingContextData = useContext(SetProccessingContext);
   const { enqueueSnackbar } = useSnackbar();
   const SingleRow = ({
     type,
@@ -48,7 +49,7 @@ export default function AttachmentsTable(props: TableShowAttachmentsProps) {
         )
         .then((res) => {
           enqueueSnackbar("تم الحذف بنجاح");
-          //   transactionCxtData.refresh();
+          SetProccessingContextData.refreshTransactionAttachments();
         })
         .catch((err) => {
           enqueueSnackbar("تعذر حذف البيانات", { variant: "error" });
