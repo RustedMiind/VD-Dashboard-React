@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import CreateNewProccessingStep1 from "./step-1";
 import CreateNewProccessingStep2 from "./step-2";
 import { ContractItemContext } from "../../../../../../ItemContext";
+import ProccessingAttachmentsTable from "../attachments";
 export default function CreateNewProccessDialog(
   props: CreateNewProccessDialogProps
 ) {
@@ -22,7 +23,8 @@ export default function CreateNewProccessDialog(
           />
         );
       case "Step2":
-        return <CreateNewProccessingStep2 />;
+        return <ProccessingAttachmentsTable />;
+        // return <CreateNewProccessingStep2 />;
     }
   };
 

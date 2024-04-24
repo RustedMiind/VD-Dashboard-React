@@ -4,6 +4,7 @@ import { SetProccessingContext } from "../../context/SetProccessingContext";
 import ReplyProccessingStep1 from "./step-1";
 import ReplyProccessingStep2 from "./step-2";
 import ReplyProccessingStep3 from "./step-3";
+import ProccessingAttachmentsTable from "../attachments";
 
 export default function ReplyProccessing({
   open,
@@ -35,7 +36,8 @@ export default function ReplyProccessing({
           <ReplyProccessingStep2 setOperationProgress={setOperationProgress} />
         );
       case "Step3":
-        return <ReplyProccessingStep3 />;
+        return <ProccessingAttachmentsTable />;
+      // return <ReplyProccessingStep3 />;
     }
   };
 
