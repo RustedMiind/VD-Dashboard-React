@@ -1,11 +1,13 @@
 import { Dialog } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CreateNewProccessingStep1 from "./step-1";
 import CreateNewProccessingStep2 from "./step-2";
+import { ContractItemContext } from "../../../../../../ItemContext";
 export default function CreateNewProccessDialog(
   props: CreateNewProccessDialogProps
 ) {
   // TODO::Declaration of component state and variables
+  const ContractItemContextData = useContext(ContractItemContext);
   const [operationProgress, setOperationProgress] = useState<"Step1" | "Step2">(
     "Step1"
   );
@@ -27,6 +29,10 @@ export default function CreateNewProccessDialog(
   const handleClose = async () => {
     setOperationProgress("Step1");
     // refresh here
+    ContractItemContextData?.fetchItemDetails?.({
+      soft: true,
+      optimized: false,
+    });
     props.setOpen(false);
   };
 
