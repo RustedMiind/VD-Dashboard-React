@@ -4,17 +4,23 @@ import CreateNewProccessingStep1 from "./step-1";
 import CreateNewProccessingStep2 from "./step-2";
 import { ContractItemContext } from "../../../../../../ItemContext";
 import ProccessingAttachmentsTable from "../attachments";
+import { SetProccessingContext } from "../../context/SetProccessingContext";
+
 export default function CreateNewProccessDialog(
   props: CreateNewProccessDialogProps
 ) {
   // TODO::Declaration of component state and variables
   const ContractItemContextData = useContext(ContractItemContext);
+  const SetProccessingContextData = useContext(SetProccessingContext);
   const [operationProgress, setOperationProgress] = useState<"Step1" | "Step2">(
     "Step1"
   );
 
   // TODO::define helper methods
   const ViewActiveTab = () => {
+    if (SetProccessingContextData.showAttachments)
+      return <ProccessingAttachmentsTable />;
+
     switch (operationProgress) {
       case "Step1":
         return (
@@ -24,7 +30,7 @@ export default function CreateNewProccessDialog(
         );
       case "Step2":
         return <ProccessingAttachmentsTable />;
-        // return <CreateNewProccessingStep2 />;
+      // return <CreateNewProccessingStep2 />;
     }
   };
 
@@ -35,6 +41,8 @@ export default function CreateNewProccessDialog(
       soft: true,
       optimized: false,
     });
+    SetProccessingContextData.setShowAttachments(false);
+    SetProccessingContextData.setTransactionId(-1);
     props.setOpen(false);
   };
 
@@ -42,7 +50,7 @@ export default function CreateNewProccessDialog(
   return (
     <>
       <Dialog
-        open={props.open}
+        open={props.open || SetProccessingContextData.showAttachments}
         onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

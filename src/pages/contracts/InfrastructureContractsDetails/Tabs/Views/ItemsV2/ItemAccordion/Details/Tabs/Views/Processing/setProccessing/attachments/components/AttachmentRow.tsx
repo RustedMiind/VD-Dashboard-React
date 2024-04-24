@@ -71,6 +71,7 @@ export default function AttachmentsRow(props: ptopsType) {
           size={"small"}
           onChange={handleAttatchmentFileTypes}
           fullWidth
+          defaultValue={"" + props.item.contract_attachment_type_id}
         >
           {attatchmentFileTypes.map((option) => (
             <MenuItem key={`${option.id}`} value={option.id}>
@@ -88,13 +89,16 @@ export default function AttachmentsRow(props: ptopsType) {
       </TableCell>
       {/* file name */}
       <TableCell>
-        <Typography variant="body2">file name</Typography>
+        <Typography variant="body2">
+          {props.item.file?.name ?? "اسم المرفق"}
+        </Typography>
       </TableCell>
       {/* file description */}
       <TableCell>
         <TextField
           onChange={(e) => setDescription(e.target.value)}
           onBlur={handleSaveDescription}
+          defaultValue={props.item.description}
           size="small"
           color="primary"
         />
@@ -121,5 +125,5 @@ export default function AttachmentsRow(props: ptopsType) {
 }
 
 type ptopsType = {
-  item: AttachmentsInstanceType
+  item: AttachmentsInstanceType;
 };

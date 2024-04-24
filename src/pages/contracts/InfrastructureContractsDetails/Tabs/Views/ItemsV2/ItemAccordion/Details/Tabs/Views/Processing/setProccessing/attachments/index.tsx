@@ -11,17 +11,30 @@ import {
   TableRow,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AttachmentsTableHeaders from "./components/TableHeaders";
 import AttachmentsRow from "./components/AttachmentRow";
+import { SetProccessingContext } from "../../context/SetProccessingContext";
+import { Media } from "../../../../../../../../../../../../../types/Media";
 
 export default function ProccessingAttachmentsTable() {
   //* Declaration component State variables...
-  const [loading, setLoading] = useState(false);
+  const SetProccessingContextData = useContext(SetProccessingContext);
   const [attachmentsArr, setAttachmentsArr] = useState<
     AttachmentsInstanceType[]
   >([]);
+
+  useEffect(() => {
+    setAttachmentsArr(
+      SetProccessingContextData.transactionsAttachments.map((ele) => ({
+        id: ele.id,
+        file: undefined,
+        description: ele.description,
+        contract_attachment_type_id: ele.contract_attachment_type_id,
+      }))
+    );
+  }, []);
 
   //* Handle selected files files
   const handleSelectedFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +42,15 @@ export default function ProccessingAttachmentsTable() {
     if (files) {
       Array.from(files).forEach((file, idx) => {
         console.log("Do something with " + file.name);
-        setAttachmentsArr((prev) => [...prev, { file: file, id: idx }]);
+        setAttachmentsArr((prev) => [
+          ...prev,
+          {
+            file: file,
+            id: idx,
+            description: "",
+            contract_attachment_type_id: 0,
+          },
+        ]);
       });
     }
   };
@@ -82,5 +103,7 @@ export default function ProccessingAttachmentsTable() {
 
 export type AttachmentsInstanceType = {
   id: number;
-  file: File;
+  file: File | undefined;
+  description: string;
+  contract_attachment_type_id: number;
 };

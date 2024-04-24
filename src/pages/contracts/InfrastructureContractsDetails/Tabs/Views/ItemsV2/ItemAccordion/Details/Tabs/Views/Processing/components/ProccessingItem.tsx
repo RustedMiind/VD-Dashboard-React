@@ -2,14 +2,23 @@ import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { TransactionType } from "../../../../../../../../../../../../types/Contracts/ContractTransactionAttachment";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { SetProccessingContext } from "../context/SetProccessingContext";
+import { useContext } from "react";
 
 export default function ProccessingItemsRow(props: PropsType) {
+  const SetProccessingContextData = useContext(SetProccessingContext);
   // * prepare last comment
   let lastComment = "--";
   if (props.item?.comments && props.item?.comments.length > 0) {
     let n = props.item?.comments?.length;
     lastComment = props.item?.comments[n - 1].comment;
   }
+
+  // * Handle Show transactions attachments
+  const showAttachments = (id: number) => {
+    SetProccessingContextData.setTransactionId(id);
+    SetProccessingContextData.setShowAttachments(true);
+  };
   // * Declare and Define Helpers variables and functions
   type RowItemCompProps = {
     label: string;
@@ -66,14 +75,14 @@ export default function ProccessingItemsRow(props: PropsType) {
         value={
           <>
             <IconButton
-              //   onClick={() => showAttachments(props.item.id)}
+              onClick={() => showAttachments(props.item.id)}
               color="primary"
               size="small"
             >
               <RemoveRedEyeIcon />
             </IconButton>
             <IconButton
-              //   onClick={() => showAttachments(props.item.id)}
+              onClick={() => showAttachments(props.item.id)}
               color="primary"
               size="small"
             >
