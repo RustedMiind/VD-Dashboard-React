@@ -6,6 +6,8 @@ export const SetProccessingContext = createContext<SetProccessingContextType>({
   transactionId: undefined,
   setTransactionId: (num) => {},
   refreshTransactionAttachments: () => {},
+  commentId: undefined,
+  setCommentId: (num) => {},
 });
 
 export function SetProccessingContextProvider({
@@ -15,10 +17,16 @@ export function SetProccessingContextProvider({
 }) {
   const [transactionId, setTransactionId] = useState<number>();
   const [subItemId, setSubItemId] = useState<number>();
+  const [commentId, setCommentId] = useState<number>();
 
   const handleSetSubItemId = (num: number) => {
     if (num == -1) setSubItemId(undefined);
     setSubItemId(num);
+  };
+
+  const handleSetCommentId = (num: number) => {
+    if (num == -1) setCommentId(undefined);
+    setCommentId(num);
   };
 
   const handleSetTransactionId = (num: number) => {
@@ -34,6 +42,8 @@ export function SetProccessingContextProvider({
         transactionId: transactionId,
         setTransactionId: handleSetTransactionId,
         refreshTransactionAttachments: () => {},
+        commentId: commentId,
+        setCommentId: handleSetCommentId,
       }}
     >
       {children}
@@ -46,5 +56,7 @@ type SetProccessingContextType = {
   setSubItemId: (num: number) => void;
   transactionId: number | undefined;
   setTransactionId: (num: number) => void;
+  commentId: number | undefined;
+  setCommentId: (num: number) => void;
   refreshTransactionAttachments: () => void;
 };

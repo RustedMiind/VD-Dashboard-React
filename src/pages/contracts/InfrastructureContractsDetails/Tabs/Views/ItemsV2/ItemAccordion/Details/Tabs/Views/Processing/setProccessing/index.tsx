@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import CreateNewProccessing from "./create/step-1";
 import CreateNewProccessDialog from "./create";
+import ReplyProccessing from "./reply";
 
 export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
   // TODO::define our component state variables
@@ -100,7 +101,10 @@ export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
         open={openCreateNewProccessDialog}
         setOpen={setOpenCreateNewProccessDialog}
       />
-      {/* <EditTransitionD2 open={openEditProccessDialog} setOpen={setOpenEditProccessDialog} /> */}
+      <ReplyProccessing
+        open={openEditProccessDialog}
+        setOpen={setOpenEditProccessDialog}
+      />
     </>
   );
 }
