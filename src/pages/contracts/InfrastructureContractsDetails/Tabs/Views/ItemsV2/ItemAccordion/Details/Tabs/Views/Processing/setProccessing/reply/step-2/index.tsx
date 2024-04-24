@@ -57,29 +57,28 @@ export default function ReplyProccessingStep2(props: Tab2Props) {
 
   //TODO::submit form function
   const handleSaveComment = handleSubmit(async (data) => {
-    props.setOperationProgress("Step3");
-    // try {
-    //   //prepare body data
-    //   let body = {
-    //     comment: data.reply,
-    //     note: data.notes,
-    //     processing_contract_sub_item_id:
-    //       SetProccessingContextData.transactionId,
-    //     contract_attachment_types: [],
-    //   };
-    //   let response = await axios.post(
-    //     Api("employee/contract/items/comment-processing/store"),
-    //     body
-    //   );
-    //   SetProccessingContextData.setCommentId(
-    //     response.data.comment_processing.id
-    //   );
-    //   setLoading(false);
-    //   enqueueSnackbar("تم الحفظ بنجاح");
-    //   props.setOperationProgress("Step3");
-    // } catch (err) {
-    //   console.log("Error in save comment::", err);
-    // }
+    try {
+      //prepare body data
+      let body = {
+        comment: data.reply,
+        note: data.notes,
+        processing_contract_sub_item_id:
+          SetProccessingContextData.transactionId,
+        contract_attachment_types: [],
+      };
+      let response = await axios.post(
+        Api("employee/contract/items/comment-processing/store"),
+        body
+      );
+      SetProccessingContextData.setCommentId(
+        response.data.comment_processing.id
+      );
+      setLoading(false);
+      enqueueSnackbar("تم الحفظ بنجاح");
+      props.setOperationProgress("Step3");
+    } catch (err) {
+      console.log("Error in save comment::", err);
+    }
   });
   //TODO::Declare helpers methods
   const FieldGrid = ({

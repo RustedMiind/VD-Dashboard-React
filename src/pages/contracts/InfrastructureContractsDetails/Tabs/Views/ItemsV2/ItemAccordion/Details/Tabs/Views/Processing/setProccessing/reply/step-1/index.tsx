@@ -15,12 +15,12 @@ export default function ReplyProccessingStep1(props: Tab1Props) {
 
   //TODO::define helper functions
   const handleNextStep = () => {
-    // if (transactionId.trim().length == 0) {
-    //   setError(true);
-    //   return;
-    // } else setError(false);
-    // //!There is an operation here we will handle it.
-    // SetProccessingContextData.setTransactionId(parseInt(transactionId));
+    if (transactionId.trim().length == 0) {
+      setError(true);
+      return;
+    } else setError(false);
+    //!There is an operation here we will handle it.
+    SetProccessingContextData.setTransactionId(parseInt(transactionId));
     props.setOperationProgress("Step2");
   };
 
@@ -43,11 +43,12 @@ export default function ReplyProccessingStep1(props: Tab1Props) {
         >
           <AddLabelToEl label={"ادخل رقم المعاملة"} required>
             <SelectWithFilter
-              //   options={TransactionContextData.transactions.map((ele) => ({
-              //     label: ele?.id ? ele?.id.toString() : "",
-              //     value: ele?.id ? ele?.id.toString() : "",
-              //   }))}
-              options={[]}
+              options={SetProccessingContextData.subItem?.processing?.map(
+                (ele) => ({
+                  label: ele?.id ? ele?.id.toString() : "",
+                  value: ele?.id ? ele?.id.toString() : "",
+                })
+              )}
               placeholder="ادخل رقم المعاملة"
               size="small"
               select

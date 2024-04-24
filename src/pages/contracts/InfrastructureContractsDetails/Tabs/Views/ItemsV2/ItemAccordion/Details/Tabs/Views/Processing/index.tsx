@@ -12,6 +12,7 @@ function ProcessingView({ subItem }: TabViewProps) {
   const SetProccessingContextData = useContext(SetProccessingContext);
   // * Set Current SubItem Id
   SetProccessingContextData.setSubItemId(subItem.id);
+  SetProccessingContextData.setSubItem(subItem);
 
   const handleOpen = () => {
     setOpenDialog(true);
