@@ -3,24 +3,25 @@ import NoProccessing from "./NoProccessing";
 import ProccessingItemsRow from "./ProccessingItem";
 import { useContext, useEffect } from "react";
 import { SetProccessingContext } from "../context/SetProccessingContext";
+import { ContractItemContext } from "../../../../../ItemContext";
 
 export default function ProcessingList() {
   const SetProccessingContextData = useContext(SetProccessingContext);
+  const ContractItemContextData = useContext(ContractItemContext);
   // * Set Current SubItem Id
   let { subItem } = SetProccessingContextData;
-
-  useEffect(() => console.log("LLL", subItem), [subItem]);
+  let updatedItem = ContractItemContextData.item?.contract_sub_items.filter(ele=>ele.id == subItem?.id)?.[0];
 
   return (
     <Stack spacing={2}>
       {/* Case there is no proccessings(transactions) */}
-      {subItem?.processing && subItem?.processing.length == 0 && (
+      {updatedItem?.processing && updatedItem?.processing.length == 0 && (
         <NoProccessing />
       )}
 
-      {subItem?.processing &&
-        subItem?.processing.length > 0 &&
-        subItem?.processing.map((item) => (
+      {updatedItem?.processing &&
+        updatedItem?.processing.length > 0 &&
+        updatedItem?.processing.map((item) => (
           <ProccessingItemsRow key={`pk_${item.id}`} item={item} />
         ))}
     </Stack>
