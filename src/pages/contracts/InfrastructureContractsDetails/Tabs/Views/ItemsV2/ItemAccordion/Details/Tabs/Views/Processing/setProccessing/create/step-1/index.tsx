@@ -88,17 +88,17 @@ export default function CreateNewProccessingStep1(
       letter_num: data.letterNum,
       subject: data.transactionSubject,
       receiver: data.sendTo,
-      contract_sub_item_id: SetProccessingContextData.subItemId,
+      contract_sub_item_id: SetProccessingContextData.subItem?.id,
       contract_attachment_types: [],
     };
-    
+
     try {
       setLoading(true);
       let response = await axios.post(
         Api("employee/contract/items/processing/store"),
         bodyData
       );
-      
+
       SetProccessingContextData.setTransactionId(response.data.processing.id);
       setLoading(false);
       enqueueSnackbar("تم الحفظ بنجاح");

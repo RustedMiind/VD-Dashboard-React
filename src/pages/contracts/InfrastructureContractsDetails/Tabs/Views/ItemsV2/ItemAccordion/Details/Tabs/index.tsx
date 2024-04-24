@@ -3,7 +3,6 @@ import { ContractSubItem } from "../../../../../../../../../types/Contracts/Cont
 import { useEffect, useMemo, useState } from "react";
 import ProcessingView from "./Views/Processing";
 import PercentageView from "./Views/Percentage";
-import { SetProccessingContextProvider } from "./Views/Processing/context/SetProccessingContext";
 
 export enum TabEnum {
   ATTACHMENTS = "المرفقات",
@@ -24,11 +23,7 @@ function TabsSection({ subItem }: PropsType) {
     if (subItem.is_processing) {
       tabs.push({
         name: TabEnum.PROCCESSING,
-        render: (
-          <SetProccessingContextProvider>
-            <ProcessingView subItem={subItem} />
-          </SetProccessingContextProvider>
-        ),
+        render: <ProcessingView subItem={subItem} />,
       });
     }
     if (subItem.is_attachment) {
