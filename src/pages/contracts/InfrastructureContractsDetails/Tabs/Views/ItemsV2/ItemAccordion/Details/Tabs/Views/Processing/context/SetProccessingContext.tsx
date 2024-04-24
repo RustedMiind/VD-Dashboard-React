@@ -2,8 +2,6 @@ import { createContext, useState } from "react";
 import { ContractSubItem } from "../../../../../../../../../../../../types/Contracts/ContractItems";
 
 export const SetProccessingContext = createContext<SetProccessingContextType>({
-  subItemId: undefined,
-  setSubItemId: (num) => {},
   transactionId: undefined,
   setTransactionId: (num) => {},
   refreshTransactionAttachments: () => {},
@@ -20,13 +18,8 @@ export function SetProccessingContextProvider({
   subItem: ContractSubItem;
 }) {
   const [transactionId, setTransactionId] = useState<number>();
-  const [subItemId, setSubItemId] = useState<number>();
   const [commentId, setCommentId] = useState<number>();
 
-  const handleSetSubItemId = (num: number) => {
-    if (num == -1) setSubItemId(undefined);
-    setSubItemId(num);
-  };
 
   const handleSetCommentId = (num: number) => {
     if (num == -1) setCommentId(undefined);
@@ -41,8 +34,6 @@ export function SetProccessingContextProvider({
   return (
     <SetProccessingContext.Provider
       value={{
-        subItemId: subItemId,
-        setSubItemId: handleSetSubItemId,
         transactionId: transactionId,
         setTransactionId: handleSetTransactionId,
         refreshTransactionAttachments: () => {},
@@ -57,8 +48,6 @@ export function SetProccessingContextProvider({
 }
 
 type SetProccessingContextType = {
-  subItemId: number | undefined;
-  setSubItemId: (num: number) => void;
   transactionId: number | undefined;
   setTransactionId: (num: number) => void;
   commentId: number | undefined;

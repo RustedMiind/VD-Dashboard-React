@@ -10,7 +10,9 @@ export default function ProcessingList() {
   const ContractItemContextData = useContext(ContractItemContext);
   // * Set Current SubItem Id
   let { subItem } = SetProccessingContextData;
-  let updatedItem = ContractItemContextData.item?.contract_sub_items.filter(ele=>ele.id == subItem?.id)?.[0];
+  let updatedItem = ContractItemContextData.item?.contract_sub_items.find(
+    (ele) => ele.id == subItem?.id
+  );
 
   return (
     <Stack spacing={2}>
