@@ -11,6 +11,8 @@ import TabsContainer from "./Tabs";
 import { Contract } from "../../../types";
 import { useSnackbar } from "notistack";
 import LoadingBackdrop from "../../../components/Loading/LoadingBackdrop";
+import { ContractUse } from "../SetContract/ContractDetailsContext";
+import { getUseData } from "../../../methods/getUseData";
 
 export const ContractDetailsContext = createContext<ContractDetailsContextType>(
   {
@@ -25,6 +27,7 @@ export interface ContractDetailsContextType {
   status: Status;
   refresh: (soft?: boolean) => void;
   refreshToggler: boolean;
+  use?: ContractUse;
 }
 
 type Status = "loading" | "loaded" | "error";
@@ -36,6 +39,7 @@ export default function InfrastructureContractsDetails() {
   const [refreshToggler, setRefreshToggler] = useState(false);
   let { id } = useParams(); //contract id
   const { enqueueSnackbar } = useSnackbar();
+  const [contractUse, setContractUse] = useState<undefined | ContractUse>({});
 
   function getContract(soft?: boolean) {
     if (!soft) setStatus("loading");
@@ -52,13 +56,26 @@ export default function InfrastructureContractsDetails() {
       });
   }
 
-  useEffect(getContract, [id]);
+  useEffect(() => {
+    getContract();
+    getUseData()
+      .then((use) => {
+        setContractUse(use);
+      })
+      .catch(console.log);
+  }, [id]);
 
   // *Loading case
   // *normal case
   return (
     <ContractDetailsContext.Provider
-      value={{ contract, refresh: getContract, status, refreshToggler }}
+      value={{
+        contract,
+        refresh: getContract,
+        status,
+        refreshToggler,
+        use: contractUse,
+      }}
     >
       <LoadingBackdrop open={status === "loading"} />
       <Stack spacing={4}>

@@ -9,7 +9,7 @@ import AddLabelToEl from "../../../../../../../../../../../../components/AddLabe
 import { TransactionType } from "../../../../../../../../../../../../types/Contracts/ContractTransactionAttachment";
 
 const GridItem = (props: GridProps) => (
-  <Grid item xl={12 / 8} lg={3} md={6} xs={12} {...props} />
+  <Grid item xl={12 / 9} lg={3} md={6} xs={12} {...props} />
 );
 
 type DetailsItemProps = {
@@ -34,8 +34,6 @@ const DetailsItem = ({
 );
 
 function ProcessingCard({ processing }: PropsType) {
-  console.log(processing);
-
   return (
     <Paper sx={{ width: 1, p: 2, bgcolor: "background.default" }} elevation={2}>
       <Grid container spacing={1}>
@@ -46,7 +44,7 @@ function ProcessingCard({ processing }: PropsType) {
         <DetailsItem label="عدد الردود">
           {processing.comments_count || "0"}
         </DetailsItem>
-        <DetailsItem label="اسم الراسل">
+        <DetailsItem gridProps={{ xl: 24 / 9 }} label="اسم الراسل">
           {processing.system_logs?.[0]?.name || "-"}
         </DetailsItem>
         <DetailsItem label="اخر رد">
