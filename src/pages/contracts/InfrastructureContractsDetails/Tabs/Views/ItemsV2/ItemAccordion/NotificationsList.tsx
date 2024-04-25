@@ -3,14 +3,13 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { TransactionContext } from "../context/TransactionContext";
 import { useContext } from "react";
-import { SystemLogType } from "../../../../../../../types/Contracts/ContractItems";
+import {
+  ContractItem,
+  SystemLogType,
+} from "../../../../../../../types/Contracts/ContractItems";
 
-export default function NotificationList() {
-  // get logs
-  const TransactionContextData = useContext(TransactionContext);
-
+export default function NotificationList({ item }: { item: ContractItem }) {
   const NotificationItem = ({ item }: { item: SystemLogType }) => (
     <MenuItem sx={{ minWidth: "270px" }}>
       <ListItemText
@@ -35,8 +34,8 @@ export default function NotificationList() {
 
   return (
     <>
-      {TransactionContextData?.currentMainItem?.system_logs?.map((item) => {
-        return <NotificationItem key={item.id} item={item} />;
+      {item?.system_logs?.map((ele) => {
+        return <NotificationItem key={ele.id} item={ele} />;
       })}
     </>
   );

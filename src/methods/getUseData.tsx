@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Api } from "../constants";
-import { DbOptionType } from "../types/other/DbOptionType";
 import { ContractUse } from "../pages/contracts/SetContract/ContractDetailsContext";
 
 /**
@@ -17,10 +16,3 @@ export async function getUseData() {
 
   return response;
 }
-
-// declare type u want
-// if u need use this method for get branches
-// declare branches in this type
-type returnedUsedData = {
-  attachments_types: DbOptionType[];
-};
