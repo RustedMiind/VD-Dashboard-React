@@ -51,13 +51,8 @@ export default function ReplyProccessingStep3() {
   //*  return ui
   return (
     <>
-      <DialogContent sx={{ bgcolor: "background.default" }}>
-        <Stack
-          bgcolor={"background.default"}
-          padding={2}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
+      <DialogContent>
+        <Stack padding={2} alignItems={"center"} justifyContent={"center"}>
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <Button
               variant="contained"

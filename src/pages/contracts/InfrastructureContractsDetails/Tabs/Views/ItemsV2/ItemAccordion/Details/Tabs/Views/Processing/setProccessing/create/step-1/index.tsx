@@ -136,14 +136,10 @@ export default function CreateNewProccessingStep1(
   // *return component ui
   return (
     <>
-      <DialogTitle
-        sx={{ textAlign: "center" }}
-        bgcolor={"background.default"}
-        fontWeight={800}
-      >
+      <DialogTitle sx={{ textAlign: "center" }} fontWeight={800}>
         انشاء معاملة جديدة
       </DialogTitle>
-      <DialogContent sx={{ bgcolor: "background.default" }}>
+      <DialogContent>
         <Stack
           bgcolor={"background.default"}
           padding={2}

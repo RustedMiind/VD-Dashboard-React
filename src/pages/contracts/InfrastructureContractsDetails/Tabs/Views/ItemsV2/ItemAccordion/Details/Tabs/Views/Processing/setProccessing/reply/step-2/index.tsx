@@ -107,20 +107,11 @@ export default function ReplyProccessingStep2(props: Tab2Props) {
 
   return (
     <>
-      <DialogTitle
-        sx={{ textAlign: "center" }}
-        bgcolor={"background.default"}
-        fontWeight={800}
-      >
+      <DialogTitle sx={{ textAlign: "center" }} fontWeight={800}>
         الرد على المعاملة
       </DialogTitle>
-      <DialogContent sx={{ bgcolor: "background.default" }}>
-        <Stack
-          bgcolor={"background.default"}
-          padding={2}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
+      <DialogContent>
+        <Stack padding={2} alignItems={"center"} justifyContent={"center"}>
           {/* Add form Header */}
           <Grid container>
             {CreateTransactionFormHeaders.map((header) => {
