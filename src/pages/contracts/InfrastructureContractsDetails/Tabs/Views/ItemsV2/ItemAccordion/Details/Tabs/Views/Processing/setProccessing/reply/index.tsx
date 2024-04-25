@@ -11,7 +11,9 @@ export default function ReplyProccessing({
   onClose,
 }: ReplyProccessingProps) {
   //TODO::define our component state variables
-  const SetProccessingContextData = useContext(SetProccessingContext);
+  const { commentId, refreshTransactionAttachments } = useContext(
+    SetProccessingContext
+  );
   const [operationProgress, setOperationProgress] = useState<
     "Step1" | "Step2" | "Step3"
   >("Step1");

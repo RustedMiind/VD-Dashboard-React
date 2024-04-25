@@ -23,9 +23,8 @@ import { serialize } from "object-to-formdata";
 
 export default function ProccessingAttachmentsTable() {
   //* Declaration component State variables...
-  const { commentId, refreshTransactionAttachments } = useContext(
-    SetProccessingContext
-  );
+  const { commentId, refreshTransactionAttachments, transactionsAttachments } =
+    useContext(SetProccessingContext);
   const { enqueueSnackbar } = useSnackbar();
 
   //* Handle selected files files
@@ -78,9 +77,9 @@ export default function ProccessingAttachmentsTable() {
             <Table aria-label="simple table">
               <AttachmentsTableHeaders />
               <TableBody>
-                {/* {attachmentsArr.map((ele) => (
-                  <AttachmentsRow key={ele.id} item={ele} />
-                ))} */}
+                {transactionsAttachments?.map((attachment) => (
+                  <AttachmentsRow key={attachment.id} attachment={attachment} />
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
