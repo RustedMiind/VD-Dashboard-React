@@ -8,7 +8,7 @@ import ProccessingAttachmentsTable from "../attachments";
 
 export default function ReplyProccessing({
   open,
-  setOpen,
+  onClose,
 }: ReplyProccessingProps) {
   //TODO::define our component state variables
   const SetProccessingContextData = useContext(SetProccessingContext);
@@ -18,7 +18,7 @@ export default function ReplyProccessing({
 
   //TODO::define helper functions
   const handleClose = () => {
-    setOpen(false);
+    onClose();
     //refresh here
     setOperationProgress("Step1");
   };
@@ -64,5 +64,5 @@ export default function ReplyProccessing({
 
 type ReplyProccessingProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
 };

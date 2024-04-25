@@ -12,13 +12,20 @@ import CreateNewProccessing from "./create/step-1";
 import CreateNewProccessDialog from "./create";
 import ReplyProccessing from "./reply";
 
+enum ProccessingActions {
+  CREATE = "create",
+  REPLY = "reply",
+}
+
 export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
   // TODO::define our component state variables
   let { open, setOpen } = props;
-  const [operationType, setOperationType] = useState("create");
+  const [operationType, setOperationType] = useState<ProccessingActions>(
+    ProccessingActions.CREATE
+  );
   const [openCreateNewProccessDialog, setOpenCreateNewProccessDialog] =
     useState(false);
-  const [openEditProccessDialog, setOpenEditProccessDialog] = useState(false);
+  const [openReplyProccessDialog, setOpenReplyProccessDialog] = useState(false);
 
   // TODO::define helper functions
   const handleClose = () => {
@@ -26,12 +33,12 @@ export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
   };
   const handleNextStep = () => {
     switch (operationType) {
-      case "create":
+      case ProccessingActions.CREATE:
         setOpenCreateNewProccessDialog(true);
         handleClose();
         break;
-      case "edit":
-        setOpenEditProccessDialog(true);
+      case ProccessingActions.REPLY:
+        setOpenReplyProccessDialog(true);
         handleClose();
         break;
     }
@@ -44,12 +51,6 @@ export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
         onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        PaperProps={{
-          sx: {
-            width: "100vw",
-            minHeight: 300,
-          },
-        }}
       >
         <DialogTitle
           sx={{ textAlign: "center" }}
@@ -72,12 +73,18 @@ export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
-            onChange={(e) => setOperationType(e.target.value)}
             value={operationType}
+            onChange={(e) =>
+              setOperationType(e.target.value as ProccessingActions)
+            }
           >
-            <FormControlLabel value="create" control={<Radio />} label="جديد" />
             <FormControlLabel
-              value="edit"
+              value={ProccessingActions.CREATE}
+              control={<Radio />}
+              label="جديد"
+            />
+            <FormControlLabel
+              value={ProccessingActions.REPLY}
               control={<Radio />}
               label="رد على المعاملة"
             />
@@ -99,11 +106,11 @@ export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
       </Dialog>
       <CreateNewProccessDialog
         open={openCreateNewProccessDialog}
-        setOpen={setOpenCreateNewProccessDialog}
+        onClose={() => setOpenCreateNewProccessDialog(false)}
       />
       <ReplyProccessing
-        open={openEditProccessDialog}
-        setOpen={setOpenEditProccessDialog}
+        open={openReplyProccessDialog}
+        onClose={() => setOpenReplyProccessDialog(false)}
       />
     </>
   );

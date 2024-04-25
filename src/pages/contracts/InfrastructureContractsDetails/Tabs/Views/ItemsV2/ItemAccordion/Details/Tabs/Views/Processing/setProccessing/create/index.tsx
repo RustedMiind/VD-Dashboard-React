@@ -6,9 +6,10 @@ import { ContractItemContext } from "../../../../../../ItemContext";
 import ProccessingAttachmentsTable from "../attachments";
 import { SetProccessingContext } from "../../context/SetProccessingContext";
 
-export default function CreateNewProccessDialog(
-  props: CreateNewProccessDialogProps
-) {
+export default function CreateNewProccessDialog({
+  onClose,
+  open,
+}: CreateNewProccessDialogProps) {
   // TODO::Declaration of component state and variables
   const ContractItemContextData = useContext(ContractItemContext);
   const SetProccessingContextData = useContext(SetProccessingContext);
@@ -43,14 +44,14 @@ export default function CreateNewProccessDialog(
     });
     SetProccessingContextData.setShowAttachments(false);
     SetProccessingContextData.setTransactionId(-1);
-    props.setOpen(false);
+    onClose();
   };
 
   // *return component ui
   return (
     <>
       <Dialog
-        open={props.open || SetProccessingContextData.showAttachments}
+        open={open || SetProccessingContextData.showAttachments}
         onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -66,5 +67,5 @@ export default function CreateNewProccessDialog(
 
 type CreateNewProccessDialogProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
 };
