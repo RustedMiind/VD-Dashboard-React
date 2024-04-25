@@ -6,6 +6,7 @@ import axios from "axios";
 import { Api } from "../../../constants";
 import { ContractsContext } from "../Context/ContractsContext";
 import { Client } from "../../../types/Clients";
+import { getUseData } from "../../../methods/getUseData";
 
 function GridChildren(props: { children: React.ReactNode }) {
   return <Stack px={1}>{props.children}</Stack>;
@@ -20,15 +21,19 @@ function SearchBar() {
   let [contractSearch, setContractSearch] = useState<Client[] | null>(null);
 
   useEffect(() => {
-    axios
-      .get<Contract>(Api("employee/contract/use"))
-      .then((res) => {
-        setContractSearch(res?.data?.client ? [res?.data?.client] : null);
-      })
-      .catch((err) => {
-        setContractSearch(null);
-      });
+    console.log("useData.client  aaa");
+    getClientsData();
   }, []);
+
+  const getClientsData = async () => {
+    try {
+      let useData = await getUseData();
+      console.log("useData.client", useData.client);
+      setContractSearch(useData.client);
+    } catch (err) {
+      setContractSearch([]);
+    }
+  };
   let contractsContext = useContext(ContractsContext);
 
   function search() {
