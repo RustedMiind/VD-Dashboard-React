@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Api } from "../constants";
 import { DbOptionType } from "../types/other/DbOptionType";
+import { ContractUse } from "../pages/contracts/SetContract/ContractDetailsContext";
 
 /**
  * getUseData()
@@ -9,7 +10,7 @@ import { DbOptionType } from "../types/other/DbOptionType";
  */
 export async function getUseData() {
   let response = await axios
-    .get<returnedUsedData>(Api("employee/contract/use"))
+    .get<ContractUse>(Api("employee/contract/use"))
     .then((res) => {
       return res.data;
     });
