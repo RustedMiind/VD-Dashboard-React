@@ -29,7 +29,7 @@ function SearchBar() {
     try {
       let useData = await getUseData();
       console.log("useData.client", useData.client);
-      setContractSearch(useData.client);
+      if (useData?.client) setContractSearch(useData?.client);
     } catch (err) {
       setContractSearch([]);
     }
