@@ -27,20 +27,11 @@ export default function ReplyProccessingStep1(props: Tab1Props) {
   // * return ui
   return (
     <>
-      <DialogTitle
-        sx={{ textAlign: "center" }}
-        bgcolor={"background.default"}
-        fontWeight={800}
-      >
+      <DialogTitle sx={{ textAlign: "center" }} fontWeight={800}>
         الرد على معاملة
       </DialogTitle>
-      <DialogContent sx={{ bgcolor: "background.default" }}>
-        <Stack
-          bgcolor={"background.default"}
-          padding={2}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
+      <DialogContent>
+        <Stack padding={2} alignItems={"center"} justifyContent={"center"}>
           <AddLabelToEl label={"ادخل رقم المعاملة"} required>
             <SelectWithFilter
               options={SetProccessingContextData.subItem?.processing?.map(

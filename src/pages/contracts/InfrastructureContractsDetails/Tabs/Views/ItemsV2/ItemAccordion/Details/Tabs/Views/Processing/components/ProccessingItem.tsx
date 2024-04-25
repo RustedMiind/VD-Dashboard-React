@@ -49,7 +49,7 @@ export default function ProccessingItemsRow(props: PropsType) {
         justifyContent: "space-around",
       }}
     >
-      <RowItemComp label="رقم المعاملة" value={"" + props.item.id} />
+      <RowItemComp label="رقم المعاملة" value={props.item.id?.toString()} />
       <RowItemComp
         label="تاريخ الارسال"
         value={new Date(props.item.created_at).toLocaleDateString()}

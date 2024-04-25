@@ -52,16 +52,11 @@ export default function ChooseProcessingType(props: ChooseProcessingTypeProps) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle
-          sx={{ textAlign: "center" }}
-          bgcolor={"background.default"}
-          fontWeight={800}
-        >
+        <DialogTitle sx={{ textAlign: "center" }} fontWeight={800}>
           انشاء المعاملة
         </DialogTitle>
         <DialogContent
           sx={{
-            bgcolor: "#fff",
             padding: "2rem",
             display: "flex",
             alignItems: "center",

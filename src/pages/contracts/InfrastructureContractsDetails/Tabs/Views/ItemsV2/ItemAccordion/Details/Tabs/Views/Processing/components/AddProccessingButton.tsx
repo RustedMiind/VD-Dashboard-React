@@ -8,10 +8,10 @@ export default function AddProccessingButton(props: propsType) {
       justifyContent={"end"}
       alignItems={"end"}
       flexDirection={"row"}
+      mb={2}
     >
       <Button
         variant="contained"
-        sx={{ width: "150px", marginY: 2 }}
         startIcon={<AddBoxOutlinedIcon />}
         onClick={() => props.handleClick()}
       >
