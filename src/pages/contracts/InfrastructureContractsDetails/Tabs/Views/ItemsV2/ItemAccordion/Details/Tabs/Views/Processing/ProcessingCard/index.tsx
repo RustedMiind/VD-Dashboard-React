@@ -9,7 +9,7 @@ import AddLabelToEl from "../../../../../../../../../../../../components/AddLabe
 import { TransactionType } from "../../../../../../../../../../../../types/Contracts/ContractTransactionAttachment";
 
 const GridItem = (props: GridProps) => (
-  <Grid item lg={12 / 8} md={3} xs={6} {...props} />
+  <Grid item xl={12 / 8} lg={3} md={6} xs={12} {...props} />
 );
 
 type DetailsItemProps = {
@@ -34,9 +34,11 @@ const DetailsItem = ({
 );
 
 function ProcessingCard({ processing }: PropsType) {
+  console.log(processing);
+
   return (
-    <Paper sx={{ width: 1, p: 2 }} elevation={1}>
-      <Grid container>
+    <Paper sx={{ width: 1, p: 2, bgcolor: "background.default" }} elevation={2}>
+      <Grid container spacing={1}>
         <DetailsItem label="رقم المعاملة">{processing.id}</DetailsItem>
         <DetailsItem label="عدد الردود">
           {processing.comments_count}
@@ -51,7 +53,10 @@ function ProcessingCard({ processing }: PropsType) {
         <DetailsItem label="الاجراء"></DetailsItem>
 
         <DetailsItem label="المرفقات">UNDER MENTAINANCE</DetailsItem>
-        <DetailsItem label="اخر تخديث">
+        <DetailsItem
+          label="اخر تحديث"
+          typographyProps={{ color: "secondary.main" }}
+        >
           {new Date(processing.updated_at).toLocaleDateString()}
         </DetailsItem>
       </Grid>
