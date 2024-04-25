@@ -8,13 +8,19 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Stack, Tooltip } from "@mui/material";
 import { ContractItem } from "../../../../../../../types/Contracts/ContractItems";
+import TimeFrameDialog from "./TimeFrameDialog";
+import { useState } from "react";
 
 function ItemActions({ item }: PropsType) {
+  const [openTimeDialog, setOpenTimeDialog] = useState(false);
   function handleBtnClick() {}
 
   return (
     <Stack direction={"row"} spacing={2}>
-      <RoundedIconButton onClick={() => handleBtnClick()} color="secondary">
+      <RoundedIconButton
+        onClick={() => setOpenTimeDialog(true)}
+        color="secondary"
+      >
         <AccessTimeIcon />
         {/* <LocationOnIcon /> */}
       </RoundedIconButton>
@@ -31,6 +37,12 @@ function ItemActions({ item }: PropsType) {
         {/* <NotificationBtn handleBtnClick={handleBtnClick} /> */}
         <div></div>
       </Tooltip>
+
+      <TimeFrameDialog
+        open={openTimeDialog}
+        onClose={() => setOpenTimeDialog(false)}
+        item={item}
+      />
     </Stack>
   );
 }

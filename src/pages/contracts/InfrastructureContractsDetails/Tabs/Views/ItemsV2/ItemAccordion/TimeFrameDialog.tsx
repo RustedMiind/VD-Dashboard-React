@@ -89,7 +89,7 @@ export default function TimeFrameDialog({ item, onClose, open }: PropsType) {
                     }}
                     variant="body2"
                   >
-                    المنفذ {item.achievement_percentage}%
+                    المنقضي {item.achievement_percentage}%
                   </Typography>
                   <Typography
                     sx={{
