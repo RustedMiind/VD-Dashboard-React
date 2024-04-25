@@ -19,6 +19,7 @@ function ItemDetails({ item }: PropsType) {
           <Stack spacing={0.5} component={Paper} bgcolor={"background.default"}>
             {item.contract_sub_items.map((subItem) => (
               <Button
+                key={subItem.id}
                 size="large"
                 sx={{ justifyContent: "start", py: 1.5 }}
                 variant={

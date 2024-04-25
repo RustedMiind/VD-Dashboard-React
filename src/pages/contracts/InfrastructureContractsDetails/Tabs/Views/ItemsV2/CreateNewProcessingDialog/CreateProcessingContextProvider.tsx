@@ -74,14 +74,18 @@ function OpenCreateProcessingContextProvider({
       value={{
         refreshProcessing: getProcessing,
         openCreateDialog(subItemId) {
+          setStep(1);
           setContractSubItemId(subItemId);
           setDialogOpen(true);
           setProcessing(undefined);
         },
         createDialogOpened: dialogOpen,
         openUpdateDialog({ processingId, step = 1 }) {
-          getProcessing(processingId);
+          setContractSubItemId(undefined);
           setStep(step);
+          getProcessing(processingId).then(() => {
+            setDialogOpen(true);
+          });
         },
         toNextStep,
         step: step,

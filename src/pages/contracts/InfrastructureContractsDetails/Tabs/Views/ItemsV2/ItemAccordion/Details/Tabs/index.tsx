@@ -43,7 +43,7 @@ function TabsSection({ subItem }: PropsType) {
     }
 
     return tabs;
-  }, [subItem.id]);
+  }, [Math.random()]);
 
   useEffect(() => {
     setCurrentTab(tabs[0]?.name || undefined);

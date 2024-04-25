@@ -57,8 +57,11 @@ function SaveAttachementsForm({}: PropsType) {
           onChange={(e) => {
             if (e.target.files) onUpload(e.target.files);
           }}
+          buttonProps={{ sx: { mb: 2 } }}
         />
-        {typeof progress === "number" && <LinearProgress value={progress} />}
+        {typeof progress === "number" && (
+          <LinearProgress variant="determinate" color="info" value={progress} />
+        )}
         <TableContainer>
           <Table sx={{ tableLayout: "fixed" }}>
             <TableHead>

@@ -44,6 +44,8 @@ function ItemAccordion({ item }: PropsType) {
     if (expanded) fetchItemDetails?.({ optimized: true, soft: false });
   }, [expanded]);
 
+  console.log("item rerendered", item);
+
   return (
     <CustomAccordion
       expanded={Boolean(expanded && detailedItem)}

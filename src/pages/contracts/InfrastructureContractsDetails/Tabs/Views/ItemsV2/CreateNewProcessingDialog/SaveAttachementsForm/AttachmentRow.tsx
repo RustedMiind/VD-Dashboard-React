@@ -50,8 +50,27 @@ function AttachmentRow({ attachment }: PropsType) {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.post(
+        Api(
+          `employee/contract/items/processing/delete-attachment-type/${attachment.id}`
+        )
+      );
+      refreshProcessing();
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (attachment.attachment_type != attachmentType) onUpdate();
+    if (
+      attachmentType &&
+      attachment.contract_attachment_type_id?.toString() != attachmentType
+    )
+      onUpdate();
   }, [attachmentType]);
 
   return (
@@ -97,7 +116,7 @@ function AttachmentRow({ attachment }: PropsType) {
           />
         </TableCell>
         <TableCell sx={{ textAlign: "center" }}>
-          <IconButton color="error">
+          <IconButton color="error" onClick={onDelete}>
             <DeleteIcon />
           </IconButton>
         </TableCell>

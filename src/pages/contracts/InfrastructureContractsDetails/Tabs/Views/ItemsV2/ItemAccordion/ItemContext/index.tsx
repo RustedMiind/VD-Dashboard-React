@@ -1,7 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ContractItem } from "../../../../../../../../types/Contracts/ContractItems";
 import { getContractItem } from "../../../../../../../../methods/api/contracts";
 import { useSnackbar } from "notistack";
+import { OpenCreateProcessingContext } from "../../CreateNewProcessingDialog/CreateProcessingContextProvider";
 
 export type ContractItemContextType = {
   item?: ContractItem;
@@ -18,21 +19,36 @@ function ContractItemContextProvider({ contractItemId, children }: PropsType) {
   const { enqueueSnackbar } = useSnackbar();
   const [item, setItem] = useState<ContractItem | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { createDialogOpened, processing } = useContext(
+    OpenCreateProcessingContext
+  );
   async function fetchItem(options?: { soft?: boolean; optimized?: boolean }) {
+    console.log("fetch trigered");
     if (options?.optimized && item?.id === contractItemId) return;
-    if (!options?.soft) setIsLoading(true);
+    if (!options?.soft) {
+      setIsLoading(true);
+    }
     try {
       const {
         data: { contract_item },
       } = await getContractItem(contractItemId);
       setItem(contract_item);
+      console.log("fetch ok");
     } catch (error) {
       enqueueSnackbar("تعذر في تحميل بيانات البند", { variant: "error" });
+
+      console.log("fetch error", error);
     } finally {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (createDialogOpened === false && item) {
+      console.log("100% refresh");
+      fetchItem({ optimized: false, soft: true });
+    }
+  }, [createDialogOpened]);
 
   return (
     <ContractItemContext.Provider
