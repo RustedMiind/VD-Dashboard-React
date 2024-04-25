@@ -62,7 +62,7 @@ export default function TopCards() {
           ) {
             transactions.push({
               id: transaction.id,
-              type: transaction.attachment_type[0].name,
+              type: transaction.attachment_type[0].name || "",
             });
           }
         });
