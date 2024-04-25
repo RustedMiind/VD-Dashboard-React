@@ -44,13 +44,14 @@ function ProcessingCard({ processing }: PropsType) {
           {new Date(processing.created_at).toLocaleDateString()}
         </DetailsItem>
         <DetailsItem label="عدد الردود">
-          {processing.comments_count}
+          {processing.comments_count || "0"}
         </DetailsItem>
         <DetailsItem label="اسم الراسل">
-          {processing.system_logs?.[0]?.name}
+          {processing.system_logs?.[0]?.name || "-"}
         </DetailsItem>
         <DetailsItem label="اخر رد">
-          {processing.comments?.[processing.comments.length - 1]?.comment}
+          {processing.comments?.[processing.comments.length - 1]?.comment ||
+            "-"}
         </DetailsItem>
         <DetailsItem label="الاجراء"></DetailsItem>
 
