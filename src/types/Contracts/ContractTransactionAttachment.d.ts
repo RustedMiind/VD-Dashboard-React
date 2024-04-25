@@ -4,6 +4,7 @@ import { ContractType } from "./ContractType";
 
 export type TansactionAttachmentType = {
   id: number;
+  name?: string;
   processings_contract_sub_item_id: number;
   contract_attachment_type_id: number;
   description: string;
@@ -30,7 +31,7 @@ export type TransactionType = {
   receiver: string;
   created_at: string;
   updated_at: string;
-  attachment: TansactionAttachmentType[];
+  attachment_type?: TansactionAttachmentType[];
   comments_count?: number;
   comments?: TransactionComment[];
   system_logs?: DbOptionType[];
