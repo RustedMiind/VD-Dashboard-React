@@ -17,54 +17,43 @@ import AttachmentsTableHeaders from "./components/TableHeaders";
 import AttachmentsRow from "./components/AttachmentRow";
 import { SetProccessingContext } from "../../context/SetProccessingContext";
 import { Media } from "../../../../../../../../../../../../../types/Media";
+import { Api } from "../../../../../../../../../../../../../constants";
+import { useSnackbar } from "notistack";
+import { serialize } from "object-to-formdata";
 
 export default function ProccessingAttachmentsTable() {
   //* Declaration component State variables...
-  const SetProccessingContextData = useContext(SetProccessingContext);
-  const [attachmentsArr, setAttachmentsArr] = useState<
-    AttachmentsInstanceType[]
-  >([]);
-
-  useEffect(() => {
-    setAttachmentsArr(
-      SetProccessingContextData.transactionsAttachments.map((ele) => ({
-        id: ele.id,
-        file: undefined,
-        description: ele.description,
-        contract_attachment_type_id: ele.contract_attachment_type_id,
-      }))
-    );
-  }, []);
+  const { commentId, refreshTransactionAttachments } = useContext(
+    SetProccessingContext
+  );
+  const { enqueueSnackbar } = useSnackbar();
 
   //* Handle selected files files
-  const handleSelectedFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectedFiles = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = e.currentTarget.files;
     if (files) {
-      Array.from(files).forEach((file, idx) => {
-        console.log("Do something with " + file.name);
-        setAttachmentsArr((prev) => [
-          ...prev,
-          {
-            file: file,
-            id: idx,
-            description: "",
-            contract_attachment_type_id: 0,
-          },
-        ]);
-      });
+      try {
+        await axios.post(
+          Api(
+            `employee/contract/items/comment-processing/store-attachment-type-images/${commentId}`
+          ),
+          serialize({ images: files }, { indices: true })
+        );
+        refreshTransactionAttachments();
+        enqueueSnackbar("done");
+      } catch (error) {
+        enqueueSnackbar("not done");
+      }
     }
   };
 
   // *return component ui
   return (
     <>
-      <DialogContent sx={{ bgcolor: "background.default" }}>
-        <Stack
-          bgcolor={"background.default"}
-          padding={2}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
+      <DialogContent>
+        <Stack padding={2} alignItems={"center"} justifyContent={"center"}>
           {/* <SetDialog open={dialogOpen} handleClose={handleCloseDialog} /> */}
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <Button
@@ -89,9 +78,9 @@ export default function ProccessingAttachmentsTable() {
             <Table aria-label="simple table">
               <AttachmentsTableHeaders />
               <TableBody>
-                {attachmentsArr.map((ele) => (
+                {/* {attachmentsArr.map((ele) => (
                   <AttachmentsRow key={ele.id} item={ele} />
-                ))}
+                ))} */}
               </TableBody>
             </Table>
           </TableContainer>

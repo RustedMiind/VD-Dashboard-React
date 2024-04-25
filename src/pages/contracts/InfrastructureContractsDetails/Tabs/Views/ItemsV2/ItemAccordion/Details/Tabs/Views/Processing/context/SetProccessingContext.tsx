@@ -26,7 +26,9 @@ export function SetProccessingContextProvider({
   children: React.ReactNode;
   subItem: ContractSubItem;
 }) {
-  const [transactionId, setTransactionId] = useState<number>();
+  const [transactionId, setTransactionId] = useState<number | undefined>(
+    undefined
+  );
   const [commentId, setCommentId] = useState<number>();
   const [showAttachments, setShowAttachments] = useState(false);
   const [transactionsAttachments, setTransactionsAttachments] = useState<
@@ -48,16 +50,16 @@ export function SetProccessingContextProvider({
   };
 
   useEffect(() => {
-    if (transactionId && transactionId != -1) {
-      let url = `employee/contract/items/processing/${transactionId}`;
-      fetchProccessingAttachments(url);
-    }
+    fetchProccessingAttachments();
   }, [transactionId]);
 
-  const fetchProccessingAttachments = async (url: string) => {
-    setTransactionsAttachments([]);
+  const fetchProccessingAttachments = async () => {
+    if (!transactionId || transactionId === -1)
+      return console.info("transactionId is " + typeof transactionId);
     let response = await axios
-      .get<{ processing: TransactionType }>(Api(url))
+      .get<{ processing: TransactionType }>(
+        Api(`employee/contract/items/processing/${transactionId}`)
+      )
       .then((res) => {
         return res.data;
       });

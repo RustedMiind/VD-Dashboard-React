@@ -20,6 +20,6 @@ export async function getUseData() {
 // declare type u want
 // if u need use this method for get branches
 // declare branches in this type
-type returnedUsedData = {
+export type returnedUsedData = {
   attachments_types: DbOptionType[];
 };

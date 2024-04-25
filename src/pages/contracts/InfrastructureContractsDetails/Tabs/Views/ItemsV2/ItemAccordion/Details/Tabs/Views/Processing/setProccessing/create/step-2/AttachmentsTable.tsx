@@ -105,7 +105,7 @@ export default function AttachmentsTable(props: TableShowAttachmentsProps) {
             {props.transactionsAttachments?.length > 0 &&
               props.transactionsAttachments.map((ele, idx) => (
                 <SingleRow
-                  key={`TA-${idx}`}
+                  key={ele.id}
                   type={ele.attachment_type?.name ?? ""}
                   description={ele.description}
                   attachmentId={ele.id}

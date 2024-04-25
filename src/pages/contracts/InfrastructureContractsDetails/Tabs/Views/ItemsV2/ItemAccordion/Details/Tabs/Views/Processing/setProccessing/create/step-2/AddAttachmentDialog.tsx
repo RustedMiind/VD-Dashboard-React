@@ -17,6 +17,7 @@ import { Api } from "../../../../../../../../../../../../../../constants";
 import AddLabelToEl from "../../../../../../../../../../../../../../components/AddLabelToEl";
 import CustomFilePond from "../../../../../../../../../../../../../../components/CustomFilepond";
 import { SetProccessingContext } from "../../../context/SetProccessingContext";
+import { ContractDetailsContext } from "../../../../../../../../../../..";
 
 export type CreateTransactionFormType = {
   description: string;
@@ -27,25 +28,13 @@ export type CreateTransactionFormType = {
 function AddAttachmentDialog(props: PropsType) {
   // Declare component State and variables
   const { enqueueSnackbar } = useSnackbar();
+  const { use } = useContext(ContractDetailsContext);
   const SetProccessingContextData = useContext(SetProccessingContext);
   const [file, setFile] = useState<FileBondState>([]);
   const [loading, setLoading] = useState(false);
   const { register, reset, handleSubmit } = useForm<CreateTransactionFormType>(
     {}
   );
-  const [attatchmentFileTypes, setAttatchmentFileTypes] = useState<
-    DbOptionType[]
-  >([]);
-
-  // fetch data for attatchmentFileTypes
-  useEffect(() => {
-    SetAttatchmentFileTypesArray();
-  }, []);
-
-  const SetAttatchmentFileTypesArray = async () => {
-    let useData = await getUseData();
-    setAttatchmentFileTypes(useData.attachments_types);
-  };
 
   const handleCreateAttatcmentTransaction = handleSubmit((data) => {
     let bodyData = {
@@ -103,7 +92,7 @@ function AddAttachmentDialog(props: PropsType) {
                   size={"small"}
                   disabled={loading}
                 >
-                  {attatchmentFileTypes.map((option) => (
+                  {use?.attachments_types.map((option) => (
                     <MenuItem key={`${option.id}`} value={option.id}>
                       {option.name}
                     </MenuItem>
