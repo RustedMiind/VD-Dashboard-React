@@ -50,7 +50,7 @@ function ItemAccordion({ item }: PropsType) {
       accordionSummaryProps={{
         children: (
           <Box py={1} width={1}>
-            <Grid container spacing={1} alignItems={"center"}>
+            <Grid container spacing={1} alignItems={"center"} justifyContent={'space-between'}>
               <GridItem onClick={() => setExpanded(!expanded)}>
                 <Box>
                   <Typography variant="h6" fontWeight={700}>
@@ -64,7 +64,10 @@ function ItemAccordion({ item }: PropsType) {
               <GridItem>
                 <Stack direction={"row"}>
                   <LabelAndValue label="المسؤول" value={item.manager?.name} />
-                  <LabelAndValue label="تاريخ الانتهاء" value={item.end_date} />
+                  <LabelAndValue
+                    label="تاريخ الانتهاء"
+                    value={new Date(item.end_date??'').toLocaleDateString("en-GB")}
+                  />
                 </Stack>
               </GridItem>
               <GridItem>

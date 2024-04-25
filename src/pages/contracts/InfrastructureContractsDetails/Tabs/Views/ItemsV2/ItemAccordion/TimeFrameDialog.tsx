@@ -116,7 +116,6 @@ export default function TimeFrameDialog({ item, onClose, open }: PropsType) {
                 >
                   <Box
                     sx={{
-                      width: "160px",
                       display: "flex",
                       justifyContent: "start",
                       alignItems: "center",
@@ -124,15 +123,16 @@ export default function TimeFrameDialog({ item, onClose, open }: PropsType) {
                     }}
                   >
                     <Typography fontWeight={400} variant="body2">
-                      بداية المشروع{" "}
-                      <b>
-                        {new Date(item.start_date || "").toLocaleDateString()}
-                      </b>
+                      بداية المشروع
+                    </Typography>
+                    <Typography variant="body2" fontWeight={600}>
+                      {new Date(item.start_date || "").toLocaleDateString(
+                        "en-GB"
+                      )}
                     </Typography>
                   </Box>
                   <Box
                     sx={{
-                      width: "160px",
                       display: "flex",
                       justifyContent: "start",
                       alignItems: "center",
@@ -140,10 +140,12 @@ export default function TimeFrameDialog({ item, onClose, open }: PropsType) {
                     }}
                   >
                     <Typography fontWeight={400} variant="body2">
-                      نهاية المشروع{" "}
-                      <b>
-                        {new Date(item.end_date || "").toLocaleDateString()}
-                      </b>
+                      نهاية المشروع
+                    </Typography>
+                    <Typography variant="body2" fontWeight={600}>
+                      {new Date(item.end_date || "").toLocaleDateString(
+                        "en-GB"
+                      )}
                     </Typography>
                   </Box>
                 </Box>
