@@ -40,10 +40,12 @@ function ProcessingCard({ processing }: PropsType) {
     <Paper sx={{ width: 1, p: 2, bgcolor: "background.default" }} elevation={2}>
       <Grid container spacing={1}>
         <DetailsItem label="رقم المعاملة">{processing.id}</DetailsItem>
+        <DetailsItem label="تاريخ الارسال">
+          {new Date(processing.created_at).toLocaleDateString()}
+        </DetailsItem>
         <DetailsItem label="عدد الردود">
           {processing.comments_count}
         </DetailsItem>
-        <DetailsItem label="اسم الراسل">{processing.id}</DetailsItem>
         <DetailsItem label="اسم الراسل">
           {processing.system_logs?.[0]?.name}
         </DetailsItem>
