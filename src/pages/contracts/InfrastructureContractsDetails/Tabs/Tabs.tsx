@@ -23,8 +23,8 @@ function Tabs() {
   return (
     <Stack component={Paper} gap={1} p={2} direction="row" flexWrap="wrap">
       <Chip {...createChipProps("معلومات العقد", TabEnum.DETAILS)} />
-      <Chip {...createChipProps("البنود", TabEnum.ITEMS)} />
-      <Chip {...createChipProps("البنود النسخة التجريبية", TabEnum.ITEMS_2)} />
+      {/* <Chip {...createChipProps("البنود", TabEnum.ITEMS)} /> */}
+      <Chip {...createChipProps("البنود", TabEnum.ITEMS_2)} />
       <Chip {...createChipProps("المعاملات")} />
       <Chip {...createChipProps("الحدول الزمني")} />
       <Chip {...createChipProps("المرفقات", TabEnum.ATTACHMENTS)} />
