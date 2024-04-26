@@ -20,6 +20,8 @@ import {
   contractItemsIntial,
   reducer,
 } from "../FormSections/ContractItems/reducer";
+import { DbOptionType } from "../../../../types/other/DbOptionType";
+import { Client } from "../../../../types/Clients";
 
 // use contractT because back-end dont return all contract data in first function we may tell him and update it.
 type contractT = {
@@ -143,10 +145,11 @@ type PropsType = {
 export type ContractUse = {
   branches?: Branch[];
   brokers?: Broker[];
+  client?: Client[];
   contractType?: ContractType[];
   employees?: EmployeeType[];
   management?: Management[];
-  attachments_types?: ContractType[];
+  attachments_types?: DbOptionType[];
 };
 
 export default ContractDetailsContextProvider;

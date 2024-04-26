@@ -46,7 +46,8 @@ export default function CreateAttachmentDialog(props: PropsType) {
 
   const SetAttatchmentFileTypesArray = async () => {
     let useData = await getUseData();
-    setAttatchmentFileTypes(useData.attachments_types);
+    if (useData.attachments_types)
+      setAttatchmentFileTypes(useData.attachments_types);
   };
 
   const handleCreateAttatcmentTransaction = handleSubmit((data) => {
@@ -73,7 +74,9 @@ export default function CreateAttachmentDialog(props: PropsType) {
         props.handleClose();
       })
       .catch((err) => {
-        enqueueSnackbar(err?.response?.data?.message ?? "تعذر في الحفظ", { variant: "error" });
+        enqueueSnackbar(err?.response?.data?.message ?? "تعذر في الحفظ", {
+          variant: "error",
+        });
       })
       .finally(() => {
         setLoading(false);

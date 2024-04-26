@@ -4,6 +4,7 @@ import { ContractType } from "./ContractType";
 
 export type TansactionAttachmentType = {
   id: number;
+  name?: string;
   processings_contract_sub_item_id: number;
   contract_attachment_type_id: number;
   description: string;
@@ -12,6 +13,17 @@ export type TansactionAttachmentType = {
   media?: Media[];
   attachment_type?: DbOptionType;
 };
+
+export interface TansactionReplyAttachmentType {
+  id: number;
+  comments_processing_contract_sub_item_id: number;
+  contract_attachment_type_id?: number;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  media: Media[];
+  attachment_type?: DbOptionType;
+}
 export type TransactionComment = {
   comment: string;
   created_at: string;
@@ -20,6 +32,7 @@ export type TransactionComment = {
   note: string;
   processing_contract_sub_item_id: number;
   updated_at: string;
+  attachment?: TansactionReplyAttachmentType[];
 };
 export type TransactionType = {
   id: number;
@@ -30,7 +43,8 @@ export type TransactionType = {
   receiver: string;
   created_at: string;
   updated_at: string;
-  attachment: TansactionAttachmentType[];
+  attachment_type?: TansactionAttachmentType[];
+  attachment?: TansactionAttachmentType[];
   comments_count?: number;
   comments?: TransactionComment[];
   system_logs?: DbOptionType[];

@@ -12,6 +12,10 @@ function ItemDetails({ item }: PropsType) {
     undefined | ContractSubItem
   >(undefined);
 
+  const subItemToRender = item.contract_sub_items?.find(
+    ({ id }) => id === currentSubItem?.id
+  );
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} lg={3}>
@@ -19,6 +23,7 @@ function ItemDetails({ item }: PropsType) {
           <Stack spacing={0.5} component={Paper} bgcolor={"background.default"}>
             {item.contract_sub_items.map((subItem) => (
               <Button
+                key={subItem.id}
                 size="large"
                 sx={{ justifyContent: "start", py: 1.5 }}
                 variant={
@@ -34,7 +39,7 @@ function ItemDetails({ item }: PropsType) {
         )}
       </Grid>
       <Grid item xs={12} lg={9}>
-        {currentSubItem && <TabsSection subItem={currentSubItem} />}
+        {subItemToRender && <TabsSection subItem={subItemToRender} />}
       </Grid>
     </Grid>
   );

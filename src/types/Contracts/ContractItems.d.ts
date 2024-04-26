@@ -2,6 +2,7 @@ import { EmployeeType } from "../Employee";
 import { Media } from "../Media";
 import { Employee } from "../User/user";
 import { DbOptionType } from "../other/DbOptionType";
+import { TransactionType } from "./ContractTransactionAttachment";
 
 export interface SystemLogType {
   created_at: string;

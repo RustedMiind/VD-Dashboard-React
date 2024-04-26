@@ -15,6 +15,7 @@ import "./TopCards.scss";
 import { ContractDetailsContext } from "..";
 import { useUser } from "../../../../contexts/user/user";
 import { EmployeeType } from "../../../../types";
+import { TransactionType } from "../../../../types/Contracts/ContractTransactionAttachment";
 
 interface Item {
   id: number;
@@ -39,6 +40,13 @@ export default function TopCards() {
   const { contract, refreshToggler } = useContext(ContractDetailsContext);
   const { user } = useUser();
 
+  const allProcessing: TransactionType[] = [];
+  contract?.contract_items?.forEach((item) => {
+    item.contract_sub_items?.forEach((subitem) => {
+      if (subitem.processing) allProcessing.push(...subitem.processing);
+    });
+  });
+
   const workStaff = useMemo(() => {
     const staff: EmployeeType[] = [];
     contract?.contract_items?.forEach((item) => {
@@ -62,7 +70,7 @@ export default function TopCards() {
           ) {
             transactions.push({
               id: transaction.id,
-              type: transaction.attachment_type[0].name,
+              type: transaction.attachment_type[0].name || "",
             });
           }
         });
@@ -421,9 +429,9 @@ export default function TopCards() {
             scrollbarWidth: "thin",
           }}
         >
-          {transactionNumbers?.map((item) => {
+          {allProcessing?.map((processing) => {
             return (
-              <Box key={item.id} display={"flex"} marginY={2}>
+              <Box key={processing.id} display={"flex"} marginY={2}>
                 <Typography
                   color={"primary.main"}
                   variant="body2"
@@ -431,7 +439,7 @@ export default function TopCards() {
                   fontWeight={500}
                   marginX={1}
                 >
-                  {item.type}
+                  {processing.receiver}
                 </Typography>
                 <Typography
                   color={"secondary.main"}
@@ -439,7 +447,7 @@ export default function TopCards() {
                   fontSize={14}
                   fontWeight={500}
                 >
-                  {item.id}
+                  {processing.id}
                 </Typography>
               </Box>
             );
