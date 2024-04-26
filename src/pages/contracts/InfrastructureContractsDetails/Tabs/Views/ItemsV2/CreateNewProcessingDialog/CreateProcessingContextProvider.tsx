@@ -3,6 +3,11 @@ import { TransactionType } from "../../../../../../../types/Contracts/ContractTr
 import { useSnackbar } from "notistack";
 import { getContractProcessing } from "../../../../../../../methods/api/contracts/getProcessing";
 
+let onSubmitSucess: (() => void) | undefined;
+const setOnSubmitSucess = (cb: () => void) => {
+  onSubmitSucess = cb;
+};
+
 export type OpenCreateProcessingContextType = {
   step: number;
   processing?: TransactionType;
@@ -12,6 +17,7 @@ export type OpenCreateProcessingContextType = {
   toNextStep: () => void;
   createDialogOpened: boolean;
   contractSubItemId?: number;
+  OnSubmitSucess: (cb: () => void) => void;
   openUpdateDialog: ({
     step,
     processingId,
@@ -29,6 +35,7 @@ export const OpenCreateProcessingContext =
     toNextStep() {},
     closeDialog() {},
     createDialogOpened: false,
+    OnSubmitSucess: setOnSubmitSucess,
   });
 
 function OpenCreateProcessingContextProvider({
@@ -87,12 +94,14 @@ function OpenCreateProcessingContextProvider({
             setDialogOpen(true);
           });
         },
+        OnSubmitSucess: setOnSubmitSucess,
         toNextStep,
         step: step,
         processing: processing,
         closeDialog() {
           setDialogOpen(false);
           setProcessing(undefined);
+          onSubmitSucess?.();
         },
         contractSubItemId,
       }}

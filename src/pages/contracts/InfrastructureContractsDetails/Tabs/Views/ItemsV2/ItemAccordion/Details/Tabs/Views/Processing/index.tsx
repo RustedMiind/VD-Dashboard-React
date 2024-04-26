@@ -3,20 +3,27 @@ import { TabViewProps } from "..";
 import ProcessingCard from "./ProcessingCard";
 import { useContext } from "react";
 import { OpenCreateProcessingContext } from "../../../../../CreateNewProcessingDialog/CreateProcessingContextProvider";
+import { ContractItemContext } from "../../../../ItemContext";
+import AddIcon from "@mui/icons-material/Add";
 
 function ProcessingView({ subItem }: TabViewProps) {
-  const OpenCreateProcessingContextData = useContext(
+  const { openCreateDialog, OnSubmitSucess } = useContext(
     OpenCreateProcessingContext
   );
-  const { openCreateDialog } = OpenCreateProcessingContextData;
+  const { fetchItemDetails } = useContext(ContractItemContext);
 
-  console.log("context", OpenCreateProcessingContextData);
   return (
-    <Stack>
+    <Stack spacing={1}>
       <Stack alignItems={"end"}>
         <Button
+          startIcon={<AddIcon />}
           variant="contained"
-          onClick={() => openCreateDialog(subItem.id)}
+          onClick={() => {
+            openCreateDialog(subItem.id);
+            OnSubmitSucess(() => {
+              fetchItemDetails?.({ optimized: false, soft: true });
+            });
+          }}
         >
           اضافة معاملة
         </Button>

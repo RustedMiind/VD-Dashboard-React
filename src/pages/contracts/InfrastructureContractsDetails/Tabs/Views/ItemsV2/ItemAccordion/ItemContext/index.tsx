@@ -32,8 +32,9 @@ function ContractItemContextProvider({ contractItemId, children }: PropsType) {
       const {
         data: { contract_item },
       } = await getContractItem(contractItemId);
+      if (!contract_item) throw new Error("no item fetched");
       setItem(contract_item);
-      console.log("fetch ok");
+      console.log("fetch ok", contract_item, "prevState: ", item);
     } catch (error) {
       enqueueSnackbar("تعذر في تحميل بيانات البند", { variant: "error" });
 
@@ -42,6 +43,8 @@ function ContractItemContextProvider({ contractItemId, children }: PropsType) {
       setIsLoading(false);
     }
   }
+
+  console.log("didUpdate context", item);
 
   useEffect(() => {
     if (createDialogOpened === false && item) {

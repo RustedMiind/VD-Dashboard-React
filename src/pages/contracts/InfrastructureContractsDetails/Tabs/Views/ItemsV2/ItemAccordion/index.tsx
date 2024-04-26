@@ -32,48 +32,55 @@ const LabelAndValue = ({ label, value }: { label: string; value?: string }) => (
   </AddLabelToEl>
 );
 
-function ItemAccordion({ item }: PropsType) {
+function ItemAccordion({ item: parentItem }: PropsType) {
   const [expanded, setExpanded] = useState(false);
 
-  const {
-    fetchItemDetails,
-    item: detailedItem,
-    isLoading,
-  } = useContext(ContractItemContext);
+  const { fetchItemDetails, item, isLoading } = useContext(ContractItemContext);
   useEffect(() => {
     if (expanded) fetchItemDetails?.({ optimized: true, soft: false });
   }, [expanded]);
 
-  console.log("item rerendered", item);
+  console.log("item rerendered", parentItem);
 
   return (
     <CustomAccordion
-      expanded={Boolean(expanded && detailedItem)}
+      expanded={Boolean(expanded && parentItem)}
       accordionSummaryProps={{
         children: (
           <Box py={1} width={1}>
-            <Grid container spacing={1} alignItems={"center"} justifyContent={'space-between'}>
+            <Grid
+              container
+              spacing={1}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
               <GridItem onClick={() => setExpanded(!expanded)}>
                 <Box>
                   <Typography variant="h6" fontWeight={700}>
-                    {item.name}
+                    {parentItem.name}
                   </Typography>
                   <Typography variant="subtitle2" color={"info.main"}>
-                    عدد البنود الفرعية : {item.contract_sub_items?.length || 0}
+                    عدد البنود الفرعية :{" "}
+                    {parentItem.contract_sub_items?.length || 0}
                   </Typography>
                 </Box>
               </GridItem>
               <GridItem>
                 <Stack direction={"row"}>
-                  <LabelAndValue label="المسؤول" value={item.manager?.name} />
+                  <LabelAndValue
+                    label="المسؤول"
+                    value={parentItem.manager?.name}
+                  />
                   <LabelAndValue
                     label="تاريخ الانتهاء"
-                    value={new Date(item.end_date??'').toLocaleDateString("en-GB")}
+                    value={new Date(
+                      parentItem.end_date ?? ""
+                    ).toLocaleDateString("en-GB")}
                   />
                 </Stack>
               </GridItem>
               <GridItem>
-                <ItemActions item={item} />
+                <ItemActions item={parentItem} />
               </GridItem>
             </Grid>
             {isLoading && <LinearProgress color="secondary" />}
@@ -81,7 +88,7 @@ function ItemAccordion({ item }: PropsType) {
         ),
       }}
     >
-      {detailedItem ? <ItemDetails item={detailedItem} /> : <></>}
+      {item ? <ItemDetails item={item} /> : <></>}
     </CustomAccordion>
   );
 }

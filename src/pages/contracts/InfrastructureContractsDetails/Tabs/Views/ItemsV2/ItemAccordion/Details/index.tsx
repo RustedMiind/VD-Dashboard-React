@@ -12,6 +12,10 @@ function ItemDetails({ item }: PropsType) {
     undefined | ContractSubItem
   >(undefined);
 
+  const subItemToRender = item.contract_sub_items?.find(
+    ({ id }) => id === currentSubItem?.id
+  );
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} lg={3}>
@@ -35,7 +39,7 @@ function ItemDetails({ item }: PropsType) {
         )}
       </Grid>
       <Grid item xs={12} lg={9}>
-        {currentSubItem && <TabsSection subItem={currentSubItem} />}
+        {subItemToRender && <TabsSection subItem={subItemToRender} />}
       </Grid>
     </Grid>
   );
