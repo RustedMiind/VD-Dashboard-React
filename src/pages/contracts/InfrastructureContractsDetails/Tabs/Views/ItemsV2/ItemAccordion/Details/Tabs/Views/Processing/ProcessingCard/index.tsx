@@ -9,8 +9,11 @@ import {
 import AddLabelToEl from "../../../../../../../../../../../../components/AddLabelToEl";
 import { TransactionType } from "../../../../../../../../../../../../types/Contracts/ContractTransactionAttachment";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import InsertCommentIcon from "@mui/icons-material/InsertComment";
 import { useContext } from "react";
 import { OpenCreateProcessingContext } from "../../../../../../CreateNewProcessingDialog/CreateProcessingContextProvider";
+import { CreateProcessingReplyContext } from "../../../../../../ReplyExistingProcessing/CreateProcessingReplyContext";
+import { ContractItemContext } from "../../../../../ItemContext";
 
 const GridItem = (props: GridProps) => (
   <Grid item xl={12 / 9} lg={3} md={6} xs={12} {...props} />
@@ -38,8 +41,11 @@ const DetailsItem = ({
 );
 
 function ProcessingCard({ processing }: PropsType) {
+  const { fetchItemDetails } = useContext(ContractItemContext);
   const { openUpdateDialog } = useContext(OpenCreateProcessingContext);
-
+  const { openCreateDialog, OnSubmitSucess } = useContext(
+    CreateProcessingReplyContext
+  );
   return (
     <Paper sx={{ width: 1, p: 2, bgcolor: "background.default" }} elevation={2}>
       <Grid container spacing={1}>
@@ -66,6 +72,16 @@ function ProcessingCard({ processing }: PropsType) {
             }}
           >
             <FileDownloadIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              openCreateDialog(processing.id);
+              OnSubmitSucess(() => {
+                fetchItemDetails?.({ optimized: false, soft: true });
+              });
+            }}
+          >
+            <InsertCommentIcon />
           </IconButton>
         </DetailsItem>
         <DetailsItem
