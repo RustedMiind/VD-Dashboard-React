@@ -14,7 +14,6 @@ function ItemsV2() {
   return (
     <>
       <OpenCreateProcessingContextProvider>
-        <CreateNewProcessingDialog />
         <Stack spacing={2}>
           <Stack spacing={2}>
             {contract?.contract_items?.map((item) => (

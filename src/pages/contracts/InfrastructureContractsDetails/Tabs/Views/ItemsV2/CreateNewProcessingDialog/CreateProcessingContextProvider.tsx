@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import { TransactionType } from "../../../../../../../types/Contracts/ContractTransactionAttachment";
 import { useSnackbar } from "notistack";
 import { getContractProcessing } from "../../../../../../../methods/api/contracts/getProcessing";
+import CreateNewProcessingDialog from ".";
 
 let onSubmitSucess: (() => void) | undefined;
 const setOnSubmitSucess = (cb: () => void) => {
@@ -106,6 +107,7 @@ function OpenCreateProcessingContextProvider({
         contractSubItemId,
       }}
     >
+      <CreateNewProcessingDialog />
       {children}
     </OpenCreateProcessingContext.Provider>
   );
