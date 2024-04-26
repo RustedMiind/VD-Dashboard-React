@@ -7,14 +7,18 @@ import {
 } from "@mui/material";
 import { TabViewProps } from "..";
 import { Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DoneAndReminder from "../../../../../../../../components/DoneAndReminder";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import EditRaioDialog from "./EditDialog";
+import { useUser } from "../../../../../../../../../../../contexts/user/user";
+import { ContractDetailsContext } from "../../../../../../../..";
+import { ContractItemContext } from "../../../../ItemContext";
 
 function PercentageView({ subItem }: TabViewProps) {
   const [openDialog, setOpenDialog] = useState(false);
-  // const { user } = useUser();
+  const { contract, refreshToggler } = useContext(ContractDetailsContext);
+  const { user } = useUser();
 
   const [ratio, setRatio] = useState(subItem.achievement_percentage);
   useEffect(() => {
@@ -70,15 +74,16 @@ function PercentageView({ subItem }: TabViewProps) {
         </Box>
       </Grid>
       <Grid item xs={2}>
-        {/* {user?.employee_id === contractSubItem?.employee_id && ( */}
-        <Button
-          variant="contained"
-          startIcon={<SettingsOutlinedIcon />}
-          onClick={() => setOpenDialog(true)}
-        >
-          تعديل
-        </Button>
-        {/* )} */}
+        {(user?.employee_id === subItem?.employee_id ||
+          user?.employee_id === contract?.employee_id) && (
+          <Button
+            variant="contained"
+            startIcon={<SettingsOutlinedIcon />}
+            onClick={() => setOpenDialog(true)}
+          >
+            تعديل
+          </Button>
+        )}
       </Grid>
       <EditRaioDialog
         open={openDialog}
