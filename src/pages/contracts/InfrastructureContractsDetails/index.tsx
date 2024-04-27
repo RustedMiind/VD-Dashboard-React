@@ -44,7 +44,7 @@ export default function InfrastructureContractsDetails() {
   function getContract(soft?: boolean) {
     if (!soft) setStatus("loading");
     axios
-      .get<{ data: Contract }>(Api(`employee/contract-details/${id}`))
+      .get<{ data: Contract }>(Api(`employee/contract/${id}`))
       .then(({ data }) => {
         setStatus("loaded");
         setContract(data.data);
