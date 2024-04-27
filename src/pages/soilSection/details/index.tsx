@@ -65,6 +65,8 @@ function SoilDetails() {
         setItems(arr);
         setReportFiles(res.data.file_visit);
         setIncomingFiles(res.data.incoming_fills);
+        setVisitFiles(res.data.file_visit);
+        setTaskFiles(res.data.file_task);
       })
       .catch((err) => {});
   }
