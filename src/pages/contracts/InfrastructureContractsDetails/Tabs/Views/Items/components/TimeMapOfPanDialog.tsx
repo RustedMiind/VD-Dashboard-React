@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { Box, Grid, LinearProgress, Stack, Typography } from "@mui/material";
+import { TransactionContext } from "../context/TransactionContext";
 
 export default function TimeMapOfPanDialog({
   open,
@@ -11,6 +12,7 @@ export default function TimeMapOfPanDialog({
   endDate,
 }: TimeMapOfPanDialog) {
   // define component variables and state
+  const TransactionContextData = React.useContext(TransactionContext);
 
   // declaration helper functions
   const handleClose = () => {
@@ -31,7 +33,7 @@ export default function TimeMapOfPanDialog({
           },
         }}
       >
-        <DialogContent sx={{bgcolor:"background.default"}}>
+        <DialogContent sx={{ bgcolor: "background.default" }}>
           <Stack
             bgcolor={"background.default"}
             padding={2}
@@ -47,7 +49,11 @@ export default function TimeMapOfPanDialog({
               padding={1}
               borderRadius={"12px"}
             >
-              <Grid item xs={12} id="LProgressBar">
+              <Grid
+                item
+                xs={12}
+                //id="LProgressBar"
+              >
                 <Typography
                   fontWeight={700}
                   fontSize={"1rem"}
@@ -69,9 +75,24 @@ export default function TimeMapOfPanDialog({
                 >
                   <LinearProgress
                     variant="determinate"
-                    value={60}
-                    style={{
+                    value={
+                      TransactionContextData?.currentMainItem
+                        ?.achievement_percentage
+                    }
+                    sx={{
                       width: "100%",
+                      "&.MuiLinearProgress-root": {
+                        height: "30px",
+                        borderRadius: "21px",
+                        border: "1px solid #fff",
+                        backgroundColor: "#FDF0D9",
+                      },
+                      
+                      "&.MuiLinearProgress-root .MuiLinearProgress-bar": {
+                        background:
+                          "linear-gradient(263.01deg, #ffc860 -2.17%, #ff5f1e 99.77%)",
+                        borderRadius: "12px",
+                      },
                     }}
                   />
                   <Typography
@@ -84,7 +105,12 @@ export default function TimeMapOfPanDialog({
                     }}
                     variant="body2"
                   >
-                    المنفذ 60%
+                    المنفذ{" "}
+                    {
+                      TransactionContextData?.currentMainItem
+                        ?.achievement_percentage
+                    }
+                    %
                   </Typography>
                   <Typography
                     sx={{
@@ -119,7 +145,8 @@ export default function TimeMapOfPanDialog({
                     }}
                   >
                     <Typography fontWeight={400} variant="body2">
-                      بداية المشروع <b>{new Date(startDate).toLocaleDateString()}</b>
+                      بداية المشروع{" "}
+                      <b>{new Date(startDate).toLocaleDateString()}</b>
                     </Typography>
                   </Box>
                   <Box
@@ -132,7 +159,8 @@ export default function TimeMapOfPanDialog({
                     }}
                   >
                     <Typography fontWeight={400} variant="body2">
-                      نهاية المشروع <b>{new Date(endDate).toLocaleDateString()}</b>
+                      نهاية المشروع{" "}
+                      <b>{new Date(endDate).toLocaleDateString()}</b>
                     </Typography>
                   </Box>
                 </Box>

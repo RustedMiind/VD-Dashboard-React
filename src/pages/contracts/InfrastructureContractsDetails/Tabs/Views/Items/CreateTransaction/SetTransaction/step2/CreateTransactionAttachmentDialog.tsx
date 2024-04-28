@@ -49,7 +49,8 @@ function CreateTransactionAttachmentFileDialog(props: PropsType) {
 
   const SetAttatchmentFileTypesArray = async () => {
     let useData = await getUseData();
-    setAttatchmentFileTypes(useData.attachments_types);
+    if (useData.attachments_types)
+      setAttatchmentFileTypes(useData.attachments_types);
   };
 
   const handleCreateAttatcmentTransaction = handleSubmit((data) => {

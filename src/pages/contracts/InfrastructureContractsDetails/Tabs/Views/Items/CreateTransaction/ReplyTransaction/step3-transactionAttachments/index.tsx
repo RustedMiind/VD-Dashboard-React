@@ -40,7 +40,7 @@ export default function ReplyTransactionTab3() {
         return res.data;
       });
     console.log("response107", response);
-    setTransactionsAttachments(response.comment_processing.attachment);
+    // setTransactionsAttachments(response.comment_processing.attachment);
     setLoading(false);
   };
 

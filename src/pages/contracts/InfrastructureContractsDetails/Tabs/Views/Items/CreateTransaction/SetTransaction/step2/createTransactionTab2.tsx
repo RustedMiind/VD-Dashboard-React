@@ -37,7 +37,7 @@ export default function CreateTransactionTab2() {
       .then((res) => {
         return res.data;
       });
-    setTransactionsAttachments(response.processing.attachment);
+    // setTransactionsAttachments(response.processing.attachment);
     setLoading(false);
   };
   transactionCxtData.refresh = refreshTransactionData;

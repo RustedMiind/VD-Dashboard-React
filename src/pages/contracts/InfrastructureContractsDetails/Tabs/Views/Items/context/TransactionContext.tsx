@@ -16,6 +16,7 @@ export interface TransactionContextType {
   open: boolean;
   handleOpen: () => void;
   handleClose: () => void;
+  subItem?: ContractSubItem;
 }
 
 export const TransactionContext = createContext<TransactionContextType>({
@@ -37,9 +38,10 @@ export function TransactionContextProvider({
   children: React.ReactNode;
 }) {
   //TODO::declare and define component state and variables
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  const [subItem, setSubItem] = useState<ContractSubItem | undefined>();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const transactions: TransactionType[] = subItem?.processing || [];
 
   // TODO::define helpers method
   // * This method will be refresh method in context :)
@@ -50,7 +52,7 @@ export function TransactionContextProvider({
       const { data } = await axios.get<{
         contract_sub_item: ContractSubItem;
       }>(Api(`employee/contract/items/show-subitem/${id}`));
-      setTransactions(data.contract_sub_item.processing || []);
+      setSubItem(data.contract_sub_item);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -64,6 +66,7 @@ export function TransactionContextProvider({
     <TransactionContext.Provider
       value={{
         transactions,
+        subItem: subItem,
         loading,
         refresh: (id) => {
           if (id) getTransactionData(id);

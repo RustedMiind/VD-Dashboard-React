@@ -17,23 +17,21 @@ export default function ContractAddUsersSelect({
   setValue: React.Dispatch<React.SetStateAction<userT[]>>;
 }) {
   return (
-    <Stack spacing={3} sx={{ width: "100%", padding: "0.2rem" }}>
-      <Autocomplete
-        disabled={disabled}
-        multiple
-        id="tags-outlined"
-        options={users}
-        onChange={(e, newVal) => {
-          setValue(newVal);
-          return "";
-        }}
-        value={selectedUsers}
-        getOptionLabel={(option) => option.full_name}
-        filterSelectedOptions
-        renderInput={(params) => (
-          <TextField {...params} placeholder="اضف مستخدم" />
-        )}
-      />
-    </Stack>
+    <Autocomplete
+      disabled={disabled}
+      multiple
+      id="tags-outlined"
+      options={users}
+      onChange={(e, newVal) => {
+        setValue(newVal);
+        return "";
+      }}
+      value={selectedUsers}
+      getOptionLabel={(option) => option.full_name}
+      filterSelectedOptions
+      renderInput={(params) => (
+        <TextField {...params} placeholder="اضف مستخدم" />
+      )}
+    />
   );
 }

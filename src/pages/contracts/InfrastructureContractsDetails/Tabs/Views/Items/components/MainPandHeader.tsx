@@ -22,6 +22,7 @@ import RoundedIconButton from "../../../../../../../components/RoundedIconButton
 import { ContractSubItem } from "../../../../../../../types/Contracts/ContractItems";
 import { CreateTransactionContext } from "../context/CreateTransactionContext";
 import NotificationBtn from "./NotificationBtn";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 export default function MainPandHeader(props: MainPandHeaderProps) {
   // define our variables
@@ -144,7 +145,8 @@ export default function MainPandHeader(props: MainPandHeaderProps) {
               onClick={() => handleBtnClick(MainPandBtns.LOCATION)}
               color="secondary"
             >
-              <LocationOnIcon />
+              <AccessTimeIcon />
+              {/* <LocationOnIcon /> */}
             </RoundedIconButton>
             <RoundedIconButton
               onClick={() => handleBtnClick(MainPandBtns.PRINTER)}

@@ -467,7 +467,7 @@ export default function AddRequest() {
               {...calculationForm.register("total_price", {
                 valueAsNumber: true,
                 ...calculationFormInputCommonProps,
-                disabled: true,
+                // disabled: true,
               })}
             />
           </GridItem>

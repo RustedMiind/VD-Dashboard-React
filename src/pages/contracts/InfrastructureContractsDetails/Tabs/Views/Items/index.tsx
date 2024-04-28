@@ -28,7 +28,7 @@ export default function ContractItemsDetails() {
             currentMainItem={mainItem}
           >
             <ReplyTransactionContextProvider>
-              <MainPand contractData={mainItem} />
+              <MainPand contractItem={mainItem} />
             </ReplyTransactionContextProvider>
           </TransactionContextProvider>
         ))}

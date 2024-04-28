@@ -15,7 +15,7 @@ import { ContractPayment } from "../../../../../types";
 import { ContractDetailsContext } from "../../ContractDetailsContext";
 import { Api } from "../../../../../constants";
 import axios from "axios";
-import SetDialog from "./SetDialog";
+import SetDialog, { getOptions } from "./SetDialog";
 // Icons
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -66,6 +66,8 @@ function Payments() {
 
   const ContractDetails = useContext(ContractDetailsContext);
 
+  const options = getOptions(ContractDetails.contract);
+
   return (
     <>
       {dialogMode === "add" ? (
@@ -112,7 +114,13 @@ function Payments() {
                       <TableCell>{payment.name}</TableCell>
                       <TableCell>{payment.period}</TableCell>
                       <TableCell>{payment.amount}</TableCell>
-                      <TableCell>{payment.status_name}</TableCell>
+                      <TableCell>
+                        {
+                          options.find(
+                            (option) => option.value === payment.status
+                          )?.name
+                        }
+                      </TableCell>
                       <TableCell>
                         <IconButton
                           size="small"

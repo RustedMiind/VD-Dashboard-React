@@ -20,7 +20,14 @@ import {
   contractItemsIntial,
   reducer,
 } from "../FormSections/ContractItems/reducer";
+import { DbOptionType } from "../../../../types/other/DbOptionType";
+import { Client } from "../../../../types/Clients";
 
+// use contractT because back-end dont return all contract data in first function we may tell him and update it.
+type contractT = {
+  contract_type: number;
+  id: number;
+};
 export const ContractDetailsContext = createContext<{
   contract?: Contract;
   use?: ContractUse;
@@ -50,6 +57,10 @@ function ContractDetailsContextProvider({ children }: PropsType) {
     reducer,
     contractItemsIntial
   );
+  const [createdContract, setCreatedContract] = useState<contractT>({
+    contract_type: 0,
+    id: 0,
+  });
 
   // useEffect(() => {
   //   if (id) {
@@ -65,9 +76,10 @@ function ContractDetailsContextProvider({ children }: PropsType) {
   //   }
   // }, [id]);
 
-  useEffect(getContract, []);
+  useEffect(getContract, [id]);
 
   function getContract() {
+    console.log("refresh contract executed");
     if (id)
       axios
         .get<{ data: Contract }>(Api(`employee/contract/${id}`))
@@ -104,6 +116,9 @@ function ContractDetailsContextProvider({ children }: PropsType) {
         });
     });
   }
+  function updateCreatedContractData(data: contractT) {
+    setCreatedContract(data);
+  }
 
   return (
     <ContractDetailsContext.Provider
@@ -130,10 +145,11 @@ type PropsType = {
 export type ContractUse = {
   branches?: Branch[];
   brokers?: Broker[];
+  client?: Client[];
   contractType?: ContractType[];
   employees?: EmployeeType[];
   management?: Management[];
-  attachments_types?: ContractType[];
+  attachments_types?: DbOptionType[];
 };
 
 export default ContractDetailsContextProvider;

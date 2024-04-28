@@ -43,7 +43,9 @@ function a11yProps(index: number) {
 export type TabType = {
   index: number;
   label: string;
+  hidden?: boolean;
   children?: React.ReactNode;
+  exist?: boolean;
 };
 
 export default function InternalTabs({
@@ -63,7 +65,6 @@ export default function InternalTabs({
     setOpenCreateOrEditTransactionDialog(true);
   };
 
-  console.log("InternalTabs");
   return (
     <Box sx={{ width: "100%" }}>
       <Box
@@ -80,19 +81,8 @@ export default function InternalTabs({
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          {TabsHeaders.map((ele) => (
-            <Tab
-              key={`tab_${ele.index}`}
-              label={ele.label}
-              {...a11yProps(ele.index)}
-              sx={{
-                backgroundColor:
-                  ele.index != value ? "#fff" : "background.paper",
-                fontSize: "1rem",
-                fontWeight: 600,
-                paddingX: 1,
-              }}
-            />
+          {TabsHeaders.filter(({ exist }) => exist).map((ele) => (
+            <Tab key={ele.index} label={ele.label} {...a11yProps(ele.index)} />
           ))}
         </Tabs>
         {value == 0 && (
@@ -110,7 +100,7 @@ export default function InternalTabs({
         setOpen={setOpenCreateOrEditTransactionDialog}
         setActiveSubItemId={setActiveSubItemId}
       />
-      {TabsHeaders.map((ele) => (
+      {TabsHeaders.filter(({ exist }) => exist).map((ele) => (
         <CustomTabPanel
           key={`$CT_${ele.index}`}
           value={value}
