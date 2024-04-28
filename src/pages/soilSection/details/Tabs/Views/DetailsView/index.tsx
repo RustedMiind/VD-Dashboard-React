@@ -50,7 +50,7 @@ function DetailsView(): JSX.Element {
           </NotPrintableTableCell>
 
           <Grid container rowSpacing={4} columnSpacing={2}>
-            <InfoItem label="رقم الطلب" value={soilData?.id} />
+            <InfoItem label="رقم الطلب" value={soilData?.serial_number} />
             <InfoItem
               label="تاريخ الطلب"
               value={formatDate(soilData?.created_at)}
