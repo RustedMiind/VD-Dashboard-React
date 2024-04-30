@@ -3,7 +3,7 @@ export enum TaskType {
   SOIL = "soil-request",
   CLIENT_REQUEST = "client-request",
   EMPLOYEE_REQUEST = "employee-request",
-  CONTRACTS = "contracts",
+  CONTRACTS = "contract",
 }
 
 export function createTaskType(type: TaskType): {
