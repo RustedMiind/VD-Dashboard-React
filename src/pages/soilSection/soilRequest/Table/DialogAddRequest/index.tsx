@@ -51,7 +51,7 @@ export default function DialogAddRequest({ open, closeDialog }: PropsType) {
         <Box>
           <Typography>اختر نوع الطلب</Typography>
         </Box>
-        <RadioGroup name="use-radio-group" value={""}>
+        <RadioGroup name="use-radio-group">
           <Box sx={{ mb: 1 }}>
             <FormControlLabel
               control={
