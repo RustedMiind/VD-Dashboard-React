@@ -3,6 +3,7 @@ export enum TaskType {
   SOIL = "soil-request",
   CLIENT_REQUEST = "client-request",
   EMPLOYEE_REQUEST = "employee-request",
+  CONTRACTS = "contracts",
 }
 
 export function createTaskType(type: TaskType): {
@@ -36,6 +37,13 @@ export function createTaskType(type: TaskType): {
         name: "طلبات الموظفين",
         route(path) {
           return `/react/employees/requests/${path}`;
+        },
+      };
+    case TaskType.CONTRACTS:
+      return {
+        name: "العقود",
+        route(path) {
+          return `/react/employees/contracts/details/${path}`;
         },
       };
     default:
