@@ -7,7 +7,7 @@ import {
   Polygon,
 } from "react-leaflet";
 import { Icon, LeafletMouseEvent } from "leaflet";
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { normalizeLongitude } from "../../../../../methods/normalizeLongitude";
 
@@ -28,16 +28,18 @@ export function ShowMap({
   lat,
   long,
 }: PropsType) {
-  let centerLat = lat,
-    centerLong = long;
-
+  console.log("Center ", lat, long);
+  let _centerLat = lat,
+    _centerLong = long;
   if (!!positionClick.length) {
-    positionClick.forEach(([lat, lng]) => {
-      centerLat += lat;
-      centerLong += lng;
-    });
-    centerLat /= positionClick.length;
-    centerLong /= positionClick.length;
+    let n = positionClick.length;
+    for (let i = 0; i < n; i++) {
+      let _position = positionClick[i];
+      _centerLat += _position[0];
+      _centerLong += _position[1];
+    }
+    _centerLat /= positionClick.length;
+    _centerLong /= positionClick.length;
   }
 
   function createPolylines() {
@@ -64,7 +66,7 @@ export function ShowMap({
   const handleResetClick = () => {
     setPositionClick([]);
   };
-
+  console.log("Breakpoint positionClick", positionClick);
   return (
     <Stack
       sx={{
@@ -74,8 +76,8 @@ export function ShowMap({
       }}
     >
       <MapContainer
-        center={[centerLat, centerLong]}
-        zoom={3}
+        center={[lat, long]}
+        zoom={15}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%", position: "relative" }}
       >

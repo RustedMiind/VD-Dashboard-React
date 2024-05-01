@@ -239,20 +239,24 @@ const ProjectWorkDetails = (props: PropsType) => {
         application: editedData?.application == 1 ? true : false,
         electronicSerive: editedData?.online_service == 1 ? true : false,
       });
-      let str = editedData?.map?.slice(2, -3);
-      let arr = str?.toString().split("},{");
-      let positions: [number, number][] = [];
-      // Temp
-      if (Array.isArray(arr)) {
-        for (let i = 0; i < arr.length; i++) {
-          let cordin = arr[i].split(",");
-          let temp: [number, number] = [
-            +cordin[0].split(":")[1],
-            +cordin[1].split(":")[1],
-          ];
-          positions.push(temp);
+      // let  = (JSON.parse(obj?.map?.map || "[]") as Position[])
+      console.log("ASD editedData?.map", editedData?.map);
+      if (editedData?.map && editedData?.map?.length > 4) {
+        let str = editedData?.map?.slice(2, -3);
+        let arr = str?.toString().split("},{");
+        let positions: [number, number][] = [];
+        // Temp
+        if (Array.isArray(arr)) {
+          for (let i = 0; i < arr.length; i++) {
+            let cordin = arr[i].split(",");
+            let temp: [number, number] = [
+              +cordin[0].split(":")[1],
+              +cordin[1].split(":")[1],
+            ];
+            positions.push(temp);
+          }
+          setLocationsPositions(positions);
         }
-        setLocationsPositions(positions);
       }
     }
   }, [isEdit, editedData]);
@@ -643,12 +647,25 @@ const ProjectWorkDetails = (props: PropsType) => {
         {/* Map */}
         <Box sx={{ marginTop: "3rem" }}>
           <Typography variant="h5">تحديد الموقع على الخريطة</Typography>
-          <ShowMap
-            positionClick={locationsPositions}
-            setPositionClick={setLocationsPositions}
-            lat={21.036}
-            long={34.2048}
-          />
+          {(!editedData?.id ||
+            (locationsPositions.length ==0)) && (
+            <ShowMap
+              positionClick={locationsPositions}
+              setPositionClick={setLocationsPositions}
+              lat={21.036}
+              long={34.2048}
+            />
+          )}
+          {editedData?.id && locationsPositions.length > 0 && (
+            <>
+              <ShowMap
+                positionClick={locationsPositions}
+                setPositionClick={setLocationsPositions}
+                lat={locationsPositions[0][0]}
+                long={locationsPositions[0][1]}
+              />
+            </>
+          )}
         </Box>
         {/* Save */}
         <Box
