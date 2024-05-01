@@ -18,6 +18,8 @@ export interface Contract {
   end_date: string; // Resolve conflict in property names
   card_image?: string; // Optional property
   details: string;
+  owner: string;
+  engineering_office: string;
   type: ContractType; // Resolving property type conflict
   amount: number; // Adjusting type to handle both string and number
   contract_type_id: number;
