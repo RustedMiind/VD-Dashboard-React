@@ -76,6 +76,12 @@ function DetailsView(): JSX.Element {
               label="عدد الجسات"
               value={soilData?.soil_order?.number_bodies}
             />
+            <InfoItem label="الاجمالي" value={soilData?.soil_order?.price} />
+            <InfoItem
+              label="الاجمالي المطلوب"
+              value={soilData?.soil_order?.total_price}
+            />
+
             <InfoItem
               label="طريقة السداد"
               value={soilData?.soil_order?.payment}

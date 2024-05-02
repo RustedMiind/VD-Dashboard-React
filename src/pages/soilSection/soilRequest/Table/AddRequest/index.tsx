@@ -166,6 +166,7 @@ export default function AddRequest() {
             bodies: data.number_bodies,
             depth: data.depth,
             price: data.price,
+            total_price: data.total_price,
           });
           setLocationFormData(formData);
 
@@ -237,7 +238,7 @@ export default function AddRequest() {
     const body = {
       area_id: currentMap?.soil_location_id,
       client_id: id,
-      depth: calculationPriceData?.depth,
+      depth: calculationForm.getValues("depth") ?? calculationPriceData?.depth,
       floor_id: locationFormData?.soilFloorId,
       lat: selectedPin?.[0],
       long: selectedPin?.[1],
@@ -250,9 +251,9 @@ export default function AddRequest() {
       )?.number_floors,
       order_type_id: locationFormData?.order_type_id,
       payment: "cash",
-      price: calculationPriceData?.price,
+      price: calculationForm.getValues("price") ?? calculationPriceData?.price,
       total_price:
-        calculationForm.getValues("bodies") ??
+        calculationForm.getValues("total_price") ??
         calculationPriceData?.total_price,
       image: images.filter((file) => file instanceof File),
     };

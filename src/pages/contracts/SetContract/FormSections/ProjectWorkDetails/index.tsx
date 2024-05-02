@@ -650,7 +650,8 @@ const ProjectWorkDetails = (props: PropsType) => {
         {/* Map */}
         <Box sx={{ marginTop: "3rem" }}>
           <Typography variant="h5">تحديد الموقع على الخريطة</Typography>
-          {(!editedData?.id || locationsPositions.length == 0) && (
+          {(!editedData?.id ||
+            (locationsPositions.length ==0)) && (
             <ShowMap
               positionClick={locationsPositions}
               setPositionClick={setLocationsPositions}
