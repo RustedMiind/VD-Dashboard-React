@@ -1,7 +1,6 @@
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -41,10 +40,9 @@ import {
 } from "../../../../../../methods/api/contracts";
 import React, { useContext, useEffect, useState } from "react";
 import SelectWithFilter from "../../../../../../components/SelectWithFilter";
-import { DbOptionType } from "../../../../../../types/other/DbOptionType";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import ContractAddUsersSelect from "../../TermsAndTasks/SelectFromUsers";
 import CustomFilePond from "../../../../../../components/CustomFilepond";
@@ -54,6 +52,7 @@ import { ContractDetailsContext } from "../../../ContractDetailsContext";
 import { useSnackbar } from "notistack";
 import { getContractItem } from "../../../../../../methods/api/contracts/getItem";
 import { ContractItem } from "../../../../../../types/Contracts/ContractItems";
+import { onlyDateBetween } from "../../../../../../methods/DayjsDatePicker";
 
 // TODO::define helpers variables ans subcomponents
 const ErrorMessage = (props: TypographyProps) => (
@@ -242,6 +241,14 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
                 render={({ field }) => (
                   <DatePicker
                     slotProps={{ textField: { fullWidth: true } }}
+                    shouldDisableDate={
+                      contract?.date && contract.end_date
+                        ? onlyDateBetween(
+                            dayjs(contract.date),
+                            dayjs(contract.end_date)
+                          )
+                        : undefined
+                    }
                     value={field.value ? dayjs(field.value) : null}
                     onChange={(newValue) => {
                       field.onChange(newValue?.format(DateOnlyFormatString));
@@ -260,6 +267,14 @@ function SetMainItemDialog({ onClose, open, itemId }: PropsType) {
                   <DatePicker
                     slotProps={{ textField: { fullWidth: true } }}
                     value={field.value ? dayjs(field.value) : null}
+                    shouldDisableDate={
+                      contract?.date && contract.end_date
+                        ? onlyDateBetween(
+                            dayjs(contract.date),
+                            dayjs(contract.end_date)
+                          )
+                        : undefined
+                    }
                     onChange={(newValue) => {
                       field.onChange(newValue?.format(DateOnlyFormatString));
                     }}
