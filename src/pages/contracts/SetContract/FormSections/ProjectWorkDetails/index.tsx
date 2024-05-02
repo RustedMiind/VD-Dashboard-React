@@ -43,13 +43,15 @@ type HeaderFieldName =
   | "bannerImg"
   | "masterPlanImg"
   | "projectIcon"
-  | "imagesAlpom";
+  | "imagesAlpom"
+  | "map_link";
 
 type FormHeaders = {
   numberOfPieces: number;
   area: number;
   location: string;
   bannerImg: string;
+  map_link: string;
   masterPlanImg: string;
   projectIcon: string;
   imagesAlpom: string[];
@@ -99,6 +101,7 @@ const FormHeaders: HeaderType[] = [
   { id: "FH-0", name: "numberOfPieces", text: "عدد القطع" },
   { id: "FH-1", name: "area", text: "المساحة" },
   { id: "FH-2", name: "location", text: "الموقع" },
+  { id: "FH-3", name: "map_link", text: "رابط الموقع" },
 ];
 
 const ProjectWorkDetails = (props: PropsType) => {
@@ -137,7 +140,7 @@ const ProjectWorkDetails = (props: PropsType) => {
       <Grid item xs={6} paddingX={1}>
         <AddLabelToEl label={text} required>
           <TextField
-            type={name == "location" ? "text" : "number"}
+            type={(name == "location" || name == 'map_link')? "text" : "number"}
             sx={{ background: "#fff" }}
             required
             //size="small"
@@ -154,7 +157,6 @@ const ProjectWorkDetails = (props: PropsType) => {
     arr.splice(idx, 1);
     setImagesAlpom([...arr]);
   };
-  console.log("Test101GO", contract?.id);
 
   const handleFormSubmit = handleSubmit((formData) => {
     let data = {
@@ -162,6 +164,7 @@ const ProjectWorkDetails = (props: PropsType) => {
       number_parts: formData.numberOfPieces,
       area: formData.area,
       location: formData.location,
+      map_link: formData.map_link,
       website: showOptions.website ? 1 : 0,
       application: showOptions.application ? 1 : 0,
       online_service: showOptions.electronicSerive ? 1 : 0,
@@ -647,8 +650,7 @@ const ProjectWorkDetails = (props: PropsType) => {
         {/* Map */}
         <Box sx={{ marginTop: "3rem" }}>
           <Typography variant="h5">تحديد الموقع على الخريطة</Typography>
-          {(!editedData?.id ||
-            (locationsPositions.length ==0)) && (
+          {(!editedData?.id || locationsPositions.length == 0) && (
             <ShowMap
               positionClick={locationsPositions}
               setPositionClick={setLocationsPositions}
