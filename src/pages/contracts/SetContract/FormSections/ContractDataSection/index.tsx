@@ -54,8 +54,6 @@ const ContractData = (props: PropsType) => {
     []
   );
 
-  console.log("is edit ?", isEdit, contract);
-
   useEffect(() => {
     if (!isEdit) {
       dispatch({ type: "CONTRACT_TYPE_ID", payload: +(type || 1) });
@@ -108,7 +106,8 @@ const ContractData = (props: PropsType) => {
 
   const addContractHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("contract details", contract, refreshContract);
+    // console.log("contractData ::-> ", contractData);
+
     if (!isEdit) {
       axios
         .post<{ data: Contract }>(
@@ -420,6 +419,42 @@ const ContractData = (props: PropsType) => {
               {errors?.employee_id && errors?.employee_id[0]}
             </Typography>
           </GridChildren>
+          <Grid container xs={12}>
+            <Grid item xs={12}>
+              <GridChildren>
+                <Typography component="label">المكتب الهندسي</Typography>
+                <TextField
+                  type="text"
+                  size="small"
+                  placeholder="المكتب الهندسي"
+                  value={contractData?.engineering_office}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "ENGINEERING_OFFICE",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+              </GridChildren>
+            </Grid>
+            <Grid item xs={12}>
+              <GridChildren>
+                <Typography component="label">اسم المالك</Typography>
+                <TextField
+                  type="text"
+                  size="small"
+                  placeholder="اسم المالك"
+                  value={contractData?.owner}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "OWNER",
+                      payload: e.target.value,
+                    });
+                  }}
+                />
+              </GridChildren>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item md={6} id="IP_C_AttachImage">
           <GridChildren>
