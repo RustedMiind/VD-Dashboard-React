@@ -54,6 +54,7 @@ export default function DialogAddRequest({ open, closeDialog }: PropsType) {
         <RadioGroup name="use-radio-group">
           <Box sx={{ mb: 1 }}>
             <FormControlLabel
+              value="x"
               control={
                 <Radio
                 //   disabled={!!clientEdit}
@@ -64,6 +65,7 @@ export default function DialogAddRequest({ open, closeDialog }: PropsType) {
               label="طلب التربة"
             />
             <FormControlLabel
+              value="y"
               control={
                 <Radio
                 //   disabled={!!clientEdit}
