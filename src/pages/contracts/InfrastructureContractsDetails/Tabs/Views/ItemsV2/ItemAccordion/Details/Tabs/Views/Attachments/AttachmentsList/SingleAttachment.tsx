@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import FilePresentOutlinedIcon from "@mui/icons-material/FilePresentOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ContractSubItemAttachment } from "../../../../../../../../../../../../types/Contracts/ContractItems";
@@ -63,20 +63,16 @@ export default function SingleAttachment({
       borderRadius={"8px"}
       sx={{ textDecoration: "none", color: "primary.main" }}
     >
-      <Stack
-        direction={"row"}
-        justifyContent="space-around"
-        alignItems="center"
+      <Button
+        startIcon={<FilePresentOutlinedIcon />}
         component={"a"}
         href={url}
         target="_blank"
-        sx={{ textDecoration: "none" }}
       >
-        <FilePresentOutlinedIcon />
         <Typography variant="body2" paddingX={1} fontWeight={400}>
           {name}
         </Typography>
-      </Stack>
+      </Button>
       <DeleteIcon
         onClick={handleDelete}
         sx={{ cursor: "pointer" }}
