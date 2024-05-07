@@ -42,6 +42,16 @@ export interface ContractItemEmployee {
   updated_at: string;
   employee?: EmployeeType;
 }
+
+export interface ContractSubItemAttachment {
+  contract_sub_item_id: number;
+  created_at: string;
+  employee_id: number;
+  id: number;
+  media: Media[];
+  updated_at: string;
+}
+
 export interface ContractSubItem {
   id: number;
   contract_item_id: number;
@@ -56,4 +66,5 @@ export interface ContractSubItem {
   updated_at: string;
   achievement_percentage?: number;
   processing?: TransactionType[];
+  attachments?: ContractSubItemAttachment[];
 }

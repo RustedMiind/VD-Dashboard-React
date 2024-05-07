@@ -3,6 +3,7 @@ import { ContractSubItem } from "../../../../../../../../../types/Contracts/Cont
 import { useEffect, useMemo, useState } from "react";
 import ProcessingView from "./Views/Processing";
 import PercentageView from "./Views/Percentage";
+import Attachments from "./Views/Attachments";
 
 export enum TabEnum {
   ATTACHMENTS = "المرفقات",
@@ -27,7 +28,10 @@ function TabsSection({ subItem }: PropsType) {
       });
     }
     if (subItem.is_attachment) {
-      tabs.push({ name: TabEnum.ATTACHMENTS, render: <></> });
+      tabs.push({
+        name: TabEnum.ATTACHMENTS,
+        render: <Attachments subItem={subItem} />,
+      });
     }
     if (subItem.is_progress_bar) {
       tabs.push({
