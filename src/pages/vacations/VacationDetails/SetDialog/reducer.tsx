@@ -18,6 +18,21 @@ const reducer = (
       return { ...state, number_days: action.payload };
     case "SET_EMPLOYEES":
       return { ...state, exception_employees: action.payload };
+    case "ADD_EMPLOYEE":
+      if (state.exception_employees.includes(action.payload)) {
+        return state;
+      }
+      return {
+        ...state,
+        exception_employees: [...state.exception_employees, action.payload],
+      };
+    case "REMOVE_EMPLOYEE":
+      return {
+        ...state,
+        exception_employees: state.exception_employees.filter(
+          (employeeId) => employeeId !== action.payload
+        ),
+      };
     case "SET_ALL":
       return action.payload;
     case "SET_RESET":
@@ -50,6 +65,12 @@ interface NumberDaysActionType extends ReducerAction<number> {
 interface EmployeeActionType extends ReducerAction<number[]> {
   type: "SET_EMPLOYEES";
 }
+interface AddEmployeeActionType extends ReducerAction<number> {
+  type: "ADD_EMPLOYEE";
+}
+interface RemoveEmployeeActionType extends ReducerAction<number> {
+  type: "REMOVE_EMPLOYEE";
+}
 
 interface SetAllActionType extends ReducerAction<VacationFormType> {
   type: "SET_ALL";
@@ -73,6 +94,8 @@ export type ActionTypes =
   | VacationIdActionType
   | NumberDaysActionType
   | EmployeeActionType
+  | AddEmployeeActionType
+  | RemoveEmployeeActionType
   | VacationNameActionType
   | SetAllActionType
   | SetResetActionType;

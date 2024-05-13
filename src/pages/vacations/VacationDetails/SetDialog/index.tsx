@@ -7,6 +7,7 @@ import {
   IconButton,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -30,6 +31,7 @@ import { AxiosErrorType } from "../../../../types/Axios";
 import { LaravelValidationError } from "../../../../types/LaravelValidationError";
 import { useSnackbar } from "notistack";
 import NonRoundedChip from "../../../../components/NonRoundedChip";
+import SelectWithFilter from "../../../../components/SelectWithFilter";
 
 const PopupVacations = (props: PropsType) => {
   const [vacationForm, dispatch] = useReducer(reducer, VacationsInitial);
@@ -255,47 +257,84 @@ const PopupVacations = (props: PropsType) => {
           </Grid>
 
           <Grid item md={12} p={1} px={2}>
-            name
             <Typography variant="body1" fontWeight={700} gutterBottom>
               اضافة موظفين لا تنطبق عليهم*
             </Typography>
-            <Select
+            <Stack direction="row" gap={1} flexWrap="wrap" mb={1}>
+              {vacationForm.exception_employees.map((employee) => (
+                <Chip
+                  key={employee}
+                  onDelete={() => {
+                    dispatch({
+                      type: "REMOVE_EMPLOYEE",
+                      payload: employee,
+                    });
+                  }}
+                  label={
+                    props.employeesInBranch?.find((e) => employee === e.id)
+                      ?.name
+                  }
+                />
+              ))}
+            </Stack>
+            <SelectWithFilter
               fullWidth
               variant="outlined"
               size="small"
-              multiple
-              multiline
-              value={vacationForm.exception_employees}
+              value={null}
               onChange={(e) => {
-                const values = e.target.value;
-                Array.isArray(values) &&
-                  dispatch({ type: "SET_EMPLOYEES", payload: values });
+                dispatch({
+                  type: "ADD_EMPLOYEE",
+                  payload: e.target.value as unknown as number,
+                });
               }}
-              renderValue={(selected) => {
-                const selectedNames = vacationForm.exception_employees.map(
-                  (id) => {
-                    const selectedOption = props.employeesInBranch?.find(
-                      (employee) => employee.id === id
-                    );
-                    return selectedOption;
-                  }
-                );
-                return selectedNames.map((chip) => (
-                  <NonRoundedChip
-                    key={chip?.id}
-                    size="small"
-                    label={chip?.name}
-                    sx={{ ml: 1 }}
-                  />
-                ));
+              options={props.employeesInBranch
+                ?.filter(
+                  (employee) =>
+                    !vacationForm.exception_employees.includes(employee.id)
+                )
+                .map((employee) => ({
+                  label: employee.name,
+                  value: employee.id,
+                }))}
+            />
+            {/* <Select
+              fullWidth
+              variant="outlined"
+              size="small"
+              value={null}
+              onChange={(e) => {
+                dispatch({
+                  type: "ADD_EMPLOYEE",
+                  payload: e.target.value as unknown as number,
+                });
               }}
+              
+              // renderValue={(selected) => {
+              //   const selectedNames = vacationForm.exception_employees.map(
+              //     (id) => {
+              //       const selectedOption = props.employeesInBranch?.find(
+              //         (employee) => employee.id === id
+              //       );
+              //       return selectedOption;
+              //     }
+              //   );
+              //   return selectedNames.map((chip) => (
+              //     <NonRoundedChip
+              //       key={chip?.id}
+              //       size="small"
+              //       label={chip?.name}
+              //       sx={{ ml: 1 }}
+              //     />
+              //   ));
+              // }}
             >
               {props.employeesInBranch?.map((option) => (
                 <MenuItem key={option.id} value={option.id}>
                   {option.name}
                 </MenuItem>
               ))}
-            </Select>
+            </Select> */}
           </Grid>
         </Grid>
       </DialogContent>
