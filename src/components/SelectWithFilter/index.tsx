@@ -14,7 +14,14 @@ function SelectWithFilter({
   }));
   console.log(filter, filtered?.length, filtered);
   return (
-    <TextField select {...props}>
+    <TextField
+      select
+      {...props}
+      onChange={(e) => {
+        props.onChange?.(e);
+        setTimeout(() => setFilter(""), 500);
+      }}
+    >
       <TextField
         variant="filled"
         value={filter}
@@ -31,6 +38,7 @@ function SelectWithFilter({
       />
       {filtered?.map((option) => (
         <MenuItem
+          key={option.value}
           sx={{ display: option.exist ? undefined : "none" }}
           onKeyDown={(e) => e.stopPropagation()}
           value={option.value}
