@@ -32,7 +32,7 @@ export default function EntryPointStandredContract() {
         </AccordionDetails>
       </Accordion>
       {/* Form num 2 Quantities, financial value and items */}
-      <Accordion disabled={!isExtended}>
+      <Accordion disabled={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2-content"
