@@ -32,7 +32,6 @@ function AttachmentSection() {
   const [attachmentToEdit, setAttachmentToEdit] = useState<
     ContractAttachment | undefined
   >(undefined);
-  
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
@@ -65,6 +64,7 @@ function AttachmentSection() {
           })
           .catch(() => {
             enqueueSnackbar("تعذر في الحذف", { variant: "error" });
+            console.log("first");
           });
     };
   }
