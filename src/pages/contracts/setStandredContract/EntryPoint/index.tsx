@@ -5,9 +5,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ContructData from "../forms/Section-1-FormContructData";
 import AmountAndValueOfTable from "../forms/Section-2-TableAmountAndValue";
 import TableContractAttachments from "../forms/Section-3-TableContractAttachments";
+import { useContext } from "react";
+import { StandredContractContext } from "../context/StandredContractContext";
 
 export default function EntryPointStandredContract() {
   // todo::declare and define component state and variables
+  const { isExtended } = useContext(StandredContractContext);
   // todo::declare and define component helper methods
   // *return component ui
   return (
@@ -29,7 +32,7 @@ export default function EntryPointStandredContract() {
         </AccordionDetails>
       </Accordion>
       {/* Form num 2 Quantities, financial value and items */}
-      <Accordion>
+      <Accordion disabled={!isExtended}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2-content"
@@ -42,7 +45,7 @@ export default function EntryPointStandredContract() {
         </AccordionDetails>
       </Accordion>
       {/* Form num 3 Contract Attachments */}
-      <Accordion>
+      <Accordion disabled={!isExtended}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2-content"

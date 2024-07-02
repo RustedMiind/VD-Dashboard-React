@@ -28,7 +28,6 @@ function SearchBar() {
   const getClientsData = async () => {
     try {
       let useData = await getUseData();
-      console.log("useData.client", useData.client);
       if (useData?.client) setContractSearch(useData?.client);
     } catch (err) {
       setContractSearch([]);
