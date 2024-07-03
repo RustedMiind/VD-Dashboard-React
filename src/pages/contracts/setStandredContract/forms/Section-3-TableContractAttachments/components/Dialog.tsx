@@ -31,14 +31,12 @@ import {
   Management,
 } from "../../../../../../types";
 import { Client } from "../../../../../../types/Clients";
-import { useParams } from "react-router-dom";
 import { StandredContractContext } from "../../../context/StandredContractContext";
 
 function SetDialog(props: PropsType) {
   // TODO::declare and define component state and variables here.
   const { contract } = useContext(StandredContractContext);
-  let { open, setOpen } = props;
-  const { id } = useParams();
+  let { open, setOpen, getContract } = props;
   const [contractUse, setContractUse] = useState<undefined | ContractUse>(
     undefined
   );
@@ -69,6 +67,7 @@ function SetDialog(props: PropsType) {
       );
       enqueueSnackbar("تم الحفظ  بنجاح");
       setOpen(!open);
+      getContract();
       reset({
         code: "",
         name: "",
@@ -194,6 +193,7 @@ function SetDialog(props: PropsType) {
 type PropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  getContract: () => void;
 };
 
 const formSchema = z.object({

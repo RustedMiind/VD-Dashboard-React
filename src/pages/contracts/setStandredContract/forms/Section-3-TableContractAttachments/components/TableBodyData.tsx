@@ -3,28 +3,37 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PrintIcon from "@mui/icons-material/Print";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import { Contract } from "../../../../../../types";
 
-export default function TableBodyData() {
+export default function TableBodyData({ contractDetails }: PropsType) {
+  console.log("contractDetails", contractDetails);
   return (
     <TableBody>
-      <TableCell></TableCell>
-      <TableCell></TableCell>
-      <TableCell></TableCell>
-      <TableCell></TableCell>
-      <TableCell>
-        <Button startIcon={<FolderOpenIcon />}>عرض الملف</Button>
-      </TableCell>
-      <TableCell>
-        <IconButton size="small">
-          <PrintIcon />
-        </IconButton>
-        <IconButton size="small">
-          <EditIcon />
-        </IconButton>
-        <IconButton size="small" color="error">
-          <DeleteIcon />
-        </IconButton>
-      </TableCell>
+      {contractDetails?.levers?.map((item) => (
+        <>
+          <TableCell>{item.code}</TableCell>
+          <TableCell>{item.name}</TableCell>
+          <TableCell>{item.id}</TableCell>
+          <TableCell>{item.contract_lever_attachment_type.name}</TableCell>
+          <TableCell>
+            <Button startIcon={<FolderOpenIcon />}>عرض الملف</Button>
+          </TableCell>
+          <TableCell>
+            <IconButton size="small">
+              <PrintIcon />
+            </IconButton>
+            <IconButton size="small">
+              <EditIcon />
+            </IconButton>
+            <IconButton size="small" color="error">
+              <DeleteIcon />
+            </IconButton>
+          </TableCell>
+        </>
+      ))}
     </TableBody>
   );
 }
+type PropsType = {
+  contractDetails: Contract | undefined;
+};
