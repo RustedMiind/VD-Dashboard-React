@@ -13,14 +13,14 @@ export default function TableContractAttachments() {
   // TODO::declare and define component state and variables
   const [openDialog, setOpenDialog] = useState(false);
   const { contract } = useContext(StandredContractContext);
-  const [contractDetails, setContractDetails] = useState<undefined | Contract>(
-    undefined
-  );
+  const [contractDetails, setContractDetails] = useState<
+    undefined | Contract[]
+  >(undefined);
   // TODO::declare and define component helper methods
 
   function getContract() {
     axios
-      .get<{ unified_contract: Contract }>(
+      .get<{ unified_contract: Contract[] }>(
         Api(`employee/unified-contract/${contract?.id}`)
       )
       .then((res) => {
