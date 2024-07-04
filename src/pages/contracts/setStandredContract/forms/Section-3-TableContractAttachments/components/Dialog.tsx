@@ -8,15 +8,90 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import { LoadingButton } from "@mui/lab";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import CustomFilePond from "../../../../../../components/CustomFilepond";
+import axios from "axios";
+import { Api } from "../../../../../../constants";
+import { serialize } from "object-to-formdata";
+import { useSnackbar } from "notistack";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { DbOptionType } from "../../../../../../types/other/DbOptionType";
+import { useContext, useEffect, useState } from "react";
+import {
+  Branch,
+  Broker,
+  ContractType,
+  EmployeeType,
+  Management,
+} from "../../../../../../types";
+import { Client } from "../../../../../../types/Clients";
+import { StandredContractContext } from "../../../context/StandredContractContext";
 
 function SetDialog(props: PropsType) {
   // TODO::declare and define component state and variables here.
-  let { open, setOpen } = props;
+  const { contract } = useContext(StandredContractContext);
+  let { open, setOpen, getContract } = props;
+  const [contractUse, setContractUse] = useState<undefined | ContractUse>(
+    undefined
+  );
+  const {
+    handleSubmit,
+    control,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm<FormType>({
+    resolver: zodResolver(formSchema),
+  });
+  const { enqueueSnackbar } = useSnackbar();
   // TODO::declare and define component helper methods here.
+  useEffect(() => {
+    getUse();
+  }, []);
+  // on submit function
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const additionalData = {
+        ...data,
+        contract_id: contract?.id, // Replace someId with the actual id you want to send
+      };
+      await axios.post(
+        Api("employee/contract/lever/store"),
+        serialize(additionalData, { indices: true, booleansAsIntegers: true })
+      );
+      enqueueSnackbar("تم الحفظ  بنجاح");
+      setOpen(!open);
+      getContract();
+      reset({
+        code: "",
+        name: "",
+      });
+    } catch (err) {
+      enqueueSnackbar("تعذر في الحفظ", { variant: "error" });
+    }
+  });
+
+  // use function
+  function getUse(): Promise<ContractUse> {
+    return new Promise((ressolve, reject) => {
+      axios
+        .get<ContractUse>(Api(`employee/contract/use`))
+        .then((res) => {
+          setContractUse(res.data);
+          ressolve(res.data);
+        })
+        .catch((err) => {
+          setContractUse(undefined);
+          reject(err);
+        });
+    });
+  }
   // * return component UI.
   return (
     <>
@@ -25,7 +100,7 @@ function SetDialog(props: PropsType) {
         open={open}
         onClose={() => setOpen(!open)}
         component="form"
-        // onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         maxWidth={"sm"}
       >
         {/* close dialog */}
@@ -53,40 +128,53 @@ function SetDialog(props: PropsType) {
             {/* name */}
             <Grid item xs={6}>
               <AddLabelToEl label={"اسم المرفق"} required>
-                <TextField size="small" />
+                <TextField size="small" {...register("name")} />
               </AddLabelToEl>
+              <Typography variant="body2" color={"error.main"}>
+                {errors.name?.message}
+              </Typography>
             </Grid>
             {/* code */}
             <Grid item xs={6}>
               <AddLabelToEl label={"رقم المرفق"} required>
-                <TextField size="small" />
+                <TextField size="small" {...register("code")} />
               </AddLabelToEl>
+              <Typography variant="body2" color={"error.main"}>
+                {errors.code?.message}
+              </Typography>
             </Grid>
             {/* type */}
             <Grid item xs={6}>
-              <AddLabelToEl label={"نوع المرفق"}>
-                <Select size={"small"}>
-                  <MenuItem value={1}>test</MenuItem>
+              <AddLabelToEl label={"نوع المرفق"} {...register("type")}>
+                <Select {...register("type")} size={"small"}>
+                  {contractUse?.attachments_types?.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </AddLabelToEl>
+              <Typography variant="body2" color={"error.main"}>
+                {errors.type?.message}
+              </Typography>
             </Grid>
             {/* attachments files */}
             <Grid item xs={6}>
               <AddLabelToEl label={"ارفاق ملف"}>
-                {/* <Controller
-                    name="image"
-                    control={control}
-                    render={({ field }) => (
-                      <CustomFilePond
-                        {...field}
-                        onupdatefiles={(files) => {
-                          field.onChange(files.map((file) => file.file)?.[0]);
-                        }}
-                        allowMultiple={false}
-                        maxFiles={1}
-                      />
-                    )}
-                  /> */}
+                <Controller
+                  name="card_image"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomFilePond
+                      {...field}
+                      onupdatefiles={(files) => {
+                        field.onChange(files.map((file) => file.file)?.[0]);
+                      }}
+                      allowMultiple={false}
+                      maxFiles={1}
+                    />
+                  )}
+                />
               </AddLabelToEl>
             </Grid>
           </Grid>
@@ -105,5 +193,24 @@ function SetDialog(props: PropsType) {
 type PropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  getContract: () => void;
+};
+
+const formSchema = z.object({
+  name: z.string().min(1, { message: "اسم المرفق مطلوب" }),
+  code: z.string().min(1, { message: "رقم المرفق مطلوب" }),
+  type: z.number().optional(),
+  card_image: z.instanceof(File).optional(),
+});
+type FormType = z.infer<typeof formSchema>;
+
+export type ContractUse = {
+  branches?: Branch[];
+  brokers?: Broker[];
+  client?: Client[];
+  contractType?: ContractType[];
+  employees?: EmployeeType[];
+  management?: Management[];
+  attachments_types?: DbOptionType[];
 };
 export default SetDialog;
