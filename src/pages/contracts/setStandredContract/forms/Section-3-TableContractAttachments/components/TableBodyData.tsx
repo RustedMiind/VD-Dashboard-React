@@ -14,14 +14,32 @@ import SetDialog from "./Dialog";
 import { useState } from "react";
 import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
 import ItemDetails from "../../../../InfrastructureContractsDetails/Tabs/Views/ItemsV2/ItemAccordion/Details";
+import axios from "axios";
+import { Api } from "../../../../../../constants";
+import { useSnackbar } from "notistack";
 
 export default function TableBodyData(props: PropsType) {
   // declare and define component state and variables
   let { contractDetails, getContract } = props;
   const [openDialog, setOpenDialog] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const [EditedContractAttachment, setEditedContractAttachment] = useState<
     undefined | ContractAttachment
   >(undefined);
+
+  function handleDelete(leverId?: string | number) {
+    if (leverId)
+      axios
+        .delete(Api(`employee/contract/lever/${leverId}`))
+        .then(() => {
+          getContract();
+          enqueueSnackbar("تم الحذف بنجاح");
+        })
+        .catch(() => {
+          enqueueSnackbar("تعذر في الحذف", { variant: "error" });
+          console.log("first");
+        });
+  }
 
   // return component ui
   return (
@@ -57,7 +75,11 @@ export default function TableBodyData(props: PropsType) {
                 >
                   <EditIcon />
                 </IconButton>
-                <IconButton size="small" color="error">
+                <IconButton
+                  size="small"
+                  color="error"
+                  onClick={() => handleDelete(item.id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

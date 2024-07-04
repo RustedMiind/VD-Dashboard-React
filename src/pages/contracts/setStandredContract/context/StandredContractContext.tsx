@@ -3,6 +3,7 @@ import { createContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { StandredContractType } from "../../../../types/Contracts/StandredContract";
+import { Api } from "../../../../constants";
 
 // * create context
 export const StandredContractContext =
@@ -12,15 +13,26 @@ export const StandredContractContext =
     contractType: "",
     contract: undefined,
     storeContract: (contract) => {},
+    isEdit: false,
+    getContractData: () => {},
   });
 
 export function StandredContractContextProvider({ children }: PropsType) {
   // TODO::declare and define our state and variables
-  const { type } = useParams(); //store contract type
-  const [isExtended, setIsExtended] = useState(false); //to control extended ot not accordation.
+  const { type, contractId } = useParams(); // store contract type.
+  const isEdit = contractId ? true : false; // determine which case create or edit.
+  const [isExtended, setIsExtended] = useState(isEdit); //to control extended ot not accordation.
   const [contract, setContract] = useState<StandredContractType | undefined>(
     undefined
   );
+
+  // Fetch data of contract on Edit case
+  useEffect(() => {
+    if (isEdit) {
+      // TODO::fetch contract data.
+      getContractData();
+    }
+  }, [isEdit]);
 
   // TODO::declare and define our helper methods
   /**
@@ -29,6 +41,22 @@ export function StandredContractContextProvider({ children }: PropsType) {
    */
   function handleSetSxtended(open: boolean) {
     setIsExtended(open);
+  }
+
+  function getContractData() {
+    axios
+      .get<{ unified_contract: StandredContractType[] }>(
+        Api(`employee/unified-contract/${contractId}`)
+      )
+      .then((response) => {
+        if (
+          response.data.unified_contract &&
+          response.data.unified_contract.length
+        ) {
+          setContract(response.data.unified_contract[0]);
+        }
+      })
+      .catch((err) => {});
   }
 
   /**
@@ -48,6 +76,8 @@ export function StandredContractContextProvider({ children }: PropsType) {
         handleSetSxtended,
         contractType: type ?? "",
         storeContract,
+        isEdit,
+        getContractData,
       }}
     >
       {children}
@@ -66,4 +96,6 @@ type StandredContractContextType = {
   handleSetSxtended(open: boolean): void;
   contract: StandredContractType | undefined;
   storeContract(contract: StandredContractType | undefined): void;
+  isEdit: boolean;
+  getContractData(): void;
 };

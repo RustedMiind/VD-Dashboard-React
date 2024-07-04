@@ -11,10 +11,12 @@ function ContractsDataTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
   const toView = typeof contracts === "object" ? contracts?.data : undefined;
-  console.log("ASD 1::", toView);
+
   return (
     <TableBody>
       {toView?.map((request) => {
+        let isStandardContract = request.type.id === 5 ? true : false;
+
         return (
           <TableRow>
             <TableCell>
@@ -58,7 +60,11 @@ function ContractsDataTable(props: PropsType) {
                 color="primary"
                 aria-label="add to shopping cart"
                 component={NavLink}
-                to={`${request.id}/edit`}
+                to={
+                  isStandardContract
+                    ? `standardContract/5/${request.id}`
+                    : `${request.id}/edit`
+                }
                 size="small"
               >
                 <SettingsIcon />
