@@ -41,7 +41,9 @@ export default function DetailsView() {
   return (
     <Stack sx={{ position: "relative" }}>
       <Grid container columnSpacing={1} rowSpacing={4}>
-        <DetailsItem label="نوع العقد">البنية التحتية</DetailsItem>
+        <DetailsItem label="نوع العقد">
+          {contract?.type.id == 1 ? "البنية التحتية" : "العقد الموحد"}
+        </DetailsItem>
         <DetailsItem label="نوع الفرع">{contract?.branch?.name}</DetailsItem>
         <DetailsItem label="صورة العقد">
           <Button component={"a"} target="_blank" href={contract?.card_image}>

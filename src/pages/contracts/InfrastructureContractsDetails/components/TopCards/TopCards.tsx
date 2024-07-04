@@ -370,7 +370,7 @@ export default function TopCards() {
           fontWeight={700}
           marginBottom={1}
         >
-          الكادر
+          {contract?.type.id == 1 ? "الكادر" : "المقاولون"}
         </Typography>
         <Box
           sx={{
@@ -406,16 +406,20 @@ export default function TopCards() {
       </Box>
       {/* Third Card */}
       {/* infrestructure contract */}
-      <NumberOfTransaction allProcessing={allProcessing} />
+      {contract?.type.id == 1 && (
+        <NumberOfTransaction allProcessing={allProcessing} />
+      )}
       {/* in standared contract */}
-      {/* <NumberOfPermits /> */}
+      {contract?.type.id == 5 && <NumberOfPermits />}
 
       {/* Forth Card */}
-      <OverallCompletionRate
-        setOpenDialog={setOpenDialog}
-        contract={contract}
-      />
-      {/* <WorkOrderStatistics /> */}
+      {contract?.type.id == 1 && (
+        <OverallCompletionRate
+          setOpenDialog={setOpenDialog}
+          contract={contract}
+        />
+      )}
+      {contract?.type.id == 5 && <WorkOrderStatistics />}
 
       <EditRaioDialog open={openDialog} setOpen={setOpenDialog} />
     </Grid>
