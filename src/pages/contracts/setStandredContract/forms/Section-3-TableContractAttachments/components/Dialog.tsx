@@ -56,7 +56,6 @@ function SetDialog(props: PropsType) {
   );
   const isEdit = EditedContractAttachment ? true : false;
 
-  
   // TODO::declare and define component helper methods here.
   useEffect(() => {
     getUse();
@@ -66,7 +65,7 @@ function SetDialog(props: PropsType) {
     if (isEdit) {
       reset({
         name: EditedContractAttachment?.name,
-        code: EditedContractAttachment?.code,
+        code: EditedContractAttachment?.code + "",
         type: EditedContractAttachment?.type
           ? +EditedContractAttachment.type
           : undefined,
