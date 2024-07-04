@@ -13,7 +13,7 @@ import {
 import { GridCloseIcon } from "@mui/x-data-grid";
 import { LoadingButton } from "@mui/lab";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import CustomFilePond from "../../../../../../components/CustomFilepond";
 import axios from "axios";
 import { Api } from "../../../../../../constants";
@@ -26,20 +26,22 @@ import { useContext, useEffect, useState } from "react";
 import {
   Branch,
   Broker,
+  Contract,
   ContractType,
   EmployeeType,
   Management,
 } from "../../../../../../types";
 import { Client } from "../../../../../../types/Clients";
 import { StandredContractContext } from "../../../context/StandredContractContext";
+import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Stack } from "@mui/material";
 
 function SetDialog(props: PropsType) {
   // TODO::declare and define component state and variables here.
   const { contract } = useContext(StandredContractContext);
-  let { open, setOpen, getContract } = props;
-  const [contractUse, setContractUse] = useState<undefined | ContractUse>(
-    undefined
-  );
+  let { open, setOpen, getContract, EditedContractAttachment } = props;
+  const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
     control,
@@ -49,11 +51,29 @@ function SetDialog(props: PropsType) {
   } = useForm<FormType>({
     resolver: zodResolver(formSchema),
   });
-  const { enqueueSnackbar } = useSnackbar();
+  const [contractUse, setContractUse] = useState<undefined | ContractUse>(
+    undefined
+  );
+  const isEdit = EditedContractAttachment ? true : false;
+
+  
   // TODO::declare and define component helper methods here.
   useEffect(() => {
     getUse();
   }, []);
+
+  useEffect(() => {
+    if (isEdit) {
+      reset({
+        name: EditedContractAttachment?.name,
+        code: EditedContractAttachment?.code,
+        type: EditedContractAttachment?.type
+          ? +EditedContractAttachment.type
+          : undefined,
+      });
+    }
+  }, [open]);
+
   // on submit function
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -61,11 +81,30 @@ function SetDialog(props: PropsType) {
         ...data,
         contract_id: contract?.id, // Replace someId with the actual id you want to send
       };
-      await axios.post(
-        Api("employee/contract/lever/store"),
-        serialize(additionalData, { indices: true, booleansAsIntegers: true })
-      );
-      enqueueSnackbar("تم الحفظ  بنجاح");
+      let url = isEdit
+        ? `employee/contract/lever/${EditedContractAttachment?.id}`
+        : `employee/contract/lever/store`;
+
+      if (isEdit)
+        await axios.post(
+          Api(url),
+          serialize(additionalData, {
+            indices: true,
+            booleansAsIntegers: true,
+          }),
+          {
+            params: {
+              _method: "PATCH",
+            },
+          }
+        );
+      else
+        await axios.post(
+          Api(url),
+          serialize(additionalData, { indices: true, booleansAsIntegers: true })
+        );
+
+      enqueueSnackbar(isEdit ? "تم التعديل بنجاح" : "تم الحفظ  بنجاح");
       setOpen(!open);
       getContract();
       reset({
@@ -92,6 +131,7 @@ function SetDialog(props: PropsType) {
         });
     });
   }
+
   // * return component UI.
   return (
     <>
@@ -146,7 +186,11 @@ function SetDialog(props: PropsType) {
             {/* type */}
             <Grid item xs={6}>
               <AddLabelToEl label={"نوع المرفق"} {...register("type")}>
-                <Select {...register("type")} size={"small"}>
+                <Select
+                  {...register("type")}
+                  defaultValue={isEdit ? EditedContractAttachment?.type : ""}
+                  size={"small"}
+                >
                   {contractUse?.attachments_types?.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
                       {item.name}
@@ -161,6 +205,28 @@ function SetDialog(props: PropsType) {
             {/* attachments files */}
             <Grid item xs={6}>
               <AddLabelToEl label={"ارفاق ملف"}>
+                {isEdit && (
+                  <Stack
+                    direction={"row"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    my={2}
+                    p={1}
+                  >
+                    <Typography
+                      component={"a"}
+                      href={EditedContractAttachment?.card_path}
+                      target="_blank"
+                      variant="body1"
+                      fontSize={14}
+                    >
+                      عرض الملف
+                    </Typography>
+                    <IconButton size="small" color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
+                )}
                 <Controller
                   name="card_image"
                   control={control}
@@ -181,8 +247,8 @@ function SetDialog(props: PropsType) {
         </DialogContent>
 
         <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-          <LoadingButton variant="contained" type="submit">
-            اضافة
+          <LoadingButton variant="contained" type="submit" fullWidth>
+            {isEdit ? "تعديل" : "اضافة"}
           </LoadingButton>
         </DialogActions>
       </Dialog>
@@ -194,6 +260,7 @@ type PropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   getContract: () => void;
+  EditedContractAttachment?: undefined | ContractAttachment;
 };
 
 const formSchema = z.object({

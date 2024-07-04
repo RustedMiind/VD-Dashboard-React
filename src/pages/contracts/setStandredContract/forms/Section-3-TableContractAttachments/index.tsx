@@ -49,7 +49,10 @@ export default function TableContractAttachments() {
       <TableContainer>
         <Table>
           <TableHeaders />
-          <TableBodyData contractDetails={contractDetails} />
+          <TableBodyData
+            contractDetails={contractDetails}
+            getContract={getContract}
+          />
         </Table>
       </TableContainer>
       <SetDialog
