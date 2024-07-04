@@ -10,13 +10,13 @@ import { StandredContractContext } from "../context/StandredContractContext";
 
 export default function EntryPointStandredContract() {
   // todo::declare and define component state and variables
-  const { isExtended } = useContext(StandredContractContext);
+  const { isExtended, isEdit } = useContext(StandredContractContext);
   // todo::declare and define component helper methods
   // *return component ui
   return (
     <Stack>
       <Typography variant="h5" fontWeight={600} mb={3}>
-        انشاء عقد موحد
+        {isEdit ? "تعديل" : "انشاء"} عقد موحد
       </Typography>
       {/* Form num 1 Contract Data */}
       <Accordion>

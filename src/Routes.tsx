@@ -218,6 +218,10 @@ function RoutesComponent() {
                 path="standardContract/:type"
                 element={<SetStandredContract />}
               />
+              <Route
+                path="standardContract/:type/:contractId"
+                element={<SetStandredContract />}
+              />
             </>
           )}
           <Route path=":id">

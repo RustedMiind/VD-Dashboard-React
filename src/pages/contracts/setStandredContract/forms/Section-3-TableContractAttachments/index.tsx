@@ -17,6 +17,9 @@ export default function TableContractAttachments() {
     undefined | Contract[]
   >(undefined);
   // TODO::declare and define component helper methods
+  useEffect(() => {
+    getContract();
+  }, [contract]);
 
   function getContract() {
     axios
@@ -30,9 +33,7 @@ export default function TableContractAttachments() {
         setContractDetails(undefined);
       });
   }
-  useEffect(() => {
-    getContract();
-  }, []);
+
   // * return component UI.
   return (
     <>
@@ -49,7 +50,10 @@ export default function TableContractAttachments() {
       <TableContainer>
         <Table>
           <TableHeaders />
-          <TableBodyData contractDetails={contractDetails} />
+          <TableBodyData
+            contractDetails={contractDetails}
+            getContract={getContract}
+          />
         </Table>
       </TableContainer>
       <SetDialog
