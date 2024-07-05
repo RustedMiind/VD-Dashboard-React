@@ -34,9 +34,25 @@ export default function BtnCus() {
       });
   }
 
+  function getContract() {
+    if (idEdit?.length === 1) {
+      axios
+        .get<{ data: Contract }>(Api(`employee/contract/${idEdit[0]}`))
+        .then((res) => {
+          let _contract = res.data.data;
+          console.log("Demooooooo _contract", _contract);
+          if (_contract?.type?.id === 5)
+            navigate(`standardContract/5/${idEdit?.[0]}`);
+          else navigate(`${idEdit?.[0]}/edit`);
+        })
+        .catch((err) => {});
+    }
+  }
+
   function Update() {
     if (idEdit?.length === 1) {
-      navigate(`${idEdit[0]}/edit`);
+      getContract();
+      // navigate(`${idEdit[0]}/edit`);
     }
   }
 
