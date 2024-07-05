@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import LoadingBackdrop from "../../../components/Loading/LoadingBackdrop";
 import { ContractUse } from "../SetContract/ContractDetailsContext";
 import { getUseData } from "../../../methods/getUseData";
+import { ContractTyoeAndDataContextProvider } from "./context/ContractTyoeAndData";
 
 export const ContractDetailsContext = createContext<ContractDetailsContextType>(
   {
@@ -77,14 +78,16 @@ export default function InfrastructureContractsDetails() {
         use: contractUse,
       }}
     >
-      <LoadingBackdrop open={status === "loading"} />
-      <Stack spacing={4}>
-        <Grid container>
-          {/* row - top headers containers */}
-          <TopCards />
-        </Grid>
-        <TabsContainer />
-      </Stack>
+      <ContractTyoeAndDataContextProvider>
+        <LoadingBackdrop open={status === "loading"} />
+        <Stack spacing={4}>
+          <Grid container>
+            {/* row - top headers containers */}
+            <TopCards />
+          </Grid>
+          <TabsContainer />
+        </Stack>
+      </ContractTyoeAndDataContextProvider>
     </ContractDetailsContext.Provider>
   );
 }
