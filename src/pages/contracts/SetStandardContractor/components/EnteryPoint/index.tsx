@@ -8,6 +8,8 @@ import {
   Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import SetContractorData from "../forms/Section-1-ContractorData";
+import ContractorRepresentatives from "../forms/Section-2-Representative";
 
 export default function EntryPointOfSetStandardContractor() {
   return (
@@ -29,8 +31,7 @@ export default function EntryPointOfSetStandardContractor() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            <SetContractorData />
           </AccordionDetails>
         </Accordion>
         {/* اضافة مناديب */}
@@ -45,8 +46,7 @@ export default function EntryPointOfSetStandardContractor() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            <ContractorRepresentatives />
           </AccordionDetails>
         </Accordion>
         {/* العمالة المخططة في العقد */}
