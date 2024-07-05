@@ -3,7 +3,6 @@ import Tabs from "./Tabs";
 import { createContext, useEffect, useState } from "react";
 import { TabEnum } from "./TabEnum";
 import TabViews from "./Views";
-import { useQueryParam } from "use-query-params";
 
 function TabsContainer() {
   const [tab, setTab] = useState<TabEnum>(TabEnum.DETAILS);
