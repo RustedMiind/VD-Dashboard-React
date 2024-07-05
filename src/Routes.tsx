@@ -51,6 +51,7 @@ import SetMobileServicePage from "./pages/ApplicationSettings/services/set-servi
 import LibrariesAndDocsMainIndex from "./pages/librariesAndDocs/main";
 import LibraryDocsIndex from "./pages/librariesAndDocs/libraryDocs";
 import SetStandredContract from "./pages/contracts/setStandredContract";
+import SetStandardContractor from "./pages/contracts/SetStandardContractor";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -221,6 +222,11 @@ function RoutesComponent() {
               <Route
                 path="standardContract/:type/:contractId"
                 element={<SetStandredContract />}
+              />
+              {/* SetStandardContractor */}
+              <Route
+                path="standardContractor/:contractId"
+                element={<SetStandardContractor />}
               />
             </>
           )}
