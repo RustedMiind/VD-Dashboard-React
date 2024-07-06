@@ -51,6 +51,8 @@ import SetMobileServicePage from "./pages/ApplicationSettings/services/set-servi
 import LibrariesAndDocsMainIndex from "./pages/librariesAndDocs/main";
 import LibraryDocsIndex from "./pages/librariesAndDocs/libraryDocs";
 import SetStandredContract from "./pages/contracts/setStandredContract";
+import SetStandardContractor from "./pages/contracts/SetStandardContractor";
+import ElectricityContractorUsers from "./pages/electricity/ElectricityContractorUsers";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -128,6 +130,11 @@ function RoutesComponent() {
             <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
           </Route>
           <Route path="FollowUpEmployees" element={<FollowUpEmployees />} />
+          {/* ElectricityContractorUsers */}
+          <Route
+            path="ElectricityContractorUsers"
+            element={<ElectricityContractorUsers />}
+          />
         </Route>
 
         <Route path="librariesAndDocs">
@@ -221,6 +228,11 @@ function RoutesComponent() {
               <Route
                 path="standardContract/:type/:contractId"
                 element={<SetStandredContract />}
+              />
+              {/* SetStandardContractor */}
+              <Route
+                path="createStandardContractor"
+                element={<SetStandardContractor />}
               />
             </>
           )}

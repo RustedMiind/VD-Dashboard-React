@@ -119,6 +119,16 @@ const routesCollections: RoutesCollectionType[] = [
         react: true,
       },
       {
+        name: "اضافة بيانات مقاول",
+        path: "/contracts/createStandardContractor",
+        react: true,
+      },
+      {
+        name: "مستخدمين",
+        path: "/electricity/ElectricityContractorUsers",
+        react: true,
+      },
+      {
         name: "أوامر العمل",
         path: "/electricity/workOrders",
         react: true,
