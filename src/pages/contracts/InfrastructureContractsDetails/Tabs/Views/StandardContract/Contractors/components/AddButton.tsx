@@ -9,9 +9,9 @@ export default function AddButton() {
 
   // TODO::declare and define component helper methods
   const handleClick = () => {
-    navigator(`/react/contracts/standardContractor/${id}`);
+    navigator(`/react/contracts/createStandardContractor`);
   };
-  
+
   // TODO::return component ui.
   return (
     <Stack justifyContent={"start"} alignItems={"end"} width="100%" my={2}>

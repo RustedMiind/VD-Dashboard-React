@@ -225,7 +225,7 @@ function RoutesComponent() {
               />
               {/* SetStandardContractor */}
               <Route
-                path="standardContractor/:contractId"
+                path="createStandardContractor"
                 element={<SetStandardContractor />}
               />
             </>
