@@ -1,11 +1,16 @@
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddUserToContractor() {
   // TODO::declare and define component state and variable
   const [hovered, setHovered] = useState(false);
+  const navigator = useNavigate();
   // TODO::declare and define component helper methods
+  const handleClick = () => {
+    navigator("/react/electricity/ElectricityContractorUsers");
+  };
   // * return component ui.
   return (
     <Stack
@@ -38,6 +43,7 @@ export default function AddUserToContractor() {
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={handleClick}
       >
         <PlayArrowIcon />
       </IconButton>
