@@ -10,6 +10,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SetContractorData from "../forms/Section-1-ContractorData";
 import ContractorRepresentatives from "../forms/Section-2-Representative";
+import ContractEmployment from "../forms/Section-3-ContractEmployment";
 
 export default function EntryPointOfSetStandardContractor() {
   return (
@@ -61,8 +62,7 @@ export default function EntryPointOfSetStandardContractor() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            <ContractEmployment />
           </AccordionDetails>
         </Accordion>
         {/* المرفقات */}

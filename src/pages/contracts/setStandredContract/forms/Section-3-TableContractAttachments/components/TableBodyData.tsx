@@ -5,18 +5,16 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import PrintIcon from "@mui/icons-material/Print";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import { Contract } from "../../../../../../types";
+import axios from "axios";
 import SetDialog from "./Dialog";
 import { useState } from "react";
-import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
-import ItemDetails from "../../../../InfrastructureContractsDetails/Tabs/Views/ItemsV2/ItemAccordion/Details";
-import axios from "axios";
-import { Api } from "../../../../../../constants";
 import { useSnackbar } from "notistack";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import { Contract } from "../../../../../../types";
+import { Api } from "../../../../../../constants";
+import { ContractAttachment } from "../../../../../../types/Contracts/ContractAttachment";
 
 export default function TableBodyData(props: PropsType) {
   // declare and define component state and variables
