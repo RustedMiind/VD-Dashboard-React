@@ -15,7 +15,7 @@ function ContractsDataTable(props: PropsType) {
   return (
     <TableBody>
       {toView?.map((request) => {
-        let isStandardContract = request.type.id === 5 ? true : false;
+        let isStandardContract = request?.type?.id === 5 ? true : false;
 
         return (
           <TableRow>

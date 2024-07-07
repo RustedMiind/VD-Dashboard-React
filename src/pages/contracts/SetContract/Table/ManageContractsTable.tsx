@@ -17,12 +17,12 @@ function ManageContractTable(props: PropsType) {
   const selectedIdsContext = useContext(ContractContext);
   const { contracts } = useContext(ContractsContext);
   const toView = typeof contracts === "object" ? contracts?.data : undefined;
-  
+
   return (
     <TableBody>
       {props.secondTabValue === 0 &&
         toView?.map((request) => {
-          let isStandardContract = request.type.id === 5 ? true : false;
+          let isStandardContract = request?.type?.id === 5 ? true : false;
 
           return (
             <TableRow key={`TR_${request.id}`}>
