@@ -9,6 +9,7 @@ import { DB_Boolean } from "../DB_Boolean";
 import { Client } from "../Clients";
 import { Employee } from "../User/user";
 import { ContractDetails } from "./ContractDetails";
+import { Media } from "../Media";
 
 export interface Contract {
   id: number;
@@ -51,6 +52,7 @@ export interface Contract {
   contract_direct_entry_sub_type?: ContractDirectEntrySubType; // Assuming both interfaces use the same type
   achievement_percentage: number;
   contract_type?: number;
+  pictures?: Levers;
 }
 
 type Management = {
@@ -96,3 +98,6 @@ export interface ContractDirectEntryType {
   id: number;
   name: string;
 }
+type Levers = {
+  lever: Media[];
+};

@@ -57,10 +57,10 @@ export default function TableComponent() {
   if (contract) {
     return (
       <>
-        {contract.contract_details?.media && (
+        {contract.pictures?.lever && (
           <AttachmentsTable
             label="مرفقات العقد"
-            media={contract.contract_details.media}
+            media={contract.pictures.lever}
           />
         )}
 
