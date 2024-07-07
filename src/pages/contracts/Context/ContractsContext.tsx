@@ -24,7 +24,7 @@ export function ContractsContextProvider({ children }: childrenProps) {
   function getAllContracts(params?: unknown) {
     setContracts("loading");
     axios
-      .get<Partial<ContractResponse>>(Api("employee/contract"), { params })
+      .get<Partial<ContractResponse>>(Api("employee/contract-auth"), { params })
       .then((res) => {
         setContracts(res.data);
       })
