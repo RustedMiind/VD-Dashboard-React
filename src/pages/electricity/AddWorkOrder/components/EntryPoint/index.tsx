@@ -1,5 +1,6 @@
 import { Grid, Stack, Typography } from "@mui/material";
 import WorkOrderFormsIndex from "../forms";
+import PathesOnMap from "../PathesOnMap";
 
 export default function AddWorkOrderEntryPoint() {
   return (
@@ -12,7 +13,7 @@ export default function AddWorkOrderEntryPoint() {
           <WorkOrderFormsIndex />
         </Grid>
         <Grid item xs={4}>
-          Map...
+          <PathesOnMap />
         </Grid>
       </Grid>
     </Stack>
