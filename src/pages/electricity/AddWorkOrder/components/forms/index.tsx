@@ -7,7 +7,7 @@ import WorkOrderAttachments from "../forms/Section-3-WorkOrderAttachments";
 export default function WorkOrderFormsIndex() {
   return (
     <>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1-content"
