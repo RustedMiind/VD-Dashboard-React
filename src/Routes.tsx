@@ -53,6 +53,7 @@ import LibraryDocsIndex from "./pages/librariesAndDocs/libraryDocs";
 import SetStandredContract from "./pages/contracts/setStandredContract";
 import SetStandardContractor from "./pages/contracts/SetStandardContractor";
 import ElectricityContractorUsers from "./pages/electricity/ElectricityContractorUsers";
+import AddWorkOrder from "./pages/electricity/AddWorkOrder";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -130,11 +131,11 @@ function RoutesComponent() {
             <Route path="details/:id" element={<WorkOrdersTypesDetails />} />
           </Route>
           <Route path="FollowUpEmployees" element={<FollowUpEmployees />} />
-          {/* ElectricityContractorUsers */}
           <Route
             path="ElectricityContractorUsers"
             element={<ElectricityContractorUsers />}
           />
+          <Route path="AddWorkOrder" element={<AddWorkOrder />} />
         </Route>
 
         <Route path="librariesAndDocs">
