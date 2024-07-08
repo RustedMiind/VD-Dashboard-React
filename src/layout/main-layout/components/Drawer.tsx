@@ -134,6 +134,11 @@ const routesCollections: RoutesCollectionType[] = [
         react: true,
       },
       {
+        name: "انشاء امر العمل",
+        path: "/electricity/AddWorkOrder",
+        react: true,
+      },
+      {
         name: "أنواع أوامر العمل",
         path: "/electricity/workordertypes",
         react: true,
