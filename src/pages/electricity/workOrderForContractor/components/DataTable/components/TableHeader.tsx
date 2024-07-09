@@ -1,6 +1,4 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import IconButton from "@mui/material/IconButton";
 
 function TableHeader() {
   return (
