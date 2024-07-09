@@ -54,6 +54,7 @@ import SetStandredContract from "./pages/contracts/setStandredContract";
 import SetStandardContractor from "./pages/contracts/SetStandardContractor";
 import ElectricityContractorUsers from "./pages/electricity/ElectricityContractorUsers";
 import WorkOrdersTable from "./pages/electricity/workOrdersTable";
+import WorkOrderContractor from "./pages/electricity/workOrderContractor";
 
 function RoutesComponent() {
   const { hasPermission, hasAnyOfPermissions } = usePermissions();
@@ -128,7 +129,7 @@ function RoutesComponent() {
             <Route path="" element={<WorkOrdersTable />} />
           </Route>
           <Route path="workcontractor">
-            <Route path="" element={<WorkOrdersTable />} />
+            <Route path="" element={<WorkOrderContractor />} />
           </Route>
           <Route path="workordertypes">
             <Route path="" element={<WorkOrderPage />} />
