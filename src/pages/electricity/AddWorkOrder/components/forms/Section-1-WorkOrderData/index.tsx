@@ -1,4 +1,13 @@
-import { Grid, Stack, TextField, Button, InputAdornment } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  TextField,
+  Button,
+  InputAdornment,
+  Autocomplete,
+  Select,
+  Box,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import { NavLink } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -9,12 +18,18 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { getUseData } from "../../../../../../methods/getUseData";
 import AddLabelToEl from "../../../../../../components/AddLabelToEl";
 import SelectWithFilter from "../../../../../../components/SelectWithFilter";
+import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import "./index.scss";
 
 export default function WorkOrderFormData() {
   // TODO::declare and define component state and variables
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [employees, setEmployees] = useState<SelectType[]>([]);
+  const [foucsOnorkOrderNum, setFoucsOnorkOrderNum] = useState(false);
+  const [WorkOrderNumber, setWorkOrderNumber] = useState<string | null>("");
+  const dummyOptions = ["Option 1", "Option 2", "Option 3"];
   const { register, control, handleSubmit, setValue, reset } = useForm({});
 
   // TODO::fetch selects data
@@ -63,7 +78,43 @@ export default function WorkOrderFormData() {
         {/* رقم امر العمل */}
         <Grid item xs={6}>
           <AddLabelToEl label={"رقم امر العمل"}>
-            <TextField size="small" />
+            <Box position={"relative"}>
+              <Autocomplete
+                freeSolo
+                options={dummyOptions}
+                value={WorkOrderNumber}
+                onChange={(e, newValue) => {
+                  setWorkOrderNumber(newValue);
+                  setFoucsOnorkOrderNum(false);
+                }}
+                size="small"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    onInput={() => {
+                      if (WorkOrderNumber !== null) setFoucsOnorkOrderNum(true);
+                    }}
+                    onBlur={() => setFoucsOnorkOrderNum(false)}
+                    onChange={(e) => setWorkOrderNumber(e.target.value)}
+                    variant="outlined"
+                  />
+                )}
+              />
+              {foucsOnorkOrderNum && (
+                <AutorenewOutlinedIcon
+                  className="Text-Loading"
+                  sx={{ color: "lightgreen" }}
+                />
+              )}
+              {!foucsOnorkOrderNum &&
+                WorkOrderNumber &&
+                WorkOrderNumber?.length > 0 && (
+                  <CheckCircleIcon
+                    className="Valid-Text"
+                    sx={{ color: "lightgreen" }}
+                  />
+                )}
+            </Box>
           </AddLabelToEl>
         </Grid>
         {/* رمز امر العمل */}
@@ -106,7 +157,7 @@ export default function WorkOrderFormData() {
                   <Button
                     variant="outlined"
                     component={NavLink}
-                    to={``}
+                    to={`/react/contracts/createStandardContractor`}
                     startIcon={<PersonAddIcon />}
                     fullWidth
                   >
