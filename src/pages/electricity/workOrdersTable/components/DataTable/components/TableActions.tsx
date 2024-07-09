@@ -1,12 +1,17 @@
-import { Box, Button, Paper, Stack } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
-import SetDialog from "./setDialog";
+import SetDialog from "../../setDialog";
 
 function TableActions() {
+  // TODO::declare and define component state and variables
   const [open, setOpen] = useState(false);
+
+  // TODO::declare and define component state and variables
   function handleClose() {
     setOpen(!open);
   }
+
+  // * return component UI.
   return (
     <Box sx={{ display: "flex", gap: 1, justifyContent: "end", m: 2 }}>
       <Button variant="outlined" disabled>

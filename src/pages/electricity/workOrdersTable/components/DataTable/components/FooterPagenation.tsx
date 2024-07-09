@@ -10,24 +10,10 @@ import { NavLink } from "react-router-dom";
 
 function FooterPagenation() {
   return (
-    <Stack
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        p: 2,
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
+    <Stack direction={"row"} justifyContent={"space-between"} p={2}>
+      <Stack direction={"row"} alignItems={"center"} gap={2}>
         <Typography>المدخلات للصفحة</Typography>
-        <TextField size="small" select>
+        <TextField defaultValue={5} size="small" select>
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
@@ -38,7 +24,7 @@ function FooterPagenation() {
           <MenuItem value={10000}>10000</MenuItem>
           <MenuItem value={-1}>عرض الكل</MenuItem>
         </TextField>
-      </Box>
+      </Stack>
       <Stack spacing={2}>
         <Pagination count={10} variant="outlined" shape="rounded" />
       </Stack>
