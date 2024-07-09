@@ -54,7 +54,7 @@ import SetStandredContract from "./pages/contracts/setStandredContract";
 import SetStandardContractor from "./pages/contracts/SetStandardContractor";
 import ElectricityContractorUsers from "./pages/electricity/ElectricityContractorUsers";
 import WorkOrdersTable from "./pages/electricity/workOrdersTable";
-import WorkOrderContractor from "./pages/electricity/workOrderContractor";
+import WorkOrderContractor from "./pages/electricity/workOrderForContractor";
 import AddWorkOrder from "./pages/electricity/AddWorkOrder";
 
 function RoutesComponent() {
