@@ -53,6 +53,8 @@ import LibraryDocsIndex from "./pages/librariesAndDocs/libraryDocs";
 import SetStandredContract from "./pages/contracts/setStandredContract";
 import SetStandardContractor from "./pages/contracts/SetStandardContractor";
 import ElectricityContractorUsers from "./pages/electricity/ElectricityContractorUsers";
+import WorkOrdersTable from "./pages/electricity/workOrdersTable";
+import WorkOrderContractor from "./pages/electricity/workOrderContractor";
 import AddWorkOrder from "./pages/electricity/AddWorkOrder";
 
 function RoutesComponent() {
@@ -123,6 +125,12 @@ function RoutesComponent() {
               path="show/:id"
               element={<CreateOrUpdateWorkOrder show={true} />}
             />
+          </Route>
+          <Route path="workorders2">
+            <Route path="" element={<WorkOrdersTable />} />
+          </Route>
+          <Route path="workcontractor">
+            <Route path="" element={<WorkOrderContractor />} />
           </Route>
           <Route path="workordertypes">
             <Route path="" element={<WorkOrderPage />} />
