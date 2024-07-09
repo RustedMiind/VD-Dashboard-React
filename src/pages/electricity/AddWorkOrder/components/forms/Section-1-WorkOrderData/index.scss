@@ -1,0 +1,21 @@
+.Text-Loading {
+  animation: Text-Loading-Animation infinite 1.4s linear;
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+}
+
+.Valid-Text {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+}
+
+@keyframes Text-Loading-Animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
