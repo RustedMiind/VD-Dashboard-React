@@ -57,7 +57,7 @@ function SetDialog({ open, handleClose }: PropsType) {
             </Button>
           </Grid>
           <Grid item xs={6}>
-            <Button variant="outlined" fullWidth>
+            <Button onClick={handleClose} variant="outlined" fullWidth>
               لا
             </Button>
           </Grid>
