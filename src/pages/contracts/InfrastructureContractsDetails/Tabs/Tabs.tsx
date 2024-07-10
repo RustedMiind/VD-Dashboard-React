@@ -26,11 +26,11 @@ function Tabs() {
     <Stack component={Paper} gap={1} p={2} direction="row" flexWrap="wrap">
       {/*  Shared Tabs  */}
       <Chip {...createChipProps("معلومات العقد", TabEnum.DETAILS)} />
-      <Chip {...createChipProps("البنود", TabEnum.ITEMS_2)} />
       <Chip {...createChipProps("المرفقات", TabEnum.ATTACHMENTS)} />
       {/* Infrestructre Contract Tabs */}
       {ContractType === "Infrestructure" && (
         <>
+          <Chip {...createChipProps("البنود", TabEnum.ITEMS_2)} />
           <Chip {...createChipProps("المعاملات")} />
           <Chip {...createChipProps("الحدول الزمني")} />
           <Chip {...createChipProps("مساحة العمل")} />
@@ -39,6 +39,7 @@ function Tabs() {
       {/* Standard Contract Tabs */}
       {ContractType === "Standard" && (
         <>
+          <Chip {...createChipProps("البنود", TabEnum.CONTRACTORS_TERMS)} />
           <Chip {...createChipProps("المقاولين", TabEnum.CONTRACTORS)} />
           <Chip {...createChipProps("أوامر العمل")} />
           <Chip {...createChipProps("المالية")} />

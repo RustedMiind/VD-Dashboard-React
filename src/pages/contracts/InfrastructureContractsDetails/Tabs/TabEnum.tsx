@@ -7,4 +7,5 @@ export enum TabEnum {
   TIME_FRAME = "time frame",
   WORK_SPACE = "work space",
   CONTRACTORS = "Contractors",
+  CONTRACTORS_TERMS = "Contractors_terms",
 }
