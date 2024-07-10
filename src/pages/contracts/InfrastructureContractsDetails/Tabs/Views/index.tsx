@@ -6,6 +6,7 @@ import ContractItemsDetails from "./Items";
 import ItemsV2 from "./ItemsV2";
 import AttachmentTables from "./AttachmentTables";
 import StandardContractDetailsContracts from "./StandardContract/Contractors";
+import StandardContractTerms from "./StandardContract/terms";
 function TabViews(): JSX.Element {
   const { tab } = useContext(TabContext);
 
@@ -20,6 +21,8 @@ function TabViews(): JSX.Element {
       return <AttachmentTables />;
     case TabEnum.CONTRACTORS:
       return <StandardContractDetailsContracts />;
+    case TabEnum.CONTRACTORS_TERMS:
+      return <StandardContractTerms />;
 
     default:
       return <></>;
